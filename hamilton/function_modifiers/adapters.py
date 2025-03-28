@@ -878,7 +878,7 @@ class datasaver(NodeCreator):
                 f"Function: {fn.__qualname__} must have a return annotation."
             )
         origin = typing.get_origin(return_annotation)
-        if return_annotation is not dict and origin is not dict:
+        if return_annotation not in (dict, Dict, "dict", "dict_") and origin not in (dict, Dict, "dict", "dict_"):
             raise InvalidDecoratorException(f"Function: {fn.__qualname__} must return a dict.")
 
     def generate_nodes(self, fn: Callable, config) -> list[node.Node]:
