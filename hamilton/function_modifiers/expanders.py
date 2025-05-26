@@ -3,7 +3,7 @@ import dataclasses
 import functools
 import inspect
 import typing
-from typing import Any, Callable, Collection, Dict, Tuple, Union
+from typing import Any, Callable, Collection, Dict, List, Optional, Tuple, Type, Union
 
 import typing_extensions
 import typing_inspect
@@ -17,6 +17,11 @@ from hamilton.function_modifiers.dependencies import (
     source,
     value,
 )
+
+try:
+    from typing import override
+except ImportError:
+    override = lambda x: x  # noqa E731
 
 """Decorators that enables DRY code by expanding one node into many"""
 
@@ -694,6 +699,89 @@ class extract_columns(base.SingleNodeNodeTransformer):
         return output_nodes
 
 
+def _determine_fields_to_extract(
+    fields: Optional[Union[Dict[str, Any], List[str]]], output_type: Any
+) -> Dict[str, Any]:
+    """Determines which fields to extract based on user requested fields and the output type of
+    the return type of the function.
+
+    :param fields: Dict of fields to extract.
+    :param output_type: The output type of the node function.
+    :return: List of field types.
+    """
+
+    output_type_error = (
+        f"For extracting fields, the decorated function output type must be a `dict` or a "
+        f"`typing.Dict` with or without type parameters (i.e. `dict[str, int]` or "
+        f"`typing.Dict[str, int]`), not: {output_type}"
+    )
+
+    if output_type == dict or output_type == Dict:
+        # NOTE: typing_inspect.is_generic_type(typing.Dict) without type parameters returns True,
+        #       so we need to address the bare dictionaries first before generics.
+        if fields is None or not isinstance(fields, dict):
+            raise base.InvalidDecoratorException(
+                "When extracting fields from a function that returns a bare `dict` output without "
+                "type parameters, you must supply a `dict` mapping field names to types."
+            )
+    elif typing_inspect.is_generic_type(output_type):
+        base_type = typing_inspect.get_origin(output_type)
+        if base_type != dict and base_type != Dict:
+            raise base.InvalidDecoratorException(output_type_error)
+        if fields is None:
+            raise base.InvalidDecoratorException(
+                "When extracting fields from a function that returns a generic `dict`, you must "
+                "supply either a `dict` (`typing.Dict`) mapping field names to types or "
+                "alternatively a `list` (`typing.List`) of field names."
+            )
+        output_args = typing_inspect.get_args(output_type)
+        if len(output_args) != 2:
+            raise base.InvalidDecoratorException(
+                f"When extracting fields from a function that returns a generic `dict`, you "
+                f"must specify only two type parameters (key, value), not {output_args}."
+            )
+        if isinstance(fields, list):
+            fields = {field: output_args[1] for field in fields}  # Infer type from annotation
+    elif typing_extensions.is_typeddict(output_type):
+        typed_dict_fields = typing.get_type_hints(output_type)  # Dict of field name -> type
+        errors = []
+        if fields is None:
+            fields = typed_dict_fields  # Infer fields and types from annotation
+        elif isinstance(fields, list):
+            reduced_fields = {}
+            for field in fields:
+                if field not in typed_dict_fields:
+                    errors.append(f"{field} is not a field in the `TypedDict` {output_type}.")
+                reduced_fields[field] = typed_dict_fields[field]
+            fields = reduced_fields
+        elif isinstance(fields, dict):
+            for field_name, field_type in fields.items():
+                expected_type = typed_dict_fields.get(field_name, None)
+                if expected_type is None:
+                    errors.append(f"{field_name} is not a field in the `TypedDict` {output_type}.")
+                    continue
+                elif expected_type == field_type or htypes.custom_subclass_check(
+                    field_type, expected_type
+                ):
+                    continue
+                errors.append(
+                    f"Error {field_name} did not match the TypedDict annotation's field "
+                    f"{field_type}. Expected {expected_type}."
+                )
+        if errors:
+            raise base.InvalidDecoratorException(
+                f"Error {fields} did not match a subset of the TypedDict annotation's fields "
+                f"{typed_dict_fields}. The following fields were not valid: {errors}."
+            )
+    else:
+        raise base.InvalidDecoratorException(output_type_error)
+
+    assert isinstance(fields, dict), "Internal error: fields should be a dict at this point."
+    _validate_extract_fields(fields)
+
+    return fields
+
+
 def _validate_extract_fields(fields: dict):
     """Validates the fields dict for extract field.
     Rules are:
@@ -734,61 +822,43 @@ def _validate_extract_fields(fields: dict):
 class extract_fields(base.SingleNodeNodeTransformer):
     """Extracts fields from a dictionary of output."""
 
-    def __init__(self, fields: dict = None, fill_with: Any = None):
+    output_type: Any
+    resolved_fields: Dict[str, Type]
+
+    def __init__(
+        self,
+        fields: Optional[Union[Dict[str, Any], List[str], Any]] = None,
+        *others,
+        fill_with: Any = None,
+    ):
         """Constructor for a modifier that expands a single function into the following nodes:
 
         - n functions, each of which take in the original dict and output a specific field
         - 1 function that outputs the original dict
 
-        :param fields: Fields to extract. A dict of 'field_name' -> 'field_type'.
+        :param fields: Fields to extract. Can be a dict of field names to types, a list of field names, or a single field name.
+        :param others: Additional fields names to extract - argument unpacking. Ignored if `fields` is a dict.
         :param fill_with: If you want to extract a field that doesn't exist, do you want to fill it with a default \
         value? Or do you want to error out? Leave empty/None to error out, set fill_value to dynamically create a \
         field value.
         """
         super(extract_fields, self).__init__()
+        if isinstance(fields, list):
+            fields = fields + list(others)
+        elif fields and not isinstance(fields, dict):
+            fields = [fields] + list(others)
         self.fields = fields
         self.fill_with = fill_with
 
     def validate(self, fn: Callable):
-        """A function is invalid if it is not annotated with a dict or typing.Dict return type.
+        """A function is invalid if it is not annotated with a dict or typing.Dict return type or if the
+        fields to extract are not valid.
 
         :param fn: Function to validate.
         :raises: InvalidDecoratorException If the function is not annotated with a dict or typing.Dict type as output.
         """
-        output_type = typing.get_type_hints(fn).get("return")
-        if typing_inspect.is_generic_type(output_type):
-            base_type = typing_inspect.get_origin(output_type)
-            if base_type == dict or base_type == Dict:
-                _validate_extract_fields(self.fields)
-            else:
-                raise base.InvalidDecoratorException(
-                    f"For extracting fields, output type must be a dict or typing.Dict, not: {output_type}"
-                )
-        elif output_type == dict:
-            _validate_extract_fields(self.fields)
-        elif typing_extensions.is_typeddict(output_type):
-            if self.fields is None:
-                self.fields = typing.get_type_hints(output_type)
-            else:
-                # check that fields is a subset of TypedDict that is defined
-                typed_dict_fields = typing.get_type_hints(output_type)
-                for field_name, field_type in self.fields.items():
-                    expected_type = typed_dict_fields.get(field_name, None)
-                    if expected_type == field_type:
-                        pass  # we're definitely good
-                    elif expected_type is not None and htypes.custom_subclass_check(
-                        field_type, expected_type
-                    ):
-                        pass
-                    else:
-                        raise base.InvalidDecoratorException(
-                            f"Error {self.fields} did not match a subset of the TypedDict annotation's fields {typed_dict_fields}."
-                        )
-            _validate_extract_fields(self.fields)
-        else:
-            raise base.InvalidDecoratorException(
-                f"For extracting fields, output type must be a dict or typing.Dict, not: {output_type}"
-            )
+        self.output_type = typing.get_type_hints(fn).get("return")
+        self.resolved_fields = _determine_fields_to_extract(self.fields, self.output_type)
 
     def transform_node(
         self, node_: node.Node, config: Dict[str, Any], fn: Callable
@@ -808,53 +878,38 @@ class extract_fields(base.SingleNodeNodeTransformer):
         # if fn is async
         if inspect.iscoroutinefunction(fn):
 
-            async def dict_generator(*args, **kwargs):
+            async def dict_generator(*args, **kwargs):  # type: ignore
                 dict_generated = await fn(*args, **kwargs)
                 if self.fill_with is not None:
-                    for field in self.fields:
+                    for field in self.resolved_fields:
                         if field not in dict_generated:
                             dict_generated[field] = self.fill_with
                 return dict_generated
 
         else:
 
-            def dict_generator(*args, **kwargs):
+            def dict_generator(*args, **kwargs):  # type: ignore
                 dict_generated = fn(*args, **kwargs)
                 if self.fill_with is not None:
-                    for field in self.fields:
+                    for field in self.resolved_fields:
                         if field not in dict_generated:
                             dict_generated[field] = self.fill_with
                 return dict_generated
 
         output_nodes = [node_.copy_with(callabl=dict_generator)]
 
-        for field, field_type in self.fields.items():
+        for field, field_type in self.resolved_fields.items():
             doc_string = base_doc  # default doc string of base function.
 
-            # if fn is async
-            if inspect.iscoroutinefunction(fn):
-
-                async def extractor_fn(field_to_extract: str = field, **kwargs) -> field_type:
-                    dt = kwargs[node_.name]
-                    if field_to_extract not in dt:
-                        raise base.InvalidDecoratorException(
-                            f"No such field: {field_to_extract} produced by {node_.name}. "
-                            f"It only produced {list(dt.keys())}"
-                        )
-                    return kwargs[node_.name][field_to_extract]
-
-            else:
-
-                def extractor_fn(
-                    field_to_extract: str = field, **kwargs
-                ) -> field_type:  # avoiding problems with closures
-                    dt = kwargs[node_.name]
-                    if field_to_extract not in dt:
-                        raise base.InvalidDecoratorException(
-                            f"No such field: {field_to_extract} produced by {node_.name}. "
-                            f"It only produced {list(dt.keys())}"
-                        )
-                    return kwargs[node_.name][field_to_extract]
+            # This extractor is constructed to avoid closure issues.
+            def extractor_fn(field_to_extract: str = field, **kwargs) -> field_type:  # type: ignore
+                dt = kwargs[node_.name]
+                if field_to_extract not in dt:
+                    raise base.InvalidDecoratorException(
+                        f"No such field: {field_to_extract} produced by {node_.name}. "
+                        f"It only produced {list(dt.keys())}"
+                    )
+                return kwargs[node_.name][field_to_extract]
 
             output_nodes.append(
                 node.Node(
@@ -862,8 +917,157 @@ class extract_fields(base.SingleNodeNodeTransformer):
                     field_type,
                     doc_string,
                     extractor_fn,
-                    input_types={node_.name: dict},
+                    input_types={node_.name: self.output_type},
                     tags=node_.tags.copy(),
+                )
+            )
+        return output_nodes
+
+
+def _determine_fields_to_unpack(fields: List[str], output_type: Any) -> List[Type]:
+    """Determines which fields to unpack based on user requested fields and the output type of
+    the return type of the function.
+
+    :param fields: List of fields to to unpack.
+    :param output_type: The output type of the node function.
+    :return: List of field types.
+    """
+
+    base_type = typing_inspect.get_origin(output_type)  # Returns None when output_type is None
+    if base_type != tuple and base_type != Tuple:
+        message = (
+            f"For unpacking fields, the decorated function output type must be either an "
+            f"explicit length tuple (e.g.`tuple[int, str]`, `typing.Tuple[int, str]`) or an "
+            f"indeterminate length tuple (e.g. `tuple[int, ...]`, `typing.Tuple[int, ...]`), "
+            f"not: {output_type}"
+        )
+        raise base.InvalidDecoratorException(message)
+
+    output_args = typing_inspect.get_args(output_type)
+    num_ellipsis = output_args.count(Ellipsis)
+    if num_ellipsis > 1:
+        raise base.InvalidDecoratorException(
+            f"Invalid tuple: Found more than one ellipsis ('...'): {output_type}"
+        )
+    elif num_ellipsis == 1:
+        if len(output_args) != 2 or output_args[1] is not Ellipsis:
+            raise base.InvalidDecoratorException(
+                f"Invalid tuple: Ellipsis ('...') must be second element: {output_type}"
+            )
+        # Valid Indeterminate length tuple, e.g. `tuple[int, ...]`, `typing.Tuple[int, ...]`
+        output_args = tuple(output_args[0] for _ in range(len(fields)))
+
+    if len(output_args) < len(fields):
+        raise base.InvalidDecoratorException(
+            f"Number of unpacked fields ({len(fields)}) is greater than the number of fields in "
+            f"the output type ({len(output_args)}): {output_type}"
+        )
+
+    errors = []
+    field_types = []
+    for idx, arg in enumerate(output_args):
+        # Determine if the type is a valid type. Note that for Python <3.11, `Any` is not a type
+        if not (
+            isinstance(arg, type)
+            or arg is Any
+            or typing_inspect.is_generic_type(arg)
+            or typing_inspect.is_union_type(arg)
+        ):
+            field_name = fields[idx]
+            errors.append(f"Field {field_name} (index {idx}) does not declare a valid type: {arg}")
+        field_types.append(arg)
+
+    if errors:
+        raise base.InvalidDecoratorException(f"Found errors in the output type: {errors}")
+
+    return field_types
+
+
+class unpack_fields(base.SingleNodeNodeTransformer):
+    """Unpacks fields from a tuple output.
+
+    Expands a single function into the following nodes:
+
+    - 1 function that outputs the original tuple
+    - n functions, each of which take in the original tuple and output a specific field
+
+    The decorated function must have an return type of either `tuple` (python 3.9+) or
+    `typing.Tuple`, and must specify either:
+    - An explicit length tuple (e.g.`tuple[int, str]`, `typing.Tuple[int, str]`)
+    - An indeterminate length tuple (e.g. `tuple[int, ...]`, `typing.Tuple[int, ...]`)
+
+    :param fields: Fields to unpack from the return value of the decorated function.
+    """
+
+    output_type: Any
+    field_types: List[Type]
+
+    def __init__(self, *fields: str):
+        super().__init__()
+        self.fields = list(fields)
+
+    @override
+    def validate(self, fn: Callable):
+        """Validates that the return type of the function is a tuple or typing.Tuple with the
+
+        :param fn: Function to validate
+        :raises: InvalidDecoratorException If the function does not output a tuple or typing.Tuple type.
+        """
+        output_type = typing.get_type_hints(fn).get("return")
+        field_types = _determine_fields_to_unpack(self.fields, output_type)
+        self.field_types = field_types
+        self.output_type = output_type
+
+    @override
+    def transform_node(
+        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+    ) -> Collection[node.Node]:
+        """Unpacks the specified fields form the tuple output into separate nodes.
+
+        :param node_: Node to transform
+        :param config: Config to use
+        :param fn: Function to unpack fields from. Must output a tuple.
+        :return: A collection of nodes --
+                one for the original tuple generator, and another for each field to unpack.
+        """
+        fn = node_.callable
+        base_doc = node_.documentation
+        base_tags = node_.tags.copy()
+
+        if inspect.iscoroutinefunction(fn):
+
+            async def tuple_generator(*args, **kwargs):  # type: ignore
+                tuple_generated = await fn(*args, **kwargs)
+                return tuple_generated
+
+        else:
+
+            def tuple_generator(*args, **kwargs):
+                tuple_generated = fn(*args, **kwargs)
+                return tuple_generated
+
+        output_nodes = [node_.copy_with(callabl=tuple_generator)]
+
+        for idx, (field_name, field_type) in enumerate(zip(self.fields, self.field_types)):
+
+            def extractor(field_index: int = idx, **kwargs) -> field_type:  # type: ignore
+                # This extractor is constructed to avoid closure issues.
+                dt = kwargs[node_.name]
+                if field_index < 0 or field_index >= len(dt):
+                    raise base.InvalidDecoratorException(
+                        f"Out of bounds field: {field_index} produced by {node_.name}. "
+                        f"It only produced {list(dt)} fields."
+                    )
+                return kwargs[node_.name][field_index]
+
+            output_nodes.append(
+                node.Node(
+                    field_name,
+                    field_type,
+                    base_doc,
+                    extractor,
+                    input_types={node_.name: self.output_type},
+                    tags=base_tags,
                 )
             )
         return output_nodes
