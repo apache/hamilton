@@ -2,7 +2,7 @@
 License
 =======
 
-Hamilton is released under the `BSD 3-Clause Clear License <https://github.com/dagworks-inc/hamilton/blob/main/LICENSE>`_.
+Hamilton is released under the `Apache 2.0 License <https://github.com/apache/hamilton/blob/main/LICENSE>`_.
 
 
 
