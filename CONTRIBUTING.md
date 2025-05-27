@@ -1,9 +1,9 @@
 # Guidance on how to contribute
 
-> All contributions to this project will be released under the [BSD 3-Clause Clear License](LICENSE). .
+> All contributions to this project will be released under the [Apache 2.0 License](LICENSE). .
 > By submitting a pull request or filing a bug, issue, or
 > feature request, you are agreeing to comply with this waiver of copyright interest.
-> You're also agreeing to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).
+> You're also agreeing to abide by the ASF Code of Conduct.
 
 
 There are two primary ways to help:

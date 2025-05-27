@@ -62,4 +62,4 @@ Hamilton UI. After spinning up the Hamilton UI application, visit it to see your
 
 
 # License
-The code here is licensed under the BSD-3 Clear Clause license. See the main repository [LICENSE](../../LICENSE) for details.
+The code here is licensed under the Apache 2.0 license. See the main repository [LICENSE](../../LICENSE) for details.
