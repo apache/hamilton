@@ -208,7 +208,7 @@ See our page on [Why use Hamilton?](https://hamilton.dagworks.io/en/latest/get-s
 
 # 📑 License
 
-Hamilton is released under the BSD 3-Clause Clear License. See [LICENSE](https://github.com/DAGWorks-Inc/hamilton/blob/main/LICENSE.md) for details.
+Hamilton is released under the Apache 2.0 License. See [LICENSE](https://github.com/apache/hamilton/blob/main/LICENSE.md) for details.
 
 
 # 🌎 Community

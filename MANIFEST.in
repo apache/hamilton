@@ -2,3 +2,5 @@ include requirements.txt
 include requirements-test.txt
 include LICENSE
 include *.md
+include NOTICE
+include DISCLAIMER

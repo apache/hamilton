@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "Hamilton, the micro-framework for creating dataframes."
 readme = "README.md"
 requires-python = ">=3.8, <4"
-license = {text = "BSD-3-Clause"}
+license = {text = "Apache-2.0"}
 keywords = ["hamilton"]
 authors = [
     { name = "Stefan Krawczyk", email = "stefan@dagworks.io" },
@@ -18,7 +18,7 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Natural Language :: English",
-    "License :: OSI Approved :: BSD License",
+    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
