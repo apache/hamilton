@@ -150,7 +150,7 @@ app.routes[-1].description += f"""<img src="data:image/png;base64,{base64_viz}"/
 ```
 > 📞 If you are interested in a generic approach to add visualizations to all of your endpoints, please reach out to us on [Slack](https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g)!
 
-![FastAPI Swagger](./fastapi_docs.png)
+![FastAPI Swagger](fastapi_docs.png)
 
 ### Benefits
 - **Separation of concerns**: the decoupling between `server.py` and `summarization.py` makes it easier to extend and test the server separately from the data transformations.

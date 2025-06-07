@@ -6,6 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+# Ignore the build directory for Sphinx documentation
+docs/_build/
+C:\Users\User\contribute-hamilton\hamilton\docs\_build
+
+env1/
+.venv/
+
 # Distribution / packaging
 .Python
 build/
