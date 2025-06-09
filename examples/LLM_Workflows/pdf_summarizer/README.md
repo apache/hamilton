@@ -17,7 +17,7 @@ Here are a few ideas:
 
 
 # Setup
-1. Clone this repository `git clone https://github.com/dagworks-inc/hamilton.git`
+1. Clone this repository `git clone https://github.com/apache/hamilton.git`
 2. Move to the directory `cd hamilton/examples/LLM_Workflows/pdf_summarizer`
 3. Create a `.env` (next to `README.md` and `docker-compose.yaml`) and add your OpenAI API key in  such that `OPENAI_API_KEY=YOUR_API_KEY`
 4. Build docker images `docker compose build`

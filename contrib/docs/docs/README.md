@@ -56,7 +56,7 @@ result = dr.execute(
   inputs={...}  # pass in inputs as appropriate
 )
 ```
-See [this notebook for an example](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/contrib/notebook.ipynb).
+See [this notebook for an example](https://github.com/apache/hamilton/tree/main/examples/contrib/notebook.ipynb).
 
 ### Static installation
 This approach relies on you installing the package on your system. This is the recommended path for
@@ -114,7 +114,7 @@ for more details.
 
 If you have a dataflow that you would like to share with the community, please submit a pull request
 to this repository. We will review your dataflow and if it meets our standards we will add it to the
-package. To submit a pull request please use [this link](https://github.com/dagworks-inc/hamilton/pulls) as it'll take you to the specific PR template.
+package. To submit a pull request please use [this link](https://github.com/apache/hamilton/pulls) as it'll take you to the specific PR template.
 
 ### Dataflow standards
 We want to ensure that the dataflows in this package are of high quality and are easy to use. To that end,

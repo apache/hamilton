@@ -50,7 +50,7 @@ class deprecated:
         fail_starting=(2,0,0),
         use_this=parameterize_values,
         explanation='We have redefined the parameterization decorators to consist of `parametrize`, `parametrize_inputs`, and `parametrize_values`
-        migration_guide="https://github.com/dagworks-inc/hamilton/..."
+        migration_guide="https://github.com/apache/hamilton/..."
     )
     class parameterized(...):
        ...

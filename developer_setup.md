@@ -17,7 +17,7 @@ Fork this repo and clone your fork. ([GitHub docs](https://docs.github.com/en/pu
 GITHUB_USERNAME="YOUR-GITHUB-USERNAME" \
 git clone https://github.com/${GITHUB_USERNAME}/hamilton.git
 cd ./hamilton
-git remote add upstream https://github.com/dagworks-inc/hamilton.git
+git remote add upstream https://github.com/apache/hamilton.git
 ```
 
 Install the project's dependencies in your preferred method for managing python dependencies. For example, run the following to use `venv`.
@@ -73,7 +73,7 @@ pre-commit run --all-files
 
 ...and by following the steps in ["How to run unit tests"](#how-to-run-unit-tests).
 
-Navigate to https://github.com/dagworks-inc/hamilton/pulls and open a pull request.
+Navigate to https://github.com/apache/hamilton/pulls and open a pull request.
 
 ## How to run unit tests
 
@@ -155,7 +155,7 @@ These are the steps to push to pypi. This is taken from the [python packaging tu
 Now that you've pushed to pypi, announce your release! We plan to automate this, but for now...
 
 1. Create a github release (select auto-generate release for painless text generation). Create a tag that's called `sf-hamilton-{version_string}`.
-See [1.2.0](https://github.com/dagworks-inc/hamilton/releases/tag/sf-hamilton-1.2.0) for an example.
+See [1.2.0](https://github.com/apache/hamilton/releases/tag/sf-hamilton-1.2.0) for an example.
 2. Announce on the #announcements channel in slack, following the format presented there.
 3. Thanks for contributing!
 

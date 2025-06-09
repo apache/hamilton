@@ -84,8 +84,8 @@ class SparkKoalasGraphAdapter(base.HamiltonGraphAdapter, base.ResultMixin):
 
         You only have the ability to return either a Pandas on Spark Dataframe or a Pandas Dataframe. To do that you \
         either use the stock \
-        `base.PandasDataFrameResult <https://github.com/dagworks-inc/hamilton/blob/main/hamilton/base.py#L39>`__ class,\
-         or you use `h_spark.KoalasDataframeResult <https://github.com/dagworks-inc/hamilton/blob/main/hamilton/experimental/h_spark.py#L16>`__.
+        `base.PandasDataFrameResult <https://github.com/apache/hamilton/blob/main/hamilton/base.py#L39>`__ class,\
+         or you use `h_spark.KoalasDataframeResult <https://github.com/apache/hamilton/blob/main/hamilton/experimental/h_spark.py#L16>`__.
 
         :param spark_session: the spark session to use.
         :param result_builder: the function to build the result -- currently on Pandas and Koalas are "supported".

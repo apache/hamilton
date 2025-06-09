@@ -8,7 +8,7 @@ all the way from feature-engineering through training and inference.
 
 The following two examples show how to use Hamilton to model an entire ML pipeline:
 
-1. A `classification pipeline <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/model_examples/scikit-learn>`_ for the iris dataset using scikit-learn
-2. An `implementation <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/model_examples/time-series>`_ of the m5 kaggle competition to do time-series forecasting on unit sales for using Walmart data.
+1. A `classification pipeline <https://github.com/apache/hamilton/tree/main/examples/model_examples/scikit-learn>`_ for the iris dataset using scikit-learn
+2. An `implementation <https://github.com/apache/hamilton/tree/main/examples/model_examples/time-series>`_ of the m5 kaggle competition to do time-series forecasting on unit sales for using Walmart data.
 
 The goal of these is to get you comfortable with building out ML pipelines using hamilton, potentially giving you inspiration/templates from which you can get started.

@@ -68,7 +68,7 @@ You can watch this [video walkthrough on getting set up](https://youtu.be/DPfxlT
 Make sure you have docker running:
 ```bash
 # clone the repository if you haven't
-git clone https://github.com/dagworks-inc/hamilton
+git clone https://github.com/apache/hamilton
 # change into the UI directory
 cd hamilton/ui
 # run docker

@@ -78,7 +78,7 @@ Adding Hamilton to your Streamlit application can provide a better separation be
 ### Example
 In this example, we will build a simple financial dashboard based on the Kaggle [Bank Marketing Dataset](https://www.kaggle.com/datasets/janiobachmann/bank-marketing-dataset).
 
-> The full code can be found on [GitHub](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/streamlit)
+> The full code can be found on [GitHub](https://github.com/apache/hamilton/tree/main/examples/streamlit)
 
 First, Hamilton transformations are defined in the module `logic.py`. This includes downloading the data from the web, getting unique values for `job`, conducting groupby aggregates, and creating `plotly` figures.
 ```python

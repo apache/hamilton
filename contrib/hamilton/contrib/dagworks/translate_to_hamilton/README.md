@@ -23,7 +23,7 @@ result = dr.execute(
 )
 print(result["code_segments"])
 ```
-For a jupyter notebook example, see [this link](https://github.com/dagWorks-Inc/hamilton/tree/main/examples/contrib/notebooks/dagworks-translate_to_hamilton).
+For a jupyter notebook example, see [this link](https://github.com/apache/hamilton/tree/main/examples/contrib/notebooks/dagworks-translate_to_hamilton).
 
 ## What you should modify
 

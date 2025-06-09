@@ -56,15 +56,15 @@ Hamilton Example
 We do not provide a specific example here, since most of the examples in the examples folder fall under this category.
 Some examples to browse:
 
-* `Hello World <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/hello_world>`__ shows the basics of how to
+* `Hello World <https://github.com/apache/hamilton/tree/main/examples/hello_world>`__ shows the basics of how to
   use Hamilton.
-* `Data Quality <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/data_quality>`__ shows how to incorporate
+* `Data Quality <https://github.com/apache/hamilton/tree/main/examples/data_quality>`__ shows how to incorporate
   runtime data quality checks into your feature engineering pipeline.
-* `Time-series Kaggle Example <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/model_examples/time-series>`__
+* `Time-series Kaggle Example <https://github.com/apache/hamilton/tree/main/examples/model_examples/time-series>`__
   shows one way to structure your code to ingest, create features, and fit a model.
-* `Feature engineering in multiple contexts <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/feature_engineering/feature_engineering_multiple_contexts>`__
+* `Feature engineering in multiple contexts <https://github.com/apache/hamilton/tree/main/examples/feature_engineering/feature_engineering_multiple_contexts>`__
   helps show how you can use Hamilton in multiple contexts reusing code where possible, e.g. offline, & online.
-* `PySpark UDF Map Examples <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/spark/pyspark_udfs>`__
+* `PySpark UDF Map Examples <https://github.com/apache/hamilton/tree/main/examples/spark/pyspark_udfs>`__
   shows how to use Hamilton to encode map operations for use with PySpark.
 
 
@@ -121,7 +121,7 @@ We skip showing a sketch of structure here, and invite you to look at the exampl
 
 Hamilton Example
 ^^^^^^^^^^^^^^^^
-We direct users to look at `Feature engineering in multiple contexts <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/feature_engineering/feature_engineering_multiple_contexts>`__
+We direct users to look at `Feature engineering in multiple contexts <https://github.com/apache/hamilton/tree/main/examples/feature_engineering/feature_engineering_multiple_contexts>`__
 that currently describes two scenarios around how you could incorporate Hamilton into an online web-service, and have
 it aligned with your batch offline processes. Note, these examples should give you the high level first principles
 view of how to do things. Since having something running in production , we didn't want to get too specific.
@@ -129,7 +129,7 @@ view of how to do things. Since having something running in production , we didn
 Write once, run anywhere blog post:
 -----------------------------------
 For a comprehensive post on writing a feature once and using it anywhere see `this blog <https://blog.dagworks.io/p/feature-engineering-with-hamilton>`__.
-The companion example code can be found `here <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/feature_engineering/write_once_run_everywhere_blog_post>`__.
+The companion example code can be found `here <https://github.com/apache/hamilton/tree/main/examples/feature_engineering/write_once_run_everywhere_blog_post>`__.
 
 Best Egg Platform Blog Post:
 ----------------------------
@@ -140,5 +140,5 @@ FAQ
 
 Q. Can I use Hamilton for feature engineering with Feast?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Yes, you can use Hamilton with Feast. See our [Feast example](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/feast) and accompanying [blog post](https://blog.dagworks.io/p/featurization-integrating-hamilton). Typically people use Hamilton on the offline side to compute features that then
+Yes, you can use Hamilton with Feast. See our [Feast example](https://github.com/apache/hamilton/tree/main/examples/feast) and accompanying [blog post](https://blog.dagworks.io/p/featurization-integrating-hamilton). Typically people use Hamilton on the offline side to compute features that then
 get pushed to Feast. For the online side it varies as to how to integrate the two.

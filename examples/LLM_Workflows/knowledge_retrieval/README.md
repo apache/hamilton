@@ -8,10 +8,10 @@ as input to OpenAI, using it in the context of conversation, where the OpenAI LL
 be called to get more context.
 
 Hamilton is great for describing dataflows, i.e. DAGs. In this example, we will use Hamilton to define a DAG that
-encapsulates two functions that are called by OpenAI as housed in [functions.py](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/knowledge_retrieval/functions.py).
+encapsulates two functions that are called by OpenAI as housed in [functions.py](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/knowledge_retrieval/functions.py).
 Specifically the logic for each is housed in two modules:
- - getting articles from Arxiv, housed in [arxiv_articles.py](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/knowledge_retrieval/arxiv_articles.py)
- - summarizing a PDF article, housed in [summarize_text.py](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/knowledge_retrieval/summarize_text.py)
+ - getting articles from Arxiv, housed in [arxiv_articles.py](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/knowledge_retrieval/arxiv_articles.py)
+ - summarizing a PDF article, housed in [summarize_text.py](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/knowledge_retrieval/summarize_text.py)
 
 ## get_articles()
 This is the DAG that is defined when you call get_articles() in functions.py:

@@ -31,7 +31,7 @@ hamilton ui
 See https://hamilton.dagworks.io/en/latest/concepts/ui/ for details, here are the cliff notes:
 
 ```bash
-git clone https://github.com/dagworks-inc/hamilton
+git clone https://github.com/apache/hamilton
 cd hamilton/ui/deployment
 ./run.sh
 ```

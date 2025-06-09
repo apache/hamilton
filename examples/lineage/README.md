@@ -6,8 +6,8 @@
 Here we showcase Hamilton's lineage abilities. We will use the Titanic
 data set to model a hypothetical company set up where there is data engineering and data science team collaborating together.
 
-If you want to see code and what it does we invite you to jump straight into browsing the [lineage_snippets](https://github.com/DAGWorks-Inc/hamilton/blob/main/examples/lineage/lineage_snippets.ipynb) notebook.
-For those coming from the lineage blog post, you can find the code shown in [lineage_script.py](https://github.com/DAGWorks-Inc/hamilton/blob/main/examples/lineage/lineage_script.py).
+If you want to see code and what it does we invite you to jump straight into browsing the [lineage_snippets](https://github.com/apache/hamilton/blob/main/examples/lineage/lineage_snippets.ipynb) notebook.
+For those coming from the lineage blog post, you can find the code shown in [lineage_script.py](https://github.com/apache/hamilton/blob/main/examples/lineage/lineage_script.py).
 
 For those who want to continue, let's first talk about some common problems people encounter, then more formally frame what we mean by
 lineage, and then explain how Hamilton's lineage capabilities help you solve common problems encountered with Data and Machine Learning.
@@ -197,8 +197,8 @@ nodes_in_path = dr.what_is_the_path_between("age", "fit_random_forest")
 To see more code, we invite you to:
 
 1. Browse the modules to see what the functions are and what they're annotated with.
-2. Browse either the [lineage_snippets](https://github.com/DAGWorks-Inc/hamilton/blob/main/examples/lineage/lineage_snippets.ipynb) notebook
-or the [lineage_script](https://github.com/DAGWorks-Inc/hamilton/blob/main/examples/lineage/lineage_script.py)
+2. Browse either the [lineage_snippets](https://github.com/apache/hamilton/blob/main/examples/lineage/lineage_snippets.ipynb) notebook
+or the [lineage_script](https://github.com/apache/hamilton/blob/main/examples/lineage/lineage_script.py)
 to see how to use the Hamilton Driver to ask questions of your DAGs.
 3. We invite you to then go back in time, by checking out this repository and checking out an older commit and
 re-running the script or notebook and seeing how things change. The command to "go back in time" would be:
@@ -215,6 +215,6 @@ re-running the script or notebook and seeing how things change. The command to "
 
 ## A script you could write to ask questions of your DAGs
 To help you get programmatic access to your DAGs, we have an example script you could write
-to quickly get lineage answers. The script is [lineage_commands.py](https://github.com/DAGWorks-Inc/hamilton/blob/main/examples/lineage/lineage_commands.py).
+to quickly get lineage answers. The script is [lineage_commands.py](https://github.com/apache/hamilton/blob/main/examples/lineage/lineage_commands.py).
 The main point of the script, is to show you that it could encode a runbook for your team,
 or be used within your CI/CD system to query, visualize, and otherwise emit lineage information.

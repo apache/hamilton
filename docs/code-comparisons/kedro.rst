@@ -10,7 +10,7 @@ On this page, we'll dive into these differences, compare features, and present
 some code snippets from both tools. 
 
 .. note::
-    See this `GitHub repository <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/kedro>`_ to compare a full project using Kedro or Hamilton.
+    See this `GitHub repository <https://github.com/apache/hamilton/tree/main/examples/kedro>`_ to compare a full project using Kedro or Hamilton.
 
 Imperative vs. Declarative
 ---------------------------
@@ -157,7 +157,7 @@ Kedro
 - Configure environment variables and credentials
 - Navigate the project structure
 
-This provides guidance when building your first data pipeline, but it's also a lot to take in at once. As you'll see in the `project comparison on GitHub <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/kedro>`_, ``Kedro`` involves more files making it harder to navigate. Also, it's reliant on YAML which is `generally seen as an unreliable format <https://noyaml.com/>`_. If you have an existing data stack or favorite library, it might clash with ``Kedro``'s way of thing (e.g., you have credentials management tool; you prefer `Hydra <https://hydra.cc/>`_ for configs).
+This provides guidance when building your first data pipeline, but it's also a lot to take in at once. As you'll see in the `project comparison on GitHub <https://github.com/apache/hamilton/tree/main/examples/kedro>`_, ``Kedro`` involves more files making it harder to navigate. Also, it's reliant on YAML which is `generally seen as an unreliable format <https://noyaml.com/>`_. If you have an existing data stack or favorite library, it might clash with ``Kedro``'s way of thing (e.g., you have credentials management tool; you prefer `Hydra <https://hydra.cc/>`_ for configs).
 
 Hamilton
 ~~~~~~~~
@@ -201,13 +201,13 @@ Feature comparison
       - ✅
     * - LLM applications
       - ⛔ Limited by in-memory execution and return values.
-      - ✅ declarative API in-memory makes it easy (`RAG app <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/retrieval_augmented_generation>`_).
+      - ✅ declarative API in-memory makes it easy (`RAG app <https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/retrieval_augmented_generation>`_).
     * - Static DAG visualizations
       - Need ``Kedro Viz`` installed to export static visualizations.
       - Visualize entire dataflow, execution path, query what's upstream, etc. directly in a notebook or output to a file (``.png``, ``.svg``, etc.). Single dependency is ``graphviz``.
     * - Interactive DAG viewer
       - `Kedro Viz <https://github.com/kedro-org/kedro-viz>`_
-      - `Hamilton UI <https://github.com/DAGWorks-Inc/hamilton/tree/main/ui>`_
+      - `Hamilton UI <https://github.com/apache/hamilton/tree/main/ui>`_
     * - Data validation
       - `Community Pandera plugin <https://github.com/Galileo-Galilei/kedro-pandera/releases>`_
       - `Native and Pandera plugin <https://hamilton.dagworks.io/en/latest/how-tos/run-data-quality-checks/>`_
@@ -276,6 +276,6 @@ Both ``Kedro`` and ``Hamilton`` provide applications to view dataflows/pipelines
 More information
 ----------------
 
-For a full side-by-side example of Kedro and Hamilton, visit `this GitHub repository <https://github.com/dagworks-inc/hamilton/tree/main/examples/kedro>`_
+For a full side-by-side example of Kedro and Hamilton, visit `this GitHub repository <https://github.com/apache/hamilton/tree/main/examples/kedro>`_
 
 For more questions, join our `Slack Channel <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_

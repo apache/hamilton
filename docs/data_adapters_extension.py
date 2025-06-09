@@ -17,7 +17,7 @@ be linking to the documentation instead, which hasn't been generated yet.
 """
 
 # These have fallbacks for local dev
-GIT_URL = os.environ.get("READTHEDOCS_GIT_CLONE_URL", "https://github.com/dagworks-inc/hamilton")
+GIT_URL = os.environ.get("READTHEDOCS_GIT_CLONE_URL", "https://github.com/apache/hamilton")
 GIT_ID = os.environ.get("READTHEDOCS_GIT_IDENTIFIER", "main")
 
 # All the modules that register data adapters

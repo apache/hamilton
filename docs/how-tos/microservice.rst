@@ -10,4 +10,4 @@ The following example shows how to execute an asynchronous set of transforms in 
 
 We will be releasing feature-specific examples shortly, as well.
 
-https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/async
+https://github.com/apache/hamilton/tree/main/examples/async

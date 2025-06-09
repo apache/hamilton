@@ -43,7 +43,7 @@ Since Hamilton dataflows will run the same way inside or outside FastAPI, you ca
 ### Example
 In this example, we'll build a backend for a PDF summarizer application.
 
-> The full code can be found on [GitHub](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/pdf_summarizer/backend/server.py)
+> The full code can be found on [GitHub](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/pdf_summarizer/backend/server.py)
 
 #### Client
 The client defines an HTTP POST request to send a PDF file along a selected OpenAI GPT model, the content type of the PDF file, and a query for the summarization. The `files` parameter allows for [multipart encoding uploads](https://requests.readthedocs.io/en/latest/user/advanced/?highlight=files#post-multiple-multipart-encoded-files) and `data` sets the content of the body of the request.

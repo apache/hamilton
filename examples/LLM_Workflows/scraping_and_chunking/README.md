@@ -90,7 +90,7 @@ def collect_processed_articles(processed_article: Collect[list]) -> list:
 The magic is in the `Parallelizable` & `Collect` types. This tells Hamilton to run what is between them
 in parallel as a single task. For more information see the
 [parallel documentation](https://hamilton.dagworks.io/en/latest/concepts/parallel-task/) and
-[examples](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/parallelism).
+[examples](https://github.com/apache/hamilton/tree/main/examples/parallelism).
 
 ## Let's explain the example
 

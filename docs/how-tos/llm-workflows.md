@@ -19,7 +19,7 @@ any of your code to do so. This is useful for debugging.
 
 The following examples show how to use Hamilton for LLM workflows:
 
-* [How to use "OpenAI functions" with a Knowledge Base](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/knowledge_retrieval/)
-* [Modular LLM Stack](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/modular_llm_stack) with [blog post](https://blog.dagworks.io/p/building-a-maintainable-and-modular)
-* [PDF Summarizer](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/pdf_summarizer) which shows
+* [How to use "OpenAI functions" with a Knowledge Base](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/knowledge_retrieval/)
+* [Modular LLM Stack](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/modular_llm_stack) with [blog post](https://blog.dagworks.io/p/building-a-maintainable-and-modular)
+* [PDF Summarizer](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/pdf_summarizer) which shows
 a partial RAG workflow (just missing going to a vector store to get the PDF/content) that runs inside FastAPI with a Streamlit frontend.

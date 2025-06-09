@@ -13,4 +13,4 @@ each Hamilton function.
 
 ## creating tasks
 For [this paralle task approach](https://hamilton.dagworks.io/en/latest/concepts/parallel-task/) see [this
-example](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/scraping_and_chunking) instead.
+example](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/scraping_and_chunking) instead.

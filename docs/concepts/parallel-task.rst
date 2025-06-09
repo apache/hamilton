@@ -34,7 +34,7 @@ To make use of this, the general pattern is you apply an adapter to the driver a
 The code above will execute the DAG submitting to a `ThreadPoolExecutor` (see :doc:`../reference/graph-adapters/ThreadPoolFutureAdapter`),
 which is great if you're doing a lot of I/O bound work, e.g. making API calls, reading from a database, etc.
 
-See this `Threadpool based example <https://github.com/dagworks-inc/hamilton/blob/main/examples/parallelism/lazy_threadpool_execution/>`_ for a complete example.
+See this `Threadpool based example <https://github.com/apache/hamilton/blob/main/examples/parallelism/lazy_threadpool_execution/>`_ for a complete example.
 
 Other adapters, e.g. Ray :doc:`../reference/graph-adapters/RayGraphAdapter`, Dask :doc:`../reference/graph-adapters/DaskGraphAdapter`, etc... will submit to their respective executors, but will involve object serialization
 (see caveats below).
@@ -135,14 +135,14 @@ Solution:
 * If you're using a library that doesn't support serialization, then one option is to have Hamilton instantiate
   the object in each parallel block. You can do this by making the code depend on something within the parallel block.
 * Another option is write a customer wrapper function that uses `__set_state__` and `__get_state__` to serialize and deserialize the object.
-* See `this issue <https://github.com/DAGWorks-Inc/hamilton/issues/743>`_ for details and possible features to make
+* See `this issue <https://github.com/apache/hamilton/issues/743>`_ for details and possible features to make
   this simpler to deal with.
 
 
 Multiple Collects
 ^^^^^^^^^^^^^^^^^
 
-Currently, by design (see all limitations `here <https://github.com/DAGWorks-Inc/hamilton/issues/301>`_), you can only have one "collect" downstream of "parallel".
+Currently, by design (see all limitations `here <https://github.com/apache/hamilton/issues/301>`_), you can only have one "collect" downstream of "parallel".
 
 So the following code WILL NOT WORK:
 
@@ -227,7 +227,7 @@ So the following code WILL NOT WORK:
         print(ans["all_agg"])
 
 
-To fix this, (this is documented in this `issue <https://github.com/DAGWorks-Inc/hamilton/issues/742>`_) you can either create a new function that combines the two `Collect[]` calls that could be combined with
+To fix this, (this is documented in this `issue <https://github.com/apache/hamilton/issues/742>`_) you can either create a new function that combines the two `Collect[]` calls that could be combined with
 :doc:`@config.when <../reference/decorators/config_when>`.
 
 .. code-block:: python

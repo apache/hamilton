@@ -95,7 +95,7 @@ for more details.
 
 If you have a dataflow that you would like to share with the community, please submit a pull request
 to this repository. We will review your dataflow and if it meets our standards we will add it to the
-package. To submit a pull request please use [this template](https://github.com/DAGWorks-Inc/hamilton/blob/main/.github/PULL_REQUEST_TEMPLATE/HAMILTON_CONTRIB_PR_TEMPLATE.md)
+package. To submit a pull request please use [this template](https://github.com/apache/hamilton/blob/main/.github/PULL_REQUEST_TEMPLATE/HAMILTON_CONTRIB_PR_TEMPLATE.md)
 . To access it, create a new Pull Request, then hit the `preview` tab, and click the link to append `template=HAMILTON_CONTRIB_PR_TEMPLATE.md` to the URL.
 
 
@@ -146,7 +146,7 @@ and will ensure that you have the correct structure.
 
 To get started, you'll want to do the following:
 
-- [ ] Fill out your `__init__.py` with the appropriate code -- see [this issue](https://github.com/DAGWorks-Inc/hamilton/issues/559) if you want some inspiration for where to get started
+- [ ] Fill out your `__init__.py` with the appropriate code -- see [this issue](https://github.com/apache/hamilton/issues/559) if you want some inspiration for where to get started
 - [ ] Fill out the sections of your `README.md` with the appropriate documentation -- follow one of the approved dataflows
 - [ ] Fill out your `tags.json` with the appropriate tags -- follow one of the approved dataflows
 - [ ] Fill out your `valid_configs.jsonl` with the appropriate configurations -- this is not necessary if you have no configurations that can change the shape of your DAG

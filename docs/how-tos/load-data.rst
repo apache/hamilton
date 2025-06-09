@@ -9,4 +9,4 @@ In the following example, we'll show how to use Hamilton to:
 2. Alter the source of data depending on how the DAG is parameterized/created
 3. Mock data for a test-setting (so you can quickly execute your DAG without having to wait for data to load)
 
-See the full tutorial `here <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/data_loaders>`_.
+See the full tutorial `here <https://github.com/apache/hamilton/tree/main/examples/data_loaders>`_.

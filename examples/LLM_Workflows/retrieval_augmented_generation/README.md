@@ -3,7 +3,7 @@ This application allows you to search arXiv for PDFs or import arbitrary PDF fil
 
 The ingestion and retrieval steps are implemented as dataflows with Hamilton and are exposed via FastAPI endpoints. The frontend is built with Streamlit and exposes the different functionalities via a simple web UI. Everything is packaged as containers with docker compose.
 
-This example draws from previous simpler examples ([Knowledge Retrieval](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/knowledge_retrieval), [Modular LLM Stack](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/modular_llm_stack), [PDF Summarizer](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/pdf_summarizer)).
+This example draws from previous simpler examples ([Knowledge Retrieval](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/knowledge_retrieval), [Modular LLM Stack](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/modular_llm_stack), [PDF Summarizer](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/pdf_summarizer)).
 
 > Find below a list of references for the technical concepts found in this example
 
@@ -16,7 +16,7 @@ This example draws from previous simpler examples ([Knowledge Retrieval](https:/
 - To view app logs `docker compose logs -f`
 
 ## Manual setup
-1. Clone this repository `git clone https://github.com/dagworks-inc/hamilton.git`
+1. Clone this repository `git clone https://github.com/apache/hamilton.git`
 2. Move to the directory `cd hamilton/examples/LLM_Workflows/retrieval_augmented_generation`
 3. Create a copy of `.env.template` with `cp .env.template .env`
 4. Replace the placeholder in `.env` with your OpenAI API key such that `OPENAI_API_KEY=YOUR_API_KEY`

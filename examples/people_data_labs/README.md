@@ -44,4 +44,4 @@ You can even run this example in Google Colab:
 - [PDL Blog](https://blog.peopledatalabs.com/) and [PDL Recipes](https://docs.peopledatalabs.com/recipes)
 - [Interactive Hamilton training](https://www.tryhamilton.dev/hamilton-basics/jumping-in)
 - [Hamilton documentation](https://hamilton.dagworks.io/en/latest/concepts/node/)
-- more [Hamilton code examples](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples) and integrations with Python tools.
+- more [Hamilton code examples](https://github.com/apache/hamilton/tree/main/examples) and integrations with Python tools.
