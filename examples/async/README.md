@@ -1,4 +1,4 @@
-# Hamilton + Async
+# Apache Hamilton + Async
 
 This is currently an experimental feature, allowing one to run a hamilton DAG composed (entirely or partially) of async functions.
 

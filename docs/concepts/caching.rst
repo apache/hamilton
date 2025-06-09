@@ -76,12 +76,12 @@ By traversing the cache keys' ``dependencies_data_versions``, we can actually re
 
 .. warning::
 
-    Cache keys could be unstable across Python and Hamilton versions (because of new features, bug fixes, etc.). Upgrading Python or Hamilton could require starting with a new empty cache for reliable behavior.
+    Cache keys could be unstable across Python and Apache Hamilton versions (because of new features, bug fixes, etc.). Upgrading Python or Apache Hamilton could require starting with a new empty cache for reliable behavior.
 
 Observing the cache
 -------------------
 
-Caching is best understood throung interacting with it. Hamilton offers many utilities to observe and introspect the cache manually.
+Caching is best understood throung interacting with it. Apache Hamilton offers many utilities to observe and introspect the cache manually.
 
 Logging
 ~~~~~~~
@@ -321,7 +321,7 @@ Code version
 
 The ``code_version`` of a node is determined by hashing its source code, ignoring docstring and comments.
 
-Importantly, Hamilton will not version nested function calls. If you edit utility functions or upgrade Python libraries, the cache might incorrectly assume the code to be the same.
+Importantly, Apache Hamilton will not version nested function calls. If you edit utility functions or upgrade Python libraries, the cache might incorrectly assume the code to be the same.
 
 For example, take the following function ``foo``:
 
@@ -417,7 +417,7 @@ Storage
 
 The caching feature is powered by two data storages:
 
-- **Metadata store**: It contains information about past ``Driver`` executions (**code version**, **data version**, run id, etc.). From this metadata, Hamilton determines if a node needs to be executed or not. This metadata is generally lightweight.
+- **Metadata store**: It contains information about past ``Driver`` executions (**code version**, **data version**, run id, etc.). From this metadata, Apache Hamilton determines if a node needs to be executed or not. This metadata is generally lightweight.
 
 - **Result store**: It's a key-value store that maps a **data version** to a **result**. It's completely unaware of nodes, executions, etc. and simply holds the **results**. The result store can significantly grow in size depending on your usage. By default, all results are pickled, but :ref:`other formats are possible <cache-result-format>`.
 
@@ -453,7 +453,7 @@ Centralizing your cache by project is useful when you have nodes that are reused
 Globally
 ^^^^^^^^^^
 
-Using a global cache is easier storage management. Since the metadata and the results for *all* your Hamilton dataflows are in one place, it can be easier to cleanup disk space.
+Using a global cache is easier storage management. Since the metadata and the results for *all* your Apache Hamilton dataflows are in one place, it can be easier to cleanup disk space.
 
 .. code-block:: python
 
@@ -657,12 +657,12 @@ This snippet loads in-memory data from persisted metadata and result stores. The
 Roadmap
 -------
 
-Caching is a significant Hamilton feature and there are plans to expand it. Here are some ideas and areas for development. Feel free comment on them or make other suggestions via `Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_ or GitHub!
+Caching is a significant Apache Hamilton feature and there are plans to expand it. Here are some ideas and areas for development. Feel free comment on them or make other suggestions via `Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_ or GitHub!
 
-- **Hamilton UI integration**: caching introduces the concept of ``data_version``. This metadata could be captured by the Hamilton UI to show how different values are used across dataflow executions. This would be particularly useful for experiment tracking and lineage.
+- **Apache Hamilton UI integration**: caching introduces the concept of ``data_version``. This metadata could be captured by the Apache Hamilton UI to show how different values are used across dataflow executions. This would be particularly useful for experiment tracking and lineage.
 - **Distributed caching support**: the initial release supports multithreading and multiprocessing on a single machine. For distributed execution, we will need ``ResultStore`` and ``MetadataStore`` that can be remote and are safe for concurrent access.
 - **Integrate with remote execution** (Ray, Skypilot, Modal, Runhouse): facilitate a pattern where the dataflow is executed locally, but some nodes can selectively be executed remotely and have their results cached locally.
 - **async support**: Support caching with ``AsyncDriver``. This requires a significant amount of code, but the core logic shouldn't change much.
 - **cache eviction**: Allow to set up a max storage (in size or number of items) or time-based policy to delete data from the metadata and result stores. This would help with managing the cache size.
 - **more store backends**: The initial release includes backend supported by the Python standard library (SQLite metadata and file-based results). Could support more backends via `fsspec <https://filesystem-spec.readthedocs.io/en/latest/?badge=latest>`_ (AWS, Azure, GCP, Databricks, etc.)
-- **support more types**: Include specialized hashing functions for complex objects from popular libraries. This can be done through Hamilton extensions.
+- **support more types**: Include specialized hashing functions for complex objects from popular libraries. This can be done through Apache Hamilton extensions.

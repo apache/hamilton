@@ -10,7 +10,7 @@ It's highly parameterizable, allowing you to customize:
 
 To tune the above, pass in a Graph Adapter, a Result Builder, and/or anotehr lifecycle method -- see :doc:`../result-builders/index`, :doc:`../graph-adapters/index`.
 
-Let's walk through how you might use the Hamilton Driver.
+Let's walk through how you might use the Apache Hamilton Driver.
 
 Instantiation
 =============
@@ -66,7 +66,7 @@ and instead you provide that input to each ``execute`` invocation.
 Short circuiting some DAG computation
 *************************************
 
-This will force Hamilton to short circuit a particular computation path, and use the passed in override as a result of
+This will force Apache Hamilton to short circuit a particular computation path, and use the passed in override as a result of
 that particular node.
 
 

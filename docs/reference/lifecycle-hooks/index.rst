@@ -9,7 +9,7 @@ The other extensions live within `plugins <https://github.com/apache/hamilton/tr
 Customization
 -------------
 
-The subsequent documents contain public-facing APIs for customizing Hamilton's
+The subsequent documents contain public-facing APIs for customizing Apache Hamilton's
 execution. Note that the public-facing APIs are still a work in progress -- we
 will be improving the documentation. We plan for the APIs, however, to be stable
 looking forward.

@@ -2,7 +2,7 @@
 Loading Data
 ============
 
-In Hamilton, data loaders are just the same as other functions in the DAG. They take in configuration parameters, and
+In Apache Hamilton, data loaders are just the same as other functions in the DAG. They take in configuration parameters, and
 output datasets in the desired form. Following up on the marketing spend dataset, you might write a data loader that
 reads a dataframe saved in csv format on s3 like this:
 
@@ -32,11 +32,11 @@ go.  However, there are a few considerations you might have prior to productiona
 Plugging in new Data Sources
 ----------------------------
 
-An advantage of Hamilton is that it allows for rapid plug-and play for various components of your pipeline. This is
+An advantage of Apache Hamilton is that it allows for rapid plug-and play for various components of your pipeline. This is
 particularly important for data loading, where you might want to load your data from different sources depending on some
 context. For instance -- if you're running your pipeline in production, you may want to use the production data sources.
 If you're running it in QA, you might want to use the staging data sources. Or, if you're running it locally, you might
-want to use abbreviated, in-memory data sources for testing. While Hamilton is not opinionated on exactly _how_ you make
+want to use abbreviated, in-memory data sources for testing. While Apache Hamilton is not opinionated on exactly _how_ you make
 this switch, it presents a variety of tooling that can make it more manageable. Some options. To demonstrate some
 techniques, let's continue on the example of loading marketing spend...
 
@@ -104,5 +104,5 @@ Then you can invoke your driver but set the config differently:
         data_loaders, ...)
 
 Note that there are a variety of other ways you can organize your code -- at this point its entirely use-case dependent.
-Hamilton is a language for declaring dataflows that's applicable towards a multitude of use-cases. It's not going to
+Apache Hamilton is a language for declaring dataflows that's applicable towards a multitude of use-cases. It's not going to
 dictate how to write your functions or where you put them.

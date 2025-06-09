@@ -17,7 +17,7 @@ To run the example, run `python run.py` and you should see the following output:
 
 # bad_module.py didn't have the right tags so graph building errored out
 ...
-Hamilton.lifecycle.base.ValidationException: Node validation failed! 1 errors encountered:
+Apache Hamilton.lifecycle.base.ValidationException: Node validation failed! 1 errors encountered:
   foo: Node bad_module.foo is an output node, but does not have a table_name tag.
 ```
 

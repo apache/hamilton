@@ -4,10 +4,10 @@ This is an example of how to use the OpenLineage adapter that can be used to sen
 
 ## Motivation
 OpenLineage is an open standard for data lineage.
-With Hamilton you can read and write data, and with OpenLineage you can track the lineage of that data.
+With Apache Hamilton you can read and write data, and with OpenLineage you can track the lineage of that data.
 
 ## Steps
-1. Build your project with Hamilton.
+1. Build your project with Apache Hamilton.
 2. Use one of the [materialization approaches](https://hamilton.dagworks.io/en/latest/concepts/materialization/) to surface metadata about what is loaded and saved.
 3. Use the OpenLineage adapter to send metadata to an OpenLineage server.
 

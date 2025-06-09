@@ -1,4 +1,4 @@
-# Streamlit + Hamilton
+# Streamlit + Apache Hamilton
 
 > This example accompanies the documentation page for [Streamlit](https://hamilton.dagworks.io/en/latest/integrations/streamlit/) integration.
 
@@ -14,23 +14,23 @@ In this example, We will build a simple financial dashboard based on the Kaggle 
 
 
 ## File organization
-Adding Hamilton to your Streamlit application can provide a better separation between the dataflow and the UI logic. They pair nicely together because Hamilton is also stateless. Once defined, each call to `Driver.execute()` is independent. Therefore, on each Streamlit rerun, you use `Driver.execute()` to complete computations. Using Hamilton this way allows you to write your dataflow into Python modules and outside of the Streamlit.
+Adding Apache Hamilton to your Streamlit application can provide a better separation between the dataflow and the UI logic. They pair nicely together because Apache Hamilton is also stateless. Once defined, each call to `Driver.execute()` is independent. Therefore, on each Streamlit rerun, you use `Driver.execute()` to complete computations. Using Apache Hamilton this way allows you to write your dataflow into Python modules and outside of the Streamlit.
 
 ### logic.py
-Hamilton transformations are defined in the module `logic.py`. This includes downloading the data from the web, getting unique values for `job`, conducting groupby aggregates, and creating `plotly` figures.
+Apache Hamilton transformations are defined in the module `logic.py`. This includes downloading the data from the web, getting unique values for `job`, conducting groupby aggregates, and creating `plotly` figures.
 
 ### app.py
 The Streamlit UI is defined in `app.py`. Notice a few things:
 - `app.py` doesn't have to depend on `pandas` and `plotly`.
 - `@cache_resource` allows to create the `Driver` only once.
-- `@cache_data` on `_execute()` will automatically cache any Hamilton result based on the combination of arguments (`final_vars`, `inputs`, and `overrides`)
+- `@cache_data` on `_execute()` will automatically cache any Apache Hamilton result based on the combination of arguments (`final_vars`, `inputs`, and `overrides`)
 - `get_state_inputs()` and `get_state_overrides()` will collect values from user inputs.
 - `execute()` parses the inputs and overrides from the state and call `_execute()`.
 
 
 ## Benefits
 - **Clearer scope**: the decoupling between `app.py` and `logic.py` makes it easier to add data transformations or extend UI, and debug errors associated with either.
-- **Reusable code**: the module `logic.py` can be reused elsewhere with Hamilton.
-    - If you are building a proof-of-concept with Streamlit, your Hamilton module will be able to grow with your project and be useful for your production pipelines.
-    - If you are already building dataflows with Hamilton, using it with Streamlit ensures your dashboard metrics have the same implementation with your production pipeline (i.e., prevent [implementation skew](https://building.nubank.com.br/dealing-with-train-serve-skew-in-real-time-ml-models-a-short-guide/))
-- **Performance boost**: by caching the Hamilton Driver and its execution call, we are able to effectively cache all data operations in a few lines of code. Furthermore, Hamilton can scale further by using a remote task executor on a separate machine from the Streamlit application.
+- **Reusable code**: the module `logic.py` can be reused elsewhere with Apache Hamilton.
+    - If you are building a proof-of-concept with Streamlit, your Apache Hamilton module will be able to grow with your project and be useful for your production pipelines.
+    - If you are already building dataflows with Apache Hamilton, using it with Streamlit ensures your dashboard metrics have the same implementation with your production pipeline (i.e., prevent [implementation skew](https://building.nubank.com.br/dealing-with-train-serve-skew-in-real-time-ml-models-a-short-guide/))
+- **Performance boost**: by caching the Apache Hamilton Driver and its execution call, we are able to effectively cache all data operations in a few lines of code. Furthermore, Apache Hamilton can scale further by using a remote task executor on a separate machine from the Streamlit application.

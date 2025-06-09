@@ -1,10 +1,10 @@
 # Translation exercise
 
-This is a tutorial that one can use to help people grok Hamilton.
+This is a tutorial that one can use to help people grok Apache Hamilton.
 
-The task is to translate the procedural code into Hamilton. That is:
+The task is to translate the procedural code into Apache Hamilton. That is:
 
-1. Translate either mpg_script.py or ProceduralMPGNotebook.ipynb into a Hamilton.
+1. Translate either mpg_script.py or ProceduralMPGNotebook.ipynb into a Apache Hamilton.
 2. There are two file stubs to fill in: `mpg_pipeline.py` or `MPGSimple.ipynb`.
 
 If you get stuck or want to see the solution, you can look at `mpg_pipeline_target.py` or `MPGSimpleTarget.ipynb`.
@@ -17,7 +17,7 @@ To get set up:
 
 1. Clone this repository.
 2. Go into the `examples/hamilton-tutorials/mpg-translation` directory.
-2. Install Hamilton. `pip install - requirements.txt`
+2. Install Apache Hamilton. `pip install - requirements.txt`
 3. Write code.
 4. Excute via notebook or command line.
 

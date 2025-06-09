@@ -1,11 +1,11 @@
 Wrapping the Driver
 ------------------------------
 
-The APIs that the Hamilton Driver is built on, are considered internal. So it is possible for you to define your own
-driver in place of the stock Hamilton driver, we suggest the following path if you don't like how the current Hamilton
+The APIs that the Apache Hamilton Driver is built on, are considered internal. So it is possible for you to define your own
+driver in place of the stock Apache Hamilton driver, we suggest the following path if you don't like how the current Apache Hamilton
 Driver interface is designed:
 
-`Write a "Wrapper" class that delegates to the Hamilton Driver.`
+`Write a "Wrapper" class that delegates to the Apache Hamilton Driver.`
 
 i.e.
 
@@ -21,11 +21,11 @@ i.e.
         # ...
 
         def my_execute_function(self, arg1, arg2, ...):
-            """What actually calls the Hamilton"""
+            """What actually calls the Apache Hamilton"""
             dr = driver.Driver(self.constructor_arg, ...)
             df = dr.execute(self.outputs)
             return self.augmetn(df)
 
-That way, you can create the right API constructs to invoke Hamilton in your context, and then delegate to the stock
-Hamilton Driver. By doing so, it will ensure that your code continues to work, since we intend to honor the Hamilton
+That way, you can create the right API constructs to invoke Apache Hamilton in your context, and then delegate to the stock
+Apache Hamilton Driver. By doing so, it will ensure that your code continues to work, since we intend to honor the Apache Hamilton
 Driver APIs with backwards compatibility as much as possible.

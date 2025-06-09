@@ -1,8 +1,8 @@
-# Deploy Hamilton in AWS Lambda
+# Deploy Apache Hamilton in AWS Lambda
 
 [AWS Lambda](https://aws.amazon.com/lambda/) - serverless computation service in AWS.
 
-Here we have an example how to deploy "hello-world" AWS Lambda with Hamilton functions.
+Here we have an example how to deploy "hello-world" AWS Lambda with Apache Hamilton functions.
 This example is based on the official instruction: https://docs.aws.amazon.com/lambda/latest/dg/python-image.html#python-image-instructions
 
 ## Prerequisites

@@ -1,6 +1,6 @@
 # Data Quality
 
-Hamilton has a simple but powerful data quality capability. This enables you to write functions
+Apache Hamilton has a simple but powerful data quality capability. This enables you to write functions
 that have assertion on the output. For example...
 
 ```python

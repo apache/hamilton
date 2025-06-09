@@ -1,6 +1,6 @@
 # Streamlit
 
-[Streamlit](https://streamlit.io/) is an open-source Python library to create web applications with minimal effort. It's an effective solution to create simple dashboards, interactive data visualizations, and proof-of-concepts for data science, machine learning, and LLM applications. On this page, you'll learn how Hamilton can help you:
+[Streamlit](https://streamlit.io/) is an open-source Python library to create web applications with minimal effort. It's an effective solution to create simple dashboards, interactive data visualizations, and proof-of-concepts for data science, machine learning, and LLM applications. On this page, you'll learn how Apache Hamilton can help you:
 - Write cleaner Streamlit applications
 - Reduce friction transition between proof-of-concept and production
 - Improve Streamlit performance
@@ -18,7 +18,7 @@ def greeting(name: str) -> None:
     st.write(f"Hello {name}")
 
 def app():
-    st.title("Hamilton + Streamlit 🐱‍🚀")
+    st.title("Apache Hamilton + Streamlit 🐱‍🚀")
 
     main, settings = st.tabs(["Main", "Settings"])
     left, right = st.columns(2)
@@ -50,7 +50,7 @@ def load_dataframe(path: str) -> pd.DataFrame:
     return pd.read_parquet(path)
 
 def app():
-    st.title("Hamilton + Streamlit 🐱‍🚀")
+    st.title("Apache Hamilton + Streamlit 🐱‍🚀")
 
     # load_dataframe() will only run the first time
     df = load_dataframe(path="...")
@@ -72,15 +72,15 @@ if __name__ == "__main__":
 > ⚠ This example is illustratory and real applications quickly get more complex.
 
 
-## Hamilton + Streamlit
-Adding Hamilton to your Streamlit application can provide a better separation between the dataflow and the UI logic. They pair nicely together because Hamilton is also stateless. Once defined, each call to `Driver.execute()` is independent. Therefore, on each Streamlit rerun, you use `Driver.execute()` to complete computations. Using Hamilton this way allows you to write your dataflow into Python modules and outside of the Streamlit.
+## Apache Hamilton + Streamlit
+Adding Apache Hamilton to your Streamlit application can provide a better separation between the dataflow and the UI logic. They pair nicely together because Apache Hamilton is also stateless. Once defined, each call to `Driver.execute()` is independent. Therefore, on each Streamlit rerun, you use `Driver.execute()` to complete computations. Using Apache Hamilton this way allows you to write your dataflow into Python modules and outside of the Streamlit.
 
 ### Example
 In this example, we will build a simple financial dashboard based on the Kaggle [Bank Marketing Dataset](https://www.kaggle.com/datasets/janiobachmann/bank-marketing-dataset).
 
 > The full code can be found on [GitHub](https://github.com/apache/hamilton/tree/main/examples/streamlit)
 
-First, Hamilton transformations are defined in the module `logic.py`. This includes downloading the data from the web, getting unique values for `job`, conducting groupby aggregates, and creating `plotly` figures.
+First, Apache Hamilton transformations are defined in the module `logic.py`. This includes downloading the data from the web, getting unique values for `job`, conducting groupby aggregates, and creating `plotly` figures.
 ```python
 # logic.py
 import pandas as pd
@@ -118,7 +118,7 @@ def job_hist(job_df: pd.DataFrame) -> Figure:
 Then, the Streamlit UI is defined in `app.py`. Notice a few things:
 - `app.py` doesn't have to depend on `pandas` and `plotly`.
 - `@cache_resource` allows to create the `Driver` only once.
-- `@cache_data` on `_execute()` will automatically cache any Hamilton result based on the combination of arguments (`final_vars`, `inputs`, and `overrides`)
+- `@cache_data` on `_execute()` will automatically cache any Apache Hamilton result based on the combination of arguments (`final_vars`, `inputs`, and `overrides`)
 - `get_state_inputs()` and `get_state_overrides()` will collect values from user inputs.
 - `execute()` parses the inputs and overrides from the state and call `_execute()`.
 
@@ -147,7 +147,7 @@ def _execute(
     inputs: Optional[dict] = None,
     overrides: Optional[dict] = None,
 ) -> dict:
-    """Generic utility to cache Hamilton results"""
+    """Generic utility to cache Apache Hamilton results"""
     dr = get_hamilton_driver()
     return dr.execute(final_vars, inputs=inputs, overrides=overrides)
 
@@ -167,7 +167,7 @@ def execute(final_vars: list[str]):
 
 
 def app():
-    st.title("Hamilton + Streamlit 🐱‍🚀")
+    st.title("Apache Hamilton + Streamlit 🐱‍🚀")
 
     # run the base data that always needs to be displayed
     data = execute(["all_jobs", "balance_per_job", "balance_per_job_boxplot"])
@@ -189,7 +189,7 @@ if __name__ == "__main__":
 
 ### Benefits
 - **Clearer scope**: the decoupling between `app.py` and `logic.py` makes it easier to add data transformations or extend UI, and debug errors associated with either.
-- **Reusable code**: the module `logic.py` can be reused elsewhere with Hamilton.
-    - If you are building a proof-of-concept with Streamlit, your Hamilton module will be able to grow with your project and be useful for your production pipelines.
-    - If you are already building dataflows with Hamilton, using it with Streamlit ensures your dashboard metrics have the same implementation with your production pipeline (i.e., prevent [implementation skew](https://building.nubank.com.br/dealing-with-train-serve-skew-in-real-time-ml-models-a-short-guide/))
-- **Performance boost**: by caching the Hamilton Driver and its execution call, we are able to effectively cache all data operations in a few lines of code. Furthermore, Hamilton can scale further by using a remote task executor on a separate machine from the Streamlit application.
+- **Reusable code**: the module `logic.py` can be reused elsewhere with Apache Hamilton.
+    - If you are building a proof-of-concept with Streamlit, your Apache Hamilton module will be able to grow with your project and be useful for your production pipelines.
+    - If you are already building dataflows with Apache Hamilton, using it with Streamlit ensures your dashboard metrics have the same implementation with your production pipeline (i.e., prevent [implementation skew](https://building.nubank.com.br/dealing-with-train-serve-skew-in-real-time-ml-models-a-short-guide/))
+- **Performance boost**: by caching the Apache Hamilton Driver and its execution call, we are able to effectively cache all data operations in a few lines of code. Furthermore, Apache Hamilton can scale further by using a remote task executor on a separate machine from the Streamlit application.

@@ -2,7 +2,7 @@
 Visualization
 =============
 
-After assembling the dataflow, several visualization features become available to the Driver. Hamilton dataflow visualizations are great for documentation because they are directly derived from the code.
+After assembling the dataflow, several visualization features become available to the Driver. Apache Hamilton dataflow visualizations are great for documentation because they are directly derived from the code.
 
 On this page, you'll learn:
 
@@ -124,7 +124,7 @@ Learn more about :doc:`materialization`.
 View node dependencies
 ----------------------
 
-Representing data pipelines, ML experiments, or LLM applications as a dataflow helps reason about the dependencies between operations. The Hamilton Driver has the following utilities to select and return a list of nodes (to learn more :doc:`../how-tos/use-hamilton-for-lineage`):
+Representing data pipelines, ML experiments, or LLM applications as a dataflow helps reason about the dependencies between operations. The Apache Hamilton Driver has the following utilities to select and return a list of nodes (to learn more :doc:`../how-tos/use-hamilton-for-lineage`):
 
 - ``.what_is_upstream_of(*node_names: str)``
 - ``.what_is_downstream_of(*node_names: str)``
@@ -193,7 +193,7 @@ This `online graphviz editor <https://edotor.net/>`_ can help you get started!
     ) -> Tuple[dict, Optional[str], Optional[str]]:
         """Custom style function for the visualization.
 
-        :param node: node that Hamilton is styling.
+        :param node: node that Apache Hamilton is styling.
         :param node_class: class used to style the default visualization
         :return: a triple of (style, node_class, legend_name)
         """

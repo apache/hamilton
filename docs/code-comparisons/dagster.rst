@@ -2,9 +2,9 @@
 Dagster
 =========
 
-Here are some code snippets to compare the macro orchestrator Dagster to the micro orchestrator Hamilton. Hamilton can run inside Dagster, but you wouldn't run Dagster inside Hamilton.
+Here are some code snippets to compare the macro orchestrator Dagster to the micro orchestrator Apache Hamilton. Apache Hamilton can run inside Dagster, but you wouldn't run Dagster inside Apache Hamilton.
 
-While the two have different scope, there's a lot of overlap between the two both in terms of functionality and API. Indeed, Dagster's software-defined assets introduced in 2022 matches Hamilton's declarative approach and should feel familiar to users of either.
+While the two have different scope, there's a lot of overlap between the two both in terms of functionality and API. Indeed, Dagster's software-defined assets introduced in 2022 matches Apache Hamilton's declarative approach and should feel familiar to users of either.
 
 
 ------
@@ -16,7 +16,7 @@ TL;DR
     :header-rows: 1
 
     * - Trait
-      - Hamilton
+      - Apache Hamilton
       - Dagster
     * - Declarative API
       - ✅
@@ -73,7 +73,7 @@ TL;DR
       - `Lifecycle hooks <https://hamilton.dagworks.io/en/latest/reference/lifecycle-hooks/>`_ (easier to extend)
       - `Op Hooks <https://docs.dagster.io/concepts/ops-jobs-graphs/op-hooks#op-hooks>`_
     * - Plugins
-      - `Spark <https://blog.dagworks.io/p/expressing-pyspark-transformations>`_, Dask, Ray, `Datadog <https://hamilton.dagworks.io/en/latest/reference/lifecycle-hooks/DDOGTracer/>`_, polars, pandera, and more (Hamilton is less restrictive and easier to extend)
+      - `Spark <https://blog.dagworks.io/p/expressing-pyspark-transformations>`_, Dask, Ray, `Datadog <https://hamilton.dagworks.io/en/latest/reference/lifecycle-hooks/DDOGTracer/>`_, polars, pandera, and more (Apache Hamilton is less restrictive and easier to extend)
       - `Spark, Dask, polars, pandera, Databricks, Snowflake, Great Expections, and more <https://docs.dagster.io/integrations>`_  (Dagster integrations are more involved to develop)
     * - Interactive Development
       - `Jupyter Magic <https://hamilton.dagworks.io/en/latest/how-tos/use-in-jupyter-notebook/#use-hamilton-jupyter-magic>`_, `VSCode extension <https://marketplace.visualstudio.com/items?itemName=ThierryJean.hamilton>`_
@@ -88,7 +88,7 @@ Dataflow definition
    :align: left
 
    +------------------------------------------------------------+----------------------------------------------------------+
-   | Hamilton                                                   | Dagster                                                  |
+   | Apache Hamilton                                                   | Dagster                                                  |
    +============================================================+==========================================================+
    | .. literalinclude:: _dagster_snippets/hamilton_dataflow.py | .. literalinclude:: _dagster_snippets/dagster_dataflow.py| 
    |                                                            |                                                          |
@@ -102,7 +102,7 @@ Dataflow definition
     :header-rows: 1
 
     * - Trait
-      - Hamilton
+      - Apache Hamilton
       - Dagster
     * - Define operations
       - Uses the native Python function signature. The dataflow is assembled based on function/parameter names and type annotations.
@@ -125,7 +125,7 @@ Dataflow execution
    :align: left
 
    +-------------------------------------------------------------+------------------------------------------------------------+
-   | Hamilton                                                    | Dagster                                                    |
+   | Apache Hamilton                                                    | Dagster                                                    |
    +=============================================================+============================================================+
    | .. literalinclude:: _dagster_snippets/hamilton_execution.py | .. literalinclude:: _dagster_snippets/dagster_execution.py | 
    |                                                             |                                                            |
@@ -136,7 +136,7 @@ Dataflow execution
     :header-rows: 1
 
     * - Trait
-      - Hamilton
+      - Apache Hamilton
       - Dagster
     * - Execution instructions
       - Define a ``Driver`` using the ``Builder`` object. It automatically assembles the graph from the dataflow definition found in ``dataflow.py``
@@ -156,7 +156,7 @@ Dataflow execution
 More information
 ----------------
 
-For a full side-by-side example of Dagster and Hamilton, visit `this GitHub repository <https://github.com/apache/hamilton/tree/main/examples/dagster>`_
+For a full side-by-side example of Dagster and Apache Hamilton, visit `this GitHub repository <https://github.com/apache/hamilton/tree/main/examples/dagster>`_
 
 For more questions, join our `Slack Channel <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_!
     

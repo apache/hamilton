@@ -2,7 +2,7 @@
 
 This example demonstrates how to perform
 a [split-apply-combine](https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html) transformation using
-Hamilton.
+Apache Hamilton.
 
 Many data analysis or processing involve one or more of the following steps:
 

@@ -1,6 +1,6 @@
-# Monitor Hamilton with OpenTelemetry, OpenLLMetry and Traceloop
+# Monitor Apache Hamilton with OpenTelemetry, OpenLLMetry and Traceloop
 
-In this simple example, you'll learn how to use the `OpenTelemetryTracer` to emit traces of your Hamilton code using the OpenTelemetry format, in particular LLM applications.
+In this simple example, you'll learn how to use the `OpenTelemetryTracer` to emit traces of your Apache Hamilton code using the OpenTelemetry format, in particular LLM applications.
 
 ![Traceloop screenshot](screenshot.png)
 
@@ -36,6 +36,6 @@ Having access to a [Traceloop account](https://www.traceloop.com/) and an API ke
 
 For this example to work without Traceloop, you will need to set up your own [OpenTelemetry destination](https://opentelemetry.io/ecosystem/vendors/). We suggest using [Jaeger](https://www.jaegertracing.io/docs/1.47/getting-started/) and included Python code to route telemetry to it in `run.py`.
 
-## Should I still use the Hamilton UI?
+## Should I still use the Apache Hamilton UI?
 
-Absolutely! OpenTelemetry focsues on collecting telemetry about the internals of code and external API calls. It's a standard amongst web services. There's no conflict between the OpenTelemetry tracer and the tracking for the Hamilton UI. In fact, the Hamilton UI captures a superset of what OpenTelemetry allows, tailored to the Hamilton framework such as:  visualizations, data lineage, summary statistics, and more utilities to improve your development experience. In the not too distant future, the Hamilton UI could ingest OpenTelemetry data 😉 (contributions welcomed!)
+Absolutely! OpenTelemetry focsues on collecting telemetry about the internals of code and external API calls. It's a standard amongst web services. There's no conflict between the OpenTelemetry tracer and the tracking for the Apache Hamilton UI. In fact, the Apache Hamilton UI captures a superset of what OpenTelemetry allows, tailored to the Apache Hamilton framework such as:  visualizations, data lineage, summary statistics, and more utilities to improve your development experience. In the not too distant future, the Apache Hamilton UI could ingest OpenTelemetry data 😉 (contributions welcomed!)

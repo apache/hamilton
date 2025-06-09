@@ -1,4 +1,4 @@
-# Hamilton UI frontend
+# Apache Hamilton UI frontend
 
 ## Dev setup
 

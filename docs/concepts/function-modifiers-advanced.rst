@@ -10,7 +10,7 @@ The page :doc:`function-modifiers` details how to use decorators to write expres
 
 Nonetheless, there exists higher level abstractions for power users that *may* be useful for integrations with your existing platform. If you want to use complex machinery instead of writing 1 additional function, comeback when it's your 10th manually addition 🛠
 
-This page assumes an advanced understanding of Hamilton and will cover:
+This page assumes an advanced understanding of Apache Hamilton and will cover:
 
 - @pipe
 - @subdag

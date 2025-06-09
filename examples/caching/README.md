@@ -1,6 +1,6 @@
 # Caching
 
-This directory contains tutorial notebooks for the Hamilton caching feature.
+This directory contains tutorial notebooks for the Apache Hamilton caching feature.
 
 - `tutorial.ipynb`: the main tutorial for caching
 - `in_memory_tutorial.ipynb`: How to use caching without writing metadata and results to file.

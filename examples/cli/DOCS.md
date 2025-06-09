@@ -1,6 +1,6 @@
 # `hamilton`
 
-Hamilton CLI
+Apache Hamilton CLI
 
 **Usage**:
 

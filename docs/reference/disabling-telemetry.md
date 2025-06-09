@@ -1,7 +1,7 @@
 # Telemetry
 
 If you do not wish to participate in telemetry capture, one can opt-out with one of the following methods:
-1. Set it to false programmatically in your code before creating a Hamilton driver:
+1. Set it to false programmatically in your code before creating a Apache Hamilton driver:
    ```python
    from hamilton import telemetry
    telemetry.disable_telemetry()

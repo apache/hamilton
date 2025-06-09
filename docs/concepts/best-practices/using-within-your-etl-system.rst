@@ -2,7 +2,7 @@
 Using within your ETL System
 ============================
 
-Conceptually you can integrate Hamilton within your existing ETL system quite easily:
+Conceptually you can integrate Apache Hamilton within your existing ETL system quite easily:
 
 Compatibility Matrix
 --------------------
@@ -34,8 +34,8 @@ Compatibility Matrix
 ETL Recipe
 ----------
 
-#. Write Hamilton functions & `“driver”` code.
-#. Publish your Hamilton functions in a package, or import via other means (e.g. checkout a repository & include in python path).
+#. Write Apache Hamilton functions & `“driver”` code.
+#. Publish your Apache Hamilton functions in a package, or import via other means (e.g. checkout a repository & include in python path).
 #. Include `sf-hamilton` as a python dependency
 #. Have your ETL system execute your “driver” code.
 #. Profit.

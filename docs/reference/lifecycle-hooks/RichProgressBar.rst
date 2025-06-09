@@ -2,7 +2,7 @@
 plugins.h_rich.RichProgressBar
 ==============================
 
-Provides a progress bar for Hamilton execution. Must have `rich` installed to use it:
+Provides a progress bar for Apache Hamilton execution. Must have `rich` installed to use it:
 
 `pip install sf-hamilton[rich]` (use quotes if using zsh)
 

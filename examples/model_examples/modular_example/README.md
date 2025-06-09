@@ -1,7 +1,7 @@
 # Modular pipeline example
 
 In this example we show how you can compose a pipeline from multiple modules.
-This is a common pattern in Hamilton, where you can define a module that encapsulates
+This is a common pattern in Apache Hamilton, where you can define a module that encapsulates
 a set of "assets" and then use that module in a parameterized manner.
 
 The use case here is that:

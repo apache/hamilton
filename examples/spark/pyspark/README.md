@@ -1,15 +1,15 @@
-# Hamilton and Pyspark
+# Apache Hamilton and Pyspark
 
-**TL;DR** Hamilton now has a full pyspark integration. This enables you to build modular pyspark applications
+**TL;DR** Apache Hamilton now has a full pyspark integration. This enables you to build modular pyspark applications
 by declaring each transformation as a hamilton function. The new `with_columns` decorator enables you to specify a
 series of individual column operations to a dataframe, written as pandas UDFs, python UDFs, or function of pyspark dataframes.
-Together with vanilla Hamilton, this new integration can help you break complex pyspark code into a series of self-contained, unit-testable functions.
+Together with vanilla Apache Hamilton, this new integration can help you break complex pyspark code into a series of self-contained, unit-testable functions.
 
 <p align="center">
 <img width="600" height="600" src="grouped_transformations.png">
 </p>
 
-*A spark application written with Hamilton that represents multiple joins (in blue), a set of map operations (in green) and a set of  join/filters (in yellow). This uses Hamilton’s visualization features (with a little extra annotation). See [TPC-H query 8](../tpc-h/query_8.py) for motivation.*
+*A spark application written with Apache Hamilton that represents multiple joins (in blue), a set of map operations (in green) and a set of  join/filters (in yellow). This uses Apache Hamilton’s visualization features (with a little extra annotation). See [TPC-H query 8](../tpc-h/query_8.py) for motivation.*
 
 ## Apache Spark
 [Apache Spark](https://spark.apache.org/) (and its python API, [pyspark](https://spark.apache.org/docs/latest/api/python/index.html)) is an open-source library for building out highly scalable data transformations.
@@ -33,20 +33,20 @@ Specifically, we've observed the following problems with pyspark code:
 5. _They are notoriously tricky to debug._ Large pipelines of spark transformations (much like SQL transformations) will often have errors that cascade upwards, and pinpointing the source of these can be quite a challenge.
 
 
-# Hamilton
-As this is a README inside the Hamilton repository, we assume some basic familiarity. That said, here's a quick primer:
+# Apache Hamilton
+As this is a README inside the Apache Hamilton repository, we assume some basic familiarity. That said, here's a quick primer:
 
-Hamilton is an open-source Python framework for writing data transformations.
-One writes Python functions in a declarative style, which Hamilton parses into nodes in
+Apache Hamilton is an open-source Python framework for writing data transformations.
+One writes Python functions in a declarative style, which Apache Hamilton parses into nodes in
 a graph based on their names, arguments and type annotations. The simple rule is akin to that of pytest fixtures --
 the name of a parameter points to another node (function) in the graph, and the name of the function defines a referencable node.
-You can request specific outputs, and Hamilton will execute the required nodes (specified by your functions) to produce them.
+You can request specific outputs, and Apache Hamilton will execute the required nodes (specified by your functions) to produce them.
 
 You can try hamilton out in your browser at [tryhamilton.dev](https://tryhamilton.dev).
 
 # Integration
 
-Breaking your spark application into Hamilton functions with pyspark dataframes as inputs and outputs gets you most of
+Breaking your spark application into Apache Hamilton functions with pyspark dataframes as inputs and outputs gets you most of
 the way towards more modular/documented code.
 That said, it falls flat in a critical area – column-level lineage/transformation
 simplicity. For complex series of map operations, spark represents all transformations
@@ -58,7 +58,7 @@ Spark, however, has no notion of indices. Data is partitioned across a cluster, 
 Thus, the two options one previously had for integrating with pyspark both have disadvantages:
 
 1. Extracting into columns then joining is prohibitively expensive and taxing on the spark optimizer (which we have not found was smart enough to detect this pattern)
-2. Running pure DataFrame transformations does not afford the expressiveness that Hamilton provides.
+2. Running pure DataFrame transformations does not afford the expressiveness that Apache Hamilton provides.
 
 The idea is to break your transformations into sections that form one of two shapes.
 
@@ -66,7 +66,7 @@ The idea is to break your transformations into sections that form one of two sha
 2. Form a DAG of column-level operations (for cardinality-preserving operations)
 
 For the first case, we just use the pyspark dataframe API. You define functions that, when put
-through Hamilton, act as a pipe. For example:
+through Apache Hamilton, act as a pipe. For example:
 
 ### Joins/Aggregations/Filters
 
@@ -296,10 +296,10 @@ normal set of spark operations.
 
 ## Scaling Alternatives
 
-Pyspark is not the only way to scale up your computation.  Hamilton supports `pandas-on-spark` as well. You can use pandas-on-spark with the `KoalaGraphAdapter` -- see [Pandas on Spark](../pandas_on_spark/README.md) for reference.
-Some people prefer vanilla spark, some like pandas-on-spark. We support both. Hamilton also support executing map-based pandas UDFs in pyspark, in case you want simple parallelism. See [pyspark_udfs](../pyspark_udfs/README.md) for reference.
+Pyspark is not the only way to scale up your computation.  Apache Hamilton supports `pandas-on-spark` as well. You can use pandas-on-spark with the `KoalaGraphAdapter` -- see [Pandas on Spark](../pandas_on_spark/README.md) for reference.
+Some people prefer vanilla spark, some like pandas-on-spark. We support both. Apache Hamilton also support executing map-based pandas UDFs in pyspark, in case you want simple parallelism. See [pyspark_udfs](../pyspark_udfs/README.md) for reference.
 
-Hamilton has integrations with other scaling libraries as well -- it all depends on your use-case:
+Apache Hamilton has integrations with other scaling libraries as well -- it all depends on your use-case:
 
 - [dask](../../dask/README.md)
 - [ray](../../ray/README.md)

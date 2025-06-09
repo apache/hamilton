@@ -32,7 +32,7 @@ def weighted_average(data:pd.Series, weight:int)->pd.Series:
 ```
 
 
-In this case Hamilton will raise an error since we cannot have two same named functions in the DAG.
+In this case Apache Hamilton will raise an error since we cannot have two same named functions in the DAG.
 
 We have a handy flag for you to allow the later imported module to overwrite the previous same-named functions:
 
@@ -44,4 +44,4 @@ dr = (
 )
 ```
 
-which will tell Hamilton to use ``module_B.weighted_average()`` for the node and ignore the same-named function from ``module_A``.
+which will tell Apache Hamilton to use ``module_B.weighted_average()`` for the node and ignore the same-named function from ``module_A``.

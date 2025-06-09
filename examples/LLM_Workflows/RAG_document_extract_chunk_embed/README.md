@@ -2,7 +2,7 @@
 
 ![pipeline-steps](pipeline-steps.png)
 
-The notebook here explains how to build a simple pipeline that processes a page from Hamilton's documentation.
+The notebook here explains how to build a simple pipeline that processes a page from Apache Hamilton's documentation.
 
 Open it in google collab:
 <a target="_blank" href="https://colab.research.google.com/github/DAGWorks-Inc/hamilton/blob/main/examples/LLM_Workflows/RAG_document_extract_chunk_embed/simple_pipeline.ipynb">

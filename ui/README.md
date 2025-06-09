@@ -1,20 +1,20 @@
-# Hamilton UI
+# Apache Hamilton UI
 
-This contains the code for the new Hamilton UI. For an overview of getting started & features
+This contains the code for the new Apache Hamilton UI. For an overview of getting started & features
 [see this documentation](https://hamilton.dagworks.io/en/latest/concepts/ui). For a lengthier post and intro see our [blog post](https://blog.dagworks.io/p/hamilton-ui-streamlining-metadata).
 
 ## One operational UI for all your dataflows
 
-The Hamilton UI is a system that provides the following capabilities:
+The Apache Hamilton UI is a system that provides the following capabilities:
 
 1. Execution tracking with associated metadata
    * Provides a persistent database to store/manage these
    * Provides a server that allows reading/writing/authentication
-2. Data/artifact observability: provides telemetry/observability of Hamilton executions + specific function results/code through a web interface
+2. Data/artifact observability: provides telemetry/observability of Apache Hamilton executions + specific function results/code through a web interface
 3. Lineage & provenance: allows you to quickly inspect how code and data is connected.
 4. Catalog: everything is observed and cataloged, so you can quickly search and find what exists and when it was run.
 
-The UI is meant to monitor/debug Hamilton dataflows both in **development** and **production**. The aim is to enable
+The UI is meant to monitor/debug Apache Hamilton dataflows both in **development** and **production**. The aim is to enable
 dataflow authors to move faster during all phases of the software development lifecycle.
 
 For an overview of some of these features [you can watch this quick video](https://youtu.be/0VIVSeN7Ij8?si=maeV0zdzTPSqUl1N).
@@ -75,7 +75,7 @@ cd hamilton/ui
 ./run.sh
 ```
 Once docker is running navigate to http://localhost:8242 and create an email and a project; then follow
-instructions on integrating with Hamilton.
+instructions on integrating with Apache Hamilton.
 
 A fuller guide can be found [here](https://hamilton.dagworks.io/en/latest/concepts/ui).
 

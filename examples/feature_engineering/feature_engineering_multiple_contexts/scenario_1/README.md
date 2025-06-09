@@ -20,7 +20,7 @@ into the feature computation process. E.g. If you're getting started, these coul
 is loaded much like the model, or queried from a database, etc. Though you'll want
 to ensure these values match whatever values the model was trained with. If you need help here, join our slack and we're happy to help you figure this out!
 
-Here's a mental image of how things work and how they relate to the files/modules & Hamilton:
+Here's a mental image of how things work and how they relate to the files/modules & Apache Hamilton:
 ![offline-online-image](FeaturesExampleScenario1.svg?sanitize=True)
 
 
@@ -38,7 +38,7 @@ Important not, there are two aggregations features defined: `age_mean` and `age_
 `age` column. These make sense to compute in an offline setting as you have all the data, but in an online setting where
 you'd be performing inference, that doesn't makse sense. So for the online case, these computations be "overridden" in
 `fastapi_server.py` with the values that were computed in the offline setting that you have stored (as mentioned above
-and below it's up to you how to store them/sync them). The nice thing in Hamilton is that we can also "tag" these two
+and below it's up to you how to store them/sync them). The nice thing in Apache Hamilton is that we can also "tag" these two
 feature transforms with information to indicate to someone reading the code, that they should be overriden in the
 online feature computation context.
 

@@ -76,5 +76,5 @@ The module uses libraries such as numpy, pandas, plotly, torch, sklearn, and ope
 # Limitations
 This code is currently set up to work with OpenAI. It could be modified to work with other embedding producers/providers.
 
-The matrix optimization is not set up to be parallelized, though it could be done using Hamilton constructs,
+The matrix optimization is not set up to be parallelized, though it could be done using Apache Hamilton constructs,
 like `Parallelizeable`.

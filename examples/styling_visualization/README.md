@@ -1,6 +1,6 @@
 # Style your dataflow visualizations
 
-A core feature of Hamilton is the ability to generate visualizations directly from your code. By default, each nodes is labelled with its name and type and is stylized (shape, color, outline, etc.).
+A core feature of Apache Hamilton is the ability to generate visualizations directly from your code. By default, each nodes is labelled with its name and type and is stylized (shape, color, outline, etc.).
 
 Now, it is possible to customize the visualization style based on node attributes. To do so, you need to define a function that will be applied to each node of the graph.
 
@@ -13,7 +13,7 @@ def custom_style(
 ) -> Tuple[dict, Optional[str], Optional[str]]:
     """Custom style function for the visualization.
 
-    :param node: node that Hamilton is styling.
+    :param node: node that Apache Hamilton is styling.
     :param node_class: class used to style the default visualization
     :return: a triple of (style, node_class, legend_name) where
         style: dictionary of graphviz attributes https://graphviz.org/docs/nodes/,
@@ -51,7 +51,7 @@ This [online graphviz editor](https://edotor.net/) can help you get started!
 
 
 ## Use cases
-The Hamilton visualizations help you document your code and communicate what your dataflow does. Adapting the style to your given context can help highlight
+The Apache Hamilton visualizations help you document your code and communicate what your dataflow does. Adapting the style to your given context can help highlight
 - code ownership
 - data sources
 - personally identifiable information
@@ -62,7 +62,7 @@ The Hamilton visualizations help you document your code and communicate what you
 Having access to `graph_types.HamiltonNode` as input means you can customize based on node name, type, tags, originating function, and more, allowing for a great degree of flexibility.
 
 ## Node classes
-The default Hamilton visualization currently relies on 3 node classes:
+The default Apache Hamilton visualization currently relies on 3 node classes:
 - `"function"`: default node type
 - `"input"`: input node, i.e., that doesn't have an associated function
 - `"config"`: value passed to the Driver config

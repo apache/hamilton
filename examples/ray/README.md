@@ -1,4 +1,4 @@
-# Scaling Hamilton on Ray
+# Scaling Apache Hamilton on Ray
 
 [Ray](https://ray.io) is a general purpose framework that allows for parallel
 computation on a local machine, as well as scaling to a
@@ -8,8 +8,8 @@ Ray cluster.
 
 ## injecting @ray.remote
 See the `hello_world` example for how you might accomplish
-scaling Hamilton on Ray, where `@ray.remote` is injected around
-each Hamilton function.
+scaling Apache Hamilton on Ray, where `@ray.remote` is injected around
+each Apache Hamilton function.
 
 ## creating tasks
 For [this paralle task approach](https://hamilton.dagworks.io/en/latest/concepts/parallel-task/) see [this

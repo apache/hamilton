@@ -16,13 +16,13 @@ Before we dive into the concepts, let's clarify the terminology we'll be using:
        the other), acyclic, (there are no cycles, i.e., no function runs before itself), and a graph (it is easily \
        naturally represented by nodes and edges) and can be represented visually. See :doc:`node`.
    * - Node |
-       Hamilton node |
+       Apache Hamilton node |
        Transform
      - A single step in the dataflow DAG representing a computation -- usually 1:1 with functions but decorators break that \
        pattern -- in which case multiple transforms trace back to a single function. See :doc:`node`.
    * - Function |
        Python function |
-       Hamilton function |
+       Apache Hamilton function |
        Node definition
      - A Python function written by a user to create a single node (in the standard case) or \
        many (using function modifiers). See :doc:`node`.
@@ -30,7 +30,7 @@ Before we dive into the concepts, let's clarify the terminology we'll be using:
        Python module
      - Python code organized into a ``.py`` file. These are natural groupings of functions that turn to a set of nodes. See :doc:`best-practices/code-organization` for more details.
    * - Driver |
-       Hamilton Driver
+       Apache Hamilton Driver
      - An object that loads Python modules to build a dataflow. It is responsible for visualizing and executing the \
        dataflow. See :doc:`driver`.
    * - script |
@@ -41,4 +41,4 @@ Before we dive into the concepts, let's clarify the terminology we'll be using:
      - Data that dictates the way the DAG is constructed. See :doc:`driver`.
    * - Function modifiers |
        Decorators
-     - A function that modifies how your Hamilton function is compiled into a Hamilton node. See :doc:`function-modifiers`.
+     - A function that modifies how your Apache Hamilton function is compiled into a Apache Hamilton node. See :doc:`function-modifiers`.

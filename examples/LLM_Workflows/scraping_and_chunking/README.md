@@ -3,7 +3,7 @@ Scraping and chunking are an important part of any RAG dataflow. Typically they'
 the start of your "backend" operations to populate for example your vector database.
 
 ## High Level Explanation
-Here we show how to model this process with Hamilton, but also we show how to avoid
+Here we show how to model this process with Apache Hamilton, but also we show how to avoid
 dealing with executors and control flow logic that can make your code hard to maintain, test, and reuse.
 For the latter case, see the example code below. You would typically see this in a scraping and chunking workflow to
 parallelize it. `some_func` below would be some large function, or wrapper around logic to process each
@@ -29,7 +29,7 @@ def scrape(urls: list) -> list:
     return all_data
 ```
 ##
-Instead, with Hamilton, you can write the processing logic INDEPENDENT of having to deal
+Instead, with Apache Hamilton, you can write the processing logic INDEPENDENT of having to deal
 with the for loop and control logic to submit to the executor. This is a big win, because
 it means you can easily unit test your code, reuse it, and then scale it to run in parallel without
 coupling to a specific execution system.
@@ -65,7 +65,7 @@ def processed_article(article_text: str) -> list:
     # do some processing, even saving it, etc.
     return article_text
 ```
-Next we can then "parallelize" & "collect" it over inputs, i.e. "map" over it with various values. To tell Hamilton to
+Next we can then "parallelize" & "collect" it over inputs, i.e. "map" over it with various values. To tell Apache Hamilton to
 do that we'd add the following functions to "sandwich" the code above:
 ```python
 def url(urls_from_sitemap: list[str], max_urls: int = 1000) -> Parallelizable[str]:
@@ -77,7 +77,7 @@ def url(urls_from_sitemap: list[str], max_urls: int = 1000) -> Parallelizable[st
     for url in urls_from_sitemap[0:max_urls]:
         yield url
 
-# The previous Hamilton code could live here, or if in another module, Hamilton
+# The previous Apache Hamilton code could live here, or if in another module, Apache Hamilton
 # would stitch the graph together correctly.
 
 def collect_processed_articles(processed_article: Collect[list]) -> list:
@@ -87,7 +87,7 @@ def collect_processed_articles(processed_article: Collect[list]) -> list:
     """
     return list(url_result)
 ```
-The magic is in the `Parallelizable` & `Collect` types. This tells Hamilton to run what is between them
+The magic is in the `Parallelizable` & `Collect` types. This tells Apache Hamilton to run what is between them
 in parallel as a single task. For more information see the
 [parallel documentation](https://hamilton.dagworks.io/en/latest/concepts/parallel-task/) and
 [examples](https://github.com/apache/hamilton/tree/main/examples/parallelism).
@@ -98,7 +98,7 @@ Here is an image of the pipeline when run locally, or via ray or dask:
 ![pipeline](pipeline.png)
 
 The pipeline is a simple one that:
-1. takes in a sitemap.xml file and creates a list of all the URLs in the file. Defaults to Hamilton's.
+1. takes in a sitemap.xml file and creates a list of all the URLs in the file. Defaults to Apache Hamilton's.
 2. For each URL the process is then parallelized (green border).
 3. each url is pulled and stripped to the relevant body of HTML.
 4. the HTML is then chunked into smaller pieces -- returning langchain documents
@@ -116,11 +116,11 @@ Or you can open the notebook in google collab:<a target="_blank" href="https://c
 ### File Structure
 Here we explain the file structure of the example:
 
- - `doc_pipeline.py` - the main file that contains the Hamilton code that defines the document chunking pipeline.
+ - `doc_pipeline.py` - the main file that contains the Apache Hamilton code that defines the document chunking pipeline.
  - `run.py` - code that you would invoke to run `doc_pipeline` locally, or in a single python process.
  - `run_dask.py` - code that you would invoke to run `doc_pipeline` on a Dask cluster / or dask locally.
  - `run_ray.py` - code that you would invoke to run `doc_pipeline` on a Ray cluster / or ray locally.
- - `spark/doc_pipeline.py` - the main file that contains the Hamilton code that defines the document chunking pipeline,
+ - `spark/doc_pipeline.py` - the main file that contains the Apache Hamilton code that defines the document chunking pipeline,
 but adjusted for PySpark.
  - `spark/spark_pipeline.py` - code that you would invoke to run `spark/doc_pipeline` on a Spark cluster / or spark locally.
  - `spark/README.md` - more details on running the Spark example and why the code differs slightly.
@@ -145,7 +145,7 @@ This example is a simple one, but it's easy to extend. For example, you could:
 * you could also add a step to save the results to a database, or to a file system.
 * you'd also likely tune the parallelism to ensure you don't DoS the resource you're hitting.
 
-## Hamilton over Langchain
-Hamilton is a general purpose tool, and what we've described here applies broadly
+## Apache Hamilton over Langchain
+Apache Hamilton is a general purpose tool, and what we've described here applies broadly
 to any code that you might write: data, machine learning, LLMs, web processing, etc. You can
 even use it with parts of LangChain!

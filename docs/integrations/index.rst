@@ -2,7 +2,7 @@
 Integrations
 ============
 
-This section showcases how Hamilton integrates with popular frameworks.
+This section showcases how Apache Hamilton integrates with popular frameworks.
 
 .. toctree::
     dlt/index

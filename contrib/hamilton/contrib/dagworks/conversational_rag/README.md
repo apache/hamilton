@@ -1,7 +1,7 @@
 # Purpose of this module
 
 This module shows a conversational retrieval augmented generation (RAG) example using
-Hamilton. It shows you how you might structure your code with Hamilton to
+Apache Hamilton. It shows you how you might structure your code with Apache Hamilton to
 create a RAG pipeline that takes into account conversation.
 
 This example uses [FAISS](https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/) + and in memory vector store and the OpenAI LLM provider.
@@ -25,7 +25,7 @@ These are the defined inputs you can provide.
  - *top_k*: An integer. This is the number of vectors to retrieve from the vector store. Defaults to 5.
 
 ### Overrides
-With Hamilton you can easily override a function and provide a value for it. For example if you're
+With Apache Hamilton you can easily override a function and provide a value for it. For example if you're
 iterating you might just want to override these two values before modifying the functions:
 
  - *context*: if you want to skip going to the vector store and provide the context directly, you can do so by providing this override.
@@ -91,7 +91,7 @@ What you'd most likely want to do is:
 3. Change the context and prompt.
 
 With (1) you can import any vector store/library that you want. You should draw out
-the process you would like, and that should then map to Hamilton functions.
+the process you would like, and that should then map to Apache Hamilton functions.
 With (2) you can import any LLM provider that you want, just use `@config.when` if you
 want to switch between multiple providers.
 With (3) you can add more functions that create parts of the prompt.

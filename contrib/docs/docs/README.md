@@ -3,17 +3,17 @@ title: "Introduction"
 sidebar_position: 1
 ---
 
-# Hamilton Dataflows
+# Apache Hamilton Dataflows
 
 <h3> Welcome!</h3>
 
-Here you'll find a website that curates a collection of Hamilton Dataflows that are
+Here you'll find a website that curates a collection of Apache Hamilton Dataflows that are
 ready to be used in your own projects. They are user-contributed and maintained, with
-the goal of making it easier for you to get started with Hamilton.
+the goal of making it easier for you to get started with Apache Hamilton.
 
 We expect this collection to grow over time, so check back often! As dataflows become mature we
 will move them into the official DAGWorks sub-package of this site and become maintained by
-DAGWorks's Hamilton team.
+DAGWorks's Apache Hamilton team.
 
 ## Navigation
 ☝️ Use the search bar above to quickly find dataflows based on keyword search.
@@ -26,13 +26,13 @@ There are two methods to get access to dataflows presented here.
 
 Assumptions:
 
-1. You are familiar with Hamilton and have it installed. If not, take
-[15 minutes to learn Hamilton in your browser](https://www.tryhamilton.dev/) and then `pip install sf-hamilton` to get started.
-Come back here when you're ready to use Hamilton.
+1. You are familiar with Apache Hamilton and have it installed. If not, take
+[15 minutes to learn Apache Hamilton in your browser](https://www.tryhamilton.dev/) and then `pip install sf-hamilton` to get started.
+Come back here when you're ready to use Apache Hamilton.
 2. You have the requisite python dependencies installed on your system.
 You'll get import errors if you don't. Don't know what you need? Scroll to the bottom of a dataflow to find the requirements. We're working on convenience functions to help!
 
-For more extensive documentation, please see [Hamilton User Contrib documentation](https://hamilton.dagworks.io).
+For more extensive documentation, please see [Apache Hamilton User Contrib documentation](https://hamilton.dagworks.io).
 
 ### Dynamic installation
 Here we dynamically download the dataflow from the internet and execute it. This is useful for quickly
@@ -138,8 +138,8 @@ Do you have the following?
   - [ ] Added an __init__.py file under my username directory.
 - [ ] Added a new folder for my dataflow under my username directory.
   - [ ] Added a README.md file under my dataflow directory that follows the standard headings and is filled out.
-  - [ ] Added a __init__.py file under my dataflow directory that contains the Hamilton code.
-  - [ ] Added a requirements.txt under my dataflow directory that contains the required packages outside of Hamilton.
+  - [ ] Added a __init__.py file under my dataflow directory that contains the Apache Hamilton code.
+  - [ ] Added a requirements.txt under my dataflow directory that contains the required packages outside of Apache Hamilton.
   - [ ] Added tags.json under my dataflow directory to curate my dataflow.
   - [ ] Added valid_configs.jsonl under my dataflow directory to specify the valid configurations.
   - [ ] Added a dag.png that shows one possible configuration of my dataflow.

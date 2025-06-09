@@ -2,7 +2,7 @@
 
 [Ibis](https://ibis-project.org/) is the portable Python dataframe library. It allows you to define data transformations once and execute them in multiple backends (BigQuery, DuckDB, PySpark, SQLite, Snowflake, Postgres, Polars; [see the full list](https://ibis-project.org/support_matrix)). If you never used Ibis before, it should feel similar to SQL with a touch of dataframes (e.g., pandas). You'll be primarily writing expressions (similar to an SQL query), which compute values only after calling for execution via `.to_pandas()` for example.
 
-On this page, you'll learn how Ibis + Hamilton can help:
+On this page, you'll learn how Ibis + Apache Hamilton can help:
 - Create a modular codebase for better collaboration and maintainability
 - Reduce the development-production gap
 
@@ -47,17 +47,17 @@ Ibis has an SQL-like syntax and supports chaining operations, allowing for power
 ### Challenge 2 - Orchestrate Ibis code in production
 Ibis alleviates a major pain point by enabling data transformations to work across backends. However, moving from dev to prod still requires some code changes such as changing backend connectors, swapping unsupported operators, adding some orchestration and logging execution. This is outside the scope of the Ibis project and is expected to be enabled by other means.
 
-## How Hamilton complements Ibis
+## How Apache Hamilton complements Ibis
 ### Write modular Ibis code
-Hamilton was initially developed to [structure pandas code for a large catalog of features](https://blog.dagworks.io/p/tidy-production-pandas-with-hamilton-3b759a2bf562), and has been adopted by multiple organizations since. Its syntax encourages users to chunk code into meaningful and reusable components, which facilitates documentation, unit testing, code reviews, and improves iteration speed. These benefits directly translate to organizing Ibis code.
+Apache Hamilton was initially developed to [structure pandas code for a large catalog of features](https://blog.dagworks.io/p/tidy-production-pandas-with-hamilton-3b759a2bf562), and has been adopted by multiple organizations since. Its syntax encourages users to chunk code into meaningful and reusable components, which facilitates documentation, unit testing, code reviews, and improves iteration speed. These benefits directly translate to organizing Ibis code.
 
-Now, we'll refactor the above code to use Hamilton. Users have the flexibility to chunk code at the table or the column-level depending on the needed granularity. This modularity is particularly beneficial to Ibis because:
+Now, we'll refactor the above code to use Apache Hamilton. Users have the flexibility to chunk code at the table or the column-level depending on the needed granularity. This modularity is particularly beneficial to Ibis because:
 
 - Well-scoped functions with type annotations and docstring are easier to understand for new Ibis users and facilitate onboarding.
 - Unit testing and data validation becomes easier with smaller expressions. These checks become more important when working across backends since the [operation coverage varies](https://ibis-project.org/support_matrix) and bugs may arise.
 
 #### Table-level
-Table-level operations might feel most familiar to SQL and Spark users. Also, Ibis + Hamilton is reminiscent of dbt for the Python ecosystem.
+Table-level operations might feel most familiar to SQL and Spark users. Also, Ibis + Apache Hamilton is reminiscent of dbt for the Python ecosystem.
 
 Working with tables is very efficient when your number of columns/features is limited, and you don't need full lineage. As you want to reuse components, you can progressively breakdown "table-level code" in to "column-level code".
 
@@ -97,7 +97,7 @@ def feature_set(
 ![ibis + hamilton table dataflow](ibis_table.png)
 
 #### Column-level
-Hamilton was built around column-level operations, which is most common in dataframe libraries (pandas, Dask, polars).
+Apache Hamilton was built around column-level operations, which is most common in dataframe libraries (pandas, Dask, polars).
 
 Column-level code leads to fully-reusable feature definitions and a great level of lineage. Notably, this allows to [trace sensitive data and evaluate downstream impacts of code changes](../../how-tos/use-hamilton-for-lineage.md). However, it is more verbose to get started with, but remember that code is more often read than written.
 
@@ -162,13 +162,13 @@ def feature_set(
 ![ibis + hamilton column-level](ibis_column.png)
 
 ``` {note}
-If your code is already structured with Hamilton, migrating from pandas to Ibis should be easy!
+If your code is already structured with Apache Hamilton, migrating from pandas to Ibis should be easy!
 ```
 
 ### Orchestrate Ibis anywhere
-Hamilton is ideal orchestrate for Ibis because it has the lightest footprint and will run anywhere Python does (script, notebook, FastAPI, pyodide, etc.) In fact, the Hamilton library only has 4 dependencies. You don't need "framework code" to get started, just plain Python functions. When moving to production, Hamilton has all the necessary features to complement Ibis such as swapping components, configurations, and lifecycle hooks for logging, alerting, and telemetry.
+Apache Hamilton is ideal orchestrate for Ibis because it has the lightest footprint and will run anywhere Python does (script, notebook, FastAPI, pyodide, etc.) In fact, the Apache Hamilton library only has 4 dependencies. You don't need "framework code" to get started, just plain Python functions. When moving to production, Apache Hamilton has all the necessary features to complement Ibis such as swapping components, configurations, and lifecycle hooks for logging, alerting, and telemetry.
 
-A simple usage pattern of Hamilton + Ibis is to use the [`@config.when` function modifier](../../concepts/function-modifiers.rst). In the following example, we have alternative implementations for the backend connection, which will be used for computing and storing results. When running your code, specify in your config `backend="duckdb"` or `backend="bigquery"` to swap between the two.
+A simple usage pattern of Apache Hamilton + Ibis is to use the [`@config.when` function modifier](../../concepts/function-modifiers.rst). In the following example, we have alternative implementations for the backend connection, which will be used for computing and storing results. When running your code, specify in your config `backend="duckdb"` or `backend="bigquery"` to swap between the two.
 
 ```python
 # ibis_dataflow.py
@@ -210,20 +210,20 @@ def insert_results(
     )
 ```
 ``` {note}
-A potential architecture for Ibis + Hamilton would be running CRON jobs on GitHub actions to periodically launch AWS Lambda with the Hamilton code to orchestrate Ibis data transformations directly on the backend. This has the potential to save meaningful cloud egress cost and greatly diminishes orchestration complexity.
+A potential architecture for Ibis + Apache Hamilton would be running CRON jobs on GitHub actions to periodically launch AWS Lambda with the Apache Hamilton code to orchestrate Ibis data transformations directly on the backend. This has the potential to save meaningful cloud egress cost and greatly diminishes orchestration complexity.
 ```
 
-## How Ibis complements Hamilton
+## How Ibis complements Apache Hamilton
 ### Performance boost
-Leveraging DuckDB as the default backend, Hamilton users migrating to Ibis should immediately find performance improvements both for local dev and production. In addition, the portability of Ibis has the potential to greatly reduce development time.
+Leveraging DuckDB as the default backend, Apache Hamilton users migrating to Ibis should immediately find performance improvements both for local dev and production. In addition, the portability of Ibis has the potential to greatly reduce development time.
 
 ### Atomic data transformation documentation
-Hamilton can directly produce a dataflow visualization from code, helping with project documentation. Ibis pushes this one step further by providing a detailed view of the query plan and schemas. See this Ibis visualization for the column-level Hamilton dataflow defined above. It includes all renaming, type casting, and transformations steps (Please open the image in a new tab and zoom in 🔎).
+Apache Hamilton can directly produce a dataflow visualization from code, helping with project documentation. Ibis pushes this one step further by providing a detailed view of the query plan and schemas. See this Ibis visualization for the column-level Apache Hamilton dataflow defined above. It includes all renaming, type casting, and transformations steps (Please open the image in a new tab and zoom in 🔎).
 
 ![ibis_full_viz](ibis_plan.png)
 
 ### Working across rows with user-defined functions (UDFs)
-Hamilton and most backends are designed to work primarily on tables and columns, but sometimes you'd like to operate over a row (think of `pd.DataFrame.apply()`). However, pivoting tables is costly and manually iterating over rows to collect values and create a new column is quickly inconvenient. By [using scalar user-defined functions (UDFs)](https://ibis-project.org/reference/scalar-udfs), Ibis makes it possible to execute arbitrary Python code on rows directly on the backend.
+Apache Hamilton and most backends are designed to work primarily on tables and columns, but sometimes you'd like to operate over a row (think of `pd.DataFrame.apply()`). However, pivoting tables is costly and manually iterating over rows to collect values and create a new column is quickly inconvenient. By [using scalar user-defined functions (UDFs)](https://ibis-project.org/reference/scalar-udfs), Ibis makes it possible to execute arbitrary Python code on rows directly on the backend.
 
 ``` {note}
 Using `@ibis.udf.scalar.python` creates a non-vectorized function that iterates row-by-row. See [the docs](https://ibis-project.org/reference/scalar-udfs) to use backend-specific UDFs with `@ibis.udf.scalar.builtin` and create vectorized scalar UDFs.
@@ -275,7 +275,7 @@ def summaries(documents: ir.Table, prompt_template: str) -> ir.Table
 
 ![](ibis_udf.png)
 
-##  Ibis + Hamilton - a natural pairing
-- **What works in dev works in prod**: Ibis and Hamilton allows you to write and structure code data transformations portable across backends for small and big data alike. The two being lightweight libraries, installing dependencies on remote workers is fast and you're unlikely to ever encounter dependency conflicts.
+##  Ibis + Apache Hamilton - a natural pairing
+- **What works in dev works in prod**: Ibis and Apache Hamilton allows you to write and structure code data transformations portable across backends for small and big data alike. The two being lightweight libraries, installing dependencies on remote workers is fast and you're unlikely to ever encounter dependency conflicts.
 - **Maintainable and testable code**: Modular functions facilitates writing high quality code and promotes reusability, compounding your engineering efforts. It becomes easier for new users to contribute to a dataflow and pull requests are merged faster.
-- **Greater visibility**: With Hamilton and Ibis, you have incredible visualizations directly derived from your code. This is a superpower for documentation, allowing users to make sense of a dataflow, and also reason about changes.
+- **Greater visibility**: With Apache Hamilton and Ibis, you have incredible visualizations directly derived from your code. This is a superpower for documentation, allowing users to make sense of a dataflow, and also reason about changes.

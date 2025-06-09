@@ -1,6 +1,6 @@
 # elijahbenizzy
 
-Elijah is one of the co-authors of Hamilton! He loves building out tooling for clean, reliable, and scalable dataflows.
+Elijah is one of the co-authors of Apache Hamilton! He loves building out tooling for clean, reliable, and scalable dataflows.
 
 In his spare time, he enjoys cycling, cooking, reading antique maps, learning about contemporary history, and hacking with fractals.
 

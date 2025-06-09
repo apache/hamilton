@@ -2,9 +2,9 @@
 Function modifiers
 ==================
 
-In :doc:`node`, we discussed how to write Python functions to define Hamilton nodes and dataflow. In the basic case, each function defines one node.
+In :doc:`node`, we discussed how to write Python functions to define Apache Hamilton nodes and dataflow. In the basic case, each function defines one node.
 
-Yet, it's common to need nodes with similar purposes but different dependencies, such as preprocessing training and evaluation datasets. In that case, using a **function modifier** can help create both nodes from a single Hamilton function!
+Yet, it's common to need nodes with similar purposes but different dependencies, such as preprocessing training and evaluation datasets. In that case, using a **function modifier** can help create both nodes from a single Apache Hamilton function!
 
 On this page, you'll learn:
 
@@ -20,9 +20,9 @@ This page covers important conceptual notions but is not exhaustive. To find det
 Decorators
 ----------
 
-Python decorators are statements that begin with ``@`` located above function definitions. Hamilton uses decorators to implement function modifiers and reduce the amount of code you have to write to make expressive dataflows.
+Python decorators are statements that begin with ``@`` located above function definitions. Apache Hamilton uses decorators to implement function modifiers and reduce the amount of code you have to write to make expressive dataflows.
 
-Multiple decorators can be stacked on a single function and are applied from bottom to top. Hamilton decorators should be insensitive to ordering, but be careful with non-Hamilton decorators (e.g., @retries, @time). See this `decorator primer <https://realpython.com/primer-on-python-decorators/>`_ to learn more.
+Multiple decorators can be stacked on a single function and are applied from bottom to top. Apache Hamilton decorators should be insensitive to ordering, but be careful with non-Apache Hamilton decorators (e.g., @retries, @time). See this `decorator primer <https://realpython.com/primer-on-python-decorators/>`_ to learn more.
 
 Function modifiers were designed to have clear semantics, so you should be able to figure out what they do from their name. For instance, the following code adds metadata using ``@tag`` and conducts some checks over the return value with ``check_output``.
 
@@ -41,7 +41,7 @@ Function modifiers were designed to have clear semantics, so you should be able 
 Reminder: Anatomy of a node
 ---------------------------
 
-This section from the page :doc:`node` details how a Python function maps to a Hamilton node. We'll reuse these terms to explain the function modifiers.
+This section from the page :doc:`node` details how a Python function maps to a Apache Hamilton node. We'll reuse these terms to explain the function modifiers.
 
 .. image:: ../_static/function_anatomy.png
     :scale: 13%
@@ -75,7 +75,7 @@ Add metadata to a node
 
 @tag
 ~~~~~~~~
-The ``@tag`` decorator **doesn't modify the function/node**. It attaches metadata to the node that can be used by Hamilton and you. It can help tag nodes by ownership, data source, version, infrastructure, and anything else.
+The ``@tag`` decorator **doesn't modify the function/node**. It attaches metadata to the node that can be used by Apache Hamilton and you. It can help tag nodes by ownership, data source, version, infrastructure, and anything else.
 
 For example, this tags the associated data product and the sensitivity of the data.
 
@@ -161,7 +161,7 @@ The next snippet checks if the returned Series is of type ``np.int32``, which is
 
 
 - To see all available validators, go to the file ``hamilton/data_quality/default_validators.py`` and view the variable ``AVAILABLE_DEFAULT_VALIDATORS``.
-- The function modifier ``@check_output_custom`` allows you to define your own validator. Validators inherit the ``base.BaseDefaultValidator`` class and are essentially standardized Hamilton node definitions (instead of functions). See ``hamilton/data_quality/default_validators.py`` or reach out on `Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_ for help!
+- The function modifier ``@check_output_custom`` allows you to define your own validator. Validators inherit the ``base.BaseDefaultValidator`` class and are essentially standardized Apache Hamilton node definitions (instead of functions). See ``hamilton/data_quality/default_validators.py`` or reach out on `Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_ for help!
 - Note: ``@check_output_custom`` decorators cannot be stacked, but they instead can take multiple validators.
 
 .. note::
@@ -173,13 +173,13 @@ The next snippet checks if the returned Series is of type ``np.int32``, which is
 pandera support
 ~~~~~~~~~~~~~~~
 
-Hamilton has a pandera plugin for data validation that you can install with ``pip install sf-hamilton[pandera]``. Then, you can pass a pandera schema (for DataFrame or Series) to ``@check_output(schema=...)``.
+Apache Hamilton has a pandera plugin for data validation that you can install with ``pip install sf-hamilton[pandera]``. Then, you can pass a pandera schema (for DataFrame or Series) to ``@check_output(schema=...)``.
 
 
 pydantic support
 ~~~~~~~~~~~~~~~~
 
-Hamilton also supports data validation of pydantic models, which can be enabled with ``pip install sf-hamilton[pydantic]``. With pydantic installed, you can pass any subclass of the pydantic base model to ``@check_output(model=...)``. Pydantic validation is performed in strict mode, meaning that raw values will not be coerced to the model's types. For more information on strict mode see the `pydantic docs <https://docs.pydantic.dev/latest/concepts/strict_mode/>`_.
+Apache Hamilton also supports data validation of pydantic models, which can be enabled with ``pip install sf-hamilton[pydantic]``. With pydantic installed, you can pass any subclass of the pydantic base model to ``@check_output(model=...)``. Pydantic validation is performed in strict mode, meaning that raw values will not be coerced to the model's types. For more information on strict mode see the `pydantic docs <https://docs.pydantic.dev/latest/concepts/strict_mode/>`_.
 
 
 Split node output into *n* nodes
@@ -296,7 +296,7 @@ For the decorator, you must specify one or more ``key=value`` pairs. Then, you n
 
 This example uses ``@config.when()`` to select between a binary classifier and a regressor model. Notice a few elements:
 
-- both functions have the same name ``base_model`` with a suffix ``__binary`` or ``__regression``. This is required because Python enforces unique function names. After the config determines which function to load, Hamilton will remove the suffix from the node name.
+- both functions have the same name ``base_model`` with a suffix ``__binary`` or ``__regression``. This is required because Python enforces unique function names. After the config determines which function to load, Apache Hamilton will remove the suffix from the node name.
 - the two functions have different return types, so ``train_model`` needs to annotate ``base_model`` as a ``Union[]`` type.
 
 .. code-block:: python
@@ -370,9 +370,9 @@ Load and save external data
 
 Most dataflows require reading or writing data to external sources in some capacity. It's a good idea to conduct this step in a node separated from transformations to trace failures more easily.
 
-Nevertheless, adding one function per read/write becomes tedious and hard to maintain. Hamilton provides well-tested implementations for common formats (JSON, CSV, Parquet, etc.) available through ``@load_from`` and ``@save_to`` decorators and materializers (see :doc:`materialization`).
+Nevertheless, adding one function per read/write becomes tedious and hard to maintain. Apache Hamilton provides well-tested implementations for common formats (JSON, CSV, Parquet, etc.) available through ``@load_from`` and ``@save_to`` decorators and materializers (see :doc:`materialization`).
 
-More formats are available through Hamilton plugins, and you should be able to add your own custom loader/saver (reach out on `Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_ for help!)
+More formats are available through Apache Hamilton plugins, and you should be able to add your own custom loader/saver (reach out on `Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_ for help!)
 
 @load_from
 ~~~~~~~~~~

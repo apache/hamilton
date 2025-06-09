@@ -6,7 +6,7 @@ So far, we executed our dataflow using the ``Driver.execute()`` method, which ca
 
 On this page, you'll learn:
 
-- How to load and save data in Hamilton
+- How to load and save data in Apache Hamilton
 - Why use materialization
 - What are ``DataSaver`` and ``DataLoader`` objects
 - The difference between ``.execute()`` and ``.materialize()``
@@ -42,14 +42,14 @@ Without materialization
 
 Observations:
 
-1. These two approaches load and save data using ``pandas`` and ``xgboost`` without any Hamilton constructs. These methods are transparent and simple to get started, but as the number of node grows (or across projects) defining one node per parquet file to load introduces a lot of boilerplate.
+1. These two approaches load and save data using ``pandas`` and ``xgboost`` without any Apache Hamilton constructs. These methods are transparent and simple to get started, but as the number of node grows (or across projects) defining one node per parquet file to load introduces a lot of boilerplate.
 2. Using **1) from nodes** improves visibility by including loading & saving  in the dataflow (as illustrated).
 3. Using **2) from ``Driver``** facilitates modifying loading & saving before code execution when executing the code, without modifying the dataflow itself. It is particularly useful when moving from development to production.
 
 Limitations
 ~~~~~~~~~~~~
 
-Hamilton's approach to "materializations" aims to solve 3 limitations:
+Apache Hamilton's approach to "materializations" aims to solve 3 limitations:
 
 1. **Redundancy**: deduplicate loading & saving code to improve maintainability and debugging
 2. **Observability**: include loading & saving in the dataflow for full observability and allow hooks
@@ -80,15 +80,15 @@ the :doc:`@datasaver() <../reference/decorators/datasaver/>` and :doc:`@dataload
 metadata about what was read and written, and this metadata is then used to track what
 was read and written.
 
-This is our recommended first step when you're starting to use materialization in Hamilton.
+This is our recommended first step when you're starting to use materialization in Apache Hamilton.
 
 
 Static materializers
 ~~~~~~~~~~~~~~~~~~~~
 
-Passing ``from_`` and ``to`` Hamilton objects to ``Builder().with_materializers()`` injects into the dataflow standardized nodes to load and save data. It solves the 3 limitations highlighted in the previous section:
+Passing ``from_`` and ``to`` Apache Hamilton objects to ``Builder().with_materializers()`` injects into the dataflow standardized nodes to load and save data. It solves the 3 limitations highlighted in the previous section:
 
-1. Redundancy ✅: Using the ``from_`` and ``to`` Hamilton constructs reduces the boilerplate to load and save data from common formats (JSON, parquet, CSV, etc.) and to interact with 3rd party libraries (pandas, matplotlib, xgboost, dlt, etc.)
+1. Redundancy ✅: Using the ``from_`` and ``to`` Apache Hamilton constructs reduces the boilerplate to load and save data from common formats (JSON, parquet, CSV, etc.) and to interact with 3rd party libraries (pandas, matplotlib, xgboost, dlt, etc.)
 2. Observability ✅: Loaders and savers are part of the dataflow. You can view them with ``Driver.display_all_functions()`` and execute nodes by requesting them with ``Driver.execute()``.
 3. Flexibility ✅: The loading and saving behavior is decoupled from the dataflow and can modified easily when creating the ``Driver`` and executing code.
 
@@ -102,7 +102,7 @@ The dataflow is executed by passing ``from_`` and ``to`` objects to ``Driver.mat
 
    ``Driver.materialize()`` can receive data savers (``from_``) and loaders (``to``) and will execute all ``to`` passed. Like ``Driver.execute()``, it can receive ``inputs``, and ``overrides``, but instead of ``final_vars`` it receives ``additional_vars``.
 
-1. Redundancy ✅: Uses ``from_`` and ``to`` Hamilton constructs.
+1. Redundancy ✅: Uses ``from_`` and ``to`` Apache Hamilton constructs.
 2. Observability 🚸: Materializers are visible with ``Driver.visualize_materialization()``, but can't be introspected otherwise. Also, you need to rely on ``Driver.materialize()`` which has a different call signature.
 3. Flexibility ✅: Loading and saving is decoupled from the dataflow.
 
@@ -113,7 +113,7 @@ The dataflow is executed by passing ``from_`` and ``to`` objects to ``Driver.mat
 Function modifiers
 ~~~~~~~~~~~~~~~~~~
 
-By adding ``@load_from`` and ``@save_to`` function modifiers (:ref:`loader-saver-decorators`) to Hamilton functions, materializers are generated when using ``Builder.with_modules()``. This approach ressembles **1) from Driver**:
+By adding ``@load_from`` and ``@save_to`` function modifiers (:ref:`loader-saver-decorators`) to Apache Hamilton functions, materializers are generated when using ``Builder.with_modules()``. This approach ressembles **1) from Driver**:
 
 .. note::
 
@@ -131,7 +131,7 @@ By adding ``@load_from`` and ``@save_to`` function modifiers (:ref:`loader-saver
 DataLoader and DataSaver
 ------------------------
 
-In Hamilton, ``DataLoader`` and ``DataSaver`` are classes that define how to load or save a particular data format. Calling ``Driver.materialize(DataLoader(), DataSaver())`` adds nodes to the dataflow (see visualizations above).
+In Apache Hamilton, ``DataLoader`` and ``DataSaver`` are classes that define how to load or save a particular data format. Calling ``Driver.materialize(DataLoader(), DataSaver())`` adds nodes to the dataflow (see visualizations above).
 
 Here are simplified snippets for saving and loading an XGBoost model to/from JSON.
 
@@ -142,4 +142,4 @@ Here are simplified snippets for saving and loading an XGBoost model to/from JSO
    |                                              |                                               |
    +----------------------------------------------+-----------------------------------------------+
 
-To define your own DataSaver and DataLoader, the Hamilton `XGBoost extension <https://github.com/apache/hamilton/blob/main/hamilton/plugins/xgboost_extensions.py>`_ provides a good example
+To define your own DataSaver and DataLoader, the Apache Hamilton `XGBoost extension <https://github.com/apache/hamilton/blob/main/hamilton/plugins/xgboost_extensions.py>`_ provides a good example

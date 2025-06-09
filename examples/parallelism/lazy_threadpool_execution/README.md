@@ -20,7 +20,7 @@ that the DAG can be parallelized, i.e. the left most nodes can be executed in pa
 When you execute `run.py`, you will output that shows:
 
 1. The DAG running in parallel -- check the image against what is printed.
-2. The DAG logging to the Hamilton UI -- please adjust for you project.
+2. The DAG logging to the Apache Hamilton UI -- please adjust for you project.
 3. The DAG running without the adapter -- this is to show the difference in execution time.
 4. An async version of the DAG running in parallel -- this is to show that the performance of this approach is similar.
 

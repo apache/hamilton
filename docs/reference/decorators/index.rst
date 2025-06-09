@@ -2,7 +2,7 @@
 Decorators
 ===========
 
-Hamilton implements several decorators to promote business-logic deduplication, configuratibility, and add a layer of capabilities. These decorators can be found in the ``hamilton.function_modifiers`` submodule `GitHub <https://github.com/apache/hamilton/blob/main/hamilton/function_modifiers>`__.
+Apache Hamilton implements several decorators to promote business-logic deduplication, configuratibility, and add a layer of capabilities. These decorators can be found in the ``hamilton.function_modifiers`` submodule `GitHub <https://github.com/apache/hamilton/blob/main/hamilton/function_modifiers>`__.
 
 Custom Decorators
 -----------------

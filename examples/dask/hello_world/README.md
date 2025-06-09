@@ -1,7 +1,7 @@
-# Hamilton on Dask
+# Apache Hamilton on Dask
 
 Here we have a hello world example showing how you can
-take some Hamilton functions and then easily run them
+take some Apache Hamilton functions and then easily run them
 in a distributed setting via dask.
 
 Note: please read this [dask best practices post](https://docs.dask.org/en/stable/dataframe-best-practices.html);

@@ -1,7 +1,7 @@
 =======================
 inspect_module()
 =======================
-Use this to get deep information about a Hamilton module.
+Use this to get deep information about a Apache Hamilton module.
 
 .. autoclass:: hamilton.dataflows.InspectModuleResult
 

@@ -22,7 +22,7 @@ if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)  # specify host and port
 ```
 
-On this page, you'll learn how Hamilton can help you:
+On this page, you'll learn how Apache Hamilton can help you:
 - Test you application
 - Reduce the friction from proof-of-concept to production
 - Document your API
@@ -35,10 +35,10 @@ FastAPI endpoints are simply decorated Python function, allowing a great deal of
 FastAPI already does a great job at automating API documentation by integrating with [Swagger UI](https://fastapi.tiangolo.com/how-to/configure-swagger-ui/) and [OpenAPI](https://fastapi.tiangolo.com/how-to/separate-openapi-schemas/). It leverages the endpoints' name, path, docstring, and type annotations, and also allows to add descriptions and example inputs. However, since docstrings, descriptions, and example inputs are not directly tied to the code, they risk becoming out of sync as changes are made.
 
 
-## Hamilton + FastAPI
-Adding Hamilton to your FastAPI server can provide a better separation between the dataflow and the API endpoints. Each endpoint can use `Driver.execute()` to request variables and wrap results into an HTTP response. Then, data transformations and interactions with resources (e.g., database, web service) are curated into standalone Python modules and decoupled from the server code.
+## Apache Hamilton + FastAPI
+Adding Apache Hamilton to your FastAPI server can provide a better separation between the dataflow and the API endpoints. Each endpoint can use `Driver.execute()` to request variables and wrap results into an HTTP response. Then, data transformations and interactions with resources (e.g., database, web service) are curated into standalone Python modules and decoupled from the server code.
 
-Since Hamilton dataflows will run the same way inside or outside FastAPI, you can write simpler unit tests for Hamilton functions without defining a mock server and client. Additionnally, visualizations for the defined Hamilton dataflows can be added to the FastAPI [Swagger UI documentation](https://fastapi.tiangolo.com/features/#automatic-docs). They will remain in sync with the API behavior because they are generated from the code.
+Since Apache Hamilton dataflows will run the same way inside or outside FastAPI, you can write simpler unit tests for Apache Hamilton functions without defining a mock server and client. Additionnally, visualizations for the defined Apache Hamilton dataflows can be added to the FastAPI [Swagger UI documentation](https://fastapi.tiangolo.com/features/#automatic-docs). They will remain in sync with the API behavior because they are generated from the code.
 
 ### Example
 In this example, we'll build a backend for a PDF summarizer application.
@@ -71,10 +71,10 @@ def post_summarize(
 ```
 > 💡 For more complex FastAPI applications, you can automatically [generate the client code](https://fastapi.tiangolo.com/advanced/generate-clients/) in Python and other languages (TypeScript, Rust, etc.)
 
-#### Backend dataflow with Hamilton
-Hamilton transformations are defined in the module `summarization.py`. This includes loading and chunking the raw text, summarizing chunks with the OpenAI API, and reducing chunks into a final summary.
+#### Backend dataflow with Apache Hamilton
+Apache Hamilton transformations are defined in the module `summarization.py`. This includes loading and chunking the raw text, summarizing chunks with the OpenAI API, and reducing chunks into a final summary.
 
-Visualization of the Hamilton dataflow
+Visualization of the Apache Hamilton dataflow
 ![summarization module graph](fastapi_summarization.png)
 
 
@@ -83,7 +83,7 @@ Then, the FastAPI server is defined in `server.py`. Notice a few things:
 - the `Driver` is built only once in the global context.
 - the endpoint types are set using `Annotated[...]` to [accept multipart encoded forms](https://fastapi.tiangolo.com/tutorial/request-forms-and-files/?h=form#__tabbed_2_1)
 - the HTTP POST request is passed as `inputs` to `Driver.execute()`
-- the Hamilton results are wrapped into a Pydantic `SummarizeResponse` model
+- the Apache Hamilton results are wrapped into a Pydantic `SummarizeResponse` model
 
 ```python
 # server.py
@@ -97,7 +97,7 @@ import summarization
 
 app = FastAPI()
 
-# build the Hamilton driver with the summarization module
+# build the Apache Hamilton driver with the summarization module
 dr = (
     driver.Builder()
     .with_modules(summarization)
@@ -133,7 +133,7 @@ if __name__ == "__main__":
 ```
 
 #### Visualize endpoints' dataflow
-The Hamilton dataflow visualizations can be added to the automatically generated FastAPI [Swagger UI documentation](https://fastapi.tiangolo.com/features/#automatic-docs), which can be viewed at http://0.0.0.0:8000/docs
+The Apache Hamilton dataflow visualizations can be added to the automatically generated FastAPI [Swagger UI documentation](https://fastapi.tiangolo.com/features/#automatic-docs), which can be viewed at http://0.0.0.0:8000/docs
 ```python
 # server.py
 # ... after defining all endpoints
@@ -154,5 +154,5 @@ app.routes[-1].description += f"""<img src="data:image/png;base64,{base64_viz}"/
 
 ### Benefits
 - **Separation of concerns**: the decoupling between `server.py` and `summarization.py` makes it easier to extend and test the server separately from the data transformations.
-- **Reusable code**: the module `summarization.py` can be reused elsewhere with Hamilton. For instance, if you first started by building a proof-of-concept with [Streamlit + Hamilton](https://hamilton.dagworks.io/en/latest/integrations/streamlit), the logic you produced could be reused to power your FastAPI server.
-- **Richer documentation**: Hamilton allows to view and better understand the dataflow of an operation. This helps onboard new API users and greatly facilitates transferring the ownership of the API to other engineers.
+- **Reusable code**: the module `summarization.py` can be reused elsewhere with Apache Hamilton. For instance, if you first started by building a proof-of-concept with [Streamlit + Apache Hamilton](https://hamilton.dagworks.io/en/latest/integrations/streamlit), the logic you produced could be reused to power your FastAPI server.
+- **Richer documentation**: Apache Hamilton allows to view and better understand the dataflow of an operation. This helps onboard new API users and greatly facilitates transferring the ownership of the API to other engineers.

@@ -1,4 +1,4 @@
-# On Garbage Collection and Memory Optimization in Hamilton
+# On Garbage Collection and Memory Optimization in Apache Hamilton
 
 ## A chance to nerd out
 
@@ -6,13 +6,13 @@ A few weeks ago, one of our users came to us with an issue. They were processing
 and noticed that the memory profile would quickly spiral out of control. The memory usage of the program grew until (a) it got prohibitively slow, then died, or (b) it just died due to a memory error.
 
 This was, of course, because we had not optimized the memory at all. If I recall correctly, all we had was a few `TODO -- optimize memory usage` comments scattered throughout.
-Now that I had an excuse (a user asking me), I jumped into the rabbit hole of profiling, garbage collection, and optimization, with the goal of reducing Hamilton's memory overhead as much as possible.
+Now that I had an excuse (a user asking me), I jumped into the rabbit hole of profiling, garbage collection, and optimization, with the goal of reducing Apache Hamilton's memory overhead as much as possible.
 
-In this writeup I will talk a little about python garbage collection, share the change we made to improve Hamilton memory usage, and show its impact through a reproducible example.
+In this writeup I will talk a little about python garbage collection, share the change we made to improve Apache Hamilton memory usage, and show its impact through a reproducible example.
 
-If you're not familiar with Hamilton, you can get started at [tryhamilton.dev](www.tryhamilton.dev), or go to the [root](https://www.github.com/apache/hamilton) of this repository and read the README.
-If you don't want to read it and instead want to jump straight ahead, all you need to know is that Hamilton enables you to define your code as a directed acyclic graph (DAG) of python functions,
-and runs them for you. It differs from orchestration frameworks (Airflow, Metaflow, etc...) in that it is a micro orchestrator -- Hamilton does not provision compute or track executions. Rather, it is run as a library
+If you're not familiar with Apache Hamilton, you can get started at [tryhamilton.dev](www.tryhamilton.dev), or go to the [root](https://www.github.com/apache/hamilton) of this repository and read the README.
+If you don't want to read it and instead want to jump straight ahead, all you need to know is that Apache Hamilton enables you to define your code as a directed acyclic graph (DAG) of python functions,
+and runs them for you. It differs from orchestration frameworks (Airflow, Metaflow, etc...) in that it is a micro orchestrator -- Apache Hamilton does not provision compute or track executions. Rather, it is run as a library
 on top of other more infrastructure-focused systems. Its primary aim is to help you organize your code and run on multiple platforms.
 
 ## Garbage collection: a primer
@@ -116,7 +116,7 @@ swap space, takes longer to handle memory retrieval/commitment, and eventually j
 
 Now that we have a grasp on the problem and a profiling methodology, let's dig in to see what we can fix. Luckily, the root of the issue was fairly clear.
 
-To execute a Hamilton node and just its required upstream dependencies, we conduct a depth-first-traversal of the graph, storing results
+To execute a Apache Hamilton node and just its required upstream dependencies, we conduct a depth-first-traversal of the graph, storing results
 we've realized in a `computed` dictionary. We use this for multiple purposes -- it can help us (a) avoid recomputing nodes and instead store
 the results, and (b) return the final results at the end that we need. The problem is that we held onto all results, regardless of whether we would need them later.
 In the (albeit contrived) script above, we only need the prior node in the chain to compute the current one.
@@ -169,7 +169,7 @@ You can see a similar pattern if you up the allocation size to 1gb. It occasiona
 ![Memory profile of test_memory.py, post-optimization, 1gb](profiling_post_optimization_larger.png)
 ## Wrapping it up
 
-After solving this memory leak, we also fixed one more -- in Hamilton's [dynamic execution capabilities](https://blog.dagworks.io/p/counting-stars-with-hamilton),
+After solving this memory leak, we also fixed one more -- in Apache Hamilton's [dynamic execution capabilities](https://blog.dagworks.io/p/counting-stars-with-hamilton),
 it was doing something similar for parallel execution -- storing all the results and not letting go of them.
 
 You can find the original fix + some initial thoughts on the script/evidence as we learned this in the [PR](https://github.com/apache/hamilton/pull/374).
@@ -177,5 +177,5 @@ You can find the original fix + some initial thoughts on the script/evidence as 
 Now that we've come out of the rabbit hole, we'll leave you with a few parting thoughts:
 
 1. If you ever find yourself really digging into garbage collection in python for data analysis, the odds are that you should probably just be using a bigger machine.
-2. If you're using Hamilton, you should upgrade to the latest version -- it has a lot of improvements and new capabilities, and is optimized to consume less memory.
+2. If you're using Apache Hamilton, you should upgrade to the latest version -- it has a lot of improvements and new capabilities, and is optimized to consume less memory.
 3. Garbage collection is *really* interesting, and I just scratched the surface. One of my first mentors in software engineering was a pioneer in the discipline of real-time garbage collection, and I've been trying to soak up as much as I could ever since I first heard about the algorithmic challenges involved.

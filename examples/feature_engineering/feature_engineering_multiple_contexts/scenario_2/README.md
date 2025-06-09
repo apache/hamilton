@@ -33,7 +33,7 @@ Important not, there are two aggregations features defined: `age_mean` and `age_
 you'd be performing inference, that doesn't makse sense. So for the online case, in this example, they are "omitted" from
 being nodes in the online context via `@config.when_not_in`. Instead, they are populated via the `online_loader.py` which
 goes to the feature store for them. `fastapi_server.py` then is a little simpler than in Scenario (1), as it just
-delegates all work to Hamilton for getting features.
+delegates all work to Apache Hamilton for getting features.
 
 ## online_loader.py
 Contains logic to load raw data in an online context from a feature store. It also contains functions to pull

@@ -1,6 +1,6 @@
-# Star counting with Hamilton/Parallelism
+# Star counting with Apache Hamilton/Parallelism
 
-This example goes along with the "Counting Stars with Hamilton" blog post.
+This example goes along with the "Counting Stars with Apache Hamilton" blog post.
 
 # Running
 

@@ -5,7 +5,7 @@ This module implements a dataflow to train an XGBoost model with hyperparameter 
 You give it a 2D arrays for `X_train`, `y_train`, `X_test`, `y_test` and you are good to go!
 
 # Configuration Options
-The Hamilton driver can be configured with the following options:
+The Apache Hamilton driver can be configured with the following options:
  - {"task":  "classification"} to use xgboost.XGBClassifier.
  - {"task":  "regression"} to use xgboost.XGBRegressor.
 

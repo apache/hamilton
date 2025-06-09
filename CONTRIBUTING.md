@@ -29,7 +29,7 @@ own fork, and then submit a pull request. All new code should have associated
 unit tests that validate implemented features and the presence or lack of defects.
 Additionally, the code should follow any stylistic and architectural guidelines
 prescribed by the project. For us here, this means you install a pre-commit hook and use
-the given style files. Basically, you should mimic the styles and patterns in the Hamilton code-base.
+the given style files. Basically, you should mimic the styles and patterns in the Apache Hamilton code-base.
 
 In terms of getting setup to develop, we invite you to read our [developer setup guide](developer_setup.md).
 

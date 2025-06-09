@@ -1,11 +1,11 @@
 # Species distribution modeling
 
-We translate the Species distribution modeling from scikit-learn into Hamilton to showcase `pipe` and`pipe_output`.
+We translate the Species distribution modeling from scikit-learn into Apache Hamilton to showcase `pipe` and`pipe_output`.
 
 # Highlights
  Example of a simple ETL pipeline broken into modules with external couplings.
 
-1) To see how to couple external modules / source code and integrate it into a Hamilton DAG check out `grids.py` or `preprocessing.py`, where we use `@pipe` to wrap and inject external functions as Hamilton nodes.
+1) To see how to couple external modules / source code and integrate it into a Apache Hamilton DAG check out `grids.py` or `preprocessing.py`, where we use `@pipe` to wrap and inject external functions as Apache Hamilton nodes.
 2) To see how to re-use functions check out `train_and_predict.py`, where we use `@pipe_output` to evaluate our model on the individual test and train datasets.
 
 ![image info](./dag.png)
@@ -55,7 +55,7 @@ qux(baz(foo(bar)))
 This can be particularly useful when:
 1. Ensuring consistency between transforms/data processing steps across different nodes.
 2. Re-using the same function on multiple nodes. For example, needing to do different pre-processing, but than passing data to the same `model`, aka feature engineering hyper-tuning.
-3. We can also use `step(...).when(...)` and can choose at execution time which transformation will be applied to the output of a particular node. For example, each `step` represents a different `model` and we switch between them with a config dictionary in the Hamilton driver.
+3. We can also use `step(...).when(...)` and can choose at execution time which transformation will be applied to the output of a particular node. For example, each `step` represents a different `model` and we switch between them with a config dictionary in the Apache Hamilton driver.
 
 ## original_script.py
 The original script has been left intact. The only change we made is to add
@@ -84,7 +84,7 @@ python -m run.py
 
 # Disclaimer
 The original code and analysis is taken from [scikit-learn](https://scikit-learn.org/stable/auto_examples/applications/plot_species_distribution_modeling.html).
-We don't know them and they don't know us - but they wrote a neat analysis and we wanted to show you how their procedural code would look like if it was written with the help of Hamilton.
+We don't know them and they don't know us - but they wrote a neat analysis and we wanted to show you how their procedural code would look like if it was written with the help of Apache Hamilton.
 
 Thanks to the authors for creating it:
 - Peter Prettenhofer <peter.prettenhofer@gmail.com>,

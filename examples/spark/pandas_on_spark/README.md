@@ -1,7 +1,7 @@
-# Hamilton on Koalas Spark 3.2+
+# Apache Hamilton on Koalas Spark 3.2+
 
 Here we have a hello world example showing how you can
-take some Hamilton functions and then easily run them
+take some Apache Hamilton functions and then easily run them
 in a distributed setting via Spark 3.2+ using Koalas.
 
 `pip install sf-hamilton[pyspark]`  or `pip install sf-hamilton pyspark[pandas_on_spark]` to for the right dependencies to run this example.
