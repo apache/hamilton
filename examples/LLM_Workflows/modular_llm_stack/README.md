@@ -6,7 +6,7 @@ This example shows how to pull data from the HuggingFace datasets hub, create em
 
 *DAG for OpenAI embeddings and Weaviate vector database*
 
-In addition, you'll see how Hamilton can help you create replaceable components. This flexibility, makes it easier to assess service providers and refactor code to fit your needs. The above and below DAGs were generated simply by changing a string value and a module import. Try to spot the differences!
+In addition, you'll see how Apache Hamilton can help you create replaceable components. This flexibility, makes it easier to assess service providers and refactor code to fit your needs. The above and below DAGs were generated simply by changing a string value and a module import. Try to spot the differences!
 
 ![](./pinecone_sentence_transformer_dag.png)
 
@@ -23,8 +23,8 @@ In addition, you'll see how Hamilton can help you create replaceable components.
 # Example structure
 - `run.py` contains the code to test the example. It uses `click` to provide a simple command interface.
 - `data_module.py` contains the code to pull data from HuggingFace. The code is in a separate Python module since it doesn't depend on the other functionalities and could include more involved preprocessing.
-- `embedding_module.py` contains the code to embed text using either Cohere API, OpenAI API or SentenceTransformer library. The use of `@config.when` allows to have all options in the same Python module. This allows to quickly rerun your Hamilton DAG by simply changing your config. You'll see that functions share similar signature to enable interchangeability.
-- `lancedb_module.py`, `weaviate_module.py`, `marqo_module.py` and `pinecone_module.py` implement the same functionalities for each vector database. Having the same function names allows Hamilton to abstract away the implementation details and reinforce the notion that both modules shouldn't be loaded simultaneously.
+- `embedding_module.py` contains the code to embed text using either Cohere API, OpenAI API or SentenceTransformer library. The use of `@config.when` allows to have all options in the same Python module. This allows to quickly rerun your Apache Hamilton DAG by simply changing your config. You'll see that functions share similar signature to enable interchangeability.
+- `lancedb_module.py`, `weaviate_module.py`, `marqo_module.py` and `pinecone_module.py` implement the same functionalities for each vector database. Having the same function names allows Apache Hamilton to abstract away the implementation details and reinforce the notion that both modules shouldn't be loaded simultaneously.
 - `docker-compose.yml` allows you to start a local instance of Weaviate ([More information](https://weaviate.io/developers/weaviate/installation/docker-compose)).
 
 # How-to run the example

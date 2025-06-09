@@ -1,6 +1,6 @@
 # Import Community Dataflows
 
-In this example, we show you how to import and use dataflows from the [Hamilton Dataflow Hub](https://hub.dagworks.io/docs/).
+In this example, we show you how to import and use dataflows from the [Apache Hamilton Dataflow Hub](https://hub.dagworks.io/docs/).
 You can use them either directly or pull and edit a local copy.
 
 # Setup

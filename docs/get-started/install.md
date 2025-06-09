@@ -3,7 +3,7 @@ Installing hamilton is easy!
 
 # Install
 
-Hamilton is a lightweight framework with a variety of extensions/plugins. To get started, you'll need the following:
+Apache Hamilton is a lightweight framework with a variety of extensions/plugins. To get started, you'll need the following:
 
 - ``python >= 3.8``
 - ``pip``
@@ -12,7 +12,7 @@ For help with python/pip/managing virtual environments see the [python docs](htt
 
 ## Installing with pip
 
-Hamilton is published on [pypi](https://pypi.org/project/sf-hamilton/) under ``sf-hamilton``. To install, run:
+Apache Hamilton is published on [pypi](https://pypi.org/project/sf-hamilton/) under ``sf-hamilton``. To install, run:
 
 `pip install sf-hamilton`
 
@@ -26,7 +26,7 @@ operating system.*
 
 ## Installing with conda
 
-Hamilton is also available on conda if you prefer:
+Apache Hamilton is also available on conda if you prefer:
 
 `conda install -c hamilton-opensource sf-hamilton`
 

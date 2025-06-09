@@ -12,7 +12,7 @@ These are the defined inputs you can provide.
  - *question*: The user question that specifies what to generate for the quiz
 
 ### Overrides
-With Hamilton you can easily override a function and provide a value for it. For example if you're
+With Apache Hamilton you can easily override a function and provide a value for it. For example if you're
 iterating you might just want to override these two values before modifying the functions:
 
  - *quiz_bank*: provide a fixed string of context that is the facts for the quiz bank.

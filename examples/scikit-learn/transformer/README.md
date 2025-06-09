@@ -1,4 +1,4 @@
-# Classic Hamilton Hello World
+# Classic Apache Hamilton Hello World
 
 In this example we show you a custom scikit-learn `Transformer` class. This class should be compliant with [scikit-learn transformers specifications](https://scikit-learn.org/stable/developers/develop.html). This class is meant to be used as part of broader scikit-learn pipelines. Scikit-learn estimators and pipelines allow for stateful objects, which are helpful when applying transformations on train-test splits notably. Also, all pipeline, estimator, and transformer objects should be picklable, enabling reproducible pipelines.
 
@@ -23,7 +23,7 @@ Here is the visualization of the execution that the transformer currently perfor
 ![scikit_transformer](scikit_transformer.png)
 
 # Limitations and TODOs
-- The current implementation relies on Hamilton defaults' `base.HamiltonGraphAdapter` and `base.PandasDataFrameResult` which limits the compatibility with other computation engines supported by Hamilton
-- The current implementation could be improved for deeper object inspection. A particular challenge is that the Hamilton driver alters the number of columns / features of the input array, and does so by specifying the *output columns*. In contrast, scikit-learn typically reads columns / features of the *input array* and passes it down. It would be worth looking at [the output feature naming convention](https://scikit-learn.org/stable/developers/develop.html#developer-api-for-set-output) and the [`ColumnTransformer` class](https://scikit-learn.org/stable/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer) which aims to fulfill a similar objective to Hamilton.
-- The current implementation allows little direct access to the `Hamilton driver`. Currently, the driver accessible via the `.driver_` attribute after calling `.fit()` or `.fit_transform()` which seems to be coherent with typical scikit-learn behavior.
+- The current implementation relies on Apache Hamilton defaults' `base.HamiltonGraphAdapter` and `base.PandasDataFrameResult` which limits the compatibility with other computation engines supported by Apache Hamilton
+- The current implementation could be improved for deeper object inspection. A particular challenge is that the Apache Hamilton driver alters the number of columns / features of the input array, and does so by specifying the *output columns*. In contrast, scikit-learn typically reads columns / features of the *input array* and passes it down. It would be worth looking at [the output feature naming convention](https://scikit-learn.org/stable/developers/develop.html#developer-api-for-set-output) and the [`ColumnTransformer` class](https://scikit-learn.org/stable/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer) which aims to fulfill a similar objective to Apache Hamilton.
+- The current implementation allows little direct access to the `Apache Hamilton driver`. Currently, the driver accessible via the `.driver_` attribute after calling `.fit()` or `.fit_transform()` which seems to be coherent with typical scikit-learn behavior.
 - The current implementation could be slightly modified to have no dependencies on scikit-learn itself. However, having inheriting from `BaseEstimator` and `TransformerMixin` provides some clarity about the class's purpose.

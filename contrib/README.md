@@ -1,12 +1,12 @@
-## Off-the-shelf Hamilton Dataflows
+## Off-the-shelf Apache Hamilton Dataflows
 
-Here you'll find documentation about the sf-hamilton-contrib package that curates a collection of Hamilton Dataflows that are
+Here you'll find documentation about the sf-hamilton-contrib package that curates a collection of Apache Hamilton Dataflows that are
 ready to be used in your own projects. They are user-contributed and maintained, with
-the goal of making it easier for you to get started with Hamilton.
+the goal of making it easier for you to get started with Apache Hamilton.
 
 We expect this collection to grow over time, so check back often! As dataflows become mature we
 will move them into the official sub-package of the respository and become maintained by the
-Hamilton team.
+Apache Hamilton team.
 
 ### Usage
 There are two ways to get access to dataflows in this package. For either approach,
@@ -132,8 +132,8 @@ This will do the following:
    - `__init__.py` -- this will be an empty file that allows you to import your dataflow
 2. Create a package under `contrib/hamilton/contrib/user/<your_github_username>/<name_of_dataflow>` with the appropriate files to describe your dataflow:
    - `README.md` to describe the dataflow with the standard headings
-   - `__init__.py` to contain the Hamilton code
-   - `requirements.txt` to contain the required packages outside of Hamilton
+   - `__init__.py` to contain the Apache Hamilton code
+   - `requirements.txt` to contain the required packages outside of Apache Hamilton
    - `tags.json` to curate your dataflow
    - `valid_configs.jsonl` to specify the valid configurations for it to be run
    - `dag.png` to show one possible configuration of your dataflow
@@ -165,7 +165,7 @@ dr = driver.Driver(
 dr.display_all_functions("dag", {"format": "png", "view": False})
 ```
 - [ ] Push a branch back to your fork
-- [ ] Open up a pull request to the main Hamilton repo!
+- [ ] Open up a pull request to the main Apache Hamilton repo!
   - [ ] Commit the files we just added
   - [ ] Create a PR
   - [ ] Tag one of the maintainers [elijahbenizzy](https://github.com/elijahbenizzy), [skrawcz](https://github.com/skrawcz), or [zilto](https://github.com/zilto) for a review

@@ -2,7 +2,7 @@
 Microservice
 ==============================
 
-While we've mainly been discussing running Hamilton in a batch environment, it can easily be used
+While we've mainly been discussing running Apache Hamilton in a batch environment, it can easily be used
 in a microservice/online setting. This is valuable if you want insight into exactly how your endpoints
 transform/load data, or if you want to execute the same transforms you did in batch in an online setting.
 

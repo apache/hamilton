@@ -52,7 +52,7 @@ e.g. you should be able to do `json.load(f)` and it would return a list of dicti
         "reply": "42"
     },
     {
-        "question": "What is Hamilton?",
+        "question": "What is Apache Hamilton?",
         "reply": "..."
     },
     ...

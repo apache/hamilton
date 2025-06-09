@@ -140,7 +140,7 @@ These are the steps to push to pypi. This is taken from the [python packaging tu
 2. Setup API tokens and add them to your ~/.pypirc.
 3. Run `python3 -m pip install --upgrade build`.
 4. Run `python3 -m pip install --upgrade twine`
-5. Run `python3 -m build` to build Hamilton. It should create things in dist/*.
+5. Run `python3 -m build` to build Apache Hamilton. It should create things in dist/*.
 6. Push to test pypi - `python3 -m twine upload --repository testpypi dist/*`.
 
    Note: you cannot push the same version twice to test or real pypi. So it's useful to append `-rcX` to the version.

@@ -1,16 +1,16 @@
 Kedro
 =========
 
-Both ``Kedro`` and ``Hamilton`` are Python tools to help define directed acyclic graph (DAG) of data transformations. While there's overlap between the two in terms of features, we note two main differences:
+Both ``Kedro`` and ``Apache Hamilton`` are Python tools to help define directed acyclic graph (DAG) of data transformations. While there's overlap between the two in terms of features, we note two main differences:
 
-- ``Kedro`` is imperative and focuses on tasks; ``Hamilton`` is declarative and focuses on assets.
-- ``Kedro`` is heavier and comes with a project structure, YAML configs, and dataset definition to manage; ``Hamilton`` is lighter to adopt and you can progressively opt-in features that you find valuable.
+- ``Kedro`` is imperative and focuses on tasks; ``Apache Hamilton`` is declarative and focuses on assets.
+- ``Kedro`` is heavier and comes with a project structure, YAML configs, and dataset definition to manage; ``Apache Hamilton`` is lighter to adopt and you can progressively opt-in features that you find valuable.
 
 On this page, we'll dive into these differences, compare features, and present
 some code snippets from both tools. 
 
 .. note::
-    See this `GitHub repository <https://github.com/apache/hamilton/tree/main/examples/kedro>`_ to compare a full project using Kedro or Hamilton.
+    See this `GitHub repository <https://github.com/apache/hamilton/tree/main/examples/kedro>`_ to compare a full project using Kedro or Apache Hamilton.
 
 Imperative vs. Declarative
 ---------------------------
@@ -24,33 +24,33 @@ There are 3 steps to build and run a dataflow (a DAG, a data pipeline, etc.)
 1. Define steps
 ~~~~~~~~~~~~~~~
 
-Imperative (``Kedro``) vs. declarative (``Hamilton``) leads to significant differences in **Step 2** and **Step 3** that will shape how you work with the tool. However, **Step 1** remains similar. In fact, both tools use the term **nodes** to refer to steps.
+Imperative (``Kedro``) vs. declarative (``Apache Hamilton``) leads to significant differences in **Step 2** and **Step 3** that will shape how you work with the tool. However, **Step 1** remains similar. In fact, both tools use the term **nodes** to refer to steps.
 
 .. table::
    :align: left
 
    +---------------------------------------------------------+------------------------------------------------------------+
-   | Kedro (imperative)                                      | Hamilton (declarative)                                     |
+   | Kedro (imperative)                                      | Apache Hamilton (declarative)                                     |
    +=========================================================+============================================================+
    | .. literalinclude:: _kedro_snippets/kedro_definition.py | .. literalinclude:: _kedro_snippets/hamilton_definition.py | 
    |                                                         |                                                            |
    +---------------------------------------------------------+------------------------------------------------------------+
 
-The function implementations are exactly the same. Yet, notice that the function names and docstrings were edited slightly. Imperative approaches like ``Kedro`` typically refer to steps as *tasks*  and prefer verbs to describe "the action of the function". Meanwhile, declarative approaches such as ``Hamilton`` describe steps as *assets* and use nouns to refer to "the value returned by the function". This might appear superficial, but it relates to the difference in **Step 2** and **Step 3**.
+The function implementations are exactly the same. Yet, notice that the function names and docstrings were edited slightly. Imperative approaches like ``Kedro`` typically refer to steps as *tasks*  and prefer verbs to describe "the action of the function". Meanwhile, declarative approaches such as ``Apache Hamilton`` describe steps as *assets* and use nouns to refer to "the value returned by the function". This might appear superficial, but it relates to the difference in **Step 2** and **Step 3**.
 
 2. Assemble dataflow
 ~~~~~~~~~~~~~~~~~~~~
 
 With ``Kedro``, you need to take your functions from **Step 1** and create ``node`` objects, specifying the node's name, inputs, and outputs. Then, you create a ``pipeline`` from a set of ``nodes`` and ``Kedro`` assembles the nodes into a DAG. Imperative approaches need to specify how tasks (Kedro nodes) relate to each other.
 
-With ``Hamilton``, you pass the module containing all functions from **Step 1** and let Hamilton create the ``nodes`` and the ``dataflow``. This is possible because in declarative approaches like Hamilton, each function defines a transform **and** its dependencies on other functions. Notice how in **Step 1**, ``model_input_table()`` has parameters ``shuttles_preprocessed`` and ``companies_preprocessed``, which refers to other functions in the module. This contains all the required information to build the DAG.
+With ``Apache Hamilton``, you pass the module containing all functions from **Step 1** and let Apache Hamilton create the ``nodes`` and the ``dataflow``. This is possible because in declarative approaches like Apache Hamilton, each function defines a transform **and** its dependencies on other functions. Notice how in **Step 1**, ``model_input_table()`` has parameters ``shuttles_preprocessed`` and ``companies_preprocessed``, which refers to other functions in the module. This contains all the required information to build the DAG.
 
 
 .. table::
    :align: left
 
    +---------------------------------------------------------+------------------------------------------------------------+
-   | Kedro (imperative)                                      | Hamilton (declarative)                                     |
+   | Kedro (imperative)                                      | Apache Hamilton (declarative)                                     |
    +=========================================================+============================================================+
    | .. literalinclude:: _kedro_snippets/kedro_assemble.py   | .. literalinclude:: _kedro_snippets/hamilton_assemble.py   | 
    |                                                         |                                                            |
@@ -66,25 +66,25 @@ With ``Hamilton``, you pass the module containing all functions from **Step 1** 
 
 - Readability improves because you can understand how functions relate to each other without jumping between files.
 
-These benefits of ``Hamilton`` encourage developers to write smaller functions that are easier to debug and maintain, leading to major code quality gains. On the opposite, the burden of ``node`` and ``pipeline`` creation as projects grow in size lead to users stuffing more and more logic in a single node, making it increasingly harder to maintain.
+These benefits of ``Apache Hamilton`` encourage developers to write smaller functions that are easier to debug and maintain, leading to major code quality gains. On the opposite, the burden of ``node`` and ``pipeline`` creation as projects grow in size lead to users stuffing more and more logic in a single node, making it increasingly harder to maintain.
 
 3. Execute dataflow
 ~~~~~~~~~~~~~~~~~~~~
 
 The primary way to execute ``Kedro`` pipelines is to use the command line tool with ``kedro run --pipeline=my_pipeline``. Pipelines are typically designed for all nodes to be executed while reading data and writing results while going through nodes. It is closer to macro-orchestration frameworks like Airflow in spirit.
 
-On the opposite, ``Hamilton`` dataflows are primarily meant to be executed programmatically (i.e., via Python code) and return results in-memory. This makes it easy to use ``Hamilton`` within a :doc:`FastAPI service <../integrations/fastapi>` service or to power an LLM application.
+On the opposite, ``Apache Hamilton`` dataflows are primarily meant to be executed programmatically (i.e., via Python code) and return results in-memory. This makes it easy to use ``Apache Hamilton`` within a :doc:`FastAPI service <../integrations/fastapi>` service or to power an LLM application.
 
 For comparable side-by-side code, we can dig into ``Kedro`` and use the ``SequentialRunner`` programmatically. To return pipeline results in-memory we would need to hack further with ``kedro.io.MemoryDataset``.
 
 .. note::
-    Hamilton also has rich support for I/O operations (see **Feature comparison** below)
+    Apache Hamilton also has rich support for I/O operations (see **Feature comparison** below)
 
 .. table::
    :align: left
 
    +---------------------------------------------------------+------------------------------------------------------------+
-   | Kedro (imperative)                                      | Hamilton (declarative)                                     |
+   | Kedro (imperative)                                      | Apache Hamilton (declarative)                                     |
    +=========================================================+============================================================+
    | .. literalinclude:: _kedro_snippets/kedro_execution.py  | .. literalinclude:: _kedro_snippets/hamilton_execution.py  | 
    |                                                         |                                                            |
@@ -92,9 +92,9 @@ For comparable side-by-side code, we can dig into ``Kedro`` and use the ``Sequen
 
 An imperative pipeline like ``Kedro`` is a series of step, just like a recipe. The user can specify "from nodes" or "to nodes" to *slice* the pipeline and not have to execute it in full.
 
-For declarative dataflows like ``Hamilton`` you request assets / nodes by name and the tool will determine the required nodes to execute (here ``"model_input_table"``) avoiding wasteful compute.
+For declarative dataflows like ``Apache Hamilton`` you request assets / nodes by name and the tool will determine the required nodes to execute (here ``"model_input_table"``) avoiding wasteful compute.
 
-The simple Python interface provided by ``Hamilton`` allows you to potentially define and execute your dataflow from a single file, which is great to kickstart an analysis or project. Just use ``python dataflow.py`` to execute it! 
+The simple Python interface provided by ``Apache Hamilton`` allows you to potentially define and execute your dataflow from a single file, which is great to kickstart an analysis or project. Just use ``python dataflow.py`` to execute it! 
 
 .. code-block:: python
 
@@ -145,7 +145,7 @@ The simple Python interface provided by ``Hamilton`` allows you to potentially d
 Framework weight
 ----------------
 
-After imperative vs. declarative, the next largest difference is the type of user experience they provide. ``Kedro`` is a more opiniated and heavier framework; ``Hamilton`` is on the opposite end of the spectrum and tries to be the lightest library possible. This changes the learning curve, adoption, and how each tool will integrate with your stack.
+After imperative vs. declarative, the next largest difference is the type of user experience they provide. ``Kedro`` is a more opiniated and heavier framework; ``Apache Hamilton`` is on the opposite end of the spectrum and tries to be the lightest library possible. This changes the learning curve, adoption, and how each tool will integrate with your stack.
 
 Kedro
 ~~~~~
@@ -159,17 +159,17 @@ Kedro
 
 This provides guidance when building your first data pipeline, but it's also a lot to take in at once. As you'll see in the `project comparison on GitHub <https://github.com/apache/hamilton/tree/main/examples/kedro>`_, ``Kedro`` involves more files making it harder to navigate. Also, it's reliant on YAML which is `generally seen as an unreliable format <https://noyaml.com/>`_. If you have an existing data stack or favorite library, it might clash with ``Kedro``'s way of thing (e.g., you have credentials management tool; you prefer `Hydra <https://hydra.cc/>`_ for configs).
 
-Hamilton
+Apache Hamilton
 ~~~~~~~~
 
-``Hamilton`` attempts to get you started quickly. In fact, this page pretty much covered what you need to know:
+``Apache Hamilton`` attempts to get you started quickly. In fact, this page pretty much covered what you need to know:
 
 - Define nodes and a dataflow using regular Python functions (no need to even import ``hamilton``!)
 - Build a ``Driver`` with your dataflow module and call ``.execute()`` to get results
 
-``Hamilton`` allows you to start light and opt-in features as your project's requirements evolve (data validation, scaling compute, testing, etc.). Python is a powerful language with rich editor support and tooling hence why it advocates for "everything in Python" instead of external configs in YAML or JSON. For example, parameters, data assets, and configurations can very much live as dataclasses within a ``.py`` file. ``Hamilton`` was built with an extensive plugin system. There are many extensions, some contributed by users, to adapt Hamilton to your project, and it's easy for you to extend yourself for further customization.
+``Apache Hamilton`` allows you to start light and opt-in features as your project's requirements evolve (data validation, scaling compute, testing, etc.). Python is a powerful language with rich editor support and tooling hence why it advocates for "everything in Python" instead of external configs in YAML or JSON. For example, parameters, data assets, and configurations can very much live as dataclasses within a ``.py`` file. ``Apache Hamilton`` was built with an extensive plugin system. There are many extensions, some contributed by users, to adapt Apache Hamilton to your project, and it's easy for you to extend yourself for further customization.
 
-In fact, ``Hamilton`` is so lightweight, you could even run it inside ``Kedro``!
+In fact, ``Apache Hamilton`` is so lightweight, you could even run it inside ``Kedro``!
 
 Feature comparison
 ------------------
@@ -180,7 +180,7 @@ Feature comparison
 
     * - Trait
       - Kedro
-      - Hamilton
+      - Apache Hamilton
     * - Focuses on
       - Tasks (imperative)
       - Assets (declarative)
@@ -207,7 +207,7 @@ Feature comparison
       - Visualize entire dataflow, execution path, query what's upstream, etc. directly in a notebook or output to a file (``.png``, ``.svg``, etc.). Single dependency is ``graphviz``.
     * - Interactive DAG viewer
       - `Kedro Viz <https://github.com/kedro-org/kedro-viz>`_
-      - `Hamilton UI <https://github.com/apache/hamilton/tree/main/ui>`_
+      - `Apache Hamilton UI <https://github.com/apache/hamilton/tree/main/ui>`_
     * - Data validation
       - `Community Pandera plugin <https://github.com/Galileo-Galilei/kedro-pandera/releases>`_
       - `Native and Pandera plugin <https://hamilton.dagworks.io/en/latest/how-tos/run-data-quality-checks/>`_
@@ -231,7 +231,7 @@ Feature comparison
       - ✅
 
 
-Both ``Kedro`` and ``Hamilton`` provide applications to view dataflows/pipelines and interact with their results. Here, ``Kedro`` provides a lighter webserver and UI, while ``Hamilton`` offers a production-ready containerized application.
+Both ``Kedro`` and ``Apache Hamilton`` provide applications to view dataflows/pipelines and interact with their results. Here, ``Kedro`` provides a lighter webserver and UI, while ``Apache Hamilton`` offers a production-ready containerized application.
 
 
 .. list-table::
@@ -240,7 +240,7 @@ Both ``Kedro`` and ``Hamilton`` provide applications to view dataflows/pipelines
 
     * - Trait
       - Kedro Viz
-      - Hamilton UI
+      - Apache Hamilton UI
     * - Interactive dataflow viewer
       - ✅
       - ✅
@@ -276,6 +276,6 @@ Both ``Kedro`` and ``Hamilton`` provide applications to view dataflows/pipelines
 More information
 ----------------
 
-For a full side-by-side example of Kedro and Hamilton, visit `this GitHub repository <https://github.com/apache/hamilton/tree/main/examples/kedro>`_
+For a full side-by-side example of Kedro and Apache Hamilton, visit `this GitHub repository <https://github.com/apache/hamilton/tree/main/examples/kedro>`_
 
 For more questions, join our `Slack Channel <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_

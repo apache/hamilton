@@ -75,7 +75,7 @@ we have exposed mock functions. To adapt this to your (real-world) use-case, you
 4. See the commit history on this example, and see what was changed to accommodate the streaming context. You'll want to do something similar.
 
 
-# Pictures of the Hamilton DAG
+# Pictures of the Apache Hamilton DAG
 ## Batch
 ![batch](batch.png)
 ## Online

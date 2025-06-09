@@ -1,9 +1,9 @@
 # Command line interface
 
-This page covers the Hamilton CLI. It is built directly from the CLI, but note that the command `hamilton --help` always provide the most accurate documentation.
+This page covers the Apache Hamilton CLI. It is built directly from the CLI, but note that the command `hamilton --help` always provide the most accurate documentation.
 
 ## Installation
-The dependencies for the Hamilton CLI can be installed via
+The dependencies for the Apache Hamilton CLI can be installed via
 
 ```console
 pip install sf-hamilton[cli]

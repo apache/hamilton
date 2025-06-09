@@ -10,5 +10,5 @@ In VSCode, the vertical sidebar is called the `activity bar` (`ctrl+b`) and the 
 - The `activity bar` can be moved to the **left** or **right** via the setting `workbench.sideBar.location`
 - The `panel` can be move to the **left**, **right**, or **bottom** by clicking the header and setting the `panel position`.
 - The `panel` can be quickly open/closed with `ctrl+j`
-- If you can't find a view, open the command palet and search for `Hamilton: Focus [...]` for shortcuts.
+- If you can't find a view, open the command palet and search for `Apache Hamilton: Focus [...]` for shortcuts.
 - If your setup becomes a mess, open the command palet and use `View: Reset View Locations`

@@ -1,4 +1,4 @@
-# Hamilton - VSCode extension
+# Apache Hamilton - VSCode extension
 
 ![](https://github.com/apache/hamilton/dev_tools/vscode_extension/resources/demo.gif)
 

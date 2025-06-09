@@ -1,7 +1,7 @@
-# Using Hamilton for ML dataflows
+# Using Apache Hamilton for ML dataflows
 
 Here we have a simple example showing how you can
-write a ML training and evaluation workflow with Hamilton.
+write a ML training and evaluation workflow with Apache Hamilton.
 
 `pip install scikit-learn` or `pip install -r requirements.txt` to get the right python dependencies
 to run this example.

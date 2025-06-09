@@ -1,6 +1,6 @@
-# Run Hamilton Functions as an AWS SageMaker Processing Job
+# Run Apache Hamilton Functions as an AWS SageMaker Processing Job
 
-[AWS SageMaker](https://aws.amazon.com/sagemaker/) is a comprehensive platform that facilitates the creation, training, and deployment of machine learning (ML) models. This guide demonstrates deploying a "hello-world" [processing job](https://docs.aws.amazon.com/sagemaker/latest/dg/processing-job.html) using Hamilton functions on SageMaker.
+[AWS SageMaker](https://aws.amazon.com/sagemaker/) is a comprehensive platform that facilitates the creation, training, and deployment of machine learning (ML) models. This guide demonstrates deploying a "hello-world" [processing job](https://docs.aws.amazon.com/sagemaker/latest/dg/processing-job.html) using Apache Hamilton functions on SageMaker.
 
 ## Prerequisites
 

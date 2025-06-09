@@ -2,7 +2,7 @@
 Data quality
 =======================
 
-Hamilton comes with data quality included out of the box.
+Apache Hamilton comes with data quality included out of the box.
 While you can read more about this in the :doc:`API reference <../reference/decorators/index/>`, we have a few examples to help get you started.
 
 The following two examples showcase a similar workflow, one using the vanilla hamilton data quality decorator, and the other using the pandera integration.

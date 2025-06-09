@@ -10,8 +10,8 @@ Do you have the following?
   - [ ] Added an __init__.py file under my username directory.
 - [ ] Added a new folder for my dataflow under my username directory.
   - [ ] Added a README.md file under my dataflow directory that follows the standard headings and is filled out.
-  - [ ] Added a __init__.py file under my dataflow directory that contains the Hamilton code.
-  - [ ] Added a requirements.txt under my dataflow directory that contains the required packages outside of Hamilton.
+  - [ ] Added a __init__.py file under my dataflow directory that contains the Apache Hamilton code.
+  - [ ] Added a requirements.txt under my dataflow directory that contains the required packages outside of Apache Hamilton.
   - [ ] Added tags.json under my dataflow directory to curate my dataflow.
   - [ ] Added valid_configs.jsonl under my dataflow directory to specify the valid configurations.
   - [ ] Added a dag.png that shows one possible configuration of my dataflow.

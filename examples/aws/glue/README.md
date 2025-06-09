@@ -1,6 +1,6 @@
-# Deploy Hamilton Functions as an AWS Glue Job
+# Deploy Apache Hamilton Functions as an AWS Glue Job
 
-[AWS Glue](https://aws.amazon.com/glue/) is a serverless data integration service. This guide demonstrates deploying a "hello-world" [processing job](https://docs.aws.amazon.com/glue/latest/dg/add-job-python.html) using Hamilton functions on AWS Glue.
+[AWS Glue](https://aws.amazon.com/glue/) is a serverless data integration service. This guide demonstrates deploying a "hello-world" [processing job](https://docs.aws.amazon.com/glue/latest/dg/add-job-python.html) using Apache Hamilton functions on AWS Glue.
 
 ## Prerequisites
 
@@ -8,9 +8,9 @@
 
 ## Step-by-Step Guide
 
-### 1. Build wheel with Hamilton functions
+### 1. Build wheel with Apache Hamilton functions
 
-First things first, AWS Glue jobs run a single python script, but you can include external code (like our Hamilton functions) by adding it as a python wheel. So, let's package our code and get it ready for action.
+First things first, AWS Glue jobs run a single python script, but you can include external code (like our Apache Hamilton functions) by adding it as a python wheel. So, let's package our code and get it ready for action.
 
 - **Install build package:**
 

@@ -2,9 +2,9 @@
 Code Organization
 =================
 
-Hamilton will force you to organize your code! Here's some tips.
+Apache Hamilton will force you to organize your code! Here's some tips.
 
-Hamilton forces you to put your code into modules that are distinct from where you run your code.
+Apache Hamilton forces you to put your code into modules that are distinct from where you run your code.
 
 You'll soon find that a single python module does not make sense, and so you'll organically start to (very likely) put
 like functions with like functions, i.e. thus creating domain specific modules --> `use this to your development
@@ -14,7 +14,7 @@ At Stitch Fix we:
 
 #. Use modules to model team thinking, e.g. date\_features.py.
 #. Use modules to helps isolate what you’re working on.
-#. Use modules to replace parts of your Hamilton dataflow very easily for different contexts.
+#. Use modules to replace parts of your Apache Hamilton dataflow very easily for different contexts.
 
 Team thinking
 -------------
@@ -42,7 +42,7 @@ want to swap/change/augment an input, having a function that would map to it def
 lot of flexibility. Rather than having a single module with all functions defined in it, separating the functions into
 different modules could be a productivity win.
 
-Why? That's because when you come to tell Hamilton what functions constitute your dataflow (i.e. DAG), you'll be able
+Why? That's because when you come to tell Apache Hamilton what functions constitute your dataflow (i.e. DAG), you'll be able
 to simply replace/add/change the module being passed. So if you want to compute inputs for certain functions
 differently, this composability of including/excluding modules, when building the DAG provides a lot of flexibility
 that you can exploit to make your development cycle faster.
