@@ -68,7 +68,7 @@ As prerequisites, you will need to have Docker installed -- you can follow instr
 
 .. code-block:: bash
 
-    git clone https://github.com/dagworks-inc/hamilton
+    git clone https://github.com/apache/hamilton
 
 2. Navigate to the ``hamilton/ui`` directory
 
@@ -135,7 +135,7 @@ Running on Snowflake
 ---------------------
 You can run the Hamilton UI on Snowflake Container Services. For a detailed guide, see the blog post
 `Observability of Python code and application logic with Hamilton UI on Snowflake Container Services <https://medium.com/@pkantyka/observability-of-python-code-and-application-logic-with-hamilton-ui-on-snowflake-container-services-a26693b46635>`_ by
-`Greg Kantyka <https://medium.com/@pkantyka>`_ and the `Hamilton Snowflake Example <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/snowflake/hamilton_ui>`_.
+`Greg Kantyka <https://medium.com/@pkantyka>`_ and the `Hamilton Snowflake Example <https://github.com/apache/hamilton/tree/main/examples/snowflake/hamilton_ui>`_.
 
 -----------
 Get started
@@ -184,7 +184,7 @@ the local mode -- if you're on postgres it links to 8241 (but you'll want to fol
 
 I need some Hamilton code to run
 --------------------------------
-If you don't have Hamilton code to run this with, you can run Hamilton UI example under `examples/hamilton_ui <https://github.com/dagworks-inc/hamilton/tree/main/examples/hamilton_ui>`_:
+If you don't have Hamilton code to run this with, you can run Hamilton UI example under `examples/hamilton_ui <https://github.com/apache/hamilton/tree/main/examples/hamilton_ui>`_:
 
 .. code-block:: bash
 

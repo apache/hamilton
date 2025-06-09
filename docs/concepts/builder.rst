@@ -88,7 +88,7 @@ It encourages organizing code into logical modules (e.g., feature processing, mo
             .build()
         )
 
-    If ``module_A`` and ``module_B`` both have the function ``foo()``, Hamilton will use ``module_B.foo()`` when constructing the DAG. See https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/module_overrides for more info.
+    If ``module_A`` and ``module_B`` both have the function ``foo()``, Hamilton will use ``module_B.foo()`` when constructing the DAG. See https://github.com/apache/hamilton/tree/main/examples/module_overrides for more info.
 
 with_config()
 -------------

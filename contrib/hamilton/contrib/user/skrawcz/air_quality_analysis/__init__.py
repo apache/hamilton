@@ -101,7 +101,7 @@ def _compute_indices(breakpoints: dict, aqi: np.ndarray, pol: str, con: float) -
 
 def pollutant_data(input_file_name: str) -> np.ndarray:
     """Returns the raw pollutant data.
-    Download data here - https://raw.githubusercontent.com/dagworks-inc/hamilton/main/examples/numpy/air-quality-analysis/air-quality-data.csv
+    Download data here - https://raw.githubusercontent.com/apache/hamilton/main/examples/numpy/air-quality-analysis/air-quality-data.csv
     """
     return np.loadtxt(input_file_name, dtype=float, delimiter=",", skiprows=1, usecols=range(1, 8))
 

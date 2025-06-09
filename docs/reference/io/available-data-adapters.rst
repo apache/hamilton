@@ -60,7 +60,7 @@ See :doc:`/reference/decorators/dataloader/` for more information on how to load
 via this more lighter weight way.
 
 If you want to extend the `@save_to` or `@load_from` decorators, see :doc:`/reference/io/available-data-adapters` for documentation,
-and `the example <https://github.com/DAGWorks-Inc/hamilton/blob/main/examples/materialization/README.md>`_
+and `the example <https://github.com/apache/hamilton/blob/main/examples/materialization/README.md>`_
 in the repository for an example of how to do so.
 
 Note that you will need to call `registry.register_adapters` (or import a module that does that)

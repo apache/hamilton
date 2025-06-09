@@ -2,7 +2,7 @@
 
 In this example, were going to show how to run a simple `data preprocessing -> model training -> model evaluation` workflow using Hamilton within Prefect tasks.
 - [**Prefect**](https://prefect.io) is an open source orchestrator written in Python. Its purpose is to launch and execute your workflows over your infrastructure.  It is a macro-orchestration system.
-- [**Hamilton**](https://github.com/dagworks-inc/hamilton) is a micro-framework to describe dataflows in Python. Its strength is expressing the flow of data & computation in a way that is straightforward to create, maintain, and reuse (much like DBT has done for SQL). It is lightweight and can be run anywhere that python runs.  It is a micro-orchestration system.
+- [**Hamilton**](https://github.com/apache/hamilton) is a micro-framework to describe dataflows in Python. Its strength is expressing the flow of data & computation in a way that is straightforward to create, maintain, and reuse (much like DBT has done for SQL). It is lightweight and can be run anywhere that python runs.  It is a micro-orchestration system.
 
 ## Why both?
 Prefect is a heavy weight system that includes useful features for production system such as job queues, caching, retries, logging, and more. However, each additional "task" you create comes with execution overhead and needs to be manually added to the DAG structure. Opting for less granular tasks ultimately reduces visibility and maintainability, while opting for more creates more overhead.

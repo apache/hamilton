@@ -275,7 +275,7 @@ def create_graphviz_graph(
         # We need to ensure that name and type string are HTML-escaped
         # strings to avoid syntax errors. This is particular important
         # because config *values* are passed through this function
-        # see issue: https://github.com/DAGWorks-Inc/hamilton/issues/1200
+        # see issue: https://github.com/apache/hamilton/issues/1200
         # see graphviz ref: https://graphviz.org/doc/info/shapes.html#html
         if len(type_string) > MAX_STRING_LENGTH:
             type_string = type_string[:MAX_STRING_LENGTH] + "[...]"

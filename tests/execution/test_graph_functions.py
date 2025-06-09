@@ -131,7 +131,7 @@ def _is(name: str) -> Callable[[node.Node], bool]:
             "d",
         ),
         ({"a": [], "b": [], "c": ["a", "b"], "d": "c"}, {"c"}, "a", "d"),
-        # https://github.com/DAGWorks-Inc/hamilton/issues/948
+        # https://github.com/apache/hamilton/issues/948
         (
             {
                 "random_int": [],

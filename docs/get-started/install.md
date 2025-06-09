@@ -36,7 +36,7 @@ Hamilton is also available on conda if you prefer:
 You can also download the code and run it from the source.
 
 ```bash
-git clone https://github.com/dagworks-inc/hamilton.git
+git clone https://github.com/apache/hamilton.git
 cd hamilton
 pip install -e .
 ```

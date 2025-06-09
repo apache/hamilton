@@ -128,7 +128,7 @@ def test_subdag_basic_source_parameterization():
     decorator = recursive.subdag(foo, bar, inputs={"a": source("c"), "b": source("d")}, config={})
     nodes = {node_.name: node_ for node_ in decorator.generate_nodes(baz, {})}
     # These aren't entirely part of the contract, but they're required for the
-    # way we're currently implementing it. See https://github.com/dagworks-inc/hamilton/issues/201
+    # way we're currently implementing it. See https://github.com/apache/hamilton/issues/201
     assert "baz.a" in nodes
     assert nodes["baz.a"](c=1) == 1
     assert "baz.b" in nodes

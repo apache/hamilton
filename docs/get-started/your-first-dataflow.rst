@@ -9,8 +9,8 @@ We're jumping in head-first. If you want to start with an overview, skip ahead t
 
 .. note::
 
-    You can follow along in the `examples directory <https://github.com/dagworks-inc/hamilton/tree/main/examples/hello\_world>`_
-    of the `hamilton repo <https://github.com/dagworks-inc/hamilton/>`_. We highly recommend forking the repo and playing
+    You can follow along in the `examples directory <https://github.com/apache/hamilton/tree/main/examples/hello\_world>`_
+    of the `hamilton repo <https://github.com/apache/hamilton/>`_. We highly recommend forking the repo and playing
     around with the code to get comfortable.
 
 Write transformation functions

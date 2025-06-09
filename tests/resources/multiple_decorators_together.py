@@ -31,7 +31,7 @@ def _dummy(**values) -> dict:
 
 @extract_fields({"out_value1": int, "out_value2": str})
 @tag(test_key="test-value")
-# @check_output(data_type=dict, importance="fail")  To fix see https://github.com/dagworks-inc/hamilton/issues/249
+# @check_output(data_type=dict, importance="fail")  To fix see https://github.com/apache/hamilton/issues/249
 @does(_dummy)
 def uber_decorated_function(in_value1: int, in_value2: str) -> dict:
     pass

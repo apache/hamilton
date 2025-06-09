@@ -34,7 +34,7 @@ def test_from_version_tuple(version_tuple, version):
             fail_starting=(0, 0, 1),
             use_this=None,
             explanation="something",
-            migration_guide="https://github.com/dagworks-inc/hamilton",
+            migration_guide="https://github.com/apache/hamilton",
         ),
         dict(
             warn_starting=(0, 0, 0),
@@ -64,7 +64,7 @@ def test_validate_deprecated_decorator_params_happy(kwargs):
             fail_starting=(0, 0, 1),
             use_this=None,
             explanation="something",
-            migration_guide="https://github.com/dagworks-inc/hamilton",
+            migration_guide="https://github.com/apache/hamilton",
         ),
         dict(
             warn_starting=(0, 0, 0),
@@ -102,7 +102,7 @@ def test_call_function_not_deprecated_yet():
         fail_starting=(1, 0, 0),
         use_this=replacement_function,
         explanation="True is the new False",
-        migration_guide="https://github.com/dagworks-inc/hamilton",
+        migration_guide="https://github.com/apache/hamilton",
         current_version=(0, 0, 0),
         warn_action=warn,
     )
@@ -128,7 +128,7 @@ def test_call_function_soon_to_be_deprecated():
         fail_starting=(1, 0, 0),
         use_this=replacement_function,
         explanation="True is the new False",
-        migration_guide="https://github.com/dagworks-inc/hamilton",
+        migration_guide="https://github.com/apache/hamilton",
         current_version=(0, 6, 0),
         warn_action=warn,
     )
@@ -148,7 +148,7 @@ def test_call_function_already_deprecated():
         fail_starting=(1, 0, 0),
         use_this=replacement_function,
         explanation="True is the new False",
-        migration_guide="https://github.com/dagworks-inc/hamilton",
+        migration_guide="https://github.com/apache/hamilton",
         current_version=(1, 1, 0),
     )
     def deprecated_function():
@@ -173,7 +173,7 @@ def test_call_function_class_not_deprecated_yet():
         fail_starting=(1, 0, 0),
         use_this=replacement_function,
         explanation="True is the new False",
-        migration_guide="https://github.com/dagworks-inc/hamilton",
+        migration_guide="https://github.com/apache/hamilton",
         current_version=(0, 0, 0),
         warn_action=warn,
     )
@@ -200,7 +200,7 @@ def test_call_function_class_soon_to_be_deprecated():
         fail_starting=(1, 0, 0),
         use_this=replacement_function,
         explanation="True is the new False",
-        migration_guide="https://github.com/dagworks-inc/hamilton",
+        migration_guide="https://github.com/apache/hamilton",
         current_version=(0, 6, 0),
         warn_action=warn,
     )
@@ -221,7 +221,7 @@ def test_call_function_class_already_deprecated():
         fail_starting=(1, 0, 0),
         use_this=replacement_function,
         explanation="True is the new False",
-        migration_guide="https://github.com/dagworks-inc/hamilton",
+        migration_guide="https://github.com/apache/hamilton",
         current_version=(1, 1, 0),
     )
     class deprecated_function:

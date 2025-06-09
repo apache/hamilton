@@ -42,7 +42,7 @@ reference/disabling-telemetry.md
 :hidden: True
 :caption: EXTERNAL RESOURCES
 
-GitHub <https://github.com/dagworks-inc/hamilton>
+GitHub <https://github.com/apache/hamilton>
 tryhamilton.dev <https://www.tryhamilton.dev/>
 Dataflow Hub <https://hub.dagworks.io/docs/>
 Blog <https://blog.dagworks.io/>

@@ -16,7 +16,7 @@ Disk cache has great features to:
 > cache (both keys and values). Learn more about [caveats](https://grantjenks.com/docs/diskcache/tutorial.html#caveats).
 
 > ❓ To store artifacts robustly, please use Hamilton materializers or the
-> [CachingGraphAdapter](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/caching_nodes/caching_graph_adatper) instead.
+> [CachingGraphAdapter](https://github.com/apache/hamilton/tree/main/examples/caching_nodes/caching_graph_adatper) instead.
 > The `CachingGraphAdapter` stores tagged nodes directly on the file system using common formats (JSON, CSV, Parquet, etc.).
 > However, it isn't aware of your function version and requires you to manually manage your disk space.
 

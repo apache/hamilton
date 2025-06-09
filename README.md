@@ -1,5 +1,5 @@
 <div align="center">
-   <h1><img src="https://github.com/DAGWorks-Inc/hamilton/assets/2328071/feb6abaa-b6d5-4271-a320-0ae4a18d8aa7" width="50"/> Hamilton — portable & expressive <br> data transformation DAGs</h1>
+   <h1><img src="https://github.com/apache/hamilton/assets/2328071/feb6abaa-b6d5-4271-a320-0ae4a18d8aa7" width="50"/> Hamilton — portable & expressive <br> data transformation DAGs</h1>
    <a href='https://hamilton.dagworks.io/en/latest/?badge=latest'>
       <img src='https://readthedocs.org/projects/hamilton/badge/?version=latest' alt='Documentation Status' />
    </a><a href="https://www.python.org/downloads/" target="_blank">
@@ -44,7 +44,7 @@ To create a DAG, write regular Python functions that specify their dependencies 
 
 Hamilton brings modularity and structure to any Python application moving data: ETL pipelines, ML workflows, LLM applications, RAG systems, BI dashboards, and the [Hamilton UI](https://hamilton.dagworks.io/en/latest/concepts/ui) allows you to automatically visualize, catalog, and monitor execution.
 
-> Hamilton is great for DAGs, but if you need loops or conditional logic to create an LLM agent or a simulation, take a look at our sister library  [Burr](https://github.com/dagworks-inc/burr) 🤖 .
+> Hamilton is great for DAGs, but if you need loops or conditional logic to create an LLM agent or a simulation, take a look at our sister library  [Burr](https://github.com/apache/burr) 🤖 .
 
 
 # Installation
@@ -145,7 +145,7 @@ You can track the execution of your Hamilton DAG in the [Hamilton UI](https://ha
 
 * 📚 See the [official documentation](https://hamilton.dagworks.io/) to learn about the core concepts of Hamilton.
 
-* 👨‍🏫 Consult the [examples on GitHub](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples) to learn about specific features or integrations with other frameworks.
+* 👨‍🏫 Consult the [examples on GitHub](https://github.com/apache/hamilton/tree/main/examples) to learn about specific features or integrations with other frameworks.
 
 * 📰 The [DAGWorks blog](https://blog.dagworks.io/) includes guides about how to build a data platform and narrative tutorials.
 
@@ -183,7 +183,7 @@ Another way to frame it is to think about the different layers of a data stack. 
          <tr>
                <td>Asset</td>
                <td>Organize expressions into meaningful units <br> (e.g., dataset, ML model, table)</td>
-               <td><b>Hamilton</b>, dbt, dlt, SQLMesh, <a href="https://github.com/dagworks-inc/burr">Burr</a></td>
+               <td><b>Hamilton</b>, dbt, dlt, SQLMesh, <a href="https://github.com/apache/burr">Burr</a></td>
          </tr>
          <tr>
                <td>Expression</td>
@@ -215,7 +215,7 @@ Hamilton is released under the Apache 2.0 License. See [LICENSE](https://github.
 ## 👨‍💻 Contributing
 We're very supportive of changes by new contributors, big or small! Make sure to discuss potential changes by creating an issue or commenting on an existing one before opening a pull request. Good first contributions include creating an example or an integration with your favorite Python library!
 
- To contribute, checkout our [contributing guidelines](https://github.com/DAGWorks-Inc/hamilton/blob/main/CONTRIBUTING.md), our [developer setup guide](https://github.com/DAGWorks-Inc/hamilton/blob/main/developer_setup.md), and our [Code of Conduct](https://github.com/DAGWorks-Inc/hamilton/blob/main/CODE_OF_CONDUCT.md).
+ To contribute, checkout our [contributing guidelines](https://github.com/apache/hamilton/blob/main/CONTRIBUTING.md), our [developer setup guide](https://github.com/apache/hamilton/blob/main/developer_setup.md), and our [Code of Conduct](https://github.com/apache/hamilton/blob/main/CODE_OF_CONDUCT.md).
 
 
 ## 😎 Used by
@@ -255,7 +255,7 @@ Hamilton was started at Stitch Fix before the original creators founded DAGWorks
 * [wren.ai](https://wren.ai/)
 
 ## 🤝 Code Contributors
-[![Contributors](https://contrib.rocks/image?repo=dagworks-inc/hamilton)](https://github.com/DAGWorks-Inc/hamilton/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=dagworks-inc/hamilton)](https://github.com/apache/hamilton/graphs/contributors)
 
 
 ## 🙌 Special Mentions & 🦟 Bug Hunters

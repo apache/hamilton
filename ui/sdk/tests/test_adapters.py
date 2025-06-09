@@ -13,7 +13,7 @@ from tests import test_tracking
 adapter_kwargs = dict(
     project_id=19319,
     api_key="l-PlUq02JLQR6rAvO4x7VTttNTtprj1Tz5zBZ0ARpQ4olb8TK4hlgY2pennFhvsR1DxpYMQ-TLm0JknXVn7y9A",
-    username="stefan@dagworks.io",
+    username="stefank@cs.stanford.edu",
     tags={"env": "dev", "status": "development"},
     client_factory=test_tracking.MockHamiltonClient,
 )

@@ -12,13 +12,13 @@ if [ -d "$target_dir" ]; then
     if [[ "$response" =~ ^[Yy]$ ]]; then
         # Remove the existing directory and then perform the git clone
         rm -rf "$target_dir"
-        git clone https://github.com/dagworks-inc/hamilton.git "$target_dir/hamilton"
+        git clone https://github.com/apache/hamilton.git "$target_dir/hamilton"
     else
         echo "Clone operation canceled."
     fi
 else
     # If the target directory doesn't exist, perform the git clone
-    git clone https://github.com/dagworks-inc/hamilton.git "$target_dir/hamilton"
+    git clone https://github.com/apache/hamilton.git "$target_dir/hamilton"
 fi
 
 # # Step 2: Move to the directory

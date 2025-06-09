@@ -2,7 +2,7 @@
 Drivers
 ========
 
-Currently, we have one `main driver <https://github.com/dagworks-inc/hamilton/blob/main/hamilton/driver.py>`__.
+Currently, we have one `main driver <https://github.com/apache/hamilton/blob/main/hamilton/driver.py>`__.
 It's highly parameterizable, allowing you to customize:
 
 * The way the DAG is executed (how each node is executed), i.e. either locally, in parallel, or on a cluster!

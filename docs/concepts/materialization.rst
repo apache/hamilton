@@ -142,4 +142,4 @@ Here are simplified snippets for saving and loading an XGBoost model to/from JSO
    |                                              |                                               |
    +----------------------------------------------+-----------------------------------------------+
 
-To define your own DataSaver and DataLoader, the Hamilton `XGBoost extension <https://github.com/DAGWorks-Inc/hamilton/blob/main/hamilton/plugins/xgboost_extensions.py>`_ provides a good example
+To define your own DataSaver and DataLoader, the Hamilton `XGBoost extension <https://github.com/apache/hamilton/blob/main/hamilton/plugins/xgboost_extensions.py>`_ provides a good example

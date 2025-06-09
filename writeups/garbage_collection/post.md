@@ -10,7 +10,7 @@ Now that I had an excuse (a user asking me), I jumped into the rabbit hole of pr
 
 In this writeup I will talk a little about python garbage collection, share the change we made to improve Hamilton memory usage, and show its impact through a reproducible example.
 
-If you're not familiar with Hamilton, you can get started at [tryhamilton.dev](www.tryhamilton.dev), or go to the [root](https://www.github.com/dagworks-inc/hamilton) of this repository and read the README.
+If you're not familiar with Hamilton, you can get started at [tryhamilton.dev](www.tryhamilton.dev), or go to the [root](https://www.github.com/apache/hamilton) of this repository and read the README.
 If you don't want to read it and instead want to jump straight ahead, all you need to know is that Hamilton enables you to define your code as a directed acyclic graph (DAG) of python functions,
 and runs them for you. It differs from orchestration frameworks (Airflow, Metaflow, etc...) in that it is a micro orchestrator -- Hamilton does not provision compute or track executions. Rather, it is run as a library
 on top of other more infrastructure-focused systems. Its primary aim is to help you organize your code and run on multiple platforms.
@@ -79,7 +79,7 @@ def foo_i(foo_i_minus_one: pd.DataFrame) -> pd.DataFrame:
 Note that this makes clever use of the decorator `@parameterize` to form a long chain -- each step is parameterized to take the
 output of the previous step as an input.
 
-While memory is now optimized, if you comment out this [one line](https://github.com/DAGWorks-Inc/hamilton/blob/20d7efa83f2d21a7a8b2e377c1e9cc683da4138e/hamilton/execution/graph_functions.py#L170) of code and replace it with `pass`
+While memory is now optimized, if you comment out this [one line](https://github.com/apache/hamilton/blob/20d7efa83f2d21a7a8b2e377c1e9cc683da4138e/hamilton/execution/graph_functions.py#L170) of code and replace it with `pass`
 you can recreate the old behavior (fork + install + do `pip install -e .` to ensure the old version is installed/play around).
 
 When you try to run this on your macbook, it will, in all likelihood, fail (if not, up the `NUM_ITERS` until it does). Not only will it fail,
@@ -131,7 +131,7 @@ The last thing we need to know is *when* to check a result for garbage collectio
 
 The easy answer is that we can always check all upstream nodes after we have computed a node. Here's the addition we made.
 It makes use of the `for/break/else` [pattern](https://stackoverflow.com/questions/9979970/why-does-python-use-else-after-for-and-while-loops) in python
-(it's a strange one), but should otherwise be simple to read. The code below is a copy of the code in [graph_functions.py](https://github.com/DAGWorks-Inc/hamilton/blob/2c81bc48169b0a4fbaacfcb694879856e49021ab/hamilton/execution/graph_functions.py#L159-L170).
+(it's a strange one), but should otherwise be simple to read. The code below is a copy of the code in [graph_functions.py](https://github.com/apache/hamilton/blob/2c81bc48169b0a4fbaacfcb694879856e49021ab/hamilton/execution/graph_functions.py#L159-L170).
 
 ```python
 for dep in node_.dependencies:
@@ -172,7 +172,7 @@ You can see a similar pattern if you up the allocation size to 1gb. It occasiona
 After solving this memory leak, we also fixed one more -- in Hamilton's [dynamic execution capabilities](https://blog.dagworks.io/p/counting-stars-with-hamilton),
 it was doing something similar for parallel execution -- storing all the results and not letting go of them.
 
-You can find the original fix + some initial thoughts on the script/evidence as we learned this in the [PR](https://github.com/DAGWorks-Inc/hamilton/pull/374).
+You can find the original fix + some initial thoughts on the script/evidence as we learned this in the [PR](https://github.com/apache/hamilton/pull/374).
 
 Now that we've come out of the rabbit hole, we'll leave you with a few parting thoughts:
 

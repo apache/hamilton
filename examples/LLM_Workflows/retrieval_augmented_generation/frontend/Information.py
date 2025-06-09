@@ -44,7 +44,7 @@ def app() -> None:
 
     View the FastAPI docs at http://localhost:8082/docs
 
-    Find the code on [Hamilton's GitHub](https://github.com/DAGWorks-Inc/hamilton) page.
+    Find the code on [Hamilton's GitHub](https://github.com/apache/hamilton) page.
     """
     )
 
@@ -55,9 +55,9 @@ def app() -> None:
 
     📣 join our community on [Slack](https://hamilton-opensource.slack.com/join/shared_invite/zt-1bjs72asx-wcUTgH7q7QX1igiQ5bbdcg#/shared-invite/email) - we're more than happy to help answer questions you might have or get you started.
 
-    ⭐️ us on [GitHub](https://github.com/DAGWorks-Inc/hamilton)
+    ⭐️ us on [GitHub](https://github.com/apache/hamilton)
 
-    📝 leave us an [issue](https://github.com/DAGWorks-Inc/hamilton/issues) if you find something
+    📝 leave us an [issue](https://github.com/apache/hamilton/issues) if you find something
     """
     )
 

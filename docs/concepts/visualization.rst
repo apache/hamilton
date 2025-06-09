@@ -212,4 +212,4 @@ This `online graphviz editor <https://edotor.net/>`_ can help you get started!
     :height: 250px
 
 
-See the `full code example <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/styling_visualization>`_ for more details.
+See the `full code example <https://github.com/apache/hamilton/tree/main/examples/styling_visualization>`_ for more details.

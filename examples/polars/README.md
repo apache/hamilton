@@ -32,7 +32,7 @@ Here is the graph of execution - which should look the same as the pandas exampl
 There is one major caveat with Polars to be aware of: THERE IS NO INDEX IN POLARS LIKE THERE IS WITH PANDAS.
 
 What this means is that when you tell Hamilton to execute and return a polars dataframe if you are using the
-[provided results builder](https://github.com/dagworks-inc/hamilton/blob/sf-hamilton-1.14.1/hamilton/plugins/h_polars.py#L8), i.e. `hamilton.plugins.h_polars.PolarsResultsBuilder`, then you will have to
+[provided results builder](https://github.com/apache/hamilton/blob/sf-hamilton-1.14.1/hamilton/plugins/h_polars.py#L8), i.e. `hamilton.plugins.h_polars.PolarsResultsBuilder`, then you will have to
 ensure the row order matches the order you expect for all the outputs you request. E.g. if you do a filter, or a sort,
 or a join, or a groupby, you will have to ensure that when you ask Hamilton to materialize an output that it's in the
 order you expect.

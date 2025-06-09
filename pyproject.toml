@@ -11,7 +11,7 @@ requires-python = ">=3.8, <4"
 license = {text = "Apache-2.0"}
 keywords = ["hamilton"]
 authors = [
-    { name = "Stefan Krawczyk", email = "stefan@dagworks.io" },
+    { name = "Stefan Krawczyk", email = "stefank@cs.stanford.edu" },
     { name = "Elijah ben Izzy", email = "elijah@dagworks.io" },
 ]
 classifiers = [
@@ -167,9 +167,9 @@ hamilton-enable-autoload-extensions = "hamilton.registry:config_enable_autoload"
 [project.urls]
 homepage = "https://www.tryhamilton.dev/"
 documentation = "https://hamilton.dagworks.io/en/latest/"
-changelog = "https://github.com/DAGWorks-Inc/hamilton/releases"
-issues = "https://github.com/dagworks-inc/hamilton/issues"
-source = "https://github.com/dagworks-inc/hamilton"
+changelog = "https://github.com/apache/hamilton/releases"
+issues = "https://github.com/apache/hamilton/issues"
+source = "https://github.com/apache/hamilton"
 slack = "https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g"
 
 #[tool.mypy]

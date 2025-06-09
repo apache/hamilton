@@ -24,7 +24,7 @@ def create_training_features(data_path: str) -> Tuple[pd.DataFrame, pd.DataFrame
         ftrs_common_prep,
         project_id=31,
         api_key=os.environ["HAMILTON_API_KEY"],
-        username="stefan@dagworks.io",
+        username="stefank@cs.stanford.edu",
         dag_name="ts-feature-engineering-v1",
         tags={"version": "v1", "stage": "production"},
     )

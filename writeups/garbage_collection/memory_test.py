@@ -4,7 +4,7 @@ Run with mprof:
     pip install memory_profiler
     mprof run test_memory.py
     mprof plot
-See https://github.com/DAGWorks-Inc/hamilton/pull/374 for more details.
+See https://github.com/apache/hamilton/pull/374 for more details.
 """
 
 from hamilton.function_modifiers import parameterize, source

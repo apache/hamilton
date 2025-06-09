@@ -24,7 +24,7 @@ for you to find flows that others have built that you can use and easily modify 
 
 We're excited to have you contribute to the Hamilton Dataflow Hub!
 
-Head on over to [github and read the instructions](https://github.com/DAGWorks-Inc/hamilton/tree/main/contrib#how-to-contribute).
+Head on over to [github and read the instructions](https://github.com/apache/hamilton/tree/main/contrib#how-to-contribute).
 
 If you have questions, join us on [slack](https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g).
 

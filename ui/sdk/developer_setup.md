@@ -18,7 +18,7 @@ Fork this repo and clone your fork.
 GITHUB_USERNAME="YOUR-GITHUB-USERNAME" \
 git clone https://github.com/${GITHUB_USERNAME}/hamilton-sdk.git
 cd ./hamilton-sdk
-git remote add upstream https://github.com/dagworks-inc/hamilton-sdk.git
+git remote add upstream https://github.com/apache/hamilton-sdk.git
 ```
 
 Install the project's dependencies in your preferred method for managing python dependencies.
@@ -72,7 +72,7 @@ pre-commit run --all-files
 
 ...and by following the steps in ["How to run unit tests"](#how-to-run-unit-tests).
 
-Navigate to https://github.com/dagworks-inc/hamilton-sdk/pulls and open a pull request.
+Navigate to https://github.com/apache/hamilton-sdk/pulls and open a pull request.
 
 ## How to run unit tests
 

@@ -125,7 +125,7 @@ Examples include:
 - [duckdb](https://duckdb.org/)
 
 Hamilton works with any python dataframe/manipulation oriented libraries.
-See our [examples folder](https://github.com/dagworks-inc/hamilton/tree/main/examples)
+See our [examples folder](https://github.com/apache/hamilton/tree/main/examples)
 to see how to use Hamilton with these libraries.
 
 
@@ -142,5 +142,5 @@ These all provide capabilities to either (a) express and execute computation ove
 parallelize it. Often both. Hamilton has a variety of integrations with these systems. The basics is that Hamilton
 can make use of these systems to execute the DAG using the [GraphAdapter](../reference/graph-adapters/index.rst) abstraction and [Lifecycle Hooks](../reference/lifecycle-hooks/index.rst).
 
-See our [examples folder](https://github.com/dagworks-inc/hamilton/tree/main/examples)
+See our [examples folder](https://github.com/apache/hamilton/tree/main/examples)
 to see how to use Hamilton with these systems.

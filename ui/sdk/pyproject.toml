@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "sf-hamilton-sdk"
 description = "Hamilton SDK for reading and writing to the Hamilton backend APIs that support the UI."
 authors = [
-    {name = "Stefan Krawczyk", email = "stefan@dagworks.io"},
+    {name = "Stefan Krawczyk", email = "stefank@cs.stanford.edu"},
     {name = "Elijah ben Izzy", email = "elijah@dagworks.io"}
 ]
 readme = "README.md"
@@ -26,9 +26,9 @@ requires-python = ">=3.7, <4"
 dynamic = ["dependencies", "optional-dependencies", "version"]
 
 [project.urls]
-"Homepage" = "https://github.com/dagworks-inc/hamilton/"
-"Bug Reports" = "https://github.com/dagworks-inc/hamilton/issues"
-"Source" = "https://github.com/dagworks-inc/hamilton/ui/sdk"
+"Homepage" = "https://github.com/apache/hamilton/"
+"Bug Reports" = "https://github.com/apache/hamilton/issues"
+"Source" = "https://github.com/apache/hamilton/ui/sdk"
 "Documenation" = "https://hamilton.dagworks.io/"
 
 [project.scripts]

@@ -566,7 +566,7 @@ def accept_error_sentinels(func: Callable):
 
     """
     # This inline import is not ideal -- we have to do this due to a circular reference
-    # See PR + comments here https://github.com/DAGWorks-Inc/hamilton/pull/1017
+    # See PR + comments here https://github.com/apache/hamilton/pull/1017
     # TODO -- fix the circular reference -- we should be able to depend on this and no pull in lifecycle methods
     from hamilton.function_modifiers.metadata import tag
 

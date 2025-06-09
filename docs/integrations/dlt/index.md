@@ -301,7 +301,7 @@ We added custom Data Loader/Saver to plug dlt with Hamilton. Compared to the pre
 
 
 ``` {note}
-See [this notebook](https://github.com/DAGWorks-Inc/hamilton/blob/main/examples/dlt/dlt_plugin.ipynb) for a demo.
+See [this notebook](https://github.com/apache/hamilton/blob/main/examples/dlt/dlt_plugin.ipynb) for a demo.
 ```
 
 ### DataLoader
@@ -409,5 +409,5 @@ dr.materialize(*materializers)
 ![](./materialization.png)
 
 ## Next steps
-- Our full [code example to ingest Slack data and generate thread summaries](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/dlt) is available on GitHub.
+- Our full [code example to ingest Slack data and generate thread summaries](https://github.com/apache/hamilton/tree/main/examples/dlt) is available on GitHub.
 - Another important pattern in data engineering is reverse ETL, which consists of moving data analytics back to your sources (CRM, Hubspot, Zendesk, etc.). See this [dlt blog](https://dlthub.com/docs/blog/reverse-etl-dlt) to get started.

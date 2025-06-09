@@ -36,7 +36,7 @@ To load/analyze the data, you can run the script `run.py`
 - `python run.py mock` creates mock data and runs the pipeline
 
 Note that you, as the user, have to manually handle connections/whatnot for duckdb.
-We are currently designing the ability to do this natively in hamilton: https://github.com/dagworks-inc/hamilton/issues/197.
+We are currently designing the ability to do this natively in hamilton: https://github.com/apache/hamilton/issues/197.
 
 # Execution Graphs
 You'll see that the execution graphs are practically the same, except for the top part. Which is exactly what we want,

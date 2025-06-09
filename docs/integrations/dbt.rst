@@ -10,4 +10,4 @@ Many projects span the gap between SQL and python, and Hamilton is a natural nex
 This example shows how you can use DBT's `new python capabilities <https://docs.getdbt.com/docs/build/python-models>`_ to integrate a Hamilton dataflow
 with a DBT pipeline.
 
-Find the full, working dbt project `here <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/dbt>`_.
+Find the full, working dbt project `here <https://github.com/apache/hamilton/tree/main/examples/dbt>`_.
