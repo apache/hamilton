@@ -59,6 +59,7 @@ parametrized_input = expanders.parametrized_input
 # Extract decorators
 extract_columns = expanders.extract_columns
 extract_fields = expanders.extract_fields
+unpack_fields = expanders.unpack_fields
 
 # does decorator
 does = macros.does
