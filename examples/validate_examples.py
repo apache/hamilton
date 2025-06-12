@@ -15,13 +15,13 @@ FAILURE = 1
 
 
 def _create_github_badge(path: pathlib.Path) -> str:
-    github_url = f"https://github.com/dagworks-inc/hamilton/blob/main/{path}"
+    github_url = f"https://github.com/dagworks-inc/hamilton/blob/main/{path.as_posix()}"
     github_badge = f"[![GitHub badge](https://img.shields.io/badge/github-view_source-2b3137?logo=github)]({github_url})"
     return github_badge
 
 
 def _create_colab_badge(path: pathlib.Path) -> str:
-    colab_url = f"https://colab.research.google.com/github/dagworks-inc/hamilton/blob/main/{path}"
+    colab_url = f"https://colab.research.google.com/github/dagworks-inc/hamilton/blob/main/{path.as_posix()}"
     colab_badge = (
         f"[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]({colab_url})"
     )
