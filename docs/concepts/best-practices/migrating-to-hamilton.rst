@@ -1,6 +1,6 @@
-=====================
+=============================
 Migrating to Apache Hamilton
-=====================
+=============================
 
 Here are two suggestions for helping you migrate to Apache Hamilton
 

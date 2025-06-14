@@ -30,7 +30,7 @@ Imperative (``Kedro``) vs. declarative (``Apache Hamilton``) leads to significan
    :align: left
 
    +---------------------------------------------------------+------------------------------------------------------------+
-   | Kedro (imperative)                                      | Apache Hamilton (declarative)                                     |
+   | Kedro (imperative)                                      | Apache Hamilton (declarative)                              |
    +=========================================================+============================================================+
    | .. literalinclude:: _kedro_snippets/kedro_definition.py | .. literalinclude:: _kedro_snippets/hamilton_definition.py | 
    |                                                         |                                                            |
@@ -50,7 +50,7 @@ With ``Apache Hamilton``, you pass the module containing all functions from **St
    :align: left
 
    +---------------------------------------------------------+------------------------------------------------------------+
-   | Kedro (imperative)                                      | Apache Hamilton (declarative)                                     |
+   | Kedro (imperative)                                      | Apache Hamilton (declarative)                              |
    +=========================================================+============================================================+
    | .. literalinclude:: _kedro_snippets/kedro_assemble.py   | .. literalinclude:: _kedro_snippets/hamilton_assemble.py   | 
    |                                                         |                                                            |
@@ -84,7 +84,7 @@ For comparable side-by-side code, we can dig into ``Kedro`` and use the ``Sequen
    :align: left
 
    +---------------------------------------------------------+------------------------------------------------------------+
-   | Kedro (imperative)                                      | Apache Hamilton (declarative)                                     |
+   | Kedro (imperative)                                      | Apache Hamilton (declarative)                              |
    +=========================================================+============================================================+
    | .. literalinclude:: _kedro_snippets/kedro_execution.py  | .. literalinclude:: _kedro_snippets/hamilton_execution.py  | 
    |                                                         |                                                            |
@@ -160,7 +160,7 @@ Kedro
 This provides guidance when building your first data pipeline, but it's also a lot to take in at once. As you'll see in the `project comparison on GitHub <https://github.com/apache/hamilton/tree/main/examples/kedro>`_, ``Kedro`` involves more files making it harder to navigate. Also, it's reliant on YAML which is `generally seen as an unreliable format <https://noyaml.com/>`_. If you have an existing data stack or favorite library, it might clash with ``Kedro``'s way of thing (e.g., you have credentials management tool; you prefer `Hydra <https://hydra.cc/>`_ for configs).
 
 Apache Hamilton
-~~~~~~~~
+w~~~~~~~~~~~~~~~
 
 ``Apache Hamilton`` attempts to get you started quickly. In fact, this page pretty much covered what you need to know:
 

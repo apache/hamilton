@@ -12,7 +12,7 @@ You don't need to get this right the first time -- search and replace is really 
 is something to converge thinking on!
 
 It enables you to define your Apache Hamilton dataflow
------------------------------------------------
+------------------------------------------------------
 
 As the name of a hamilton function defines the name of the created artifact, naming is vital to a readable, extensible
 hamilton codebase.  Names must mean something:
