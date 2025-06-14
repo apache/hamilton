@@ -126,10 +126,9 @@ def test_sanitize_error_general():
         import re
 
         actual = re.sub(r"line \d\d\d", "line XXX", actual)
-        expected = (
-            """...<USER_CODE>...\n...hamilton/telemetry.py, line XXX, in get_adapter_name\n"""
-        )
-        # if this fails -- run it how circleci runs it
+        expected = """...hamilton/tests/test_telemetry.py, line XXX, in test_sanitize_error_general\n...hamilton/hamilton/telemetry.py, line XXX, in get_adapter_name\n"""
+
+        # if this fails -- run it how github actions run it
         assert actual == expected
 
 

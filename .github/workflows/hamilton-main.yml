@@ -18,16 +18,16 @@ jobs:
     name: "Unit Tests"
     runs-on: ${{ matrix.os }}
     strategy:
-    #   fail-fast: true
+      fail-fast: false # will change this to true at the end, but want to see tests failing on all use cases
       matrix:
         os:
           - ubuntu-latest
         python-version:
-          - 3.8
-          - 3.9
-          - 3.10
-          - 3.11
-          - 3.12
+          - '3.8'
+          - '3.9'
+          - '3.10'
+          - '3.11'
+          - '3.12'
     env:
       UV_PRERELEASE: "allow"
       HAMILTON_TELEMETRY_ENABLED: false
@@ -44,7 +44,9 @@ jobs:
 
         - name: Install Graphviz on macOS
           if: runner.os == 'macOS'
-          run: brew install graphviz
+          run: |
+            brew install graphviz
+            brew install libomp
 
         - name: Checkout repository
           uses: actions/checkout@v4
@@ -71,6 +73,7 @@ jobs:
             uv pip install "kaleido<0.4.0"
             uv run pytest tests/ --cov=hamilton --ignore tests/integrations
 
+
         - name: Test integrations
           if: ${{ matrix.python-version == '3.9' }}
           run: |
@@ -96,6 +99,7 @@ jobs:
             uv sync --extra test
             uv pip install polars
             uv run pytest plugin_tests/h_polars
+
         - name: Test narwhals
           run: |
             uv sync --extra test
@@ -134,16 +138,18 @@ jobs:
             uv run pytest plugin_tests/h_spark
 
         - name: Test vaex
-          # Vaex supports <= py3.9
+          # Vaex supports <= py3.10 and numpy<2
           if: ${{ runner.os == 'Linux' && (matrix.python-version == '3.8' || matrix.python-version == '3.9' || matrix.python-version == '3.10') }}
           run: |
             sudo apt-get install --no-install-recommends --yes libpcre3-dev cargo
             uv sync --extra test --extra vaex
+            uv pip install "numpy<2"
             uv run pytest plugin_tests/h_vaex
 
         - name: Test vaex
-          # Vaex supports <= py3.9
+          # Vaex supports <= py3.10 and numpy<2
           if: ${{ runner.os != 'Linux' && (matrix.python-version == '3.8' || matrix.python-version == '3.9' || matrix.python-version == '3.10') }}
           run: |
             uv sync --extra test --extra vaex
+            uv pip install "numpy<2"
             uv run pytest plugin_tests/h_vaex
