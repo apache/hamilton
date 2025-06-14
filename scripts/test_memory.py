@@ -49,7 +49,7 @@ count = 0
 
 
 @parameterize(
-    **{f"foo_{i}": {"foo_i_minus_one": source(f"foo_{i-1}")} for i in range(1, NUM_ITERS)}
+    **{f"foo_{i}": {"foo_i_minus_one": source(f"foo_{i - 1}")} for i in range(1, NUM_ITERS)}
 )
 def foo_i(foo_i_minus_one: pd.DataFrame) -> pd.DataFrame:
     global count
@@ -61,4 +61,4 @@ def foo_i(foo_i_minus_one: pd.DataFrame) -> pd.DataFrame:
 if __name__ == "__main__":
     mod = create_temporary_module(foo_i, foo_0)
     dr = driver.Builder().with_modules(mod).build()
-    output = dr.execute([f"foo_{NUM_ITERS-1}"], inputs=dict(memory_size=100_000_000))
+    output = dr.execute([f"foo_{NUM_ITERS - 1}"], inputs=dict(memory_size=100_000_000))
