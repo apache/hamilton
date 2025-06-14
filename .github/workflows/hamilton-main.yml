@@ -1,0 +1,149 @@
+name: Unit Tests
+
+on:
+  workflow_dispatch:
+
+  pull_request:
+    branches:
+        - main
+    paths:
+        - '.github/**'
+        - 'hamilton/**'
+        - 'plugin_tests/**'
+        - 'tests/**'
+        - 'pyproject.toml'
+
+jobs:
+  test:
+    name: "Unit Tests"
+    runs-on: ${{ matrix.os }}
+    strategy:
+    #   fail-fast: true
+      matrix:
+        os:
+          - ubuntu-latest
+        python-version:
+          - 3.8
+          - 3.9
+          - 3.10
+          - 3.11
+          - 3.12
+    env:
+      UV_PRERELEASE: "allow"
+      HAMILTON_TELEMETRY_ENABLED: false
+
+    steps:
+        - name: Install Graphviz on Linux
+          if: runner.os == 'Linux'
+          run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends graphviz
+
+        - name: Install Graphviz on Windows
+          if: runner.os == 'Windows'
+          run: choco install graphviz
+          shell: powershell
+
+        - name: Install Graphviz on macOS
+          if: runner.os == 'macOS'
+          run: brew install graphviz
+
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Install uv and set the python version
+          uses: astral-sh/setup-uv@v6
+          with:
+            python-version: ${{ matrix.python-version }}
+            enable-cache: true
+            cache-dependency-glob: "uv.lock"
+            activate-environment: true
+
+        # It's enough to do it on single OS
+        - name: Check linting with pre-commit
+          if: ${{ runner.os == 'Linux' }}
+          run: |
+            uv sync --extra dev
+            uv run pre-commit install
+            uv run pre-commit run --all-files
+
+        - name: Test hamilton main package
+          run: |
+            uv sync --extra test
+            uv pip install "kaleido<0.4.0"
+            uv run pytest tests/ --cov=hamilton --ignore tests/integrations
+
+        - name: Test integrations
+          if: ${{ matrix.python-version == '3.9' }}
+          run: |
+            uv sync --extra test --extra pandera
+            uv pip install -r tests/integrations/pandera/requirements.txt
+            uv pip install dask-expr
+            uv run pytest tests/integrations
+
+        - name: Test integrations
+          if: ${{ matrix.python-version != '3.9' }}
+          run: |
+            uv sync --extra test --extra pandera
+            uv pip install -r tests/integrations/pandera/requirements.txt
+            uv run pytest tests/integrations
+
+        - name: Test pandas
+          run: |
+            uv sync --extra test
+            uv run pytest plugin_tests/h_pandas
+
+        - name: Test polars
+          run: |
+            uv sync --extra test
+            uv pip install polars
+            uv run pytest plugin_tests/h_polars
+        - name: Test narwhals
+          run: |
+            uv sync --extra test
+            uv pip install polars pandas narwhals
+            uv run pytest plugin_tests/h_narwhals
+
+        - name: Test dask
+          # Dask supports >= py3.9
+          if: ${{ matrix.python-version != '3.8' }}
+          run: |
+            uv sync --extra test --extra dask
+            uv run pytest plugin_tests/h_dask
+
+        - name: Test ray
+          # Ray supports >= py3.9
+          if: ${{ matrix.python-version != '3.8' }}
+          run: |
+            uv sync --extra test --extra ray
+            uv run pytest plugin_tests/h_ray
+
+        - name: Test pyspark
+          # Spark supports >= py3.9
+          if: ${{ matrix.python-version != '3.8' && runner.os == 'Linux' }}
+          run: |
+            sudo apt-get install --no-install-recommends --yes default-jre
+            uv sync --extra test --extra pyspark
+            pip install 'numpy<2' 'pyspark[connect]'
+            uv run pytest plugin_tests/h_spark
+
+        - name: Test pyspark
+          # Spark supports >= py3.9
+          if: ${{ matrix.python-version != '3.8' && runner.os != 'Linux' }}
+          run: |
+            uv sync --extra test --extra pyspark
+            uv pip install 'numpy<2' 'pyspark[connect]'
+            uv run pytest plugin_tests/h_spark
+
+        - name: Test vaex
+          # Vaex supports <= py3.9
+          if: ${{ runner.os == 'Linux' && (matrix.python-version == '3.8' || matrix.python-version == '3.9' || matrix.python-version == '3.10') }}
+          run: |
+            sudo apt-get install --no-install-recommends --yes libpcre3-dev cargo
+            uv sync --extra test --extra vaex
+            uv run pytest plugin_tests/h_vaex
+
+        - name: Test vaex
+          # Vaex supports <= py3.9
+          if: ${{ runner.os != 'Linux' && (matrix.python-version == '3.8' || matrix.python-version == '3.9' || matrix.python-version == '3.10') }}
+          run: |
+            uv sync --extra test --extra vaex
+            uv run pytest plugin_tests/h_vaex
