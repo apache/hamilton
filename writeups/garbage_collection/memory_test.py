@@ -46,7 +46,7 @@ def foo_0(memory_size: int = 100_000_000) -> pd.DataFrame:
 
 
 @parameterize(
-    **{f"foo_{i}": {"foo_i_minus_one": source(f"foo_{i-1}")} for i in range(1, NUM_ITERS)}
+    **{f"foo_{i}": {"foo_i_minus_one": source(f"foo_{i - 1}")} for i in range(1, NUM_ITERS)}
 )
 def foo_i(foo_i_minus_one: pd.DataFrame) -> pd.DataFrame:
     global count
