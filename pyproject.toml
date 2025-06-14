@@ -27,7 +27,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "numpy",
+    "numpy<2",
     "pandas",
     "typing_extensions > 4.0.0",
     "typing_inspect",
@@ -37,7 +37,6 @@ dependencies = [
 cli = ["typer"]
 dask = ["dask[complete]"]  # commonly you'll want everything.
 dask-array = ["dask[array]"]
-dask-core = ["dask-core"]
 dask-dataframe = ["dask[dataframe]"]
 dask-diagnostics = ["dask[diagnostics]"]
 dask-distributed = ["dask[distributed]"]
@@ -58,7 +57,8 @@ docs = [
   # required for all the plugins
   "dlt",
   # furo -- install from main for now until the next release is out:
-  "furo @ git+https://github.com/pradyunsg/furo@main",
+  "furo",
+  # "furo @ git+https://github.com/pradyunsg/furo@main",
   "gitpython", # Required for parsing git info for generation of data-adapter docs
   "grpcio-status",
   "lightgbm",
@@ -69,6 +69,7 @@ docs = [
   "myst-nb",
   "narwhals",
   "numpy < 2.0.0",
+  "packaging",
   "pandera",
   "pillow",
   "polars",
@@ -149,7 +150,11 @@ test = [
 ]
 tqdm = ["tqdm"]
 ui = ["sf-hamilton-ui"]
-vaex = ["vaex"]
+
+# vaex -- on >=py3.11 only core part available https://github.com/vaexio/vaex/pull/2331#issuecomment-2437198176
+vaex = [
+  "vaex; python_version <= '3.10'"
+  ]
 visualization = ["graphviz", "networkx"]
 
 [project.entry-points.console_scripts]
