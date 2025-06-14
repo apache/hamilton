@@ -19,7 +19,7 @@ It allows you to:
 
 
 Get started with Apache Hamilton locally
--------------------------------------
+----------------------------------------
 The following section of the docs will teach you how to install Apache Hamilton and get started with your own project.
 
 .. toctree::

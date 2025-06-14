@@ -25,7 +25,7 @@ A simple joke example
    :align: left
 
    +-----------------------------------------------------------+----------------------------------------------------------+-------------------------------------------------------------+
-   | Apache Hamilton                                                  | Vanilla                                                  | LangChain                                                   |
+   | Apache Hamilton                                           | Vanilla                                                  | LangChain                                                   |
    +===========================================================+==========================================================+=============================================================+
    | .. literalinclude:: langchain_snippets/hamilton_invoke.py | .. literalinclude:: langchain_snippets/vanilla_invoke.py | .. literalinclude:: langchain_snippets/lcel_invoke.py       |
    |                                                           |                                                          |                                                             |
@@ -49,7 +49,7 @@ Note: you could use @config.when to include both streamed and non-streamed versi
    :align: left
 
    +-------------------------------------------------------------+------------------------------------------------------------+---------------------------------------------------------------+
-   | Apache Hamilton                                                    | Vanilla                                                    | LangChain                                                     |
+   | Apache Hamilton                                             | Vanilla                                                    | LangChain                                                     |
    +=============================================================+============================================================+===============================================================+
    | .. literalinclude:: langchain_snippets/hamilton_streamed.py | .. literalinclude:: langchain_snippets/vanilla_streamed.py | .. literalinclude:: langchain_snippets/lcel_streamed.py       |
    |                                                             |                                                            |                                                               |
@@ -74,7 +74,7 @@ e.g. Ray, Dask, etc. We use multi-threading here.
    :align: left
 
    +-------------------------------------------------------------+------------------------------------------------------------+---------------------------------------------------------------+
-   | Apache Hamilton                                                    | Vanilla                                                    | LangChain                                                     |
+   | Apache Hamilton                                             | Vanilla                                                    | LangChain                                                     |
    +=============================================================+============================================================+===============================================================+
    | .. literalinclude:: langchain_snippets/hamilton_batch.py    | .. literalinclude:: langchain_snippets/vanilla_batch.py    | .. literalinclude:: langchain_snippets/lcel_batch.py          |
    |                                                             |                                                            |                                                               |
@@ -99,7 +99,7 @@ is that you need to use the async Apache Hamilton Driver.
    :align: left
 
    +-------------------------------------------------------------+------------------------------------------------------------+---------------------------------------------------------------+
-   | Apache Hamilton                                                    | Vanilla                                                    | LangChain                                                     |
+   | Apache Hamilton                                             | Vanilla                                                    | LangChain                                                     |
    +=============================================================+============================================================+===============================================================+
    | .. literalinclude:: langchain_snippets/hamilton_async.py    | .. literalinclude:: langchain_snippets/vanilla_async.py    | .. literalinclude:: langchain_snippets/lcel_async.py          |
    |                                                             |                                                            |                                                               |
@@ -125,7 +125,7 @@ that uses the different OpenAI model.
    :align: left
 
    +------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------+
-   | Apache Hamilton                                                         | Vanilla                                                         | LangChain                                                     |
+   | Apache Hamilton                                                  | Vanilla                                                         | LangChain                                                     |
    +==================================================================+=================================================================+===============================================================+
    | .. literalinclude:: langchain_snippets/hamilton_completion.py    | .. literalinclude:: langchain_snippets/vanilla_completion.py    | .. literalinclude:: langchain_snippets/lcel_completion.py     |
    |                                                                  |                                                                 |                                                               |
@@ -152,7 +152,7 @@ to use Anthropic.
    :align: left
 
    +------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------+
-   | Apache Hamilton                                                         | Vanilla                                                         | LangChain                                                     |
+   | Apache Hamilton                                                  | Vanilla                                                         | LangChain                                                     |
    +==================================================================+=================================================================+===============================================================+
    | .. literalinclude:: langchain_snippets/hamilton_anthropic.py     | .. literalinclude:: langchain_snippets/vanilla_anthropic.py     | .. literalinclude:: langchain_snippets/lcel_anthropic.py      |
    |                                                                  |                                                                 |                                                               |
@@ -178,7 +178,7 @@ printing.
    :align: left
 
    +------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------+
-   | Apache Hamilton                                                         | Vanilla                                                         | LangChain                                                     |
+   | Apache Hamilton                                                  | Vanilla                                                         | LangChain                                                     |
    +==================================================================+=================================================================+===============================================================+
    | .. literalinclude:: langchain_snippets/hamilton_logging.py       | .. literalinclude:: langchain_snippets/vanilla_logging.py       | .. literalinclude:: langchain_snippets/lcel_logging.py        |
    |                                                                  |                                                                 |                                                               |
@@ -197,7 +197,7 @@ opinion it's better to be explicit about it.
    :align: left
 
    +------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------+
-   | Apache Hamilton                                                         | Vanilla                                                         | LangChain                                                     |
+   | Apache Hamilton                                                  | Vanilla                                                         | LangChain                                                     |
    +==================================================================+=================================================================+===============================================================+
    | .. literalinclude:: langchain_snippets/hamilton_fallbacks.py     | .. literalinclude:: langchain_snippets/vanilla_fallbacks.py     | .. literalinclude:: langchain_snippets/lcel_fallbacks.py      |
    |                                                                  |                                                                 |                                                               |

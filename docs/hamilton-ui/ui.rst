@@ -157,7 +157,7 @@ Then, navigate to the project page (dashboard/projects), in the running UI, and 
 Remember the project ID -- you'll use it for the next steps.
 
 Existing Apache Hamilton Code
-----------------------
+------------------------------------
 Add the following adapter to your code if you have existing Apache Hamilton code:
 
 .. code-block:: python
@@ -183,7 +183,7 @@ Then run your DAG, and follow the links in the logs! Note that the link is corre
 the local mode -- if you're on postgres it links to 8241 (but you'll want to follow it to 8241).
 
 I need some Apache Hamilton code to run
---------------------------------
+----------------------------------------------
 If you don't have Apache Hamilton code to run this with, you can run Apache Hamilton UI example under `examples/hamilton_ui <https://github.com/apache/hamilton/tree/main/examples/hamilton_ui>`_:
 
 .. code-block:: bash

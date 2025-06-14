@@ -33,7 +33,7 @@ executing pipelines. It is more complex to set up and run. Note: If you stuck th
 the `example_dag.py`, the Apache Hamilton pipeline could be used in the Airflow PythonOperator!
 
 Apache Hamilton:
-_________
+________________
 The below code here shows how you can define a simple data pipeline using Apache Hamilton. The pipeline consists of three functions
 that are executed in sequence. The pipeline is defined in a module called `pipeline.py`, and then executed in a separate
 script called `run.py`, which imports the pipeline module and executes it.

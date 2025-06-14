@@ -52,7 +52,7 @@ Here is a sketch of the above pattern:
 
 
 Apache Hamilton Example
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
 We do not provide a specific example here, since most of the examples in the examples folder fall under this category.
 Some examples to browse:
 
@@ -96,7 +96,7 @@ Here's a sketch of how you might use Apache Hamilton in conjunction with a Kafka
 
 
 Apache Hamilton Example
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
 Currently we don't have a streaming example. But we are working on it. We direct users to look at the online example
 for now, since conceptually from a modularity stand point, things would be set up in a similar way.
 
@@ -120,7 +120,7 @@ the `@config.*` decorator, to help you segment your feature computation dataflow
 We skip showing a sketch of structure here, and invite you to look at the examples below.
 
 Apache Hamilton Example
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
 We direct users to look at `Feature engineering in multiple contexts <https://github.com/apache/hamilton/tree/main/examples/feature_engineering/feature_engineering_multiple_contexts>`__
 that currently describes two scenarios around how you could incorporate Apache Hamilton into an online web-service, and have
 it aligned with your batch offline processes. Note, these examples should give you the high level first principles
@@ -139,6 +139,6 @@ FAQ
 ----
 
 Q. Can I use Apache Hamilton for feature engineering with Feast?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Yes, you can use Apache Hamilton with Feast. See our [Feast example](https://github.com/apache/hamilton/tree/main/examples/feast) and accompanying [blog post](https://blog.dagworks.io/p/featurization-integrating-hamilton). Typically people use Apache Hamilton on the offline side to compute features that then
 get pushed to Feast. For the online side it varies as to how to integrate the two.

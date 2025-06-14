@@ -88,7 +88,7 @@ Dataflow definition
    :align: left
 
    +------------------------------------------------------------+----------------------------------------------------------+
-   | Apache Hamilton                                                   | Dagster                                                  |
+   | Apache Hamilton                                            | Dagster                                                  |
    +============================================================+==========================================================+
    | .. literalinclude:: _dagster_snippets/hamilton_dataflow.py | .. literalinclude:: _dagster_snippets/dagster_dataflow.py| 
    |                                                            |                                                          |
@@ -125,7 +125,7 @@ Dataflow execution
    :align: left
 
    +-------------------------------------------------------------+------------------------------------------------------------+
-   | Apache Hamilton                                                    | Dagster                                                    |
+   | Apache Hamilton                                             | Dagster                                                    |
    +=============================================================+============================================================+
    | .. literalinclude:: _dagster_snippets/hamilton_execution.py | .. literalinclude:: _dagster_snippets/dagster_execution.py | 
    |                                                             |                                                            |
