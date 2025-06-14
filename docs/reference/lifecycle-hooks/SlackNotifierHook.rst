@@ -2,7 +2,7 @@
 plugins.h_slack.SlackNotifier
 =============================
 
-Provides a Slack notifier for Hamilton execution. Must have `slack_sdk` installed to use it:
+Provides a Slack notifier for Apache Hamilton execution. Must have `slack_sdk` installed to use it:
 
 `pip install sf-hamilton[slack]` (use quotes if using zsh)
 

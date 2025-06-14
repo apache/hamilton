@@ -5,7 +5,7 @@ This example shows you can use the
 annotated functions that save and load data so that they
 can also return metadata.
 
-This metadata is then exposed in the Hamilton UI / inspectable
+This metadata is then exposed in the Apache Hamilton UI / inspectable
 by other adapters.
 
 To run this example, you can use the following command:
@@ -14,8 +14,8 @@ To run this example, you can use the following command:
 ```bash
 pip install -r requirements.txt
 ```
-2. Have the Hamilton UI set up. See [UI docs](https://hamilton.dagworks.io/en/latest/hamilton-ui/) for instructions.
-3. You have modified the run.py / notebook to log to the right Hamilton UI project.
+2. Have the Apache Hamilton UI set up. See [UI docs](https://hamilton.dagworks.io/en/latest/hamilton-ui/) for instructions.
+3. You have modified the run.py / notebook to log to the right Apache Hamilton UI project.
 4. Run the example:
 
 ```bash

@@ -1,6 +1,6 @@
-# Using Hamilton to help manage your pyspark UDFs
+# Using Apache Hamilton to help manage your pyspark UDFs
 
-Here we have a version of the Hamilton hello world example showing how you can take some Hamilton functions and then
+Here we have a version of the Apache Hamilton hello world example showing how you can take some Apache Hamilton functions and then
 easily run them as pyspark UDFs.
 
 ## Dependencies
@@ -9,8 +9,8 @@ easily run them as pyspark UDFs.
 
 ## File organization:
 
-* `pandas_udfs.py` contains UDF definitions that Hamilton will know how to run as `pandas_udfs` on pyspark.
-* `vanilla_udfs.py` contains UDF definitions that Hamilton will know how to run as row based UDFs on pyspark.
+* `pandas_udfs.py` contains UDF definitions that Apache Hamilton will know how to run as `pandas_udfs` on pyspark.
+* `vanilla_udfs.py` contains UDF definitions that Apache Hamilton will know how to run as row based UDFs on pyspark.
 * `run.py` contains spark driver and hamilton driver code to run everything.
 
 ## To run
@@ -33,35 +33,35 @@ You should get the following as output:
 |   50|    400|43.333333333333336|           0.125|                    1.2579336|1.0|2.0|           3.0|
 +-----+-------+------------------+----------------+-----------------------------+---+---+--------------+
 ```
-with Hamilton showing you the following execution visualization:
+with Apache Hamilton showing you the following execution visualization:
 ![udf hamilton execution](my_spark_udf.dot.png)
 Note: foo, bar, and augmented_mean do not depend on any inputs in the dataframe.
 
-# What Hamilton does under the hood
+# What Apache Hamilton does under the hood
 
-You need to use the `PySparkUDFGraphAdapter` for this to work. This is because Hamilton needs to know how to
-augment operations for pyspark. With this adapter, Hamilton will:
+You need to use the `PySparkUDFGraphAdapter` for this to work. This is because Apache Hamilton needs to know how to
+augment operations for pyspark. With this adapter, Apache Hamilton will:
 
 1. Takes care of the spark boilerplate for you in creating a UDF.
 2. Intelligently knows whether to pull from the dataframe for input to a function, based on column names,
 or pulls from the passed in dictionary of inputs for that UDF.
 3. **Append** the requested outputs to the dataframe.
 4. Operate on the premise that as part of the inputs field to `dr.execute(..., inputs=INPUTS)`, the `INPUTS`
-dictionary contains a mapping of column name to pyspark dataframe. Hamilton will then know to use that **single**
+dictionary contains a mapping of column name to pyspark dataframe. Apache Hamilton will then know to use that **single**
 dataframe to pull from and append columns to, to coordinate UDF execution.
 5. Assume all functions are `map` based functions. If they're not, then you'll need to manually
-manage that outside of Hamilton.
+manage that outside of Apache Hamilton.
 
-# Why is Hamilton useful here?
+# Why is Apache Hamilton useful here?
 
 1. It makes it easy to write UDFs that can be run in a distributed setting.
 2. Those UDFs can be run in other contexts that don't use spark!
-3. Hamilton forces you to curate UDFs and thus they subsequently can be versioned, tested, documented, and reused
+3. Apache Hamilton forces you to curate UDFs and thus they subsequently can be versioned, tested, documented, and reused
 in other spark jobs easily. Think reusable feature definitions, think reusable metric definitions! Assumption: they
 have to be `map` based functions.
 4. Anyone who wants to use these UDFs, MUST ALIGN ON COLUMNS NAMES! This is a good thing, because it means that you can
 standardize on column names and reuse UDFs across different spark jobs, which lowers your maintenance burden!
-5. If you don't care about intermediate outputs, Hamilton won't add them. It'll only add the outputs you want to the
+5. If you don't care about intermediate outputs, Apache Hamilton won't add them. It'll only add the outputs you want to the
 passed in dataframe.
 
 # Limitations
@@ -81,7 +81,7 @@ Let us know if this would be useful to you!
 ## All the Pandas UDF signatures
 
 (1) Let us know what you need.
-(2) Implementation is a matter of (a) getting the API right, and (b) making sure it fits with the Hamilton way of thinking.
+(2) Implementation is a matter of (a) getting the API right, and (b) making sure it fits with the Apache Hamilton way of thinking.
 
 ## Aggregation UDFs
 
@@ -94,8 +94,8 @@ a good API for this.
 
 # Other questions
 
-## Can't I just use pyspark dataframes directly with Hamilton functions?
+## Can't I just use pyspark dataframes directly with Apache Hamilton functions?
 
-Yes, with Hamilton you could write functions that define a named flow that operates entirely over pyspark dataframes.
-However, you lose a lot of the flexibility of Hamilton doing things that way. We're open to suggestions,
+Yes, with Apache Hamilton you could write functions that define a named flow that operates entirely over pyspark dataframes.
+However, you lose a lot of the flexibility of Apache Hamilton doing things that way. We're open to suggestions,
 or API changes to make this approach easier.

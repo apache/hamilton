@@ -75,7 +75,7 @@ It encourages organizing code into logical modules (e.g., feature processing, mo
 
 .. note::
 
-    Your modules may have same named functions which will raise an error when using ``.build()`` since we cannot have two nodes with the same name. You can use the method ``.allow_module_overrides()`` and Hamilton will choose the function from the later imported module.
+    Your modules may have same named functions which will raise an error when using ``.build()`` since we cannot have two nodes with the same name. You can use the method ``.allow_module_overrides()`` and Apache Hamilton will choose the function from the later imported module.
 
 
 
@@ -88,7 +88,7 @@ It encourages organizing code into logical modules (e.g., feature processing, mo
             .build()
         )
 
-    If ``module_A`` and ``module_B`` both have the function ``foo()``, Hamilton will use ``module_B.foo()`` when constructing the DAG. See https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/module_overrides for more info.
+    If ``module_A`` and ``module_B`` both have the function ``foo()``, Apache Hamilton will use ``module_B.foo()`` when constructing the DAG. See https://github.com/apache/hamilton/tree/main/examples/module_overrides for more info.
 
 with_config()
 -------------
@@ -182,7 +182,7 @@ Adds `DataSaver` and `DataLoader` nodes to your dataflow. This allows to visuali
 with_cache()
 --------------
 
-This enables Hamilton's caching feature, which allows to automatically store intermediary results and reuse them in subsequent executions to skip computations. Learn more in the :doc:`/concepts/caching` section.
+This enables Apache Hamilton's caching feature, which allows to automatically store intermediary results and reuse them in subsequent executions to skip computations. Learn more in the :doc:`/concepts/caching` section.
 
 .. code-block:: python
 
@@ -216,7 +216,7 @@ This allows to add multiple Lifecycle hooks  to the Driver. This is a very flexi
         .build()
     )
 
-Other hooks are available to output a progress bar in the terminal, do experiment tracking for your Hamilton runs, cache results to disk, send logs to DataDog, and more!
+Other hooks are available to output a progress bar in the terminal, do experiment tracking for your Apache Hamilton runs, cache results to disk, send logs to DataDog, and more!
 
 enable_dynamic_execution()
 --------------------------

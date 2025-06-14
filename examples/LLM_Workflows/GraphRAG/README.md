@@ -83,7 +83,7 @@ This will run the following two pipelines:
 ![ingest fighters](ingest_fighters.png)
 ![ingest fights](ingest_fights.png)
 
-**Note:** [Hamilton](https://github.com/dagworks-inc/hamilton) also comes with a UI that you can use to visualize the pipeline and
+**Note:** [Apache Hamilton](https://github.com/apache/hamilton) also comes with a UI that you can use to visualize the pipeline and
 track execution information about it. See hamilton_ingest.py or ingest_notebook.ipynb for more information.
 
 ## Ingest data using a notebook:

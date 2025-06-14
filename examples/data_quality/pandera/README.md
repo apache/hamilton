@@ -1,5 +1,5 @@
 # Pandera Data Quality Example
-Here we show how one can define some transformation logic that uses the new Hamilton data quality feature with [Pandera](https://pandera.readthedocs.io/)
+Here we show how one can define some transformation logic that uses the new Apache Hamilton data quality feature with [Pandera](https://pandera.readthedocs.io/)
 In addition, we also show how you can manage execution on top of Ray, Pandas on Spark.
 
 This example is ALMOST IDENTICAL to `examples/data_quality/simple` except that it instead uses Pandera as input to
@@ -30,7 +30,7 @@ this is where we would make that happen.
 should happily run on top of Dask, and Ray.
 * feature_logic_spark.py - this module contains some feature transformation code specific to running on top of Pandas on Spark.
 Specifically, note that the data types checked against are different than in `feature_logic.py`.
-* run.py - this is the default Hamilton way of materializing features.
+* run.py - this is the default Apache Hamilton way of materializing features.
 * run_dask.py - this shows how one would materialize features using Dask.
 * run_ray.py - this shows how one would materialize features using Ray.
 * run_spark.py - this shows how one would materialize features using Pandas on Spark.
@@ -48,22 +48,22 @@ Note: `importance` is not specified in the `@check_output`decorators found in fe
 behavior is therefore invoked, which is to log a "warning" and not stop execution. If stopping execution is desired,
 `importance="fail"` should then be added to the decorators; more centralized control is going to be added in future releases.
 
-### Normal Hamilton
+### Normal Apache Hamilton
 
 > pip install -r requirements.txt
 > python run.py
 
-### Hamilton on Dask
+### Apache Hamilton on Dask
 It is best practice to create a python virtual environment for each project/example. We omit showing that step here.
 > pip install -r requirements-dask.txt
 > python run_dask.py
 
-### Hamilton on Ray
+### Apache Hamilton on Ray
 It is best practice to create a python virtual environment for each project/example. We omit showing that step here.
 > pip install -r requirements-ray.txt
 > python run_ray.py
 
-### Hamilton on Pandas on Spark
+### Apache Hamilton on Pandas on Spark
 It is best practice to create a python virtual environment for each project/example. We omit showing that step here.
 > pip install -r requirements-spark.txt
 > python run_spark.py
@@ -73,7 +73,7 @@ It is best practice to create a python virtual environment for each project/exam
 Again you'll see that the visualizations don't change much between the different ways of executing. But to help you
 visualize what's going on, here is the output of `visualize_execution` for each of them.
 
-## Vanilla Hamilton
+## Vanilla Apache Hamilton
 ![run](./run.png)
 
 ## Dask

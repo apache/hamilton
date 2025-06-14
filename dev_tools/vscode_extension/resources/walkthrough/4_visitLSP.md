@@ -1,6 +1,6 @@
-# Hamilton Language Server
+# Apache Hamilton Language Server
 
-Hamilton VSCode uses a [Language Server](https://microsoft.github.io/language-server-protocol/) to build a dataflow from your currently active file.
+Apache Hamilton VSCode uses a [Language Server](https://microsoft.github.io/language-server-protocol/) to build a dataflow from your currently active file.
 
 Current features include:
 - view the dataflow

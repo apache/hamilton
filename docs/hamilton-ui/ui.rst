@@ -2,22 +2,22 @@
 UI Overview
 --------------------
 
-Hamilton comes with a fully open-source UI that can be run both for local deployment and on a remote server.
+Apache Hamilton comes with a fully open-source UI that can be run both for local deployment and on a remote server.
 The UI consists of the following features:
 
 1. Telemetry for hamilton executions -- both on the history of executions and the data itself.
 2. A feature/artifact catalog for browsing/connecting executions of nodes -> results.
 3. A dataflow (i.e. DAG) visualizer for exploring and looking at your code, and determining lineage.
-4. A project explorer for viewing curating projects and viewing versions of your Hamilton dataflows.
+4. A project explorer for viewing curating projects and viewing versions of your Apache Hamilton dataflows.
 
-In short, the Hamilton UI aims to combine a large swath of MLOps/data observability systems in one simple application.
+In short, the Apache Hamilton UI aims to combine a large swath of MLOps/data observability systems in one simple application.
 
 .. image:: ../_static/hamilton_ui.jpeg
-    :alt: Hamilton UI
+    :alt: Apache Hamilton UI
 
 ---
 
-The Hamilton UI has two modes:
+The Apache Hamilton UI has two modes:
 1. Run locally using sqlite3
 2. Run on docker images with postgres (meant for deployment)
 
@@ -41,7 +41,7 @@ for full scalability and a multi-read/write db.
 Docker/Deployed Mode
 --------------------
 
-The Hamilton UI can be contained within a set of Docker images. You launch with `docker-compose <https://docs.docker.com/compose/>`_, and it will start up the UI, the backend server,
+The Apache Hamilton UI can be contained within a set of Docker images. You launch with `docker-compose <https://docs.docker.com/compose/>`_, and it will start up the UI, the backend server,
 and a Postgres database. If you'd like a quick overview of some of the features, you can watch the following:
 
 .. raw:: html
@@ -64,11 +64,11 @@ If you'd like a video walkthrough on getting set up, you can watch the following
 
 As prerequisites, you will need to have Docker installed -- you can follow instructions  `here <https://docs.docker.com/engine/install/>`_.
 
-1. Clone the Hamilton repository locally
+1. Clone the Apache Hamilton repository locally
 
 .. code-block:: bash
 
-    git clone https://github.com/dagworks-inc/hamilton
+    git clone https://github.com/apache/hamilton
 
 2. Navigate to the ``hamilton/ui`` directory
 
@@ -133,9 +133,9 @@ chart contribution!
 
 Running on Snowflake
 ---------------------
-You can run the Hamilton UI on Snowflake Container Services. For a detailed guide, see the blog post
-`Observability of Python code and application logic with Hamilton UI on Snowflake Container Services <https://medium.com/@pkantyka/observability-of-python-code-and-application-logic-with-hamilton-ui-on-snowflake-container-services-a26693b46635>`_ by
-`Greg Kantyka <https://medium.com/@pkantyka>`_ and the `Hamilton Snowflake Example <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/snowflake/hamilton_ui>`_.
+You can run the Apache Hamilton UI on Snowflake Container Services. For a detailed guide, see the blog post
+`Observability of Python code and application logic with Apache Hamilton UI on Snowflake Container Services <https://medium.com/@pkantyka/observability-of-python-code-and-application-logic-with-hamilton-ui-on-snowflake-container-services-a26693b46635>`_ by
+`Greg Kantyka <https://medium.com/@pkantyka>`_ and the `Apache Hamilton Snowflake Example <https://github.com/apache/hamilton/tree/main/examples/snowflake/hamilton_ui>`_.
 
 -----------
 Get started
@@ -156,9 +156,9 @@ Then, navigate to the project page (dashboard/projects), in the running UI, and 
 
 Remember the project ID -- you'll use it for the next steps.
 
-Existing Hamilton Code
-----------------------
-Add the following adapter to your code if you have existing Hamilton code:
+Existing Apache Hamilton Code
+------------------------------------
+Add the following adapter to your code if you have existing Apache Hamilton code:
 
 .. code-block:: python
 
@@ -182,13 +182,13 @@ Add the following adapter to your code if you have existing Hamilton code:
 Then run your DAG, and follow the links in the logs! Note that the link is correct if you're using
 the local mode -- if you're on postgres it links to 8241 (but you'll want to follow it to 8241).
 
-I need some Hamilton code to run
---------------------------------
-If you don't have Hamilton code to run this with, you can run Hamilton UI example under `examples/hamilton_ui <https://github.com/dagworks-inc/hamilton/tree/main/examples/hamilton_ui>`_:
+I need some Apache Hamilton code to run
+----------------------------------------------
+If you don't have Apache Hamilton code to run this with, you can run Apache Hamilton UI example under `examples/hamilton_ui <https://github.com/apache/hamilton/tree/main/examples/hamilton_ui>`_:
 
 .. code-block:: bash
 
-    # we assume you're in the Hamilton repository root
+    # we assume you're in the Apache Hamilton repository root
     cd examples/hamilton_ui
     # make sure you have the right python packages installed
     pip install -r requirements.txt
@@ -283,7 +283,7 @@ HamiltonTracker constructor. By default, these are set to `localhost:8241/8242`.
 
 Changing behavior of what is captured
 -------------------------------------
-By default, a lot is captured and sent to the Hamilton UI.
+By default, a lot is captured and sent to the Apache Hamilton UI.
 
 Here are a few options that can change that - these can be found
 in `hamilton_sdk.tracking.constants`. You can either change the defaults by

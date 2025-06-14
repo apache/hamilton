@@ -24,7 +24,7 @@ of the series, and one that checks whether the data is in a certain range.
 
 Note that you can also specify custom decorators using the ``@check_output_custom`` decorator.
 
-See `data_quality <https://github.com/dagworks-inc/hamilton/blob/main/data\_quality.md>`_ for more information on
+See `data_quality <https://github.com/apache/hamilton/blob/main/data\_quality.md>`_ for more information on
 available validators and how to build custom ones.
 
 Note we also have a plugins that allow for validation with the pandera and pydantic libraries. There are two ways to access these:

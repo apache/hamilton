@@ -5,10 +5,10 @@ of previously run images.
 
 This example uses dataflows from the hub to do something fun with image captioning and generation.
 Note that hamilton code is used rather than defined here. How the game is orchestrated
-is by using Hamilton's companion framework called [Burr](https://github.com/dagworks-inc/burr).
+is by using Apache Hamilton's companion framework called [Burr](https://github.com/apache/burr).
 
-Burr is a simple way to define state machines and run them. It complements Hamilton by providing
-a way to save state, define loops and conditional branches. That is, it defines things that Hamilton
+Burr is a simple way to define state machines and run them. It complements Apache Hamilton by providing
+a way to save state, define loops and conditional branches. That is, it defines things that Apache Hamilton
 cannot.
 
 # Contents

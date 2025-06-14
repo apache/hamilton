@@ -4,14 +4,14 @@ Common Indices
 
 If you're creating dataframes, then this will apply to you!
 
-While Hamilton is a general-purpose framework, we've found a common pattern is to manipulate datasets that have shared
+While Apache Hamilton is a general-purpose framework, we've found a common pattern is to manipulate datasets that have shared
 indices (spines) for creating dataframes.
 
 Although this might not apply towards every use-case (E.G. more complex joins with spark dataframes), a large selection
 of use-cases can be enabled if every dataframe in your pipeline shares an index. This is particularly pertinent when
 writing transformations over (non-event-based) time-series data.
 
-While Hamilton currently has no means of enforcing shared-spine, it is up to the writer of the function to validate
+While Apache Hamilton currently has no means of enforcing shared-spine, it is up to the writer of the function to validate
 input data as necessary. Thus we recommend the following if you are creating a dataframe as output:
 
 Best practice:

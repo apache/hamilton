@@ -7,7 +7,7 @@ problem, and is meant to represent a pipeline of chaining/redefinitions. This is
 used in conjunction with) ``pipe`` in pandas. In Pyspark this is akin to the common operation of redefining a dataframe
 with new columns.
 
-For some examples have a look at: https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/scikit-learn/species_distribution_modeling
+For some examples have a look at: https://github.com/apache/hamilton/tree/main/examples/scikit-learn/species_distribution_modeling
 
 While it is generally reasonable to contain constructs within a node's function,
 you should consider the pipe family for any of the following reasons:

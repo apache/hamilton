@@ -45,7 +45,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           // editUrl:
-          //   'https://github.com/dagworks-inc/contrib/hamilton/',
+          //   'https://github.com/apache/contrib/hamilton/',
         },
         blog: {
           showReadingTime: true,
@@ -99,7 +99,7 @@ const config = {
           {to: '/leaderboard', label: 'Leaderboard', position: 'left'},
           {href: 'https://blog.dagworks.io', label: 'DAGWorks Blog', position: 'right'},
           {
-            href: 'https://github.com/dagworks-inc/hamilton',
+            href: 'https://github.com/apache/hamilton',
             label: 'GitHub',
             position: 'right',
           },
@@ -153,7 +153,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/dagworks-inc/hamilton',
+                href: 'https://github.com/apache/hamilton',
               },
             ],
           },

@@ -42,8 +42,8 @@ setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     author="Stefan Krawczyk, Elijah ben Izzy",
-    author_email="stefan@dagworks.io,elijah@dagworks.io",
-    url="https://github.com/dagworks-inc/hamilton/contrib",
+    author_email="stefank@cs.stanford.edu,elijah@dagworks.io",
+    url="https://github.com/apache/hamilton/contrib",
     # packages=find_namespace_packages(include=["hamilton.*"], exclude=["tests"]),
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
@@ -72,8 +72,8 @@ setup(
     },
     # Relevant project URLs
     project_urls={  # Optional
-        "Bug Reports": "https://github.com/dagworks-inc/hamilton/issues",
-        "Source": "https://github.com/dagworks-inc/hamilton/contrib",
+        "Bug Reports": "https://github.com/apache/hamilton/issues",
+        "Source": "https://github.com/apache/hamilton/contrib",
     },
     # Useful scripts
     entry_points={

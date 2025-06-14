@@ -1,12 +1,12 @@
-## Off-the-shelf Hamilton Dataflows
+## Off-the-shelf Apache Hamilton Dataflows
 
-Here you'll find documentation about the sf-hamilton-contrib package that curates a collection of Hamilton Dataflows that are
+Here you'll find documentation about the sf-hamilton-contrib package that curates a collection of Apache Hamilton Dataflows that are
 ready to be used in your own projects. They are user-contributed and maintained, with
-the goal of making it easier for you to get started with Hamilton.
+the goal of making it easier for you to get started with Apache Hamilton.
 
 We expect this collection to grow over time, so check back often! As dataflows become mature we
 will move them into the official sub-package of the respository and become maintained by the
-Hamilton team.
+Apache Hamilton team.
 
 ### Usage
 There are two ways to get access to dataflows in this package. For either approach,
@@ -95,7 +95,7 @@ for more details.
 
 If you have a dataflow that you would like to share with the community, please submit a pull request
 to this repository. We will review your dataflow and if it meets our standards we will add it to the
-package. To submit a pull request please use [this template](https://github.com/DAGWorks-Inc/hamilton/blob/main/.github/PULL_REQUEST_TEMPLATE/HAMILTON_CONTRIB_PR_TEMPLATE.md)
+package. To submit a pull request please use [this template](https://github.com/apache/hamilton/blob/main/.github/PULL_REQUEST_TEMPLATE/HAMILTON_CONTRIB_PR_TEMPLATE.md)
 . To access it, create a new Pull Request, then hit the `preview` tab, and click the link to append `template=HAMILTON_CONTRIB_PR_TEMPLATE.md` to the URL.
 
 
@@ -132,8 +132,8 @@ This will do the following:
    - `__init__.py` -- this will be an empty file that allows you to import your dataflow
 2. Create a package under `contrib/hamilton/contrib/user/<your_github_username>/<name_of_dataflow>` with the appropriate files to describe your dataflow:
    - `README.md` to describe the dataflow with the standard headings
-   - `__init__.py` to contain the Hamilton code
-   - `requirements.txt` to contain the required packages outside of Hamilton
+   - `__init__.py` to contain the Apache Hamilton code
+   - `requirements.txt` to contain the required packages outside of Apache Hamilton
    - `tags.json` to curate your dataflow
    - `valid_configs.jsonl` to specify the valid configurations for it to be run
    - `dag.png` to show one possible configuration of your dataflow
@@ -146,7 +146,7 @@ and will ensure that you have the correct structure.
 
 To get started, you'll want to do the following:
 
-- [ ] Fill out your `__init__.py` with the appropriate code -- see [this issue](https://github.com/DAGWorks-Inc/hamilton/issues/559) if you want some inspiration for where to get started
+- [ ] Fill out your `__init__.py` with the appropriate code -- see [this issue](https://github.com/apache/hamilton/issues/559) if you want some inspiration for where to get started
 - [ ] Fill out the sections of your `README.md` with the appropriate documentation -- follow one of the approved dataflows
 - [ ] Fill out your `tags.json` with the appropriate tags -- follow one of the approved dataflows
 - [ ] Fill out your `valid_configs.jsonl` with the appropriate configurations -- this is not necessary if you have no configurations that can change the shape of your DAG
@@ -165,7 +165,7 @@ dr = driver.Driver(
 dr.display_all_functions("dag", {"format": "png", "view": False})
 ```
 - [ ] Push a branch back to your fork
-- [ ] Open up a pull request to the main Hamilton repo!
+- [ ] Open up a pull request to the main Apache Hamilton repo!
   - [ ] Commit the files we just added
   - [ ] Create a PR
   - [ ] Tag one of the maintainers [elijahbenizzy](https://github.com/elijahbenizzy), [skrawcz](https://github.com/skrawcz), or [zilto](https://github.com/zilto) for a review

@@ -20,11 +20,11 @@ setup(
     name="sf-hamilton-ui",  # there's already a hamilton in pypi
     version="0.0.17",
     description="Hamilton, the micro-framework for creating dataframes.",
-    long_description="""Hamilton tracking server, see [the docs for more](https://github.com/dagworks-inc/hamilton/tree/main/ui/)""",
+    long_description="""Hamilton tracking server, see [the docs for more](https://github.com/apache/hamilton/tree/main/ui/)""",
     long_description_content_type="text/markdown",
     author="Stefan Krawczyk, Elijah ben Izzy",
-    author_email="stefan@dagworks.io,elijah@dagworks.io",
-    url="https://github.com/dagworks-inc/hamilton",
+    author_email="stefank@cs.stanford.edu,elijah@dagworks.io",
+    url="https://github.com/apache/hamilton",
     packages=find_packages(exclude=["tests"], include=["hamilton_ui", "hamilton_ui.*"]),
     include_package_data=True,
     install_requires=load_requirements(),
@@ -48,7 +48,7 @@ setup(
     # adding this to slim the package down, since these dependencies are only used in certain contexts.
     # Relevant project URLs
     project_urls={  # Optional
-        "Bug Reports": "https://github.com/dagworks-inc/hamilton/issues",
-        "Source": "https://github.com/dagworks-inc/hamilton",
+        "Bug Reports": "https://github.com/apache/hamilton/issues",
+        "Source": "https://github.com/apache/hamilton",
     },
 )

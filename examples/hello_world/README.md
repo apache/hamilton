@@ -1,4 +1,4 @@
-# Classic Hamilton Hello World
+# Classic Apache Hamilton Hello World
 
 In this example we show you how to create a simple hello world dataflow that
 creates a dataframe as a result. It performs a series of transforms on the
@@ -8,8 +8,8 @@ File organization:
 
 * `my_functions.py` houses the logic that we want to compute. Note how the functions are named, and what input
 parameters they require. That is how we create a DAG modeling the dataflow we want to happen.
-* `my_script.py` houses how to get Hamilton to create the DAG and exercise it with some inputs.
-* `my_notebook.ipynb` houses how one might iterate in a notebook environment and provide a way to inline define Hamilton
+* `my_script.py` houses how to get Apache Hamilton to create the DAG and exercise it with some inputs.
+* `my_notebook.ipynb` houses how one might iterate in a notebook environment and provide a way to inline define Apache Hamilton
 functions and add them to the DAG constructed. To be clear, it is not used by `my_script.py`, but showing an alternate path
 to running/developing things.
 

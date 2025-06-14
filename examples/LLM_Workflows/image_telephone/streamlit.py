@@ -43,17 +43,17 @@ def info_sidebar():
             "\n\n"
         )
         st.markdown(
-            "# Brought to you by [Hamilton](https://github.com/dagworks-inc/hamilton) ✨\n"
+            "# Brought to you by [Hamilton](https://github.com/apache/hamilton) ✨\n"
             "You can see the code + DAGs used to generate the data in the `Build` tab."
             "The dataflow to prompt GPT-4 and create images was built using the [Hamilton]"
-            "(https://github.com/dagworks-inc/hamilton) library.\n\n"
+            "(https://github.com/apache/hamilton) library.\n\n"
             "Generate your own images by pulling the dataflow from the "
             "[Hamilton Dataflow Hub](https://hub.dagworks.io/docs/Users/elijahbenizzy/caption_images/) and specify your ["
             "OpenAI API key](https://platform.openai.com/overview) to get started!"
         )
 
         st.markdown(
-            "### ⭐ Please leave a star on [GitHub](https://github.com/dagworks-inc/hamilton)\n"
+            "### ⭐ Please leave a star on [GitHub](https://github.com/apache/hamilton)\n"
             "### 🤓 Join our [Slack](https://hamilton-opensource.slack.com/join/shared_invite/zt-1bjs72asx-wcUTgH7q7QX1igiQ5bbdcg#/shared-invite/email) channel if you have any question!"
         )
 
@@ -451,7 +451,7 @@ def build_display():
     """Section for the build tab"""
     caption_images, generate_images, caption_dag, generate_dag = load_resources()
     st.markdown(
-        "# Using [Hamilton](https://github.com/dagworks-inc/hamilton) to build pipelines \n"
+        "# Using [Hamilton](https://github.com/apache/hamilton) to build pipelines \n"
         "The code to generate the data for this app is built using Hamilton, a declarative framework"
         "for building clean, self-documenting, and extensible data pipelines. The basics of this is simple -- "
         "we have two modules, one for captioning images and one for generating images from captions. Each one "
@@ -463,7 +463,7 @@ def build_display():
         "Our broader vision is two-fold:\n"
         "1. That everyone will build their data pipelines in a well-structured, composable, and self-documenting manner (such as Hamilton).\n"
         "2. That people get more productive by reusing other people's pipelines, with a bustling community around it!\n"
-        "We're still early in our journey and would love you to be part of it! See our [github repo](https://github.com/dagworks-inc/hamilton) to get started."
+        "We're still early in our journey and would love you to be part of it! See our [github repo](https://github.com/apache/hamilton) to get started."
     )
     tab_1, tab_2, tab_3 = st.tabs(
         ["Captioning module", "Image generation module", "The loop"],
@@ -499,7 +499,7 @@ def build_display():
             "we need to do a few more things to generate the data you just looked at:\n"
             "1. Create a Burr application that orchestrates calling them\n"
             "2. Add in some persistence.\n"
-            "The following shows some simplified code doing (1). For (2) see full example in the [Hamilton repo](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/LLM_Workflows/image_telephone)."
+            "The following shows some simplified code doing (1). For (2) see full example in the [Hamilton repo](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/image_telephone)."
         )
         code = '''@action(
     reads=["current_image_location"],

@@ -9,7 +9,7 @@ You need to install `plotly` (low-level API) to annotate your function with `plo
 def confusion_matrix(...) -> plotly.graph_objects.Figure:
     return plotly.express.imshow(...)
 
-# 2. import the module and create the Hamilton driver
+# 2. import the module and create the Apache Hamilton driver
 dr = (
     driver.Builder()
     .with_config({...})

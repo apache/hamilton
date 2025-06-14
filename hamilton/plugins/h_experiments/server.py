@@ -78,7 +78,7 @@ def base_page(*components: AnyComponent) -> list[AnyComponent]:
             links=[
                 c.Link(
                     components=[c.Text(text="GitHub")],
-                    on_click=GoToEvent(url="https://github.com/dagworks-inc/hamilton"),
+                    on_click=GoToEvent(url="https://github.com/apache/hamilton"),
                 ),
             ],
         ),

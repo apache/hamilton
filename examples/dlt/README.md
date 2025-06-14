@@ -1,14 +1,14 @@
 # dlt
 
-This example shows dlt + Hamilton can help you cover the full ELT cycle using portable Python code. It is a companion to this [documentation page](https://hamilton.dagworks.io/en/latest/integrations/dlt/).
+This example shows dlt + Apache Hamilton can help you cover the full ELT cycle using portable Python code. It is a companion to this [documentation page](https://hamilton.dagworks.io/en/latest/integrations/dlt/).
 
 # Content
 It includes a pipeline to ingest messages from Slack channels and generate threads summaries.
 
 - `slack/` is the code imported from dlt for the Slack `Source`
 - `.dlt/` contains the source's version, config, and secrets for the dlt `Pipeline`
-- `transform.py` contains the Hamilton code to transform data and build the `threads` table
-- `run.py` contains the code to execution the dlt `Pipeline` and the Hamilton dataflow.
+- `transform.py` contains the Apache Hamilton code to transform data and build the `threads` table
+- `run.py` contains the code to execution the dlt `Pipeline` and the Apache Hamilton dataflow.
 - `notebook.ipynb` contains the equivalent of both `transform.py` and `run.py` allowing you to explore the code interactively.
 
 # Set up

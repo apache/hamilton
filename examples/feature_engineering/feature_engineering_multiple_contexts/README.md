@@ -2,15 +2,15 @@
 
 What is feature engineering? It's the process of transforming data for input to a "model".
 
-To make models better, it's common to perform and try a lot of "transforms". This is where Hamilton comes in.
-Hamilton allows you to:
+To make models better, it's common to perform and try a lot of "transforms". This is where Apache Hamilton comes in.
+Apache Hamilton allows you to:
 * write different transformations in a straightforward and formulaic manner
 * keep them managed and versioned with computational lineage (if using something like git)
 * has a great testing and documentation story
 
 which allows you to sanely iterate, maintain, and determine what works best for your modeling domain.
 
-In this series of examples, we'll skip talking about the benefits of Hamilton here, and instead focus on how to use it
+In this series of examples, we'll skip talking about the benefits of Apache Hamilton here, and instead focus on how to use it
 for feature engineering. But first, some context on what challenges you're likely to face with feature engineering
 in general.
 
@@ -62,16 +62,16 @@ With (1) and (2) in mind, you can see that there are a lot of different dimensio
 feature engineering processes. They have to connect with each other, and be flexible enough to support your specific
 deployment needs.
 
-# Using Hamilton for Feature Engineering for Batch/Offline
+# Using Apache Hamilton for Feature Engineering for Batch/Offline
 If you fall into **only** needing to deploy features for batch jobs, then stop right there. You don't need these examples,
 as they are focused on how to bridge the gap between "offline" and "online" feature engineering. You should instead
 browse the other examples like `data_quality`.
 
-# Using Hamilton for Feature Engineering for Batch/Offline and Online/Streaming
+# Using Apache Hamilton for Feature Engineering for Batch/Offline and Online/Streaming
 These example scenarios here are for the people who have to deal with both batch and online feature engineering.
 
 We provide two examples for two common scenarios that occur if you have this need. Note, the example code in these
-scenarios tries to be illustrative about how to think and frame using Hamilton. It contains minimal features so as to
+scenarios tries to be illustrative about how to think and frame using Apache Hamilton. It contains minimal features so as to
 not overwhelm you, and leaves out some implementation details that you would need to fill in for your specific use case,
 e.g. like fitting a model using the features, or where to store aggregate feature values, etc.
 
@@ -81,7 +81,7 @@ setting, as well as an online setting (e.g. synchronous request via FastAPI). Wh
 happens is that the code for features is not shared, and results in two implementations
 that result in subtle bugs and hard to maintain code.
 
-With this example series, we show how you can use Hamilton to:
+With this example series, we show how you can use Apache Hamilton to:
 
 1. write a feature once. (scenarios 1 and 2)
 2. leverage that feature code anywhere that python runs. e.g. in batch and online. (scenarios 1 and 2)
@@ -90,8 +90,8 @@ you can inject those values into your feature computation needs. (scenario 2)
 
 The task that we're modeling here isn't that important, but if you must know, we're trying to predict the number of
 hours of absence that an employee will have given some information about them; this is based off the `data_quality`
-example, which is based off of the [Metaflow+Hamilton example](https://outerbounds.com/blog/developing-scalable-feature-engineering-dags/),
-where Hamilton was used for the feature engineering process -- in that example only offline feature engineering was modeled.
+example, which is based off of the [Metaflow+Apache Hamilton example](https://outerbounds.com/blog/developing-scalable-feature-engineering-dags/),
+where Apache Hamilton was used for the feature engineering process -- in that example only offline feature engineering was modeled.
 
 Assumptions we're using:
 1. You have a fixed set of features that you want to compute for a model that you have determined as being useful a priori.
@@ -116,15 +116,15 @@ at prediction time to get the right feature computation to happen.
 In this scenario we assume we are not passed in data, but need to fetch it ourselves as part of the online API request.
 
 We will pretend to hit a feature store, that will provide us with the required data to compute the features for
-input to the model. This example shows one way to modularize your Hamilton code so that you can swap out the "source"
+input to the model. This example shows one way to modularize your Apache Hamilton code so that you can swap out the "source"
 of the data. To simplify the example, we assume that we can get all the input data we need from a feature store, rather
 than it also coming in via the request. Note: if using a feature store, which is effectively a cache, you might not need
-Hamilton on the online side, if, and only if, you can get all the data you need from the feature store, without needing
+Apache Hamilton on the online side, if, and only if, you can get all the data you need from the feature store, without needing
 to perform any computations. In this situation, you would push compute features to the feature store from your offline
 ETL process that creates features.
 
 A good exercise would be to make note of the differences with this scenario (2) and scenario (1) in how they structure
-the code with Hamilton.
+the code with Apache Hamilton.
 
 # What's next?
 Jump into each directory and read the README, it'll explain how the example is set up and how things should work.
@@ -132,7 +132,7 @@ Jump into each directory and read the README, it'll explain how the example is s
 # What are extensions/uses not shown here but we know you can do them
 Here are two ideas that come to mind:
 
-1. Streaming settings. Given the examples, it should be clear how to make it possbile to use Hamilton in a streaming setting.
-2. How to ask Hamilton what features are needed as input to know what to request from the feature store. With tags, and
-querying the DAG at the start of the app, you could dynamically ask Hamilton what's required and then only go to the
+1. Streaming settings. Given the examples, it should be clear how to make it possbile to use Apache Hamilton in a streaming setting.
+2. How to ask Apache Hamilton what features are needed as input to know what to request from the feature store. With tags, and
+querying the DAG at the start of the app, you could dynamically ask Apache Hamilton what's required and then only go to the
 feature store for that data. If this type of example would be of interest, let us know.

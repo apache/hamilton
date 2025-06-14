@@ -1,6 +1,6 @@
-# Modeling Pregnancy Due Dates using Hamilton
+# Modeling Pregnancy Due Dates using Apache Hamilton
 
-This is an example of developing and applying a simple statistical model using Hamilton
+This is an example of developing and applying a simple statistical model using Apache Hamilton
 for a very common problem. What is the probability that a baby will be born (before, on, after)
 X date?
 
@@ -15,8 +15,8 @@ You can read the full description in the [post](https://blog.dagworks.io/p/181bb
 In this, you'll find the following files:
 
 1. [notebook.ipynb](notebook.ipynb) - The Jupyter notebook that walks through the process of developing/running the model.
-2. [base_dates.py] -- a Hamilton module that generates date-related series
-3. [probability_estimation.py] -- a Hamilton module that computes a statistical model (estimating parameters for probability due dates)
-4. [probabilities.py] -- a Hamilton module that runs that model over a set of dates
+2. [base_dates.py] -- a Apache Hamilton module that generates date-related series
+3. [probability_estimation.py] -- a Apache Hamilton module that computes a statistical model (estimating parameters for probability due dates)
+4. [probabilities.py] -- a Apache Hamilton module that runs that model over a set of dates
 
 Run the notebook to see the process of developing the model and running it.

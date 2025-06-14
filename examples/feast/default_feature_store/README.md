@@ -1,5 +1,5 @@
 # Context
-Anything in the directory `/default_feature_store`, including the rest of this `README` was generated with the CLI command `feast init default_feature_store`, which creates a Feast quickstart example. This example can provide useful information to new Feast users and serve as a comparison point to integrations with Hamilton. The directory `/simple_feature_store` is reimplements 1-to-1 the functionalities from this directory.
+Anything in the directory `/default_feature_store`, including the rest of this `README` was generated with the CLI command `feast init default_feature_store`, which creates a Feast quickstart example. This example can provide useful information to new Feast users and serve as a comparison point to integrations with Apache Hamilton. The directory `/simple_feature_store` is reimplements 1-to-1 the functionalities from this directory.
 
 
 # Feast Quickstart

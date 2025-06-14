@@ -2,14 +2,14 @@
 
 This example was demo'ed at the Dask community day for July 2023.
 
-In this example we showcase using the [Hamilton DaskGraphAdapter](https://hamilton.dagworks.io/en/latest/reference/graph-adapters/DaskGraphAdapter/#h-dask-daskgraphadapter)
-to inject dask.delayed() as it's walking the DAG that is defined with Hamilton.
+In this example we showcase using the [Apache Hamilton DaskGraphAdapter](https://hamilton.dagworks.io/en/latest/reference/graph-adapters/DaskGraphAdapter/#h-dask-daskgraphadapter)
+to inject dask.delayed() as it's walking the DAG that is defined with Apache Hamilton.
 
 File organization:
 
 * `my_functions.py` houses the logic that we want to compute. Note how the functions are named, and what input
 parameters they require. That is how we create a DAG modeling the dataflow we want to happen.
-* `demo_day_notebook.ipynb` is the notebook that was shown in the demo. At the top it shows using Hamilton, and running
+* `demo_day_notebook.ipynb` is the notebook that was shown in the demo. At the top it shows using Apache Hamilton, and running
 the code without delegating to Dask, and then at the bottom it shows how to use the DaskGraphAdapter that augments
 how the DAG is walked, because it calls dask.delayed on every function.
 
@@ -34,5 +34,5 @@ This is a simple DAG that we construct here. But for reference it looks like thi
 
 # References:
 * [Dask](https://dask.org/)
-* [Hamilton Docs](https://hamilton.dagworks.io/en/latest/)
-* [Try Hamilton in your browser](https://www.tryhamilton.dev/)
+* [Apache Hamilton Docs](https://hamilton.dagworks.io/en/latest/)
+* [Try Apache Hamilton in your browser](https://www.tryhamilton.dev/)

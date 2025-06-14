@@ -1,8 +1,8 @@
 # Data Loaders
 
-Among multiple uses, Hamilton excels at building maintainable, scalable representations of ETLs.
+Among multiple uses, Apache Hamilton excels at building maintainable, scalable representations of ETLs.
 If you've read through the other guides, it should be pretty clear how hamilton enables transformations (the T in ETL/ELT).
-In this example, we'll talk about an approach to _Extracting_ data, and how Hamilton enables you to build out extracts,
+In this example, we'll talk about an approach to _Extracting_ data, and how Apache Hamilton enables you to build out extracts,
 in a scalable, pluggable way. For example, being able to switch where data is loaded between development and production
 is useful, since you might only want a subsample in development, or even load it from a different source.
 Here we'll show you how you can achieve this without cluttering your code with `if else`,
@@ -36,7 +36,7 @@ To load/analyze the data, you can run the script `run.py`
 - `python run.py mock` creates mock data and runs the pipeline
 
 Note that you, as the user, have to manually handle connections/whatnot for duckdb.
-We are currently designing the ability to do this natively in hamilton: https://github.com/dagworks-inc/hamilton/issues/197.
+We are currently designing the ability to do this natively in hamilton: https://github.com/apache/hamilton/issues/197.
 
 # Execution Graphs
 You'll see that the execution graphs are practically the same, except for the top part. Which is exactly what we want,
