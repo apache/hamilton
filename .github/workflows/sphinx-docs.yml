@@ -71,6 +71,7 @@ jobs:
         retention-days: 5
 
     - name: Deploy documentation
+      working-directory: ./docs
       run: |
         # Set target branch based on current branch
         if [ "${{ github.ref }}" = "refs/heads/main" ]; then
@@ -88,32 +89,50 @@ jobs:
         # Create a temporary directory
         mkdir -p /tmp/gh-pages
         
+        # Store current directory
+        CURRENT_DIR=$(pwd)
+        ls -lsa $CURRENT_DIR
+        
         # Try to clone the repository with the target branch
         if ! git clone --branch $TARGET_BRANCH --single-branch \
             https://github.com/${{ github.repository }}.git /tmp/gh-pages 2>/dev/null; then
           # If branch doesn't exist, initialize a new repository and create the branch
           echo "Branch $TARGET_BRANCH doesn't exist. Creating it..."
+          rm -rf /tmp/gh-pages
           mkdir -p /tmp/gh-pages
           cd /tmp/gh-pages
           git init
-          git remote add origin https://github.com/${{ github.repository }}.git
+          git config --local init.defaultBranch $TARGET_BRANCH
           git checkout -b $TARGET_BRANCH
-          cd - >/dev/null
+          git remote add origin https://github.com/${{ github.repository }}.git
+          cd "$CURRENT_DIR"
+        else
+          echo "CD'ing into $CURRENT_DIR"
+          cd "$CURRENT_DIR"
         fi
         
         # Remove existing content directory if it exists
         rm -rf /tmp/gh-pages/content
         
+#        # Ensure build directories exist
+#        mkdir -p "$CURRENT_DIR/_build/html"
+#        mkdir -p "$CURRENT_DIR/_build/pdf"
+        
         # Copy the built HTML documentation to the content directory
         mkdir -p /tmp/gh-pages/content
-        cp -r _build/html/* /tmp/gh-pages/content/
+        cp -r "$CURRENT_DIR/_build/html/"* /tmp/gh-pages/content/ 2>/dev/null || echo "No HTML files to copy"
         
         # Copy the PDF documentation to the content/pdf directory
         mkdir -p /tmp/gh-pages/content/pdf
-        cp -r _build/pdf/* /tmp/gh-pages/content/pdf/
+        cp -r "$CURRENT_DIR/_build/pdf/"* /tmp/gh-pages/content/pdf/ 2>/dev/null || echo "No PDF files to copy"
         
         # Add, commit and push the changes
         cd /tmp/gh-pages
+        # Create a README if it doesn't exist
+        if [ ! -f README.md ]; then
+          echo "# Documentation for $TARGET_BRANCH" > README.md
+          echo "This branch contains the built documentation." >> README.md
+        fi
         git add -A
         
         # Check if there are changes to commit
