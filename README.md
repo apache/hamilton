@@ -30,7 +30,7 @@
 </div>
 <br></br>
 
-Apache Hamilton is a lightweight Python library for directed acyclic graphs (DAGs) of data transformations. Your DAG is **portable**; it runs anywhere Python runs, whether it's a script, notebook, Airflow pipeline, FastAPI server, etc. Your DAG is **expressive**; Apache Hamilton has extensive features to define and modify the execution of a DAG (e.g., data validation, experiment tracking, remote execution).
+Apache Hamilton (incubating) is a lightweight Python library for directed acyclic graphs (DAGs) of data transformations. Your DAG is **portable**; it runs anywhere Python runs, whether it's a script, notebook, Airflow pipeline, FastAPI server, etc. Your DAG is **expressive**; Apache Hamilton has extensive features to define and modify the execution of a DAG (e.g., data validation, experiment tracking, remote execution).
 
 To create a DAG, write regular Python functions that specify their dependencies with their parameters. As shown below, it results in readable code that can always be visualized. Apache Hamilton loads that definition and automatically builds the DAG for you!
 
