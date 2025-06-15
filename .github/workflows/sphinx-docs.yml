@@ -69,3 +69,57 @@ jobs:
         path: docs/_build/pdf/
         if-no-files-found: error
         retention-days: 5
+
+    - name: Deploy documentation
+      run: |
+        # Set target branch based on current branch
+        if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          TARGET_BRANCH="asf-site"
+          echo "Deploying to production (asf-site) branch"
+        else
+          TARGET_BRANCH="asf-staging"
+          echo "Deploying to staging (asf-staging) branch"
+        fi
+
+        # Configure git
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        
+        # Create a temporary directory
+        mkdir -p /tmp/gh-pages
+        
+        # Try to clone the repository with the target branch
+        if ! git clone --branch $TARGET_BRANCH --single-branch \
+            https://github.com/${{ github.repository }}.git /tmp/gh-pages 2>/dev/null; then
+          # If branch doesn't exist, initialize a new repository and create the branch
+          echo "Branch $TARGET_BRANCH doesn't exist. Creating it..."
+          mkdir -p /tmp/gh-pages
+          cd /tmp/gh-pages
+          git init
+          git remote add origin https://github.com/${{ github.repository }}.git
+          git checkout -b $TARGET_BRANCH
+          cd - >/dev/null
+        fi
+        
+        # Remove existing content directory if it exists
+        rm -rf /tmp/gh-pages/content
+        
+        # Copy the built HTML documentation to the content directory
+        mkdir -p /tmp/gh-pages/content
+        cp -r _build/html/* /tmp/gh-pages/content/
+        
+        # Copy the PDF documentation to the content/pdf directory
+        mkdir -p /tmp/gh-pages/content/pdf
+        cp -r _build/pdf/* /tmp/gh-pages/content/pdf/
+        
+        # Add, commit and push the changes
+        cd /tmp/gh-pages
+        git add -A
+        
+        # Check if there are changes to commit
+        if ! git diff --quiet; then
+          git commit -m "Deploy documentation from ${{ github.sha }}"
+          git push https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git $TARGET_BRANCH
+        else
+          echo "No changes to deploy"
+        fi
