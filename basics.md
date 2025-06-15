@@ -1,19 +1,19 @@
-# Hamilton Basics
+# Apache Hamilton Basics
 
-There are two parts to Hamilton:
+There are two parts to Apache Hamilton:
 
-1. Hamilton Functions.
+1. Apache Hamilton Functions.
 
-   Hamilton Functions are what you, the end user write.
+   Apache Hamilton Functions are what you, the end user write.
 
-2. Hamilton Driver.
+2. Apache Hamilton Driver.
 
-   Once you've written your functions, you will need to use the Hamilton Driver to build the DAG and orchestrate
+   Once you've written your functions, you will need to use the Apache Hamilton Driver to build the DAG and orchestrate
    execution.
 
 Let's dive deeper into these parts below, but first a word on terminology.
 
-We use the following terms interchangeably, e.g. a ____ in Hamilton is ... :
+We use the following terms interchangeably, e.g. a ____ in Apache Hamilton is ... :
 
 * column
 * variable
@@ -24,10 +24,10 @@ That's because we're representing columns as functions, which are parts of a dir
  a column is a part of a dataframe. To compute a column we write a function that has input variables. From these functions
 we create a DAG and represent each function as a node, linking each input variable by an edge to its respective node.
 
-## Hamilton Functions
-Using Hamilton is all about writing functions. From these functions a dataframe is constructed for you at execution time.
+## Apache Hamilton Functions
+Using Apache Hamilton is all about writing functions. From these functions a dataframe is constructed for you at execution time.
 
-A simple (but rather contrived) example of what Hamilton does that adds two numbers is as follows:
+A simple (but rather contrived) example of what Apache Hamilton does that adds two numbers is as follows:
 
 ```python
 def _sum(*vars):
@@ -51,20 +51,20 @@ While this looks like a simple python function, there are a few components to no
    and separate out that logic for debugging/iterating.
 2. The function `sum_a_b` depends on two upstream nodes -- `a` and `b`. This means that these values must either be:
     * Defined by another function
-    * Passed in by the user as a configuration variable (see `Hamilton Driver Code` below)
-3. The function `sum_a_b` makes full use of the python type-hint system. This is required in Hamilton,
+    * Passed in by the user as a configuration variable (see `Apache Hamilton Driver Code` below)
+3. The function `sum_a_b` makes full use of the python type-hint system. This is required in Apache Hamilton,
    as it allows us to type-check the inputs and outputs to match with upstream producers and downstream consumers. In this case,
    we know that the input `a` has to be an integer, the input `b` has to also be an integer, and anything that declares `sum_a_b` as an input
    has to declare it as an integer.
 4. Standard python documentation is a first-class citizen. As we have a 1:1 relationship between python functions and
    nodes, each function documentation also describes a piece of business logic.
-5. Functions that start with _ are ignored, and not included in the DAG. Hamilton tries to make use of every function
+5. Functions that start with _ are ignored, and not included in the DAG. Apache Hamilton tries to make use of every function
    in a module, so this allows us to easily indicate helper functions that won't become part of the DAG.
 
 
-### Python Types & Hamilton
+### Python Types & Apache Hamilton
 
-Hamilton makes use of python's type-hinting feature to check compatibility between function outputs and function inputs. However,
+Apache Hamilton makes use of python's type-hinting feature to check compatibility between function outputs and function inputs. However,
 this is not particularly sophisticated, largely due to the lack of available tooling in python. Thus, generic types do not function correctly.
 The following will not work:
 
@@ -86,8 +86,8 @@ def some_func() -> dict:
 
 While this is unfortunate, the typing API in python is not yet sophisticated enough to rely on accurate subclass validation.
 
-## Hamilton Driver Code
-For documentation on the actual Hamilton Driver code, we invite the reader to [read the Driver class source code](/hamilton/driver.py) directly.
+## Apache Hamilton Driver Code
+For documentation on the actual Apache Hamilton Driver code, we invite the reader to [read the Driver class source code](/hamilton/driver.py) directly.
 
 At a high level, the driver code does two things:
 
@@ -115,7 +115,7 @@ The configuration is used not just to feed data to the DAG, but also to determin
 As such, it is passed in to the constructor, and used during DAG creation. This enables such decorators like @config.when.
 
 Otherwise the contents of the _config_ dictionary should include all the inputs required for whatever final output you
-want to create. The configuration dictionary should not be used for overriding what Hamilton will compute.
+want to create. The configuration dictionary should not be used for overriding what Apache Hamilton will compute.
 To do this, use the `override` parameter as part of the `execute()` -- see below.
 
 #### \*modules: ModuleType
@@ -130,13 +130,13 @@ via a recursive depth-first-traversal, which leads to the possibility (although 
 recursion depth errors. If that happens, the culprit is almost always a circular reference in the graph. We suggest
 displaying the DAG to verify this.
 
-To help speed up development of new or existing Hamilton Functions, we enable you to _override_ parts of the DAG. What
-this means is that before calling `execute()`, you have computed some result that you want to use instead of what Hamilton
+To help speed up development of new or existing Apache Hamilton Functions, we enable you to _override_ parts of the DAG. What
+this means is that before calling `execute()`, you have computed some result that you want to use instead of what Apache Hamilton
 would produce. To do so, you just pass in a dictionary of `{'col_name': YOUR_VALUE}` as the overrides argument to the
 execute function.
 
 To visualize the DAG that would be executed, pass the flag `display_graph=True` to execute. It will render an image in a pdf format.
 
 # Backstory
-For the backstory on Hamilton we invite you to watch ~9 minute lightning talk on it that we gave at the apply conference:
+For the backstory on Apache Hamilton we invite you to watch ~9 minute lightning talk on it that we gave at the apply conference:
 [video](https://www.youtube.com/watch?v=B5Zp_30Knoo), [slides](https://www.slideshare.net/StefanKrawczyk/hamilton-a-micro-framework-for-creating-dataframes).

@@ -2,39 +2,39 @@
 Airflow
 ======================
 
-For more details see this `Hamilton + Airflow blog post <https://blog.dagworks.io/p/supercharge-your-airflow-dag-with>`_.
+For more details see this `Apache Hamilton + Airflow blog post <https://blog.dagworks.io/p/supercharge-your-airflow-dag-with>`_.
 
 **TL;DR:**
 
-1. Hamilton complements Airflow. It'll help you write better, more modular, and testable code.
-2. Hamilton does not replace Airflow.
+1. Apache Hamilton complements Airflow. It'll help you write better, more modular, and testable code.
+2. Apache Hamilton does not replace Airflow.
 
 
 High-level differences:
 -----------------------
 
-* Hamilton is a micro-orchestator. Airflow is a macro-orchestrator.
-* Hamilton is a Python library standardizing how you express python pipelines, while Airflow is a complete platform and
+* Apache Hamilton is a micro-orchestator. Airflow is a macro-orchestrator.
+* Apache Hamilton is a Python library standardizing how you express python pipelines, while Airflow is a complete platform and
   system for scheduling and executing pipelines.
-* Hamilton focuses on providing a lightweight, low dependency, flexible way to define data pipelines as Python functions,
+* Apache Hamilton focuses on providing a lightweight, low dependency, flexible way to define data pipelines as Python functions,
   whereas Airflow is a whole system that comes with a web-based UI, scheduler, and executor.
-* Hamilton pipelines are defined using pure Python code, that can be run anywhere that Python runs. While Airflow uses
+* Apache Hamilton pipelines are defined using pure Python code, that can be run anywhere that Python runs. While Airflow uses
   Python to describe a DAG, this DAG can only be run by the Airflow system.
-* Hamilton complements Airflow, and you can use Hamilton within Airflow. But the reverse is not true.
-* You can use Hamilton directly in a Jupyter Notebook, or Python web-service. You can't do this with Airflow.
+* Apache Hamilton complements Airflow, and you can use Apache Hamilton within Airflow. But the reverse is not true.
+* You can use Apache Hamilton directly in a Jupyter Notebook, or Python web-service. You can't do this with Airflow.
 
 
 Code examples:
 --------------
-Looking at the two examples below, you can see that Hamilton is a more lightweight and flexible way to define data pipelines.
-There is no scheduling information, etc required to run the code because Hamilton runs the pipeline in the same process as the
+Looking at the two examples below, you can see that Apache Hamilton is a more lightweight and flexible way to define data pipelines.
+There is no scheduling information, etc required to run the code because Apache Hamilton runs the pipeline in the same process as the
 caller. This makes it easier to test and debug pipelines. Airflow, on the other hand, is a complete system for scheduling and
 executing pipelines. It is more complex to set up and run. Note: If you stuck the contents of `run.py` in a function within
-the `example_dag.py`, the Hamilton pipeline could be used in the Airflow PythonOperator!
+the `example_dag.py`, the Apache Hamilton pipeline could be used in the Airflow PythonOperator!
 
-Hamilton:
-_________
-The below code here shows how you can define a simple data pipeline using Hamilton. The pipeline consists of three functions
+Apache Hamilton:
+________________
+The below code here shows how you can define a simple data pipeline using Apache Hamilton. The pipeline consists of three functions
 that are executed in sequence. The pipeline is defined in a module called `pipeline.py`, and then executed in a separate
 script called `run.py`, which imports the pipeline module and executes it.
 

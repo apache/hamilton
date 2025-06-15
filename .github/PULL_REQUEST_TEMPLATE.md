@@ -1,6 +1,6 @@
 --- PR TEMPLATE INSTRUCTIONS (1) ---
 
-Looking to submit a Hamilton Dataflow to the sf-hamilton-contrib module? If so go the the `Preview` tab and select the appropriate sub-template:
+Looking to submit a Apache Hamilton Dataflow to the sf-hamilton-contrib module? If so go the the `Preview` tab and select the appropriate sub-template:
 * [sf-hamilton-contrib template](?expand=1&template=HAMILTON_CONTRIB_PR_TEMPLATE.md)
 
 Else, if not, please remove this block of text.

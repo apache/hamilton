@@ -46,5 +46,5 @@ You general multiprocessing caveats apply if you choose an executor other than M
 4. Memory requirements -- the "collect" (or reduce) step pulls things into memory. If you hit this, this just
 means you need to redesign your code a little, e.g. write large things to a store and pass pointers.
 
-To extend this to [PySpark see the examples folder](https://github.com/dagworks-inc/hamilton/tree/main/examples/LLM_Workflows/scraping_and_chunking/spark)
+To extend this to [PySpark see the examples folder](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/scraping_and_chunking/spark)
 for the changes required to adjust the code to handle PySpark.

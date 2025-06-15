@@ -72,10 +72,10 @@ export const NotUsingHamiltonYet = (props: {
   useHamiltonSDK: boolean;
 }) => {
   const initCode = props.useHamiltonSDK
-      ? `git clone https://github.com/DAGWorks-Inc/hamilton.git
+      ? `git clone https://github.com/apache/hamilton.git
 cd hamilton/examples/hamilton_ui
 # provide the project ID and username for run.py.
-`    : `git clone https://github.com/DAGWorks-Inc/dagworks-examples.git
+`    : `git clone https://github.com/apache/dagworks-examples.git
 cd dagworks-examples/hello_world/
 # modify run.py -- change the username and project_id to your own
 `;

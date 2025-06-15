@@ -1,7 +1,7 @@
 # Purpose of this module
 
 The purpose of this module is to provide you with a dataflow to translate
-your existing procedural code into code written in the Hamilton style.
+your existing procedural code into code written in the Apache Hamilton style.
 
 ```python
 # Make sure you have an API key in your environment, e.g. os.environ["OPENAI_API_KEY"]
@@ -23,7 +23,7 @@ result = dr.execute(
 )
 print(result["code_segments"])
 ```
-For a jupyter notebook example, see [this link](https://github.com/dagWorks-Inc/hamilton/tree/main/examples/contrib/notebooks/dagworks-translate_to_hamilton).
+For a jupyter notebook example, see [this link](https://github.com/apache/hamilton/tree/main/examples/contrib/notebooks/dagworks-translate_to_hamilton).
 
 ## What you should modify
 

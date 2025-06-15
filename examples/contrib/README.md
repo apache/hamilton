@@ -1,6 +1,6 @@
 # Import Community Dataflows
 
-In this example, we show you how to import and use dataflows from the [Hamilton Dataflow Hub](https://hub.dagworks.io/docs/).
+In this example, we show you how to import and use dataflows from the [Apache Hamilton Dataflow Hub](https://hub.dagworks.io/docs/).
 You can use them either directly or pull and edit a local copy.
 
 # Setup
@@ -15,7 +15,7 @@ Or run it in Google Colab:
 
 
 # 3 ways to import
-There are 3 main ways to use community dataflows: static installation, dynamic installation, and local copy (see [documentation](https://github.com/DAGWorks-Inc/hamilton/tree/main/contrib)). We present each of them in this example:
+There are 3 main ways to use community dataflows: static installation, dynamic installation, and local copy (see [documentation](https://github.com/apache/hamilton/tree/main/contrib)). We present each of them in this example:
 
 ## 1. Static installation
 The script `run.py` uses the direct import `from hamilton.contrib.user.zilto import xgboost_optuna`. It's as simple as that! (but first `pip install sf-hamilton-contrib --upgrade`)
@@ -28,4 +28,4 @@ After completing the dynamic installation, the second part of the notebook inclu
 
 
 # Contribute your own dataflow!
-You can find more information on how to contribute in the `contrib` module's [README](https://github.com/DAGWorks-Inc/hamilton/tree/main/contrib)
+You can find more information on how to contribute in the `contrib` module's [README](https://github.com/apache/hamilton/tree/main/contrib)

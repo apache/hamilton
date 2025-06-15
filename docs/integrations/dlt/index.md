@@ -2,25 +2,25 @@
 
 [dlt](https://dlthub.com/) stands for "data load tool". It's an open-source Python library providing a ton of data `Sources` (Slack, Stripe, Google Analytics, Zendesk, etc.) and `Destinations` (S3, Snowflake, BigQuery, Postgres, etc.). `Pipelines` make it easy to connect `Sources` and `Destinations` and provide advanced engineering features such as table normalization, incremental loading, and automatic schema evolution.
 
-dlt is an "extract and load" tool and Hamilton is a "transform" tool, allowing various usage patterns.
+dlt is an "extract and load" tool and Apache Hamilton is a "transform" tool, allowing various usage patterns.
 
 On this page, you'll learn:
 
 - Extract, Transform, Load (ETL)
 - Extract, Load, Transform (ELT)
-- dlt materializer plugin for Hamilton
+- dlt materializer plugin for Apache Hamilton
 
 ``` {note}
-See this [blog post](https://blog.dagworks.io/p/slack-summary-pipeline-with-dlt-ibis) for a more detailed discussion about ETL with dlt + Hamilton
+See this [blog post](https://blog.dagworks.io/p/slack-summary-pipeline-with-dlt-ibis) for a more detailed discussion about ETL with dlt + Apache Hamilton
 ```
 
 ## Extract, Transform, Load (ETL)
 The key consideration for ETL is that the data has to move twice:
 
-> ingest raw data (dlt) -> transform (Hamilton) -> store transformed data (dlt)
+> ingest raw data (dlt) -> transform (Apache Hamilton) -> store transformed data (dlt)
 
 1. **Extract**: dlt moves the raw data to a processing server
-2. **Transform**: on the server, Hamilton executes transformations
+2. **Transform**: on the server, Apache Hamilton executes transformations
 3. **Load**: dlt moves the final data to its destination (database, dashboard, etc.)
 
 **Pros**
@@ -58,7 +58,7 @@ The key consideration for ETL is that the data has to move twice:
 
 ### Transform
 
-2. Define the Hamilton dataflow of transformations
+2. Define the Apache Hamilton dataflow of transformations
 
     ```python
     # transform.py
@@ -94,7 +94,7 @@ The key consideration for ETL is that the data has to move twice:
 
 ![](transform.png)
 
-3. Add the Hamilton dataflow execution code to `run.py`
+3. Add the Apache Hamilton dataflow execution code to `run.py`
 
     ```python
     # run.py
@@ -119,13 +119,13 @@ The key consideration for ETL is that the data has to move twice:
         destination='bigquery',
         dataset_name="slack_community_backup"
     )
-    # pass the results from Hamilton to dlt
+    # pass the results from Apache Hamilton to dlt
     data = results["threads"].to_dict(orient="records")
     final_load_info = load_pipeline.run(data, table_name="threads")
     ```
 
 ### ETL Summary
-You need to set up your dlt pipeline for raw and transformed data, and define your Hamilton transformation dataflow. Then, your execution code consist of executing the ETL step in sequence. It should look like this:
+You need to set up your dlt pipeline for raw and transformed data, and define your Apache Hamilton transformation dataflow. Then, your execution code consist of executing the ETL step in sequence. It should look like this:
 
 ```python
 # run.py
@@ -162,12 +162,12 @@ final_load_info = load_pipeline.run(data, table_name="threads")
 ## Extract, Load, Transform (ELT)
 Compared to ETL, ELT moves data once.
 
-> ingest and store raw data (dlt) -> transform (Hamilton)
+> ingest and store raw data (dlt) -> transform (Apache Hamilton)
 
 Transformations happen within the data destination, typically a data warehouse. To achieve this, we will leverage the [Ibis](https://ibis-project.org/) library, which allows to execute data transformations directly on the destination backend.
 
 1. **Extract & Load**: dlt moves the raw data to the destination
-2. **Transform**: Hamilton + Ibis execute transformations within the destination
+2. **Transform**: Apache Hamilton + Ibis execute transformations within the destination
 
 **Pros**
 - Deduplicate computation: redundant operations can be optimized using raw and intermediary data
@@ -204,7 +204,7 @@ Transformations happen within the data destination, typically a data warehouse. 
 
 ### Transform
 
-2. Define a dataflow of transformations using Hamilton + Ibis
+2. Define a dataflow of transformations using Apache Hamilton + Ibis
 
     ```python
     # transform.py
@@ -252,7 +252,7 @@ Transformations happen within the data destination, typically a data warehouse. 
         return True
     ```
 
-3. Execute the Hamilton dataflow to trigger transformations on the backend
+3. Execute the Apache Hamilton dataflow to trigger transformations on the backend
 
     ```python
     # run.py
@@ -268,7 +268,7 @@ Transformations happen within the data destination, typically a data warehouse. 
     ```
 
 ### ELT Summary
-You need to set up your dlt pipeline for raw, and define your Hamilton transformation dataflow. Then, your execution code consist of using dlt to move data to the backend and Hamilton + Ibis to execute transformations.
+You need to set up your dlt pipeline for raw, and define your Apache Hamilton transformation dataflow. Then, your execution code consist of using dlt to move data to the backend and Apache Hamilton + Ibis to execute transformations.
 
 ```python
 # run.py
@@ -297,15 +297,15 @@ results = dr.execute(
 ```
 
 ## dlt materializer plugin
-We added custom Data Loader/Saver to plug dlt with Hamilton. Compared to the previous approach, it allows to include the dlt operations as part of the Hamilton dataflow and improve lineage / visibility.
+We added custom Data Loader/Saver to plug dlt with Apache Hamilton. Compared to the previous approach, it allows to include the dlt operations as part of the Apache Hamilton dataflow and improve lineage / visibility.
 
 
 ``` {note}
-See [this notebook](https://github.com/DAGWorks-Inc/hamilton/blob/main/examples/dlt/dlt_plugin.ipynb) for a demo.
+See [this notebook](https://github.com/apache/hamilton/blob/main/examples/dlt/dlt_plugin.ipynb) for a demo.
 ```
 
 ### DataLoader
-The `DataLoader` allows to read in-memory data from a `dlt.Resource`. When working with `dlt.Source`, you can access individual `dlt.Resource` with `source.resource["source_name"]`. This removes the need to write utility functions to read data from dlt (with pandas or Ibis). Contrary to the previous ETL and ELT examples, this approach is useful when you don't want to store the dlt Source data. It effectively connects dlt to Hamilton to enable "Extract, Transform" (ET).
+The `DataLoader` allows to read in-memory data from a `dlt.Resource`. When working with `dlt.Source`, you can access individual `dlt.Resource` with `source.resource["source_name"]`. This removes the need to write utility functions to read data from dlt (with pandas or Ibis). Contrary to the previous ETL and ELT examples, this approach is useful when you don't want to store the dlt Source data. It effectively connects dlt to Apache Hamilton to enable "Extract, Transform" (ET).
 
 
 ```python
@@ -335,7 +335,7 @@ dr.materialize(*materializers, additional_vars=["threads"])
 ```
 
 ### DataSaver
-The `DataSaver` allows to write node results to any `dlt.Destination`. You'll need to define a `dlt.Pipeline` with the desired `dlt.Destination` and you can specify arguments for the `pipeline.run()` behavior (e.g., incremental loading, primary key, load_file_format). This provides a "Transform, Load" (TL) connector from Hamilton to dlt.
+The `DataSaver` allows to write node results to any `dlt.Destination`. You'll need to define a `dlt.Pipeline` with the desired `dlt.Destination` and you can specify arguments for the `pipeline.run()` behavior (e.g., incremental loading, primary key, load_file_format). This provides a "Transform, Load" (TL) connector from Apache Hamilton to dlt.
 
 ```python
 # run.py
@@ -366,7 +366,7 @@ dr.materialize(*materializers)
 ```
 
 ### Combining both
-You can also combine both the `DataLoader` and `DataSaver`. You will see below that it's almost identical to the ELT example, but now all operations are part of the Hamilton dataflow!
+You can also combine both the `DataLoader` and `DataSaver`. You will see below that it's almost identical to the ELT example, but now all operations are part of the Apache Hamilton dataflow!
 
 
 ```python
@@ -409,5 +409,5 @@ dr.materialize(*materializers)
 ![](./materialization.png)
 
 ## Next steps
-- Our full [code example to ingest Slack data and generate thread summaries](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/dlt) is available on GitHub.
+- Our full [code example to ingest Slack data and generate thread summaries](https://github.com/apache/hamilton/tree/main/examples/dlt) is available on GitHub.
 - Another important pattern in data engineering is reverse ETL, which consists of moving data analytics back to your sources (CRM, Hubspot, Zendesk, etc.). See this [dlt blog](https://dlthub.com/docs/blog/reverse-etl-dlt) to get started.

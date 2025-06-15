@@ -2,7 +2,7 @@
 Driver
 ======
 
-Once you defined your dataflow in a Python module, you need to create a Hamilton Driver to execute it. This page details the Driver basics, which include:
+Once you defined your dataflow in a Python module, you need to create a Apache Hamilton Driver to execute it. This page details the Driver basics, which include:
 
 1. Defining the Driver
 2. Visualizing the dataflow
@@ -44,7 +44,7 @@ The most basic Driver is built like this:
 
 The ``.build()`` method will fail if the definition found in ``my_dataflow`` is invalid (e.g., type mismatch, missing annotations) allowing you to fix issues and iterate quickly.
 
-The ``Driver`` is defined in the context you intend to run, separately from your dataflow module. It can be in a script, notebook, server, web app, or anywhere else Python can run. As a convention, most Hamilton code examples use a script named ``run.py``.
+The ``Driver`` is defined in the context you intend to run, separately from your dataflow module. It can be in a script, notebook, server, web app, or anywhere else Python can run. As a convention, most Apache Hamilton code examples use a script named ``run.py``.
 
 Visualize the dataflow
 ----------------------
@@ -93,7 +93,7 @@ The Driver automatically determines the minimum required path to compute request
 Development tips
 ----------------
 
-With Hamilton, development time is mostly spent writing functions for your dataflow in a Python module. Rebuilding the Driver and visualizing your dataflow as you make changes helps iterative development. Find below two useful development workflows.
+With Apache Hamilton, development time is mostly spent writing functions for your dataflow in a Python module. Rebuilding the Driver and visualizing your dataflow as you make changes helps iterative development. Find below two useful development workflows.
 
 With a Python module
 ~~~~~~~~~~~~~~~~~~~~
@@ -160,7 +160,7 @@ Recap
 
 Next step
 ---------
-Now, you know the basics of authoring and executing Hamilton dataflows! We encourage you to:
+Now, you know the basics of authoring and executing Apache Hamilton dataflows! We encourage you to:
 
 - Write some code with our `interactive tutorials <https://www.tryhamilton.dev/intro>`_
 - Kickstart your project with `community dataflows <https://hub.dagworks.io/docs/>`_

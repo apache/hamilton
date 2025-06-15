@@ -14,10 +14,10 @@ In real-life practice you would probably do the following:
 * In real life, data is generally not normally distributed. There are tests for such non-normal data like the
   Wilcoxon test.
 
-You can download some data to use [here](https://raw.githubusercontent.com/dagworks-inc/hamilton/main/examples/numpy/air-quality-analysis/air-quality-data.csv),
+You can download some data to use [here](https://raw.githubusercontent.com/apache/hamilton/main/examples/numpy/air-quality-analysis/air-quality-data.csv),
 or download the following way:
 ```bash
-wget https://raw.githubusercontent.com/dagworks-inc/hamilton/main/examples/numpy/air-quality-analysis/air-quality-data.csv
+wget https://raw.githubusercontent.com/apache/hamilton/main/examples/numpy/air-quality-analysis/air-quality-data.csv
 ```
 
 # Configuration Options

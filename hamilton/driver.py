@@ -429,7 +429,7 @@ class Driver:
         :param allow_module_overrides: Optional. Same named functions get overridden by later modules.
             The order of listing the modules is important, since later ones will overwrite the previous ones.
             This is a global call affecting all imported modules.
-            See https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/module_overrides for more info.
+            See https://github.com/apache/hamilton/tree/main/examples/module_overrides for more info.
         :param _materializers: Not public facing, do not use this parameter. This is injected by the builder.
         :param _graph_executor: Not public facing, do not use this parameter. This is injected by the builder.
             If you need to tune execution, use the builder to do so.
@@ -2131,7 +2131,7 @@ class Builder:
         """Same named functions in different modules get overwritten.
         If multiple modules have same named functions, the later module overrides the previous one(s).
         The order of listing the modules is important, since later ones will overwrite the previous ones. This is a global call affecting all imported modules.
-        See https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/module_overrides for more info.
+        See https://github.com/apache/hamilton/tree/main/examples/module_overrides for more info.
 
         :return: self
         """

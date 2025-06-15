@@ -1,6 +1,6 @@
-# Hamilton Experiment Manager
+# Apache Hamilton Experiment Manager
 
-Add a hook to your Hamilton Driver to log runs and visualize artifacts and metadata! The server is built using FastAPI + FastUI allowing to easily integrate the server within your app or extend the UI.
+Add a hook to your Apache Hamilton Driver to log runs and visualize artifacts and metadata! The server is built using FastAPI + FastUI allowing to easily integrate the server within your app or extend the UI.
 
 <p align="center">
     <img src="./showcase.gif" height=600, width=auto/>
@@ -15,12 +15,12 @@ Add a hook to your Hamilton Driver to log runs and visualize artifacts and metad
 Use `pip install sf-hamilton[experiments]` to install both the hook and the server with their dependencies
 
 ## How to use the ExperimentTracker hook
-The `ExperimentTracker` hook can be added to your Hamilton Driver definition to automatically log metadata about the run and materialized results.
+The `ExperimentTracker` hook can be added to your Apache Hamilton Driver definition to automatically log metadata about the run and materialized results.
 
 1. Create the `ExperimentTracker` hook object:
     - `experiment_name`: name to organize related runs. Is used to create directories and displayed in the UI
     - `base_directory`: path where the metadata cache and subdirectories to store artifacts will be created. Default is `./experiments`.
-2. Create the Hamilton Driver and pass the `ExperimentTracker` to `with_adapters()` method
+2. Create the Apache Hamilton Driver and pass the `ExperimentTracker` to `with_adapters()` method
 3. Define materializers for each artifacts you care about. The UI provides rich support for `parquet`, `csv`, and `json`.
     - ⚠ Make sure to use relative paths (ones that don't start with `/`) for artifacts to be stored in run directories.
 4. Call `dr.materialize()` to launch run for which metadata and artifacts will be tracked.
@@ -44,7 +44,7 @@ Then navigate to `http://localhost:8123` to view the experiment manager! Then yo
 from hamilton import driver
 from hamilton.plugins import h_experiments
 
-import my_functions  # <- your Hamilton module
+import my_functions  # <- your Apache Hamilton module
 
 
 # 1. create the hook

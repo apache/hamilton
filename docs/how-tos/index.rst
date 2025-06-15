@@ -2,8 +2,8 @@
 User Guide
 ==============
 
-This portion of the documentation goes over the set of common examples for Hamilton usage, so you can apply
-it to your day-to-day work. Each one corresponds to an example in the `examples <https://github.com/DAGWorks-Inc/hamilton/tree/main/examples>`_
+This portion of the documentation goes over the set of common examples for Apache Hamilton usage, so you can apply
+it to your day-to-day work. Each one corresponds to an example in the `examples <https://github.com/apache/hamilton/tree/main/examples>`_
 directory. If there's an example you want but don't see, reach out or open an issue on github -- we're always looking to add more.
 
 
