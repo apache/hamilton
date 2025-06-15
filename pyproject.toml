@@ -27,7 +27,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "numpy<2",
+    "numpy",
     "pandas",
     "typing_extensions > 4.0.0",
     "typing_inspect",
@@ -56,9 +56,7 @@ docs = [
   "diskcache",
   # required for all the plugins
   "dlt",
-  # furo -- install from main for now until the next release is out:
   "furo",
-  # "furo @ git+https://github.com/pradyunsg/furo@main",
   "gitpython", # Required for parsing git info for generation of data-adapter docs
   "grpcio-status",
   "lightgbm",
@@ -112,7 +110,8 @@ rich = ["rich"]
 sdk = ["sf-hamilton-sdk"]
 slack = ["slack-sdk"]
 test = [
-  "connectorx",
+  "connectorx<=0.3.2; python_version=='3.8'",
+  "connectorx; python_version!='3.8'",
   "dask[complete]",
   "dask-expr; python_version == '3.9'",
   "datasets", # huggingface datasets

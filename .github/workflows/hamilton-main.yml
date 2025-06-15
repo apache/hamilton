@@ -71,6 +71,7 @@ jobs:
             uv pip install "kaleido<0.4.0"
             uv run pytest tests/ --cov=hamilton --ignore tests/integrations
 
+
         - name: Test integrations
           if: ${{ matrix.python-version == '3.9' }}
           run: |
@@ -134,16 +135,18 @@ jobs:
             uv run pytest plugin_tests/h_spark
 
         - name: Test vaex
-          # Vaex supports <= py3.9
+          # Vaex supports <= py3.10 and numpy<2
           if: ${{ runner.os == 'Linux' && (matrix.python-version == '3.8' || matrix.python-version == '3.9' || matrix.python-version == '3.10') }}
           run: |
             sudo apt-get install --no-install-recommends --yes libpcre3-dev cargo
             uv sync --extra test --extra vaex
+            uv pip install "numpy<2"
             uv run pytest plugin_tests/h_vaex
 
         - name: Test vaex
-          # Vaex supports <= py3.9
+          # Vaex supports <= py3.10 and numpy<2
           if: ${{ runner.os != 'Linux' && (matrix.python-version == '3.8' || matrix.python-version == '3.9' || matrix.python-version == '3.10') }}
           run: |
             uv sync --extra test --extra vaex
+            uv pip install "numpy<2"
             uv run pytest plugin_tests/h_vaex
