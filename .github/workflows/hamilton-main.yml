@@ -18,7 +18,7 @@ jobs:
     name: "Unit Tests"
     runs-on: ${{ matrix.os }}
     strategy:
-    #   fail-fast: true
+      fail-fast: false # will change this to true at the end, but want to see tests failing on all use cases
       matrix:
         os:
           - ubuntu-latest
@@ -46,7 +46,9 @@ jobs:
 
         - name: Install Graphviz on macOS
           if: runner.os == 'macOS'
-          run: brew install graphviz
+          run: |
+            brew install graphviz
+            brew install libomp
 
         - name: Checkout repository
           uses: actions/checkout@v4
@@ -97,6 +99,7 @@ jobs:
             uv sync --extra test
             uv pip install polars
             uv run pytest plugin_tests/h_polars
+
         - name: Test narwhals
           run: |
             uv sync --extra test
