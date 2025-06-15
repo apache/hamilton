@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from numpy import testing
+from packaging import version
 
 from hamilton import base
 
@@ -279,7 +280,7 @@ def test_PandasDataFrameResult_build_dataframe_with_dataframes(outputs, expected
 # Still supporting old pandas version, although we should phase off...
 int_64_index = "Index:::int64" if pd.__version__ >= "2.0.0" else "RangeIndex:::int64"
 
-PD_VERSION = tuple(int(item) for item in pd.__version__.split("."))
+PD_VERSION = version.parse(pd.__version__)
 
 
 @pytest.mark.parametrize(
@@ -326,7 +327,7 @@ PD_VERSION = tuple(int(item) for item in pd.__version__.split("."))
             {"a": pd.Series([1, 2, 3]).index},
             ({"Index:::int64": ["a"]}, {}, {}),
             marks=pytest.mark.skipif(
-                PD_VERSION < (2, 0, 0),
+                PD_VERSION < version.parse("2.0.0"),
                 reason="Pandas 2.0 changed default indices but we still " "support pandas <2.0",
             ),
         ),
@@ -334,7 +335,7 @@ PD_VERSION = tuple(int(item) for item in pd.__version__.split("."))
             {"a": pd.Series([1, 2, 3]).index},
             ({"Int64Index:::int64": ["a"]}, {}, {}),
             marks=pytest.mark.skipif(
-                PD_VERSION >= (2, 0, 0),
+                PD_VERSION >= version.parse("2.0.0"),
                 reason="Pandas 2.0 changed default indices but we still " "support pandas <2.0",
             ),
         ),

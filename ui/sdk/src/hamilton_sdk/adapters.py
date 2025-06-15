@@ -8,16 +8,16 @@ from datetime import timezone
 from types import ModuleType
 from typing import Any, Callable, Dict, List, Optional, Union
 
+from hamilton import graph as h_graph
+from hamilton import node
+from hamilton.data_quality import base as dq_base
+from hamilton.lifecycle import base
+
 from hamilton_sdk import driver
 from hamilton_sdk.api import clients, constants
 from hamilton_sdk.tracking import runs
 from hamilton_sdk.tracking.runs import Status, TrackingState
 from hamilton_sdk.tracking.trackingtypes import TaskRun
-
-from hamilton import graph as h_graph
-from hamilton import node
-from hamilton.data_quality import base as dq_base
-from hamilton.lifecycle import base
 
 logger = logging.getLogger(__name__)
 
@@ -314,7 +314,7 @@ class HamiltonTracker(
         for i, other_result in enumerate(other_results):
             other_attr = dict(
                 node_name=get_node_name(node_, task_id),
-                name=other_result.get("name", f"Attribute {i+1}"),  # retrieve name if specified
+                name=other_result.get("name", f"Attribute {i + 1}"),  # retrieve name if specified
                 type=other_result["observability_type"],
                 # 0.0.3 -> 3
                 schema_version=int(other_result["observability_schema_version"].split(".")[-1]),
