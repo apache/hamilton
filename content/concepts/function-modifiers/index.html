@@ -1,0 +1,957 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Builder" href="../builder/" /><link rel="prev" title="Materialization" href="../materialization/" />
+        <link rel="canonical" href="https://hamilton.dagworks.io/concepts/function-modifiers/" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06.dev1 -->
+        <title>Function modifiers - Hamilton</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3912a5f9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/testimonials.css?v=bd684830" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     📢 Announcing the <a target="_blank" href="https://www.meetup.com/global-hamilton-open-source-user-group-meetup/">Hamilton Meetup Group</a>. Sign up to attend events! 📢 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../"><div class="brand">Hamilton</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../">
+  
+  
+  <span class="sidebar-brand-text">Hamilton</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search/" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">USER GUIDE</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../get-started/">Get Started</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Get Started</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/why-hamilton/">Why use Apache Hamilton?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/install/">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/your-first-dataflow/">Your First Dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/learning-resources/">Learning Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/contributing/">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/license/">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">Concepts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../glossary/">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../node/">Functions, nodes &amp; dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../driver/">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../materialization/">Materialization</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Function modifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../builder/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../caching/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../function-modifiers-advanced/">Function modifiers (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../parallel-task/">Dynamic DAGs/Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/#sdk-configuration">SDK Configuration</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../best-practices/">Best Practices</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Best Practices</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../best-practices/function-naming/">Function Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../best-practices/migrating-to-hamilton/">Migrating to Apache Hamilton</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../best-practices/code-organization/">Code Organization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../best-practices/common-indices/">Common Indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../best-practices/output-immutability/">Output Immutability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../best-practices/using-within-your-etl-system/">Using within your ETL System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../best-practices/loading-data/">Loading Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how-tos/">User Guide</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-in-jupyter-notebook/">Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/load-data/">Loading data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/caching-tutorial/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/ml-training/">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/llm-workflows/">LLM workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/scale-up/">Scaling computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/microservice/">Microservice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/extensions-autoloading/">Extension autoloading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/wrapping-driver/">Wrapping the Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/cli-reference/">Command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/pre-commit-hooks/">pre-commit hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../hamilton-ui/">Apache Hamilton UI</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Apache Hamilton UI</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#sdk-configuration">SDK Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../hamilton-vscode/">IDE extension</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of IDE extension</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-vscode/vscode_extension/">Apache Hamilton VSCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-vscode/language_server/">Language Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../integrations/">Integrations</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Integrations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/dlt/">dlt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/fastapi/">FastAPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/ibis/">Ibis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/streamlit/">Streamlit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/dbt/">dbt</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/mlflow">MLFlow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/airflow">Airflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/aws">Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/image_telephone">Burr</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dagster">Dagster</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dask">Dask</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/feast">Feast</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/outerbounds/hamilton-metaflow">Metaflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/data_quality/pandera">Pandera</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/plotly">Plotly</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/polars">Polars</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/prefect">Prefect</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/ray">Ray</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/slack">Slack</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/spark">Spark</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/vaex">Vaex</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/narwhals">Narwhals</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/openlineage">OpenLineage</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../code-comparisons/">Code Comparisons</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Code Comparisons</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/kedro/">Kedro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/dagster/">Dagster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/langchain/">LangChain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/airflow/">Airflow</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/">Meet-ups</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/decorators/">Decorators</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Decorators</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/check_output/">check_output*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/config_when/">config.when*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/dataloader/">dataloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/datasaver/">datasaver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/does/">does</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_columns/">extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_fields/">extract_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/inject/">inject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/load_from/">load_from</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize/">parameterize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_extract_columns/">parameterize_extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_frame/">parameterize_frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_sources/">parameterize_sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_subdag/">parameterized_subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_values/">parameterize_values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/pipe/">pipe family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/resolve/">resolve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/save_to/">save_to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/subdag/">subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/schema/">schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/tag/">tag*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/with_columns/">with_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/drivers/">Drivers</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Drivers</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#driver">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#defaultgraphexecutor">DefaultGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#taskbasedgraphexecutor">TaskBasedGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/AsyncDriver/">AsyncDriver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Custom/">Custom Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/caching/">Caching</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Caching</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/caching-logic/">Caching logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/data-versioning/">Data versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/stores/">Stores</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/graph-adapters/">GraphAdapters</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of GraphAdapters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SimplePythonDataFrameGraphAdapter/">SimplePythonDataFrameGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SimplePythonGraphAdapter/">SimplePythonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/HamiltonGraphAdapter/">HamiltonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/AsyncGraphAdapter/">h_async.AsyncGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/ThreadPoolFutureAdapter/">h_threadpool.FutureAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/CachingGraphAdapter/">CachingGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/DaskGraphAdapter/">h_dask.DaskGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/PySparkUDFGraphAdapter/">h_spark.PySparkUDFGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/RayGraphAdapter/">h_ray.RayGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/RayWorkflowGraphAdapter/">h_ray.RayWorkflowGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SparkKoalasGraphAdapter/">h_spark.SparkKoalasGraphAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/lifecycle-hooks/">Lifecycle Adapters</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Lifecycle Adapters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/ResultBuilder/">lifecycle.ResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/LegacyResultMixin/">lifecycle.LegacyResultMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphAdapter/">lifecycle.api.GraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NodeExecutionHook/">lifecycle.NodeExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphExecutionHook/">lifecycle.api.GraphExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/EdgeConnectionHook/">lifecycle.api.EdgeConnectionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NodeExecutionMethod/">lifecycle.api.NodeExecutionMethod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/StaticValidator/">lifecycle.api.StaticValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphConstructionHook/">lifecycle.api.GraphConstructionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskSubmissionHook/">lifecycle.api.TaskSubmissionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskReturnHook/">lifecycle.api.TaskReturnHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskExecutionHook/">lifecycle.api.TaskExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskGroupingHook/">lifecycle.api.TaskGroupingHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/PDBDebugger/">lifecycle.PDBDebugger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/PrintLn/">lifecycle.PrintLn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/ProgressBar/">plugins.h_tqdm.ProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/RichProgressBar/">plugins.h_rich.RichProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/DDOGTracer/">plugins.h_ddog.DDOGTracer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/FunctionInputOutputTypeChecker/">lifecycle.FunctionInputOutputTypeChecker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/SlackNotifierHook/">plugins.h_slack.SlackNotifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GracefulErrorAdapter/">lifecycle.GracefulErrorAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/SparkInputValidator/">plugins.h_spark.SparkInputValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/Narwhals/">plugins.h_narhwals.NarwhalsAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/Narwhals/#plugins-h-narhwals-narwhalsdataframeresultbuilder">plugins.h_narhwals.NarwhalsDataFrameResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/MLFlowTracker/">plugins.h_mlflow.MLFlowTracker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NoEdgeAndInputTypeChecking/">lifecycle.NoEdgeAndInputTypeChecking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/OpenLineageAdapter/">plugins.h_openlineage.OpenLineageAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/result-builders/">ResultBuilders</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle navigation of ResultBuilders</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Generic/">Generic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Numpy/">Numpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Pandas/">Pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Polars/">Polars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Dask/">Dask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Custom/">Custom ResultBuilder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/io/">I/O</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle navigation of I/O</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/">Using Data Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/#data-loaders">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/#data-savers">Data Savers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/adapter-documentation/">Data Adapters</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/dataflows/">Dataflows</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle navigation of Dataflows</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/clear_storage/">clear_storage()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/copy/">copy()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/find/">find()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/import_module/">import_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/inspect/">inspect()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/inspect_module/">inspect_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/install_dependencies_string/">install_dependencies_string()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/latest_commit/">latest_commit()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/list/">list()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/pull_module/">pull_module()</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/disabling-telemetry/">Telemetry</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">EXTERNAL RESOURCES</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://www.tryhamilton.dev/">tryhamilton.dev</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://hub.dagworks.io/docs/">Dataflow Hub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://blog.dagworks.io/">Blog</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/blob/main/docs/concepts/function-modifiers.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/concepts/function-modifiers.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="function-modifiers">
+<h1>Function modifiers<a class="headerlink" href="#function-modifiers" title="Link to this heading">¶</a></h1>
+<p>In <a class="reference internal" href="../node/"><span class="doc">Functions, nodes &amp; dataflow</span></a>, we discussed how to write Python functions to define Apache Hamilton nodes and dataflow. In the basic case, each function defines one node.</p>
+<p>Yet, it’s common to need nodes with similar purposes but different dependencies, such as preprocessing training and evaluation datasets. In that case, using a <strong>function modifier</strong> can help create both nodes from a single Apache Hamilton function!</p>
+<p>On this page, you’ll learn:</p>
+<ul class="simple">
+<li><p>Python decorators basics</p></li>
+<li><p>Add metadata to node</p></li>
+<li><p>Validate node output</p></li>
+<li><p>Split node output into <em>n</em> nodes</p></li>
+<li><p>Define one function, create <em>n</em> nodes</p></li>
+<li><p>Select nodes to load from module</p></li>
+</ul>
+<p>This page covers important conceptual notions but is not exhaustive. To find details about all function modifiers see API references <a class="reference internal" href="../../reference/decorators/"><span class="doc">Decorators</span></a>.</p>
+<section id="decorators">
+<h2>Decorators<a class="headerlink" href="#decorators" title="Link to this heading">¶</a></h2>
+<p>Python decorators are statements that begin with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> located above function definitions. Apache Hamilton uses decorators to implement function modifiers and reduce the amount of code you have to write to make expressive dataflows.</p>
+<p>Multiple decorators can be stacked on a single function and are applied from bottom to top. Apache Hamilton decorators should be insensitive to ordering, but be careful with non-Apache Hamilton decorators (e.g., &#64;retries, &#64;time). See this <a class="reference external" href="https://realpython.com/primer-on-python-decorators/">decorator primer</a> to learn more.</p>
+<p>Function modifiers were designed to have clear semantics, so you should be able to figure out what they do from their name. For instance, the following code adds metadata using <code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code> and conducts some checks over the return value with <code class="docutils literal notranslate"><span class="pre">check_output</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="s1">&#39;Data-Science&#39;</span><span class="p">,</span> <span class="n">pii</span><span class="o">=</span><span class="s1">&#39;False&#39;</span><span class="p">)</span>
+<span class="nd">@check_output</span><span class="p">(</span><span class="n">data_type</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),</span> <span class="n">allow_nans</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">height_zero_mean_unit_variance</span><span class="p">(</span>
+    <span class="n">height_zero_mean</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">height_std_dev</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="sd">&quot;&quot;&quot;Zero mean unit variance value of height&quot;&quot;&quot;</span>
+<span class="k">return</span> <span class="n">height_zero_mean</span> <span class="o">/</span> <span class="n">height_std_dev</span>
+</pre></div>
+</div>
+</section>
+<section id="reminder-anatomy-of-a-node">
+<h2>Reminder: Anatomy of a node<a class="headerlink" href="#reminder-anatomy-of-a-node" title="Link to this heading">¶</a></h2>
+<p>This section from the page <a class="reference internal" href="../node/"><span class="doc">Functions, nodes &amp; dataflow</span></a> details how a Python function maps to a Apache Hamilton node. We’ll reuse these terms to explain the function modifiers.</p>
+<a class="reference internal image-reference" href="../../_images/function_anatomy.png"><img alt="../../_images/function_anatomy.png" class="align-center" src="../../_images/function_anatomy.png" style="width: 424.84000000000003px; height: 218.14000000000001px;" />
+</a>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>id</p></th>
+<th class="head"><p>Function components</p></th>
+<th class="head"><p>Node components</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Function name and return type annotation</p></td>
+<td><p>Node name and type</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Parameter names and type annotations</p></td>
+<td><p>Node dependencies</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Docstring</p></td>
+<td><p>Description of the node return value</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Function body</p></td>
+<td><p>Implementation of the node</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="add-metadata-to-a-node">
+<span id="tag-decorators"></span><h2>Add metadata to a node<a class="headerlink" href="#add-metadata-to-a-node" title="Link to this heading">¶</a></h2>
+<section id="tag">
+<h3>&#64;tag<a class="headerlink" href="#tag" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code> decorator <strong>doesn’t modify the function/node</strong>. It attaches metadata to the node that can be used by Apache Hamilton and you. It can help tag nodes by ownership, data source, version, infrastructure, and anything else.</p>
+<p>For example, this tags the associated data product and the sensitivity of the data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">tag</span>
+
+<span class="nd">@tag</span><span class="p">(</span><span class="n">data_product</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span> <span class="n">pii</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">final_column</span><span class="p">(</span>
+    <span class="n">intermediate_column</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span> <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="query-node-by-tag">
+<h3>Query node by tag<a class="headerlink" href="#query-node-by-tag" title="Link to this heading">¶</a></h3>
+<p>Once you built your Driver, you can get all nodes with <code class="docutils literal notranslate"><span class="pre">Driver.list_available_variables()</span></code> and then filter them by tag. The following gets all the nodes for which <code class="docutils literal notranslate"><span class="pre">data_product=&quot;final&quot;</span></code> and passes them to <code class="docutils literal notranslate"><span class="pre">driver.execute()</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_module</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">tagged_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">()</span>
+                <span class="k">if</span> <span class="s1">&#39;final&#39;</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data_product&#39;</span><span class="p">)]</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">tagged_nodes</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="customize-visualization-by-tag">
+<h3>Customize visualization by tag<a class="headerlink" href="#customize-visualization-by-tag" title="Link to this heading">¶</a></h3>
+<p>Tags are also accessible to the visualization styling feature, allowing you to highlight important nodes for your documentation. See <a class="reference internal" href="../visualization/#custom-visualization-style"><span class="std std-ref">Apply custom style</span></a> for details.</p>
+<a class="reference internal image-reference" href="../../_images/custom_viz.png"><img alt="../../_images/custom_viz.png" src="../../_images/custom_viz.png" style="height: 250px;" />
+</a>
+</section>
+<section id="schema">
+<h3>&#64;schema<a class="headerlink" href="#schema" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;schema</span></code> function modifiers provides a lightweight way to add type metadata to dataframes. It works by specifying tuples of <code class="docutils literal notranslate"><span class="pre">(field_name,</span> <span class="pre">field_type)</span></code> with types as strings.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">schema</span>
+
+<span class="nd">@schema</span><span class="o">.</span><span class="n">output</span><span class="p">(</span>
+    <span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_df</span><span class="p">(</span><span class="n">raw_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">],</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">]}</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/schema.png" src="../../_images/schema.png" />
+</section>
+</section>
+<section id="validate-node-output">
+<h2>Validate node output<a class="headerlink" href="#validate-node-output" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;check_output</span></code> function modifiers are applied on the <strong>node output / function return</strong> and therefore don’t directly affect node behavior. Decorators separate data validation from the function body where the core logic is. It improves function readability, and it helps reusing and maintaining standardized checks across multiple functions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the future, validatation capabailities may be added to <code class="docutils literal notranslate"><span class="pre">&#64;schema</span></code>. For now, it’s only added metadata.</p>
+</div>
+<section id="check-output">
+<h3>&#64;check_output*<a class="headerlink" href="#check-output" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;check_output</span></code> implements many data checks for Python objects and DataFrame/Series including data type, min/max/between, count, fraction of null/nan values, and allow null/nan. Failed checks are either logged (<code class="docutils literal notranslate"><span class="pre">importance=&quot;warn&quot;</span></code>) or make the dataflow fail (<code class="docutils literal notranslate"><span class="pre">importance=&quot;fail&quot;</span></code>).</p>
+<p>The next snippet checks if the returned Series is of type <code class="docutils literal notranslate"><span class="pre">np.int32</span></code>, which is non-nullable, and if its within the range 0-100, and logs failed checks. This allows us to manually review instances where data validation failed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_output</span>
+
+<span class="nd">@check_output</span><span class="p">(</span><span class="n">data_type</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="n">importance</span><span class="o">=</span><span class="s2">&quot;warn&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">quiz_grade</span><span class="p">(</span><span class="n">quiz_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+    <span class="k">return</span> <span class="o">...</span>
+</pre></div>
+</div>
+<img alt="../../_images/check_output.png" src="../../_images/check_output.png" />
+<ul class="simple">
+<li><p>To see all available validators, go to the file <code class="docutils literal notranslate"><span class="pre">hamilton/data_quality/default_validators.py</span></code> and view the variable <code class="docutils literal notranslate"><span class="pre">AVAILABLE_DEFAULT_VALIDATORS</span></code>.</p></li>
+<li><p>The function modifier <code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> allows you to define your own validator. Validators inherit the <code class="docutils literal notranslate"><span class="pre">base.BaseDefaultValidator</span></code> class and are essentially standardized Apache Hamilton node definitions (instead of functions). See <code class="docutils literal notranslate"><span class="pre">hamilton/data_quality/default_validators.py</span></code> or reach out on <a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a> for help!</p></li>
+<li><p>Note: <code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> decorators cannot be stacked, but they instead can take multiple validators.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As you see, validation steps effectively add nodes to the dataflow and the visualization. This helps trace which specific check failed for instance, but it can make visualizations harder to read.</p>
+<p>You can hide these nodes using the custom visualization style feature (see <a class="reference internal" href="../visualization/#custom-visualization-style"><span class="std std-ref">Apply custom style</span></a>) by applying the style <code class="docutils literal notranslate"><span class="pre">{&quot;style&quot;:</span> <span class="pre">&quot;invis&quot;}</span></code> to nodes with the tag <code class="docutils literal notranslate"><span class="pre">hamilton.data_quality.source_node</span></code>. This will only keep the original nodes and their <code class="docutils literal notranslate"><span class="pre">_raw</span></code> variant.</p>
+</div>
+</section>
+<section id="pandera-support">
+<h3>pandera support<a class="headerlink" href="#pandera-support" title="Link to this heading">¶</a></h3>
+<p>Apache Hamilton has a pandera plugin for data validation that you can install with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">sf-hamilton[pandera]</span></code>. Then, you can pass a pandera schema (for DataFrame or Series) to <code class="docutils literal notranslate"><span class="pre">&#64;check_output(schema=...)</span></code>.</p>
+</section>
+<section id="pydantic-support">
+<h3>pydantic support<a class="headerlink" href="#pydantic-support" title="Link to this heading">¶</a></h3>
+<p>Apache Hamilton also supports data validation of pydantic models, which can be enabled with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">sf-hamilton[pydantic]</span></code>. With pydantic installed, you can pass any subclass of the pydantic base model to <code class="docutils literal notranslate"><span class="pre">&#64;check_output(model=...)</span></code>. Pydantic validation is performed in strict mode, meaning that raw values will not be coerced to the model’s types. For more information on strict mode see the <a class="reference external" href="https://docs.pydantic.dev/latest/concepts/strict_mode/">pydantic docs</a>.</p>
+</section>
+</section>
+<section id="split-node-output-into-n-nodes">
+<h2>Split node output into <em>n</em> nodes<a class="headerlink" href="#split-node-output-into-n-nodes" title="Link to this heading">¶</a></h2>
+<p>Sometimes, your node outputs multiple values that you would like to name and make available to other nodes. These function modifiers act on the <strong>node output / function return</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To add metadata to extracted nodes, use <code class="docutils literal notranslate"><span class="pre">&#64;tag_output</span></code>, which works just like <code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code>.</p>
+</div>
+<section id="extract-fields">
+<h3>&#64;extract_fields<a class="headerlink" href="#extract-fields" title="Link to this heading">¶</a></h3>
+<p>A good example is splitting a dataset into train, validation, and test splits. We will use <code class="docutils literal notranslate"><span class="pre">&#64;extract_fields</span></code>, which requires specifying in a dictionary the <code class="docutils literal notranslate"><span class="pre">field_name:</span> <span class="pre">field_type</span></code> of each field.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_fields</span>
+
+<span class="nd">@extract_fields</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>  <span class="c1"># don&#39;t forget the dictionary</span>
+    <span class="n">X_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">X_validation</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">X_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>  <span class="c1"># keys match those from @extract_fields</span>
+        <span class="n">X_validation</span><span class="o">=</span><span class="n">X_validation</span><span class="p">,</span>
+        <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/extract_fields.png"><img alt="../../_images/extract_fields.png" src="../../_images/extract_fields.png" style="height: 250px;" />
+</a>
+<p>Now, <code class="docutils literal notranslate"><span class="pre">X_train</span></code>, <code class="docutils literal notranslate"><span class="pre">X_validation</span></code>, and <code class="docutils literal notranslate"><span class="pre">X_test</span></code> are available to other nodes, and they can be queried by <code class="docutils literal notranslate"><span class="pre">.execute()</span></code>. But, since <code class="docutils literal notranslate"><span class="pre">dataset_splits</span></code> is its own node, you can query it to get all splits in a dictionary!</p>
+</section>
+<section id="extract-columns">
+<h3>&#64;extract_columns<a class="headerlink" href="#extract-columns" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">&#64;extract_columns</span></code> is a specialized version of <code class="docutils literal notranslate"><span class="pre">&#64;extract_fields</span></code> to get individual columns of a dataframe (pandas, polars, Spark, etc.). It enables column-level lineage which improves visibility over data transformations and facilitates reusing feature transformations. Also, it can reduce memory usage by avoiding moving large dataframe through nodes.</p>
+<p>Since it knows how to extract series from a dataframe, you just have to specify the column names.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_columns</span>
+
+<span class="c1"># assuming `user_id` and `weekday` are existing columns</span>
+<span class="c1"># note that strings are passed directly, without a list</span>
+<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">&quot;user_id&quot;</span><span class="p">,</span> <span class="s2">&quot;weekday&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_df</span><span class="p">(</span><span class="n">raw_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean my data&quot;&quot;&quot;</span>
+    <span class="n">clean_df</span> <span class="o">=</span> <span class="n">clean_my_data</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">clean_df</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/extract_columns.png"><img alt="../../_images/extract_columns.png" src="../../_images/extract_columns.png" style="height: 250px;" />
+</a>
+</section>
+</section>
+<section id="define-one-function-create-n-nodes">
+<h2>Define one function, create <em>n</em> nodes<a class="headerlink" href="#define-one-function-create-n-nodes" title="Link to this heading">¶</a></h2>
+<p>The family of <code class="docutils literal notranslate"><span class="pre">&#64;parameterize</span></code> function modifiers allows the creation of multiple nodes with the same <strong>node implementation / function body</strong> (and therefore output type), but different <strong>node inputs</strong>.</p>
+<p>This has many applications, such as producing the same performance plot for multiple models or computing groupby aggregates along different dimensions.</p>
+<section id="parameterize">
+<h3>&#64;parameterize<a class="headerlink" href="#parameterize" title="Link to this heading">¶</a></h3>
+<p>You need to specify the generated <strong>node name</strong>, a dictionary of dependencies, and optionally a docstring. For the dependencies, you can pass constants with <code class="docutils literal notranslate"><span class="pre">value()</span></code> or get them from the dataflow by passing a node name to <code class="docutils literal notranslate"><span class="pre">source()</span></code>. These notions are tricky at first, but let’s look at an example:</p>
+<p>We create 3 nodes: <code class="docutils literal notranslate"><span class="pre">revenue_by_age</span></code>, <code class="docutils literal notranslate"><span class="pre">revenue_by_country</span></code>, <code class="docutils literal notranslate"><span class="pre">revenue_by_occupation</span></code>. For each, we get the dataframe <code class="docutils literal notranslate"><span class="pre">df</span></code> from the dataflow using <code class="docutils literal notranslate"><span class="pre">source()</span></code> and specify a different <code class="docutils literal notranslate"><span class="pre">groupby_col</span></code> with <code class="docutils literal notranslate"><span class="pre">value()</span></code>. Also, the docstring uses <code class="docutils literal notranslate"><span class="pre">{groupby_col}</span></code> to have the value inserted.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">parameterize</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">source</span><span class="p">,</span> <span class="n">value</span>
+
+<span class="nd">@parameterize</span><span class="p">(</span>
+    <span class="n">revenue_by_age</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;df&quot;</span><span class="p">),</span> <span class="n">groupby_col</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;age&quot;</span><span class="p">)),</span>
+    <span class="n">revenue_by_country</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;df&quot;</span><span class="p">),</span> <span class="n">groupby_col</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;country&quot;</span><span class="p">)),</span>
+    <span class="n">revenue_by_occupation</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;df&quot;</span><span class="p">),</span> <span class="n">groupby_col</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;occupation&quot;</span><span class="p">)),</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">population_metrics</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">groupby_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute df metrics aggregates over dimension {groupby_col}&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)[</span><span class="s2">&quot;revenue&quot;</span><span class="p">]</span> \
+             <span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">])</span> \
+             <span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/parameterize.png" src="../../_images/parameterize.png" />
+<ul class="simple">
+<li><p>The above example mixes constant <code class="docutils literal notranslate"><span class="pre">value()</span></code> and dataflow <code class="docutils literal notranslate"><span class="pre">source()</span></code> dependencies. The syntax is indeed verbose. Simplified syntaxes are available through <code class="docutils literal notranslate"><span class="pre">&#64;parameterize_values</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;parameterize_sources</span></code> if you only need one type of dependency.</p></li>
+<li><p>If you need to extract columns from the output of a generated node, use <code class="docutils literal notranslate"><span class="pre">&#64;parameterize_extract_columns</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="select-functions-to-include">
+<span id="config-decorators"></span><h2>Select functions to include<a class="headerlink" href="#select-functions-to-include" title="Link to this heading">¶</a></h2>
+<p>The family of <code class="docutils literal notranslate"><span class="pre">&#64;config</span></code> decorators doesn’t modify the function. Rather, it tells the Driver which functions from the module (and therefore nodes) to include in the dataflow. This helps projects that need to run in different contexts (e.g., locally vs orchestrator) or need to swap different implementations of a node (e.g., ML experiments, code migration, A/B testing).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>At first, there can be confusion between <code class="docutils literal notranslate"><span class="pre">&#64;config</span></code> and the <code class="docutils literal notranslate"><span class="pre">inputs</span></code> and <code class="docutils literal notranslate"><span class="pre">overrides</span></code> of the Driver’s <code class="docutils literal notranslate"><span class="pre">.execute()</span></code> and <code class="docutils literal notranslate"><span class="pre">.materialize()</span></code> methods. In common language, people might refer to the <code class="docutils literal notranslate"><span class="pre">.execute(inputs=...,</span> <span class="pre">overrides=...)</span></code> as a configuration. However, these two affect the values passing through the dataflow <strong>once the Driver is built</strong> while <code class="docutils literal notranslate"><span class="pre">&#64;config</span></code> determines <strong>how the Driver is built</strong>.</p>
+</div>
+<section id="config">
+<h3>&#64;config<a class="headerlink" href="#config" title="Link to this heading">¶</a></h3>
+<p>For the decorator, you must specify one or more <code class="docutils literal notranslate"><span class="pre">key=value</span></code> pairs. Then, you need to add to the Builder <code class="docutils literal notranslate"><span class="pre">.with_config()</span></code> and give it a dictionary of <code class="docutils literal notranslate"><span class="pre">key=value</span></code> pairs. This will determine which functions to load.</p>
+<p>This example uses <code class="docutils literal notranslate"><span class="pre">&#64;config.when()</span></code> to select between a binary classifier and a regressor model. Notice a few elements:</p>
+<ul class="simple">
+<li><p>both functions have the same name <code class="docutils literal notranslate"><span class="pre">base_model</span></code> with a suffix <code class="docutils literal notranslate"><span class="pre">__binary</span></code> or <code class="docutils literal notranslate"><span class="pre">__regression</span></code>. This is required because Python enforces unique function names. After the config determines which function to load, Apache Hamilton will remove the suffix from the node name.</p></li>
+<li><p>the two functions have different return types, so <code class="docutils literal notranslate"><span class="pre">train_model</span></code> needs to annotate <code class="docutils literal notranslate"><span class="pre">base_model</span></code> as a <code class="docutils literal notranslate"><span class="pre">Union[]</span></code> type.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model_training.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">&quot;binary_classification&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">base_model__binary</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">XGBClassifier</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">&quot;continuous_regression&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">base_model__regression</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">XGBRegressor</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">XGBRegressor</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">train_model</span><span class="p">(</span>
+    <span class="n">base_model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">XGBClassifier</span><span class="p">,</span> <span class="n">XGBRegressor</span><span class="p">],</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">XGBClassifier</span><span class="p">,</span> <span class="n">XGBRegressor</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="o">...</span>
+
+<span class="c1"># run.py</span>
+<span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">model_training</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">&quot;continuous_regression&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/config_1.png"><img alt="../../_images/config_1.png" src="../../_images/config_1.png" style="height: 168px;" />
+</a>
+<a class="reference internal image-reference" href="../../_images/config_2.png"><img alt="../../_images/config_2.png" src="../../_images/config_2.png" style="height: 168px;" />
+</a>
+<p>In the above example, if the Driver receives no value for the key <code class="docutils literal notranslate"><span class="pre">task</span></code> or the value isn’t <code class="docutils literal notranslate"><span class="pre">&quot;binary_classification&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;continuous_regression&quot;</span></code>, there would be no <code class="docutils literal notranslate"><span class="pre">base_model</span></code> node loaded and <code class="docutils literal notranslate"><span class="pre">train_model</span></code> would fail.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">&#64;config.when_not()</span></code> can help set up a default case and ensure a <code class="docutils literal notranslate"><span class="pre">base_model</span></code> node is always loaded.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">&quot;xgboost&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">base_model__xgboost</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">XGBClassifier</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="nd">@config</span><span class="o">.</span><span class="n">when_not</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">&quot;xgboost&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">base_model__default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestRegressor</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestRegressor</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There exists also <code class="docutils literal notranslate"><span class="pre">&#64;config.when_in()</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;config.when_not_in()</span></code> that accept a list of values to check. Expanding on the previous example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">&quot;xgboost&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">base_model__xgboost</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">XGBClassifier</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">&quot;lightgbm&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">base_model__lightgbm</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">LGBMClassifier</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">LGBMClassifier</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="nd">@config</span><span class="o">.</span><span class="n">when_not_in</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;xgboost&quot;</span><span class="p">,</span> <span class="s2">&quot;lightgbm&quot;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">base_model__default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestRegressor</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestRegressor</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="load-and-save-external-data">
+<span id="loader-saver-decorators"></span><h2>Load and save external data<a class="headerlink" href="#load-and-save-external-data" title="Link to this heading">¶</a></h2>
+<p>Most dataflows require reading or writing data to external sources in some capacity. It’s a good idea to conduct this step in a node separated from transformations to trace failures more easily.</p>
+<p>Nevertheless, adding one function per read/write becomes tedious and hard to maintain. Apache Hamilton provides well-tested implementations for common formats (JSON, CSV, Parquet, etc.) available through <code class="docutils literal notranslate"><span class="pre">&#64;load_from</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;save_to</span></code> decorators and materializers (see <a class="reference internal" href="../materialization/"><span class="doc">Materialization</span></a>).</p>
+<p>More formats are available through Apache Hamilton plugins, and you should be able to add your own custom loader/saver (reach out on <a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a> for help!)</p>
+<section id="load-from">
+<h3>&#64;load_from<a class="headerlink" href="#load-from" title="Link to this heading">¶</a></h3>
+<p>You can think of <code class="docutils literal notranslate"><span class="pre">&#64;load_from</span></code> as adding an upstream node. The next example specifies the <code class="docutils literal notranslate"><span class="pre">path</span></code> of the file, which will be loaded in the variable <code class="docutils literal notranslate"><span class="pre">raw_data</span></code>. Note that the variable type should be compatible with the loaded file (<code class="docutils literal notranslate"><span class="pre">dict</span></code> for JSON here).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/path/to/file.json&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalized_data</span><span class="p">(</span><span class="n">raw_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="o">...</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/load_from.png"><img alt="../../_images/load_from.png" src="../../_images/load_from.png" style="height: 168px;" />
+</a>
+<p>It is possible to use <code class="docutils literal notranslate"><span class="pre">source()</span></code> (like in <code class="docutils literal notranslate"><span class="pre">&#64;parameterize</span></code>) to specify the file path from the driver code. See:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># functions.py</span>
+<span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;raw_data_path&quot;</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalized_data</span><span class="p">(</span><span class="n">raw_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="o">...</span>
+
+<span class="c1"># run.py</span>
+<span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">functions</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;normalized_data&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">raw_data_path</span><span class="o">=</span><span class="s2">&quot;./this/file.json&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>You will need to use the <code class="docutils literal notranslate"><span class="pre">inject_</span></code> keyword when you load multiple files into a node or your function has multiple parameters.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/path/to/logs.json&quot;</span><span class="p">,</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">&quot;logs1&quot;</span><span class="p">)</span>
+<span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/path/to/other/logs.json&quot;</span><span class="p">,</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">&quot;logs2&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merged_logs</span><span class="p">(</span><span class="n">logs1</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">logs2</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="o">...</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/load_from_inject.png"><img alt="../../_images/load_from_inject.png" src="../../_images/load_from_inject.png" style="height: 168px;" />
+</a>
+</section>
+<section id="save-to">
+<h3>&#64;save_to<a class="headerlink" href="#save-to" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;save_to</span></code> decorator works very similarly to <code class="docutils literal notranslate"><span class="pre">&#64;load_from</span></code>. In this case, <code class="docutils literal notranslate"><span class="pre">path=...</span></code> specifies where the data will be saved, and an <code class="docutils literal notranslate"><span class="pre">output_name_</span></code> is required to be able to request the node from <code class="docutils literal notranslate"><span class="pre">Driver.execute()</span></code>. Here again, <code class="docutils literal notranslate"><span class="pre">source()</span></code> can be used.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># functions.py</span>
+<span class="nd">@save_to</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;metrics_path&quot;</span><span class="p">),</span> <span class="n">output_name_</span><span class="o">=</span><span class="s2">&quot;metrics_to_json&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">eval_metric</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="c1"># run.py</span>
+<span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">functions</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;metrics_to_json&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">metrics_path</span><span class="o">=</span><span class="s2">&quot;./out/metrics.json&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/save_to.png"><img alt="../../_images/save_to.png" src="../../_images/save_to.png" style="height: 168px;" />
+</a>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../builder/">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Builder</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../materialization/">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Materialization</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Function modifiers</a><ul>
+<li><a class="reference internal" href="#decorators">Decorators</a></li>
+<li><a class="reference internal" href="#reminder-anatomy-of-a-node">Reminder: Anatomy of a node</a></li>
+<li><a class="reference internal" href="#add-metadata-to-a-node">Add metadata to a node</a><ul>
+<li><a class="reference internal" href="#tag">&#64;tag</a></li>
+<li><a class="reference internal" href="#query-node-by-tag">Query node by tag</a></li>
+<li><a class="reference internal" href="#customize-visualization-by-tag">Customize visualization by tag</a></li>
+<li><a class="reference internal" href="#schema">&#64;schema</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#validate-node-output">Validate node output</a><ul>
+<li><a class="reference internal" href="#check-output">&#64;check_output*</a></li>
+<li><a class="reference internal" href="#pandera-support">pandera support</a></li>
+<li><a class="reference internal" href="#pydantic-support">pydantic support</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#split-node-output-into-n-nodes">Split node output into <em>n</em> nodes</a><ul>
+<li><a class="reference internal" href="#extract-fields">&#64;extract_fields</a></li>
+<li><a class="reference internal" href="#extract-columns">&#64;extract_columns</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#define-one-function-create-n-nodes">Define one function, create <em>n</em> nodes</a><ul>
+<li><a class="reference internal" href="#parameterize">&#64;parameterize</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#select-functions-to-include">Select functions to include</a><ul>
+<li><a class="reference internal" href="#config">&#64;config</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-and-save-external-data">Load and save external data</a><ul>
+<li><a class="reference internal" href="#load-from">&#64;load_from</a></li>
+<li><a class="reference internal" href="#save-to">&#64;save_to</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=187304be"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=22e4c79f"></script>
+    </body>
+</html>

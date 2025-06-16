@@ -1,0 +1,1034 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="LangChain" href="../langchain/" /><link rel="prev" title="Kedro" href="../kedro/" />
+        <link rel="canonical" href="https://hamilton.dagworks.io/code-comparisons/dagster/" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06.dev1 -->
+        <title>Dagster - Hamilton</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3912a5f9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/testimonials.css?v=bd684830" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     📢 Announcing the <a target="_blank" href="https://www.meetup.com/global-hamilton-open-source-user-group-meetup/">Hamilton Meetup Group</a>. Sign up to attend events! 📢 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../"><div class="brand">Hamilton</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../">
+  
+  
+  <span class="sidebar-brand-text">Hamilton</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search/" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">USER GUIDE</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../get-started/">Get Started</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Get Started</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/why-hamilton/">Why use Apache Hamilton?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/install/">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/your-first-dataflow/">Your First Dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/learning-resources/">Learning Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/contributing/">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/license/">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../concepts/">Concepts</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/glossary/">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/node/">Functions, nodes &amp; dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/driver/">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/visualization/">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/materialization/">Materialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/function-modifiers/">Function modifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/builder/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/caching/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/function-modifiers-advanced/">Function modifiers (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/parallel-task/">Dynamic DAGs/Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#sdk-configuration">SDK Configuration</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../concepts/best-practices/">Best Practices</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Best Practices</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/function-naming/">Function Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/migrating-to-hamilton/">Migrating to Apache Hamilton</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/code-organization/">Code Organization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/common-indices/">Common Indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/output-immutability/">Output Immutability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/using-within-your-etl-system/">Using within your ETL System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/loading-data/">Loading Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how-tos/">User Guide</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-in-jupyter-notebook/">Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/load-data/">Loading data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/caching-tutorial/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/ml-training/">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/llm-workflows/">LLM workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/scale-up/">Scaling computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/microservice/">Microservice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/extensions-autoloading/">Extension autoloading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/wrapping-driver/">Wrapping the Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/cli-reference/">Command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/pre-commit-hooks/">pre-commit hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../hamilton-ui/">Apache Hamilton UI</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Apache Hamilton UI</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#sdk-configuration">SDK Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../hamilton-vscode/">IDE extension</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of IDE extension</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-vscode/vscode_extension/">Apache Hamilton VSCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-vscode/language_server/">Language Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../integrations/">Integrations</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Integrations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/dlt/">dlt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/fastapi/">FastAPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/ibis/">Ibis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/streamlit/">Streamlit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/dbt/">dbt</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/mlflow">MLFlow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/airflow">Airflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/aws">Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/image_telephone">Burr</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dagster">Dagster</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dask">Dask</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/feast">Feast</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/outerbounds/hamilton-metaflow">Metaflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/data_quality/pandera">Pandera</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/plotly">Plotly</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/polars">Polars</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/prefect">Prefect</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/ray">Ray</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/slack">Slack</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/spark">Spark</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/vaex">Vaex</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/narwhals">Narwhals</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/openlineage">OpenLineage</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">Code Comparisons</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Code Comparisons</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../kedro/">Kedro</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Dagster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../langchain/">LangChain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../airflow/">Airflow</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/">Meet-ups</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/decorators/">Decorators</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Decorators</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/check_output/">check_output*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/config_when/">config.when*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/dataloader/">dataloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/datasaver/">datasaver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/does/">does</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_columns/">extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_fields/">extract_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/inject/">inject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/load_from/">load_from</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize/">parameterize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_extract_columns/">parameterize_extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_frame/">parameterize_frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_sources/">parameterize_sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_subdag/">parameterized_subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_values/">parameterize_values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/pipe/">pipe family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/resolve/">resolve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/save_to/">save_to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/subdag/">subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/schema/">schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/tag/">tag*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/with_columns/">with_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/drivers/">Drivers</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Drivers</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#driver">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#defaultgraphexecutor">DefaultGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#taskbasedgraphexecutor">TaskBasedGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/AsyncDriver/">AsyncDriver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Custom/">Custom Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/caching/">Caching</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Caching</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/caching-logic/">Caching logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/data-versioning/">Data versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/stores/">Stores</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/graph-adapters/">GraphAdapters</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of GraphAdapters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SimplePythonDataFrameGraphAdapter/">SimplePythonDataFrameGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SimplePythonGraphAdapter/">SimplePythonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/HamiltonGraphAdapter/">HamiltonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/AsyncGraphAdapter/">h_async.AsyncGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/ThreadPoolFutureAdapter/">h_threadpool.FutureAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/CachingGraphAdapter/">CachingGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/DaskGraphAdapter/">h_dask.DaskGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/PySparkUDFGraphAdapter/">h_spark.PySparkUDFGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/RayGraphAdapter/">h_ray.RayGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/RayWorkflowGraphAdapter/">h_ray.RayWorkflowGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SparkKoalasGraphAdapter/">h_spark.SparkKoalasGraphAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/lifecycle-hooks/">Lifecycle Adapters</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Lifecycle Adapters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/ResultBuilder/">lifecycle.ResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/LegacyResultMixin/">lifecycle.LegacyResultMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphAdapter/">lifecycle.api.GraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NodeExecutionHook/">lifecycle.NodeExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphExecutionHook/">lifecycle.api.GraphExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/EdgeConnectionHook/">lifecycle.api.EdgeConnectionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NodeExecutionMethod/">lifecycle.api.NodeExecutionMethod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/StaticValidator/">lifecycle.api.StaticValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphConstructionHook/">lifecycle.api.GraphConstructionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskSubmissionHook/">lifecycle.api.TaskSubmissionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskReturnHook/">lifecycle.api.TaskReturnHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskExecutionHook/">lifecycle.api.TaskExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskGroupingHook/">lifecycle.api.TaskGroupingHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/PDBDebugger/">lifecycle.PDBDebugger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/PrintLn/">lifecycle.PrintLn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/ProgressBar/">plugins.h_tqdm.ProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/RichProgressBar/">plugins.h_rich.RichProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/DDOGTracer/">plugins.h_ddog.DDOGTracer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/FunctionInputOutputTypeChecker/">lifecycle.FunctionInputOutputTypeChecker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/SlackNotifierHook/">plugins.h_slack.SlackNotifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GracefulErrorAdapter/">lifecycle.GracefulErrorAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/SparkInputValidator/">plugins.h_spark.SparkInputValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/Narwhals/">plugins.h_narhwals.NarwhalsAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/Narwhals/#plugins-h-narhwals-narwhalsdataframeresultbuilder">plugins.h_narhwals.NarwhalsDataFrameResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/MLFlowTracker/">plugins.h_mlflow.MLFlowTracker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NoEdgeAndInputTypeChecking/">lifecycle.NoEdgeAndInputTypeChecking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/OpenLineageAdapter/">plugins.h_openlineage.OpenLineageAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/result-builders/">ResultBuilders</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle navigation of ResultBuilders</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Generic/">Generic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Numpy/">Numpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Pandas/">Pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Polars/">Polars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Dask/">Dask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Custom/">Custom ResultBuilder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/io/">I/O</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle navigation of I/O</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/">Using Data Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/#data-loaders">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/#data-savers">Data Savers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/adapter-documentation/">Data Adapters</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/dataflows/">Dataflows</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle navigation of Dataflows</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/clear_storage/">clear_storage()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/copy/">copy()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/find/">find()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/import_module/">import_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/inspect/">inspect()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/inspect_module/">inspect_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/install_dependencies_string/">install_dependencies_string()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/latest_commit/">latest_commit()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/list/">list()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/pull_module/">pull_module()</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/disabling-telemetry/">Telemetry</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">EXTERNAL RESOURCES</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://www.tryhamilton.dev/">tryhamilton.dev</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://hub.dagworks.io/docs/">Dataflow Hub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://blog.dagworks.io/">Blog</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/blob/main/docs/code-comparisons/dagster.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/code-comparisons/dagster.rst" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="dagster">
+<h1>Dagster<a class="headerlink" href="#dagster" title="Link to this heading">¶</a></h1>
+<p>Here are some code snippets to compare the macro orchestrator Dagster to the micro orchestrator Apache Hamilton. Apache Hamilton can run inside Dagster, but you wouldn’t run Dagster inside Apache Hamilton.</p>
+<p>While the two have different scope, there’s a lot of overlap between the two both in terms of functionality and API. Indeed, Dagster’s software-defined assets introduced in 2022 matches Apache Hamilton’s declarative approach and should feel familiar to users of either.</p>
+<section id="tl-dr">
+<h2>TL;DR<a class="headerlink" href="#tl-dr" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23.5%" />
+<col style="width: 38.2%" />
+<col style="width: 38.2%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Trait</p></th>
+<th class="head"><p>Apache Hamilton</p></th>
+<th class="head"><p>Dagster</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Declarative API</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dependencies</p></td>
+<td><p>Lightweight library with minimal dependencies (<code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">pandas</span></code>, <code class="docutils literal notranslate"><span class="pre">typing_inspect</span></code>). Minimizes dependency conflicts.</p></td>
+<td><p>Heavier framework/system with several dependencies (<code class="docutils literal notranslate"><span class="pre">pydantic</span></code>, <code class="docutils literal notranslate"><span class="pre">sqlalchemy</span></code>, <code class="docutils literal notranslate"><span class="pre">requests</span></code>, <code class="docutils literal notranslate"><span class="pre">Jinja2</span></code>, <code class="docutils literal notranslate"><span class="pre">protobuf</span></code>). <code class="docutils literal notranslate"><span class="pre">urllib3</span></code> on which depends <code class="docutils literal notranslate"><span class="pre">requests</span></code> introduced breaking changes several times and <code class="docutils literal notranslate"><span class="pre">pydantic</span></code> v1 and v2 are incompatible.</p></td>
+</tr>
+<tr class="row-even"><td><p>Macro orchestration</p></td>
+<td><p>DIY or in tandem with Dagster, Airflow, Prefect, Metaflow, etc.</p></td>
+<td><p>Includes: manual, schedules, sensors, conditional execution</p></td>
+</tr>
+<tr class="row-odd"><td><p>Micro orchestration (i.e., <code class="docutils literal notranslate"><span class="pre">dbt</span></code>, <code class="docutils literal notranslate"><span class="pre">LangChain</span></code>)</p></td>
+<td><p>Can run anywhere (locally, notebook, macro orchestrator, <a class="reference external" href="https://hamilton.dagworks.io/en/latest/integrations/fastapi/">FastAPI</a>, <a class="reference external" href="https://hamilton.dagworks.io/en/latest/integrations/streamlit/">Streamlit</a>, pyodide, etc.)</p></td>
+<td><p>❌</p></td>
+</tr>
+<tr class="row-even"><td><p>Code structure</p></td>
+<td><p>Since it’s micro, there are no restrictions.</p></td>
+<td><p>Since it’s macro, a certain code structure is required to properly package code. The prevalent use of relative imports in the tutorial reduces code reusability.</p></td>
+</tr>
+<tr class="row-odd"><td><p>LLM applications</p></td>
+<td><p>Well-suited for <a class="reference external" href="https://blog.dagworks.io/p/retrieval-augmented-generation-reference-arch">LLM applications</a> since it’s a micro orchestration framework.</p></td>
+<td><p>❌</p></td>
+</tr>
+<tr class="row-even"><td><p>Lineage</p></td>
+<td><p>Fine-grained / column-level lineage. Includes <a class="reference external" href="https://hamilton.dagworks.io/en/latest/how-tos/use-hamilton-for-lineage/">utilities to explore lineage</a>.</p></td>
+<td><p>Coarser operations to reduce orchestration and I/O overhead.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Visualization</p></td>
+<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/concepts/visualization/">View the dataflow and produce visual artifacts</a>. Configurable and supports extensive custom styling.</p></td>
+<td><p>Export Daster UI in <code class="docutils literal notranslate"><span class="pre">.svg</span></code>. No styling.</p></td>
+</tr>
+<tr class="row-even"><td><p>Run tracking</p></td>
+<td><p><a class="reference external" href="https://docs.dagworks.io/capabilities">DAGWorks</a> (premium)</p></td>
+<td><p>Dagster UI</p></td>
+</tr>
+<tr class="row-odd"><td><p>Experiment Managers</p></td>
+<td><p>Has an <a class="reference external" href="https://blog.dagworks.io/p/building-a-lightweight-experiment">experiment manager plugin</a></p></td>
+<td><p>❌</p></td>
+</tr>
+<tr class="row-even"><td><p>Materializers</p></td>
+<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/concepts/materialization/">Data Savers &amp; Loaders</a></p></td>
+<td><p><a class="reference external" href="https://docs.dagster.io/_apidocs/io-managers">IO Managers</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Data validation</p></td>
+<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/how-tos/run-data-quality-checks/">Native validators and pandera plugin</a></p></td>
+<td><p><a class="reference external" href="https://docs.dagster.io/_apidocs/asset-checks">Asset checks</a> (experimental), <a class="reference external" href="https://docs.dagster.io/integrations/pandera">pandera integration</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Versioning operations</p></td>
+<td><p>Nodes and dataflow versions are derived from code.</p></td>
+<td><p><a class="reference external" href="https://docs.dagster.io/concepts/assets/software-defined-assets#asset-code-versions">Asset code version</a> is specified manually.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Versioning data</p></td>
+<td><p>Automated code version + data value are used to read from cache or compute new results with <a class="reference external" href="https://docs.dagster.io/concepts/assets/software-defined-assets#asset-code-versions">DiskCacheAdapter</a></p></td>
+<td><p>Manual asset code version + upstream changes are used to <a class="reference external" href="https://docs.dagster.io/concepts/assets/software-defined-assets#asset-code-versions">trigger re-materialization</a></p></td>
+</tr>
+<tr class="row-even"><td><p>In-memory Execution</p></td>
+<td><p>Default</p></td>
+<td><p><a class="reference external" href="https://docs.dagster.io/_apidocs/io-managers">Materialize in-memory</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Task-based Execution</p></td>
+<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#taskbasedgraphexecutor">TaskBasedExecutor</a></p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-even"><td><p>Dynamic branching</p></td>
+<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/concepts/parallel-task/">Parallelizable/Collect</a></p></td>
+<td><p><a class="reference external" href="https://docs.dagster.io/_apidocs/dynamic">Mapping/Collect</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Hooks</p></td>
+<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/lifecycle-hooks/">Lifecycle hooks</a> (easier to extend)</p></td>
+<td><p><a class="reference external" href="https://docs.dagster.io/concepts/ops-jobs-graphs/op-hooks#op-hooks">Op Hooks</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Plugins</p></td>
+<td><p><a class="reference external" href="https://blog.dagworks.io/p/expressing-pyspark-transformations">Spark</a>, Dask, Ray, <a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/lifecycle-hooks/DDOGTracer/">Datadog</a>, polars, pandera, and more (Apache Hamilton is less restrictive and easier to extend)</p></td>
+<td><p><a class="reference external" href="https://docs.dagster.io/integrations">Spark, Dask, polars, pandera, Databricks, Snowflake, Great Expections, and more</a>  (Dagster integrations are more involved to develop)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Interactive Development</p></td>
+<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/how-tos/use-in-jupyter-notebook/#use-hamilton-jupyter-magic">Jupyter Magic</a>, <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=ThierryJean.hamilton">VSCode extension</a></p></td>
+<td><p>❌</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="dataflow-definition">
+<h2>Dataflow definition<a class="headerlink" href="#dataflow-definition" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper docutils container" id="id1">
+<table class="docutils align-left" id="id1">
+<caption><span class="caption-text">HackerNews top stories</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Apache Hamilton</p></th>
+<th class="head"><p>Dagster</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_columns</span>
+
+<span class="n">NEWSTORIES_URL</span> <span class="o">=</span> <span class="s2">&quot;https://hacker-news.firebaseio.com/v0/topstories.json&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">topstory_ids</span><span class="p">(</span><span class="n">newstories_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">NEWSTORIES_URL</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Query the id of the top HackerNews stories&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">newstories_url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()[:</span><span class="mi">100</span><span class="p">]</span>
+
+<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">topstories</span><span class="p">(</span><span class="n">topstory_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Query the top HackerNews stories based on ids&quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item_id</span> <span class="ow">in</span> <span class="n">topstory_ids</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;https://hacker-news.firebaseio.com/v0/item/</span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">.json&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">most_frequent_words</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute word frequency in HackerNews story titles&quot;&quot;&quot;</span>
+    <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;the&quot;</span><span class="p">,</span> <span class="s2">&quot;an&quot;</span><span class="p">,</span> <span class="s2">&quot;of&quot;</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;for&quot;</span><span class="p">,</span> <span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="s2">&quot;with&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;is&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\u2013</span><span class="s2">&quot;</span><span class="p">]</span>
+    <span class="n">word_counts</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">raw_title</span> <span class="ow">in</span> <span class="n">title</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">raw_title</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;.,-!?:;()[]&#39;</span><span class="se">\&quot;</span><span class="s2">-&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            
+            <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">STOPWORDS</span><span class="p">:</span>
+                <span class="k">continue</span>
+            
+            <span class="n">word_counts</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">word_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>     
+    <span class="k">return</span> <span class="n">word_counts</span>
+                 
+<span class="k">def</span><span class="w"> </span><span class="nf">top_25_words_plot</span><span class="p">(</span><span class="n">most_frequent_words</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bar plot of the frequency of the top 25 words in HackerNews titles&quot;&quot;&quot;</span>
+    <span class="n">top_words</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="n">most_frequent_words</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)[:</span><span class="mi">25</span><span class="p">]</span>
+    <span class="p">}</span>
+    
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">top_words</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">top_words</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Top 25 Words in Hacker News Titles&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">fig</span>
+
+<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">&quot;registered_at&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">signups</span><span class="p">(</span><span class="n">hackernews_api</span><span class="p">:</span> <span class="n">DataGeneratorResource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Query HackerNews signups using a mock API endpoint&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">hackernews_api</span><span class="o">.</span><span class="n">get_signups</span><span class="p">())</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">earliest_signup</span><span class="p">(</span><span class="n">registered_at</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Earliest signup on HackerNews&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">registered_at</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">latest_signup</span><span class="p">(</span><span class="n">registered_at</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Latest signup on HackerNews&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">registered_at</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dagster</span><span class="w"> </span><span class="kn">import</span> <span class="n">AssetExecutionContext</span><span class="p">,</span> <span class="n">MetadataValue</span><span class="p">,</span> <span class="n">asset</span><span class="p">,</span> <span class="n">MaterializeResult</span>
+
+<span class="nd">@asset</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">topstory_ids</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">newstories_url</span> <span class="o">=</span> <span class="s2">&quot;https://hacker-news.firebaseio.com/v0/topstories.json&quot;</span>
+    <span class="n">top_new_story_ids</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">newstories_url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()[:</span><span class="mi">100</span><span class="p">]</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/topstory_ids.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">top_new_story_ids</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+        
+<span class="nd">@asset</span><span class="p">(</span><span class="n">deps</span><span class="o">=</span><span class="p">[</span><span class="n">topstory_ids</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">topstories</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">AssetExecutionContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MaterializeResult</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/topstory_ids.json&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">topstory_ids</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item_id</span> <span class="ow">in</span> <span class="n">topstory_ids</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;https://hacker-news.firebaseio.com/v0/item/</span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">.json&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">%</span> <span class="mi">20</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> items so far.&quot;</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;data/topstories.csv&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">MaterializeResult</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;num_records&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span>
+            <span class="s2">&quot;preview&quot;</span><span class="p">:</span> <span class="n">MetadataValue</span><span class="o">.</span><span class="n">md</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()),</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    
+<span class="nd">@asset</span><span class="p">(</span><span class="n">deps</span><span class="o">=</span><span class="p">[</span><span class="n">topstories</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">most_frequent_words</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">MaterializeResult</span><span class="p">:</span>
+    <span class="n">stopwords</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;the&quot;</span><span class="p">,</span> <span class="s2">&quot;an&quot;</span><span class="p">,</span> <span class="s2">&quot;of&quot;</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;for&quot;</span><span class="p">,</span> <span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="s2">&quot;with&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;is&quot;</span><span class="p">]</span>
+    <span class="n">topstories</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/topstories.csv&quot;</span><span class="p">)</span>
+
+    <span class="n">word_counts</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">raw_title</span> <span class="ow">in</span> <span class="n">topstories</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]:</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">raw_title</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;.,-!?:;()[]&#39;</span><span class="se">\&quot;</span><span class="s2">-&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cleaned_word</span> <span class="ow">in</span> <span class="n">stopwords</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">cleaned_word</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            
+            <span class="n">word_counts</span><span class="p">[</span><span class="n">cleaned_word</span><span class="p">]</span> <span class="o">=</span> <span class="n">word_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">top_words</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="n">word_counts</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)[:</span><span class="mi">25</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">top_words</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">top_words</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Top 25 Words in Hacker News Titles&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="n">buffer</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
+    <span class="n">image_data</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+
+    <span class="n">md_content</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;![img](data:image/png;base64,</span><span class="si">{</span><span class="n">image_data</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/most_frequent_words.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">top_words</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">MaterializeResult</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="n">MetadataValue</span><span class="o">.</span><span class="n">md</span><span class="p">(</span><span class="n">md_content</span><span class="p">)}</span>
+    <span class="p">)</span>
+
+<span class="nd">@asset</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">signups</span><span class="p">(</span><span class="n">hackernews_api</span><span class="p">:</span> <span class="n">DataGeneratorResource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MaterializeResult</span><span class="p">:</span>
+    <span class="n">signups</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">hackernews_api</span><span class="o">.</span><span class="n">get_signups</span><span class="p">())</span>
+
+    <span class="n">signups</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;data/signups.csv&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">MaterializeResult</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;Record Count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">signups</span><span class="p">),</span>
+            <span class="s2">&quot;Preview&quot;</span><span class="p">:</span> <span class="n">MetadataValue</span><span class="o">.</span><span class="n">md</span><span class="p">(</span><span class="n">signups</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()),</span>
+            <span class="s2">&quot;Earliest Signup&quot;</span><span class="p">:</span> <span class="n">signups</span><span class="p">[</span><span class="s2">&quot;registered_at&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+            <span class="s2">&quot;Latest Signup&quot;</span><span class="p">:</span> <span class="n">signups</span><span class="p">[</span><span class="s2">&quot;registered_at&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><img alt="../../_images/hamilton_dataflow.png" src="../../_images/hamilton_dataflow.png" />
+</td>
+<td><img alt="../../_images/dagster_dataflow.png" src="../../_images/dagster_dataflow.png" />
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-given docutils container" id="id2">
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Key points</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 23.5%" />
+<col style="width: 38.2%" />
+<col style="width: 38.2%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Trait</p></th>
+<th class="head"><p>Apache Hamilton</p></th>
+<th class="head"><p>Dagster</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Define operations</p></td>
+<td><p>Uses the native Python function signature. The dataflow is assembled based on function/parameter names and type annotations.</p></td>
+<td><p>Uses the <code class="docutils literal notranslate"><span class="pre">&#64;asset</span></code> decorator to transform function in operations and specify dependencies by passing functions.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Data I/O</p></td>
+<td><p>Loading/Saving is decoupled from the dataflow definition. The code becomes <a class="reference external" href="https://blog.dagworks.io/p/separate-data-io-from-transformation">more portable and facilitates moving from dev to prod</a>.</p></td>
+<td><p>Each asset code operations is coupled with I/O. Hard-coding this behavior reduces maintainability.</p></td>
+</tr>
+<tr class="row-even"><td><p>Lineage</p></td>
+<td><p>Favors granular operations and fine-grained lineage. For example, <code class="docutils literal notranslate"><span class="pre">most_frequent_words()</span></code> operates on a single column and the <code class="docutils literal notranslate"><span class="pre">top_25_words_plot</span></code> is its own function.</p></td>
+<td><p>Favors chunking dataflow into meaningful assets to reduce the orchestration and I/O overhead per operation. Finer lineage is complex to achieve and requires using <code class="docutils literal notranslate"><span class="pre">&#64;op</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;graph</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;job</span></code>, and <code class="docutils literal notranslate"><span class="pre">&#64;asset</span></code> (<a class="reference external" href="https://docs.dagster.io/guides/dagster/how-assets-relate-to-ops-and-graphs">ref</a>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Documentation</p></td>
+<td><p>Uses the native Python docstrings. Further metadata can be added using the <code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code> decorator.</p></td>
+<td><p>Uses <code class="docutils literal notranslate"><span class="pre">MaterializeResult</span></code> to store metadata.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="dataflow-execution">
+<h2>Dataflow execution<a class="headerlink" href="#dataflow-execution" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper docutils container" id="id3">
+<table class="docutils align-left" id="id3">
+<caption><span class="caption-text">HackerNews top stories</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Apache Hamilton</p></th>
+<th class="head"><p>Dagster</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.io.materialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">to</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.plugins</span><span class="w"> </span><span class="kn">import</span> <span class="n">matplotlib_extensions</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">dataflow</span>  <span class="c1"># import module with dataflow definition</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mock_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataGeneratorResource</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>  
+        <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">dataflow</span><span class="p">)</span>  <span class="c1"># pass the module</span>
+        <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># load environment variable</span>
+    <span class="n">num_days</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HACKERNEWS_NUM_DAYS_WINDOW&quot;</span><span class="p">)</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span> <span class="c1"># mock an API connection</span>
+        <span class="n">hackernews_api</span><span class="o">=</span><span class="n">DataGeneratorResource</span><span class="p">(</span><span class="n">num_days</span><span class="o">=</span><span class="n">num_days</span><span class="p">),</span>
+    <span class="p">)</span>
+    
+    <span class="c1"># define I/O operations; decoupled from dataflow def</span>
+    <span class="n">materializers</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">to</span><span class="o">.</span><span class="n">json</span><span class="p">(</span>  <span class="c1"># JSON file type</span>
+            <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;most_frequent_words.json&quot;</span><span class="p">,</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;most_frequent_words&quot;</span><span class="p">],</span>
+            <span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/most_frequent_words.json&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">to</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span>  <span class="c1"># CSV file type</span>
+            <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;topstories.csv&quot;</span><span class="p">,</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;topstories&quot;</span><span class="p">],</span>
+            <span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/topstories.csv&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">to</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;signups.csv&quot;</span><span class="p">,</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;signups&quot;</span><span class="p">],</span>
+            <span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/signups.csv&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">to</span><span class="o">.</span><span class="n">plt</span><span class="p">(</span>  <span class="c1"># Use matplotlib.pyplot to render</span>
+            <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;top_25_words_plot.plt&quot;</span><span class="p">,</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;top_25_words_plot&quot;</span><span class="p">],</span>
+            <span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/top_25_words_plot.png&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+    
+    <span class="c1"># visualize materialization plan without executing code</span>
+    <span class="n">dr</span><span class="o">.</span><span class="n">visualize_materialization</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">materializers</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
+        <span class="n">output_file_path</span><span class="o">=</span><span class="s2">&quot;dataflow.png&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># pass I/O operations and inputs to materialize dataflow</span>
+    <span class="n">dr</span><span class="o">.</span><span class="n">materialize</span><span class="p">(</span><span class="o">*</span><span class="n">materializers</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+    
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+        
+</pre></div>
+</div>
+</td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dagster</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AssetSelection</span><span class="p">,</span>
+    <span class="n">Definitions</span><span class="p">,</span>
+    <span class="n">define_asset_job</span><span class="p">,</span>
+    <span class="n">load_assets_from_modules</span><span class="p">,</span>
+    <span class="n">EnvVar</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">assets</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataGeneratorResource</span>
+
+<span class="c1"># load assets from passed modules</span>
+<span class="n">all_assets</span> <span class="o">=</span> <span class="n">load_assets_from_modules</span><span class="p">([</span><span class="n">assets</span><span class="p">])</span>
+<span class="c1"># select assets to include in the job</span>
+<span class="n">hackernews_job</span> <span class="o">=</span> <span class="n">define_asset_job</span><span class="p">(</span><span class="s2">&quot;hackernews_job&quot;</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="n">AssetSelection</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+
+<span class="c1"># load environment variable</span>
+<span class="n">num_days</span> <span class="o">=</span> <span class="n">EnvVar</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="s2">&quot;HACKERNEWS_NUM_DAYS_WINDOW&quot;</span><span class="p">)</span>
+<span class="n">defs</span> <span class="o">=</span> <span class="n">Definitions</span><span class="p">(</span>
+    <span class="n">assets</span><span class="o">=</span><span class="n">all_assets</span><span class="p">,</span>
+    <span class="n">jobs</span><span class="o">=</span><span class="p">[</span><span class="n">hackernews_job</span><span class="p">],</span>
+    <span class="n">resources</span><span class="o">=</span><span class="p">{</span>  <span class="c1"># register mock API connection</span>
+        <span class="s2">&quot;hackernews_api&quot;</span><span class="p">:</span> <span class="n">DataGeneratorResource</span><span class="p">(</span><span class="n">num_days</span><span class="o">=</span><span class="n">num_days</span><span class="p">),</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-given docutils container" id="id4">
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Key points</span><a class="headerlink" href="#id4" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 23.5%" />
+<col style="width: 38.2%" />
+<col style="width: 38.2%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Trait</p></th>
+<th class="head"><p>Apache Hamilton</p></th>
+<th class="head"><p>Dagster</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Execution instructions</p></td>
+<td><p>Define a <code class="docutils literal notranslate"><span class="pre">Driver</span></code> using the <code class="docutils literal notranslate"><span class="pre">Builder</span></code> object. It automatically assembles the graph from the dataflow definition found in <code class="docutils literal notranslate"><span class="pre">dataflow.py</span></code></p></td>
+<td><p>Load assets from Python modules using <code class="docutils literal notranslate"><span class="pre">load_assets_from_modules</span></code> then create an asset job by selecting assets to include. Finally, create a <code class="docutils literal notranslate"><span class="pre">Definitions</span></code> object to register on the orchestrator.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Execution plane</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Driver.materialize()</span></code> executes the dataflow in a Python process. Can be called as a script, <a class="reference external" href="https://blog.dagworks.io/p/a-command-line-tool-to-improve-your">using the CLI</a>, or programmatically.</p></td>
+<td><p>The <a class="reference external" href="https://docs.dagster.io/concepts/assets/asset-jobs">asset job is executed by the orchestrator</a>, either through Dagster UI, by a scheduler/sensor/trigger, or via the CLI.</p></td>
+</tr>
+<tr class="row-even"><td><p>Data I/O</p></td>
+<td><p>I/O is decoupled from dataflow definition. People responsible for deployment can manage data sources without refactoring the dataflow. (Data I/O can be coupled if wanted.)</p></td>
+<td><p>Data I/O is coupled with data assets which simplifies the execution code at the code of reusability.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Framework code</p></td>
+<td><p>Leverages a maximum of standard Python mechanisms (imports, env variables, etc.).</p></td>
+<td><p>Most constructs requires Dagster-specific code to leverage protobuf serialization.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="more-information">
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading">¶</a></h2>
+<p>For a full side-by-side example of Dagster and Apache Hamilton, visit <a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dagster">this GitHub repository</a></p>
+<p>For more questions, join our <a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack Channel</a>!</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../langchain/">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">LangChain</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../kedro/">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Kedro</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Dagster</a><ul>
+<li><a class="reference internal" href="#tl-dr">TL;DR</a></li>
+<li><a class="reference internal" href="#dataflow-definition">Dataflow definition</a></li>
+<li><a class="reference internal" href="#dataflow-execution">Dataflow execution</a></li>
+<li><a class="reference internal" href="#more-information">More information</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=187304be"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=22e4c79f"></script>
+    </body>
+</html>

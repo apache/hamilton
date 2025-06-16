@@ -1,0 +1,10 @@
+.needs_style_break {
+    page-break-before: always;
+}
+
+table.need, table.NEEDS_DATATABLES, .needs_style_ssp-table-wrap {
+    table-layout: fixed;
+    td, th {
+        overflow-wrap: break-word;
+    }
+}

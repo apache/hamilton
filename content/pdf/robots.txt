@@ -1,0 +1,3 @@
+User-agent: *
+
+Sitemap: https://hamilton.dagworks.io/en/latest/sitemap.xml

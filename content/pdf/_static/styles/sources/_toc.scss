@@ -1,0 +1,161 @@
+// .. contents:: config
+.contents {
+    ul {
+        list-style: none;
+    }
+
+    > ul {
+        padding-left: 0;
+
+        > li {
+            font-weight: 500;
+            line-height: 15pt;
+            margin: 3em 0 1em;
+
+            &::before {
+                background: $primary;
+                color: $white;
+                content: "";
+                display: block;
+                height: 0.08cm;
+                margin-bottom: 0.25cm;
+                width: 2cm;
+            }
+
+            a {
+                color: #000000;
+                font-size: 15pt;
+            }
+
+            a::after {
+                color: $primary;
+                content: target-counter(attr(href url), page);
+                // font-size: 15pt;
+
+                float: right;
+            }
+
+            > ul {
+                list-style: none;
+                padding-left: 0;
+
+                li {
+                    border-top: 0.3pt solid #c1c1c1;
+                    margin: 0.25cm 0;
+                    padding-top: 0.25cm;
+                    line-height: 12pt;
+                    // font-size: 12pt;
+                    font-weight: 300;
+
+                    a {
+                        color: #000000;
+                        font-size: 12pt;
+                    }
+
+
+                    p::before {
+                        color: $primary;
+                        content: "• ";
+                        font-size: 40pt;
+                        line-height: 16pt;
+                        vertical-align: bottom;
+                    }
+
+                    ul {
+                        padding-left: 2em;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// .. toctree:: config
+.sphinxsidebarwrapper {
+
+    page-break-before: always;
+
+    div {
+        
+        ul {
+            list-style: none;
+        }
+
+        > ul {
+            padding-left: 0;
+
+            > li {
+                font-weight: 500;
+                //line-height: 15pt;
+                line-height: 12pt;
+                //margin: 3em 0 1em;
+                margin: 2em 0 1em;
+
+                // Adds a red, short line above each main chapter
+                //&::before {
+                //    background: $primary;
+                //    color: $white;
+                //    content: "";
+                //    display: block;
+                //    height: 0.08cm;
+                //    margin-bottom: 0.25cm;
+                //    width: 2cm;
+                //}
+
+                a {
+                    color: #000000;
+                    //font-size: 15pt;
+                    font-size: 13pt;
+                }
+
+                a::after {
+                    color: $primary;
+                    content: target-counter(attr(href url), page);
+                    //content: '123';
+                    // font-size: 15pt;
+
+                    float: right;
+
+                }
+
+
+                > ul {
+                    list-style: none;
+                    padding-left: 0;
+
+                    li {
+                        border-top: 0.3pt solid #c1c1c1;
+                        //margin: 0.25cm 0;
+                        margin: 0.15cm 0;
+                        //padding-top: 0.25cm;
+                        padding-top: 0.15cm;
+                        //line-height: 12pt;
+                        line-height: 10pt;
+                        // font-size: 12pt;
+                        font-weight: 300;
+
+                        a {
+                            color: #000000;
+                            font-size: 12pt;
+                        }
+
+
+                        a::before {
+                            color: $primary;
+                            content: "• ";
+                            //font-size: 40pt;
+                            font-size: 30pt;
+                            //line-height: 13pt;
+                            line-height: 10pt;
+                            vertical-align: bottom;
+                        }
+
+                        ul {
+                            padding-left: 2em;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

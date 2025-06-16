@@ -1,0 +1,27 @@
+#back-cover {
+    width: 100%;
+    height: 100%;
+
+    .container {
+        width: 100%;
+        .back-cover-footer {
+            font-family: 'Helvetica Neue';
+            font-size: 11pt;
+            margin-top: 3px;
+            position: absolute;
+            bottom: 30pt;
+            color: $white;
+            width: 100%;
+            p {
+                width: 80%;
+                margin: 0 auto;
+                text-align: center;
+
+                a {
+                    color: $white;
+                }
+            }
+        }
+    }
+}
+

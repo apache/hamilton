@@ -1,0 +1,2005 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Feature engineering" href="../use-for-feature-engineering/" /><link rel="prev" title="Loading data" href="../load-data/" />
+        <link rel="canonical" href="https://hamilton.dagworks.io/how-tos/caching-tutorial/" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06.dev1 -->
+        <title>Caching - Hamilton</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3912a5f9" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/testimonials.css?v=bd684830" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     📢 Announcing the <a target="_blank" href="https://www.meetup.com/global-hamilton-open-source-user-group-meetup/">Hamilton Meetup Group</a>. Sign up to attend events! 📢 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../"><div class="brand">Hamilton</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../">
+  
+  
+  <span class="sidebar-brand-text">Hamilton</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search/" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">USER GUIDE</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../get-started/">Get Started</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Get Started</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/why-hamilton/">Why use Apache Hamilton?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/install/">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/your-first-dataflow/">Your First Dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/learning-resources/">Learning Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/contributing/">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/license/">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../concepts/">Concepts</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Concepts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/glossary/">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/node/">Functions, nodes &amp; dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/driver/">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/visualization/">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/materialization/">Materialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/function-modifiers/">Function modifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/builder/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/caching/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/function-modifiers-advanced/">Function modifiers (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/parallel-task/">Dynamic DAGs/Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#sdk-configuration">SDK Configuration</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../concepts/best-practices/">Best Practices</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Best Practices</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/function-naming/">Function Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/migrating-to-hamilton/">Migrating to Apache Hamilton</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/code-organization/">Code Organization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/common-indices/">Common Indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/output-immutability/">Output Immutability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/using-within-your-etl-system/">Using within your ETL System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/loading-data/">Loading Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">User Guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of User Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../use-in-jupyter-notebook/">Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../load-data/">Loading data</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ml-training/">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../llm-workflows/">LLM workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../scale-up/">Scaling computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../microservice/">Microservice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extensions-autoloading/">Extension autoloading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../wrapping-driver/">Wrapping the Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli-reference/">Command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pre-commit-hooks/">pre-commit hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../hamilton-ui/">Apache Hamilton UI</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Apache Hamilton UI</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#sdk-configuration">SDK Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../hamilton-vscode/">IDE extension</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of IDE extension</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-vscode/vscode_extension/">Apache Hamilton VSCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-vscode/language_server/">Language Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../integrations/">Integrations</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Integrations</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/dlt/">dlt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/fastapi/">FastAPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/ibis/">Ibis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/streamlit/">Streamlit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/dbt/">dbt</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/mlflow">MLFlow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/airflow">Airflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/aws">Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/image_telephone">Burr</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dagster">Dagster</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dask">Dask</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/feast">Feast</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/outerbounds/hamilton-metaflow">Metaflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/data_quality/pandera">Pandera</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/plotly">Plotly</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/polars">Polars</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/prefect">Prefect</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/ray">Ray</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/slack">Slack</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/spark">Spark</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/vaex">Vaex</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/narwhals">Narwhals</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/openlineage">OpenLineage</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../code-comparisons/">Code Comparisons</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Code Comparisons</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/kedro/">Kedro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/dagster/">Dagster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/langchain/">LangChain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/airflow/">Airflow</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../community/">Meet-ups</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/decorators/">Decorators</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Decorators</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/check_output/">check_output*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/config_when/">config.when*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/dataloader/">dataloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/datasaver/">datasaver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/does/">does</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_columns/">extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_fields/">extract_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/inject/">inject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/load_from/">load_from</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize/">parameterize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_extract_columns/">parameterize_extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_frame/">parameterize_frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_sources/">parameterize_sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_subdag/">parameterized_subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_values/">parameterize_values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/pipe/">pipe family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/resolve/">resolve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/save_to/">save_to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/subdag/">subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/schema/">schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/tag/">tag*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/with_columns/">with_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/drivers/">Drivers</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Drivers</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#driver">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#defaultgraphexecutor">DefaultGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#taskbasedgraphexecutor">TaskBasedGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/AsyncDriver/">AsyncDriver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Custom/">Custom Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/caching/">Caching</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Caching</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/caching-logic/">Caching logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/data-versioning/">Data versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/stores/">Stores</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/graph-adapters/">GraphAdapters</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of GraphAdapters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SimplePythonDataFrameGraphAdapter/">SimplePythonDataFrameGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SimplePythonGraphAdapter/">SimplePythonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/HamiltonGraphAdapter/">HamiltonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/AsyncGraphAdapter/">h_async.AsyncGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/ThreadPoolFutureAdapter/">h_threadpool.FutureAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/CachingGraphAdapter/">CachingGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/DaskGraphAdapter/">h_dask.DaskGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/PySparkUDFGraphAdapter/">h_spark.PySparkUDFGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/RayGraphAdapter/">h_ray.RayGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/RayWorkflowGraphAdapter/">h_ray.RayWorkflowGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SparkKoalasGraphAdapter/">h_spark.SparkKoalasGraphAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/lifecycle-hooks/">Lifecycle Adapters</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of Lifecycle Adapters</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/ResultBuilder/">lifecycle.ResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/LegacyResultMixin/">lifecycle.LegacyResultMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphAdapter/">lifecycle.api.GraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NodeExecutionHook/">lifecycle.NodeExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphExecutionHook/">lifecycle.api.GraphExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/EdgeConnectionHook/">lifecycle.api.EdgeConnectionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NodeExecutionMethod/">lifecycle.api.NodeExecutionMethod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/StaticValidator/">lifecycle.api.StaticValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphConstructionHook/">lifecycle.api.GraphConstructionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskSubmissionHook/">lifecycle.api.TaskSubmissionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskReturnHook/">lifecycle.api.TaskReturnHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskExecutionHook/">lifecycle.api.TaskExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskGroupingHook/">lifecycle.api.TaskGroupingHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/PDBDebugger/">lifecycle.PDBDebugger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/PrintLn/">lifecycle.PrintLn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/ProgressBar/">plugins.h_tqdm.ProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/RichProgressBar/">plugins.h_rich.RichProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/DDOGTracer/">plugins.h_ddog.DDOGTracer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/FunctionInputOutputTypeChecker/">lifecycle.FunctionInputOutputTypeChecker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/SlackNotifierHook/">plugins.h_slack.SlackNotifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GracefulErrorAdapter/">lifecycle.GracefulErrorAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/SparkInputValidator/">plugins.h_spark.SparkInputValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/Narwhals/">plugins.h_narhwals.NarwhalsAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/Narwhals/#plugins-h-narhwals-narwhalsdataframeresultbuilder">plugins.h_narhwals.NarwhalsDataFrameResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/MLFlowTracker/">plugins.h_mlflow.MLFlowTracker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NoEdgeAndInputTypeChecking/">lifecycle.NoEdgeAndInputTypeChecking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/OpenLineageAdapter/">plugins.h_openlineage.OpenLineageAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/result-builders/">ResultBuilders</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle navigation of ResultBuilders</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Generic/">Generic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Numpy/">Numpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Pandas/">Pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Polars/">Polars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Dask/">Dask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Custom/">Custom ResultBuilder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/io/">I/O</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle navigation of I/O</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/">Using Data Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/#data-loaders">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/#data-savers">Data Savers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/adapter-documentation/">Data Adapters</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/dataflows/">Dataflows</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle navigation of Dataflows</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/clear_storage/">clear_storage()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/copy/">copy()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/find/">find()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/import_module/">import_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/inspect/">inspect()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/inspect_module/">inspect_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/install_dependencies_string/">install_dependencies_string()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/latest_commit/">latest_commit()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/list/">list()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/pull_module/">pull_module()</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/disabling-telemetry/">Telemetry</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">EXTERNAL RESOURCES</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://www.tryhamilton.dev/">tryhamilton.dev</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://hub.dagworks.io/docs/">Dataflow Hub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://blog.dagworks.io/">Blog</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/blob/main/docs/how-tos/caching-tutorial.ipynb?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/how-tos/caching-tutorial.ipynb" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="caching">
+<h1>Caching<a class="headerlink" href="#caching" title="Link to this heading">¶</a></h1>
+<p>In Hamilton, <strong>caching</strong> broadly refers to “reusing results from previous executions to skip redundant computation”. If you change code or pass new data, it will automatically determine which results can be reused and which nodes need to be re-executed. This improves execution speed and reduces resource usage (computation, API credits, etc.).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Open the notebook in <a class="reference external" href="https://colab.research.google.com/github/DAGWorks-Inc/hamilton/blob/main/examples/caching/tutorial.ipynb">Google Colab</a> for an interactive version and better syntax highlighting.</p>
+</div>
+<p>Throughout this tutorial, we’ll be using the Hamilton notebook extension to define dataflows directly in the notebook (<a class="reference external" href="https://github.com/apache/hamilton/blob/main/examples/jupyter_notebook_magic/example.ipynb">see tutorial</a>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
+
+<span class="c1"># load the notebook extension</span>
+<span class="o">%</span><span class="k">reload_ext</span> hamilton.plugins.jupyter_magic
+</pre></div>
+</div>
+</div>
+</div>
+<p>We import the <code class="docutils literal notranslate"><span class="pre">logging</span></code> module and get the logger from <code class="docutils literal notranslate"><span class="pre">hamilton.caching</span></code>. With the level set to <code class="docutils literal notranslate"><span class="pre">INFO</span></code>, we’ll see <code class="docutils literal notranslate"><span class="pre">GET_RESULT</span></code> and <code class="docutils literal notranslate"><span class="pre">EXECUTE_NODE</span></code> cache events as they happen.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;hamilton.caching&quot;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The next cell deletes the cached data to ensure this notebook can be run from top to bottom without any issues.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+
+<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s2">&quot;./.hamilton_cache&quot;</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Link to this heading">¶</a></h2>
+<p>Throughout this notebook, we’ll use the same simple dataflow that processes transactions in various locations and currencies.</p>
+<p>We use the cell magic <code class="docutils literal notranslate"><span class="pre">%%cell_to_module</span></code> from the Hamilton notebook extension. It will convert the content of the cell into a Python module that can be loaded by Hamilton. The <code class="docutils literal notranslate"><span class="pre">--display</span></code> flag allows to visualize the dataflow.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">cell_to_module</span> basics_module --display
+import pandas as pd
+
+DATA = {
+    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;],
+    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;],
+    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56],
+    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;],
+    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;],
+}
+
+def raw_data() -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    return pd.DataFrame(DATA)
+
+def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
+    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
+    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.73
+    return df
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/1e83e2488806989a3e8d851ca9599dd6efcb3cb7564e574d703f8c115927d1bc.svg" src="../../_images/1e83e2488806989a3e8d851ca9599dd6efcb3cb7564e574d703f8c115927d1bc.svg" />
+</div>
+</div>
+<p>Then, we build the <code class="docutils literal notranslate"><span class="pre">Driver</span></code> with caching enabled and execute the dataflow.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">basics_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">basics_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+
+<span class="n">basics_results_1</span> <span class="o">=</span> <span class="n">basics_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;processed_data&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">basics_results_1</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::adapter::execute_node
+processed_data::adapter::execute_node
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        cities        date  amount country currency  amound_in_usd
+0     New York  2024-09-13  478.23     USA      USD       478.2300
+1  Los Angeles  2024-09-12  251.67     USA      USD       251.6700
+2      Chicago  2024-09-11  989.34     USA      USD       989.3400
+3     Montréal  2024-09-11  742.14  Canada      CAD       541.7622
+4    Vancouver  2024-09-09  584.56  Canada      CAD       426.7288
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can view what values were retrieved from the cache using <code class="docutils literal notranslate"><span class="pre">dr.cache.view_run()</span></code>. Since this was the first execution, nothing is retrieved.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">basics_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/b09930f285394509c047b0f9475d96dfbd906af26aca3e8777d3f017056bcca3.svg" src="../../_images/b09930f285394509c047b0f9475d96dfbd906af26aca3e8777d3f017056bcca3.svg" />
+</div>
+</div>
+<p>On the second execution, <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> is retrieved from cache as reported in the logs and highlighted in the visualization</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">basics_results_2</span> <span class="o">=</span> <span class="n">basics_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;processed_data&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">basics_results_2</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">basics_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::result_store::get_result::hit
+processed_data::result_store::get_result::hit
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        cities        date  amount country currency  amound_in_usd
+0     New York  2024-09-13  478.23     USA      USD       478.2300
+1  Los Angeles  2024-09-12  251.67     USA      USD       251.6700
+2      Chicago  2024-09-11  989.34     USA      USD       989.3400
+3     Montréal  2024-09-11  742.14  Canada      CAD       541.7622
+4    Vancouver  2024-09-09  584.56  Canada      CAD       426.7288
+</pre></div>
+</div>
+<img alt="../../_images/ca81b82f367a3921e372f4d1951340b309c4705c002a46a8f4224e4f2db03ea8.svg" src="../../_images/ca81b82f367a3921e372f4d1951340b309c4705c002a46a8f4224e4f2db03ea8.svg" />
+</div>
+</div>
+<section id="understanding-the-cache-key">
+<h3>Understanding the <code class="docutils literal notranslate"><span class="pre">cache_key</span></code><a class="headerlink" href="#understanding-the-cache-key" title="Link to this heading">¶</a></h3>
+<p>The Hamilton cache stores results using a <code class="docutils literal notranslate"><span class="pre">cache_key</span></code>. It is composed of the node’s name (<code class="docutils literal notranslate"><span class="pre">node_name</span></code>), the code that defines it (<code class="docutils literal notranslate"><span class="pre">code_version</span></code>), and its data inputs (<code class="docutils literal notranslate"><span class="pre">data_version</span></code> of its dependencies).</p>
+<p>For example, the cache keys for the previous cells are:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;node_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;raw_data&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;code_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;9d727859b9fd883247c3379d4d25a35af4a56df9d9fde20c75c6375dde631c68&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dependencies_data_versions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">  </span><span class="c1">// it has no dependencies</span>
+<span class="p">}</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;node_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;code_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;c9e3377d6c5044944bd89eeb7073c730ee8707627c39906b4156c6411f056f00&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dependencies_data_versions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;cutoff_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WkGjJythLWYAIj2Qr8T_ug==&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// input value</span>
+<span class="w">        </span><span class="nt">&quot;raw_data&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;t-BDcMLikFSNdn4piUKy1mBcKPoEsnsYjUNzWg==&quot;</span><span class="w">  </span><span class="c1">// raw_data&#39;s result</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Results could be successfully retrieved because nodes in the first execution and second execution shared the same <code class="docutils literal notranslate"><span class="pre">cache_key</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">cache_key</span></code> objects are internal and you won’t have to interact with them directly. However, keep that concept in mind throughout this tutorial. Towards the end, we show how to manually handle the <code class="docutils literal notranslate"><span class="pre">cache_key</span></code> for debugging.</p>
+</section>
+</section>
+<section id="adding-a-node">
+<h2>Adding a node<a class="headerlink" href="#adding-a-node" title="Link to this heading">¶</a></h2>
+<p>Let’s say you’re iteratively developing your dataflow and you add a new node. Here, we copy the previous module into a new module named <code class="docutils literal notranslate"><span class="pre">adding_node_module</span></code> and define the node <code class="docutils literal notranslate"><span class="pre">amount_per_country</span></code>.</p>
+<blockquote>
+<div><p>In practice, you would edit the cell directly, but this makes the notebook easier to read and maintain</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">cell_to_module</span> adding_node_module --display
+import pandas as pd
+
+DATA = {
+    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;],
+    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;],
+    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56],
+    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;],
+    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;],
+}
+
+def raw_data() -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    return pd.DataFrame(DATA)
+
+def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
+    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
+    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.73
+    return df
+
+def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
+    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/45f163869e87bd049f81c053641ae90c2783ddf30411449a5c2f1bac2ff1da6e.svg" src="../../_images/45f163869e87bd049f81c053641ae90c2783ddf30411449a5c2f1bac2ff1da6e.svg" />
+</div>
+</div>
+<p>We build a new <code class="docutils literal notranslate"><span class="pre">Driver</span></code> with <code class="docutils literal notranslate"><span class="pre">adding_node_module</span></code> and execute the dataflow. You’ll notice that <code class="docutils literal notranslate"><span class="pre">raw_data</span></code> and <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> are retrieved and only <code class="docutils literal notranslate"><span class="pre">amount_per_country</span></code> is executed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adding_node_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">adding_node_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+
+<span class="n">adding_node_results</span> <span class="o">=</span> <span class="n">adding_node_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span> <span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adding_node_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">adding_node_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::result_store::get_result::hit
+processed_data::result_store::get_result::hit
+amount_per_country::adapter::execute_node
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Canada         968.491
+USA           1719.240
+</pre></div>
+</div>
+<img alt="../../_images/f75eb13ed268ce05dc7e45abe473f3ef29b1f801ee774998d9b21f42e18becd9.svg" src="../../_images/f75eb13ed268ce05dc7e45abe473f3ef29b1f801ee774998d9b21f42e18becd9.svg" />
+</div>
+</div>
+<p>Even though this is the first execution of <code class="docutils literal notranslate"><span class="pre">adding_node_dr</span></code> and the module <code class="docutils literal notranslate"><span class="pre">adding_node_module</span></code>, the cache contains results for <code class="docutils literal notranslate"><span class="pre">raw_data</span></code> and <code class="docutils literal notranslate"><span class="pre">processed_data</span></code>. We’re able to retrieve values because they have the same cache keys (code version and dependencies data versions).</p>
+<p>This means you can reuse cached results across dataflows. This is particularly useful with training and inference machine learning pipelines.</p>
+</section>
+<section id="changing-inputs">
+<h2>Changing inputs<a class="headerlink" href="#changing-inputs" title="Link to this heading">¶</a></h2>
+<p>We reuse the same dataflow <code class="docutils literal notranslate"><span class="pre">adding_node_module</span></code>, but change the input <code class="docutils literal notranslate"><span class="pre">cutoff_date</span></code> from
+<code class="docutils literal notranslate"><span class="pre">&quot;2024-09-01&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;2024-09-11&quot;</span></code>.</p>
+<p>This new input forces <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> to be re-executed. This produces a new result for <code class="docutils literal notranslate"><span class="pre">processed_data</span></code>, which cascades and also forced <code class="docutils literal notranslate"><span class="pre">amount_per_country</span></code> to be re-executed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_inputs_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">adding_node_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+
+<span class="n">changing_inputs_results_1</span> <span class="o">=</span> <span class="n">changing_inputs_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span> <span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-11&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_inputs_results_1</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">changing_inputs_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::result_store::get_result::hit
+processed_data::adapter::execute_node
+amount_per_country::adapter::execute_node
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+USA              729.9
+</pre></div>
+</div>
+<img alt="../../_images/8635b2f729922dc7b680c54e8709b3c4b03939d84e5fec4c3cb878a364c332ca.svg" src="../../_images/8635b2f729922dc7b680c54e8709b3c4b03939d84e5fec4c3cb878a364c332ca.svg" />
+</div>
+</div>
+<p>Now, we execute with the <code class="docutils literal notranslate"><span class="pre">cutoff_date</span></code> value <code class="docutils literal notranslate"><span class="pre">&quot;2024-09-05&quot;</span></code>, which forces <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> to be executed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_inputs_results_2</span> <span class="o">=</span> <span class="n">changing_inputs_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span> <span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-05&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_inputs_results_2</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">changing_inputs_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::result_store::get_result::hit
+processed_data::adapter::execute_node
+amount_per_country::result_store::get_result::hit
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Canada         968.491
+USA           1719.240
+</pre></div>
+</div>
+<img alt="../../_images/1b539b88b1d02240de09b908155ac486f37633c59e6040466a0e36631f7f220d.svg" src="../../_images/1b539b88b1d02240de09b908155ac486f37633c59e6040466a0e36631f7f220d.svg" />
+</div>
+</div>
+<p>Notice that the cache could still retrieve <code class="docutils literal notranslate"><span class="pre">amount_per_country</span></code>. This is because <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> return a value that had been cached previously (in the <code class="docutils literal notranslate"><span class="pre">Adding</span> <span class="pre">a</span> <span class="pre">node</span></code> section).</p>
+<p>In concrete terms, filtering rows by the date <code class="docutils literal notranslate"><span class="pre">&quot;2024-09-05&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;2024-09-01&quot;</span></code> includes the same rows and produces the same dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">adding_node_results</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_inputs_results_2</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        cities        date  amount country currency  amound_in_usd
+0     New York  2024-09-13  478.23     USA      USD       478.2300
+1  Los Angeles  2024-09-12  251.67     USA      USD       251.6700
+2      Chicago  2024-09-11  989.34     USA      USD       989.3400
+3     Montréal  2024-09-11  742.14  Canada      CAD       541.7622
+4    Vancouver  2024-09-09  584.56  Canada      CAD       426.7288
+
+        cities        date  amount country currency  amound_in_usd
+0     New York  2024-09-13  478.23     USA      USD       478.2300
+1  Los Angeles  2024-09-12  251.67     USA      USD       251.6700
+2      Chicago  2024-09-11  989.34     USA      USD       989.3400
+3     Montréal  2024-09-11  742.14  Canada      CAD       541.7622
+4    Vancouver  2024-09-09  584.56  Canada      CAD       426.7288
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="changing-code">
+<h2>Changing code<a class="headerlink" href="#changing-code" title="Link to this heading">¶</a></h2>
+<p>As you develop your dataflow, you will need to edit upstream nodes. Caching will automatically detect code changes and determine which node needs to be re-executed. In <code class="docutils literal notranslate"><span class="pre">processed_data()</span></code>, we’ll change the conversation rate from <code class="docutils literal notranslate"><span class="pre">0.73</span></code> to <code class="docutils literal notranslate"><span class="pre">0.71</span></code>.</p>
+<blockquote>
+<div><p>NOTE. changes to docstrings and comments <code class="docutils literal notranslate"><span class="pre">#</span></code> are ignored when versioning a node.</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">cell_to_module</span> changing_code_module
+import pandas as pd
+
+DATA = {
+    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;],
+    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;],
+    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56],
+    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;],
+    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;],
+}
+
+def raw_data() -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    return pd.DataFrame(DATA)
+
+def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
+    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
+    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  # &lt;- VALUE CHANGED FROM module_2
+    return df
+
+def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
+    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+</pre></div>
+</div>
+</div>
+</div>
+<p>We need to execute <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> because the code change created a new <code class="docutils literal notranslate"><span class="pre">cache_key</span></code> and led to a cache miss. Then, <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> returns a previously unseen value, forcing <code class="docutils literal notranslate"><span class="pre">amount_per_country</span></code> to also be re-executed</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_code_dr_1</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_code_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+
+<span class="n">changing_code_results_1</span> <span class="o">=</span> <span class="n">changing_code_dr_1</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span> <span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_1</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">changing_code_dr_1</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::result_store::get_result::hit
+processed_data::adapter::execute_node
+amount_per_country::adapter::execute_node
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Canada         941.957
+USA           1719.240
+</pre></div>
+</div>
+<img alt="../../_images/8635b2f729922dc7b680c54e8709b3c4b03939d84e5fec4c3cb878a364c332ca.svg" src="../../_images/8635b2f729922dc7b680c54e8709b3c4b03939d84e5fec4c3cb878a364c332ca.svg" />
+</div>
+</div>
+<p>We make another code change to <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> to accomodate currency conversion for Brazil and Mexico.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">cell_to_module</span> changing_code_module_2
+import pandas as pd
+
+DATA = {
+    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;],
+    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;],
+    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56],
+    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;],
+    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;],
+}
+
+def raw_data() -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    return pd.DataFrame(DATA)
+
+def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
+    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
+    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  
+    df.loc[df.country == &quot;Brazil&quot;, &quot;amound_in_usd&quot;] *= 0.18  # &lt;- LINE ADDED
+    df.loc[df.country == &quot;Mexico&quot;, &quot;amound_in_usd&quot;] *= 0.05  # &lt;- LINE ADDED
+    return df
+
+def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
+    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+</pre></div>
+</div>
+</div>
+</div>
+<p>Again, the code change forces <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> to be executed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_code_dr_2</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_code_module_2</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+
+<span class="n">changing_code_results_2</span> <span class="o">=</span> <span class="n">changing_code_dr_2</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_2</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">changing_code_dr_2</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::result_store::get_result::hit
+processed_data::adapter::execute_node
+amount_per_country::result_store::get_result::hit
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Canada         941.957
+USA           1719.240
+</pre></div>
+</div>
+<img alt="../../_images/1b539b88b1d02240de09b908155ac486f37633c59e6040466a0e36631f7f220d.svg" src="../../_images/1b539b88b1d02240de09b908155ac486f37633c59e6040466a0e36631f7f220d.svg" />
+</div>
+</div>
+<p>However, <code class="docutils literal notranslate"><span class="pre">amount_per_country</span></code> can be retrieved because <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> returned a previously seen value.</p>
+<p>In concrete terms, adding code to process currency from Brazil and Mexico didn’t change the <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> result because it only includes data from the USA and Canada.</p>
+<blockquote>
+<div><p>NOTE. This is similar to what happened at the end of the section <strong>Changing inputs</strong>.</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_1</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_2</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        cities        date  amount country currency  amound_in_usd
+0     New York  2024-09-13  478.23     USA      USD       478.2300
+1  Los Angeles  2024-09-12  251.67     USA      USD       251.6700
+2      Chicago  2024-09-11  989.34     USA      USD       989.3400
+3     Montréal  2024-09-11  742.14  Canada      CAD       526.9194
+4    Vancouver  2024-09-09  584.56  Canada      CAD       415.0376
+
+        cities        date  amount country currency  amound_in_usd
+0     New York  2024-09-13  478.23     USA      USD       478.2300
+1  Los Angeles  2024-09-12  251.67     USA      USD       251.6700
+2      Chicago  2024-09-11  989.34     USA      USD       989.3400
+3     Montréal  2024-09-11  742.14  Canada      CAD       526.9194
+4    Vancouver  2024-09-09  584.56  Canada      CAD       415.0376
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="changing-external-data">
+<h2>Changing external data<a class="headerlink" href="#changing-external-data" title="Link to this heading">¶</a></h2>
+<p>Hamilton’s caching mechanism uses the node’s <code class="docutils literal notranslate"><span class="pre">code_version</span></code> and its dependencies <code class="docutils literal notranslate"><span class="pre">data_version</span></code> to determine if the node needs to be executed or the result can be retrieved from cache. By default, it assumes <a class="reference external" href="https://www.astronomer.io/docs/learn/dag-best-practices#review-idempotency">idempotency</a> of operations.</p>
+<p>This section covers how to handle node with external effects, such as reading or writing external data.</p>
+<section id="idempotency">
+<h3>Idempotency<a class="headerlink" href="#idempotency" title="Link to this heading">¶</a></h3>
+<p>To illustrate idempotency, let’s use this minimal dataflow which has a single node that returns the current date and time:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">current_datetime</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The first execution will execute the node and store the resulting date and time. On the second execution, the cache will read the stored result instead of re-executing. Why? Because the <code class="docutils literal notranslate"><span class="pre">code_version</span></code> is the same and the dependencies <code class="docutils literal notranslate"><span class="pre">data_version</span></code> (it has no dependencies) haven’t changed.</p>
+<p>A similar situation occurs when reading from external data, as shown here:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dataset</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, the code of <code class="docutils literal notranslate"><span class="pre">dataset()</span></code> and the value for <code class="docutils literal notranslate"><span class="pre">file_path</span></code> can stay the same, but the file itself could be updated (e.g., new rows added).</p>
+<p>The next sections show how to always re-execute a node and ensure the latest data is used. The <code class="docutils literal notranslate"><span class="pre">DATA</span></code> constant is modified with transactions in Brazil and Mexico to simulate <code class="docutils literal notranslate"><span class="pre">raw_data</span></code> loading a new dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">cell_to_module</span> changing_external_module
+import pandas as pd
+
+DATA = {
+    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;, &quot;Houston&quot;, &quot;Phoenix&quot;, &quot;Mexico City&quot;, &quot;Chihuahua City&quot;, &quot;Rio de Janeiro&quot;],
+    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;, &quot;2024-09-08&quot;, &quot;2024-09-07&quot;, &quot;2024-09-06&quot;, &quot;2024-09-05&quot;, &quot;2024-09-04&quot;],
+    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
+    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Mexico&quot;, &quot;Mexico&quot;, &quot;Brazil&quot;],
+    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;MXN&quot;, &quot;MXN&quot;, &quot;BRL&quot;],
+}
+
+def raw_data() -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    return pd.DataFrame(DATA)
+
+def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
+    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
+    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  
+    df.loc[df.country == &quot;Brazil&quot;, &quot;amound_in_usd&quot;] *= 0.18
+    df.loc[df.country == &quot;Mexico&quot;, &quot;amound_in_usd&quot;] *= 0.05
+    return df
+
+def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
+    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+</pre></div>
+</div>
+</div>
+</div>
+<p>At execution, we see <code class="docutils literal notranslate"><span class="pre">raw_data</span></code> being retrieved along with all downstream nodes. Also, we note that the printed results don’t include Brazil nor Mexico.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_external_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_external_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+
+<span class="n">changing_external_results</span> <span class="o">=</span> <span class="n">changing_external_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_external_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">changing_external_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::result_store::get_result::hit
+processed_data::result_store::get_result::hit
+amount_per_country::result_store::get_result::hit
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Canada         941.957
+USA           1719.240
+</pre></div>
+</div>
+<img alt="../../_images/eea7bb8b5fbb5e62b5d5fc5afb75560e8f8b051e675e02a74f8aa069fc6890cd.svg" src="../../_images/eea7bb8b5fbb5e62b5d5fc5afb75560e8f8b051e675e02a74f8aa069fc6890cd.svg" />
+</div>
+</div>
+</section>
+<section id="with-cache-to-specify-caching-behavior">
+<h3><code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code> to specify caching behavior<a class="headerlink" href="#with-cache-to-specify-caching-behavior" title="Link to this heading">¶</a></h3>
+<p>Here, we build a new <code class="docutils literal notranslate"><span class="pre">Driver</span></code> with the same <code class="docutils literal notranslate"><span class="pre">changing_external_module</span></code>, but we specify in <code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code> to always recompute <code class="docutils literal notranslate"><span class="pre">raw_data</span></code>.</p>
+<p>The visualization shows that <code class="docutils literal notranslate"><span class="pre">raw_data</span></code> was executed, and because of the new data, all downstream nodes also need to be executed. The results now include Brazil and Mexico.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_external_with_cache_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_external_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;raw_data&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+
+<span class="n">changing_external_with_cache_results</span> <span class="o">=</span> <span class="n">changing_external_with_cache_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_external_with_cache_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">changing_external_with_cache_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::adapter::execute_node
+processed_data::adapter::execute_node
+amount_per_country::adapter::execute_node
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Brazil         77.9004
+Canada        941.9570
+Mexico         46.2170
+USA          2959.7600
+</pre></div>
+</div>
+<img alt="../../_images/07680997efcfb99a67e5c023937a860033cd2b884441c9f81fe04f687511ba15.svg" src="../../_images/07680997efcfb99a67e5c023937a860033cd2b884441c9f81fe04f687511ba15.svg" />
+</div>
+</div>
+</section>
+<section id="cache-to-specify-caching-behavior">
+<h3><code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> to specify caching behavior<a class="headerlink" href="#cache-to-specify-caching-behavior" title="Link to this heading">¶</a></h3>
+<p>Another way to specify the <code class="docutils literal notranslate"><span class="pre">RECOMPUTE</span></code> behavior is to use the <code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> decorator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">cell_to_module</span> changing_external_decorator_module
+import pandas as pd
+from hamilton.function_modifiers import cache
+
+DATA = {
+    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;, &quot;Houston&quot;, &quot;Phoenix&quot;, &quot;Mexico City&quot;, &quot;Chihuahua City&quot;, &quot;Rio de Janeiro&quot;],
+    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;, &quot;2024-09-08&quot;, &quot;2024-09-07&quot;, &quot;2024-09-06&quot;, &quot;2024-09-05&quot;, &quot;2024-09-04&quot;],
+    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
+    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Mexico&quot;, &quot;Mexico&quot;, &quot;Brazil&quot;],
+    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;MXN&quot;, &quot;MXN&quot;, &quot;BRL&quot;],
+}
+
+@cache(behavior=&quot;recompute&quot;)
+def raw_data() -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    return pd.DataFrame(DATA)
+
+def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
+    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
+    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  
+    df.loc[df.country == &quot;Brazil&quot;, &quot;amound_in_usd&quot;] *= 0.18
+    df.loc[df.country == &quot;Mexico&quot;, &quot;amound_in_usd&quot;] *= 0.05
+    return df
+
+def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
+    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+</pre></div>
+</div>
+</div>
+</div>
+<p>We build a new <code class="docutils literal notranslate"><span class="pre">Driver</span></code> with <code class="docutils literal notranslate"><span class="pre">changing_external_cache_decorator_module</span></code>, which includes the <code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> decorator. Note that we don’t specify anything in <code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_external_decorator_dr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_external_decorator_module</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_cache</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">changing_external_decorator_results</span> <span class="o">=</span> <span class="n">changing_external_decorator_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_external_decorator_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">changing_external_decorator_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::adapter::execute_node
+processed_data::result_store::get_result::hit
+amount_per_country::result_store::get_result::hit
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Brazil         77.9004
+Canada        941.9570
+Mexico         46.2170
+USA          2959.7600
+</pre></div>
+</div>
+<img alt="../../_images/c10310d3db77ca1780ef83c2a2b8450cc67a86301d5a14d880c75d548bc8f310.svg" src="../../_images/c10310d3db77ca1780ef83c2a2b8450cc67a86301d5a14d880c75d548bc8f310.svg" />
+</div>
+</div>
+<p>We see that <code class="docutils literal notranslate"><span class="pre">raw_data</span></code> was re-executed. Then, <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> and <code class="docutils literal notranslate"><span class="pre">amount_per_country</span></code> can be retrieved because they were produced just before by the <code class="docutils literal notranslate"><span class="pre">changing_external_with_cache_dr</span></code></p>
+</section>
+<section id="when-to-use-cache-vs-with-cache">
+<h3>When to use <code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> vs. <code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code>?<a class="headerlink" href="#when-to-use-cache-vs-with-cache" title="Link to this heading">¶</a></h3>
+<p>Specifying the caching behavior via <code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> is entirely equivalent. There are benefits to either approach:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code>: specify behavior at the dataflow-level. The behavior is tied to the node and will be picked up by all <code class="docutils literal notranslate"><span class="pre">Driver</span></code> loading the module. This can prevent errors or unexpected behaviors for users of that dataflow.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code>: specify behavior at the <code class="docutils literal notranslate"><span class="pre">Driver</span></code>-level. Gives the flexiblity to change the behavior without modifying the dataflow code and committing changes. You might be ok with <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> during development, but want to ensure <code class="docutils literal notranslate"><span class="pre">RECOMPUTE</span></code> in production.</p></li>
+</ul>
+<p>Importantly, the behavior specified in <code class="docutils literal notranslate"><span class="pre">.with_cache(...)</span></code> overrides whatever is in <code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> because it is closer to execution. For example, having <code class="docutils literal notranslate"><span class="pre">.with_cache(default=[&quot;raw_data&quot;])</span></code> <code class="docutils literal notranslate"><span class="pre">&#64;cache(behavior=&quot;recompute&quot;)</span></code> would force <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> behavior.</p>
+<blockquote>
+<div><p>⛔ <strong>Important</strong>: Using the <code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> decorator alone doesn’t enable caching; adding <code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code> to the <code class="docutils literal notranslate"><span class="pre">Builder</span></code> does. The decorator is only a mean to specify special behaviors for a node.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="force-recompute-all">
+<h2>Force recompute all<a class="headerlink" href="#force-recompute-all" title="Link to this heading">¶</a></h2>
+<p>By specifying <code class="docutils literal notranslate"><span class="pre">.with_cache(recompute=True)</span></code>, you are setting the behavior <code class="docutils literal notranslate"><span class="pre">RECOMPUTE</span></code> for all nodes. This forces recomputation, which is useful for producing a “cache refresh” with up-to-date values.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">recompute_all_dr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_external_decorator_module</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">recompute_all_results</span> <span class="o">=</span> <span class="n">recompute_all_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">recompute_all_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">recompute_all_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::adapter::execute_node
+processed_data::adapter::execute_node
+amount_per_country::adapter::execute_node
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Brazil         77.9004
+Canada        941.9570
+Mexico         46.2170
+USA          2959.7600
+</pre></div>
+</div>
+<img alt="../../_images/07680997efcfb99a67e5c023937a860033cd2b884441c9f81fe04f687511ba15.svg" src="../../_images/07680997efcfb99a67e5c023937a860033cd2b884441c9f81fe04f687511ba15.svg" />
+</div>
+</div>
+<p>We see that all nodes were recomputed.</p>
+</section>
+<section id="setting-default-behavior">
+<h2>Setting default behavior<a class="headerlink" href="#setting-default-behavior" title="Link to this heading">¶</a></h2>
+<p>Once you enable caching using <code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code>, it is a “opt-out” feature by default. This means all nodes are cached unless you set the <code class="docutils literal notranslate"><span class="pre">DISABLE</span></code> behavior via <code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> or <code class="docutils literal notranslate"><span class="pre">.with_cache(disable=[...])</span></code>. This can become difficult to manage as the number of nodes increases.</p>
+<p>You can make it an “opt-in” feature by setting <code class="docutils literal notranslate"><span class="pre">default_behavior=&quot;disable&quot;</span></code> in <code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code>. This way, you’re using caching, but only for nodes explicitly specified in <code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> or <code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code>.</p>
+<p>Here, we build a <code class="docutils literal notranslate"><span class="pre">Driver</span></code> with the <code class="docutils literal notranslate"><span class="pre">changing_external_decorator_module</span></code>, where <code class="docutils literal notranslate"><span class="pre">raw_data</span></code> was set to have behavior <code class="docutils literal notranslate"><span class="pre">RECOMPUTE</span></code>, and set the default behavior to <code class="docutils literal notranslate"><span class="pre">DISABLE</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">default_behavior_dr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_external_decorator_module</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">default_behavior</span><span class="o">=</span><span class="s2">&quot;disable&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">default_behavior_results</span> <span class="o">=</span> <span class="n">default_behavior_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">default_behavior_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">default_behavior_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::adapter::execute_node
+processed_data::adapter::execute_node
+amount_per_country::adapter::execute_node
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Brazil         77.9004
+Canada        941.9570
+Mexico         46.2170
+USA          2959.7600
+</pre></div>
+</div>
+<img alt="../../_images/07680997efcfb99a67e5c023937a860033cd2b884441c9f81fe04f687511ba15.svg" src="../../_images/07680997efcfb99a67e5c023937a860033cd2b884441c9f81fe04f687511ba15.svg" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">default_behavior_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">behaviors</span><span class="p">[</span><span class="n">default_behavior_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;amount_per_country&#39;: &lt;CachingBehavior.DISABLE: 3&gt;,
+ &#39;processed_data&#39;: &lt;CachingBehavior.DISABLE: 3&gt;,
+ &#39;raw_data&#39;: &lt;CachingBehavior.RECOMPUTE: 2&gt;,
+ &#39;cutoff_date&#39;: &lt;CachingBehavior.DISABLE: 3&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="materializers">
+<h2>Materializers<a class="headerlink" href="#materializers" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>NOTE. You can skip this section if you’re not using materializers.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> and <code class="docutils literal notranslate"><span class="pre">DataSaver</span></code> (collectively “materializers”) are special Hamilton nodes that connect your dataflow to external data (files, databases, etc.). These constructs are safe to use with caching and are complementary.</p>
+<p><strong>Caching</strong></p>
+<ul class="simple">
+<li><p>writing and reading shorter-term data to be used with the dataflow</p></li>
+<li><p>strong connection between the code and the data</p></li>
+<li><p>automatically handle multiple versions of the same dataset</p></li>
+</ul>
+<p><strong>Materializers</strong></p>
+<ul class="simple">
+<li><p>robust mechanism to read/write data from many sources</p></li>
+<li><p>data isn’t necessarily meant to be used with Hamilton (e.g., loading from a warehouse, outputting a report).</p></li>
+<li><p>typically outputs to a static destination; each write overwrites the previous stored dataset.</p></li>
+</ul>
+<p>The next cell uses <code class="docutils literal notranslate"><span class="pre">&#64;dataloader</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;datasaver</span></code> decorators. In the visualization, we see the added <code class="docutils literal notranslate"><span class="pre">raw_data.loader</span></code> and <code class="docutils literal notranslate"><span class="pre">saved_data</span></code> nodes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">cell_to_module</span> materializers_module -d
+import pandas as pd
+from hamilton.function_modifiers import dataloader, datasaver
+
+DATA = {
+    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;, &quot;Houston&quot;, &quot;Phoenix&quot;, &quot;Mexico City&quot;, &quot;Chihuahua City&quot;, &quot;Rio de Janeiro&quot;],
+    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;, &quot;2024-09-08&quot;, &quot;2024-09-07&quot;, &quot;2024-09-06&quot;, &quot;2024-09-05&quot;, &quot;2024-09-04&quot;],
+    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
+    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Mexico&quot;, &quot;Mexico&quot;, &quot;Brazil&quot;],
+    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;MXN&quot;, &quot;MXN&quot;, &quot;BRL&quot;],
+}
+
+@dataloader()
+def raw_data() -&gt; tuple[pd.DataFrame, dict]:
+    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    data = pd.DataFrame(DATA)
+    metadata = {&quot;source&quot;: &quot;notebook&quot;, &quot;format&quot;: &quot;json&quot;}
+    return data, metadata
+
+def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
+    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
+    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  
+    df.loc[df.country == &quot;Brazil&quot;, &quot;amound_in_usd&quot;] *= 0.18
+    df.loc[df.country == &quot;Mexico&quot;, &quot;amound_in_usd&quot;] *= 0.05
+    return df
+
+def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
+    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+
+@datasaver()
+def saved_data(amount_per_country: pd.DataFrame) -&gt; dict:
+    amount_per_country.to_parquet(&quot;./saved_data.parquet&quot;)
+    metadata = {&quot;source&quot;: &quot;notebook&quot;, &quot;format&quot;: &quot;parquet&quot;}
+    return metadata
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/d5b1c3299cacd430c993398fa0cd643d6f0ea978b2f9933eb3b2fc2c37b1bb81.svg" src="../../_images/d5b1c3299cacd430c993398fa0cd643d6f0ea978b2f9933eb3b2fc2c37b1bb81.svg" />
+</div>
+</div>
+<p>Next, we build a <code class="docutils literal notranslate"><span class="pre">Driver</span></code> as usual.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">materializers_dr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">materializers_module</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_cache</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">materializers_results</span> <span class="o">=</span> <span class="n">materializers_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">,</span> <span class="s2">&quot;saved_data&quot;</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">materializers_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">materializers_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data.loader::adapter::execute_node
+raw_data::adapter::execute_node
+processed_data::result_store::get_result::hit
+amount_per_country::result_store::get_result::hit
+saved_data::adapter::execute_node
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Brazil         77.9004
+Canada        941.9570
+Mexico         46.2170
+USA          2959.7600
+</pre></div>
+</div>
+<img alt="../../_images/e7a0ef291e1a59efc83b5adb4ba842c91cf7cdb306aa04a0389ca2888867828d.svg" src="../../_images/e7a0ef291e1a59efc83b5adb4ba842c91cf7cdb306aa04a0389ca2888867828d.svg" />
+</div>
+</div>
+<p>We execute the dataflow a second time to show that loaders and savers are just like any other node; they can be cached and retrieved.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">materializers_results</span> <span class="o">=</span> <span class="n">materializers_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">,</span> <span class="s2">&quot;saved_data&quot;</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">materializers_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">materializers_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data.loader::result_store::get_result::hit
+raw_data::result_store::get_result::hit
+processed_data::result_store::get_result::hit
+amount_per_country::result_store::get_result::hit
+saved_data::result_store::get_result::hit
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Brazil         77.9004
+Canada        941.9570
+Mexico         46.2170
+USA          2959.7600
+</pre></div>
+</div>
+<img alt="../../_images/99c1d46bf7e8abaf1b3a6e2c69718baa44d7df6f0111ea85047c04261204d103.svg" src="../../_images/99c1d46bf7e8abaf1b3a6e2c69718baa44d7df6f0111ea85047c04261204d103.svg" />
+</div>
+</div>
+<section id="usage-patterns">
+<h3>Usage patterns<a class="headerlink" href="#usage-patterns" title="Link to this heading">¶</a></h3>
+<p>Here are a few common scenarios:</p>
+<p><strong>Loading data is expensive</strong>: Your dataflow uses a <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> to get data from Snowflake. You want to load it once and cache it. When executing your dataflow, you want to use your cached copy to save query time, egress costs, etc.</p>
+<ul class="simple">
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> caching behavior for loaders.</p></li>
+</ul>
+<p><strong>Only save new data</strong>: You run the dataflow multiple times (maybe with different parameters or on a schedule) and only want to write to destination when the data changes.</p>
+<ul class="simple">
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> caching behavior for savers.</p></li>
+</ul>
+<p><strong>Always read the latest data</strong>: You want to use caching, but also ensure the dataflow always uses the latest data. This involves executing the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> every time, get the data in-memory, version it, and then determine what needs to be executed (see <strong>Changing external data</strong>).</p>
+<ul class="simple">
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">RECOMPUTE</span></code> caching behavior for loaders.</p></li>
+</ul>
+<p>Use the parameters <code class="docutils literal notranslate"><span class="pre">default_loader_behavior</span></code> or <code class="docutils literal notranslate"><span class="pre">default_saver_behavior</span></code> of the <code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code> clause to specify the behavior for all loaders or savers.</p>
+<blockquote>
+<div><p>NOTE. The <strong>Caching + materializers tutorial</strong> notebook details how to achieve granular control over loader and saver behaviors.</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">materializers_dr_2</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">materializers_module</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_cache</span><span class="p">(</span>
+        <span class="n">default_loader_behavior</span><span class="o">=</span><span class="s2">&quot;recompute&quot;</span><span class="p">,</span>
+        <span class="n">default_saver_behavior</span><span class="o">=</span><span class="s2">&quot;disable&quot;</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">materializers_results_2</span> <span class="o">=</span> <span class="n">materializers_dr_2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">,</span> <span class="s2">&quot;saved_data&quot;</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">materializers_results_2</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">materializers_dr_2</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data.loader::adapter::execute_node
+raw_data::adapter::execute_node
+processed_data::result_store::get_result::hit
+amount_per_country::result_store::get_result::hit
+saved_data::adapter::execute_node
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         amound_in_usd
+country               
+Brazil         77.9004
+Canada        941.9570
+Mexico         46.2170
+USA          2959.7600
+</pre></div>
+</div>
+<img alt="../../_images/e7a0ef291e1a59efc83b5adb4ba842c91cf7cdb306aa04a0389ca2888867828d.svg" src="../../_images/e7a0ef291e1a59efc83b5adb4ba842c91cf7cdb306aa04a0389ca2888867828d.svg" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">materializers_dr_2</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">behaviors</span><span class="p">[</span><span class="n">materializers_dr_2</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;amount_per_country&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;,
+ &#39;processed_data&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;,
+ &#39;raw_data.loader&#39;: &lt;CachingBehavior.RECOMPUTE: 2&gt;,
+ &#39;raw_data&#39;: &lt;CachingBehavior.RECOMPUTE: 2&gt;,
+ &#39;saved_data&#39;: &lt;CachingBehavior.DISABLE: 3&gt;,
+ &#39;cutoff_date&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="changing-the-cache-format">
+<h2>Changing the cache format<a class="headerlink" href="#changing-the-cache-format" title="Link to this heading">¶</a></h2>
+<p>By default, results are stored in <code class="docutils literal notranslate"><span class="pre">pickle</span></code> format. It’s a convenient default but <a class="reference external" href="https://grantjenks.com/docs/diskcache/tutorial.html#caveats">comes with caveats</a>. You can use the <code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> decorator to specify another file format for storing results.</p>
+<p>By default this includes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">json</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parquet</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">excel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">file</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feather</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">orc</span></code></p></li>
+</ul>
+<p>This feature uses <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> and <code class="docutils literal notranslate"><span class="pre">DataSaver</span></code> under the hood and supports all of the same formats (including your custom ones, as long as they take a <code class="docutils literal notranslate"><span class="pre">path</span></code> attribute).</p>
+<blockquote>
+<div><p>This is an area of active development. Feel free to share suggestions and feedback!</p>
+</div></blockquote>
+<p>The next cell sets <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> to be cached using the <code class="docutils literal notranslate"><span class="pre">parquet</span></code> format.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">cell_to_module</span> cache_format_module
+import pandas as pd
+from hamilton.function_modifiers import cache
+
+DATA = {
+    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;, &quot;Houston&quot;, &quot;Phoenix&quot;, &quot;Mexico City&quot;, &quot;Chihuahua City&quot;, &quot;Rio de Janeiro&quot;],
+    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;, &quot;2024-09-08&quot;, &quot;2024-09-07&quot;, &quot;2024-09-06&quot;, &quot;2024-09-05&quot;, &quot;2024-09-04&quot;],
+    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
+    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Mexico&quot;, &quot;Mexico&quot;, &quot;Brazil&quot;],
+    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;MXN&quot;, &quot;MXN&quot;, &quot;BRL&quot;],
+}
+
+def raw_data() -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    return pd.DataFrame(DATA)
+
+@cache(format=&quot;parquet&quot;)
+def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
+    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
+    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  
+    df.loc[df.country == &quot;Brazil&quot;, &quot;amound_in_usd&quot;] *= 0.18
+    df.loc[df.country == &quot;Mexico&quot;, &quot;amound_in_usd&quot;] *= 0.05
+    return df
+
+def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.Series:
+    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
+    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum()
+</pre></div>
+</div>
+</div>
+</div>
+<p>When executing the dataflow, we see <code class="docutils literal notranslate"><span class="pre">raw_data</span></code> recomputed because it’s a dataloader. The result for <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> will be retrieved, but it will be saved again as <code class="docutils literal notranslate"><span class="pre">.parquet</span></code> this time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cache_format_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">cache_format_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+
+<span class="n">cache_format_results</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cache_format_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::result_store::get_result::hit
+processed_data::adapter::execute_node
+amount_per_country::adapter::execute_node
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>country
+Canada     941.957
+USA       1719.240
+Name: amound_in_usd, dtype: float64
+</pre></div>
+</div>
+<img alt="../../_images/9850128f869ecbd8f7874e39664dab865a795736f63314c2361b21895ce20f41.svg" src="../../_images/9850128f869ecbd8f7874e39664dab865a795736f63314c2361b21895ce20f41.svg" />
+</div>
+</div>
+<p>Now, under the <code class="docutils literal notranslate"><span class="pre">./.hamilton_cache</span></code>, there will be two results of the same name, one with the <code class="docutils literal notranslate"><span class="pre">.parquet</span></code> extension and one without. The one without is actually a pickeld <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> to retrieve the <code class="docutils literal notranslate"><span class="pre">.parquet</span></code> file.</p>
+<p>You can access the path programmatically via the <code class="docutils literal notranslate"><span class="pre">result_store._path_from_data_version(...)</span></code> method.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_version</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">][</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]</span>
+<span class="n">parquet_path</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">_path_from_data_version</span><span class="p">(</span><span class="n">data_version</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.parquet&quot;</span><span class="p">)</span>
+<span class="n">parquet_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="introspecting-the-cache">
+<h2>Introspecting the cache<a class="headerlink" href="#introspecting-the-cache" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Driver.cache</span></code> stores information about all executions over its lifetime. Previous <code class="docutils literal notranslate"><span class="pre">run_id</span></code> are available through <code class="docutils literal notranslate"><span class="pre">Driver.cache.run_ids</span></code> and can be used in tandem without other utility functions:</p>
+<ul class="simple">
+<li><p>Resolve the node caching behavior (e.g., “recompute”)</p></li>
+<li><p>Access structured logs</p></li>
+<li><p>Visualize the cache execution</p></li>
+</ul>
+<p>Also, <code class="docutils literal notranslate"><span class="pre">Driver.cache.last_run_id</span></code> is a shortcut to the most recent execution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">resolve_behaviors</span><span class="p">(</span><span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;amount_per_country&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;,
+ &#39;processed_data&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;,
+ &#39;raw_data&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;,
+ &#39;cutoff_date&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_logs</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">run_logs</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>processed_data::adapter::resolve_behavior
+processed_data::adapter::set_cache_key
+processed_data::adapter::get_cache_key::hit
+processed_data::adapter::get_data_version::miss
+processed_data::metadata_store::get_data_version::miss
+processed_data::adapter::execute_node
+processed_data::adapter::set_data_version
+processed_data::metadata_store::set_data_version
+processed_data::adapter::get_cache_key::hit
+processed_data::adapter::get_data_version::hit
+processed_data::result_store::set_result
+processed_data::adapter::get_data_version::hit
+processed_data::adapter::resolve_behavior
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># for `.view_run()` passing no parameter is equivalent to the last `run_id`</span>
+<span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">(</span><span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/9850128f869ecbd8f7874e39664dab865a795736f63314c2361b21895ce20f41.svg" src="../../_images/9850128f869ecbd8f7874e39664dab865a795736f63314c2361b21895ce20f41.svg" />
+</div>
+</div>
+<section id="interactively-explore-runs">
+<h3>Interactively explore runs<a class="headerlink" href="#interactively-explore-runs" title="Link to this heading">¶</a></h3>
+<p>By using <code class="docutils literal notranslate"><span class="pre">ipywidgets</span></code> we can easily build a widget to iterate over <code class="docutils literal notranslate"><span class="pre">run_id</span></code> values and display cache information. Below, we create a <code class="docutils literal notranslate"><span class="pre">Driver</span></code> and execute it a few times to generate data then inspect it with a widget.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">interactive_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">cache_format_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+
+<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-05&quot;</span><span class="p">})</span>
+<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-10&quot;</span><span class="p">})</span>
+<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-11&quot;</span><span class="p">})</span>
+<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-13&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw_data::result_store::get_result::hit
+processed_data::result_store::get_result::hit
+amount_per_country::result_store::get_result::hit
+raw_data::result_store::get_result::hit
+processed_data::adapter::execute_node
+amount_per_country::result_store::get_result::hit
+raw_data::result_store::get_result::hit
+processed_data::adapter::execute_node
+amount_per_country::adapter::execute_node
+raw_data::result_store::get_result::hit
+processed_data::adapter::execute_node
+amount_per_country::adapter::execute_node
+raw_data::result_store::get_result::hit
+processed_data::adapter::execute_node
+amount_per_country::adapter::execute_node
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;amount_per_country&#39;: Series([], Name: amound_in_usd, dtype: float64)}
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following cell allows you to click-and-drag or use arrow-keys to navigate</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ipywidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SelectionSlider</span><span class="p">,</span> <span class="n">interact</span>
+
+
+<span class="nd">@interact</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">SelectionSlider</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">run_ids</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">iterate_over_runs</span><span class="p">(</span><span class="n">run_id</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">])</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8a9785e33191453bac0b952ce1f80ef3", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+</section>
+<section id="managing-storage">
+<h2>Managing storage<a class="headerlink" href="#managing-storage" title="Link to this heading">¶</a></h2>
+<section id="setting-the-cache-path">
+<h3>Setting the cache <code class="docutils literal notranslate"><span class="pre">path</span></code><a class="headerlink" href="#setting-the-cache-path" title="Link to this heading">¶</a></h3>
+<p>By default, metadata and results are stored under <code class="docutils literal notranslate"><span class="pre">./.hamilton_cache</span></code>, relative to the current directory at execution time. You can also manually set the directory via <code class="docutils literal notranslate"><span class="pre">.with_cache(path=...)</span></code> to isolate or centralize cache storage between dataflows or projects.</p>
+<p>Running the next cell will create the directory <code class="docutils literal notranslate"><span class="pre">./my_other_cache</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">manual_path_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">cache_format_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./my_other_cache&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="instantiating-the-result-store-and-metadata-store">
+<h3>Instantiating the <code class="docutils literal notranslate"><span class="pre">result_store</span></code> and <code class="docutils literal notranslate"><span class="pre">metadata_store</span></code><a class="headerlink" href="#instantiating-the-result-store-and-metadata-store" title="Link to this heading">¶</a></h3>
+<p>If you need to store metadata and results in separate locations, you can do so by instantiating the <code class="docutils literal notranslate"><span class="pre">result_store</span></code> and <code class="docutils literal notranslate"><span class="pre">metadata_store</span></code> manually with their own configuration. In this case, setting <code class="docutils literal notranslate"><span class="pre">.with_cache(path=...)</span></code> would be ignored.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.caching.stores.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileResultStore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.caching.stores.sqlite</span><span class="w"> </span><span class="kn">import</span> <span class="n">SQLiteMetadataStore</span>
+
+<span class="n">result_store</span> <span class="o">=</span> <span class="n">FileResultStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./results&quot;</span><span class="p">)</span>
+<span class="n">metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./metadata&quot;</span><span class="p">)</span>
+
+<span class="n">manual_stores_dr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">cache_format_module</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_cache</span><span class="p">(</span>
+        <span class="n">result_store</span><span class="o">=</span><span class="n">result_store</span><span class="p">,</span>
+        <span class="n">metadata_store</span><span class="o">=</span><span class="n">metadata_store</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="deleting-data-and-recovering-storage">
+<h3>Deleting data and recovering storage<a class="headerlink" href="#deleting-data-and-recovering-storage" title="Link to this heading">¶</a></h3>
+<p>As you use caching, you might be generating a lot of data that you don’t need anymore. One straightforward solution is to delete the entire directory where metadata and results are stored.</p>
+<p>You can also programmatically call <code class="docutils literal notranslate"><span class="pre">.delete_all()</span></code> on the <code class="docutils literal notranslate"><span class="pre">result_store</span></code> and <code class="docutils literal notranslate"><span class="pre">metadata_store</span></code>, which should reclaim most storage. If you delete results, make sure to also delete metadata. The caching mechanism should figure it out, but it’s safer to keep them in sync.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">manual_stores_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">delete_all</span><span class="p">()</span>
+<span class="n">manual_stores_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">delete_all</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="id1">
+<h2>Usage patterns<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>As demonstrated here, caching works great in a notebook environment.</p>
+<ul class="simple">
+<li><p>In addition to iteration speed, caching allows you to restart your kernel or shutdown your computer for the day without worry. When you’ll come back, you will still be able to retrieve results from cache.</p></li>
+<li><p>A similar benefit is the ability resume execution between environments. For example, you might be running Hamilton in a script, but when a bug happens you can reload these values in a notebook and investigate.</p></li>
+<li><p>Caching works great with other adapters like the <code class="docutils literal notranslate"><span class="pre">HamiltonTracker</span></code> that powers the Hamilton UI and the <code class="docutils literal notranslate"><span class="pre">MLFlowTracker</span></code> for experiment tracking.</p></li>
+</ul>
+</section>
+<section id="internals">
+<h2>🚧 INTERNALS<a class="headerlink" href="#internals" title="Link to this heading">¶</a></h2>
+<p>If you’re curious the following sections provide details about the caching internals. These APIs are not public and may change without notice.</p>
+<section id="manually-retrieve-results">
+<h3>Manually retrieve results<a class="headerlink" href="#manually-retrieve-results" title="Link to this heading">¶</a></h3>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">Driver.cache</span></code> you can directly retrieve results from previous executions. The cache stores “data versions” which are keys for the <code class="docutils literal notranslate"><span class="pre">result_store</span></code>.</p>
+<p>Here, we get the <code class="docutils literal notranslate"><span class="pre">run_id</span></code> for the 4th execution (index 3) and the data version for <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> before retrieving its value.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_id</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">run_ids</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">data_version</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_version</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>        cities        date  amount country currency  amound_in_usd
+0     New York  2024-09-13  478.23     USA      USD         478.23
+1  Los Angeles  2024-09-12  251.67     USA      USD         251.67
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="decoding-the-cache-key">
+<h3>Decoding the <code class="docutils literal notranslate"><span class="pre">cache_key</span></code><a class="headerlink" href="#decoding-the-cache-key" title="Link to this heading">¶</a></h3>
+<p>By now, you should have a better grasp on how Hamilton’s caching determines when to execute a node. Internally, it creates a <code class="docutils literal notranslate"><span class="pre">cache_key</span></code> from the <code class="docutils literal notranslate"><span class="pre">code_version</span></code> of the node and the <code class="docutils literal notranslate"><span class="pre">data_version</span></code> of each dependency. The cache keys are stored on the <code class="docutils literal notranslate"><span class="pre">Driver.cache</span></code> and can be decoded for introspection and debugging.</p>
+<p>Here, we get the <code class="docutils literal notranslate"><span class="pre">run_id</span></code> for the 3rd execution (index 2) and the cache key for <code class="docutils literal notranslate"><span class="pre">amount_per_country</span></code>. We then use <code class="docutils literal notranslate"><span class="pre">decode_key()</span></code> to retrieve the <code class="docutils literal notranslate"><span class="pre">node_name</span></code>, <code class="docutils literal notranslate"><span class="pre">code_version</span></code>, and <code class="docutils literal notranslate"><span class="pre">dependencies_data_versions</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.caching.cache_key</span><span class="w"> </span><span class="kn">import</span> <span class="n">decode_key</span>
+
+<span class="n">run_id</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">run_ids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">cache_key</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">cache_keys</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span>
+<span class="n">decode_key</span><span class="p">(</span><span class="n">cache_key</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;node_name&#39;: &#39;amount_per_country&#39;,
+ &#39;code_version&#39;: &#39;c2ccafa54280fbc969870b6baa445211277d7e8cfa98a0821836c175603ffda2&#39;,
+ &#39;dependencies_data_versions&#39;: {&#39;processed_data&#39;: &#39;WgV5-4SfdKTfUY66x-msj_xXsKNPNTP2guRhfw==&#39;}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Indeed, this match the data version for <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> for the 3rd execution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;WgV5-4SfdKTfUY66x-msj_xXsKNPNTP2guRhfw==&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="manually-retrieve-metadata">
+<h3>Manually retrieve metadata<a class="headerlink" href="#manually-retrieve-metadata" title="Link to this heading">¶</a></h3>
+<p>In addition to the <code class="docutils literal notranslate"><span class="pre">result_store</span></code>, there is a <code class="docutils literal notranslate"><span class="pre">metadata_store</span></code> that contains mapping between <code class="docutils literal notranslate"><span class="pre">cache_key</span></code> and <code class="docutils literal notranslate"><span class="pre">data_version</span></code> (cache keys are unique, but many can point to the same data).</p>
+<p>Using the knowledge from the previous section, we can use the cache key for <code class="docutils literal notranslate"><span class="pre">amount_per_country</span></code> to retrieve its <code class="docutils literal notranslate"><span class="pre">data_version</span></code> and result. It’s also possible to decode its <code class="docutils literal notranslate"><span class="pre">cache_key</span></code>, and get the <code class="docutils literal notranslate"><span class="pre">data_version</span></code> for its dependencies, making the node execution reproducible.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_id</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">run_ids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">cache_key</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">cache_keys</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span>
+<span class="n">amount_data_version</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cache_key</span><span class="p">)</span>
+<span class="n">amount_result</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">amount_data_version</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">amount_result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>country
+Canada     526.9194
+USA       1719.2400
+Name: amound_in_usd, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">dep_name</span><span class="p">,</span> <span class="n">dependency_data_version</span> <span class="ow">in</span> <span class="n">decode_key</span><span class="p">(</span><span class="n">cache_key</span><span class="p">)[</span><span class="s2">&quot;dependencies_data_versions&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">dep_result</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dependency_data_version</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dep_name</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dep_result</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>processed_data
+        cities        date  amount country currency  amound_in_usd
+0     New York  2024-09-13  478.23     USA      USD         478.23
+1  Los Angeles  2024-09-12  251.67     USA      USD         251.67
+2      Chicago  2024-09-11  989.34     USA      USD         989.34
+3     Montréal  2024-09-11  742.14  Canada      CAD       526.9194
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../use-for-feature-engineering/">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Feature engineering</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../load-data/">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Loading data</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Caching</a><ul>
+<li><a class="reference internal" href="#basics">Basics</a><ul>
+<li><a class="reference internal" href="#understanding-the-cache-key">Understanding the <code class="docutils literal notranslate"><span class="pre">cache_key</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-a-node">Adding a node</a></li>
+<li><a class="reference internal" href="#changing-inputs">Changing inputs</a></li>
+<li><a class="reference internal" href="#changing-code">Changing code</a></li>
+<li><a class="reference internal" href="#changing-external-data">Changing external data</a><ul>
+<li><a class="reference internal" href="#idempotency">Idempotency</a></li>
+<li><a class="reference internal" href="#with-cache-to-specify-caching-behavior"><code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code> to specify caching behavior</a></li>
+<li><a class="reference internal" href="#cache-to-specify-caching-behavior"><code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> to specify caching behavior</a></li>
+<li><a class="reference internal" href="#when-to-use-cache-vs-with-cache">When to use <code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> vs. <code class="docutils literal notranslate"><span class="pre">.with_cache()</span></code>?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#force-recompute-all">Force recompute all</a></li>
+<li><a class="reference internal" href="#setting-default-behavior">Setting default behavior</a></li>
+<li><a class="reference internal" href="#materializers">Materializers</a><ul>
+<li><a class="reference internal" href="#usage-patterns">Usage patterns</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#changing-the-cache-format">Changing the cache format</a></li>
+<li><a class="reference internal" href="#introspecting-the-cache">Introspecting the cache</a><ul>
+<li><a class="reference internal" href="#interactively-explore-runs">Interactively explore runs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#managing-storage">Managing storage</a><ul>
+<li><a class="reference internal" href="#setting-the-cache-path">Setting the cache <code class="docutils literal notranslate"><span class="pre">path</span></code></a></li>
+<li><a class="reference internal" href="#instantiating-the-result-store-and-metadata-store">Instantiating the <code class="docutils literal notranslate"><span class="pre">result_store</span></code> and <code class="docutils literal notranslate"><span class="pre">metadata_store</span></code></a></li>
+<li><a class="reference internal" href="#deleting-data-and-recovering-storage">Deleting data and recovering storage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id1">Usage patterns</a></li>
+<li><a class="reference internal" href="#internals">🚧 INTERNALS</a><ul>
+<li><a class="reference internal" href="#manually-retrieve-results">Manually retrieve results</a></li>
+<li><a class="reference internal" href="#decoding-the-cache-key">Decoding the <code class="docutils literal notranslate"><span class="pre">cache_key</span></code></a></li>
+<li><a class="reference internal" href="#manually-retrieve-metadata">Manually retrieve metadata</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=187304be"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=22e4c79f"></script>
+    </body>
+</html>

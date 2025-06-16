@@ -1,0 +1,35 @@
+dl.class, dl.type, dl.function, dl.member, dl.var, dl.enum, dl.enum-class, dl.enum-struct, dl.method {
+    dt {
+        text-align: left;
+    }
+
+    > dt {
+        font-weight: normal;
+    }
+
+    em.property {
+        font-weight: bold;
+        color: #007020;
+    }
+
+    em.sig-param {
+        color: #007020;
+    }
+
+    code.sig-prename {
+        font-weight: bold;
+        color: #4070a0;
+    }
+
+    code.sig-name {
+        color: #0e84b5;
+    }
+
+    dl.field-list {
+        display: block;
+
+        dt, dd {
+            padding-left: 0;
+        }
+    }
+}

@@ -1,0 +1,11 @@
+=======================
+h_dask.DaskGraphAdapter
+=======================
+
+Runs the entire Apache Hamilton DAG on dask.
+
+
+.. autoclass:: hamilton.plugins.h_dask.DaskGraphAdapter
+   :special-members: __init__
+   :members:
+   :inherited-members:

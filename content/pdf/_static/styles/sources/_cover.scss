@@ -1,0 +1,117 @@
+#cover {
+    width: 100%;
+    // height: 100%;
+
+    align-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    height: 297mm;
+
+    background: $cover-bg;
+    background-size: cover;
+    margin: 0;
+
+    h1 {
+        font-family: "Work Sans", sans-serif;
+        color: $primary;
+        font-size: 38pt;
+        margin: 5cm 2cm 0 2cm;
+        page: no-chapter;
+        width: 100%;
+    }
+
+    a {
+        color: $cover;
+        font-weight: bolder;
+    }
+
+    .container {
+        width: 100%;
+        top: 0;
+        background: $cover-overlay;
+        .logo {
+            font-size: 24pt;
+            color: $cover;
+            width: 200px;
+            height: 45px;
+            position: absolute;
+            text-align: right;
+            top: 40pt;
+            right: 20pt;
+            p {
+                margin: auto;
+            }
+        }
+
+        .cover-middle {
+            position: relative;
+            top: 40%;
+            width: 100%;
+
+            .title {
+                position: absolute;
+                top: 5pt;
+                left: 40pt;
+                height: 150pt;
+
+                .title-cover {
+                    font-family: "Work Sans Bold", sans-serif;
+                    font-size: 45pt;
+                    margin-bottom: 0;
+                    margin-top: 0;
+                    margin-left: 0;
+                    color: $cover;
+                }
+
+                .subtitle-cover {
+                    font-family: "Work Sans Bold", sans-serif;
+                    font-weight: bolder;
+                    font-size: 28pt;
+                    // text-transform: uppercase;
+                    margin-top: 5pt;
+                    color: $cover;
+                }
+
+                .meta {
+                    font-family: 'Work Sans';
+                    font-size: 18pt;
+                    margin-top: 12pt;
+                    margin-bottom: 0;
+                    color: $cover;
+                }
+            }
+
+            .client-logo {
+                position: absolute;
+                border-radius: 8pt;
+                border: 4px solid white;
+                background-color: white;
+                top: 20pt;
+                right: 40pt;
+                float: right;
+                height: 150px;
+                width: 150px;
+
+                img {
+                    width: 150px;
+                    height: 150px;
+                }
+            }
+        }
+
+        .cover-footer {
+            font-family: 'Work Sans';
+            font-size: 11pt;
+            margin-top: 3px;
+            position: absolute;
+            bottom: 30pt;
+            color: $white;
+            width: 100%;
+            p {
+                width: 80%;
+                margin: 0 auto;
+                text-align: center;
+            }
+        }
+    }
+}

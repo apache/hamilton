@@ -1,0 +1,74 @@
+dl.head, dl.get, dl.post, dl.put, dl.delete, dl.patch, dl.options, dl.trace, dl.connect, dl.copy, dl.any {
+    break-before: auto;
+    break-after: auto;
+    break-inside: auto;
+
+    //> * {
+    //    break-before: auto;
+    //}
+
+    > dd > dl.field-list {
+        display: block;
+
+        > * {
+            flex-basis: unset;
+            padding-left: 0;
+        }
+    }
+
+    > dt {
+        margin-bottom: 1em;
+    }
+
+    > dd {
+        margin-left: 0;
+
+        > p > strong {
+            font-weight: normal;
+        }
+    }
+
+    span.sig-paren, em.property, em.sig-param {
+        font-weight: normal;
+    }
+
+    code.descname:first-child {
+        font-size: 0.9em;
+        background-color: #337ab7;
+        color: white;
+        display: inline-block;
+        padding-left: 5px;
+        padding-right: 5px;
+        margin-right: 10px;
+    }
+
+    &.get {
+        code.descname:first-child {
+            background-color: #61AFFE;
+        }
+    }
+
+    &.post {
+        code.descname:first-child {
+            background-color: #49CC90;
+        }
+    }
+
+    &.put {
+        code.descname:first-child {
+            background-color: #FCA130;
+        }
+    }
+
+    &.patch {
+        code.descname:first-child {
+            background-color: #50E3C2;
+        }
+    }
+
+    &.delete {
+        code.descname:first-child {
+            background-color: #F93E3E;
+        }
+    }
+}

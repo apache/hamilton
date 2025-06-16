@@ -1,0 +1,176 @@
+@charset "UTF-8";
+
+@import "variables";
+@import "fonts";
+@import "lists";
+@import "tables";
+@import "blocks";
+@import "alerts";
+@import "code";
+@import "toc";
+@import "pages";
+@import "cover";
+@import "back-cover";
+@import "text";
+@import "admonition";
+@import "api";
+@import "needs";
+
+@media print
+{
+    // Para evitar que queden espacios entre los bloques de API
+    dd, dt, dl {
+        // page-break-inside: avoid;
+    }
+}
+
+body div.body {
+    min-width: unset;
+    max-width: unset;
+}
+
+.docutils {
+    th.field-name {
+        display: table-row;
+    }
+
+    td {
+        display: none;
+    }
+
+    td.field-body {
+        display: table-row;
+        padding-top: 1em;
+
+        ul {
+            margin-left: 1em;
+            margin-bottom: 1em;
+        }
+    }
+}
+
+body {
+  margin: 0;
+}
+
+.highlight-default {
+  margin-top: 0.5em;
+}
+
+.highlight {
+  pre {
+    padding: 1em;
+    //white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+}
+
+.headerlink {
+  display: none;
+}
+
+html {
+  color: #393939;
+  font-family: Fira Sans;
+  font-size: 11pt;
+  font-weight: 300;
+  line-height: 1.5;
+
+  body {
+    h1 {
+      color: $primary;
+      font-size: 30pt;
+      page-break-before: always;
+    }
+
+    h2, h3, h4 {
+      color: black;
+      font-weight: 400;
+    }
+
+    h2 {
+      page-break-before: always;
+      font-size: 28pt;
+      string-set: heading content();
+    }
+
+    h3 {
+      font-weight: 300;
+      font-size: 20pt;
+    }
+
+    h4 {
+      font-size: 16pt;
+    }
+
+    h5 {
+      font-size: 15pt;
+      font-weight: 100;
+    }
+
+    h6 {
+      font-size: 13pt;
+      font-weight: 100;
+
+    }
+
+    section {
+      h5 {
+        margin-bottom: 1pt;
+      }
+      p {
+        margin-top: 0;
+      }
+    }
+
+    h5, h6 {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+  }
+}
+
+
+
+.alert {
+  i {
+    margin-right: 6pt;
+  }
+}
+
+.is-marginless { margin: 0 !important; }
+.is-paddingless { padding: 0 !important; }
+
+.charts-inline {
+  columns: 2;
+  column-fill: balance;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.big-stats {
+  font-size: 23pt;
+}
+
+.docutils.literal.notranslate {
+    //-moz-hyphens: none;
+    //-ms-hyphens: none;
+    //-webkit-hyphens: none;
+    hyphens: none;
+    color: #552977;
+    background-color: #f1f1f1;
+    font-size: 9pt;
+    display: inline-block;
+    padding: 1pt 3pt;
+}

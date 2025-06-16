@@ -1,0 +1,206 @@
+// Page helpers
+.dont-break {
+    page-break-inside: avoid;
+}
+
+.break-before {
+  page-break-before: always;
+}
+
+.break-after {
+  page-break-after: always;
+}
+
+#back-cover {
+    page: back_cover;
+    page-break-before: always;
+}
+
+@page landscape_page {
+    size: landscape;
+}
+
+@page portrait_page {
+    size: portrait;
+}
+
+.ssp-portrait {
+    page: portrait_page;
+
+}
+.ssp-landscape {
+    page: landscape_page;
+}
+
+@page {
+  padding-top: 1em;
+
+  @top-left {
+    background: $primary;
+    color: $white;
+    content: $top-left-content;
+    height: 1cm;
+    text-align: center;
+    width: 1cm;
+  }
+
+  @top-center {
+    content: $top-center-content;
+    font-size: 9pt;
+    height: 1cm;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    border-bottom-color: $primary-opaque;
+    border-bottom-style: solid;
+    border-bottom-width: 0.05cm;
+  }
+
+  @top-right {
+    content: $top-right-content;
+    font-size: 9pt;
+    height: 1cm;
+    text-align: right;
+    vertical-align: middle;
+    width: 100%;
+    border-bottom-color: $primary-opaque;
+    border-bottom-style: solid;
+    border-bottom-width: 0.05cm;
+  }
+
+  @bottom-left {
+    content: $bottom-left-content;
+    text-align: left;
+    font-size: 9pt;
+    height: 1cm;
+    vertical-align: middle;
+    width: 100%;
+    border-top-color: $primary-opaque;
+    border-top-style: solid;
+    border-top-width: 0.05cm;
+    margin-top: 3px;
+    position: absolute;
+    bottom: 30pt;
+  }
+
+  @bottom-center {
+    content: $bottom-center-content;
+    text-align: center;
+    font-size: 9pt;
+    height: 1cm;
+    vertical-align: middle;
+    width: 100%;
+    border-top-color: $primary-opaque;
+    border-top-style: solid;
+    border-top-width: 0.05cm;
+    margin-top: 3px;
+    position: absolute;
+    bottom: 30pt;
+  }
+
+  @bottom-right {
+    content: $bottom-right-content;
+    text-align: right;
+    font-size: 9pt;
+    height: 1cm;
+    vertical-align: middle;
+    width: 100%;
+    margin-top: 3px;
+    position: absolute;
+    bottom: 30pt;
+    border-top-color: $primary-opaque;
+    border-top-style: solid;
+    border-top-width: 0.05cm;
+  }
+}
+
+@page:blank {
+  @top-left {
+    background: none;
+    content: "";
+  }
+
+  @top-center {
+    content: none;
+  }
+
+  @top-right {
+    content: none;
+  }
+}
+
+@page no-chapter {
+  @top-left {
+    background: none;
+    content: none;
+  }
+
+  @top-center {
+    content: none;
+  }
+
+  @top-right {
+    content: none;
+  }
+}
+
+@if not $nocover {
+
+@page:first {
+  background: $cover-bg;
+  background-size: cover;
+  margin: 0;
+}
+
+}
+
+@media screen {
+  #cover {
+    background: $cover-bg;
+    background-size: cover;
+    margin: 0;
+  }
+}
+
+@page chapter {
+  background: $primary;
+  color: $white;
+  margin: 0;
+
+
+  @top-left {
+    content: none;
+  }
+
+  @top-center {
+    content: none;
+  }
+
+  @top-right {
+    content: none;
+  }
+}
+
+// Back cover
+@page back_cover {
+    background: $cover-bg;
+    background-size: cover;
+    margin: 0;
+    color: #ffffff;
+}
+
+@page back_cover {
+    @bottom-right {
+        content: none;
+    }
+    @top-left {
+        background: none;
+        content: '';
+    }
+    @top-center {
+        content: none;
+    }
+    @top-right {
+        content: none;
+    }
+}

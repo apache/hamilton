@@ -1,0 +1,67 @@
+.admonition {
+    padding: 12px;
+    line-height: 24px;
+    margin-bottom: 24px;
+    background: #e7f2fa;
+
+    .admonition-title {
+        color: #fff;
+        font-weight: bold;
+        display: block;
+        margin: -6px;
+        padding: 6px 12px;
+        margin-bottom: 12px;
+        background: #6ab0de;
+
+        &:before {
+            display: inline-block;
+            font-family: fontawesome-webfont;
+       	    content: "\f06a";
+            font-style: normal;
+           	font-weight: normal;
+           	line-height: 1;
+           	text-decoration: inherit;
+            margin-right: 4px;
+       }
+    }
+
+    &.attention, &.caution, &.warning {
+        background: #ffedcc;
+
+        .admonition-title {
+            background: #f0b37e;
+
+            &:before {
+                content: "\f071";
+            }
+        }
+    }
+
+    &.danger, &.error {
+        background: #fdf3f2;
+
+        .admonition-title {
+            background: #f29f97;
+
+            &:before {
+                content: "\f7b9";
+            }
+        }
+    }
+
+    &.hint, &.important {
+        background: #dbfaf4;;
+
+        .admonition-title {
+            background: #1abc9c;
+        }
+    }
+
+    &.hint, &.note {
+
+        .admonition-title:before {
+            content: "\f05a";
+        }
+    }
+
+}

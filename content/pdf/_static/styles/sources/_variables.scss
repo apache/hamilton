@@ -1,0 +1,28 @@
+// Used to define scss variables, so that the config()-call is used only once (in this file) and
+// inside other scss-files.
+// Outside this scss-file use the here defined variables.
+
+// Colors
+$primary: config('primary', '#961a1a') !default;
+$primary-opaque: config('primary-opaque', 'rgba(150, 26, 26, .5)') !default;
+$secondary: config('secondary', '#379683')  !default;
+$cover: config('cover', '#ffffff')  !default;
+$white: config('white', '#ffffff')  !default;
+$links: config('links', '#961a1a')  !default;
+
+// Images
+$cover-bg: config('cover-bg', '#961a1a');
+$cover-overlay: config('cover-overlay', 'rgba(0,0,0,0)');
+
+// pdf header content
+$top-left-content: config('top-left-content', 'counter(page)') !default;
+$top-center-content: config('top-center-content', '') !default;
+$top-right-content: config('top-right-content', 'string(heading)') !default;
+
+// pdf footer content
+$bottom-left-content: config('bottom-left-content', '') !default;
+$bottom-center-content: config('bottom-center-content', '') !default;
+$bottom-right-content: config('bottom-right-content', '') !default;
+
+$nocover: theme_option('nocover', false) !default;
+

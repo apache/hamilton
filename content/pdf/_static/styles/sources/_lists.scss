@@ -1,0 +1,54 @@
+ul, ol {
+    padding-left: 15px;
+
+    ul, ol {
+        padding-left: 20px;
+    }
+}
+
+dl {
+    dt {
+        font-weight: bold;
+    }
+}
+
+dl.option-list, dl.field-list {
+    display: flex;
+    flex-wrap: wrap;
+    //margin-left: -15px;
+    //margin-right: -15px;
+
+    dt, dd {
+        //margin-left: 15px;
+        //margin-right: 15px;
+    }
+
+    dt {
+        //margin-left: 30px;
+        padding-right: 15px;
+        flex: 0 0 33%;
+        max-width: 33%;
+        font-weight: normal;
+    }
+
+    dd {
+        //margin-right: 30px;
+        margin-left: 0;
+        padding-left: 15px;
+        flex: 0 0 66%;
+        max-width: 66%;
+    }
+}
+
+dl.field-list {
+    dt, dd {
+        padding-top: .5em;
+        padding-bottom: .5em;
+    }
+}
+
+.hlist {
+    ul {
+        list-style: none;
+    }
+}
