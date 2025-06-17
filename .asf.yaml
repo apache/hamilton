@@ -1,0 +1,73 @@
+# https://cwiki.apache.org/confluence/display/INFRA/Git+-+.asf.yaml+features
+
+github:
+  description: "Apache Hamilton helps data scientists and engineers define testable, modular, self-documenting dataflows, that encode lineage/tracing and metadata. Runs and scales everywhere python does."
+  homepage: https://hamilton.apache.org/
+  labels:
+    - python
+    - data-science
+    - machine-learning
+    - etl
+    - pandas
+    - orchestration
+    - data-engineering
+    - data-analysis
+    - software-engineering
+    - feature-engineering
+    - dataframe
+    - hacktoberfest
+    - dag
+    - lineage
+    - etl-framework
+    - etl-pipeline
+    - rag
+    - mlops
+    - llmops
+
+  protected_tags:
+    - "v*.*.*"
+
+  dependabot_alerts:  true
+  dependabot_updates: true
+
+  features:
+    # Enable wiki for documentation
+    wiki: true
+    # Enable issue management
+    issues: true
+    # Enable projects for project management boards
+    projects: true
+    # Enable github discussions
+    discussions: true
+
+  enabled_merge_buttons:
+    squash:  true
+    merge:   false
+    rebase:  true
+
+  protected_branches:
+    main:
+      required_status_checks:
+        # strict means "Require branches to be up to date before merging".
+        strict: false
+        # contexts are the names of checks that must pass
+        # contexts:
+      required_pull_request_reviews:
+        dismiss_stale_reviews: false
+        require_code_owner_reviews: false
+        required_approving_review_count: 1
+
+notifications:
+  commits:              commits@hamilton.apache.org
+  issues:               notifications@hamilton.apache.org
+  pullrequests:         notifications@hamilton.apache.org
+  discussions:          notifications@hamilton.apache.org
+  jobs:                 notifications@hamilton.apache.org
+
+
+staging:
+  profile: ~
+  whoami: asf-staging
+
+publish:
+  whoami: asf-site
