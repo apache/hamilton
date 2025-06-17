@@ -63,3 +63,13 @@ notifications:
   pullrequests:         notifications@hamilton.apache.org
   discussions:          notifications@hamilton.apache.org
   jobs:                 notifications@hamilton.apache.org
+
+
+staging:
+  profile: ~
+  whoami:  asf-staging
+  subdir:    content
+
+production:
+  whoami:  asf-site
+  subdir:    content
