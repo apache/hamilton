@@ -19,7 +19,7 @@ def test_compute_stats_pyspark():
         "observability_schema_version": "0.0.2",
         "observability_type": "dict",
         "observability_value": {
-            "type": "<class 'pyspark.sql.dataframe.DataFrame'>",
+            "type": "<class 'pyspark.sql.classic.dataframe.DataFrame'>",
             "value": {
                 "columns": [
                     {
