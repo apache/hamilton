@@ -33,7 +33,7 @@ multidict==6.0.4
 opentelemetry-api==1.20.0
 passlib==1.7.4
 propelauth-py==3.1.8
-protobuf==4.24.4
+protobuf==4.25.8
 psutil==5.9.5
 psycopg2-binary==2.9.9
 pycparser==2.21
