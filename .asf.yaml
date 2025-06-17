@@ -67,9 +67,7 @@ notifications:
 
 staging:
   profile: ~
-  whoami:  asf-staging
-  subdir:    content
+  whoami: asf-staging
 
-production:
-  whoami:  asf-site
-  subdir:    content
+publish:
+  whoami: asf-site
