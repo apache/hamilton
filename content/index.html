@@ -469,7 +469,7 @@
     <span class="visually-hidden">View this page</span>
   </a>
 </div><div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/index.md" title="Edit this page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/index.md" rel="edit" title="Edit this page">
     <svg><use href="#svg-pencil"></use></svg>
     <span class="visually-hidden">Edit this page</span>
   </a>
@@ -496,7 +496,7 @@
     <a href="https://pepy.tech/project/sf-hamilton" target="_blank"><img src="https://pepy.tech/badge/sf-hamilton" alt="Total Downloads"/></a>
     <a href="https://pepy.tech/project/sf-hamilton" target="_blank"><img src="https://static.pepy.tech/badge/sf-hamilton/month" alt="Total Monthly Downloads"/></a>
 </div>
-<p>Apache Hamilton is a general-purpose framework to write dataflows using regular Python functions. At the core, each function defines a transformation and its parameters indicates its dependencies. Apache Hamilton automatically connects individual functions into a <a class="reference external" href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">Directed Acyclic Graph</a> (DAG) that can be executed, visualized, optimized, and reported on.
+<p>Apache Hamilton (incubating) is a general-purpose framework to write dataflows using regular Python functions. At the core, each function defines a transformation and its parameters indicates its dependencies. Apache Hamilton automatically connects individual functions into a <a class="reference external" href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">Directed Acyclic Graph</a> (DAG) that can be executed, visualized, optimized, and reported on.
 Apache Hamilton also comes with a <a class="reference internal" href="hamilton-ui/"><span class="std std-doc">UI</span></a> to visualize, catalog, and monitor your dataflows.</p>
 <figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="_images/abc.png"><img alt="_images/abc.png" src="_images/abc.png" style="width: 565.0px; height: 352.0px;" />
@@ -506,8 +506,8 @@ Apache Hamilton also comes with a <a class="reference internal" href="hamilton-u
 </figcaption>
 </figure>
 </section>
-<section id="why-should-you-use-apache-hamilton">
-<h1>Why should you use Apache Hamilton?<a class="headerlink" href="#why-should-you-use-apache-hamilton" title="Link to this heading">¶</a></h1>
+<section id="why-should-you-use-apache-hamilton-incubating">
+<h1>Why should you use Apache Hamilton (incubating)?<a class="headerlink" href="#why-should-you-use-apache-hamilton-incubating" title="Link to this heading">¶</a></h1>
 <p><strong>Facilitate collaboration</strong>. By focusing on functions, Apache Hamilton avoids sprawling code hierarchy and generates flat dataflows. Well-scoped functions make it easier to add features, complete code reviews, debug pipeline failures, and hand-off projects. Visualizations can be generated directly from your code to better understand and document it.
 Integration with the <a class="reference internal" href="hamilton-ui/"><span class="std std-doc">Apache Hamilton UI</span></a> allows you to track lineage, catalog code &amp; artifacts, and monitor your dataflows.</p>
 <p><strong>Reduce development time</strong>. Apache Hamilton dataflows are reusable across projects and context (e.g., pipeline vs. web service). The benefits of developing robust and well-tested solutions are multiplied by reusability. Off-the-shelf dataflows are available on the <a class="reference external" href="https://hub.dagworks.io/">Apache Hamilton Hub</a>.</p>
