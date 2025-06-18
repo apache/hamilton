@@ -854,8 +854,8 @@ class datasaver(NodeCreator):
 
     def validate(self, fn: Callable):
         """Validates that the function output is a dict type."""
-        return_annotation = inspect.signature(fn).return_annotation
-        if return_annotation is inspect.Signature.empty:
+        return_annotation = typing.get_type_hints(fn)["return"]
+        if return_annotation is None:
             raise InvalidDecoratorException(
                 f"Function: {fn.__qualname__} must have a return annotation."
             )
