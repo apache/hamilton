@@ -50,7 +50,7 @@ docs = [
   "sf-hamilton[dev]",
   "alabaster>=0.7,<0.8,!=0.7.5", # read the docs pins
   "commonmark==0.9.1", # read the docs pins
-  "dask-expr; python_version == '3.9'",
+  "dask-expr>=1.1.14; python_version >= '3.10'", # Bugfix only available after py3.10 https://github.com/dask/dask-expr/pull/1150
   "dask[distributed]",
   "ddtrace<3.0",
   "diskcache",
@@ -113,7 +113,7 @@ test = [
   "connectorx<=0.3.2; python_version=='3.8'",
   "connectorx; python_version!='3.8'",
   "dask[complete]",
-  "dask-expr; python_version == '3.9'",
+  "dask-expr>=1.1.14; python_version >= '3.10'", # Bugfix only available after py3.10 https://github.com/dask/dask-expr/pull/1150
   "datasets>=2.18.0", # huggingface datasets -- https://github.com/huggingface/datasets/issues/6737#issuecomment-2107336816
   "diskcache",
   "dlt",
