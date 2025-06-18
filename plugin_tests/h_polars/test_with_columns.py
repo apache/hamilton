@@ -144,7 +144,7 @@ def test_append_into_original_df():
         upstream_df=dummy_df(),
         dummy_fn_with_columns=dummy_fn_with_columns(col_1=pl.Series([1, 2, 3, 4])),
     )
-    assert merge_node.name == "__append"
+    assert merge_node.name == "_append"
     assert merge_node.type == pl.DataFrame
 
     pl.testing.assert_series_equal(output_df["col_1"], pl.Series([1, 2, 3, 4]), check_names=False)
@@ -174,7 +174,7 @@ def test_override_original_column_in_df():
     merge_node = output_nodes[-1]
 
     output_df = merge_node.callable(upstream_df=dummy_df(), col_1=col_1())
-    assert merge_node.name == "__append"
+    assert merge_node.name == "_append"
     assert merge_node.type == pl.DataFrame
 
     pl.testing.assert_series_equal(
@@ -204,7 +204,7 @@ def test_assign_custom_namespace_with_columns():
     assert nodes_[0].name == "target_fn"
     assert nodes_[1].name == "dummy_namespace.dummy_fn_with_columns"
     assert nodes_[2].name == "dummy_namespace.col_1"
-    assert nodes_[3].name == "dummy_namespace.__append"
+    assert nodes_[3].name == "dummy_namespace._append"
 
 
 def test_end_to_end_with_columns_automatic_extract():
