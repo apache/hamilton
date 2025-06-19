@@ -103,7 +103,8 @@ pandera = ["pandera"]
 pydantic = ["pydantic>=2.0"]
 pyspark = [
   # we have to run these dependencies because Spark does not check to ensure the right target was called
-  "pyspark[pandas_on_spark,sql]"
+  "pyspark[pandas_on_spark,sql]",
+  "grpcio"
 ]
 ray = ["ray>=2.0.0", "pyarrow"]
 rich = ["rich"]
