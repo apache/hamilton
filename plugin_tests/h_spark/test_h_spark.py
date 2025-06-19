@@ -6,7 +6,6 @@ import pyspark.pandas as ps
 import pytest
 from pyspark import Row
 from pyspark.sql import Column, DataFrame, SparkSession, types
-from pyspark.sql.connect.dataframe import DataFrame as CDataFrame
 from pyspark.sql.connect.session import SparkSession as CSparkSession
 from pyspark.sql.functions import column
 
@@ -889,19 +888,10 @@ def test_create_selector_node(spark_session):
     )
 
 
-def test_spark_input_adapter_dataframe():
+def test_spark_input_adapter_dataframe(spark_session):
     # We have to do these at is is very difficult to mock out connect.x objects
-
-    class ConnectDataFrame(CDataFrame):
-        def __init__(self):
-            pass
-
-        def __repr__(self):
-            return "df"
-
-    assert SparkInputValidator().do_validate_input(
-        node_type=DataFrame, input_value=ConnectDataFrame()
-    )
+    df = spark_session.range(1)
+    assert SparkInputValidator().do_validate_input(node_type=DataFrame, input_value=df)
 
 
 def test_spark_input_adapter_connector():
