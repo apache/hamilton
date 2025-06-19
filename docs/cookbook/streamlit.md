@@ -113,7 +113,7 @@ def job_hist(job_df: pd.DataFrame) -> Figure:
     return px.histogram(job_df["balance"])
 ```
 
-![logic dataflow](./streamlit_logic.png)
+![logic dataflow](streamlit_logic.png)
 
 Then, the Streamlit UI is defined in `app.py`. Notice a few things:
 - `app.py` doesn't have to depend on `pandas` and `plotly`.
