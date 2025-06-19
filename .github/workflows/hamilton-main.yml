@@ -116,6 +116,8 @@ jobs:
         - name: Test ray
           # Ray supports >= py3.9
           if: ${{ matrix.python-version != '3.8' }}
+          env:
+            RAY_ENABLE_UV_RUN_RUNTIME_ENV: 0 # https://github.com/ray-project/ray/issues/53848
           run: |
             uv sync --extra test --extra ray
             uv run pytest plugin_tests/h_ray
