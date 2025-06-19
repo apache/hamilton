@@ -125,6 +125,8 @@ jobs:
         - name: Test pyspark
           # Spark supports >= py3.9
           if: ${{ matrix.python-version != '3.8' && runner.os == 'Linux' }}
+          env:
+            PYSPARK_SUBMIT_ARGS: "--conf spark.sql.ansi.enabled=false pyspark-shell"
           run: |
             sudo apt-get install --no-install-recommends --yes default-jre
             uv sync --extra test --extra pyspark
@@ -135,6 +137,8 @@ jobs:
         - name: Test pyspark
           # Spark supports >= py3.9
           if: ${{ matrix.python-version != '3.8' && runner.os != 'Linux' }}
+          env:
+            PYSPARK_SUBMIT_ARGS: "--conf spark.sql.ansi.enabled=false pyspark-shell"
           run: |
             uv sync --extra test --extra pyspark
             uv pip install 'numpy<2' 'pyspark[connect]' 'grpcio'
