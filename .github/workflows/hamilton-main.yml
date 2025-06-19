@@ -128,7 +128,8 @@ jobs:
           run: |
             sudo apt-get install --no-install-recommends --yes default-jre
             uv sync --extra test --extra pyspark
-            pip install 'numpy<2' 'pyspark[connect]'
+            uv pip install 'numpy<2' 'pyspark[connect]' 'grpcio'
+            uv pip install --no-cache --reinstall --strict 'grpcio-status >= 1.48.1'
             uv run pytest plugin_tests/h_spark
 
         - name: Test pyspark
@@ -136,7 +137,8 @@ jobs:
           if: ${{ matrix.python-version != '3.8' && runner.os != 'Linux' }}
           run: |
             uv sync --extra test --extra pyspark
-            uv pip install 'numpy<2' 'pyspark[connect]'
+            uv pip install 'numpy<2' 'pyspark[connect]' 'grpcio'
+            uv pip install --no-cache --reinstall --strict 'grpcio-status >= 1.48.1'
             uv run pytest plugin_tests/h_spark
 
         - name: Test vaex
