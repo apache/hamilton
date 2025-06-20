@@ -18,7 +18,7 @@ jobs:
     name: "Unit Tests"
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false # will change this to true at the end, but want to see tests failing on all use cases
+      fail-fast: false # want to see for each version if fails are different
       matrix:
         os:
           - ubuntu-latest
