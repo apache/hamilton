@@ -166,7 +166,7 @@ if __name__ == "__main__":
 
     # execute the pipeline for the given URL
     results = pipeline_driver.execute(
-        ["store"], inputs={"url": "https://hamilton.dagworks.io/en/latest/"}
+        ["store"], inputs={"url": "https://hamilton.apache.org/"}
     )
 
     # show the dataframe for this document

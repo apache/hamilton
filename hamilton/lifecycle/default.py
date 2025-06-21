@@ -361,7 +361,7 @@ class CacheAdapter(NodeExecutionHook, NodeExecutionMethod, GraphExecutionHook):
             "The `CacheAdapter` is deprecated and will be removed in Hamilton 2.0. "
             "Consider enabling the core caching feature via `Builder.with_cache()`. "
             "This might not be 1-to-1 replacement, so please reach out if there are missing features. "
-            "See https://hamilton.dagworks.io/en/latest/concepts/caching/ to learn more."
+            "See https://hamilton.apache.org/concepts/caching/ to learn more."
         )
 
     def run_before_graph_execution(self, *, graph: HamiltonGraph, **kwargs):

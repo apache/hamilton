@@ -24,7 +24,7 @@ with contrib.catch_import_errors(__name__, __file__, logger):
 from hamilton.htypes import Collect, Parallelizable
 
 
-def sitemap_text(sitemap_url: str = "https://hamilton.dagworks.io/en/latest/sitemap.xml") -> str:
+def sitemap_text(sitemap_url: str = "https://hamilton.apache.org/sitemap.xml") -> str:
     """Takes in a sitemap URL and returns the sitemap.xml file.
 
     :param sitemap_url: the URL of sitemap.xml file

@@ -175,7 +175,7 @@ def create_function_graph(
                 raise ValueError(
                     f"Cannot define function {n.name} more than once."
                     f" Already defined by function {f}"
-                    f" In case you want to override the previous functions check out .allow_module_overrides() at: https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/"
+                    f" In case you want to override the previous functions check out .allow_module_overrides() at: https://hamilton.apache.org/reference/drivers/Driver/"
                 )
             nodes[n.name] = n
     # add dependencies -- now that all nodes except input nodes, we just run through edges & validate graph.

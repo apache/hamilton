@@ -413,7 +413,7 @@ def _set_materializer_attrs():
         wrapper.__signature__ = new_signature
         wrapper.__doc__ = f"""
         Materializes data to {key} format. Note that the parameters are a superset of possible parameters -- this might depend on
-        the actual type of the data passed in. For more information, see: https://hamilton.dagworks.io/en/latest/reference/io/available-data-adapters/#data-loaders.
+        the actual type of the data passed in. For more information, see: https://hamilton.apache.org/reference/io/available-data-adapters/#data-loaders.
         You can also pass `source` and `value` in as kwargs.
         """
         return wrapper

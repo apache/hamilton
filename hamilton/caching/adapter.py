@@ -794,7 +794,7 @@ class HamiltonCacheAdapter(
             logger.warning(
                 f"Node `{node_name}` has unhashable result of type `{type(result)}`. "
                 "Set `CachingBehavior.IGNORE` or register a versioning function to silence warning. "
-                "Learn more: https://hamilton.dagworks.io/en/latest/concepts/caching/#caching-behavior\n"
+                "Learn more: https://hamilton.apache.org/concepts/caching/#caching-behavior\n"
             )
             # if the data version is unhashable, we need to set a random suffix to the cache_key
             # to prevent the cache from thinking this value is constant, causing a cache hit.

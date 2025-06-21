@@ -64,6 +64,11 @@ if re.match(r"^sf-hamilton-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$", current_t
 else:
     version = "latest"
 language = "en"
-html_baseurl = "https://hamilton.dagworks.io/"
+GIT_BRANCH_OUTPUT = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+current_branch = GIT_BRANCH_OUTPUT.decode().strip()
+if current_branch == "main":
+    html_baseurl = "https://hamilton.apache.org/"
+else:
+    html_baseurl = "https://hamilton.staged.apache.org/"
 html_extra_path = ["robots.txt"]
 # ---

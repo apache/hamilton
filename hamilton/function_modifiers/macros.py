@@ -243,7 +243,7 @@ def get_default_tags(fn: Callable) -> Dict[str, str]:
     "to utilize config for resolving decorators. Note this allows you to use any"
     "existing decorators.",
     current_version=(1, 19, 0),
-    migration_guide="https://hamilton.dagworks.io/en/latest/reference/decorators/",
+    migration_guide="https://hamilton.apache.org/reference/decorators/",
 )
 class dynamic_transform(base.NodeCreator):
     def __init__(
@@ -1074,7 +1074,7 @@ class pipe_input(base.NodeInjector):
     explanation="pipe has been replaced with pipe_input -- a clearer name since "
     "we also added pipe_output with complimentary functionality.",
     current_version=(1, 77, 0),
-    migration_guide="https://hamilton.dagworks.io/en/latest/reference/decorators/",
+    migration_guide="https://hamilton.apache.org/reference/decorators/",
 )
 class pipe(pipe_input):
     def __init__(
