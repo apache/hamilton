@@ -165,9 +165,7 @@ if __name__ == "__main__":
     pipeline_driver = driver.Builder().with_modules(doc_pipeline).build()
 
     # execute the pipeline for the given URL
-    results = pipeline_driver.execute(
-        ["store"], inputs={"url": "https://hamilton.apache.org/"}
-    )
+    results = pipeline_driver.execute(["store"], inputs={"url": "https://hamilton.apache.org/"})
 
     # show the dataframe for this document
     print(results["store"].head())

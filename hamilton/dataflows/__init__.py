@@ -383,7 +383,9 @@ def inspect_module(module: ModuleType) -> InspectModuleResult:
         user = None
         local_file_path = OFFICIAL_PATH.format(commit_ish=version, dataflow=dataflow)
         user_url = None
-        dataflow_url = f"https://github.com/apache/hamilton/tree/{version}/contrib/contrib/dagworks/{dataflow}"
+        dataflow_url = (
+            f"https://github.com/apache/hamilton/tree/{version}/contrib/contrib/dagworks/{dataflow}"
+        )
     else:
         user = module.__file__.split("/")[-3]
         user_url = f"https://github.com/{user}"
