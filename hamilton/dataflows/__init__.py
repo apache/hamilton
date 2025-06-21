@@ -37,7 +37,7 @@ TODOs:
  - make functions more robust (see comments in functions).
 """
 COMMON_PATH = "{commit_ish}/contrib/hamilton/contrib"
-BASE_URL = f"https://raw.githubusercontent.com/dagworks-inc/hamilton/{COMMON_PATH}"
+BASE_URL = f"https://raw.githubusercontent.com/apache/hamilton/{COMMON_PATH}"
 DATAFLOW_FOLDER = os.path.expanduser("~/.hamilton/dataflows")
 USER_PATH = DATAFLOW_FOLDER + "/" + COMMON_PATH + "/user/{user}/{dataflow}"
 OFFICIAL_PATH = DATAFLOW_FOLDER + "/" + COMMON_PATH + "/dagworks/{dataflow}"
@@ -314,13 +314,13 @@ def inspect(dataflow: str, user: str = None, version: str = "latest") -> Inspect
     if user:
         local_file_path = USER_PATH.format(commit_ish=version, user=user, dataflow=dataflow)
         dataflow_url = (
-            f"https://github.com/dagworks-inc/hamilton/tree/{version}/contrib/contrib/user/{user}/{dataflow}",
+            f"https://github.com/apache/hamilton/tree/{version}/contrib/contrib/user/{user}/{dataflow}",
         )
         user_url = f"https://github.com/{user}"
     else:
         local_file_path = OFFICIAL_PATH.format(commit_ish=version, dataflow=dataflow)
         dataflow_url = (
-            f"https://github.com/dagworks-inc/hamilton/tree/{version}/contrib/contrib/dagworks/{dataflow}",
+            f"https://github.com/apache/hamilton/tree/{version}/contrib/contrib/dagworks/{dataflow}",
         )
         user_url = None
     if not os.path.exists(local_file_path):
@@ -383,12 +383,14 @@ def inspect_module(module: ModuleType) -> InspectModuleResult:
         user = None
         local_file_path = OFFICIAL_PATH.format(commit_ish=version, dataflow=dataflow)
         user_url = None
-        dataflow_url = f"https://github.com/dagworks-inc/hamilton/tree/{version}/contrib/contrib/dagworks/{dataflow}"
+        dataflow_url = (
+            f"https://github.com/apache/hamilton/tree/{version}/contrib/contrib/dagworks/{dataflow}"
+        )
     else:
         user = module.__file__.split("/")[-3]
         user_url = f"https://github.com/{user}"
         local_file_path = USER_PATH.format(commit_ish=version, user=user, dataflow=dataflow)
-        dataflow_url = f"https://github.com/dagworks-inc/hamilton/tree/{version}/contrib/contrib/user/{user}/{dataflow}"
+        dataflow_url = f"https://github.com/apache/hamilton/tree/{version}/contrib/contrib/user/{user}/{dataflow}"
 
     if not os.path.exists(local_file_path):
         raise ValueError(

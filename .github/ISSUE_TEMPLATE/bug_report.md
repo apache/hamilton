@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a bug report to help us improve Hamilton.
+about: Create a bug report to help us improve Apache Hamilton.
 title: Bug Report
 labels: triage
 assignees: ''

@@ -2,7 +2,7 @@ import dataclasses
 from os import PathLike
 from typing import Any, Collection, Dict, Optional, Type, Union
 
-# This is not necessary once this PR gets merged: https://github.com/DAGWorks-Inc/hamilton/pull/467.
+# This is not necessary once this PR gets merged: https://github.com/apache/hamilton/pull/467.
 try:
     import sklearn.inspection
     import sklearn.metrics

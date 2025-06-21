@@ -1,7 +1,7 @@
 ==============
 Best Practices
 ==============
-A set of best-practices to help you get the most out of Hamilton quickly and easily.
+A set of best-practices to help you get the most out of Apache Hamilton quickly and easily.
 
 .. toctree::
 

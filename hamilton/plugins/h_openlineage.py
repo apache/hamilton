@@ -161,7 +161,7 @@ class OpenLineageAdapter(
         dr.execute(...)
 
     Note for data lineage to be emitted, you must use the "materializer" abstraction to provide
-    metadata. See https://hamilton.dagworks.io/en/latest/concepts/materialization/.
+    metadata. See https://hamilton.apache.org/concepts/materialization/.
     This can be done via the `@datasaver()` and `@dataloader()` decorators, or
     using the `@load_from` or `@save_to` decorators, as well as passing in data savers
     and data loaders via `.with_materializers()` on the Driver Builder, or via `.materialize()`

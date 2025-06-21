@@ -18,7 +18,7 @@ def spark_session(app_name: str) -> ps.SparkSession:
     return ps.SparkSession.builder.appName(app_name).getOrCreate()
 
 
-def sitemap_text(sitemap_url: str = "https://hamilton.dagworks.io/en/latest/sitemap.xml") -> str:
+def sitemap_text(sitemap_url: str = "https://hamilton.apache.org/sitemap.xml") -> str:
     """Takes in a sitemap URL and returns the sitemap.xml file.
 
     :param sitemap_url: the URL of sitemap.xml file

@@ -175,7 +175,7 @@ def create_function_graph(
                 raise ValueError(
                     f"Cannot define function {n.name} more than once."
                     f" Already defined by function {f}"
-                    f" In case you want to override the previous functions check out .allow_module_overrides() at: https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/"
+                    f" In case you want to override the previous functions check out .allow_module_overrides() at: https://hamilton.apache.org/reference/drivers/Driver/"
                 )
             nodes[n.name] = n
     # add dependencies -- now that all nodes except input nodes, we just run through edges & validate graph.
@@ -275,7 +275,7 @@ def create_graphviz_graph(
         # We need to ensure that name and type string are HTML-escaped
         # strings to avoid syntax errors. This is particular important
         # because config *values* are passed through this function
-        # see issue: https://github.com/DAGWorks-Inc/hamilton/issues/1200
+        # see issue: https://github.com/apache/hamilton/issues/1200
         # see graphviz ref: https://graphviz.org/doc/info/shapes.html#html
         if len(type_string) > MAX_STRING_LENGTH:
             type_string = type_string[:MAX_STRING_LENGTH] + "[...]"

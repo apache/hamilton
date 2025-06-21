@@ -1,6 +1,6 @@
-# Hamilton CLI
+# Apache Hamilton CLI
 
-The Hamilton CLI allows to build `Driver` objects from the command line.
+The Apache Hamilton CLI allows to build `Driver` objects from the command line.
 
 # Installation
 Install dependencies with (it only needs `typer`)
@@ -14,7 +14,7 @@ Test the installation with
 # Features
 
 ## Commands
-- `build`: creates a Hamilton `Driver` from specified modules. It"s useful to validate the dataflow definition
+- `build`: creates a Apache Hamilton `Driver` from specified modules. It"s useful to validate the dataflow definition
 - `validate`: calls `Driver.validate_execution()` for a set of `inputs` and `overrides` passed through the `--context` option.
 - `view`: calls `dr.display_all_functions()` on the built `Driver`
 - `version`: generates node hashes based on their source code, and a dataflow hash from the collection of node hashes.

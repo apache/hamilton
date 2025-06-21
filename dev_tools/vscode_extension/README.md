@@ -1,6 +1,6 @@
-# Hamilton - VSCode extension
+# Apache Hamilton - VSCode extension
 
-![](https://github.com/dagworks-inc/hamilton/dev_tools/vscode_extension/resources/demo.gif)
+![](https://github.com/apache/hamilton/dev_tools/vscode_extension/resources/demo.gif)
 
 ## Get started
 Go through the VSCode walkthrough by viewing the command pallet (`ctrl+p`) and using command `Welcome: Open Walkthrough...`

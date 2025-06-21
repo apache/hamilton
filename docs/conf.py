@@ -11,7 +11,7 @@ project = "Hamilton"
 html_theme = "furo"
 html_title = "Hamilton"
 html_theme_options = {
-    "source_repository": "https://github.com/dagworks-inc/hamilton",
+    "source_repository": "https://github.com/apache/hamilton",
     "source_branch": "main",
     "source_directory": "docs/",
     "announcement": "📢 Announcing the "
@@ -26,6 +26,7 @@ html_theme_options = {
     },
 }
 html_static_path = ["_static"]
+templates_path = ['_templates']
 
 html_css_files = [
     "testimonials.css",
@@ -64,6 +65,11 @@ if re.match(r"^sf-hamilton-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$", current_t
 else:
     version = "latest"
 language = "en"
-html_baseurl = "https://hamilton.dagworks.io/"
+GIT_BRANCH_OUTPUT = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+current_branch = GIT_BRANCH_OUTPUT.decode().strip()
+if current_branch == "main":
+    html_baseurl = "https://hamilton.apache.org/"
+else:
+    html_baseurl = "https://hamilton.staged.apache.org/"
 html_extra_path = ["robots.txt"]
 # ---

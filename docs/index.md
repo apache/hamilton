@@ -17,6 +17,13 @@ code-comparisons/index
 
 ```{toctree}
 :hidden: True
+:caption: PDF
+PDF <https://hamilton.apache.org/_static/Hamilton.pdf>
+```
+
+
+```{toctree}
+:hidden: True
 :caption: Community
 
 community/index
@@ -42,7 +49,7 @@ reference/disabling-telemetry.md
 :hidden: True
 :caption: EXTERNAL RESOURCES
 
-GitHub <https://github.com/dagworks-inc/hamilton>
+GitHub <https://github.com/apache/hamilton>
 tryhamilton.dev <https://www.tryhamilton.dev/>
 Dataflow Hub <https://hub.dagworks.io/docs/>
 Blog <https://blog.dagworks.io/>

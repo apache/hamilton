@@ -1,0 +1,148 @@
+name: Build Sphinx Documentation
+
+on:
+  push:
+    branches: [ "main", "update_references"]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/sphinx-docs.yml'
+  pull_request:
+    branches: [ "main", "update_references" ]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/sphinx-docs.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: "doc-pages"
+  cancel-in-progress: true
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y graphviz
+
+    - name: Upgrade pip and setuptools
+      run: |
+        python -m pip install --upgrade --no-cache-dir pip setuptools
+
+    - name: Install Sphinx and dependencies
+      run: |
+        python -m pip install --upgrade --no-cache-dir sphinx sphinx-rtd-theme sphinx-simplepdf
+        python -m pip install --upgrade --upgrade-strategy only-if-needed --no-cache-dir .[docs]
+
+    - name: Build Sphinx documentation
+      working-directory: ./docs
+      run: |
+        python -m sphinx -T -W --keep-going -b dirhtml -d _build/doctrees -D language=en . _build/html
+
+    - name: Build PDF documentation
+      working-directory: ./docs
+      run: |
+        # Build PDF using simplepdf
+        python -m sphinx -T -b simplepdf -d _build/doctrees -D language=en . _build/pdf
+
+    - name: Upload HTML artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: sphinx-docs-html
+        path: docs/_build/html/
+        retention-days: 5
+
+    - name: Upload PDF artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: sphinx-docs-pdf
+        path: docs/_build/pdf/
+        retention-days: 5
+
+    - name: Deploy documentation
+      working-directory: ./docs
+      run: |
+        # Set target branch based on current branch
+        if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          TARGET_BRANCH="asf-site"
+          echo "Deploying to production (asf-site) branch"
+        else
+          TARGET_BRANCH="asf-staging"
+          echo "Deploying to staging (asf-staging) branch"
+        fi
+
+        # Configure git
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+
+        # Create a temporary directory
+        mkdir -p /tmp/gh-pages
+
+        # Store current directory
+        CURRENT_DIR=$(pwd)
+        ls -lsa $CURRENT_DIR
+
+        # Try to clone the repository with the target branch
+        if ! git clone --branch $TARGET_BRANCH --single-branch \
+            https://github.com/${{ github.repository }}.git /tmp/gh-pages 2>/dev/null; then
+          # If branch doesn't exist, initialize a new repository and create the branch
+          echo "Branch $TARGET_BRANCH doesn't exist. Creating it..."
+          rm -rf /tmp/gh-pages
+          mkdir -p /tmp/gh-pages
+          cd /tmp/gh-pages
+          git init
+          git config --local init.defaultBranch $TARGET_BRANCH
+          git checkout -b $TARGET_BRANCH
+          git remote add origin https://github.com/${{ github.repository }}.git
+          cd "$CURRENT_DIR"
+        else
+          echo "CD'ing into $CURRENT_DIR"
+          cd "$CURRENT_DIR"
+        fi
+
+        # Remove existing content directory if it exists
+        rm -rf /tmp/gh-pages/content
+
+        #        # Ensure build directories exist
+        #        mkdir -p "$CURRENT_DIR/_build/html"
+        #        mkdir -p "$CURRENT_DIR/_build/pdf"
+
+        # Copy the built HTML documentation to the content directory
+        mkdir -p /tmp/gh-pages/content
+        cp -r "$CURRENT_DIR/_build/html/"* /tmp/gh-pages/content/ 2>/dev/null || echo "No HTML files to copy"
+
+        # Copy the PDF documentation to the content/pdf directory
+        mkdir -p /tmp/gh-pages/content/pdf
+        cp -r "$CURRENT_DIR/_build/pdf/Hamilton.pdf" /tmp/gh-pages/content/_static/ 2>/dev/null || echo "No PDF file to copy"
+
+        # Add, commit and push the changes
+        cd /tmp/gh-pages
+        git status
+        ls -lhsa content
+        # Create a README if it doesn't exist
+        if [ ! -f README.md ]; then
+          echo "# Documentation for $TARGET_BRANCH" > README.md
+          echo "This branch contains the built documentation." >> README.md
+        fi
+        git add -A
+        git status
+        # Check if there are changes to commit (including untracked files)
+        if [ -n "$(git status --porcelain)" ]; then
+          git commit -m "Deploy documentation from ${{ github.sha }}"
+          git push https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git $TARGET_BRANCH
+          echo "Changes pushed to $TARGET_BRANCH branch"
+        else
+          echo "No changes to deploy"
+        fi

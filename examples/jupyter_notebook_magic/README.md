@@ -1,8 +1,8 @@
-# Hamilton notebook extension
+# Apache Hamilton notebook extension
 
-One of the best part about notebooks is the ability to execute and immediately inspect results. They provide a "read-eval-print" loop (REPL) coding experience. However, the way Hamilton separates dataflow definition (functions in a module) from execution (building and executing a driver) creates an extra step that can slowdown this loop.
+One of the best part about notebooks is the ability to execute and immediately inspect results. They provide a "read-eval-print" loop (REPL) coding experience. However, the way Apache Hamilton separates dataflow definition (functions in a module) from execution (building and executing a driver) creates an extra step that can slowdown this loop.
 
-We built the Hamilton notebook extension to tighten that loop and even give a better experience than the core notebook experience!
+We built the Apache Hamilton notebook extension to tighten that loop and even give a better experience than the core notebook experience!
 
 For a [video overview click here](https://www.youtube.com/watch?v=Z3ZT2ur2jg8&t=288s).
 

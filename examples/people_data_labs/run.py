@@ -23,7 +23,7 @@ def main():
     print(results["augmented_company_info"].head())
 
     # add code to store results
-    # ref: https://hamilton.dagworks.io/en/latest/concepts/materialization/
+    # ref: https://hamilton.apache.org/concepts/materialization/
 
 
 if __name__ == "__main__":

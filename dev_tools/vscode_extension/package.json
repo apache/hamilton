@@ -3,7 +3,7 @@
   "displayName": "Hamilton VSCode",
   "description": "VSCode extension for the Hamilton Python library.",
   "publisher": "DAGWorks",
-  "repository": "https://github.com/dagworks-inc/hamilton",
+  "repository": "https://github.com/apache/hamilton",
   "author": {
     "name": "Thierry Jean"
   },

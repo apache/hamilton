@@ -2,7 +2,7 @@
 Using within your ETL System
 ============================
 
-Conceptually you can integrate Hamilton within your existing ETL system quite easily:
+Conceptually you can integrate Apache Hamilton within your existing ETL system quite easily:
 
 Compatibility Matrix
 --------------------
@@ -13,11 +13,11 @@ Compatibility Matrix
    * - Framework / Scheduler
      - Compatibility
    * - `Airflow <http://airflow.org>`_
-     - ✅  (see [airflow example](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/airflow))
+     - ✅  (see [airflow example](https://github.com/apache/hamilton/tree/main/examples/airflow))
    * - `Dagster <https://dagster.io>`_
      - ✅
    * - `Prefect <https://prefect.io>`_
-     - ✅  (see [prefect example](https://github.com/DAGWorks-Inc/hamilton/tree/main/examples/prefect))
+     - ✅  (see [prefect example](https://github.com/apache/hamilton/tree/main/examples/prefect))
    * - `Kubeflow Pipelines <https://www.kubeflow.org/docs/components/pipelines>`_
      - ✅
    * - `CRON <https://en.wikipedia.org/wiki/Cron>`_
@@ -34,8 +34,8 @@ Compatibility Matrix
 ETL Recipe
 ----------
 
-#. Write Hamilton functions & `“driver”` code.
-#. Publish your Hamilton functions in a package, or import via other means (e.g. checkout a repository & include in python path).
+#. Write Apache Hamilton functions & `“driver”` code.
+#. Publish your Apache Hamilton functions in a package, or import via other means (e.g. checkout a repository & include in python path).
 #. Include `sf-hamilton` as a python dependency
 #. Have your ETL system execute your “driver” code.
 #. Profit.

@@ -1,6 +1,6 @@
 # Materialization
 
-Hamilton's driver allows for ad-hoc materialization. This enables you to take a DAG you already have,
+Apache Hamilton's driver allows for ad-hoc materialization. This enables you to take a DAG you already have,
 and save your data to a set of custom locations/url.
 
 Note that these materializers are _isomorphic_ in nature to the

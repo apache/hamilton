@@ -163,8 +163,8 @@ def processed_local_dataset__snli(
 @load_from.csv(
     path=source("local_dataset_path")
     # see data loader docuemntation and the PandasCSVReader for values you can pass in:
-    #  - https://hamilton.dagworks.io/en/latest/reference/io/available-data-adapters/#data-loaders
-    #  - https://github.com/dagworks-inc/hamilton/blob/main/hamilton/plugins/pandas_extensions.py#L89-L255
+    #  - https://hamilton.apache.org/reference/io/available-data-adapters/#data-loaders
+    #  - https://github.com/apache/hamilton/blob/main/hamilton/plugins/pandas_extensions.py#L89-L255
 )
 def processed_local_dataset__local(
     local_dataset: pd.DataFrame,

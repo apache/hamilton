@@ -68,7 +68,7 @@ tuple(Output Name, Documentation string) -> value.
 
 Note that `@parametrized` is deprecated, and we intend for you to use `@parameterize_vales`. We're consolidating
 to make the parameterization decorators more consistent! You have plenty of time to migrate,
-we wont make this a hard change until we have a Hamilton 2.0.0 to release.
+we wont make this a hard change until we have a Apache Hamilton 2.0.0 to release.
 
 
 ## @parameterize_sources (replacing @parameterized_inputs)
@@ -401,7 +401,7 @@ See [data_quality](data_quality.md) for more information on available validators
 ## @subdag
 
 The `@subdag` decorator enables you to rerun components of your DAG with varying parameters. Note that this is immensely powerful -- if we
-draw analogies from Hamilton to standard procedural programming paradigms, we might have the following correspondence:
+draw analogies from Apache Hamilton to standard procedural programming paradigms, we might have the following correspondence:
 
 - `config.when` + friends -- `if/else` statements
 - `parameterize`/`extract_columns` -- `for` loop

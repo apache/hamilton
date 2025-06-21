@@ -33,9 +33,9 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/dagworks-inc/hamilton/"
-"Bug Reports" = "https://github.com/dagworks-inc/hamilton/issues"
-"Source" = "https://github.com/dagworks-inc/hamilton/tree/main/dev_tools/language_server"
+"Homepage" = "https://github.com/apache/hamilton/"
+"Bug Reports" = "https://github.com/apache/hamilton/issues"
+"Source" = "https://github.com/apache/hamilton/tree/main/dev_tools/language_server"
 "Documenation" = "https://hamilton.dagworks.io/"
 
 [project.optional-dependencies]

@@ -9,8 +9,8 @@ We're jumping in head-first. If you want to start with an overview, skip ahead t
 
 .. note::
 
-    You can follow along in the `examples directory <https://github.com/dagworks-inc/hamilton/tree/main/examples/hello\_world>`_
-    of the `hamilton repo <https://github.com/dagworks-inc/hamilton/>`_. We highly recommend forking the repo and playing
+    You can follow along in the `examples directory <https://github.com/apache/hamilton/tree/main/examples/hello\_world>`_
+    of the `hamilton repo <https://github.com/apache/hamilton/>`_. We highly recommend forking the repo and playing
     around with the code to get comfortable.
 
 Write transformation functions
@@ -34,8 +34,8 @@ An astute observer might ask the following questions:
 
 #. **Why do the parameter names clash with the function names?** This is core to how hamilton works. It utilizes dependency injection to create a DAG of computation. Parameter names tell the framework where your function gets its data.
 #. **OK, if the parameter names determine the source of the data, why have we not defined defined `spend` or `signups` as functions?** This is OK, as we will provide this data as an input when we actually want to materialize our functions. The DAG doesn't have to be complete when it is compiled.
-#. **Why is there no main line to call these functions?** Good observation. In fact, we never will call them (directly)! This is one of the core principles of Hamilton. You write individual transforms and the rest is handled by the framework. More on that next.
-#. **The functions all output pandas series. What if I don't want to use series?** You don't have to! Hamilton is not opinionated on the data type you use. The following are all perfectly valid as well (and we support dask/spark/ray/other distributed frameworks).
+#. **Why is there no main line to call these functions?** Good observation. In fact, we never will call them (directly)! This is one of the core principles of Apache Hamilton. You write individual transforms and the rest is handled by the framework. More on that next.
+#. **The functions all output pandas series. What if I don't want to use series?** You don't have to! Apache Hamilton is not opinionated on the data type you use. The following are all perfectly valid as well (and we support dask/spark/ray/other distributed frameworks).
 
 Let's add a few more functions to our ``my_functions.py`` file:
 
@@ -126,11 +126,11 @@ And you should see the following output:
     2022-02-06     50      400      43.333333             0.125
 
 Not only is your spend to signup ratio decreasing exponentially (your product is going viral!), but you've also
-successfully run your first Hamilton Dataflow. Kudos!
+successfully run your first Apache Hamilton Dataflow. Kudos!
 
 See, wasn't that quick and easy?
 
 Note: if you're ever like "why are things taking a while to execute?", then you might have too much
-in your python environment and Hamilton is auto-loading all the extensions. You can disable this by
+in your python environment and Apache Hamilton is auto-loading all the extensions. You can disable this by
 setting the environment variable ``HAMILTON_AUTOLOAD_EXTENSIONS=0`` or programmatically via
 ``from hamilton import registry; registry.disable_autoload()`` - for more see :doc:`../how-tos/extensions-autoloading`.

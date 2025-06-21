@@ -1,7 +1,7 @@
 # Kaggle M5 Forecasting
 Source - https://www.kaggle.com/c/m5-forecasting-accuracy.
 
-This is an example of how one might use Hamilton using the M5 Forecasting Kaggle
+This is an example of how one might use Apache Hamilton using the M5 Forecasting Kaggle
 challenge as an example. The code here is based on Ratan Rohith's notebook
 that can be [found here](https://www.kaggle.com/code/ratan123/m5-forecasting-lightgbm-with-timeseries-splits).
 The notebook is a beginner level notebook that does some feature engineering, and uses LightGBM to fit
@@ -18,7 +18,7 @@ you will need to log in to Kaggle to download the data.
 
 You can even run this example in Google Colab:
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)
-](https://colab.research.google.com/github/dagworks-inc/hamilton/blob/main/examples/model_examples/time-series/Hamilton-TimeSeriesmodel.ipynb)
+](https://colab.research.google.com/github/dagworks-inc/hamilton/blob/main/examples/model_examples/time-series/Apache Hamilton-TimeSeriesmodel.ipynb)
 
 
 
