@@ -17,6 +17,13 @@ code-comparisons/index
 
 ```{toctree}
 :hidden: True
+:caption: PDF
+PDF <https://hamilton.apache.org/_static/Hamilton.pdf>
+```
+
+
+```{toctree}
+:hidden: True
 :caption: Community
 
 community/index
