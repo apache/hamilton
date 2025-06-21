@@ -6,7 +6,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
 import typing_inspect
 
-from hamilton.htypes import Collect, Parallelizable
+from hamilton.htypes import Collect, is_parallelizable
 
 """
 Module that contains the primitive components of the graph.
@@ -285,7 +285,7 @@ class Node(object):
         node_source = NodeType.STANDARD
         # TODO - extract this into a function + clean up!
         if typing_inspect.is_generic_type(return_type):
-            if typing_inspect.get_origin(return_type) == Parallelizable:
+            if is_parallelizable(typing_inspect.get_origin(return_type)):
                 node_source = NodeType.EXPAND
         for hint in typing.get_type_hints(fn, **type_hint_kwargs).values():
             if typing_inspect.is_generic_type(hint):
