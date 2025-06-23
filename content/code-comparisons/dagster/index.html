@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta property="article:modified_time" content="2025-06-21T06:42:21+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="LangChain" href="../langchain/" /><link rel="prev" title="Kedro" href="../kedro/" />
+    <meta property="article:modified_time" content="2025-06-23T03:13:35+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="LangChain" href="../langchain/" /><link rel="prev" title="Kedro" href="../kedro/" />
         <link rel="canonical" href="https://hamilton.staged.apache.org/code-comparisons/dagster/" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
@@ -526,7 +526,7 @@
 <td><p>Includes: manual, schedules, sensors, conditional execution</p></td>
 </tr>
 <tr class="row-odd"><td><p>Micro orchestration (i.e., <code class="docutils literal notranslate"><span class="pre">dbt</span></code>, <code class="docutils literal notranslate"><span class="pre">LangChain</span></code>)</p></td>
-<td><p>Can run anywhere (locally, notebook, macro orchestrator, <a class="reference external" href="https://hamilton.dagworks.io/en/latest/integrations/fastapi/">FastAPI</a>, <a class="reference external" href="https://hamilton.dagworks.io/en/latest/integrations/streamlit/">Streamlit</a>, pyodide, etc.)</p></td>
+<td><p>Can run anywhere (locally, notebook, macro orchestrator, <a class="reference external" href="https://hamilton.apache.org/integrations/fastapi/">FastAPI</a>, <a class="reference external" href="https://hamilton.apache.org/integrations/streamlit/">Streamlit</a>, pyodide, etc.)</p></td>
 <td><p>❌</p></td>
 </tr>
 <tr class="row-even"><td><p>Code structure</p></td>
@@ -538,11 +538,11 @@
 <td><p>❌</p></td>
 </tr>
 <tr class="row-even"><td><p>Lineage</p></td>
-<td><p>Fine-grained / column-level lineage. Includes <a class="reference external" href="https://hamilton.dagworks.io/en/latest/how-tos/use-hamilton-for-lineage/">utilities to explore lineage</a>.</p></td>
+<td><p>Fine-grained / column-level lineage. Includes <a class="reference external" href="https://hamilton.apache.org/how-tos/use-hamilton-for-lineage/">utilities to explore lineage</a>.</p></td>
 <td><p>Coarser operations to reduce orchestration and I/O overhead.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Visualization</p></td>
-<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/concepts/visualization/">View the dataflow and produce visual artifacts</a>. Configurable and supports extensive custom styling.</p></td>
+<td><p><a class="reference external" href="https://hamilton.apache.org/concepts/visualization/">View the dataflow and produce visual artifacts</a>. Configurable and supports extensive custom styling.</p></td>
 <td><p>Export Daster UI in <code class="docutils literal notranslate"><span class="pre">.svg</span></code>. No styling.</p></td>
 </tr>
 <tr class="row-even"><td><p>Run tracking</p></td>
@@ -554,11 +554,11 @@
 <td><p>❌</p></td>
 </tr>
 <tr class="row-even"><td><p>Materializers</p></td>
-<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/concepts/materialization/">Data Savers &amp; Loaders</a></p></td>
+<td><p><a class="reference external" href="https://hamilton.apache.org/concepts/materialization/">Data Savers &amp; Loaders</a></p></td>
 <td><p><a class="reference external" href="https://docs.dagster.io/_apidocs/io-managers">IO Managers</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>Data validation</p></td>
-<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/how-tos/run-data-quality-checks/">Native validators and pandera plugin</a></p></td>
+<td><p><a class="reference external" href="https://hamilton.apache.org/how-tos/run-data-quality-checks/">Native validators and pandera plugin</a></p></td>
 <td><p><a class="reference external" href="https://docs.dagster.io/_apidocs/asset-checks">Asset checks</a> (experimental), <a class="reference external" href="https://docs.dagster.io/integrations/pandera">pandera integration</a></p></td>
 </tr>
 <tr class="row-even"><td><p>Versioning operations</p></td>
@@ -574,23 +574,23 @@
 <td><p><a class="reference external" href="https://docs.dagster.io/_apidocs/io-managers">Materialize in-memory</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>Task-based Execution</p></td>
-<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#taskbasedgraphexecutor">TaskBasedExecutor</a></p></td>
+<td><p><a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#taskbasedgraphexecutor">TaskBasedExecutor</a></p></td>
 <td><p>Default</p></td>
 </tr>
 <tr class="row-even"><td><p>Dynamic branching</p></td>
-<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/concepts/parallel-task/">Parallelizable/Collect</a></p></td>
+<td><p><a class="reference external" href="https://hamilton.apache.org/concepts/parallel-task/">Parallelizable/Collect</a></p></td>
 <td><p><a class="reference external" href="https://docs.dagster.io/_apidocs/dynamic">Mapping/Collect</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>Hooks</p></td>
-<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/lifecycle-hooks/">Lifecycle hooks</a> (easier to extend)</p></td>
+<td><p><a class="reference external" href="https://hamilton.apache.org/reference/lifecycle-hooks/">Lifecycle hooks</a> (easier to extend)</p></td>
 <td><p><a class="reference external" href="https://docs.dagster.io/concepts/ops-jobs-graphs/op-hooks#op-hooks">Op Hooks</a></p></td>
 </tr>
 <tr class="row-even"><td><p>Plugins</p></td>
-<td><p><a class="reference external" href="https://blog.dagworks.io/p/expressing-pyspark-transformations">Spark</a>, Dask, Ray, <a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/lifecycle-hooks/DDOGTracer/">Datadog</a>, polars, pandera, and more (Apache Hamilton is less restrictive and easier to extend)</p></td>
+<td><p><a class="reference external" href="https://blog.dagworks.io/p/expressing-pyspark-transformations">Spark</a>, Dask, Ray, <a class="reference external" href="https://hamilton.apache.org/reference/lifecycle-hooks/DDOGTracer/">Datadog</a>, polars, pandera, and more (Apache Hamilton is less restrictive and easier to extend)</p></td>
 <td><p><a class="reference external" href="https://docs.dagster.io/integrations">Spark, Dask, polars, pandera, Databricks, Snowflake, Great Expections, and more</a>  (Dagster integrations are more involved to develop)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Interactive Development</p></td>
-<td><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/how-tos/use-in-jupyter-notebook/#use-hamilton-jupyter-magic">Jupyter Magic</a>, <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=ThierryJean.hamilton">VSCode extension</a></p></td>
+<td><p><a class="reference external" href="https://hamilton.apache.org/how-tos/use-in-jupyter-notebook/#use-hamilton-jupyter-magic">Jupyter Magic</a>, <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=ThierryJean.hamilton">VSCode extension</a></p></td>
 <td><p>❌</p></td>
 </tr>
 </tbody>
@@ -995,7 +995,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on Jun 21, 2025</div>
+              Last updated on Jun 23, 2025</div>
           </div>
           <div class="right-details">
             

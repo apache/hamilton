@@ -28,7 +28,7 @@ TL;DR
       - DIY or in tandem with Dagster, Airflow, Prefect, Metaflow, etc.
       - Includes: manual, schedules, sensors, conditional execution
     * - Micro orchestration (i.e., ``dbt``, ``LangChain``)
-      - Can run anywhere (locally, notebook, macro orchestrator, `FastAPI <https://hamilton.dagworks.io/en/latest/integrations/fastapi/>`_, `Streamlit <https://hamilton.dagworks.io/en/latest/integrations/streamlit/>`_, pyodide, etc.)
+      - Can run anywhere (locally, notebook, macro orchestrator, `FastAPI <https://hamilton.apache.org/integrations/fastapi/>`_, `Streamlit <https://hamilton.apache.org/integrations/streamlit/>`_, pyodide, etc.)
       - ❌
     * - Code structure
       - Since it's micro, there are no restrictions.
@@ -37,10 +37,10 @@ TL;DR
       - Well-suited for `LLM applications <https://blog.dagworks.io/p/retrieval-augmented-generation-reference-arch>`_ since it's a micro orchestration framework.
       - ❌
     * - Lineage
-      - Fine-grained / column-level lineage. Includes `utilities to explore lineage <https://hamilton.dagworks.io/en/latest/how-tos/use-hamilton-for-lineage/>`_.
+      - Fine-grained / column-level lineage. Includes `utilities to explore lineage <https://hamilton.apache.org/how-tos/use-hamilton-for-lineage/>`_.
       - Coarser operations to reduce orchestration and I/O overhead.
     * - Visualization
-      - `View the dataflow and produce visual artifacts <https://hamilton.dagworks.io/en/latest/concepts/visualization/>`_. Configurable and supports extensive custom styling.
+      - `View the dataflow and produce visual artifacts <https://hamilton.apache.org/concepts/visualization/>`_. Configurable and supports extensive custom styling.
       - Export Daster UI in ``.svg``. No styling.
     * - Run tracking
       - `DAGWorks <https://docs.dagworks.io/capabilities>`_ (premium)
@@ -49,10 +49,10 @@ TL;DR
       - Has an `experiment manager plugin <https://blog.dagworks.io/p/building-a-lightweight-experiment>`_
       - ❌
     * - Materializers
-      - `Data Savers & Loaders <https://hamilton.dagworks.io/en/latest/concepts/materialization/>`_
+      - `Data Savers & Loaders <https://hamilton.apache.org/concepts/materialization/>`_
       - `IO Managers <https://docs.dagster.io/_apidocs/io-managers>`_
     * - Data validation
-      - `Native validators and pandera plugin <https://hamilton.dagworks.io/en/latest/how-tos/run-data-quality-checks/>`_ 
+      - `Native validators and pandera plugin <https://hamilton.apache.org/how-tos/run-data-quality-checks/>`_
       - `Asset checks <https://docs.dagster.io/_apidocs/asset-checks>`_ (experimental), `pandera integration <https://docs.dagster.io/integrations/pandera>`_
     * - Versioning operations
       - Nodes and dataflow versions are derived from code.
@@ -64,19 +64,19 @@ TL;DR
       - Default
       - `Materialize in-memory <https://docs.dagster.io/_apidocs/io-managers>`_
     * - Task-based Execution
-      - `TaskBasedExecutor <https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#taskbasedgraphexecutor>`_
+      - `TaskBasedExecutor <https://hamilton.apache.org/reference/drivers/Driver/#taskbasedgraphexecutor>`_
       - Default
     * - Dynamic branching
-      - `Parallelizable/Collect <https://hamilton.dagworks.io/en/latest/concepts/parallel-task/>`_
+      - `Parallelizable/Collect <https://hamilton.apache.org/concepts/parallel-task/>`_
       - `Mapping/Collect <https://docs.dagster.io/_apidocs/dynamic>`_
     * - Hooks
-      - `Lifecycle hooks <https://hamilton.dagworks.io/en/latest/reference/lifecycle-hooks/>`_ (easier to extend)
+      - `Lifecycle hooks <https://hamilton.apache.org/reference/lifecycle-hooks/>`_ (easier to extend)
       - `Op Hooks <https://docs.dagster.io/concepts/ops-jobs-graphs/op-hooks#op-hooks>`_
     * - Plugins
-      - `Spark <https://blog.dagworks.io/p/expressing-pyspark-transformations>`_, Dask, Ray, `Datadog <https://hamilton.dagworks.io/en/latest/reference/lifecycle-hooks/DDOGTracer/>`_, polars, pandera, and more (Apache Hamilton is less restrictive and easier to extend)
+      - `Spark <https://blog.dagworks.io/p/expressing-pyspark-transformations>`_, Dask, Ray, `Datadog <https://hamilton.apache.org/reference/lifecycle-hooks/DDOGTracer/>`_, polars, pandera, and more (Apache Hamilton is less restrictive and easier to extend)
       - `Spark, Dask, polars, pandera, Databricks, Snowflake, Great Expections, and more <https://docs.dagster.io/integrations>`_  (Dagster integrations are more involved to develop)
     * - Interactive Development
-      - `Jupyter Magic <https://hamilton.dagworks.io/en/latest/how-tos/use-in-jupyter-notebook/#use-hamilton-jupyter-magic>`_, `VSCode extension <https://marketplace.visualstudio.com/items?itemName=ThierryJean.hamilton>`_
+      - `Jupyter Magic <https://hamilton.apache.org/how-tos/use-in-jupyter-notebook/#use-hamilton-jupyter-magic>`_, `VSCode extension <https://marketplace.visualstudio.com/items?itemName=ThierryJean.hamilton>`_
       - ❌
 
 

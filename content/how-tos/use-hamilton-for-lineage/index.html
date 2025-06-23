@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta property="article:modified_time" content="2025-06-21T06:42:21+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Scaling computation" href="../scale-up/" /><link rel="prev" title="Data quality" href="../run-data-quality-checks/" />
+    <meta property="article:modified_time" content="2025-06-23T03:13:35+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Scaling computation" href="../scale-up/" /><link rel="prev" title="Data quality" href="../run-data-quality-checks/" />
         <link rel="canonical" href="https://hamilton.staged.apache.org/how-tos/use-hamilton-for-lineage/" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
@@ -583,21 +583,21 @@ straightforward way to store evolutions of your code and configuration, and ther
 <p>By versioning code, you are therefore versioning lineage information. This means you can go back in time and ask
 questions about the past. For example, you can ask what the lineage information was for a model that was trained at
 a specific point in time. This is as simple as checking out the git SHA of the code that produced the model, and
-asking Apache Hamilton to visualize (e.g. see <a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver.visualize_execution"><code class="docutils literal notranslate"><span class="pre">visualize_execution()</span></code></a>),  the DAG and ask questions of it.</p>
+asking Apache Hamilton to visualize (e.g. see <a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.visualize_execution"><code class="docutils literal notranslate"><span class="pre">visualize_execution()</span></code></a>),  the DAG and ask questions of it.</p>
 </section>
 <section id="auditing-and-compliance">
 <h3>Auditing and Compliance<a class="headerlink" href="#auditing-and-compliance" title="Link to this heading">¶</a></h3>
-<p>The <a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/decorators/tag"><code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code></a> and (<code class="docutils literal notranslate"><span class="pre">&#64;tag_outputs</span></code>) feature allows
+<p>The <a class="reference external" href="https://hamilton.apache.org/reference/decorators/tag"><code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code></a> and (<code class="docutils literal notranslate"><span class="pre">&#64;tag_outputs</span></code>) feature allows
 you to annotate your functions with metadata. No extra YAML file to manage, just directly together with your Apache Hamilton code.
 This means you can tag functions with information such as “PII”, “GDPR”, “HIPAA”, etc. and then ask Apache Hamilton to return
 nodes with certain tags, e.g. get me all my “sources”, or “what is PII, and what consumes it?”, etc.</p>
-<p>The <a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver">Apache Hamilton Driver</a>
+<p>The <a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver">Apache Hamilton Driver</a>
 has a lot of functions that allow you to ask questions of your DAGs to make (1) easier. The driver code can be run in
 a CI/CD system, or as part of a reporting/auditing pipeline. For example, you can ask:</p>
 <ul class="simple">
-<li><p>What are all the functions and their tags via <a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver.list_available_variables"><code class="docutils literal notranslate"><span class="pre">list_available_variables()</span></code></a></p></li>
-<li><p>What are the possible places that consume the output of this function via <a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver.what_is_downstream_of"><code class="docutils literal notranslate"><span class="pre">what_is_downstream_of()</span></code></a></p></li>
-<li><p>What are the possible sources that feed into this function via <a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver.what_is_upstream_of"><code class="docutils literal notranslate"><span class="pre">what_is_upstream_of()</span></code></a></p></li>
+<li><p>What are all the functions and their tags via <a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.list_available_variables"><code class="docutils literal notranslate"><span class="pre">list_available_variables()</span></code></a></p></li>
+<li><p>What are the possible places that consume the output of this function via <a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.what_is_downstream_of"><code class="docutils literal notranslate"><span class="pre">what_is_downstream_of()</span></code></a></p></li>
+<li><p>What are the possible sources that feed into this function via <a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.what_is_upstream_of"><code class="docutils literal notranslate"><span class="pre">what_is_upstream_of()</span></code></a></p></li>
 </ul>
 <p>With these three functions you can the find functions with specific tags and then ask questions in relation to them.</p>
 </section>
@@ -609,11 +609,11 @@ troubleshooting and debugging.</p>
 and executed mean that one can easily walk through just the part of the DAG of interest to debug an issue.
 To help with this, Apache Hamilton has various methods to visualize lineage so you can more easily see what you’re walking through connects to:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver.display_all_functions"><code class="docutils literal notranslate"><span class="pre">display_all_functions()</span></code></a></p></li>
-<li><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver.display_downstream_of"><code class="docutils literal notranslate"><span class="pre">display_downstream_of()</span></code></a></p></li>
-<li><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver.display_upstream_of"><code class="docutils literal notranslate"><span class="pre">display_upstream_of()</span></code></a></p></li>
-<li><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver.visualize_execution"><code class="docutils literal notranslate"><span class="pre">visualize_execution()</span></code></a></p></li>
-<li><p><a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver.visualize_path_between"><code class="docutils literal notranslate"><span class="pre">visualize_path_between()</span></code></a></p></li>
+<li><p><a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.display_all_functions"><code class="docutils literal notranslate"><span class="pre">display_all_functions()</span></code></a></p></li>
+<li><p><a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.display_downstream_of"><code class="docutils literal notranslate"><span class="pre">display_downstream_of()</span></code></a></p></li>
+<li><p><a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.display_upstream_of"><code class="docutils literal notranslate"><span class="pre">display_upstream_of()</span></code></a></p></li>
+<li><p><a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.visualize_execution"><code class="docutils literal notranslate"><span class="pre">visualize_execution()</span></code></a></p></li>
+<li><p><a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.visualize_path_between"><code class="docutils literal notranslate"><span class="pre">visualize_path_between()</span></code></a></p></li>
 </ul>
 </section>
 <section id="collaboration">
@@ -629,8 +629,8 @@ Driver code enables one to ask questions of the DAGs, and therefore the code, to
 <p>At a high level, the recipe for utilizing Apache Hamilton’s lineage capabilities is as follows:</p>
 <ol class="arabic simple">
 <li><p>Write Apache Hamilton code.</p></li>
-<li><p>Use <a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/decorators/tag"><code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code></a> and
-<a class="reference external" href="https://hamilton.dagworks.io/en/latest/reference/decorators/tag"><code class="docutils literal notranslate"><span class="pre">&#64;tag_outputs</span></code></a> to
+<li><p>Use <a class="reference external" href="https://hamilton.apache.org/reference/decorators/tag"><code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code></a> and
+<a class="reference external" href="https://hamilton.apache.org/reference/decorators/tag"><code class="docutils literal notranslate"><span class="pre">&#64;tag_outputs</span></code></a> to
 annotate functions.</p></li>
 <li><p>Instantiate a Apache Hamilton Driver, it’ll then have a representation of how data and compute flow as defined by your
 Apache Hamilton code. The Driver object can then emit/provide information on lineage!</p></li>
@@ -753,7 +753,7 @@ or be used within your CI/CD system to query, visualize, and otherwise emit line
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on Jun 21, 2025</div>
+              Last updated on Jun 23, 2025</div>
           </div>
           <div class="right-details">
             
