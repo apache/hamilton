@@ -12,7 +12,7 @@ output of a function is immutable, then there's only one place it was created; i
 provides a great debugging experience if there are ever issues in your dataflow. We believe that by default, one should
 always strive for immutability of outputs.
 
-However, it is up to you, the Apache Hamilton function writer, to ensure that immutability is something that is adhered to.
+However, it is up to you, the Hamilton function writer, to ensure that immutability is something that is adhered to.
 
 Best practice:
 --------------

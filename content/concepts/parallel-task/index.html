@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta property="article:modified_time" content="2025-06-23T03:13:35+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="UI Overview" href="../ui/" /><link rel="prev" title="Function modifiers (Advanced)" href="../function-modifiers-advanced/" />
+    <meta property="article:modified_time" content="2025-06-23T03:58:30+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="UI Overview" href="../ui/" /><link rel="prev" title="Function modifiers (Advanced)" href="../function-modifiers-advanced/" />
         <link rel="canonical" href="https://hamilton.staged.apache.org/concepts/parallel-task/" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
@@ -505,7 +505,7 @@
 <p>The adapter approach effectively farms out the execution of each node/function to a system that can handle resolving
 futures. That is, Apache Hamilton walks the DAG and submits each node to the adapter, which then submits the node for execution,
 and internally the execution resolves any Futures from prior submitted nodes.</p>
-<p>To make use of this, the general pattern is you apply an adapter to the driver and don’t need to touch your Apache Hamilton functions!:</p>
+<p>To make use of this, the general pattern is you apply an adapter to the driver and don’t need to touch your Hamilton functions!:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.execution</span><span class="w"> </span><span class="kn">import</span> <span class="n">executors</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.plugins.h_threadpool</span><span class="w"> </span><span class="kn">import</span> <span class="n">FutureAdapter</span>

@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta property="article:modified_time" content="2025-06-23T03:13:35+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Function modifiers" href="../function-modifiers/" /><link rel="prev" title="Visualization" href="../visualization/" />
+    <meta property="article:modified_time" content="2025-06-23T03:58:30+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Function modifiers" href="../function-modifiers/" /><link rel="prev" title="Visualization" href="../visualization/" />
         <link rel="canonical" href="https://hamilton.staged.apache.org/concepts/materialization/" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
@@ -870,7 +870,7 @@ was read and written.</p>
 </section>
 <section id="function-modifiers">
 <h3>Function modifiers<a class="headerlink" href="#function-modifiers" title="Link to this heading">¶</a></h3>
-<p>By adding <code class="docutils literal notranslate"><span class="pre">&#64;load_from</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;save_to</span></code> function modifiers (<a class="reference internal" href="../function-modifiers/#loader-saver-decorators"><span class="std std-ref">Load and save external data</span></a>) to Apache Hamilton functions, materializers are generated when using <code class="docutils literal notranslate"><span class="pre">Builder.with_modules()</span></code>. This approach ressembles <strong>1) from Driver</strong>:</p>
+<p>By adding <code class="docutils literal notranslate"><span class="pre">&#64;load_from</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;save_to</span></code> function modifiers (<a class="reference internal" href="../function-modifiers/#loader-saver-decorators"><span class="std std-ref">Load and save external data</span></a>) to Hamilton functions, materializers are generated when using <code class="docutils literal notranslate"><span class="pre">Builder.with_modules()</span></code>. This approach ressembles <strong>1) from Driver</strong>:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Under the hood, the <code class="docutils literal notranslate"><span class="pre">&#64;load_from</span></code> modifier uses the same code as <code class="docutils literal notranslate"><span class="pre">from_</span></code> to load data, same for <code class="docutils literal notranslate"><span class="pre">&#64;save_to</span></code> and <code class="docutils literal notranslate"><span class="pre">to</span></code>.</p>

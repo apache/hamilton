@@ -93,7 +93,7 @@ A "async" joke example
 ----------------------
 Here we show how to make the joke using async constructs. With Apache Hamilton
 you can mix and match async and regular functions, the only change
-is that you need to use the async Apache Hamilton Driver.
+is that you need to use the async Hamilton Driver.
 
 .. table:: Async Version
    :align: left

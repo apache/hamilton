@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta property="article:modified_time" content="2025-06-23T03:13:35+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Ibis" href="../ibis/" /><link rel="prev" title="dlt" href="../dlt/" />
+    <meta property="article:modified_time" content="2025-06-23T03:58:30+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Ibis" href="../ibis/" /><link rel="prev" title="dlt" href="../dlt/" />
         <link rel="canonical" href="https://hamilton.staged.apache.org/integrations/fastapi/" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
@@ -535,7 +535,7 @@
 <section id="apache-hamilton-fastapi">
 <h2>Apache Hamilton + FastAPI<a class="headerlink" href="#apache-hamilton-fastapi" title="Link to this heading">¶</a></h2>
 <p>Adding Apache Hamilton to your FastAPI server can provide a better separation between the dataflow and the API endpoints. Each endpoint can use <code class="docutils literal notranslate"><span class="pre">Driver.execute()</span></code> to request variables and wrap results into an HTTP response. Then, data transformations and interactions with resources (e.g., database, web service) are curated into standalone Python modules and decoupled from the server code.</p>
-<p>Since Apache Hamilton dataflows will run the same way inside or outside FastAPI, you can write simpler unit tests for Apache Hamilton functions without defining a mock server and client. Additionnally, visualizations for the defined Apache Hamilton dataflows can be added to the FastAPI <a class="reference external" href="https://fastapi.tiangolo.com/features/#automatic-docs">Swagger UI documentation</a>. They will remain in sync with the API behavior because they are generated from the code.</p>
+<p>Since Apache Hamilton dataflows will run the same way inside or outside FastAPI, you can write simpler unit tests for Hamilton functions without defining a mock server and client. Additionnally, visualizations for the defined Apache Hamilton dataflows can be added to the FastAPI <a class="reference external" href="https://fastapi.tiangolo.com/features/#automatic-docs">Swagger UI documentation</a>. They will remain in sync with the API behavior because they are generated from the code.</p>
 <section id="example">
 <h3>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h3>
 <p>In this example, we’ll build a backend for a PDF summarizer application.</p>
@@ -597,7 +597,7 @@
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 
-<span class="c1"># build the Apache Hamilton driver with the summarization module</span>
+<span class="c1"># build the Hamilton Driver with the summarization module</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">summarization</span><span class="p">)</span>

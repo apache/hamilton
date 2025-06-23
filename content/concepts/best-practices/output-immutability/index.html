@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta property="article:modified_time" content="2025-06-23T03:13:35+00:00" /><link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Using within your ETL System" href="../using-within-your-etl-system/" /><link rel="prev" title="Common Indices" href="../common-indices/" />
+    <meta property="article:modified_time" content="2025-06-23T03:58:30+00:00" /><link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Using within your ETL System" href="../using-within-your-etl-system/" /><link rel="prev" title="Common Indices" href="../common-indices/" />
         <link rel="canonical" href="https://hamilton.staged.apache.org/concepts/best-practices/output-immutability/" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
@@ -502,7 +502,7 @@ column are not changeable.</p>
 output of a function is immutable, then there’s only one place it was created; it’s not modified anywhere else. This
 provides a great debugging experience if there are ever issues in your dataflow. We believe that by default, one should
 always strive for immutability of outputs.</p>
-<p>However, it is up to you, the Apache Hamilton function writer, to ensure that immutability is something that is adhered to.</p>
+<p>However, it is up to you, the Hamilton function writer, to ensure that immutability is something that is adhered to.</p>
 <section id="best-practice">
 <h2>Best practice:<a class="headerlink" href="#best-practice" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">

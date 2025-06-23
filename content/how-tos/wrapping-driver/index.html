@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta property="article:modified_time" content="2025-06-23T03:13:35+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Command line interface" href="../cli-reference/" /><link rel="prev" title="Extension autoloading" href="../extensions-autoloading/" />
+    <meta property="article:modified_time" content="2025-06-23T03:58:30+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Command line interface" href="../cli-reference/" /><link rel="prev" title="Extension autoloading" href="../extensions-autoloading/" />
         <link rel="canonical" href="https://hamilton.staged.apache.org/how-tos/wrapping-driver/" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
@@ -495,10 +495,10 @@
         <article role="main" id="furo-main-content">
           <section id="wrapping-the-driver">
 <h1>Wrapping the Driver<a class="headerlink" href="#wrapping-the-driver" title="Link to this heading">¶</a></h1>
-<p>The APIs that the Apache Hamilton Driver is built on, are considered internal. So it is possible for you to define your own
-driver in place of the stock Apache Hamilton driver, we suggest the following path if you don’t like how the current Apache Hamilton
+<p>The APIs that the Hamilton Driver is built on, are considered internal. So it is possible for you to define your own
+driver in place of the stock Hamilton Driver, we suggest the following path if you don’t like how the current Apache Hamilton
 Driver interface is designed:</p>
-<p><cite>Write a “Wrapper” class that delegates to the Apache Hamilton Driver.</cite></p>
+<p><cite>Write a “Wrapper” class that delegates to the Hamilton Driver.</cite></p>
 <p>i.e.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 
@@ -510,14 +510,14 @@ Driver interface is designed:</p>
     <span class="c1"># ...</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">my_execute_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;What actually calls the Apache Hamilton&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;What actually calls the Hamilton&quot;&quot;&quot;</span>
         <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Driver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constructor_arg</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">augmetn</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>That way, you can create the right API constructs to invoke Apache Hamilton in your context, and then delegate to the stock
-Apache Hamilton Driver. By doing so, it will ensure that your code continues to work, since we intend to honor the Apache Hamilton
+<p>That way, you can create the right API constructs to invoke Hamilton in your context, and then delegate to the stock
+Hamilton Driver. By doing so, it will ensure that your code continues to work, since we intend to honor the Hamilton
 Driver APIs with backwards compatibility as much as possible.</p>
 </section>
 

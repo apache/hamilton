@@ -75,7 +75,7 @@ A node is a single "operation" or "step" in a dataflow. Apache Hamilton users wr
 
 Anatomy of a node
 ~~~~~~~~~~~~~~~~~
-The following figure and table detail how a Python function maps to a Apache Hamilton node.
+The following figure and table detail how a Python function maps to a Hamilton node.
 
 
 .. image:: ../_static/function_anatomy.png

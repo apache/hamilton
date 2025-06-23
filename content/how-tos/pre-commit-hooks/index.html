@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta property="article:modified_time" content="2025-06-23T03:13:35+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Apache Hamilton UI" href="../../hamilton-ui/" /><link rel="prev" title="Command line interface" href="../cli-reference/" />
+    <meta property="article:modified_time" content="2025-06-23T03:58:30+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Apache Hamilton UI" href="../../hamilton-ui/" /><link rel="prev" title="Command line interface" href="../cli-reference/" />
         <link rel="canonical" href="https://hamilton.staged.apache.org/how-tos/pre-commit-hooks/" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
@@ -566,7 +566,7 @@
 <li><p>functions with a name starting with underscore (<code class="docutils literal notranslate"><span class="pre">_</span></code>) are ignored from the dataflow</p></li>
 <li><p>functions with a <code class="docutils literal notranslate"><span class="pre">&#64;config</span></code> decorator received a trailing double underscore with a suffix (e.g., <code class="docutils literal notranslate"><span class="pre">hello__weekday()</span></code>, <code class="docutils literal notranslate"><span class="pre">hello__weekend()</span></code>)</p></li>
 </ul>
-<p>Instead of reimplementing this logic, we can try to build the Apache Hamilton Driver with the command <code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">build</span> <span class="pre">MODULES</span></code> and catch errors. This also ensures the verification is always in sync with the actual build mechanism. This hook will help prevent us from committing invalid dataflow definitions.</p>
+<p>Instead of reimplementing this logic, we can try to build the Hamilton Driver with the command <code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">build</span> <span class="pre">MODULES</span></code> and catch errors. This also ensures the verification is always in sync with the actual build mechanism. This hook will help prevent us from committing invalid dataflow definitions.</p>
 </section>
 <section id="checking-dataflow-paths">
 <h3>Checking dataflow paths<a class="headerlink" href="#checking-dataflow-paths" title="Link to this heading">¶</a></h3>

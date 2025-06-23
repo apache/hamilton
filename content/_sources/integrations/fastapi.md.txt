@@ -38,7 +38,7 @@ FastAPI already does a great job at automating API documentation by integrating 
 ## Apache Hamilton + FastAPI
 Adding Apache Hamilton to your FastAPI server can provide a better separation between the dataflow and the API endpoints. Each endpoint can use `Driver.execute()` to request variables and wrap results into an HTTP response. Then, data transformations and interactions with resources (e.g., database, web service) are curated into standalone Python modules and decoupled from the server code.
 
-Since Apache Hamilton dataflows will run the same way inside or outside FastAPI, you can write simpler unit tests for Apache Hamilton functions without defining a mock server and client. Additionnally, visualizations for the defined Apache Hamilton dataflows can be added to the FastAPI [Swagger UI documentation](https://fastapi.tiangolo.com/features/#automatic-docs). They will remain in sync with the API behavior because they are generated from the code.
+Since Apache Hamilton dataflows will run the same way inside or outside FastAPI, you can write simpler unit tests for Hamilton functions without defining a mock server and client. Additionnally, visualizations for the defined Apache Hamilton dataflows can be added to the FastAPI [Swagger UI documentation](https://fastapi.tiangolo.com/features/#automatic-docs). They will remain in sync with the API behavior because they are generated from the code.
 
 ### Example
 In this example, we'll build a backend for a PDF summarizer application.
@@ -97,7 +97,7 @@ import summarization
 
 app = FastAPI()
 
-# build the Apache Hamilton driver with the summarization module
+# build the Hamilton Driver with the summarization module
 dr = (
     driver.Builder()
     .with_modules(summarization)
