@@ -33,11 +33,11 @@ A simple joke example
 
 
 .. figure:: langchain_snippets/hamilton-invoke.png
-   :alt: Structure of the Apache Hamilton DAG
+   :alt: Structure of the Hamilton DAG
    :align: center
    :width: 50%
 
-   The Apache Hamilton DAG visualized.
+   The Hamilton DAG visualized.
 
 -----------------------
 A streamed joke example
@@ -57,11 +57,11 @@ Note: you could use @config.when to include both streamed and non-streamed versi
 
 
 .. figure:: langchain_snippets/hamilton-streamed.png
-   :alt: Structure of the Apache Hamilton DAG
+   :alt: Structure of the Hamilton DAG
    :align: center
    :width: 50%
 
-   The Apache Hamilton DAG visualized.
+   The Hamilton DAG visualized.
 
 -------------------------------
 A "batch" parallel joke example
@@ -82,11 +82,11 @@ e.g. Ray, Dask, etc. We use multi-threading here.
 
 
 .. figure:: langchain_snippets/hamilton-batch.png
-   :alt: Structure of the Apache Hamilton DAG
+   :alt: Structure of the Hamilton DAG
    :align: center
    :width: 75%
 
-   The Apache Hamilton DAG visualized.
+   The Hamilton DAG visualized.
 
 ----------------------
 A "async" joke example
@@ -107,11 +107,11 @@ is that you need to use the async Hamilton Driver.
 
 
 .. figure:: langchain_snippets/hamilton-async.png
-   :alt: Structure of the Apache Hamilton DAG
+   :alt: Structure of the Hamilton DAG
    :align: center
    :width: 50%
 
-   The Apache Hamilton DAG visualized.
+   The Hamilton DAG visualized.
 
 
 ---------------------------------
@@ -133,11 +133,11 @@ that uses the different OpenAI model.
 
 
 .. figure:: langchain_snippets/hamilton-completion.png
-   :alt: Structure of the Apache Hamilton DAG
+   :alt: Structure of the Hamilton DAG
    :align: center
    :width: 50%
 
-   The Apache Hamilton DAG visualized with configuration provided for the completion path. Note the dangling node - that's normal, it's not used in the completion path.
+   The Hamilton DAG visualized with configuration provided for the completion path. Note the dangling node - that's normal, it's not used in the completion path.
 
 
 ---------------------------------
@@ -160,11 +160,11 @@ to use Anthropic.
 
 
 .. figure:: langchain_snippets/hamilton-anthropic.png
-   :alt: Structure of the Apache Hamilton DAG
+   :alt: Structure of the Hamilton DAG
    :align: center
    :width: 50%
 
-   The Apache Hamilton DAG visualized with configuration provided to use Anthropic.
+   The Hamilton DAG visualized with configuration provided to use Anthropic.
 
 
 ---------------------------------

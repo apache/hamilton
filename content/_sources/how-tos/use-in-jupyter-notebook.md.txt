@@ -232,7 +232,7 @@ You'd then follow the following process:
 
 1. Write your data transformation in the open python module
 2. In the notebook, instantiate a Hamilton Driver and test the DAG with a small subset of data.&#x20;
-3. Because of %autoreload, the module is reimported with the latest changes each time the Apache Hamilton DAG is executed. This approach prevents out-of-order notebook executions, and functions always reside in clean .py files.
+3. Because of %autoreload, the module is reimported with the latest changes each time the Hamilton DAG is executed. This approach prevents out-of-order notebook executions, and functions always reside in clean .py files.
 
 Credit: [Thierry Jean's blog post](https://medium.com/@thijean/the-perks-of-creating-dataflows-with-hamilton-36e8c56dd2a).
 

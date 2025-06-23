@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta property="article:modified_time" content="2025-06-23T03:58:30+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Loading data" href="../load-data/" /><link rel="prev" title="User Guide" href="../" />
+    <meta property="article:modified_time" content="2025-06-23T04:04:22+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Loading data" href="../load-data/" /><link rel="prev" title="User Guide" href="../" />
         <link rel="canonical" href="https://hamilton.staged.apache.org/how-tos/use-in-jupyter-notebook/" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
@@ -689,7 +689,7 @@ pip<span class="w"> </span>install<span class="w"> </span>sf-hamilton
 <ol class="arabic simple">
 <li><p>Write your data transformation in the open python module</p></li>
 <li><p>In the notebook, instantiate a Hamilton Driver and test the DAG with a small subset of data. </p></li>
-<li><p>Because of %autoreload, the module is reimported with the latest changes each time the Apache Hamilton DAG is executed. This approach prevents out-of-order notebook executions, and functions always reside in clean .py files.</p></li>
+<li><p>Because of %autoreload, the module is reimported with the latest changes each time the Hamilton DAG is executed. This approach prevents out-of-order notebook executions, and functions always reside in clean .py files.</p></li>
 </ol>
 <p>Credit: <a class="reference external" href="https://medium.com/&#64;thijean/the-perks-of-creating-dataflows-with-hamilton-36e8c56dd2a">Thierry Jean’s blog post</a>.</p>
 </section>
