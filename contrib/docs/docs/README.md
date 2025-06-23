@@ -32,7 +32,7 @@ Come back here when you're ready to use Apache Hamilton.
 2. You have the requisite python dependencies installed on your system.
 You'll get import errors if you don't. Don't know what you need? Scroll to the bottom of a dataflow to find the requirements. We're working on convenience functions to help!
 
-For more extensive documentation, please see [Apache Hamilton User Contrib documentation](https://hamilton.dagworks.io).
+For more extensive documentation, please see [Apache Hamilton User Contrib documentation](https://hamilton.apache.org).
 
 ### Dynamic installation
 Here we dynamically download the dataflow from the internet and execute it. This is useful for quickly
@@ -107,7 +107,7 @@ dataflows.copy(NAME_OF_DATAFLOW, destination_path="PATH_TO_DIRECTORY")
 from hamilton.contrib.user.NAME_OF_USER import NAME_OF_DATAFLOW
 dataflows.copy(NAME_OF_DATAFLOW, destination_path="PATH_TO_DIRECTORY")
 ```
-You can then modify/import the code as you see fit. See [copy()](https://hamilton.dagworks.io/en/latest/reference/dataflows/copy/)
+You can then modify/import the code as you see fit. See [copy()](https://hamilton.apache.org/reference/dataflows/copy/)
 for more details.
 
 ## How to contribute

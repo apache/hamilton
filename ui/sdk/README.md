@@ -8,7 +8,7 @@ DAGs with the Apache Hamilton UI.
 ## Getting Started
 
 For the latest documentation, please consult our
-[Apache Hamilton documentation](https://hamilton.dagworks.io/) under `Apache Hamilton UI`.
+[Apache Hamilton documentation](https://hamilton.apache.org/) under `Apache Hamilton UI`.
 
 For a quick overview of Apache Hamilton, we suggest [tryhamilton.dev](https://www.tryhamilton.dev/).
 

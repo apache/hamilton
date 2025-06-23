@@ -28,7 +28,7 @@ hamilton ui
 
 #### Docker Install
 
-See https://hamilton.dagworks.io/en/latest/concepts/ui/ for details, here are the cliff notes:
+See https://hamilton.apache.org/concepts/ui/ for details, here are the cliff notes:
 
 ```bash
 git clone https://github.com/apache/hamilton

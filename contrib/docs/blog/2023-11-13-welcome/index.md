@@ -18,7 +18,7 @@ for you to find flows that others have built that you can use and easily modify 
 1. Browse the dataflows defined.
 2. Find a [dataflow](/docs) you want to use.
 3. Cut and paste the code snippet to get started with it!
-4. Use the dataflow as is, or modify it to your needs by copying it to your own repository via [copy()](https://hamilton.dagworks.io/en/latest/reference/dataflows/copy/).
+4. Use the dataflow as is, or modify it to your needs by copying it to your own repository via [copy()](https://hamilton.apache.org/en/latest/reference/dataflows/copy/).
 
 ## How to contribute
 

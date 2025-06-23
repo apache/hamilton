@@ -22,7 +22,7 @@ const FeatureList = [
         Hamilton allows you to easily focus on each step of your dataflow.
           Dataflows are also reusable and extensible so use this hub to help you
           find the code that you're looking for. Then if you need to make a change,
-        you can <a href={"https://hamilton.dagworks.io/en/latest/reference/dataflows/copy/#copy"}> copy </a>
+        you can <a href={"https://hamilton.apache.org/reference/dataflows/copy/#copy"}> copy </a>
         the dataflow and make your own version.
       </>
     ),

@@ -87,7 +87,7 @@ dataflows.copy(NAME_OF_DATAFLOW, destination_path="PATH_TO_DIRECTORY")
 from hamilton.contrib.user.NAME_OF_USER import NAME_OF_DATAFLOW
 dataflows.copy(NAME_OF_DATAFLOW, destination_path="PATH_TO_DIRECTORY")
 ```
-You can then modify/import the code as you see fit. See [copy()](https://hamilton.dagworks.io/en/latest/reference/dataflows/copy/)
+You can then modify/import the code as you see fit. See [copy()](https://hamilton.apache.org/reference/dataflows/copy/)
 for more details.
 
 

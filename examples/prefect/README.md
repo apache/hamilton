@@ -47,7 +47,7 @@ The easiest way to get this example running is to sign up for Prefect's free tie
 ![blocks](./docs/prefect_config_block.JPG)
 2. Prefect keeps track of your flow and tasks config, which is useful to reproduce runs.
 ![params](./docs/prefect_run_params.JPG)
-3. Store Apache Hamilton [DAG visualization](https://hamilton.dagworks.io/en/latest/how-tos/use-hamilton-for-lineage/) with your runs using Prefect [artifacts](https://docs.prefect.io/latest/concepts/artifacts/).
+3. Store Apache Hamilton [DAG visualization](https://hamilton.apache.org/how-tos/use-hamilton-for-lineage/) with your runs using Prefect [artifacts](https://docs.prefect.io/latest/concepts/artifacts/).
     ![dag](./docs/prepare_data_hamilton_dag.png)
     The general idea is:
     1. produce a local visualization file

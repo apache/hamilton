@@ -2,7 +2,7 @@
 
 *Rhetorical question*: which code would you rather maintain, change, and update?
 
-For a side by side comparison see [our docs](https://hamilton.dagworks.io/en/latest/code-comparisons/langchain/).
+For a side by side comparison see [our docs](https://hamilton.apache.org/code-comparisons/langchain/).
 
 In this directory you'll find a set of equivalent examples.
 Most of the files are self-contained, and are prefixed with what

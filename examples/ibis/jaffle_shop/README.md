@@ -2,7 +2,7 @@
 
 This repository is a reimplementation of the canonical [dbt example jaffle_shop](https://github.com/dbt-labs/jaffle_shop). It illustrates data transformations for an ecommerce store.
 
-Data transformations are implemented using the Python library [Ibis](https://ibis-project.org/) which allows to define SQL operations that works across backends. By default, it uses [duckdb](https://duckdb.org/) for local development. Apache Hamilton + Ibis provides a Python-centric alternative to dbt ([Learn more](https://hamilton.dagworks.io/en/latest/integrations/ibis/)).
+Data transformations are implemented using the Python library [Ibis](https://ibis-project.org/) which allows to define SQL operations that works across backends. By default, it uses [duckdb](https://duckdb.org/) for local development. Apache Hamilton + Ibis provides a Python-centric alternative to dbt ([Learn more](https://hamilton.apache.org/integrations/ibis/)).
 
 ## Content
 The content and structure aims to match the [original dbt `jaffle_shop`](https://github.com/dbt-labs/jaffle_shop/tree/main) example. On the other hand, Apache Hamilton is just a Python library and is flexible regarding project structure.

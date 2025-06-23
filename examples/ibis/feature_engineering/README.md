@@ -34,5 +34,5 @@ Follow these steps to get the example working:
 
 
 # Resources
-- [Learn more about Apache Hamilton + Ibis](https://hamilton.dagworks.io/en/latest/integrations/ibis/)
+- [Learn more about Apache Hamilton + Ibis](https://hamilton.apache.org/integrations/ibis/)
 - [Ibis documentation](https://ibis-project.org/)

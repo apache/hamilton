@@ -72,6 +72,6 @@ and `"function"` nodes can receive several modifiers:
 - `"output"`: for values returned by `.execute()` (`final_vars`) or `.materialize()` (`materializers` and `additional_vars`)
 - `"materializer"`: nodes added to the dataflow by `.materialize()`
 - `"parallelizable"`/`"expand"`: functions annotated with `Parallelizable[]` or `Expand[]`
-- `"field"` and `"cluster"`: are both associated with the schema [visualization feature](https://hamilton.dagworks.io/en/latest/reference/decorators/schema/#schema)
+- `"field"` and `"cluster"`: are both associated with the schema [visualization feature](https://hamilton.apache.org/reference/decorators/schema/#schema)
 
 We recommend not using these names as `legend_name` when defining your custom style to avoid conflicts.

@@ -32,7 +32,7 @@ or you can do `docker compose logs -f` to tail the logs (ctrl+c to stop tailing 
 - [FastAPI /docs metadata](https://fastapi.tiangolo.com/tutorial/metadata/)
 - [FastAPI lifespan events](https://fastapi.tiangolo.com/advanced/events/)
 - [Apache Hamilton Interactive online demo](https://www.tryhamilton.dev/)
-- [Apache Hamilton Parallelizable/Collect](https://hamilton.dagworks.io/en/latest/concepts/customizing-execution/#dynamic-dags-parallel-execution)
+- [Apache Hamilton Parallelizable/Collect](https://hamilton.apache.org/concepts/customizing-execution/#dynamic-dags-parallel-execution)
 - [OpenAI API docs](https://platform.openai.com/docs/introduction)
 - [RAG sample architecture by Amazon](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-customize-rag.html)
 - [Streamlit API documentation](https://docs.streamlit.io/library/api-reference)

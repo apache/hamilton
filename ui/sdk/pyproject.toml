@@ -29,7 +29,7 @@ dynamic = ["dependencies", "optional-dependencies", "version"]
 "Homepage" = "https://github.com/apache/hamilton/"
 "Bug Reports" = "https://github.com/apache/hamilton/issues"
 "Source" = "https://github.com/apache/hamilton/ui/sdk"
-"Documenation" = "https://hamilton.dagworks.io/"
+"Documentation" = "https://hamilton.apache.org/"
 
 [project.scripts]
 hamilton-sdk = "hamilton_sdk.cli.cli:cli"

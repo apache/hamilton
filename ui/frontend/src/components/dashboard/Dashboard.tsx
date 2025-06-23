@@ -226,7 +226,7 @@ const MiniSideBar = (props: {
           title="Search"
         />
         <a
-          href="https://hamilton.dagworks.io/en/latest/concepts/ui"
+          href="https://hamilton.apache.org/concepts/ui"
           target="_blank"
           rel="noopener noreferrer"
         >

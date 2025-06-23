@@ -1,7 +1,7 @@
 # Apache Hamilton UI
 
 This contains the code for the new Apache Hamilton UI. For an overview of getting started & features
-[see this documentation](https://hamilton.dagworks.io/en/latest/concepts/ui). For a lengthier post and intro see our [blog post](https://blog.dagworks.io/p/hamilton-ui-streamlining-metadata).
+[see this documentation](https://hamilton.apache.org/concepts/ui). For a lengthier post and intro see our [blog post](https://blog.dagworks.io/p/hamilton-ui-streamlining-metadata).
 
 ## One operational UI for all your dataflows
 
@@ -77,7 +77,7 @@ cd hamilton/ui
 Once docker is running navigate to http://localhost:8242 and create an email and a project; then follow
 instructions on integrating with Apache Hamilton.
 
-A fuller guide can be found [here](https://hamilton.dagworks.io/en/latest/concepts/ui).
+A fuller guide can be found [here](https://hamilton.apache.org/concepts/ui).
 
 ## Architecture
 

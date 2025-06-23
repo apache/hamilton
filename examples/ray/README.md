@@ -12,5 +12,5 @@ scaling Apache Hamilton on Ray, where `@ray.remote` is injected around
 each Apache Hamilton function.
 
 ## creating tasks
-For [this paralle task approach](https://hamilton.dagworks.io/en/latest/concepts/parallel-task/) see [this
+For [this paralle task approach](https://hamilton.apache.org/concepts/parallel-task/) see [this
 example](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/scraping_and_chunking) instead.

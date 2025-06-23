@@ -192,10 +192,10 @@ Feature comparison
       - Default
     * - I/O execution
       - `Datasets and Data Catalog <https://docs.kedro.org/en/stable/data/data_catalog.html>`_
-      - `Data Savers & Loaders <https://hamilton.dagworks.io/en/latest/concepts/materialization/>`_
+      - `Data Savers & Loaders <https://hamilton.apache.org/concepts/materialization/>`_
     * - Expressive DAG definition
       - ⛔
-      - `Function modifiers <https://hamilton.dagworks.io/en/latest/concepts/function-modifiers/>`_
+      - `Function modifiers <https://hamilton.apache.org/concepts/function-modifiers/>`_
     * - Column-level transformations
       - ⛔
       - ✅
@@ -210,7 +210,7 @@ Feature comparison
       - `Apache Hamilton UI <https://github.com/apache/hamilton/tree/main/ui>`_
     * - Data validation
       - `Community Pandera plugin <https://github.com/Galileo-Galilei/kedro-pandera/releases>`_
-      - `Native and Pandera plugin <https://hamilton.dagworks.io/en/latest/how-tos/run-data-quality-checks/>`_
+      - `Native and Pandera plugin <https://hamilton.apache.org/how-tos/run-data-quality-checks/>`_
     * - Executors
       - `Sequential, multiprocessing, multi-threading <https://docs.kedro.org/en/stable/nodes_and_pipelines/run_a_pipeline.html>`_
       - Sequential, async, multiprocessing, multi-threading
@@ -219,7 +219,7 @@ Feature comparison
       - `PySpark <https://blog.dagworks.io/p/expressing-pyspark-transformations>`_, Dask, Ray, Modal
     * - Dynamic branching
       - ⛔
-      - `Parallelizable/Collect <https://hamilton.dagworks.io/en/latest/concepts/parallel-task/>`_ for easy parallelization.
+      - `Parallelizable/Collect <https://hamilton.apache.org/concepts/parallel-task/>`_ for easy parallelization.
     * - Command line tool (CLI)
       - ✅
       - ✅

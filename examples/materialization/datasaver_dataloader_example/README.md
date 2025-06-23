@@ -14,7 +14,7 @@ To run this example, you can use the following command:
 ```bash
 pip install -r requirements.txt
 ```
-2. Have the Apache Hamilton UI set up. See [UI docs](https://hamilton.dagworks.io/en/latest/hamilton-ui/) for instructions.
+2. Have the Apache Hamilton UI set up. See [UI docs](https://hamilton.apache.org/hamilton-ui/) for instructions.
 3. You have modified the run.py / notebook to log to the right Apache Hamilton UI project.
 4. Run the example:
 

@@ -2,7 +2,7 @@
 
 In this example, we're going to show you how Apache Hamilton can help you structure your Feast repository and bring tighter coupling between your feature transformations (code) and feature store (data).
 - **Feast** is a feature store, which is an ML-specific stack component, that helps store and serve features (offline vs. online, batch vs. stream). It keeps a registry of features scattered across storage sources (database, data warehouse, streaming, etc.) and facilitates data retrieval and joining. Features need to be computed separately, typically in an SQL pipeline or a Python dataframe library and then be pushed to the Feast feature store([Feast FAQ](https://feast.dev/)).
-- **Apache Hamilton** is a data transformation micro-framework. It helps one write Python code that is modular and reusable, and that expresses a [DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph) of execution. It was initially developed for large dataframes with hundreds of columns for machine learning while preserving strong lineage capabilities ([high-level comparison](https://hamilton.dagworks.io/en/latest/)).
+- **Apache Hamilton** is a data transformation micro-framework. It helps one write Python code that is modular and reusable, and that expresses a [DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph) of execution. It was initially developed for large dataframes with hundreds of columns for machine learning while preserving strong lineage capabilities ([high-level comparison](https://hamilton.apache.org/)).
 
 
 ## File organization

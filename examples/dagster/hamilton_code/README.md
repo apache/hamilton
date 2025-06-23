@@ -19,6 +19,6 @@ The directory also include `mock_api.py` which simulates a `ressource` in the Da
     ```
 
 ## Going further
-- Learn the basics of Apache Hamilton via the `Concepts/` [documentation section](https://hamilton.dagworks.io/en/latest/concepts/node/)
+- Learn the basics of Apache Hamilton via the `Concepts/` [documentation section](https://hamilton.apache.org/concepts/node/)
 - Visit [tryhamilton.dev](tryhamilton.dev) for an interactive tutorial in your browser
 - Visit the [DAGWorks blog](https://blog.dagworks.io/) for more detailed guides

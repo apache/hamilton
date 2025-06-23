@@ -412,7 +412,7 @@ export const Welcome = () => {
               target="_blank"
               rel="noreferrer"
               className="hover:underline text-dwlightblue"
-              href="https://hamilton.dagworks.io"
+              href="https://hamilton.apache.org"
             >
               Hamilton&apos;s documentation and examples.
             </a>

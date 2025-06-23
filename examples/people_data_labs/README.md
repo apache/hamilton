@@ -43,5 +43,5 @@ You can even run this example in Google Colab:
 ## Resources
 - [PDL Blog](https://blog.peopledatalabs.com/) and [PDL Recipes](https://docs.peopledatalabs.com/recipes)
 - [Interactive Apache Hamilton training](https://www.tryhamilton.dev/hamilton-basics/jumping-in)
-- [Apache Hamilton documentation](https://hamilton.dagworks.io/en/latest/concepts/node/)
+- [Apache Hamilton documentation](https://hamilton.apache.org/concepts/node/)
 - more [Apache Hamilton code examples](https://github.com/apache/hamilton/tree/main/examples) and integrations with Python tools.

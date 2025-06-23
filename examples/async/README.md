@@ -31,7 +31,7 @@ You should get the following result:
 
 ## Tracking
 
-This has an additional endpoint that will use the async tracker if the [ui](https://hamilton.dagworks.io/en/latest/concepts/ui/)
+This has an additional endpoint that will use the async tracker if the [ui](https://hamilton.apache.org/concepts/ui/)
 is running on port 8241 -- see [fastapi_example.py](fastapi_example.py) for the code.
 If it is not running it will proceed anyway without tracking.
 

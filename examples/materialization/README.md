@@ -4,7 +4,7 @@ Apache Hamilton's driver allows for ad-hoc materialization. This enables you to 
 and save your data to a set of custom locations/url.
 
 Note that these materializers are _isomorphic_ in nature to the
-[@save_to](https://hamilton.dagworks.io/en/latest/reference/decorators/save_to/)
+[@save_to](https://hamilton.apache.org/reference/decorators/save_to/)
 decorator. Materializers inject the additional node at runtime, modifying the
 DAG to include a data saver node, and returning the metadata around materialization.
 
@@ -30,7 +30,7 @@ and `value` (which is the default) to specify literals.
 ## `driver.materialize`
 
 This will be a high-level overview. For more details,
-see [documentation](https://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver.materializehttps://hamilton.dagworks.io/en/latest/reference/drivers/Driver/#hamilton.driver.Driver.materialize).
+see [documentation](https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.materializehttps://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.materialize).
 
 `driver.materialize()` does the following:
 1. Processes a list of materializers to create a new DAG
@@ -42,7 +42,7 @@ see [documentation](https://hamilton.dagworks.io/en/latest/reference/drivers/Dri
 Materializers each consume:
 1. A `dependencies` list to materialize
 2. A (optional) `combine` parameter to combine the outputs of the dependencies
-(this is required if there are multiple dependencies). This is a [ResultMixin](https://hamilton.dagworks.io/en/latest/concepts/customizing-execution/#result-builders) object
+(this is required if there are multiple dependencies). This is a [ResultMixin](https://hamilton.apache.org/concepts/customizing-execution/#result-builders) object
 3. an `id` parameter to identify the materializer, which serves as the nde name in the DAG
 
 Materializers are referenced by the `to` object in `hamilton.io.materialization`, which utilizes

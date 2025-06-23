@@ -154,5 +154,5 @@ app.routes[-1].description += f"""<img src="data:image/png;base64,{base64_viz}"/
 
 ### Benefits
 - **Separation of concerns**: the decoupling between `server.py` and `summarization.py` makes it easier to extend and test the server separately from the data transformations.
-- **Reusable code**: the module `summarization.py` can be reused elsewhere with Apache Hamilton. For instance, if you first started by building a proof-of-concept with [Streamlit + Apache Hamilton](https://hamilton.dagworks.io/en/latest/integrations/streamlit), the logic you produced could be reused to power your FastAPI server.
+- **Reusable code**: the module `summarization.py` can be reused elsewhere with Apache Hamilton. For instance, if you first started by building a proof-of-concept with [Streamlit + Apache Hamilton](https://hamilton.apache.org/integrations/streamlit), the logic you produced could be reused to power your FastAPI server.
 - **Richer documentation**: Apache Hamilton allows to view and better understand the dataflow of an operation. This helps onboard new API users and greatly facilitates transferring the ownership of the API to other engineers.

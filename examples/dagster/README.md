@@ -2,7 +2,7 @@
 
 This repository compares how to build dataflows with macro orchestrator Dagster and the micro orchestrator Apache Hamilton.
 
-> see the [side-by-side comparison](https://hamilton.dagworks.io/en/latest/code-comparisons/dagster/) in the Apache Hamilton documentation
+> see the [side-by-side comparison](https://hamilton.apache.org/code-comparisons/dagster/) in the Apache Hamilton documentation
 
 ## Content
 - `dagster_code/` includes code from the [Dagster tutorial](https://docs.dagster.io/tutorial) to load data and compute statistics from the website [HackerNews](https://news.ycombinator.com/).

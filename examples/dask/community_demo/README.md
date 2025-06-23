@@ -2,7 +2,7 @@
 
 This example was demo'ed at the Dask community day for July 2023.
 
-In this example we showcase using the [Apache Hamilton DaskGraphAdapter](https://hamilton.dagworks.io/en/latest/reference/graph-adapters/DaskGraphAdapter/#h-dask-daskgraphadapter)
+In this example we showcase using the [Apache Hamilton DaskGraphAdapter](https://hamilton.apache.org/reference/graph-adapters/DaskGraphAdapter/#h-dask-daskgraphadapter)
 to inject dask.delayed() as it's walking the DAG that is defined with Apache Hamilton.
 
 File organization:
@@ -34,5 +34,5 @@ This is a simple DAG that we construct here. But for reference it looks like thi
 
 # References:
 * [Dask](https://dask.org/)
-* [Apache Hamilton Docs](https://hamilton.dagworks.io/en/latest/)
+* [Apache Hamilton Docs](https://hamilton.apache.org/)
 * [Try Apache Hamilton in your browser](https://www.tryhamilton.dev/)

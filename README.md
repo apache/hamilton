@@ -1,6 +1,6 @@
 <div align="center">
    <h1><img src="https://github.com/apache/hamilton/assets/2328071/feb6abaa-b6d5-4271-a320-0ae4a18d8aa7" width="50"/> Apache Hamilton — portable & expressive <br> data transformation DAGs</h1>
-   <a href='https://hamilton.dagworks.io/en/latest/?badge=latest'>
+   <a href='https://hamilton.apache.org/?badge=latest'>
       <img src='https://readthedocs.org/projects/hamilton/badge/?version=latest' alt='Documentation Status' />
    </a><a href="https://www.python.org/downloads/" target="_blank">
       <img src="https://img.shields.io/badge/python-3.8|%203.9|%203.10|%203.11|%203.12-blue.svg" alt="Python supported"/>
@@ -42,7 +42,7 @@ To create a DAG, write regular Python functions that specify their dependencies 
 </div>
 <br>
 
-Apache Hamilton brings modularity and structure to any Python application moving data: ETL pipelines, ML workflows, LLM applications, RAG systems, BI dashboards, and the [Apache Hamilton UI](https://hamilton.dagworks.io/en/latest/concepts/ui) allows you to automatically visualize, catalog, and monitor execution.
+Apache Hamilton brings modularity and structure to any Python application moving data: ETL pipelines, ML workflows, LLM applications, RAG systems, BI dashboards, and the [Apache Hamilton UI](https://hamilton.apache.org/concepts/ui) allows you to automatically visualize, catalog, and monitor execution.
 
 > Apache Hamilton is great for DAGs, but if you need loops or conditional logic to create an LLM agent or a simulation, take a look at our sister library  [Burr](https://github.com/apache/burr) 🤖 .
 
@@ -69,17 +69,17 @@ Data teams write code to deliver business value, but few have the resources to s
 
 - **Separation of concerns**. Apache Hamilton separates the DAG "definition" and "execution" which lets data scientists focus on solving problems and engineers manage production pipelines.
 
-- **Effective collaboration**. The [Apache Hamilton UI provides a shared interface](https://hamilton.dagworks.io/en/latest/hamilton-ui/ui/) for teams to inspect results and debug failures throughout the development cycle.
+- **Effective collaboration**. The [Apache Hamilton UI provides a shared interface](https://hamilton.apache.org/hamilton-ui/ui/) for teams to inspect results and debug failures throughout the development cycle.
 
 - **Low-friction dev to prod**. Use `@config.when()` to modify your DAG between execution environments instead of error-prone `if/else` feature flags. The notebook extension prevents the pain of migrating code from a notebook to a Python module.
 
 - **Portable transformations**. Your DAG is [independent of infrastructure or orchestration](https://blog.dagworks.io/publish/posts/detail/145543927?referrer=%2Fpublish%2Fposts), meaning you can develop and debug locally and reuse code across contexts (local, Airflow, FastAPI, etc.).
 
-- **Maintainable DAG definition**. Apache Hamilton [automatically builds the DAG from a single line of code whether it has 10 or 1000 nodes](https://hamilton.dagworks.io/en/latest/concepts/driver/). It can also assemble multiple Python modules into a pipeline, encouraging modularity.
+- **Maintainable DAG definition**. Apache Hamilton [automatically builds the DAG from a single line of code whether it has 10 or 1000 nodes](https://hamilton.apache.org/concepts/driver/). It can also assemble multiple Python modules into a pipeline, encouraging modularity.
 
-- **Expressive DAGs**. [Function modifiers](https://hamilton.dagworks.io/en/latest/concepts/function-modifiers/) are a unique feature to keep your code [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) and reduce the complexity of maintaining large DAGs. Other frameworks inevitably lead to code redundancy or bloated functions.
+- **Expressive DAGs**. [Function modifiers](https://hamilton.apache.org/concepts/function-modifiers/) are a unique feature to keep your code [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) and reduce the complexity of maintaining large DAGs. Other frameworks inevitably lead to code redundancy or bloated functions.
 
-- **Built-in coding style**. The Apache Hamilton DAG is [defined using Python functions](https://hamilton.dagworks.io/en/latest/concepts/node/), encouraging  modular, easy-to-read, self-documenting, and unit testable code.
+- **Built-in coding style**. The Apache Hamilton DAG is [defined using Python functions](https://hamilton.apache.org/concepts/node/), encouraging  modular, easy-to-read, self-documenting, and unit testable code.
 
 - **Data and schema validation**. Decorate functions with `@check_output` to validate output properties, and raise warnings or exceptions. Add the `SchemaValidator()` adapter to automatically inspect dataframe-like objects (pandas, polars, Ibis, etc.) to track and validate their schema.
 
@@ -88,7 +88,7 @@ Data teams write code to deliver business value, but few have the resources to s
 
 # Apache Hamilton UI
 
-You can track the execution of your Apache Hamilton DAG in the [Apache Hamilton UI](https://hamilton.dagworks.io/en/latest/hamilton-ui/ui/). It automatically populates a data catalog with lineage / tracing and provides execution observability to inspect results and debug errors. You can run it as a [local server](https://hamilton.dagworks.io/en/latest/hamilton-ui/ui/#local-mode) or a [self-hosted application using Docker](https://hamilton.dagworks.io/en/latest/hamilton-ui/ui/#docker-deployed-mode).
+You can track the execution of your Apache Hamilton DAG in the [Apache Hamilton UI](https://hamilton.apache.org/hamilton-ui/ui/). It automatically populates a data catalog with lineage / tracing and provides execution observability to inspect results and debug errors. You can run it as a [local server](https://hamilton.apache.org/hamilton-ui/ui/#local-mode) or a [self-hosted application using Docker](https://hamilton.apache.org/hamilton-ui/ui/#docker-deployed-mode).
 
 <p align="center">
   <img src="./docs/_static/hamilton_1.jpeg" alt="Description1" width="30%" style="margin-right: 20px;"/>
@@ -143,7 +143,7 @@ You can track the execution of your Apache Hamilton DAG in the [Apache Hamilton 
 
 # Documentation & learning resources
 
-* 📚 See the [official documentation](https://hamilton.dagworks.io/) to learn about the core concepts of Apache Hamilton.
+* 📚 See the [official documentation](https://hamilton.apache.org/) to learn about the core concepts of Apache Hamilton.
 
 * 👨‍🏫 Consult the [examples on GitHub](https://github.com/apache/hamilton/tree/main/examples) to learn about specific features or integrations with other frameworks.
 
@@ -204,7 +204,7 @@ Another way to frame it is to think about the different layers of a data stack. 
    </table>
 </div>
 
-See our page on [Why use Apache Hamilton?](https://hamilton.dagworks.io/en/latest/get-started/why-hamilton/) and framework [code comparisons](https://hamilton.dagworks.io/en/latest/code-comparisons/) for more information.
+See our page on [Why use Apache Hamilton?](https://hamilton.apache.org/get-started/why-hamilton/) and framework [code comparisons](https://hamilton.apache.org/code-comparisons/) for more information.
 
 # 📑 License
 
