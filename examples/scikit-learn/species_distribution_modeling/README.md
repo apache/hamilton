@@ -5,7 +5,7 @@ We translate the Species distribution modeling from scikit-learn into Apache Ham
 # Highlights
  Example of a simple ETL pipeline broken into modules with external couplings.
 
-1) To see how to couple external modules / source code and integrate it into a Apache Hamilton DAG check out `grids.py` or `preprocessing.py`, where we use `@pipe` to wrap and inject external functions as Apache Hamilton nodes.
+1) To see how to couple external modules / source code and integrate it into a Apache Hamilton DAG check out `grids.py` or `preprocessing.py`, where we use `@pipe` to wrap and inject external functions as Hamilton nodes.
 2) To see how to re-use functions check out `train_and_predict.py`, where we use `@pipe_output` to evaluate our model on the individual test and train datasets.
 
 ![image info](./dag.png)

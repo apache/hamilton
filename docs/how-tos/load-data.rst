@@ -2,7 +2,7 @@
 Loading data
 ==================
 
-While we've been injecting data in from the driver in previous examples, Apache Hamilton functions are fully capable of loading their own data.
+While we've been injecting data in from the driver in previous examples, Hamilton functions are fully capable of loading their own data.
 In the following example, we'll show how to use Apache Hamilton to:
 
 1. Load data from an external source (CSV file and duckdb database)

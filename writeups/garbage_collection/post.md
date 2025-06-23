@@ -116,7 +116,7 @@ swap space, takes longer to handle memory retrieval/commitment, and eventually j
 
 Now that we have a grasp on the problem and a profiling methodology, let's dig in to see what we can fix. Luckily, the root of the issue was fairly clear.
 
-To execute a Apache Hamilton node and just its required upstream dependencies, we conduct a depth-first-traversal of the graph, storing results
+To execute a Hamilton node and just its required upstream dependencies, we conduct a depth-first-traversal of the graph, storing results
 we've realized in a `computed` dictionary. We use this for multiple purposes -- it can help us (a) avoid recomputing nodes and instead store
 the results, and (b) return the final results at the end that we need. The problem is that we held onto all results, regardless of whether we would need them later.
 In the (albeit contrived) script above, we only need the prior node in the chain to compute the current one.

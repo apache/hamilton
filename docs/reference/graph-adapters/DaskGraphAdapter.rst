@@ -2,7 +2,7 @@
 h_dask.DaskGraphAdapter
 =======================
 
-Runs the entire Apache Hamilton DAG on dask.
+Runs the entire Hamilton DAG on dask.
 
 
 .. autoclass:: hamilton.plugins.h_dask.DaskGraphAdapter

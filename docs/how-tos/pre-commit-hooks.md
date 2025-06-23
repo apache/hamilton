@@ -65,7 +65,7 @@ Apache Hamilton doesn't have many syntactic constraints, but there's a few thing
 - functions with a name starting with underscore (`_`) are ignored from the dataflow
 - functions with a `@config` decorator received a trailing double underscore with a suffix (e.g., `hello__weekday()`, `hello__weekend()`)
 
-Instead of reimplementing this logic, we can try to build the Apache Hamilton Driver with the command `hamilton build MODULES` and catch errors. This also ensures the verification is always in sync with the actual build mechanism. This hook will help prevent us from committing invalid dataflow definitions.
+Instead of reimplementing this logic, we can try to build the Hamilton Driver with the command `hamilton build MODULES` and catch errors. This also ensures the verification is always in sync with the actual build mechanism. This hook will help prevent us from committing invalid dataflow definitions.
 
 ### Checking dataflow paths
 A dataflow definition might be valid, but it might break paths in unexpected ways. The command `hamilton validate` (which internally uses `Driver.validate_execution()`) can check if a node is reachable.

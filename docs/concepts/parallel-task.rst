@@ -12,7 +12,7 @@ The adapter approach effectively farms out the execution of each node/function t
 futures. That is, Apache Hamilton walks the DAG and submits each node to the adapter, which then submits the node for execution,
 and internally the execution resolves any Futures from prior submitted nodes.
 
-To make use of this, the general pattern is you apply an adapter to the driver and don't need to touch your Apache Hamilton functions!:
+To make use of this, the general pattern is you apply an adapter to the driver and don't need to touch your Hamilton functions!:
 
 .. code-block:: python
 

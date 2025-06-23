@@ -113,7 +113,7 @@ The dataflow is executed by passing ``from_`` and ``to`` objects to ``Driver.mat
 Function modifiers
 ~~~~~~~~~~~~~~~~~~
 
-By adding ``@load_from`` and ``@save_to`` function modifiers (:ref:`loader-saver-decorators`) to Apache Hamilton functions, materializers are generated when using ``Builder.with_modules()``. This approach ressembles **1) from Driver**:
+By adding ``@load_from`` and ``@save_to`` function modifiers (:ref:`loader-saver-decorators`) to Hamilton functions, materializers are generated when using ``Builder.with_modules()``. This approach ressembles **1) from Driver**:
 
 .. note::
 

@@ -2,9 +2,9 @@
 Function modifiers
 ==================
 
-In :doc:`node`, we discussed how to write Python functions to define Apache Hamilton nodes and dataflow. In the basic case, each function defines one node.
+In :doc:`node`, we discussed how to write Python functions to define Hamilton nodes and dataflow. In the basic case, each function defines one node.
 
-Yet, it's common to need nodes with similar purposes but different dependencies, such as preprocessing training and evaluation datasets. In that case, using a **function modifier** can help create both nodes from a single Apache Hamilton function!
+Yet, it's common to need nodes with similar purposes but different dependencies, such as preprocessing training and evaluation datasets. In that case, using a **function modifier** can help create both nodes from a single Hamilton function!
 
 On this page, you'll learn:
 
@@ -41,7 +41,7 @@ Function modifiers were designed to have clear semantics, so you should be able 
 Reminder: Anatomy of a node
 ---------------------------
 
-This section from the page :doc:`node` details how a Python function maps to a Apache Hamilton node. We'll reuse these terms to explain the function modifiers.
+This section from the page :doc:`node` details how a Python function maps to a Hamilton node. We'll reuse these terms to explain the function modifiers.
 
 .. image:: ../_static/function_anatomy.png
     :scale: 13%
@@ -161,7 +161,7 @@ The next snippet checks if the returned Series is of type ``np.int32``, which is
 
 
 - To see all available validators, go to the file ``hamilton/data_quality/default_validators.py`` and view the variable ``AVAILABLE_DEFAULT_VALIDATORS``.
-- The function modifier ``@check_output_custom`` allows you to define your own validator. Validators inherit the ``base.BaseDefaultValidator`` class and are essentially standardized Apache Hamilton node definitions (instead of functions). See ``hamilton/data_quality/default_validators.py`` or reach out on `Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_ for help!
+- The function modifier ``@check_output_custom`` allows you to define your own validator. Validators inherit the ``base.BaseDefaultValidator`` class and are essentially standardized Hamilton node definitions (instead of functions). See ``hamilton/data_quality/default_validators.py`` or reach out on `Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_ for help!
 - Note: ``@check_output_custom`` decorators cannot be stacked, but they instead can take multiple validators.
 
 .. note::

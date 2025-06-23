@@ -124,7 +124,7 @@ Learn more about :doc:`materialization`.
 View node dependencies
 ----------------------
 
-Representing data pipelines, ML experiments, or LLM applications as a dataflow helps reason about the dependencies between operations. The Apache Hamilton Driver has the following utilities to select and return a list of nodes (to learn more :doc:`../how-tos/use-hamilton-for-lineage`):
+Representing data pipelines, ML experiments, or LLM applications as a dataflow helps reason about the dependencies between operations. The Hamilton Driver has the following utilities to select and return a list of nodes (to learn more :doc:`../how-tos/use-hamilton-for-lineage`):
 
 - ``.what_is_upstream_of(*node_names: str)``
 - ``.what_is_downstream_of(*node_names: str)``

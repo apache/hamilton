@@ -2,7 +2,7 @@
 Driver
 ======
 
-Once you defined your dataflow in a Python module, you need to create a Apache Hamilton Driver to execute it. This page details the Driver basics, which include:
+Once you defined your dataflow in a Python module, you need to create a Hamilton Driver to execute it. This page details the Driver basics, which include:
 
 1. Defining the Driver
 2. Visualizing the dataflow
