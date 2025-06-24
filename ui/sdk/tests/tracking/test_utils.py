@@ -157,3 +157,28 @@ def test_make_json_safe_str_with_null_byte():
     assert isinstance(result, dict)
     assert isinstance(result["key2"], str)
     assert result["key2"] == "value\\x00"
+
+
+def test_make_json_safe_with_nan():
+    """Test that NaN and Infinity values are properly handled in make_json_safe"""
+    import math
+
+    # Test with a dictionary
+    input_dict = {"a": math.nan, "b": np.nan, "c": 1.0, "d": math.inf, "e": -math.inf}
+    result = utils.make_json_safe(input_dict)
+    assert isinstance(result, dict)
+    assert result["a"] == "nan"  # NaN should be represented as "nan"
+    assert result["b"] == "nan"  # …same for numpy.nan
+    assert result["c"] == 1.0  # Regular float should remain unchanged
+    assert result["d"] == "inf"  # Infinity should be represented as "inf"
+    assert result["e"] == "-inf"  # Negative infinity should be represented as "-inf"
+
+    # Test with a list
+    input_list = [math.nan, np.nan, 1.0, math.inf, -math.inf]
+    result = utils.make_json_safe(input_list)
+    assert isinstance(result, list)
+    assert result[0] == "nan"  # NaN should be represented as "nan"
+    assert result[1] == "nan"  # …same for numpy.nan
+    assert result[2] == 1.0  # Regular float should remain unchanged
+    assert result[3] == "inf"  # Infinity should be represented as "inf"
+    assert result[4] == "-inf"  # Negative infinity should be represented as "-inf"
