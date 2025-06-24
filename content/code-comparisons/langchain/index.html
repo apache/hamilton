@@ -3,15 +3,16 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Airflow" href="../airflow/" /><link rel="prev" title="Dagster" href="../dagster/" />
-        <link rel="canonical" href="https://hamilton.dagworks.io/code-comparisons/langchain/" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06.dev1 -->
+    <meta property="article:modified_time" content="2025-06-24T05:52:25+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Airflow" href="../airflow/" /><link rel="prev" title="Dagster" href="../dagster/" />
+        <link rel="canonical" href="https://hamilton.apache.org/code-comparisons/langchain/" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>LangChain - Hamilton</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3912a5f9" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../../_static/testimonials.css?v=bd684830" />
     
     
@@ -19,24 +20,24 @@
 
 <style>
   body {
-    --color-code-background: #f2f2f2;
-  --color-code-foreground: #1e1e1e;
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
   --color-announcement-background: #ffba00;
   --color-announcement-text: #091E42;
   
   }
   @media not print {
     body[data-theme="dark"] {
-      --color-code-background: #2b2b2b;
-  --color-code-foreground: #f8f8f2;
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
   --color-announcement-background: #ffba00;
   --color-announcement-text: #091E42;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
-        --color-code-background: #2b2b2b;
-  --color-code-foreground: #f8f8f2;
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
   --color-announcement-background: #ffba00;
   --color-announcement-text: #091E42;
   
@@ -316,6 +317,10 @@
 </ul>
 </li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">PDF</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://hamilton.apache.org/_static/Hamilton.pdf">PDF</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Community</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../community/">Meet-ups</a></li>
@@ -329,6 +334,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/dataloader/">dataloader</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/datasaver/">datasaver</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/does/">does</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/unpack_fields/">unpack_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_columns/">extract_columns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_fields/">extract_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/inject/">inject</a></li>
@@ -606,10 +612,10 @@ underneath.</p>
 </table>
 </div>
 <figure class="align-center" id="id2">
-<a class="reference internal image-reference" href="../../_images/hamilton-invoke.png"><img alt="Structure of the Apache Hamilton DAG" src="../../_images/hamilton-invoke.png" style="width: 50%;" />
+<a class="reference internal image-reference" href="../../_images/hamilton-invoke.png"><img alt="Structure of the Hamilton DAG" src="../../_images/hamilton-invoke.png" style="width: 50%;" />
 </a>
 <figcaption>
-<p><span class="caption-text">The Apache Hamilton DAG visualized.</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+<p><span class="caption-text">The Hamilton DAG visualized.</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 </section>
@@ -748,10 +754,10 @@ Note: you could use &#64;config.when to include both streamed and non-streamed v
 </table>
 </div>
 <figure class="align-center" id="id4">
-<a class="reference internal image-reference" href="../../_images/hamilton-streamed.png"><img alt="Structure of the Apache Hamilton DAG" src="../../_images/hamilton-streamed.png" style="width: 50%;" />
+<a class="reference internal image-reference" href="../../_images/hamilton-streamed.png"><img alt="Structure of the Hamilton DAG" src="../../_images/hamilton-streamed.png" style="width: 50%;" />
 </a>
 <figcaption>
-<p><span class="caption-text">The Apache Hamilton DAG visualized.</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+<p><span class="caption-text">The Hamilton DAG visualized.</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 </section>
@@ -925,10 +931,10 @@ e.g. Ray, Dask, etc. We use multi-threading here.</p>
 </table>
 </div>
 <figure class="align-center" id="id6">
-<a class="reference internal image-reference" href="../../_images/hamilton-batch.png"><img alt="Structure of the Apache Hamilton DAG" src="../../_images/hamilton-batch.png" style="width: 75%;" />
+<a class="reference internal image-reference" href="../../_images/hamilton-batch.png"><img alt="Structure of the Hamilton DAG" src="../../_images/hamilton-batch.png" style="width: 75%;" />
 </a>
 <figcaption>
-<p><span class="caption-text">The Apache Hamilton DAG visualized.</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
+<p><span class="caption-text">The Hamilton DAG visualized.</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 </section>
@@ -936,7 +942,7 @@ e.g. Ray, Dask, etc. We use multi-threading here.</p>
 <h2>A “async” joke example<a class="headerlink" href="#a-async-joke-example" title="Link to this heading">¶</a></h2>
 <p>Here we show how to make the joke using async constructs. With Apache Hamilton
 you can mix and match async and regular functions, the only change
-is that you need to use the async Apache Hamilton Driver.</p>
+is that you need to use the async Hamilton Driver.</p>
 <div class="table-wrapper docutils container" id="id7">
 <table class="docutils align-left" id="id7">
 <caption><span class="caption-text">Async Version</span><a class="headerlink" href="#id7" title="Link to this table">¶</a></caption>
@@ -1077,10 +1083,10 @@ is that you need to use the async Apache Hamilton Driver.</p>
 </table>
 </div>
 <figure class="align-center" id="id8">
-<a class="reference internal image-reference" href="../../_images/hamilton-async.png"><img alt="Structure of the Apache Hamilton DAG" src="../../_images/hamilton-async.png" style="width: 50%;" />
+<a class="reference internal image-reference" href="../../_images/hamilton-async.png"><img alt="Structure of the Hamilton DAG" src="../../_images/hamilton-async.png" style="width: 50%;" />
 </a>
 <figcaption>
-<p><span class="caption-text">The Apache Hamilton DAG visualized.</span><a class="headerlink" href="#id8" title="Link to this image">¶</a></p>
+<p><span class="caption-text">The Hamilton DAG visualized.</span><a class="headerlink" href="#id8" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1230,10 +1236,10 @@ that uses the different OpenAI model.</p>
 </table>
 </div>
 <figure class="align-center" id="id10">
-<a class="reference internal image-reference" href="../../_images/hamilton-completion.png"><img alt="Structure of the Apache Hamilton DAG" src="../../_images/hamilton-completion.png" style="width: 50%;" />
+<a class="reference internal image-reference" href="../../_images/hamilton-completion.png"><img alt="Structure of the Hamilton DAG" src="../../_images/hamilton-completion.png" style="width: 50%;" />
 </a>
 <figcaption>
-<p><span class="caption-text">The Apache Hamilton DAG visualized with configuration provided for the completion path. Note the dangling node - that’s normal, it’s not used in the completion path.</span><a class="headerlink" href="#id10" title="Link to this image">¶</a></p>
+<p><span class="caption-text">The Hamilton DAG visualized with configuration provided for the completion path. Note the dangling node - that’s normal, it’s not used in the completion path.</span><a class="headerlink" href="#id10" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1390,10 +1396,10 @@ to use Anthropic.</p>
 </table>
 </div>
 <figure class="align-center" id="id12">
-<a class="reference internal image-reference" href="../../_images/hamilton-anthropic.png"><img alt="Structure of the Apache Hamilton DAG" src="../../_images/hamilton-anthropic.png" style="width: 50%;" />
+<a class="reference internal image-reference" href="../../_images/hamilton-anthropic.png"><img alt="Structure of the Hamilton DAG" src="../../_images/hamilton-anthropic.png" style="width: 50%;" />
 </a>
 <figcaption>
-<p><span class="caption-text">The Apache Hamilton DAG visualized with configuration provided to use Anthropic.</span><a class="headerlink" href="#id12" title="Link to this image">¶</a></p>
+<p><span class="caption-text">The Hamilton DAG visualized with configuration provided to use Anthropic.</span><a class="headerlink" href="#id12" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1631,7 +1637,8 @@ opinion it’s better to be explicit about it.</p>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
+            <div class="last-updated">
+              Last updated on Jun 24, 2025</div>
           </div>
           <div class="right-details">
             
@@ -1675,6 +1682,6 @@ opinion it’s better to be explicit about it.</p>
 </div><script src="../../_static/documentation_options.js?v=187304be"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/furo.js?v=22e4c79f"></script>
+    <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>
     </body>
 </html>

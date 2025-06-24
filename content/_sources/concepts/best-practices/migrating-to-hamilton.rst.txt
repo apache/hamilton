@@ -25,7 +25,7 @@ change those systems to be able to use Apache Hamilton. If that's the case, then
 
 Specifically, this custom wrapper object class's purpose is to match your existing API expectations. It will act as the
 translation layer from your existing API expectations, to what running Apache Hamilton requires, and back. In Apache Hamilton
-terminology, this is a `Custom Driver Wrapper`, since it wraps around the Apache Hamilton Driver class.
+terminology, this is a `Custom Driver Wrapper`, since it wraps around the Hamilton Driver class.
 
 .. image:: ../../_static/Hamilton_ApplyMeetup_2022_wrapper.svg
   :alt: The wrapper driver class helps ensure your existing API expectations are matched.

@@ -3,15 +3,16 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Builder" href="../builder/" /><link rel="prev" title="Materialization" href="../materialization/" />
-        <link rel="canonical" href="https://hamilton.dagworks.io/concepts/function-modifiers/" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06.dev1 -->
+    <meta property="article:modified_time" content="2025-06-24T05:52:25+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Builder" href="../builder/" /><link rel="prev" title="Materialization" href="../materialization/" />
+        <link rel="canonical" href="https://hamilton.apache.org/concepts/function-modifiers/" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>Function modifiers - Hamilton</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=3912a5f9" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../../_static/testimonials.css?v=bd684830" />
     
     
@@ -19,24 +20,24 @@
 
 <style>
   body {
-    --color-code-background: #f2f2f2;
-  --color-code-foreground: #1e1e1e;
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
   --color-announcement-background: #ffba00;
   --color-announcement-text: #091E42;
   
   }
   @media not print {
     body[data-theme="dark"] {
-      --color-code-background: #2b2b2b;
-  --color-code-foreground: #f8f8f2;
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
   --color-announcement-background: #ffba00;
   --color-announcement-text: #091E42;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
-        --color-code-background: #2b2b2b;
-  --color-code-foreground: #f8f8f2;
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
   --color-announcement-background: #ffba00;
   --color-announcement-text: #091E42;
   
@@ -316,6 +317,10 @@
 </ul>
 </li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">PDF</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://hamilton.apache.org/_static/Hamilton.pdf">PDF</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Community</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../community/">Meet-ups</a></li>
@@ -329,6 +334,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/dataloader/">dataloader</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/datasaver/">datasaver</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/does/">does</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/unpack_fields/">unpack_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_columns/">extract_columns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_fields/">extract_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/inject/">inject</a></li>
@@ -490,8 +496,8 @@
         <article role="main" id="furo-main-content">
           <section id="function-modifiers">
 <h1>Function modifiers<a class="headerlink" href="#function-modifiers" title="Link to this heading">¶</a></h1>
-<p>In <a class="reference internal" href="../node/"><span class="doc">Functions, nodes &amp; dataflow</span></a>, we discussed how to write Python functions to define Apache Hamilton nodes and dataflow. In the basic case, each function defines one node.</p>
-<p>Yet, it’s common to need nodes with similar purposes but different dependencies, such as preprocessing training and evaluation datasets. In that case, using a <strong>function modifier</strong> can help create both nodes from a single Apache Hamilton function!</p>
+<p>In <a class="reference internal" href="../node/"><span class="doc">Functions, nodes &amp; dataflow</span></a>, we discussed how to write Python functions to define Hamilton nodes and dataflow. In the basic case, each function defines one node.</p>
+<p>Yet, it’s common to need nodes with similar purposes but different dependencies, such as preprocessing training and evaluation datasets. In that case, using a <strong>function modifier</strong> can help create both nodes from a single Hamilton function!</p>
 <p>On this page, you’ll learn:</p>
 <ul class="simple">
 <li><p>Python decorators basics</p></li>
@@ -519,7 +525,7 @@
 </section>
 <section id="reminder-anatomy-of-a-node">
 <h2>Reminder: Anatomy of a node<a class="headerlink" href="#reminder-anatomy-of-a-node" title="Link to this heading">¶</a></h2>
-<p>This section from the page <a class="reference internal" href="../node/"><span class="doc">Functions, nodes &amp; dataflow</span></a> details how a Python function maps to a Apache Hamilton node. We’ll reuse these terms to explain the function modifiers.</p>
+<p>This section from the page <a class="reference internal" href="../node/"><span class="doc">Functions, nodes &amp; dataflow</span></a> details how a Python function maps to a Hamilton node. We’ll reuse these terms to explain the function modifiers.</p>
 <a class="reference internal image-reference" href="../../_images/function_anatomy.png"><img alt="../../_images/function_anatomy.png" class="align-center" src="../../_images/function_anatomy.png" style="width: 424.84000000000003px; height: 218.14000000000001px;" />
 </a>
 <div class="table-wrapper docutils container">
@@ -623,7 +629,7 @@
 <img alt="../../_images/check_output.png" src="../../_images/check_output.png" />
 <ul class="simple">
 <li><p>To see all available validators, go to the file <code class="docutils literal notranslate"><span class="pre">hamilton/data_quality/default_validators.py</span></code> and view the variable <code class="docutils literal notranslate"><span class="pre">AVAILABLE_DEFAULT_VALIDATORS</span></code>.</p></li>
-<li><p>The function modifier <code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> allows you to define your own validator. Validators inherit the <code class="docutils literal notranslate"><span class="pre">base.BaseDefaultValidator</span></code> class and are essentially standardized Apache Hamilton node definitions (instead of functions). See <code class="docutils literal notranslate"><span class="pre">hamilton/data_quality/default_validators.py</span></code> or reach out on <a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a> for help!</p></li>
+<li><p>The function modifier <code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> allows you to define your own validator. Validators inherit the <code class="docutils literal notranslate"><span class="pre">base.BaseDefaultValidator</span></code> class and are essentially standardized Hamilton node definitions (instead of functions). See <code class="docutils literal notranslate"><span class="pre">hamilton/data_quality/default_validators.py</span></code> or reach out on <a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a> for help!</p></li>
 <li><p>Note: <code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> decorators cannot be stacked, but they instead can take multiple validators.</p></li>
 </ul>
 <div class="admonition note">
@@ -648,17 +654,35 @@
 <p class="admonition-title">Note</p>
 <p>To add metadata to extracted nodes, use <code class="docutils literal notranslate"><span class="pre">&#64;tag_output</span></code>, which works just like <code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code>.</p>
 </div>
+<section id="unpack-fields">
+<h3>&#64;unpack_fields<a class="headerlink" href="#unpack-fields" title="Link to this heading">¶</a></h3>
+<p>A good example is splitting a dataset into training, validation, and test splits. We use <code class="docutils literal notranslate"><span class="pre">&#64;unpack_fields</span></code>, which requires specifying the names of the fields to extract. The function must return a tuple with at least as many elements as there are specified fields. Note that selecting a subset of the tuple or using an indeterminate tuple size is also possible.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">unpack_fields</span>
+
+<span class="nd">@unpack_fields</span><span class="p">(</span><span class="s2">&quot;X_train&quot;</span> <span class="s2">&quot;X_validation&quot;</span><span class="p">,</span> <span class="s2">&quot;X_test&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/extract_fields.png"><img alt="../../_images/extract_fields.png" src="../../_images/extract_fields.png" style="height: 250px;" />
+</a>
+<p>Now, <code class="docutils literal notranslate"><span class="pre">X_train</span></code>, <code class="docutils literal notranslate"><span class="pre">X_validation</span></code>, and <code class="docutils literal notranslate"><span class="pre">X_test</span></code> are available to other nodes and can be queried with <code class="docutils literal notranslate"><span class="pre">.execute()</span></code>. However, since <code class="docutils literal notranslate"><span class="pre">dataset_splits</span></code> is itself a node, you can query it to obtain all splits in a single tuple!</p>
+</section>
 <section id="extract-fields">
 <h3>&#64;extract_fields<a class="headerlink" href="#extract-fields" title="Link to this heading">¶</a></h3>
-<p>A good example is splitting a dataset into train, validation, and test splits. We will use <code class="docutils literal notranslate"><span class="pre">&#64;extract_fields</span></code>, which requires specifying in a dictionary the <code class="docutils literal notranslate"><span class="pre">field_name:</span> <span class="pre">field_type</span></code> of each field.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_fields</span>
+<p>Additionally, we can extract fields from an output dictionary using <code class="docutils literal notranslate"><span class="pre">&#64;extract_fields</span></code>. In this case, you must specify the dictionary keys and their types. The function must return a dictionary that contains, at a minimum, those keys specified in the decorator.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_fields</span>
 
 <span class="nd">@extract_fields</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>  <span class="c1"># don&#39;t forget the dictionary</span>
     <span class="n">X_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">X_validation</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">X_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
 <span class="p">))</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
     <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
@@ -670,7 +694,7 @@
 </div>
 <a class="reference internal image-reference" href="../../_images/extract_fields.png"><img alt="../../_images/extract_fields.png" src="../../_images/extract_fields.png" style="height: 250px;" />
 </a>
-<p>Now, <code class="docutils literal notranslate"><span class="pre">X_train</span></code>, <code class="docutils literal notranslate"><span class="pre">X_validation</span></code>, and <code class="docutils literal notranslate"><span class="pre">X_test</span></code> are available to other nodes, and they can be queried by <code class="docutils literal notranslate"><span class="pre">.execute()</span></code>. But, since <code class="docutils literal notranslate"><span class="pre">dataset_splits</span></code> is its own node, you can query it to get all splits in a dictionary!</p>
+<p>Again, <code class="docutils literal notranslate"><span class="pre">X_train</span></code>, <code class="docutils literal notranslate"><span class="pre">X_validation</span></code>, and <code class="docutils literal notranslate"><span class="pre">X_test</span></code> are now available to other nodes, or you can query the <code class="docutils literal notranslate"><span class="pre">dataset_splits</span></code> node to retrieve all splits in a dictionary.</p>
 </section>
 <section id="extract-columns">
 <h3>&#64;extract_columns<a class="headerlink" href="#extract-columns" title="Link to this heading">¶</a></h3>
@@ -883,7 +907,8 @@
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
+            <div class="last-updated">
+              Last updated on Jun 24, 2025</div>
           </div>
           <div class="right-details">
             
@@ -921,6 +946,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#split-node-output-into-n-nodes">Split node output into <em>n</em> nodes</a><ul>
+<li><a class="reference internal" href="#unpack-fields">&#64;unpack_fields</a></li>
 <li><a class="reference internal" href="#extract-fields">&#64;extract_fields</a></li>
 <li><a class="reference internal" href="#extract-columns">&#64;extract_columns</a></li>
 </ul>
@@ -952,6 +978,6 @@
 </div><script src="../../_static/documentation_options.js?v=187304be"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/furo.js?v=22e4c79f"></script>
+    <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>
     </body>
 </html>

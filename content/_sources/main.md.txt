@@ -6,7 +6,7 @@
     <a href="https://pepy.tech/project/sf-hamilton" target="_blank"><img src="https://static.pepy.tech/badge/sf-hamilton/month" alt="Total Monthly Downloads"/></a>
 </div>
 
-Apache Hamilton is a general-purpose framework to write dataflows using regular Python functions. At the core, each function defines a transformation and its parameters indicates its dependencies. Apache Hamilton automatically connects individual functions into a [Directed Acyclic Graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph) (DAG) that can be executed, visualized, optimized, and reported on.
+Apache Hamilton (incubating) is a general-purpose framework to write dataflows using regular Python functions. At the core, each function defines a transformation and its parameters indicates its dependencies. Apache Hamilton automatically connects individual functions into a [Directed Acyclic Graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph) (DAG) that can be executed, visualized, optimized, and reported on.
 Apache Hamilton also comes with a [UI](hamilton-ui/index.rst) to visualize, catalog, and monitor your dataflows.
 
 ```{figure} ./_static/abc.png
@@ -16,7 +16,7 @@ Apache Hamilton also comes with a [UI](hamilton-ui/index.rst) to visualize, cata
 The ABC of Apache Hamilton
 ```
 
-# Why should you use Apache Hamilton?
+# Why should you use Apache Hamilton (incubating)?
 **Facilitate collaboration**. By focusing on functions, Apache Hamilton avoids sprawling code hierarchy and generates flat dataflows. Well-scoped functions make it easier to add features, complete code reviews, debug pipeline failures, and hand-off projects. Visualizations can be generated directly from your code to better understand and document it.
 Integration with the [Apache Hamilton UI](hamilton-ui/index.rst) allows you to track lineage, catalog code & artifacts, and monitor your dataflows.
 

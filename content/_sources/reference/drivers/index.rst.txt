@@ -10,7 +10,7 @@ It's highly parameterizable, allowing you to customize:
 
 To tune the above, pass in a Graph Adapter, a Result Builder, and/or anotehr lifecycle method -- see :doc:`../result-builders/index`, :doc:`../graph-adapters/index`.
 
-Let's walk through how you might use the Apache Hamilton Driver.
+Let's walk through how you might use the Hamilton Driver.
 
 Instantiation
 =============

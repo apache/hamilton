@@ -35,7 +35,7 @@ When people come to encounter your code, they'll need to understand it, add to i
 You'll want to ensure some standardization to enable:
 
 #. Mapping business concepts to function names. E.g. That will help people to find things in the code that map to things that happen within your business.
-#. Ensuring naming uniformity across the code base. People usually follow the precedent of the code around them, so if everything in a particular module for say, date features, has a ``D_`` prefix, then they will likely follow that naming convention. This is likely something you will iterate on -- and it's best to try to converge on a team naming convention once you have a feel for the Apache Hamilton functions being written by the team.
+#. Ensuring naming uniformity across the code base. People usually follow the precedent of the code around them, so if everything in a particular module for say, date features, has a ``D_`` prefix, then they will likely follow that naming convention. This is likely something you will iterate on -- and it's best to try to converge on a team naming convention once you have a feel for the Hamilton functions being written by the team.
 
 We suggest that long functions names that are separated by ``_`` aren't a bad thing. E.g. if you were to come across a
 function named ``life_time_value`` versus ``ltv`` versus ``l_t_v``, which one is more obvious as to what it is and what
