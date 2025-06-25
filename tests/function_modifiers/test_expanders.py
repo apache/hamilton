@@ -333,24 +333,6 @@ class MyDictBad(TypedDict):
     test2: str
 
 
-@pytest.mark.parametrize(
-    "return_type",
-    [
-        dict,
-        Dict,
-        Dict[str, str],
-        Dict[str, Any],
-        MyDict,
-    ],
-)
-def test_extract_fields_validate_happy(return_type):
-    def return_dict() -> return_type:
-        return {}
-
-    annotation = function_modifiers.extract_fields({"test": int})
-    annotation.validate(return_dict)
-
-
 class SomeObject:
     pass
 
@@ -369,95 +351,306 @@ class MyDictInheritanceBadCase(TypedDict):
     test2: str
 
 
-def test_extract_fields_validate_happy_inheritance():
-    def return_dict() -> MyDictInheritance:
-        return {}
+@pytest.mark.parametrize(
+    "return_type_str,fields",
+    [
+        ("Dict[str, int]", ("A", "B")),
+        ("Dict[str, int]", (["A", "B"])),
+        ("Dict", {"A": str, "B": int}),
+        ("MyDict", ()),
+        ("MyDict", {"test2": str}),
+        ("MyDictInheritance", {"test": InheritedObject}),
+        pytest.param("dict[str, int]", ("A", "B"), marks=skipif(**prior_to_py39)),
+        pytest.param("dict[str, int]", (["A", "B"]), marks=skipif(**prior_to_py39)),
+        pytest.param("dict", {"A": str, "B": int}, marks=skipif(**prior_to_py39)),
+    ],
+)
+def test_extract_fields_valid_annotations_for_inferred_types(return_type_str, fields):
+    return_type = eval(return_type_str)
 
-    annotation = function_modifiers.extract_fields({"test": InheritedObject})
-    annotation.validate(return_dict)
+    def function() -> return_type:  # type: ignore
+        return {}  # Only testing validation, so return value doesn't matter
 
-
-def test_extract_fields_validate_not_subclass():
-    def return_dict() -> MyDictInheritanceBadCase:
-        return {}
-
-    annotation = function_modifiers.extract_fields({"test": SomeObject})
-    with pytest.raises(base.InvalidDecoratorException):
-        annotation.validate(return_dict)
+    if isinstance(fields, tuple):
+        annotation = function_modifiers.extract_fields(*fields)
+    else:
+        annotation = function_modifiers.extract_fields(fields)
+    annotation.validate(function)
 
 
 @pytest.mark.parametrize(
-    "return_type",
-    [(int), (list), (np.ndarray), (pd.DataFrame), (MyDictBad)],
+    "return_type_str,fields",
+    [
+        ("Dict", ("A", "B")),
+        ("Dict", (["A", "B"])),
+        ("Dict", (["A"])),
+        ("Dict", (["A", "B", "C"])),
+        ("int", {"A": int}),
+        ("list", {"A": int}),
+        ("np.ndarray", {"A": int}),
+        ("pd.DataFrame", {"A": int}),
+        ("MyDictBad", {"A": int}),
+        ("MyDictInheritanceBadCase", {"A": SomeObject}),
+        pytest.param("dict", ("A", "B"), marks=skipif(**prior_to_py39)),
+        pytest.param("dict", (["A", "B"]), marks=skipif(**prior_to_py39)),
+        pytest.param("dict", (["A"]), marks=skipif(**prior_to_py39)),
+        pytest.param("dict", (["A", "B", "C"]), marks=skipif(**prior_to_py39)),
+    ],
 )
-def test_extract_fields_validate_errors(return_type):
-    def return_dict() -> return_type:
-        return {}
+def test_extract_fields_invalid_annotations_for_inferred_types(return_type_str, fields):
+    return_type = eval(return_type_str)
 
-    annotation = function_modifiers.extract_fields({"test": int})
+    def function() -> return_type:  # type: ignore
+        return {}  # Only testing validation, so return value doesn't matter
+
+    if isinstance(fields, tuple):
+        annotation = function_modifiers.extract_fields(*fields)
+    else:
+        annotation = function_modifiers.extract_fields(fields)
     with pytest.raises(hamilton.function_modifiers.base.InvalidDecoratorException):
-        annotation.validate(return_dict)
+        annotation.validate(function)
 
 
-def test_extract_fields_typeddict_empty_fields():
-    def return_dict() -> MyDict:
-        return {}
-
-    # don't need fields for TypedDict
-    annotation = function_modifiers.extract_fields()
-    annotation.validate(return_dict)
-
-
-def test_extract_fields_typeddict_subset():
-    def return_dict() -> MyDict:
-        return {}
-
-    # test that a subset of fields is fine
-    annotation = function_modifiers.extract_fields({"test2": str})
-    annotation.validate(return_dict)
-
-
-def test_valid_extract_fields():
-    """Tests whole extract_fields decorator."""
+def test_extract_fields_transform_on_bare_dict_with_explicit_types():
+    """Tests whole extract_fields decorator using a bare, non-generic, dict and explicit types."""
     annotation = function_modifiers.extract_fields(
         {"col_1": list, "col_2": int, "col_3": np.ndarray}
     )
 
-    def dummy_dict_generator() -> dict:
+    def dummy_dict() -> dict:  # bare dict, not generic
         """dummy doc"""
         return {"col_1": [1, 2, 3, 4], "col_2": 1, "col_3": np.ndarray([1, 2, 3, 4])}
 
-    nodes = list(
-        annotation.transform_node(node.Node.from_fn(dummy_dict_generator), {}, dummy_dict_generator)
-    )
+    annotation.validate(dummy_dict)
+    nodes = list(annotation.transform_node(node.Node.from_fn(dummy_dict), {}, dummy_dict))
+
     assert len(nodes) == 4
     assert nodes[0] == node.Node(
-        name=dummy_dict_generator.__name__,
+        name=dummy_dict.__name__,
         typ=dict,
-        doc_string=dummy_dict_generator.__doc__,
-        callabl=dummy_dict_generator,
+        doc_string=getattr(dummy_dict, "__doc__", ""),
+        callabl=dummy_dict,
         tags={"module": "tests.function_modifiers.test_expanders"},
     )
     assert nodes[1].name == "col_1"
     assert nodes[1].type == list
     assert nodes[1].documentation == "dummy doc"  # we default to base function doc.
-    assert nodes[1].input_types == {dummy_dict_generator.__name__: (dict, DependencyType.REQUIRED)}
+    assert nodes[1].input_types == {dummy_dict.__name__: (dict, DependencyType.REQUIRED)}
     assert nodes[2].name == "col_2"
     assert nodes[2].type == int
     assert nodes[2].documentation == "dummy doc"
-    assert nodes[2].input_types == {dummy_dict_generator.__name__: (dict, DependencyType.REQUIRED)}
+    assert nodes[2].input_types == {dummy_dict.__name__: (dict, DependencyType.REQUIRED)}
     assert nodes[3].name == "col_3"
     assert nodes[3].type == np.ndarray
     assert nodes[3].documentation == "dummy doc"
-    assert nodes[3].input_types == {dummy_dict_generator.__name__: (dict, DependencyType.REQUIRED)}
+    assert nodes[3].input_types == {dummy_dict.__name__: (dict, DependencyType.REQUIRED)}
 
 
-def test_extract_fields_fill_with():
+def test_extract_fields_transform_on_generic_dict_with_explicit_types():
+    """Tests whole extract_fields decorator using a generic dict and explicit types."""
+    annotation = function_modifiers.extract_fields({"col_1": int, "col_2": int})
+
+    def dummy_dict() -> Dict[str, int]:
+        """dummy doc"""
+        return {"col_1": 1, "col_2": 2}
+
+    annotation.validate(dummy_dict)
+    nodes = list(annotation.transform_node(node.Node.from_fn(dummy_dict), {}, dummy_dict))
+
+    assert len(nodes) == 3
+    assert nodes[0] == node.Node(
+        name=dummy_dict.__name__,
+        typ=Dict[str, int],
+        doc_string=getattr(dummy_dict, "__doc__", ""),
+        callabl=dummy_dict,
+        tags={"module": "tests.function_modifiers.test_expanders"},
+    )
+
+    assert nodes[1].name == "col_1"
+    assert nodes[1].type == int
+    assert nodes[1].documentation == "dummy doc"  # we default to base function doc.
+    assert nodes[1].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+    assert nodes[2].name == "col_2"
+    assert nodes[2].type == int
+    assert nodes[2].documentation == "dummy doc"
+    assert nodes[2].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+
+
+def test_extract_fields_transform_on_generic_dict_with_field_list():
+    """Tests whole extract_fields decorator using a generic dict and a list of field names."""
+    annotation = function_modifiers.extract_fields(["col_1", "col_2"])
+
+    def dummy_dict() -> Dict[str, int]:
+        """dummy doc"""
+        return {"col_1": 1, "col_2": 2}
+
+    annotation.validate(dummy_dict)
+    nodes = list(annotation.transform_node(node.Node.from_fn(dummy_dict), {}, dummy_dict))
+
+    assert len(nodes) == 3
+    assert nodes[0] == node.Node(
+        name=dummy_dict.__name__,
+        typ=Dict[str, int],
+        doc_string=getattr(dummy_dict, "__doc__", ""),
+        callabl=dummy_dict,
+        tags={"module": "tests.function_modifiers.test_expanders"},
+    )
+
+    assert nodes[1].name == "col_1"
+    assert nodes[1].type == int
+    assert nodes[1].documentation == "dummy doc"  # we default to base function doc.
+    assert nodes[1].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+    assert nodes[2].name == "col_2"
+    assert nodes[2].type == int
+    assert nodes[2].documentation == "dummy doc"
+    assert nodes[2].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+
+
+def test_extract_fields_transform_on_generic_dict_with_unpacked_fields():
+    """Tests whole extract_fields decorator using a generic dict and unpacked field names."""
+    annotation = function_modifiers.extract_fields("col_1", "col_2")
+
+    def dummy_dict() -> Dict[str, int]:
+        """dummy doc"""
+        return {"col_1": 1, "col_2": 2}
+
+    annotation.validate(dummy_dict)
+    nodes = list(annotation.transform_node(node.Node.from_fn(dummy_dict), {}, dummy_dict))
+
+    assert len(nodes) == 3
+    assert nodes[0] == node.Node(
+        name=dummy_dict.__name__,
+        typ=Dict[str, int],
+        doc_string=getattr(dummy_dict, "__doc__", ""),
+        callabl=dummy_dict,
+        tags={"module": "tests.function_modifiers.test_expanders"},
+    )
+
+    assert nodes[1].name == "col_1"
+    assert nodes[1].type == int
+    assert nodes[1].documentation == "dummy doc"  # we default to base function doc.
+    assert nodes[1].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+    assert nodes[2].name == "col_2"
+    assert nodes[2].type == int
+    assert nodes[2].documentation == "dummy doc"
+    assert nodes[2].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+
+
+def test_extract_fields_transform_on_typed_dict_with_explicit_types():
+    """Tests whole extract_fields decorator using a TypedDict and explicit types."""
+    annotation = function_modifiers.extract_fields({"test2": str})
+
+    def dummy_dict() -> MyDict:
+        """dummy doc"""
+        return {"test": 1, "test2": "2"}
+
+    annotation.validate(dummy_dict)
+    nodes = list(annotation.transform_node(node.Node.from_fn(dummy_dict), {}, dummy_dict))
+
+    assert len(nodes) == 2
+    assert nodes[0] == node.Node(
+        name=dummy_dict.__name__,
+        typ=MyDict,
+        doc_string=getattr(dummy_dict, "__doc__", ""),
+        callabl=dummy_dict,
+        tags={"module": "tests.function_modifiers.test_expanders"},
+    )
+
+    assert nodes[1].name == "test2"
+    assert nodes[1].type == str
+    assert nodes[1].documentation == "dummy doc"
+    assert nodes[1].input_types == {dummy_dict.__name__: (MyDict, DependencyType.REQUIRED)}
+
+
+def test_extract_fields_transform_on_typed_dict_with_field_list():
+    """Tests whole extract_fields decorator using a TypedDict and a list of field names."""
+    annotation = function_modifiers.extract_fields(["test2"])
+
+    def dummy_dict() -> MyDict:
+        """dummy doc"""
+        return {"test": 1, "test2": "2"}
+
+    annotation.validate(dummy_dict)
+    nodes = list(annotation.transform_node(node.Node.from_fn(dummy_dict), {}, dummy_dict))
+
+    assert len(nodes) == 2
+    assert nodes[0] == node.Node(
+        name=dummy_dict.__name__,
+        typ=MyDict,
+        doc_string=getattr(dummy_dict, "__doc__", ""),
+        callabl=dummy_dict,
+        tags={"module": "tests.function_modifiers.test_expanders"},
+    )
+
+    assert nodes[1].name == "test2"
+    assert nodes[1].type == str
+    assert nodes[1].documentation == "dummy doc"
+    assert nodes[1].input_types == {dummy_dict.__name__: (MyDict, DependencyType.REQUIRED)}
+
+
+def test_extract_fields_transform_on_typed_dict_with_unpacked_fields():
+    """Tests whole extract_fields decorator using a TypedDict and explicit types."""
+    annotation = function_modifiers.extract_fields("test2")
+
+    def dummy_dict() -> MyDict:
+        """dummy doc"""
+        return {"test": 1, "test2": "2"}
+
+    annotation.validate(dummy_dict)
+    nodes = list(annotation.transform_node(node.Node.from_fn(dummy_dict), {}, dummy_dict))
+
+    assert len(nodes) == 2
+    assert nodes[0] == node.Node(
+        name=dummy_dict.__name__,
+        typ=MyDict,
+        doc_string=getattr(dummy_dict, "__doc__", ""),
+        callabl=dummy_dict,
+        tags={"module": "tests.function_modifiers.test_expanders"},
+    )
+
+    assert nodes[1].name == "test2"
+    assert nodes[1].type == str
+    assert nodes[1].documentation == "dummy doc"
+    assert nodes[1].input_types == {dummy_dict.__name__: (MyDict, DependencyType.REQUIRED)}
+
+
+def test_extract_fields_transform_on_typed_dict_with_inferred_types():
+    """Tests whole extract_fields decorator using a TypedDict and inferred types."""
+    annotation = function_modifiers.extract_fields()
+
+    def dummy_dict() -> MyDict:
+        """dummy doc"""
+        return {"test": 1, "test2": "2"}
+
+    annotation.validate(dummy_dict)
+    nodes = list(annotation.transform_node(node.Node.from_fn(dummy_dict), {}, dummy_dict))
+
+    assert len(nodes) == 3
+    assert nodes[0] == node.Node(
+        name=dummy_dict.__name__,
+        typ=MyDict,
+        doc_string=getattr(dummy_dict, "__doc__", ""),
+        callabl=dummy_dict,
+        tags={"module": "tests.function_modifiers.test_expanders"},
+    )
+
+    assert nodes[1].name == "test"
+    assert nodes[1].type == int
+    assert nodes[1].documentation == "dummy doc"  # we default to base function doc.
+    assert nodes[1].input_types == {dummy_dict.__name__: (MyDict, DependencyType.REQUIRED)}
+    assert nodes[2].name == "test2"
+    assert nodes[2].type == str
+    assert nodes[2].documentation == "dummy doc"
+    assert nodes[2].input_types == {dummy_dict.__name__: (MyDict, DependencyType.REQUIRED)}
+
+
+def test_extract_fields_transform_using_fill_with():
     def dummy_dict() -> dict:
         """dummy doc"""
         return {"col_1": [1, 2, 3, 4], "col_2": 1, "col_3": np.ndarray([1, 2, 3, 4])}
 
     annotation = function_modifiers.extract_fields({"col_2": int, "col_4": float}, fill_with=1.0)
+    annotation.validate(dummy_dict)
     original_node, extracted_field_node, missing_field_node = annotation.transform_node(
         node.Node.from_fn(dummy_dict), {}, dummy_dict
     )
@@ -468,18 +661,19 @@ def test_extract_fields_fill_with():
     assert missing_field == 1.0
 
 
-def test_extract_fields_no_fill_with():
+def test_extract_fields_transform_not_using_fill_with():
     def dummy_dict() -> dict:
         """dummy doc"""
         return {"col_1": [1, 2, 3, 4], "col_2": 1, "col_3": np.ndarray([1, 2, 3, 4])}
 
     annotation = function_modifiers.extract_fields({"col_4": int})
+    annotation.validate(dummy_dict)
     nodes = list(annotation.transform_node(node.Node.from_fn(dummy_dict), {}, dummy_dict))
     with pytest.raises(hamilton.function_modifiers.base.InvalidDecoratorException):
         nodes[1].callable(dummy_dict=dummy_dict())
 
 
-def test_unpack_fields_valid_explicit_tuple():
+def test_unpack_fields_transform_on_explicit_tuple():
     def dummy() -> Tuple[int, str, int]:
         """dummy doc"""
         return 1, "2", 3
@@ -510,7 +704,7 @@ def test_unpack_fields_valid_explicit_tuple():
     assert nodes[3].input_types == {dummy.__name__: (Tuple[int, str, int], DependencyType.REQUIRED)}
 
 
-def test_unpack_fields_valid_explicit_tuple_subset():
+def test_unpack_fields_transform_on_explicit_tuple_subset():
     def dummy() -> Tuple[int, str, int]:
         """dummy doc"""
         return 1, "2", 3
@@ -533,7 +727,7 @@ def test_unpack_fields_valid_explicit_tuple_subset():
     assert nodes[1].input_types == {dummy.__name__: (Tuple[int, str, int], DependencyType.REQUIRED)}
 
 
-def test_unpack_fields_valid_indeterminate_tuple():
+def test_unpack_fields_transform_on_indeterminate_tuple():
     def dummy() -> Tuple[int, ...]:
         """dummy doc"""
         return 1, 2, 3
