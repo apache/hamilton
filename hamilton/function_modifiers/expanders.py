@@ -736,6 +736,36 @@ def _validate_extract_fields(fields: dict):
             )
 
 
+async def dict_generator_async(
+    *args,
+    fn,
+    fill_with,
+    fields,
+    **kwargs,
+):
+    dict_generated = await fn(*args, **kwargs)
+    if fill_with is not None:
+        for field in fields:
+            if field not in dict_generated:
+                dict_generated[field] = fill_with
+    return dict_generated
+
+
+async def dict_generator(
+    *args,
+    fn,
+    fill_with,
+    fields,
+    **kwargs,
+):
+    dict_generated = fn(*args, **kwargs)
+    if fill_with is not None:
+        for field in fields:
+            if field not in dict_generated:
+                dict_generated[field] = fill_with
+    return dict_generated
+
+
 class extract_fields(base.SingleNodeNodeTransformer):
     """Extracts fields from a dictionary of output."""
 
@@ -809,29 +839,35 @@ class extract_fields(base.SingleNodeNodeTransformer):
         """
         fn = node_.callable
         base_doc = node_.documentation
-
+        dict_generator_fn = (
+            functools.partial(dict_generator, fn=fn, fill_with=self.fill_with, fields=self.fields)
+            if not (inspect.iscoroutinefunction(fn))
+            else functools.partial(
+                dict_generator_async, fn=fn, fill_with=self.fill_with, fields=self.fields
+            )
+        )
         # if fn is async
-        if inspect.iscoroutinefunction(fn):
+        # if inspect.iscoroutinefunction(fn):
+        #
+        #     async def dict_generator(*args, **kwargs):
+        #         dict_generated = await fn(*args, **kwargs)
+        #         if self.fill_with is not None:
+        #             for field in self.fields:
+        #                 if field not in dict_generated:
+        #                     dict_generated[field] = self.fill_with
+        #         return dict_generated
+        #
+        # else:
+        #
+        #     def dict_generator(*args, **kwargs):
+        #         dict_generated = fn(*args, **kwargs)
+        #         if self.fill_with is not None:
+        #             for field in self.fields:
+        #                 if field not in dict_generated:
+        #                     dict_generated[field] = self.fill_with
+        #         return dict_generated
 
-            async def dict_generator(*args, **kwargs):
-                dict_generated = await fn(*args, **kwargs)
-                if self.fill_with is not None:
-                    for field in self.fields:
-                        if field not in dict_generated:
-                            dict_generated[field] = self.fill_with
-                return dict_generated
-
-        else:
-
-            def dict_generator(*args, **kwargs):
-                dict_generated = fn(*args, **kwargs)
-                if self.fill_with is not None:
-                    for field in self.fields:
-                        if field not in dict_generated:
-                            dict_generated[field] = self.fill_with
-                return dict_generated
-
-        output_nodes = [node_.copy_with(callabl=dict_generator)]
+        output_nodes = [node_.copy_with(callabl=dict_generator_fn)]
 
         for field, field_type in self.fields.items():
             doc_string = base_doc  # default doc string of base function.
