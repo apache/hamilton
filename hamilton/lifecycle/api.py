@@ -1,7 +1,18 @@
 import abc
 from abc import ABC
 from types import ModuleType
-from typing import TYPE_CHECKING, Any, Collection, Dict, List, Optional, Tuple, Type, final
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Collection,
+    Dict,
+    List,
+    Optional,
+    Tuple,
+    Type,
+    final,
+)
 
 from hamilton import graph_types, node
 
@@ -231,6 +242,7 @@ class NodeExecutionHook(BasePreNodeExecute, BasePostNodeExecute, abc.ABC):
         success: bool,
         task_id: Optional[str],
         run_id: str,
+        originating_function: Callable,
         **future_kwargs: Any,
     ):
         """Hook that is executed post node execution.
@@ -272,6 +284,7 @@ class NodeExecutionHook(BasePreNodeExecute, BasePostNodeExecute, abc.ABC):
             task_id=task_id,
             success=success,
             run_id=run_id,
+            originating_function=node_.originating_functions[0],
         )
 
 
