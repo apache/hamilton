@@ -21,7 +21,7 @@ cryptography==41.0.4
 ddsketch==2.0.4
 ddtrace==1.15.0
 Deprecated==1.2.14
-Django==4.2.6
+Django==4.2.22
 django-extensions==3.2.3
 django-ninja==1.0b1
 envier==0.4.0
