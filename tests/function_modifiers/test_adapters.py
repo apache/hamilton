@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import dataclasses
 from collections import Counter
 from typing import Any, Collection, Dict, List, Tuple, Type
