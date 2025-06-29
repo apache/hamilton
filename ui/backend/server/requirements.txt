@@ -47,7 +47,7 @@ sf-hamilton==1.58.0
 six==1.16.0
 sqlparse==0.4.4
 typing_extensions==4.8.0
-urllib3==1.26.17
+urllib3==2.5.0
 wrapt==1.15.0
 xmltodict==0.13.0
 yarl==1.9.2
