@@ -49,7 +49,7 @@ def custom_subclass_check(requested_type: Type, param_type: Type):
     param_type, _ = get_type_information(param_type)
     param_origin_type = param_type
     has_generic = False
-    if param_type == Any:
+    if param_type == Any or requested_type == Any:
         # any type is a valid subclass of Any.
         return True
     if _safe_subclass(requested_type, param_type):
