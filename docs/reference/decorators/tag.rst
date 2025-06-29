@@ -21,19 +21,7 @@ For instance:
 
 **How do I query by tags?**
 
-Right now, we don't have a specific interface to query by tags, however we do expose them via the driver. Using the
-``list_available_variables()`` capability exposes tags along with their names & types, enabling querying of the
-available outputs for specific tag matches. E.g.
-
-.. code-block:: python
-
-    from hamilton import driver
-    dr = driver.Driver(...)  # create driver as required
-    all_possible_outputs = dr.list_available_variables()
-    desired_outputs = [o.name for o in all_possible_outputs
-                       if 'my_tag_value' == o.tags.get('my_tag_key')]
-    output = dr.execute(desired_outputs)
-
+The `list_available_variables <../../drivers/Driver/#hamilton.driver.Driver.list_available_variables>`_ method accepts in a tag query, enabling search over the tags for specific matches.
 
 ----
 
