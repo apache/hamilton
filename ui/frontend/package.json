@@ -26,7 +26,7 @@
     "elkjs": "^0.8.2",
     "fuse.js": "^6.6.2",
     "headlessui": "^0.0.0",
-    "http-proxy-middleware": "^2.0.6",
+    "http-proxy-middleware": "^2.0.9",
     "moment-timezone": "^0.5.40",
     "posthog-js": "^1.82.1",
     "prism-react-renderer": "^1.3.5",
