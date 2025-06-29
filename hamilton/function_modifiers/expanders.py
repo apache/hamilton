@@ -271,16 +271,21 @@ class parameterize(base.NodeExpander):
                     new_input_types[param] = (
                         val  # We just use the standard one, nothing is getting replaced
                     )
+            partial_func = functools.partial(
+                replacement_function,
+                **{parameter: val.value for parameter, val in literal_dependencies.items()},
+            )
             nodes.append(
                 node_.copy_with(
                     name=output_node,
                     doc_string=docstring,  # TODO -- change docstring
-                    callabl=functools.partial(
-                        replacement_function,
-                        **{parameter: val.value for parameter, val in literal_dependencies.items()},
-                    ),
+                    callabl=partial_func,
                     input_types=new_input_types,
                     include_refs=False,  # Include refs is here as this is earlier than compile time
+                    originating_functions=(
+                        fn,
+                        partial_func,
+                    ),
                     # TODO -- figure out why this isn't getting replaced later...
                 )
             )

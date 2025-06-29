@@ -764,10 +764,13 @@ def _add_original_function_to_nodes(fn: Callable, nodes: List[node.Node]) -> Lis
     out = []
     for node_ in nodes:
         current_originating_functions = node_.originating_functions
-        new_originating_functions = (
-            current_originating_functions if current_originating_functions is not None else ()
-        ) + (fn,)
-        out.append(node_.copy_with(originating_functions=new_originating_functions))
+        if current_originating_functions and fn not in current_originating_functions:
+            new_originating_functions = (
+                current_originating_functions if current_originating_functions is not None else ()
+            ) + (fn,)
+            out.append(node_.copy_with(originating_functions=new_originating_functions))
+        else:
+            out.append(node_)
     return out
 
 
