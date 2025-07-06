@@ -191,13 +191,36 @@ Sometimes, your node outputs multiple values that you would like to name and mak
 
     To add metadata to extracted nodes, use ``@tag_output``, which works just like ``@tag``.
 
-@extract_fields
-~~~~~~~~~~~~~~~
+@unpack_fields
+~~~~~~~~~~~~~~
 
-A good example is splitting a dataset into train, validation, and test splits. We will use ``@extract_fields``, which requires specifying in a dictionary the ``field_name: field_type`` of each field.
+A good example is splitting a dataset into training, validation, and test splits. We use ``@unpack_fields``, which requires specifying the names of the fields to extract. The function must return a tuple with at least as many elements as there are specified fields. Note that selecting a subset of the tuple or using an indeterminate tuple size is also possible.
 
 .. code-block:: python
 
+    from typing import Tuple
+    from hamilton.function_modifiers import unpack_fields
+
+    @unpack_fields("X_train" "X_validation", "X_test")
+    def dataset_splits(X: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """Randomly split data into train, validation, test"""
+        X_train, X_validation, X_test = random_split(X)
+        return X_train, X_validation, X_test
+
+.. image:: ./_function-modifiers/extract_fields.png
+    :height: 250px
+
+
+Now, ``X_train``, ``X_validation``, and ``X_test`` are available to other nodes and can be queried with ``.execute()``. However, since ``dataset_splits`` is itself a node, you can query it to obtain all splits in a single tuple!
+
+@extract_fields
+~~~~~~~~~~~~~~~
+
+Additionally, we can extract fields from an output dictionary using ``@extract_fields``. In this case, you must specify the dictionary keys and their types. The function must return a dictionary that contains, at a minimum, those keys specified in the decorator.
+
+.. code-block:: python
+
+    from typing import Dict
     from hamilton.function_modifiers import extract_fields
 
     @extract_fields(dict(  # don't forget the dictionary
@@ -205,7 +228,7 @@ A good example is splitting a dataset into train, validation, and test splits. W
         X_validation=np.ndarray,
         X_test=np.ndarray,
     ))
-    def dataset_splits(X: np.ndarray) -> dict:
+    def dataset_splits(X: np.ndarray) -> Dict:
         """Randomly split data into train, validation, test"""
         X_train, X_validation, X_test = random_split(X)
         return dict(
@@ -218,7 +241,7 @@ A good example is splitting a dataset into train, validation, and test splits. W
     :height: 250px
 
 
-Now, ``X_train``, ``X_validation``, and ``X_test`` are available to other nodes, and they can be queried by ``.execute()``. But, since ``dataset_splits`` is its own node, you can query it to get all splits in a dictionary!
+Again, ``X_train``, ``X_validation``, and ``X_test`` are now available to other nodes, or you can query the ``dataset_splits`` node to retrieve all splits in a dictionary.
 
 @extract_columns
 ~~~~~~~~~~~~~~~~
