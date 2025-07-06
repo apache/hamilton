@@ -1,8 +1,0 @@
-{# _templates/layout.html #}
-
-{% extends "!layout.html" %}
-
-{% block extrahead %}
-    {{ super() }}
-    <meta http-equiv="Content-Security-Policy" content="img-src 'self' data: https://www.apache.org/ https://www.apachecon.com/ https://img.shields.io/ https://pepy.tech/ https://static.pepy.tech/;">
-{% endblock %}

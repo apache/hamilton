@@ -6,6 +6,19 @@ import sys
 # required to get reference documentation to be built
 sys.path.insert(0, os.path.abspath(".."))
 
+apache_footer = """
+<div class="apache-footer">
+    <img width="200" src="/_static/apache-incubator-logo.svg" alt="Apache Incubator Logo" class="apache-incubator-logo">
+    <div class="apache-notice">
+        <p>Apache Hamilton is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.</p>
+    </div>
+    <div class="apache-copyright">
+        <p>Apache, the names of Apache projects, and the feather logo are either registered trademarks or trademarks of the Apache Software Foundation in the United States and/or other countries.</p>
+    </div>
+</div>
+"""
+
+copyright = "The Apache Software Foundation, Licensed under the Apache License, Version 2.0."
 project = "Hamilton"
 
 html_theme = "furo"
@@ -24,12 +37,20 @@ html_theme_options = {
         "color-announcement-background": "#ffba00",
         "color-announcement-text": "#091E42",
     },
+    "footer_icons": [
+        {
+            "name": "Apache Stuff",
+            "html": apache_footer,
+            "url": "https://incubator.apache.org/",
+        },
+    ],
 }
 html_static_path = ["_static"]
 templates_path = ['_templates']
 
 html_css_files = [
     "testimonials.css",
+    "custom.css",
 ]
 extensions = [
     "sphinx.ext.autodoc",
