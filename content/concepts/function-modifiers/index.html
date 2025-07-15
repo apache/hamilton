@@ -3,15 +3,14 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <meta property="article:modified_time" content="2025-06-24T05:52:25+00:00" /><link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Builder" href="../builder/" /><link rel="prev" title="Materialization" href="../materialization/" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Builder" href="../builder/" /><link rel="prev" title="Materialization" href="../materialization/" />
         <link rel="canonical" href="https://hamilton.apache.org/concepts/function-modifiers/" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
         <title>Function modifiers - Hamilton</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../../_static/testimonials.css?v=bd684830" />
     
@@ -613,7 +612,7 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">&#64;check_output</span></code> function modifiers are applied on the <strong>node output / function return</strong> and therefore don’t directly affect node behavior. Decorators separate data validation from the function body where the core logic is. It improves function readability, and it helps reusing and maintaining standardized checks across multiple functions.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In the future, validatation capabailities may be added to <code class="docutils literal notranslate"><span class="pre">&#64;schema</span></code>. For now, it’s only added metadata.</p>
+<p>In the future, validation capabilities may be added to <code class="docutils literal notranslate"><span class="pre">&#64;schema</span></code>. For now, it’s only added metadata.</p>
 </div>
 <section id="check-output">
 <h3>&#64;check_output*<a class="headerlink" href="#check-output" title="Link to this heading">¶</a></h3>
@@ -660,7 +659,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">unpack_fields</span>
 
-<span class="nd">@unpack_fields</span><span class="p">(</span><span class="s2">&quot;X_train&quot;</span> <span class="s2">&quot;X_validation&quot;</span><span class="p">,</span> <span class="s2">&quot;X_test&quot;</span><span class="p">)</span>
+<span class="nd">@unpack_fields</span><span class="p">(</span><span class="s2">&quot;X_train&quot;</span><span class="p">,</span> <span class="s2">&quot;X_validation&quot;</span><span class="p">,</span> <span class="s2">&quot;X_test&quot;</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
     <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -673,11 +672,11 @@
 </section>
 <section id="extract-fields">
 <h3>&#64;extract_fields<a class="headerlink" href="#extract-fields" title="Link to this heading">¶</a></h3>
-<p>Additionally, we can extract fields from an output dictionary using <code class="docutils literal notranslate"><span class="pre">&#64;extract_fields</span></code>. In this case, you must specify the dictionary keys and their types. The function must return a dictionary that contains, at a minimum, those keys specified in the decorator.</p>
+<p>Additionally, we can extract fields from an output dictionary using <code class="docutils literal notranslate"><span class="pre">&#64;extract_fields</span></code>. The function must return a dictionary that contains, at a minimum, those keys specified in the decorator. In this case, you can specify a dictionary of fields and their types:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_fields</span>
 
-<span class="nd">@extract_fields</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>  <span class="c1"># don&#39;t forget the dictionary</span>
+<span class="nd">@extract_fields</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>  <span class="c1"># fields specified as a dictionary</span>
     <span class="n">X_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">X_validation</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">X_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -694,6 +693,61 @@
 </div>
 <a class="reference internal image-reference" href="../../_images/extract_fields.png"><img alt="../../_images/extract_fields.png" src="../../_images/extract_fields.png" style="height: 250px;" />
 </a>
+<p>Or if you are using a generic dictionary, you can specify solely the field names.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_fields</span>
+
+<span class="nd">@extract_fields</span><span class="p">(</span><span class="s2">&quot;X_train&quot;</span><span class="p">,</span> <span class="s2">&quot;X_validation&quot;</span><span class="p">,</span> <span class="s2">&quot;X_test&quot;</span><span class="p">)</span>  <span class="c1"># field names only</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>  <span class="c1"># generic dict</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+        <span class="n">X_validation</span><span class="o">=</span><span class="n">X_validation</span><span class="p">,</span>
+        <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>If you are using a <cite>TypedDict</cite>, you can specify the just field names.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_fields</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DatasetSplits</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">X_train</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">X_validation</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">X_test</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+
+<span class="nd">@extract_fields</span><span class="p">(</span><span class="s2">&quot;X_train&quot;</span><span class="p">,</span> <span class="s2">&quot;X_validation&quot;</span><span class="p">,</span> <span class="s2">&quot;X_test&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetSplits</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+        <span class="n">X_validation</span><span class="o">=</span><span class="n">X_validation</span><span class="p">,</span>
+        <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Or you can leave the field names empty and extract all fields from the <cite>TypedDict</cite>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_fields</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DatasetSplits</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">X_train</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">X_validation</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">X_test</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+
+<span class="nd">@extract_fields</span><span class="p">(</span><span class="n">DatasetSplits</span><span class="p">)</span>  <span class="c1"># field names only</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetSplits</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+        <span class="n">X_validation</span><span class="o">=</span><span class="n">X_validation</span><span class="p">,</span>
+        <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
 <p>Again, <code class="docutils literal notranslate"><span class="pre">X_train</span></code>, <code class="docutils literal notranslate"><span class="pre">X_validation</span></code>, and <code class="docutils literal notranslate"><span class="pre">X_test</span></code> are now available to other nodes, or you can query the <code class="docutils literal notranslate"><span class="pre">dataset_splits</span></code> node to retrieve all splits in a dictionary.</p>
 </section>
 <section id="extract-columns">
@@ -907,8 +961,7 @@
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
-            <div class="last-updated">
-              Last updated on Jun 24, 2025</div>
+            
           </div>
           <div class="right-details">
             

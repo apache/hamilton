@@ -140,7 +140,7 @@ The ``@check_output`` function modifiers are applied on the **node output / func
 
 .. note::
 
-    In the future, validatation capabailities may be added to ``@schema``. For now, it's only added metadata.
+    In the future, validation capabilities may be added to ``@schema``. For now, it's only added metadata.
 
 @check_output*
 ~~~~~~~~~~~~~~
@@ -201,7 +201,7 @@ A good example is splitting a dataset into training, validation, and test splits
     from typing import Tuple
     from hamilton.function_modifiers import unpack_fields
 
-    @unpack_fields("X_train" "X_validation", "X_test")
+    @unpack_fields("X_train", "X_validation", "X_test")
     def dataset_splits(X: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """Randomly split data into train, validation, test"""
         X_train, X_validation, X_test = random_split(X)
@@ -216,14 +216,14 @@ Now, ``X_train``, ``X_validation``, and ``X_test`` are available to other nodes 
 @extract_fields
 ~~~~~~~~~~~~~~~
 
-Additionally, we can extract fields from an output dictionary using ``@extract_fields``. In this case, you must specify the dictionary keys and their types. The function must return a dictionary that contains, at a minimum, those keys specified in the decorator.
+Additionally, we can extract fields from an output dictionary using ``@extract_fields``. The function must return a dictionary that contains, at a minimum, those keys specified in the decorator. In this case, you can specify a dictionary of fields and their types:
 
 .. code-block:: python
 
     from typing import Dict
     from hamilton.function_modifiers import extract_fields
 
-    @extract_fields(dict(  # don't forget the dictionary
+    @extract_fields(dict(  # fields specified as a dictionary
         X_train=np.ndarray,
         X_validation=np.ndarray,
         X_test=np.ndarray,
@@ -239,6 +239,68 @@ Additionally, we can extract fields from an output dictionary using ``@extract_f
 
 .. image:: ./_function-modifiers/extract_fields.png
     :height: 250px
+
+Or if you are using a generic dictionary, you can specify solely the field names.
+
+.. code-block:: python
+
+    from typing import Dict
+    from hamilton.function_modifiers import extract_fields
+
+    @extract_fields("X_train", "X_validation", "X_test")  # field names only
+    def dataset_splits(X: np.ndarray) -> Dict[str, np.ndarray]:  # generic dict
+        """Randomly split data into train, validation, test"""
+        X_train, X_validation, X_test = random_split(X)
+        return dict(
+            X_train=X_train,
+            X_validation=X_validation,
+            X_test=X_test,
+        )
+
+If you are using a `TypedDict`, you can specify the just field names.
+
+.. code-block:: python
+
+    from typing import TypedDict
+    from hamilton.function_modifiers import extract_fields
+
+    class DatasetSplits(TypedDict):
+        X_train: np.ndarray
+        X_validation: np.ndarray
+        X_test: np.ndarray
+
+    @extract_fields("X_train", "X_validation", "X_test")
+    def dataset_splits(X: np.ndarray) -> DatasetSplits:
+        """Randomly split data into train, validation, test"""
+        X_train, X_validation, X_test = random_split(X)
+        return dict(
+            X_train=X_train,
+            X_validation=X_validation,
+            X_test=X_test,
+        )
+
+
+Or you can leave the field names empty and extract all fields from the `TypedDict`.
+
+.. code-block:: python
+
+    from typing import TypedDict
+    from hamilton.function_modifiers import extract_fields
+
+    class DatasetSplits(TypedDict):
+        X_train: np.ndarray
+        X_validation: np.ndarray
+        X_test: np.ndarray
+
+    @extract_fields(DatasetSplits)  # field names only
+    def dataset_splits(X: np.ndarray) -> DatasetSplits:
+        """Randomly split data into train, validation, test"""
+        X_train, X_validation, X_test = random_split(X)
+        return dict(
+            X_train=X_train,
+            X_validation=X_validation,
+            X_test=X_test,
+        )
 
 
 Again, ``X_train``, ``X_validation``, and ``X_test`` are now available to other nodes, or you can query the ``dataset_splits`` node to retrieve all splits in a dictionary.
