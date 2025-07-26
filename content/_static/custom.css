@@ -1,0 +1,59 @@
+/* Custom styles for the Apache footer */
+.apache-footer {
+    background-color: var(--color-background-secondary) !important;
+    color: var(--color-foreground-secondary) !important;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    border-top: 1px solid var(--color-background-border);
+}
+
+.apache-footer p {
+    color: var(--color-foreground-secondary) !important;
+    margin: 0.5rem 0;
+    font-size: 0.9em;
+}
+
+.apache-footer a {
+    color: var(--color-link) !important;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-link-underline);
+}
+
+.apache-footer a:hover {
+    color: var(--color-link--hover) !important;
+    border-bottom-color: var(--color-link-underline--hover);
+}
+
+/* Base styles that apply to all modes */
+.apache-footer .apache-incubator-logo {
+    width: 200px !important;
+    height: auto !important;
+    margin: 0 auto 1rem auto;
+    display: block;
+}
+
+/* Light mode - make logo dark */
+[data-theme="light"] .apache-footer .apache-incubator-logo {
+    filter: invert(0.9) brightness(0.2) contrast(1.2);
+}
+
+/* Dark mode - use original colors */
+[data-theme="dark"] .apache-footer .apache-incubator-logo {
+    filter: none !important;
+}
+
+/* Override bottom page icons */
+.bottom-of-page .icons svg {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    color: var(--color-foreground-muted) !important;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .apache-footer {
+    background-color: var(--color-background-secondary) !important;
+}
+
+[data-theme="dark"] .apache-footer a {
+    color: var(--color-link) !important;
+}

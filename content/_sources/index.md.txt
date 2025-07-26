@@ -47,6 +47,13 @@ reference/disabling-telemetry.md
 
 ```{toctree}
 :hidden: True
+:caption: ASF
+
+asf/index
+```
+
+```{toctree}
+:hidden: True
 :caption: EXTERNAL RESOURCES
 
 GitHub <https://github.com/apache/hamilton>
