@@ -1,6 +1,6 @@
 import logging
 
-from hamilton.plugins.h_ray import RayGraphAdapter, RayTaskExecutor, RayWorkflowGraphAdapter
+from hamilton.plugins.h_ray import RayGraphAdapter, RayTaskExecutor
 
 logger = logging.getLogger(__name__)
 logger.warning(
@@ -8,4 +8,4 @@ logger.warning(
     " Please use hamilton.plugins.h_ray instead."
 )
 
-__all__ = ["RayGraphAdapter", "RayWorkflowGraphAdapter", "RayTaskExecutor"]
+__all__ = ["RayGraphAdapter", "RayTaskExecutor"]
