@@ -38,7 +38,7 @@ class KedroSaver(DataSaver):
         return [Any]
 
     def save_data(self, data: Any) -> Dict[str, Any]:
-        self.catalog.save(name=self.dataset_name, data=data)
+        self.catalog.save(self.dataset_name, data)
         return dict(success=True)
 
     @classmethod

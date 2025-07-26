@@ -50,7 +50,7 @@ def test_hfds_lancedb_saver(tmp_path: pathlib.Path):
             "columns": ["vector", "named_entities"],
             "features": {
                 "named_entities": {"_type": "Value", "dtype": "string"},
-                "vector": {"_type": "Sequence", "feature": {"_type": "Value", "dtype": "float64"}},
+                "vector": {"_type": "List", "feature": {"_type": "Value", "dtype": "float64"}},
             },
             "rows": 1,
             "size_in_bytes": None,
