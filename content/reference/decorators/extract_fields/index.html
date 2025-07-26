@@ -6,12 +6,12 @@
 <link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="inject" href="../inject/" /><link rel="prev" title="extract_columns" href="../extract_columns/" />
         <link rel="canonical" href="https://hamilton.staged.apache.org/reference/decorators/extract_fields/" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
         <title>extract_fields - Hamilton</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/testimonials.css?v=bd684830" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=a33697e8" />
     
@@ -20,24 +20,24 @@
 
 <style>
   body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
   --color-announcement-background: #ffba00;
   --color-announcement-text: #091E42;
   
   }
   @media not print {
     body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
   --color-announcement-background: #ffba00;
   --color-announcement-text: #091E42;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
   --color-announcement-background: #ffba00;
   --color-announcement-text: #091E42;
   
@@ -202,7 +202,6 @@
     <div class="sidebar-container">
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../">
-  
   
   <span class="sidebar-brand-text">Hamilton</span>
   
@@ -379,7 +378,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../graph-adapters/DaskGraphAdapter/">h_dask.DaskGraphAdapter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../graph-adapters/PySparkUDFGraphAdapter/">h_spark.PySparkUDFGraphAdapter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../graph-adapters/RayGraphAdapter/">h_ray.RayGraphAdapter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../graph-adapters/RayWorkflowGraphAdapter/">h_ray.RayWorkflowGraphAdapter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../graph-adapters/SparkKoalasGraphAdapter/">h_spark.SparkKoalasGraphAdapter</a></li>
 </ul>
 </li>
@@ -489,7 +487,7 @@
     <span class="visually-hidden">View this page</span>
   </a>
 </div><div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/reference/decorators/extract_fields.rst" title="Edit this page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/reference/decorators/extract_fields.rst" rel="edit" title="Edit this page">
     <svg><use href="#svg-pencil"></use></svg>
     <span class="visually-hidden">Edit this page</span>
   </a>
@@ -532,11 +530,11 @@ compilation to ensure downstream uses are expecting the right type.</p>
 <p><strong>Reference Documentation</strong></p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.function_modifiers.extract_fields">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hamilton.function_modifiers.</span></span><span class="sig-name descname"><span class="pre">extract_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.function_modifiers.extract_fields" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hamilton.function_modifiers.</span></span><span class="sig-name descname"><span class="pre">extract_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.function_modifiers.extract_fields" title="Link to this definition">¶</a></dt>
 <dd><p>Extracts fields from a dictionary of output.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.function_modifiers.extract_fields.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.function_modifiers.extract_fields.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.function_modifiers.extract_fields.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Constructor for a modifier that expands a single function into the following nodes:</p>
 <ul class="simple">
 <li><p>n functions, each of which take in the original dict and output a specific field</p></li>
@@ -545,7 +543,8 @@ compilation to ensure downstream uses are expecting the right type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fields</strong> – Fields to extract. A dict of ‘field_name’ -&gt; ‘field_type’.</p></li>
+<li><p><strong>fields</strong> – Fields to extract. Can be a dict of field names to types, a list of field names, or a single field name.</p></li>
+<li><p><strong>others</strong> – Additional fields names to extract - argument unpacking. Ignored if <cite>fields</cite> is a dict.</p></li>
 <li><p><strong>fill_with</strong> – If you want to extract a field that doesn’t exist, do you want to fill it with a default         value? Or do you want to error out? Leave empty/None to error out, set fill_value to dynamically create a         field value.</p></li>
 </ul>
 </dd>
@@ -643,6 +642,6 @@ compilation to ensure downstream uses are expecting the right type.</p>
 </div><script src="../../../_static/documentation_options.js?v=187304be"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

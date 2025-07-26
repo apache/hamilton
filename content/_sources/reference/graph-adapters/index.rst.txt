@@ -20,5 +20,4 @@ Reference
    DaskGraphAdapter
    PySparkUDFGraphAdapter
    RayGraphAdapter
-   RayWorkflowGraphAdapter
    SparkKoalasGraphAdapter
