@@ -77,7 +77,7 @@ class KedroLoader(DataLoader):
         return [Any]
 
     def load_data(self, type_: Type) -> Tuple[Any, Dict[str, Any]]:
-        data = self.catalog.load(name=self.dataset_name, version=self.version)
+        data = self.catalog.load(self.dataset_name, self.version)
         metadata = dict(dataset_name=self.dataset_name, version=self.version)
         return data, metadata
 
