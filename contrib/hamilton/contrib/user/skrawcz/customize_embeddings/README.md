@@ -1,7 +1,7 @@
 # Purpose of this module
 
 This module is used to customize embeddings for text data. It is based on MIT licensed code from
-this [OpenAI cookbook](https://github.com/openai/openai-cookbook/blob/main/examples/Customizing_embeddings.ipynb).
+this [OpenAI cookbook](https://github.com/openai/openai-cookbook/blob/6d89e11fed344237f07910a98ba98303ece7dd18/examples/Customizing_embeddings.ipynb).
 
 The output is a matrix that you can use to multiply your embeddings. The product of this multiplication is a
 'custom embedding' that will better emphasize aspects of the text relevant to your use case.
