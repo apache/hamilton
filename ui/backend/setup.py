@@ -1,7 +1,4 @@
 # /usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""The setup script."""
 
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -19,6 +16,10 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+# -*- coding: utf-8 -*-
+
+"""The setup script."""
 
 from setuptools import find_packages, setup
 
