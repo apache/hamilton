@@ -54,14 +54,14 @@ def app():
 
     # load_dataframe() will only run the first time
     df = load_dataframe(path="...")
-    st.dataframes(df)
+    st.dataframe(df)
 
     # If favorite flavor is known, display it.
     if st.session_state("favorite"):
         st.write(f"Your favorite ice cream is: {st.session_state['favorite']}")
     # Ask for the favorite ice cream until an answer is given.
     else:
-        st.text_inputs(
+        st.text_input(
             "What's your favorite ice cream flavor?",
             key="favorite",  # key to st.session_state
         )
