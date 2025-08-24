@@ -81,7 +81,7 @@ def B(A: int) -> float: ...
 def C(A: int, B: float) -> None: ...
 
 # driver code
-dr = driver.Builder().with_mdoules(my_module).build()
+dr = driver.Builder().with_modules(my_module).build()
 dr.validate_execution(final_vars=["C"]) # <- success
 ```
 
@@ -92,7 +92,7 @@ def B(X: int) -> float: ...
 def C(A: int, B: float) -> None: ...
 
 # driver code
-dr = driver.Builder().with_mdoules(my_module).build()
+dr = driver.Builder().with_modules(my_module).build()
 dr.validate_execution(final_vars=["C"]) # <- failure. missing `A`
 ```
 
