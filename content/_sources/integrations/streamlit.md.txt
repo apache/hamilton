@@ -39,7 +39,7 @@ if __name__ == "__main__":
 > ⚠ This example is illustratory and real applications quickly get more complex.
 
 ### 2. Cache and state management
-When the user interacts with the app, Streamlit reruns your entire Python code to update what's displayed on screen ([reference](https://docs.streamlit.io/get-started/fundamentals/main-concepts#data-flow)). By default, no data is preserved between updates and all computations need to be executed again. Your application suffer slow downs if you handle large dataframes or load machine learning models in memory for instance. To overcome this limitation, Streamlit allows to [cache expensive operations](https://docs.streamlit.io/library/advanced-features/caching) via the decorators `@streamlit.cache_data` and `@streamlit.cache_resource` and [store state variables](https://docs.streamlit.io/library/api-reference/session-state) between reruns in the global dictionary `streamlit.session_state` or via `key` attributes of input widget. State management becomes particularly important when building a [multipage app](https://docs.streamlit.io/get-started/tutorials/create-a-multipage-app) where each page is defined in a separate Python file and can't commmunicate by default.
+When the user interacts with the app, Streamlit reruns your entire Python code to update what's displayed on screen ([reference](https://docs.streamlit.io/get-started/fundamentals/main-concepts#data-flow)). By default, no data is preserved between updates and all computations need to be executed again. Your application suffer slow downs if you handle large dataframes or load machine learning models in memory for instance. To overcome this limitation, Streamlit allows to [cache expensive operations](https://docs.streamlit.io/library/advanced-features/caching) via the decorators `@streamlit.cache_data` and `@streamlit.cache_resource` and [store state variables](https://docs.streamlit.io/library/api-reference/session-state) between reruns in the global dictionary `streamlit.session_state` or via `key` attributes of input widget. State management becomes particularly important when building a [multipage app](https://docs.streamlit.io/get-started/tutorials/create-a-multipage-app) where each page is defined in a separate Python file and can't communicate by default.
 
 ```python
 import pandas as pd
@@ -54,14 +54,14 @@ def app():
 
     # load_dataframe() will only run the first time
     df = load_dataframe(path="...")
-    st.dataframes(df)
+    st.dataframe(df)
 
     # If favorite flavor is known, display it.
     if st.session_state("favorite"):
         st.write(f"Your favorite ice cream is: {st.session_state['favorite']}")
     # Ask for the favorite ice cream until an answer is given.
     else:
-        st.text_inputs(
+        st.text_input(
             "What's your favorite ice cream flavor?",
             key="favorite",  # key to st.session_state
         )
