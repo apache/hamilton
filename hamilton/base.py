@@ -19,15 +19,13 @@
 It should only import hamilton.node, numpy, pandas.
 It cannot import hamilton.graph, or hamilton.driver.
 """
+from __future__ import annotations
 
 import abc
 import collections
 import logging
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any, Dict, List, Optional, Tuple, Type, Union, TYPE_CHECKING
 
-import numpy as np
-import pandas as pd
-from pandas.core.indexes import extension as pd_extension
 
 from hamilton.lifecycle import api as lifecycle_api
 
@@ -35,6 +33,11 @@ try:
     from . import htypes, node
 except ImportError:
     import node
+
+if TYPE_CHECKING:
+    import numpy as np
+    import pandas as pd
+
 
 logger = logging.getLogger(__name__)
 
@@ -120,6 +123,8 @@ class PandasDataFrameResult(ResultMixin):
         :param outputs: the dict we're trying to create a result from.
         :return: dict of all index types, dict of time series/categorical index types, dict if there is no index
         """
+        import pandas as pd
+
         all_index_types = collections.defaultdict(list)
         time_indexes = collections.defaultdict(list)
         no_indexes = collections.defaultdict(list)
@@ -131,6 +136,8 @@ class PandasDataFrameResult(ResultMixin):
 
         def get_parent_time_index_type():
             """Helper to pull the right time index parent class."""
+            from pandas.core.indexes import extension as pd_extension
+
             if hasattr(pd_extension, "NDArrayBackedExtensionIndex"):
                 index_type = pd_extension.NDArrayBackedExtensionIndex
             else:
@@ -220,6 +227,8 @@ class PandasDataFrameResult(ResultMixin):
 
         :param outputs: the outputs to build a dataframe from.
         """
+        import pandas as pd
+
         # TODO check inputs are pd.Series, arrays, or scalars -- else error
         output_index_type_tuple = PandasDataFrameResult.pandas_index_types(outputs)
         # this next line just log warnings
@@ -255,6 +264,7 @@ class PandasDataFrameResult(ResultMixin):
         :param outputs: The outputs to build the dataframe from.
         :return: A dataframe with the outputs.
         """
+        import pandas as pd
 
         def get_output_name(output_name: str, column_name: str) -> str:
             """Add function prefix to columns.
@@ -300,6 +310,7 @@ class PandasDataFrameResult(ResultMixin):
         return [Any]
 
     def output_type(self) -> Type:
+        import pandas as pd
         return pd.DataFrame
 
 
@@ -365,6 +376,7 @@ class NumpyMatrixResult(ResultMixin):
         :param outputs: function_name -> np.array.
         :return: numpy matrix
         """
+        import numpy as np
         # TODO check inputs are all numpy arrays/array like things -- else error
         num_rows = -1
         columns_with_lengths = collections.OrderedDict()
@@ -402,6 +414,7 @@ class NumpyMatrixResult(ResultMixin):
         return [Any]  # Typing
 
     def output_type(self) -> Type:
+        import pandas as pd
         return pd.DataFrame
 
 
