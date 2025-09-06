@@ -1,19 +1,20 @@
 
-import tomllib
+import os
 import pathlib
 import re
-import os
 import shutil
 import sys
+
+import tomllib
 from setuptools import setup
 
-# ensure the right current working directory
 os.chdir(os.path.abspath(os.path.dirname(__file__)))
+
 
 def copy_hamilton_library():
     setup_dir = pathlib.Path(__file__).resolve().parent
-    source_dir = (setup_dir.parent / 'hamilton').resolve()
-    dest_dir = (setup_dir / 'hamilton' / '_hamilton').resolve()
+    source_dir = (setup_dir.parent / "hamilton").resolve()
+    dest_dir = (setup_dir / "hamilton" / "_hamilton").resolve()
 
     # Safety checks
     if not source_dir.is_dir():
@@ -37,7 +38,7 @@ def copy_hamilton_library():
 def get_version():
     version_path = pathlib.Path(__file__).parent / "hamilton" / "_hamilton" / "version.py"
     content = version_path.read_text()
-    match = re.search(r'^VERSION\s*=\s*\(([^)]+)\)', content, re.MULTILINE)
+    match = re.search(r"^VERSION\s*=\s*\(([^)]+)\)", content, re.MULTILINE)
     if match:
         version_tuple_str = match.group(1)  # "1, 88, 0"
         # Parse tuple string into list of integers
@@ -61,7 +62,18 @@ install_requires = list(
 extras_require = {
     **project.get("optional-dependencies", {}),
     **{"visualization": ["graphviz"]},  # drop networkx
+    **{
+        "core-tests": [  # dependencies required to run unit tests; used in CI
+            "pytest",
+            "pytest-asyncio",
+            "pandas",
+            "typer",
+            "networkx",
+            "graphviz",
+        ]
+    }
 }
+
 
 setup(
     name="sf-hamilton-core",
