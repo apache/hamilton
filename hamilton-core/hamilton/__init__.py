@@ -1,8 +1,8 @@
 import importlib.util
 import pathlib
 import sys
-from typing import Any
 from types import ModuleType
+from typing import Any
 
 
 def _load_hamilton_module() -> ModuleType:
@@ -58,11 +58,13 @@ _registry_module.disable_autoload()
 _origin_module = _load_hamilton_module()
 _proxy_module = _create_proxy_module()
 
+
 def __getattr__(name: str) -> Any:
     try:
         return getattr(_origin_module, name)
     except AttributeError:
-        raise AttributeError(f"module {__name__} has no attribute {name}")
+        raise
+
 
 # `getattr()` must be available to build the package
 _proxy_module.__getattr__ = __getattr__

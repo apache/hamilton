@@ -19,24 +19,22 @@
 It should only import hamilton.node, numpy, pandas.
 It cannot import hamilton.graph, or hamilton.driver.
 """
+
 from __future__ import annotations
 
 import abc
 import collections
 import logging
-from typing import Any, Dict, List, Optional, Tuple, Type, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Type, Union
 
-
+from hamilton import htypes
 from hamilton.lifecycle import api as lifecycle_api
-
-try:
-    from . import htypes, node
-except ImportError:
-    import node
 
 if TYPE_CHECKING:
     import numpy as np
     import pandas as pd
+
+    import hamilton.node as node
 
 
 logger = logging.getLogger(__name__)
@@ -311,6 +309,7 @@ class PandasDataFrameResult(ResultMixin):
 
     def output_type(self) -> Type:
         import pandas as pd
+
         return pd.DataFrame
 
 
@@ -377,6 +376,7 @@ class NumpyMatrixResult(ResultMixin):
         :return: numpy matrix
         """
         import numpy as np
+
         # TODO check inputs are all numpy arrays/array like things -- else error
         num_rows = -1
         columns_with_lengths = collections.OrderedDict()
@@ -415,6 +415,7 @@ class NumpyMatrixResult(ResultMixin):
 
     def output_type(self) -> Type:
         import pandas as pd
+
         return pd.DataFrame
 
 

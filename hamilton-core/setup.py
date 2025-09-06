@@ -1,4 +1,3 @@
-
 import os
 import pathlib
 import re
@@ -46,6 +45,7 @@ def get_version():
         version_str = ".".join(version_parts)
         return version_str
 
+
 copy_hamilton_library()
 
 pyproject_path = pathlib.Path(__file__).parents[1] / "pyproject.toml"
@@ -54,11 +54,10 @@ project = pyproject["project"]
 
 readme_file = project.get("readme", None)
 console_scripts = [
-    f"{name}={target}" for name, target in project.get("entry-points", {}).get("console_scripts", {}).items()
+    f"{name}={target}"
+    for name, target in project.get("entry-points", {}).get("console_scripts", {}).items()
 ]
-install_requires = list(
-    set(project.get("dependencies", [])).difference(set(["pandas", "numpy"]))
-)
+install_requires = list(set(project.get("dependencies", [])).difference(set(["pandas", "numpy"])))
 extras_require = {
     **project.get("optional-dependencies", {}),
     **{"visualization": ["graphviz"]},  # drop networkx
@@ -71,7 +70,7 @@ extras_require = {
             "networkx",
             "graphviz",
         ]
-    }
+    },
 }
 
 
