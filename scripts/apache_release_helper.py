@@ -10,9 +10,6 @@ import sys
 # You need to fill these in for your project.
 # The name of your project's short name (e.g., 'myproject').
 PROJECT_SHORT_NAME = "hamilton"
-# Your Apache ID (the one you use to log in to svn and people.apache.org).
-APACHE_ID = "skrawcz"
-
 # The file where you want to update the version number.
 # Common options are setup.py, __init__.py, or a dedicated VERSION file.
 # For example: "src/main/python/myproject/__init__.py"
@@ -34,7 +31,7 @@ def get_version_from_file(file_path: str) -> str:
         major, minor, patch, rc_group, rc = match.groups()
         version = f"{major}.{minor}.{patch}"
         if rc:
-            version += "." + rc
+            version += rc
         return version
     raise ValueError(f"Could not find version in {file_path}")
 
@@ -93,10 +90,9 @@ def update_version(version, rc_num):
         return False
 
 
-def create_release_artifacts(version, rc_num):
+def create_release_artifacts(expected_version):
     """Creates the source tarball, GPG signature, and checksums using `python -m build`."""
     print("Creating release artifacts with 'python -m build'...")
-    version_with_incubating = f"{version}-incubating"
 
     # Clean the dist directory before building.
     if os.path.exists("dist"):
@@ -111,12 +107,19 @@ def create_release_artifacts(version, rc_num):
         return None
 
     # Find the created tarball in the dist directory.
-    tarball_path = glob.glob(
-        f"dist/{PROJECT_SHORT_NAME.replace('-', '_')}-{version_with_incubating}.tar.gz"
-    )
+    expected_tar_ball = f"dist/sf_hamilton-{expected_version.lower()}.tar.gz"
+    tarball_path = glob.glob(expected_tar_ball)
 
     if not tarball_path:
-        print("Error: Could not find the generated source tarball in the 'dist' directory.")
+        print(
+            f"Error: Could not find {expected_tar_ball} the generated source tarball in the 'dist' directory."
+        )
+        if os.path.exists("dist"):
+            print("Contents of 'dist' directory:")
+            for item in os.listdir("dist"):
+                print(f"- {item}")
+        else:
+            print("'dist' directory not found.")
         return None
 
     archive_name = tarball_path[0]
@@ -150,10 +153,10 @@ def create_release_artifacts(version, rc_num):
     return archive_name
 
 
-def svn_upload(version, rc_num, archive_name):
+def svn_upload(version, rc_num, archive_name, apache_id):
     """Uploads the artifacts to the ASF dev distribution repository."""
     print("Uploading artifacts to ASF SVN...")
-    svn_path = f"https://dist.apache.org/repos/dist/dev/incubator/{PROJECT_SHORT_NAME}/{version}-incubating-rc{rc_num}"
+    svn_path = f"https://dist.apache.org/repos/dist/dev/incubator/{PROJECT_SHORT_NAME}/{version}-RC{rc_num}"
 
     try:
         # Create a new directory for the release candidate.
@@ -182,7 +185,7 @@ def svn_upload(version, rc_num, archive_name):
                     "-m",
                     f"Adding {os.path.basename(file_path)}",
                     "--username",
-                    APACHE_ID,
+                    apache_id,
                 ],
                 check=True,
             )
@@ -199,7 +202,7 @@ def svn_upload(version, rc_num, archive_name):
 def generate_email_template(version, rc_num, svn_url):
     """Generates the content for the [VOTE] email."""
     print("Generating email template...")
-    version_with_incubating = f"{version}-incubating"
+    version_with_incubating = f"{version}"
     tag = f"v{version}"
 
     email_content = f"""[VOTE] Release Apache {PROJECT_SHORT_NAME} {version_with_incubating} (release candidate {rc_num})
@@ -221,8 +224,6 @@ The Git tag to be voted upon is:
 The release hash is:
 [Insert git commit hash here]
 
-The Nexus staging repository is:
-[Insert Nexus staging repository URL here if applicable]
 
 Release artifacts are signed with the following key:
 [Insert your GPG key ID here]
@@ -258,24 +259,25 @@ def main():
         ```
     2.  **Configure the Script**: Open `apache_release_helper.py` in a text editor and update the three variables at the top of the file with your project's details:
         * `PROJECT_SHORT_NAME`
-        * `APACHE_ID`
         * `VERSION_FILE` and `VERSION_PATTERN`
     3.  **Prerequisites**:
         * You must have `git`, `gpg`, `svn`, and the `build` Python module installed.
         * Your GPG key and SVN access must be configured for your Apache ID.
     4.  **Run the Script**:
-        Open your terminal, navigate to the root of your project directory, and run the script with the desired version and release candidate number.
+        Open your terminal, navigate to the root of your project directory, and run the script with the desired version, release candidate number, and Apache ID.
 
 
-    python apache_release_helper.py 1.2.3 0
+    python apache_release_helper.py 1.2.3 0 your_apache_id
     """
     parser = argparse.ArgumentParser(description="Automates parts of the Apache release process.")
     parser.add_argument("version", help="The new release version (e.g., '1.0.0').")
     parser.add_argument("rc_num", help="The release candidate number (e.g., '0' for RC0).")
+    parser.add_argument("apache_id", help="Your apache user ID.")
     args = parser.parse_args()
 
     version = args.version
     rc_num = args.rc_num
+    apache_id = args.apache_id
 
     check_prerequisites()
 
@@ -283,31 +285,39 @@ def main():
     print(current_version)
     expected_version = version
     if rc_num != "-":
-        expected_version = f"{version}.RC{rc_num}"
+        expected_version = f"{version}RC{rc_num}"
     if current_version != expected_version:
         print("Update the version in the version file to match the expected version.")
         sys.exit(1)
 
-    print(f"\nCreating git tag 'v{expected_version}'...")
+    tag_name = f"v{expected_version}"
+    print(f"\nChecking for git tag '{tag_name}'...")
     try:
-        # subprocess.run(["git", "add", VERSION_FILE], check=True)
-        # subprocess.run(
-        #     ["git", "commit", "-m", f"Set version to {version} for RC{rc_num}"], check=True
-        # )
-        subprocess.run(["git", "tag", f"v{version}"], check=True)
-        print(f"Git tag v{version} created.")
+        # Check if the tag already exists
+        existing_tag = subprocess.check_output(["git", "tag", "-l", tag_name]).decode().strip()
+        if existing_tag == tag_name:
+            print(f"Git tag '{tag_name}' already exists.")
+            response = input("Do you want to continue without creating a new tag? (y/n): ").lower()
+            if response != "y":
+                print("Aborting.")
+                sys.exit(1)
+        else:
+            # Tag does not exist, create it
+            print(f"Creating git tag '{tag_name}'...")
+            subprocess.run(["git", "tag", tag_name], check=True)
+            print(f"Git tag {tag_name} created.")
     except subprocess.CalledProcessError as e:
-        print(f"Error creating Git tag: {e}")
+        print(f"Error checking or creating Git tag: {e}")
         sys.exit(1)
 
     # Create artifacts
-    archive_name = create_release_artifacts(version, rc_num)
+    archive_name = create_release_artifacts(expected_version)
     if not archive_name:
         sys.exit(1)
 
     # Upload artifacts
     # NOTE: You MUST have your SVN client configured to use your Apache ID and have permissions.
-    svn_url = svn_upload(version, rc_num, archive_name)
+    svn_url = svn_upload(version, rc_num, archive_name, apache_id)
     if not svn_url:
         sys.exit(1)
 
