@@ -1,3 +1,20 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
 import argparse
 import glob
 import hashlib
@@ -5,6 +22,7 @@ import os
 import shutil
 import subprocess
 import sys
+from typing import Optional
 
 # --- Configuration ---
 # You need to fill these in for your project.
@@ -31,7 +49,7 @@ def get_version_from_file(file_path: str) -> str:
         major, minor, patch, rc_group, rc = match.groups()
         version = f"{major}.{minor}.{patch}"
         if rc:
-            version += rc
+            raise ValueError("Do not commit RC to the version file.")
         return version
     raise ValueError(f"Could not find version in {file_path}")
 
@@ -90,48 +108,16 @@ def update_version(version, rc_num):
         return False
 
 
-def create_release_artifacts(expected_version):
-    """Creates the source tarball, GPG signature, and checksums using `python -m build`."""
-    print("Creating release artifacts with 'python -m build'...")
-
-    # Clean the dist directory before building.
-    if os.path.exists("dist"):
-        shutil.rmtree("dist")
-
-    # Use python -m build to create the source distribution.
-    try:
-        subprocess.run(["python", "-m", "build", "--sdist", "."], check=True)
-        print("Source distribution created successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Error creating source distribution: {e}")
-        return None
-
-    # Find the created tarball in the dist directory.
-    expected_tar_ball = f"dist/sf_hamilton-{expected_version.lower()}.tar.gz"
-    tarball_path = glob.glob(expected_tar_ball)
-
-    if not tarball_path:
-        print(
-            f"Error: Could not find {expected_tar_ball} the generated source tarball in the 'dist' directory."
-        )
-        if os.path.exists("dist"):
-            print("Contents of 'dist' directory:")
-            for item in os.listdir("dist"):
-                print(f"- {item}")
-        else:
-            print("'dist' directory not found.")
-        return None
-
-    archive_name = tarball_path[0]
-
-    print(f"Found source tarball: {archive_name}")
-
+def sign_artifacts(archive_name: str) -> Optional[list[str]]:
+    """Creates signed files for the designated artifact."""
+    files = []
     # Sign the tarball with GPG. The user must have a key configured.
     try:
         subprocess.run(
             ["gpg", "--armor", "--output", f"{archive_name}.asc", "--detach-sig", archive_name],
             check=True,
         )
+        files.append(f"{archive_name}.asc")
         print(f"Created GPG signature: {archive_name}.asc")
     except subprocess.CalledProcessError as e:
         print(f"Error signing tarball: {e}")
@@ -149,14 +135,59 @@ def create_release_artifacts(expected_version):
     with open(f"{archive_name}.sha512", "w") as f:
         f.write(f"{sha512_hash.hexdigest()}\n")
     print(f"Created SHA512 checksum: {archive_name}.sha512")
+    files.append(f"{archive_name}.sha512")
+    return files
 
-    return archive_name
+
+def create_release_artifacts(version) -> tuple[list[str], list[str]]:
+    """Creates the source tarball, GPG signature, and checksums using `python -m build`."""
+    print("Creating release artifacts with 'python -m build'...")
+
+    # Clean the dist directory before building.
+    if os.path.exists("dist"):
+        shutil.rmtree("dist")
+
+    # Use python -m build to create the source distribution.
+    try:
+        subprocess.run(["python", "-m", "build", "--sdist", "."], check=True)
+        print("Source distribution created successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error creating source distribution: {e}")
+        return None
+
+    # Find the created tarball in the dist directory.
+    expected_tar_ball = f"dist/sf_hamilton-{version.lower()}.tar.gz"
+    tarball_path = glob.glob(expected_tar_ball)
+
+    if not tarball_path:
+        print(
+            f"Error: Could not find {expected_tar_ball} the generated source tarball in the 'dist' directory."
+        )
+        if os.path.exists("dist"):
+            print("Contents of 'dist' directory:")
+            for item in os.listdir("dist"):
+                print(f"- {item}")
+        else:
+            print("'dist' directory not found.")
+        raise ValueError("Could not find the generated source tarball in the 'dist' directory.")
+
+    # copy the tarball to be apache-hamilton-{version.lower()}-incubating.tar.gz
+    new_tar_ball = f"dist/apache-hamilton-{version.lower()}-incubating.tar.gz"
+    shutil.copy(tarball_path[0], new_tar_ball)
+    archive_name = new_tar_ball
+    print(f"Found source tarball: {archive_name}")
+    main_signed_files = sign_artifacts(archive_name)
+    if main_signed_files is None:
+        raise ValueError("Could not sign the main release artifacts.")
+    # create sf-hamilton release artifacts
+    sf_hamilton_signed_files = sign_artifacts(expected_tar_ball)
+    return [new_tar_ball] + main_signed_files, [expected_tar_ball] + sf_hamilton_signed_files
 
 
-def svn_upload(version, rc_num, archive_name, apache_id):
+def svn_upload(version, rc_num, archive_files, sf_hamilton_archive_files, apache_id):
     """Uploads the artifacts to the ASF dev distribution repository."""
     print("Uploading artifacts to ASF SVN...")
-    svn_path = f"https://dist.apache.org/repos/dist/dev/incubator/{PROJECT_SHORT_NAME}/{version}-RC{rc_num}"
+    svn_path = f"https://dist.apache.org/repos/dist/dev/incubator/{PROJECT_SHORT_NAME}/apache-hamilton/{version}-incubating-RC{rc_num}"
 
     try:
         # Create a new directory for the release candidate.
@@ -165,14 +196,14 @@ def svn_upload(version, rc_num, archive_name, apache_id):
                 "svn",
                 "mkdir",
                 "-m",
-                f"Creating directory for {version}-incubating-rc{rc_num}",
+                f"Creating directory for {version}-incubating-RC{rc_num}",
                 svn_path,
             ],
             check=True,
         )
 
         # Get the files to import (tarball, asc, sha512).
-        files_to_import = [archive_name, f"{archive_name}.asc", f"{archive_name}.sha512"]
+        files_to_import = archive_files + sf_hamilton_archive_files
 
         # Use svn import for the new directory.
         for file_path in files_to_import:
@@ -202,7 +233,7 @@ def svn_upload(version, rc_num, archive_name, apache_id):
 def generate_email_template(version, rc_num, svn_url):
     """Generates the content for the [VOTE] email."""
     print("Generating email template...")
-    version_with_incubating = f"{version}"
+    version_with_incubating = f"{version}-incubating"
     tag = f"v{version}"
 
     email_content = f"""[VOTE] Release Apache {PROJECT_SHORT_NAME} {version_with_incubating} (release candidate {rc_num})
@@ -232,12 +263,23 @@ https://downloads.apache.org/incubator/{PROJECT_SHORT_NAME}/KEYS
 
 Please download, verify, and test the release candidate.
 
+For testing, please run some of the examples, scripts/qualify.sh has
+a sampling of them to run.
+
 The vote will run for a minimum of 72 hours.
 Please vote:
 
 [ ] +1 Release this package as Apache {PROJECT_SHORT_NAME} {version_with_incubating}
 [ ] +0 No opinion
 [ ] -1 Do not release this package because... (Please provide a reason)
+
+Checklist for reference:
+[ ] Download links are valid.
+[ ] Checksums and signatures.
+[ ] LICENSE/NOTICE files exist
+[ ] No unexpected binary files
+[ ] All source files have ASF headers
+[ ] Can compile from source
 
 On behalf of the Apache {PROJECT_SHORT_NAME} PPMC,
 [Your Name]
@@ -283,14 +325,11 @@ def main():
 
     current_version = get_version_from_file(VERSION_FILE)
     print(current_version)
-    expected_version = version
-    if rc_num != "-":
-        expected_version = f"{version}RC{rc_num}"
-    if current_version != expected_version:
+    if current_version != version:
         print("Update the version in the version file to match the expected version.")
         sys.exit(1)
 
-    tag_name = f"v{expected_version}"
+    tag_name = f"v{version}-incubating-RC{rc_num}"
     print(f"\nChecking for git tag '{tag_name}'...")
     try:
         # Check if the tag already exists
@@ -311,13 +350,13 @@ def main():
         sys.exit(1)
 
     # Create artifacts
-    archive_name = create_release_artifacts(expected_version)
-    if not archive_name:
+    main_archive_files, sf_hamilton_archive_files = create_release_artifacts(version)
+    if not main_archive_files:
         sys.exit(1)
 
     # Upload artifacts
     # NOTE: You MUST have your SVN client configured to use your Apache ID and have permissions.
-    svn_url = svn_upload(version, rc_num, archive_name, apache_id)
+    svn_url = svn_upload(version, rc_num, main_archive_files, sf_hamilton_archive_files, apache_id)
     if not svn_url:
         sys.exit(1)
 

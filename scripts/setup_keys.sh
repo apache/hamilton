@@ -1,4 +1,20 @@
 #!/bin/bash
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
 
 # This script helps new Apache committers set up their GPG keys for releases.
 # It guides you through creating a new key, exports the public key, and
@@ -55,6 +71,16 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+echo "Checking out dist repository to update KEYS file"
+svn checkout --depth immediates https://dist.apache.org/repos/dist dist
+cd dist/release
+svn checkout https://dist.apache.org/repos/dist/release/incubator/hamilton incubator/hamilton
+
+cd ../../
+gpg --list-keys "$KEY_ID" >> dis/release/incubator/hamilton/KEYS
+cat "$KEY_ID.asc" >> dis/release/incubator/hamilton/KEYS
+cd dist/release/incubator/hamilton
+
 echo " "
 echo "========================================================"
 echo "      Setup Complete!"
@@ -62,10 +88,8 @@ echo "========================================================"
 echo "Your public key has been saved to: $KEY_ID.asc"
 echo " "
 echo "NEXT STEPS (VERY IMPORTANT):"
-echo "1. Find your project's KEYS file in its SVN repository."
-echo "   e.g., svn checkout https://dist.apache.org/repos/dist/release/incubator/your-podling/KEYS"
-echo "2. Append the contents of $KEY_ID.asc to the KEYS file."
-echo "3. Commit and push the updated KEYS file to the SVN repository."
-echo "4. Inform the mailing list that you've updated the KEYS file."
+echo "1. Please inspect the KEYS file to ensure the new key is added correctly. It should be in the current directory."
+echo "2. If all good run: svn update KEYS && svn commit -m \"Adds new key $KEY_ID for YOUR NAME\""
+echo "3. Inform the mailing list that you've updated the KEYS file."
 echo "   The updated KEYS file is essential for others to verify your release signatures."
 echo " "
