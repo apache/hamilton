@@ -16,12 +16,14 @@
 # under the License.
 
 [build-system]
-requires = ["setuptools>=72.1"]
-build-backend = "setuptools.build_meta"
+requires = ["flit_core >=3.11,<4"]
+build-backend = "flit_core.buildapi"
 
 [project]
 name = "sf-hamilton"
-dynamic = ["version"]
+version = "1.88.0"  # NOTE: keep this in sync with hamilton/version.py
+# TODO: flip back to dynamic once flit handles tuples for version
+# dynamic = ["version"]
 description = "Hamilton, the micro-framework for creating dataframes."
 readme = "README.md"
 requires-python = ">=3.8.1, <4"
@@ -174,7 +176,7 @@ docs = [
   "xgboost",
 ]
 
-[project.entry-points.console_scripts]
+[project.scripts]
 h_experiments = "hamilton.plugins.h_experiments.__main__:main"
 hamilton = "hamilton.cli.__main__:cli"
 hamilton-admin-build-ui = "hamilton.admin:build_ui"
@@ -272,3 +274,10 @@ exclude = ["*tests*"]
 
 [tool.setuptools.package-data]
 hamilton = ["*.json", "*.md", "*.txt"]
+
+[tool.flit.module]
+name = "hamilton"
+
+[tool.flit.sdist]
+include = ["LICENSE", "NOTICE", "DISCLAIMER"]
+exclude = []
