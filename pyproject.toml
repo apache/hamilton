@@ -21,7 +21,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "sf-hamilton"
-version = "1.88.0"  # NOTE: keep this in sync with hamilton/version.py
+version = "1.89.0"  # NOTE: keep this in sync with hamilton/version.py
 # TODO: flip back to dynamic once hamilton version is a string. Flit doesn't handle tuples.
 # dynamic = ["version"]
 description = "Hamilton, the micro-framework for creating dataframes."
