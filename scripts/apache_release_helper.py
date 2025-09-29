@@ -257,11 +257,10 @@ def svn_upload(version, rc_num, files_to_import: list[str], apache_id):
         return None
 
 
-def generate_email_template(version, rc_num, svn_url):
+def generate_email_template(version, rc_num, svn_url, tag_name):
     """Generates the content for the [VOTE] email."""
     print("Generating email template...")
     version_with_incubating = f"{version}-incubating"
-    tag = f"v{version}"
 
     email_content = f"""[VOTE] Release Apache {PROJECT_SHORT_NAME} {version_with_incubating} (release candidate {rc_num})
 
@@ -271,27 +270,30 @@ This is a call for a vote on releasing Apache {PROJECT_SHORT_NAME} {version_with
 release candidate {rc_num}.
 
 This release includes the following changes (see CHANGELOG for details):
-- [List key changes here]
+- [List key changes here -- use git / github to get the list of changes]
 
 The artifacts for this release candidate can be found at:
 {svn_url}
 
 The Git tag to be voted upon is:
-{tag}
+{tag_name}
 
 The release hash is:
-[Insert git commit hash here]
+[Insert git commit hash here for current one with version bump]
+[Insert git commit hash here for commit directly before version bump]
 
 
 Release artifacts are signed with the following key:
 [Insert your GPG key ID here]
+
 The KEYS file is available at:
 https://downloads.apache.org/incubator/{PROJECT_SHORT_NAME}/KEYS
 
 Please download, verify, and test the release candidate.
 
 For testing, please run some of the examples, scripts/qualify.sh has
-a sampling of them to run.
+a sampling of them to run. You'll have to install extra dependencies (see example README.md/requirements.txt for details),
+and in some cases download some data.
 
 The vote will run for a minimum of 72 hours.
 Please vote:
@@ -306,7 +308,7 @@ Checklist for reference:
 [ ] LICENSE/NOTICE files exist
 [ ] No unexpected binary files
 [ ] All source files have ASF headers
-[ ] Can compile from source
+[ ] Can be used from source
 
 On behalf of the Apache {PROJECT_SHORT_NAME} PPMC,
 [Your Name]
@@ -372,7 +374,8 @@ def main():
             # Tag does not exist, create it
             print(f"Creating git tag '{tag_name}'...")
             subprocess.run(["git", "tag", tag_name], check=True)
-            print(f"Git tag {tag_name} created.")
+            subprocess.run(["git", "push", "origin", tag_name], check=True)
+            print(f"Git tag {tag_name} created & pushed.")
     except subprocess.CalledProcessError as e:
         print(f"Error checking or creating Git tag: {e}")
         sys.exit(1)
@@ -389,7 +392,7 @@ def main():
         sys.exit(1)
 
     # Generate email
-    generate_email_template(version, rc_num, svn_url)
+    generate_email_template(version, rc_num, svn_url, tag_name)
 
     print("\nProcess complete. Please copy the email template to your mailing list.")
 
