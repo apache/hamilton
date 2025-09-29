@@ -77,8 +77,8 @@ cd dist/release
 svn checkout https://dist.apache.org/repos/dist/release/incubator/hamilton incubator/hamilton
 
 cd ../../
-gpg --list-keys "$KEY_ID" >> dis/release/incubator/hamilton/KEYS
-cat "$KEY_ID.asc" >> dis/release/incubator/hamilton/KEYS
+gpg --list-keys "$KEY_ID" >> dist/release/incubator/hamilton/KEYS
+cat "$KEY_ID.asc" >> dist/release/incubator/hamilton/KEYS
 cd dist/release/incubator/hamilton
 
 echo " "

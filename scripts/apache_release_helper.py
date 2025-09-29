@@ -139,17 +139,23 @@ def sign_artifacts(archive_name: str) -> Optional[list[str]]:
     return files
 
 
-def create_release_artifacts(version) -> tuple[list[str], list[str]]:
+def create_release_artifacts(version) -> list[str]:
     """Creates the source tarball, GPG signature, and checksums using `python -m build`."""
     print("Creating release artifacts with 'python -m build'...")
-
+    files_to_upload = []
     # Clean the dist directory before building.
     if os.path.exists("dist"):
         shutil.rmtree("dist")
 
     # Use python -m build to create the source distribution.
     try:
-        subprocess.run(["python", "-m", "build", "--sdist", "."], check=True)
+        subprocess.run(
+            [
+                "flit",
+                "build",
+            ],
+            check=True,
+        )
         print("Source distribution created successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error creating source distribution: {e}")
@@ -157,6 +163,7 @@ def create_release_artifacts(version) -> tuple[list[str], list[str]]:
 
     # Find the created tarball in the dist directory.
     expected_tar_ball = f"dist/sf_hamilton-{version.lower()}.tar.gz"
+    files_to_upload.append(expected_tar_ball)
     tarball_path = glob.glob(expected_tar_ball)
 
     if not tarball_path:
@@ -181,16 +188,38 @@ def create_release_artifacts(version) -> tuple[list[str], list[str]]:
         raise ValueError("Could not sign the main release artifacts.")
     # create sf-hamilton release artifacts
     sf_hamilton_signed_files = sign_artifacts(expected_tar_ball)
-    return [new_tar_ball] + main_signed_files, [expected_tar_ball] + sf_hamilton_signed_files
+    # create wheel release artifacts
+    expected_wheel = f"dist/sf_hamilton-{version.lower()}-py3-none-any.whl"
+    wheel_path = glob.glob(expected_wheel)
+    wheel_signed_files = sign_artifacts(wheel_path[0])
+    # create incubator wheel release artifacts
+    expected_incubator_wheel = f"dist/apache-hamilton-{version.lower()}-incubating-py3-none-any.whl"
+    shutil.copy(wheel_path[0], expected_incubator_wheel)
+    incubator_wheel_signed_files = sign_artifacts(expected_incubator_wheel)
+    files_to_upload = (
+        [new_tar_ball]
+        + main_signed_files
+        + [expected_tar_ball]
+        + sf_hamilton_signed_files
+        + [expected_wheel]
+        + wheel_signed_files
+        + [expected_incubator_wheel]
+        + incubator_wheel_signed_files
+    )
+    return files_to_upload
 
 
-def svn_upload(version, rc_num, archive_files, sf_hamilton_archive_files, apache_id):
-    """Uploads the artifacts to the ASF dev distribution repository."""
+def svn_upload(version, rc_num, files_to_import: list[str], apache_id):
+    """Uploads the artifacts to the ASF dev distribution repository.
+
+    files_to_import: Get the files to import (tarball, asc, sha512).
+    """
     print("Uploading artifacts to ASF SVN...")
-    svn_path = f"https://dist.apache.org/repos/dist/dev/incubator/{PROJECT_SHORT_NAME}/apache-hamilton/{version}-incubating-RC{rc_num}"
+    svn_path = f"https://dist.apache.org/repos/dist/dev/incubator/{PROJECT_SHORT_NAME}/{version}-RC{rc_num}"
 
     try:
         # Create a new directory for the release candidate.
+        print(f"Creating directory for {version}-incubating-RC{rc_num}... at {svn_path}")
         subprocess.run(
             [
                 "svn",
@@ -201,9 +230,6 @@ def svn_upload(version, rc_num, archive_files, sf_hamilton_archive_files, apache
             ],
             check=True,
         )
-
-        # Get the files to import (tarball, asc, sha512).
-        files_to_import = archive_files + sf_hamilton_archive_files
 
         # Use svn import for the new directory.
         for file_path in files_to_import:
@@ -220,6 +246,7 @@ def svn_upload(version, rc_num, archive_files, sf_hamilton_archive_files, apache
                 ],
                 check=True,
             )
+            print(f"Imported {file_path} to {svn_path}")
 
         print(f"Artifacts successfully uploaded to: {svn_path}")
         return svn_path
@@ -295,9 +322,9 @@ def main():
     """
     ### How to Use the Updated Script
 
-    1.  **Install the `build` module**:
+    1.  **Install the `flit` module**:
         ```bash
-        pip install build
+        pip install flit
         ```
     2.  **Configure the Script**: Open `apache_release_helper.py` in a text editor and update the three variables at the top of the file with your project's details:
         * `PROJECT_SHORT_NAME`
@@ -308,6 +335,7 @@ def main():
     4.  **Run the Script**:
         Open your terminal, navigate to the root of your project directory, and run the script with the desired version, release candidate number, and Apache ID.
 
+    Note: if you have multiple gpg keys, specify the default in ~/.gnupg/gpg.conf add a line with `default-key <KEYID>`.
 
     python apache_release_helper.py 1.2.3 0 your_apache_id
     """
@@ -350,13 +378,13 @@ def main():
         sys.exit(1)
 
     # Create artifacts
-    main_archive_files, sf_hamilton_archive_files = create_release_artifacts(version)
-    if not main_archive_files:
+    files_to_upload = create_release_artifacts(version)
+    if not files_to_upload:
         sys.exit(1)
 
     # Upload artifacts
     # NOTE: You MUST have your SVN client configured to use your Apache ID and have permissions.
-    svn_url = svn_upload(version, rc_num, main_archive_files, sf_hamilton_archive_files, apache_id)
+    svn_url = svn_upload(version, rc_num, files_to_upload, apache_id)
     if not svn_url:
         sys.exit(1)
 
