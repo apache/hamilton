@@ -301,9 +301,10 @@ Please vote:
 [ ] -1 Do not release this package because... (Please provide a reason)
 
 Checklist for reference:
+[ ] Incubating in name.
 [ ] Download links are valid.
 [ ] Checksums and signatures.
-[ ] LICENSE/NOTICE files exist
+[ ] LICENSE/NOTICE/DISCLAIMER files exist
 [ ] No unexpected binary files
 [ ] All source files have ASF headers
 [ ] Can compile from source
