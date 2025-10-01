@@ -1,9 +1,9 @@
 # Welcome to Apache Hamilton
 <div align="left">
-    <a href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g" target="_blank"><img src="https://img.shields.io/badge/Join-Hamilton_Slack-brightgreen?logo=slack" alt="Apache Hamilton Slack"/></a>
-    <a href="https://twitter.com/hamilton_os" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social" alt="Twitter"/></a>
-    <a href="https://pepy.tech/project/sf-hamilton" target="_blank"><img src="https://pepy.tech/badge/sf-hamilton" alt="Total Downloads"/></a>
-    <a href="https://pepy.tech/project/sf-hamilton" target="_blank"><img src="https://static.pepy.tech/badge/sf-hamilton/month" alt="Total Monthly Downloads"/></a>
+    <a href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g" target="_blank"><img src="./_static/hamilton_slack.png" alt="Apache Hamilton Slack"/></a>
+    <a href="https://twitter.com/hamilton_os" target="_blank"><img src="./_static/hamilton_os_follow.png" alt="Twitter"/></a>
+    <a href="https://pepy.tech/project/sf-hamilton" target="_blank"><img src="./_static/1m_downloads.png" alt="Total Downloads"/></a>
+    <a href="https://pepy.tech/project/sf-hamilton" target="_blank"><img src="./_static/100k_downloads_month.png" alt="Total Monthly Downloads"/></a>
 </div>
 
 Apache Hamilton (incubating) is a general-purpose framework to write dataflows using regular Python functions. At the core, each function defines a transformation and its parameters indicates its dependencies. Apache Hamilton automatically connects individual functions into a [Directed Acyclic Graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph) (DAG) that can be executed, visualized, optimized, and reported on.

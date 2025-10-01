@@ -15,17 +15,11 @@
       <img src="https://static.pepy.tech/badge/sf-hamilton/month" alt="Total Monthly Downloads"/>
    </a>
    <br/>
-   <a target="_blank" href="https://linkedin.com/showcase/dagster" style="background:none">
-      <img src="https://img.shields.io/badge/DAGWorks-Follow-purple.svg?logo=linkedin" />
-   </a>
    <a href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g" target="_blank">
       <img src="https://img.shields.io/badge/Apache Hamilton-Join-purple.svg?logo=slack" alt="Apache Hamilton Slack"/>
    </a>
    <a href="https://twitter.com/hamilton_os" target="_blank">
       <img src="https://img.shields.io/badge/HamiltonOS-Follow-purple.svg?logo=X"/>
-   </a>
-   <a href="https://twitter.com/dagworks" target="_blank">
-      <img src="https://img.shields.io/badge/DAGWorks-Follow-purple.svg?logo=X"/>
    </a>
 </div>
 <br></br>
