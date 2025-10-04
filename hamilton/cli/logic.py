@@ -269,7 +269,6 @@ def visualize_diff(
 
 
 # TODO refactor ContextLoader to a class
-# TODO support loading from pyproject.toml
 def load_context(file_path: Path) -> dict:
     if not file_path.exists():
         raise FileNotFoundError(f"`{file_path}` doesn't exist.")
@@ -279,6 +278,8 @@ def load_context(file_path: Path) -> dict:
         context = _read_json_context(file_path)
     elif extension == ".py":
         context = _read_py_context(file_path)
+    elif extension in [".toml", ".tml"]:
+        context = _read_toml_context(file_path)
     else:
         raise ValueError(f"Received extension `{extension}` is unsupported.")
 
@@ -335,5 +336,45 @@ def _read_py_context(file_path: Path) -> dict:
         OVERRIDES_HEADER,
     ]:
         context[k] = getattr(module, k, None)
+
+    return context
+
+
+def _read_toml_context(file_path: Path) -> dict:
+    """Read context from a TOML file. For pyproject.toml, looks for Hamilton configuration in [tool.hamilton] section."""
+    try:
+        import tomli  # Using tomli for compatibility with older Python versions
+    except ImportError:
+        # Provide a helpful error message if tomli is not available
+        raise ImportError(
+            "tomli is required to read TOML files. "
+            "Install it with `pip install tomli` or `pip install sf-hamilton[cli]` which includes TOML support."
+        )
+
+    with open(file_path, 'rb') as f:
+        data = tomli.load(f)
+
+    # First check if there's a [tool.hamilton] section in pyproject.toml
+    # This is where Hamilton-specific configuration would typically go
+    hamilton_config = data.get('tool', {}).get('hamilton', {})
+    
+    # If we find Hamilton-specific config, use it as the context
+    if hamilton_config:
+        context = {
+            CONFIG_HEADER: hamilton_config.get('config', {}),
+            FINAL_VARS_HEADER: hamilton_config.get('final_vars', []),
+            INPUTS_HEADER: hamilton_config.get('inputs', {}),
+            OVERRIDES_HEADER: hamilton_config.get('overrides', {}),
+        }
+    else:
+        # Otherwise, check for top-level Hamilton context headers
+        context = {}
+        for k in [
+            CONFIG_HEADER,
+            FINAL_VARS_HEADER,
+            INPUTS_HEADER,
+            OVERRIDES_HEADER,
+        ]:
+            context[k] = data.get(k, None)
 
     return context

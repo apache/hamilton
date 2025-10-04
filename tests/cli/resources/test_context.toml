@@ -1,0 +1,7 @@
+# Test TOML file for Hamilton CLI context loading
+
+# Define Hamilton headers as top-level values
+HAMILTON_CONFIG = {test_param = "test_value"}
+HAMILTON_FINAL_VARS = ["final_var1", "final_var2"]
+HAMILTON_INPUTS = {input_value = 42}
+HAMILTON_OVERRIDES = {override_value = "override"}

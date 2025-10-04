@@ -93,3 +93,44 @@ def test_diff_node_versions():
     assert diff["reference_only"] == ["orders_per_customer"]
     assert diff["current_only"] == ["orders_per_distributor"]
     assert diff["edit"] == ["average_order_by_customer", "customer_summary_table"]
+
+
+def test_load_context_from_toml():
+    """Test loading context from a TOML file with top-level Hamilton headers."""
+    import os
+    os.environ["HAMILTON_CONFIG"] = "HAMILTON_CONFIG"
+    os.environ["HAMILTON_FINAL_VARS"] = "HAMILTON_FINAL_VARS"
+    os.environ["HAMILTON_INPUTS"] = "HAMILTON_INPUTS"
+    os.environ["HAMILTON_OVERRIDES"] = "HAMILTON_OVERRIDES"
+    
+    toml_path = Path(__file__).parent / "resources" / "test_context.toml"
+    
+    # Load context from TOML file
+    context = logic.load_context(toml_path)
+    
+    # Check that the expected values are loaded
+    assert context["HAMILTON_CONFIG"] == {"test_param": "test_value"}
+    assert context["HAMILTON_INPUTS"] == {"input_value": 42}
+    assert context["HAMILTON_OVERRIDES"] == {"override_value": "override"}
+    # The TOML file has an array of final variables
+    assert context["HAMILTON_FINAL_VARS"] == ["final_var1", "final_var2"]
+
+
+def test_load_context_from_toml_tool_hamilton():
+    """Test loading context from a TOML file with [tool.hamilton] section."""
+    import os
+    os.environ["HAMILTON_CONFIG"] = "HAMILTON_CONFIG"
+    os.environ["HAMILTON_FINAL_VARS"] = "HAMILTON_FINAL_VARS"
+    os.environ["HAMILTON_INPUTS"] = "HAMILTON_INPUTS"
+    os.environ["HAMILTON_OVERRIDES"] = "HAMILTON_OVERRIDES"
+    
+    toml_path = Path(__file__).parent / "resources" / "test_tool_hamilton.toml"
+    
+    # Load context from TOML file with tool.hamilton section
+    context = logic.load_context(toml_path)
+    
+    # Check that the expected values from [tool.hamilton] section are loaded
+    assert context["HAMILTON_CONFIG"] == {"test_param": "test_value"}
+    assert context["HAMILTON_INPUTS"] == {"input_value": 42, "string_input": "test_string"}
+    assert context["HAMILTON_OVERRIDES"] == {"override_value": "override"}
+    assert context["HAMILTON_FINAL_VARS"] == ["final_var1", "final_var2"]
