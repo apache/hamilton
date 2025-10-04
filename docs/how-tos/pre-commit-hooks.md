@@ -106,6 +106,13 @@ In `v1`, the dataflow could be validated for `C` without any inputs. Now, a deve
 // will call .validate_execution(final_vars["C"])
 ```
 
+Or, using a TOML file:
+
+```toml
+# context.toml
+HAMILTON_FINAL_VARS = ["C"]  # will call .validate_execution(final_vars["C"])
+```
+
 ```{note}
 pre-commit hooks can prevent commits from breaking a core path, but you should use unit and integration tests for more robust checks.
 ```
@@ -125,6 +132,7 @@ To use them, add this snippet to your `.pre-commit-config.yaml` and adapt it to 
       hamilton build my_module.py,
       hamilton build my_module2.py,
       hamilton validate --context context.json my_module.py my_module2.py,
+      hamilton validate --context context.toml my_module.py my_module2.py,  # example with TOML file
     ]
 ```
 

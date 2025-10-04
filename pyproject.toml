@@ -53,7 +53,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-cli = ["typer"]
+cli = [
+    "typer",
+    "tomli",
+]
 dask = ["dask[complete]"]  # commonly you'll want everything.
 dask-array = ["dask[array]"]
 dask-dataframe = ["dask[dataframe]"]
