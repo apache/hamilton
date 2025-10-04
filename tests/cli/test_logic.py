@@ -95,13 +95,12 @@ def test_diff_node_versions():
     assert diff["edit"] == ["average_order_by_customer", "customer_summary_table"]
 
 
-def test_load_context_from_toml():
+def test_load_context_from_toml(monkeypatch):
     """Test loading context from a TOML file with top-level Hamilton headers."""
-    import os
-    os.environ["HAMILTON_CONFIG"] = "HAMILTON_CONFIG"
-    os.environ["HAMILTON_FINAL_VARS"] = "HAMILTON_FINAL_VARS"
-    os.environ["HAMILTON_INPUTS"] = "HAMILTON_INPUTS"
-    os.environ["HAMILTON_OVERRIDES"] = "HAMILTON_OVERRIDES"
+    monkeypatch.setenv("HAMILTON_CONFIG", "HAMILTON_CONFIG")
+    monkeypatch.setenv("HAMILTON_FINAL_VARS", "HAMILTON_FINAL_VARS")
+    monkeypatch.setenv("HAMILTON_INPUTS", "HAMILTON_INPUTS")
+    monkeypatch.setenv("HAMILTON_OVERRIDES", "HAMILTON_OVERRIDES")
     
     toml_path = Path(__file__).parent / "resources" / "test_context.toml"
     
@@ -116,13 +115,12 @@ def test_load_context_from_toml():
     assert context["HAMILTON_FINAL_VARS"] == ["final_var1", "final_var2"]
 
 
-def test_load_context_from_toml_tool_hamilton():
+def test_load_context_from_toml_tool_hamilton(monkeypatch):
     """Test loading context from a TOML file with [tool.hamilton] section."""
-    import os
-    os.environ["HAMILTON_CONFIG"] = "HAMILTON_CONFIG"
-    os.environ["HAMILTON_FINAL_VARS"] = "HAMILTON_FINAL_VARS"
-    os.environ["HAMILTON_INPUTS"] = "HAMILTON_INPUTS"
-    os.environ["HAMILTON_OVERRIDES"] = "HAMILTON_OVERRIDES"
+    monkeypatch.setenv("HAMILTON_CONFIG", "HAMILTON_CONFIG")
+    monkeypatch.setenv("HAMILTON_FINAL_VARS", "HAMILTON_FINAL_VARS")
+    monkeypatch.setenv("HAMILTON_INPUTS", "HAMILTON_INPUTS")
+    monkeypatch.setenv("HAMILTON_OVERRIDES", "HAMILTON_OVERRIDES")
     
     toml_path = Path(__file__).parent / "resources" / "test_tool_hamilton.toml"
     
