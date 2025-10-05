@@ -17,35 +17,17 @@
 
 import { VizEdge, VizNode } from "./types";
 
-import ELK, { ElkNode } from "elkjs/lib/elk.bundled.js";
+import dagre from "dagre";
 
-const elk = new ELK();
+// Dagre graph instance
+const dagreGraph = new dagre.graphlib.Graph({ compound: true });
 
-const convertGraphFromElk = (
-  root: ElkNode,
-  nodeNameMap: Map<string, VizNode>
-) => {
-  const output = [] as VizNode[];
-  const queue = [root];
-  while (queue.length > 0) {
-    const node = queue.shift() as ElkNode;
-    const vizNode = nodeNameMap.get(node.id);
-    if (vizNode !== undefined) {
-      (vizNode.position = {
-        x: node.x as number, // + PARENT_PADDING.left,
-        y: node.y as number, // + PARENT_PADDING.top,
-      }),
-        (vizNode.data.dimensions = {
-          width: node.width as number, // + PARENT_PADDING.left + PARENT_PADDING.right,
-          height: node.height as number,
-          // PARENT_PADDING.bottom +
-          // PARENT_PADDING.top,
-        });
-      output.push(vizNode);
-    }
-    queue.push(...(node.children || []));
-  }
-  return output;
+const dagreOptions = {
+  rankdir: "TB", // Top to bottom layout (can be changed to "LR" for left-to-right)
+  nodesep: 80, // Node separation
+  ranksep: 100, // Rank separation
+  marginx: 25,
+  marginy: 25,
 };
 
 export const getLayoutedElements = (
@@ -54,97 +36,65 @@ export const getLayoutedElements = (
   nodeDimensions: Map<string, { width: number; height: number }>,
   vertical: boolean
 ) => {
-  // Organize every node by its parents
-  const nodesByParent = new Map<string, VizNode[]>([["root", []]]);
-  nodes.forEach((node) => {
-    const parent = node.parentNode || "root";
-    if (!nodesByParent.has(parent)) {
-      nodesByParent.set(parent, []);
-    }
-    nodesByParent.get(parent)?.push(node);
+  const direction = vertical ? "TB" : "LR";
+
+  // Configure dagre graph
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+  dagreGraph.setGraph({
+    ...dagreOptions,
+    rankdir: direction,
   });
 
-  const buildGraph = (rootNode: VizNode): ElkNode => {
-    const children = nodesByParent.get(rootNode.id) || [];
-    const subGraph = children.map((child) => buildGraph(child));
-    // let { width: minWidth, height: minHeight } = nodeDimensions.get(
-    //   rootNode.id
-    // ) || { minWidth: 0, minHeight: 0 };
-    // minWidth = minWidth || 0;
-    // minHeight = minHeight || 0;
-    const graph = {
-      id: rootNode.id,
-      children: subGraph,
-      targetPosition: "right", // TODO -- use the direction above
-      sourcePosition: "left",
-      layoutOptions: {
-        "elk.padding": "[top=40,left=25,bottom=25,right=25]",
-        // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-        // "elk.nodeSize.constraints": "MINIMUM_SIZE",
-        // "elk.nodeSize.minimum": `(${minHeight-2},${minWidth-2})`,
-      },
-      // ? isHorizontal
-      //   ? "right"
-      //   : "bottom"
-      // : "right",
-      // width: 1000,
-      // height: 100,
-      width: rootNode
-        ? nodeDimensions.get(rootNode.id)?.width || 10
-        : undefined,
-      height: rootNode
-        ? nodeDimensions.get(rootNode.id)?.height || 10
-        : undefined,
+  // Clear previous graph state
+  nodes.forEach((node) => {
+    if (dagreGraph.hasNode(node.id)) {
+      dagreGraph.removeNode(node.id);
+    }
+  });
+
+  // Add nodes to dagre graph with their dimensions
+  nodes.forEach((node) => {
+    const dimensions = nodeDimensions.get(node.id) || { width: 150, height: 100 };
+    dagreGraph.setNode(node.id, {
+      width: dimensions.width,
+      height: dimensions.height,
+    });
+
+    // Handle parent-child relationships for compound graphs
+    if (node.parentNode) {
+      dagreGraph.setParent(node.id, node.parentNode);
+    }
+  });
+
+  // Add edges to dagre graph
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+
+  // Calculate layout
+  dagre.layout(dagreGraph);
+
+  // Apply layout to nodes
+  const layoutedNodes = nodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    const dimensions = nodeDimensions.get(node.id) || { width: 150, height: 100 };
+
+    // Update node position and dimensions
+    node.position = {
+      x: nodeWithPosition.x - dimensions.width / 2, // Center the node
+      y: nodeWithPosition.y - dimensions.height / 2, // Center the node
     };
-    return graph;
-  };
+    node.data.dimensions = {
+      width: dimensions.width,
+      height: dimensions.height,
+    };
 
-  const elkOptions = {
-    // "nodeLabels.padding": "[top=10,left=10,bottom=10,right=10]",
-    "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-    // "elk.padding" : "[top=25,left=25,bottom=25,right=25]",
-    // "elk.spacing.individual": "true",
-    // "spacing.nodeNodeBetweenLayers": "150",
-    "elk.algorithm": "layered",
-    // "org.eclipse.elk.layered.layering.strategy": "STRETCH_WIDfasefasefsTH",
-    // "elk.spacing.nodeNode": "20",
-    // "elk.direction": direction == "LR" ? "RIGHT" : "DOWN",
-    // "elk.layered.spacing.nodeNodeBetweenLayers": "100",
-    // "elk.spacing.nodeNode": "80",
-    // // "elk.algorithm": "mrtree",
-  };
+    return node;
+  });
 
-  const nodeNameMap = new Map(nodes.map((node) => [node.id, node]));
-  const vizEdgeNameMap = new Map(edges.map((edge) => [edge.id, edge]));
-
-  const subGraph = (nodesByParent.get("root") || []).map((node) =>
-    buildGraph(node)
-  );
-  const graph = {
-    id: "root",
-    layoutOptions: elkOptions,
-    children: subGraph,
-    width: 1000,
-    height: 200,
-    edges: edges.map((edge) => ({
-      ...edge,
-      sources: [edge.source],
-      targets: [edge.target],
-    })),
-  };
-  return elk
-    .layout(graph, {
-      layoutOptions: {
-        "org.eclipse.elk.direction": vertical ? "DOWN" : "RIGHT",
-      },
-    })
-    .then((layoutedGraph) => ({
-      nodes: convertGraphFromElk(layoutedGraph, nodeNameMap),
-      edges: (layoutedGraph.edges || []).map((edge) => {
-        const edgeId = edge.id;
-        const originalEdge = vizEdgeNameMap.get(edgeId) as VizEdge;
-        return originalEdge;
-      }) as VizEdge[],
-    }))
-    .catch(console.error);
+  // Return layouted elements (no async needed for dagre)
+  return Promise.resolve({
+    nodes: layoutedNodes,
+    edges: edges,
+  });
 };

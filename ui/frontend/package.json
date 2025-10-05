@@ -22,8 +22,8 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-plugin-zoom": "^2.0.1",
     "date-fns": "^2.30.0",
+    "dagre": "^0.8.5",
     "dayjs": "^1.11.9",
-    "elkjs": "^0.8.2",
     "fuse.js": "^6.6.2",
     "headlessui": "^0.0.0",
     "http-proxy-middleware": "^2.0.9",
@@ -89,6 +89,7 @@
     ]
   },
   "devDependencies": {
+    "@types/dagre": "^0.7.52",
     "@types/react-syntax-highlighter": "^15.5.6",
     "@typescript-eslint/eslint-plugin": "^5.47.1",
     "@typescript-eslint/parser": "^5.47.1",
