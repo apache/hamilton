@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.9-slim
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -10,9 +10,17 @@ RUN apt-get update && apt-get install -y \
     gcc \
     libc-dev \
     libffi-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-COPY server/requirements.txt /code/
-RUN pip install -r /code/requirements.txt
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
+# Copy dependency files
+COPY server/requirements-locked.txt /code/server/
+
+# Install dependencies using uv
+RUN cd /code/server && uv pip install --system --no-cache -r requirements-locked.txt
+
+# Copy application code
 COPY . /code/

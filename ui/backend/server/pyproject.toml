@@ -1,0 +1,30 @@
+[project]
+name = "hamilton-ui-backend"
+version = "0.1.0"
+description = "Hamilton UI Backend Server"
+requires-python = ">=3.9"
+dependencies = [
+    "aioboto3",
+    "aiobotocore",
+    "aiofiles",
+    "aiohttp",
+    "colorlog",
+    "ddtrace",
+    "django",
+    "django-extensions",
+    "django-ninja>=1.1.0",
+    "passlib",
+    "propelauth-py",
+    "psycopg2-binary",
+    "pydantic",
+    "sf-hamilton",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
