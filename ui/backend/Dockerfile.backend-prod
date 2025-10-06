@@ -1,20 +1,24 @@
-FROM python:3.8-slim
+FROM python:3.9-slim
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /code
 
-# Install system dependencies
+# Install system dependencies and uv
 RUN apt-get update && apt-get install -y \
     gcc \
     libc-dev \
     libffi-dev \
-    && rm -rf /var/lib/apt/lists/*
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh
+
+ENV PATH="/root/.local/bin:$PATH"
 
 COPY . /code/
-COPY server/requirements.txt /code/
+COPY server/requirements-locked.txt /code/
 
-RUN pip install -r /code/requirements.txt
+RUN uv pip install --system -r /code/requirements-locked.txt
 
 COPY . /code/
