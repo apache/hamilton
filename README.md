@@ -215,7 +215,7 @@ Apache Hamilton is released under the Apache 2.0 License. See [LICENSE](https://
 ## 👨‍💻 Contributing
 We're very supportive of changes by new contributors, big or small! Make sure to discuss potential changes by creating an issue or commenting on an existing one before opening a pull request. Good first contributions include creating an example or an integration with your favorite Python library!
 
- To contribute, checkout our [contributing guidelines](https://github.com/apache/hamilton/blob/main/CONTRIBUTING.md), our [developer setup guide](https://github.com/apache/hamilton/blob/main/developer_setup.md), and our [Code of Conduct](https://github.com/apache/hamilton/blob/main/CODE_OF_CONDUCT.md).
+ To contribute, checkout our [contributing guidelines](https://github.com/apache/hamilton/blob/main/CONTRIBUTING.md), our [developer setup guide](https://github.com/apache/hamilton/blob/main/developer_setup.md), and our [Code of Conduct](https://www.apache.org/foundation/policies/conduct.html).
 
 
 ## 😎 Used by
