@@ -106,7 +106,7 @@ $ hamilton validate [OPTIONS] MODULES...
 
 ## Using TOML Files for Configuration
 
-Starting with version 2.0.0, the Hamilton CLI supports loading configuration from TOML files, including `pyproject.toml`. You can use either of these two formats:
+Starting with version 1.90.0, the Hamilton CLI supports loading configuration from TOML files, including `pyproject.toml`. You can use either of these two formats:
 
 ### Format 1: Top-level Hamilton headers
 
