@@ -20,3 +20,6 @@ concepts that makes Apache Hamilton unique and powerful.
    parallel-task
    ui
    best-practices/index
+   data_quality
+   decorators
+   garbage_collection/post
