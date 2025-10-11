@@ -349,22 +349,22 @@ def _read_toml_context(file_path: Path) -> dict:
         raise ImportError(
             "tomli is required to read TOML files. "
             "Install it with `pip install tomli` or `pip install sf-hamilton[cli]` which includes TOML support."
-        )
+        ) from None
 
-    with open(file_path, 'rb') as f:
+    with open(file_path, "rb") as f:
         data = tomli.load(f)
 
     # First check if there's a [tool.hamilton] section in pyproject.toml
     # This is where Hamilton-specific configuration would typically go
-    hamilton_config = data.get('tool', {}).get('hamilton', {})
-    
+    hamilton_config = data.get("tool", {}).get("hamilton", {})
+
     # If we find Hamilton-specific config, use it as the context
     if hamilton_config:
         context = {
-            CONFIG_HEADER: hamilton_config.get('config', {}),
-            FINAL_VARS_HEADER: hamilton_config.get('final_vars', []),
-            INPUTS_HEADER: hamilton_config.get('inputs', {}),
-            OVERRIDES_HEADER: hamilton_config.get('overrides', {}),
+            CONFIG_HEADER: hamilton_config.get("config", {}),
+            FINAL_VARS_HEADER: hamilton_config.get("final_vars", []),
+            INPUTS_HEADER: hamilton_config.get("inputs", {}),
+            OVERRIDES_HEADER: hamilton_config.get("overrides", {}),
         }
     else:
         # Otherwise, check for top-level Hamilton context headers

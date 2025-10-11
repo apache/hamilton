@@ -113,7 +113,7 @@ Or, using a TOML file:
 HAMILTON_FINAL_VARS = ["C"]  # will call .validate_execution(final_vars["C"])
 ```
 
-```{note}
+``` {note}
 pre-commit hooks can prevent commits from breaking a core path, but you should use unit and integration tests for more robust checks.
 ```
 
