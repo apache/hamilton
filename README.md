@@ -276,7 +276,7 @@ Apache Hamilton was started at Stitch Fix before the original creators founded D
 * [wren.ai](https://wren.ai/)
 
 ## 🤝 Code Contributors
-[![Contributors](https://contrib.rocks/image?repo=dagworks-inc/hamilton)](https://github.com/apache/hamilton/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=apache/hamilton)](https://github.com/apache/hamilton/graphs/contributors)
 
 
 ## 🙌 Special Mentions & 🦟 Bug Hunters
