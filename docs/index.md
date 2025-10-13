@@ -27,6 +27,7 @@ PDF <https://hamilton.apache.org/_static/Hamilton.pdf>
 :caption: Community
 
 community/index
+community/developer_setup
 Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>
 ```
 

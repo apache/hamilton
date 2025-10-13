@@ -30,4 +30,3 @@ The following section of the docs will teach you how to install Apache Hamilton 
     learning-resources
     contributing
     license
-    basics

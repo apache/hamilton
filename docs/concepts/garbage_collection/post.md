@@ -10,7 +10,7 @@ Now that I had an excuse (a user asking me), I jumped into the rabbit hole of pr
 
 In this writeup I will talk a little about python garbage collection, share the change we made to improve Apache Hamilton memory usage, and show its impact through a reproducible example.
 
-If you're not familiar with Apache Hamilton, you can get started at [tryhamilton.dev](www.tryhamilton.dev), or go to the [root](https://www.github.com/apache/hamilton) of this repository and read the README.
+If you're not familiar with Apache Hamilton, you can get started at [tryhamilton.dev](https://www.tryhamilton.dev), or go to the [root](https://www.github.com/apache/hamilton) of this repository and read the README.
 If you don't want to read it and instead want to jump straight ahead, all you need to know is that Apache Hamilton enables you to define your code as a directed acyclic graph (DAG) of python functions,
 and runs them for you. It differs from orchestration frameworks (Airflow, Metaflow, etc...) in that it is a micro orchestrator -- Apache Hamilton does not provision compute or track executions. Rather, it is run as a library
 on top of other more infrastructure-focused systems. Its primary aim is to help you organize your code and run on multiple platforms.
