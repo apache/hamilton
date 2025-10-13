@@ -12,9 +12,21 @@ repos:
       # Run the linter.
       - id: ruff
         args: [ --fix ]
+        exclude: |
+          (?x)^(
+              examples/dask/hello_world/business_logic\.py|
+              examples/ray/hello_world/business_logic\.py|
+              examples/spark/pandas_on_spark/business_logic\.py
+          )$
       # Run the formatter.
       - id: ruff-format
         # args: [ --diff ]  # Use for previewing changes
+        exclude: |
+          (?x)^(
+              examples/dask/hello_world/business_logic\.py|
+              examples/ray/hello_world/business_logic\.py|
+              examples/spark/pandas_on_spark/business_logic\.py
+          )$
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
@@ -25,6 +37,12 @@ repos:
       - id: requirements-txt-fixer
       # valid python file
       - id: check-ast
+        exclude: |
+          (?x)^(
+              examples/dask/hello_world/business_logic\.py|
+              examples/ray/hello_world/business_logic\.py|
+              examples/spark/pandas_on_spark/business_logic\.py
+          )$
   - repo: local
     hooks:
       - id: validate-example-notebooks
