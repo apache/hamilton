@@ -85,10 +85,10 @@ for FILE in $FILES; do
         DEST_FILE_URL="${DEST_URL}/${DEST_FILE_NAME}"
 
         if [ "$DRY_RUN" = true ]; then
-            echo "DRY RUN: svn cp \"${SOURCE_FILE_URL}\" \"${DEST_FILE_URL}\" -m \"Promote Apache ${PROJECT_SHORT_NAME} ${VERSION}: ${DEST_FILE_NAME}\""
+            echo "DRY RUN: svn mv \"${SOURCE_FILE_URL}\" \"${DEST_FILE_URL}\" -m \"Promote Apache ${PROJECT_SHORT_NAME} ${VERSION}: ${DEST_FILE_NAME}\""
         else
-            echo "Copying ${FILE} to ${DEST_FILE_URL}"
-            svn cp "${SOURCE_FILE_URL}" "${DEST_FILE_URL}" -m "Promote Apache ${PROJECT_SHORT_NAME} ${VERSION}: ${DEST_FILE_NAME}"
+            echo "Moving ${FILE} to ${DEST_FILE_URL}"
+            svn mv "${SOURCE_FILE_URL}" "${DEST_FILE_URL}" -m "Promote Apache ${PROJECT_SHORT_NAME} ${VERSION}: ${DEST_FILE_NAME}"
         fi
     fi
 done
