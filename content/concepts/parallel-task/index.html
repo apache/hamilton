@@ -616,7 +616,7 @@ and run on the remote executor (which in this case is the <cite>ThreadPoolExecut
 <li><p>Make sure that your objects are serializable.</p></li>
 <li><p>If you’re using a library that doesn’t support serialization, then one option is to have Apache Hamilton instantiate
 the object in each parallel block. You can do this by making the code depend on something within the parallel block.</p></li>
-<li><p>Another option is write a customer wrapper function that uses <cite>__set_state__</cite> and <cite>__get_state__</cite> to serialize and deserialize the object.</p></li>
+<li><p>Another option is write a custom wrapper function that uses <cite>__set_state__</cite> and <cite>__get_state__</cite> to serialize and deserialize the object.</p></li>
 <li><p>See <a class="reference external" href="https://github.com/apache/hamilton/issues/743">this issue</a> for details and possible features to make
 this simpler to deal with.</p></li>
 </ul>

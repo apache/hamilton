@@ -134,7 +134,7 @@ Solution:
 * Make sure that your objects are serializable.
 * If you're using a library that doesn't support serialization, then one option is to have Apache Hamilton instantiate
   the object in each parallel block. You can do this by making the code depend on something within the parallel block.
-* Another option is write a customer wrapper function that uses `__set_state__` and `__get_state__` to serialize and deserialize the object.
+* Another option is write a custom wrapper function that uses `__set_state__` and `__get_state__` to serialize and deserialize the object.
 * See `this issue <https://github.com/apache/hamilton/issues/743>`_ for details and possible features to make
   this simpler to deal with.
 
