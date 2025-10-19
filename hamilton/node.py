@@ -68,7 +68,7 @@ class Node(object):
         doc_string: str = "",
         callabl: Callable = None,
         node_source: NodeType = NodeType.STANDARD,
-        input_types: Dict[str, Union[Type, Tuple[Type, DependencyType]]] = None,
+        input_types: Optional[Dict[str, Union[Type, Tuple[Type, DependencyType]]]] = None,
         tags: Dict[str, Any] = None,
         namespace: Tuple[str, ...] = (),
         originating_functions: Optional[Tuple[Callable, ...]] = None,
@@ -118,8 +118,9 @@ class Node(object):
                 # assume optional values passed
                 self._default_parameter_values = optional_values if optional_values else {}
             else:
-                # TODO -- remove this when we no longer support 3.8 -- 10/14/2024
-                type_hint_kwargs = {} if sys.version_info < (3, 9) else {"include_extras": True}
+                type_hint_kwargs: dict[str, Any] = {"include_extras": True}
+                if sys.version_info >= (3, 13):
+                    type_hint_kwargs["globalns"] = callabl.__globals__
                 input_types = typing.get_type_hints(callabl, **type_hint_kwargs)
                 signature = inspect.signature(callabl)
                 for key, value in signature.parameters.items():
@@ -291,8 +292,7 @@ class Node(object):
         """
         if name is None:
             name = fn.__name__
-        # TODO -- remove this when we no longer support 3.8 -- 10/14/2024
-        type_hint_kwargs = {} if sys.version_info < (3, 9) else {"include_extras": True}
+        type_hint_kwargs = {"include_extras": True}
         return_type = typing.get_type_hints(fn, **type_hint_kwargs).get("return")
         if return_type is None:
             raise ValueError(f"Missing type hint for return value in function {fn.__qualname__}.")

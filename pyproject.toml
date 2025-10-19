@@ -26,7 +26,7 @@ version = "1.89.0"  # NOTE: keep this in sync with hamilton/version.py
 # dynamic = ["version"]
 description = "Hamilton, the micro-framework for creating dataframes."
 readme = "README.md"
-requires-python = ">=3.8.1, <4"
+requires-python = ">=3.10.1, <4"
 license = {text = "Apache-2.0"}
 keywords = ["hamilton"]
 authors = [
@@ -39,11 +39,10 @@ classifiers = [
     "Natural Language :: English",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13"
 ]
 dependencies = [
     "numpy",

@@ -65,7 +65,6 @@ np_version = np.__version__
 major, minor, _ = map(int, np_version.split("."))
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python 3.9 or higher")
 def test_node_handles_annotated():
     from typing import Annotated
 
