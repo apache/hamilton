@@ -175,8 +175,7 @@ def validate_validator_fn(fn: Callable):
     """
     if inspect.iscoroutinefunction(fn):
         raise InvalidLifecycleAdapter(
-            f"Lifecycle validators must (so far) be synchronous, "
-            f"but {fn} is an async function. "
+            f"Lifecycle validators must (so far) be synchronous, but {fn} is an async function. "
         )
     validate_lifecycle_adapter_function(fn, returns_value=True)
 

@@ -311,7 +311,7 @@ def create_graphviz_graph(
             name = dep.name
             type_string = get_type_as_string(dep.type) if get_type_as_string(dep.type) else ""
             rows.append(f"<tr><td>{name}</td><td>{type_string}</td></tr>")
-        return f"<<table border=\"0\">{''.join(rows)}</table>>"
+        return f'<<table border="0">{"".join(rows)}</table>>'
 
     def _get_node_type(n: node.Node) -> str:
         """Get the node type of a DAG node.

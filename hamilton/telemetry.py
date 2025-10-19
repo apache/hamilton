@@ -112,7 +112,7 @@ def _check_config_and_environ_for_telemetry_flag(
             telemetry_enabled = config_obj.getboolean("DEFAULT", "telemetry_enabled")
         except ValueError as e:
             logger.debug(
-                "Unable to parse value for `telemetry_enabled` from config. " f"Encountered {e}"
+                f"Unable to parse value for `telemetry_enabled` from config. Encountered {e}"
             )
     if os.environ.get("HAMILTON_TELEMETRY_ENABLED") is not None:
         env_value = os.environ.get("HAMILTON_TELEMETRY_ENABLED")

@@ -832,7 +832,7 @@ def _validate_extract_fields(fields: dict):
 
         if errors:
             raise base.InvalidDecoratorException(
-                f"Error, found these {errors}. " f"Please pass in a dict of string to types. "
+                f"Error, found these {errors}. Please pass in a dict of string to types. "
             )
 
 

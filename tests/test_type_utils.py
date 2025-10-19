@@ -312,7 +312,7 @@ def test_check_input_type_match(node_type, input_value):
 # included if the
 @pytest.mark.skipif(
     sys.version_info < (3, 9, 0),
-    reason="Type hinting generics in standard collections " "is only supported in 3.9+",
+    reason="Type hinting generics in standard collections is only supported in 3.9+",
 )
 def test_check_input_types_subscripted_generics_dict_str_Any():
     """Tests check_input_type of SimplePythonDataFrameGraphAdapter"""
@@ -324,7 +324,7 @@ def test_check_input_types_subscripted_generics_dict_str_Any():
 # included if the
 @pytest.mark.skipif(
     sys.version_info < (3, 9, 0),
-    reason="Type hinting generics in standard collections " "is only supported in 3.9+",
+    reason="Type hinting generics in standard collections is only supported in 3.9+",
 )
 def test_check_input_types_subscripted_generics_list_Any():
     """Tests check_input_type of SimplePythonDataFrameGraphAdapter"""
