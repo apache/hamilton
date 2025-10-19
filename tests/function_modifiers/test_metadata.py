@@ -41,7 +41,7 @@ def test_tags():
         "foo@",  # Invalid identifier
         "foo bar",  # No spaces
         "foo.bar+baz",  # Invalid key, not a valid identifier
-        "" "...",  # Empty not allowed  # Empty elements not allowed
+        "...",  # Empty not allowed  # Empty elements not allowed
     ],
 )
 def test_tags_invalid_key(key):

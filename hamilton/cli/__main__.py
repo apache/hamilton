@@ -81,7 +81,7 @@ CONTEXT_ANNOTATIONS = Annotated[
     typer.Option(
         "--context",
         "-ctx",
-        help="Path to Driver context file [.json, .py]",
+        help="Path to Driver context file [.json, .py, .toml]",
         exists=True,
         dir_okay=False,
         readable=True,

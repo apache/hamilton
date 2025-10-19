@@ -68,8 +68,7 @@ def ensure_function_empty(fn: Callable):
         _empty_function_with_docstring.__code__.co_code,
     }:
         raise base.InvalidDecoratorException(
-            f"Function: {fn.__name__} is not empty. Must have only one line that "
-            'consists of "pass"'
+            f'Function: {fn.__name__} is not empty. Must have only one line that consists of "pass"'
         )
 
 

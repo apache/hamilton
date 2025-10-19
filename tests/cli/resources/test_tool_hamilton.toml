@@ -1,0 +1,8 @@
+# Test TOML file for Hamilton CLI context loading using [tool.hamilton] section
+
+[tool.hamilton]
+# Hamilton-specific configuration
+config = {test_param = "test_value"}
+final_vars = ["final_var1", "final_var2"]
+inputs = {input_value = 42, string_input = "test_string"}
+overrides = {override_value = "override"}
