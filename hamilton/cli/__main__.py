@@ -19,16 +19,10 @@ import dataclasses
 import json
 import logging
 import os
-import sys
 import warnings
 from pathlib import Path
 from pprint import pprint
-from typing import Any, Callable, List, Optional
-
-if sys.version_info < (3, 9):
-    from typing_extensions import Annotated
-else:
-    from typing import Annotated
+from typing import Annotated, Any, Callable, List, Optional
 
 import typer
 

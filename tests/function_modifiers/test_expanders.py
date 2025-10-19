@@ -38,10 +38,6 @@ from hamilton.node import DependencyType
 
 # TODO: Move/refactor for more general use
 skipif = pytest.mark.skipif
-prior_to_py39 = {
-    "condition": sys.version_info < (3, 9, 0),
-    "reason": "Python 3.9+ required for this test",
-}
 prior_to_py311 = {
     "condition": sys.version_info < (3, 11, 0),
     "reason": "Python 3.11+ required for this test",
@@ -377,9 +373,9 @@ class MyDictInheritanceBadCase(TypedDict):
         ("MyDict", ()),
         ("MyDict", {"test2": str}),
         ("MyDictInheritance", {"test": InheritedObject}),
-        pytest.param("dict[str, int]", ("A", "B"), marks=skipif(**prior_to_py39)),
-        pytest.param("dict[str, int]", (["A", "B"]), marks=skipif(**prior_to_py39)),
-        pytest.param("dict", {"A": str, "B": int}, marks=skipif(**prior_to_py39)),
+        ("dict[str, int]", ("A", "B")),
+        ("dict[str, int]", (["A", "B"])),
+        ("dict", {"A": str, "B": int}),
     ],
 )
 def test_extract_fields_valid_annotations_for_inferred_types(return_type_str, fields):
@@ -408,10 +404,10 @@ def test_extract_fields_valid_annotations_for_inferred_types(return_type_str, fi
         ("pd.DataFrame", {"A": int}),
         ("MyDictBad", {"A": int}),
         ("MyDictInheritanceBadCase", {"A": SomeObject}),
-        pytest.param("dict", ("A", "B"), marks=skipif(**prior_to_py39)),
-        pytest.param("dict", (["A", "B"]), marks=skipif(**prior_to_py39)),
-        pytest.param("dict", (["A"]), marks=skipif(**prior_to_py39)),
-        pytest.param("dict", (["A", "B", "C"]), marks=skipif(**prior_to_py39)),
+        ("dict", ("A", "B")),
+        ("dict", (["A", "B"])),
+        ("dict", (["A"])),
+        ("dict", (["A", "B", "C"])),
     ],
 )
 def test_extract_fields_invalid_annotations_for_inferred_types(return_type_str, fields):
@@ -781,9 +777,9 @@ def test_unpack_fields_transform_on_indeterminate_tuple():
         ("Tuple[int, int]", ("A", "B")),
         ("Tuple[int, int, str]", ("A", "B", "C")),
         ("Tuple[int, ...]", ("A", "B")),
-        pytest.param("tuple[int, int]", ("A", "B"), marks=skipif(**prior_to_py39)),
-        pytest.param("tuple[int, int, str]", ("A", "B", "C"), marks=skipif(**prior_to_py39)),
-        pytest.param("tuple[int, ...]", ("A", "B"), marks=skipif(**prior_to_py39)),
+        ("tuple[int, int]", ("A", "B")),
+        ("tuple[int, int, str]", ("A", "B", "C")),
+        ("tuple[int, ...]", ("A", "B")),
     ],
 )
 def test_unpack_fields_valid_type_annotations(return_type_str, fields):
@@ -807,11 +803,11 @@ def test_unpack_fields_valid_type_annotations(return_type_str, fields):
         pytest.param("Tuple[...]", ("A", "B", "C"), marks=skipif(**prior_to_py311)),
         pytest.param("Tuple[int, int, ...]", ("A", "B"), marks=skipif(**prior_to_py311)),
         pytest.param("Tuple[..., int, int]", ("A", "B"), marks=skipif(**prior_to_py311)),
-        pytest.param("tuple", ("A",), marks=skipif(**prior_to_py39)),
-        pytest.param("tuple[int, int]", ("A", "B", "C"), marks=skipif(**prior_to_py39)),
-        pytest.param("tuple[...]", ("A", "B", "C"), marks=skipif(**prior_to_py39)),
-        pytest.param("tuple[int, int, ...]", ("A", "B"), marks=skipif(**prior_to_py39)),
-        pytest.param("tuple[..., int, int]", ("A", "B"), marks=skipif(**prior_to_py39)),
+        ("tuple", ("A",)),
+        ("tuple[int, int]", ("A", "B", "C")),
+        ("tuple[...]", ("A", "B", "C")),
+        ("tuple[int, int, ...]", ("A", "B")),
+        ("tuple[..., int, int]", ("A", "B")),
     ],
 )
 def test_unpack_fields_invalid_type_annotations(return_type_str, fields):
@@ -1112,9 +1108,7 @@ def test_inject_misconfigured_param_type_dict():
         annotation.validate(foo)
 
 
-@pytest.mark.skipif(**prior_to_py39)
 def test_inject_misconfigured_param_untyped_generic_list():
-    # NOTE: Stricter typing rules for generics were introduced in Python 3.9.
     def foo(x: List) -> int:
         return sum(x)
 

@@ -68,7 +68,7 @@ class Node(object):
         doc_string: str = "",
         callabl: Callable = None,
         node_source: NodeType = NodeType.STANDARD,
-        input_types: Optional[Dict[str, Union[Type, Tuple[Type, DependencyType]]]] = None,
+        input_types: Dict[str, Union[Type, Tuple[Type, DependencyType]]] = None,
         tags: Dict[str, Any] = None,
         namespace: Tuple[str, ...] = (),
         originating_functions: Optional[Tuple[Callable, ...]] = None,

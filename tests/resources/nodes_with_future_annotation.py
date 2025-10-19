@@ -17,16 +17,10 @@
 
 from __future__ import annotations
 
-import sys
-from typing import List, Tuple
-
 from hamilton.function_modifiers import dataloader
 from hamilton.htypes import Collect, Parallelizable
 
 """Tests future annotations with common node types"""
-
-tuple_ = Tuple if sys.version_info < (3, 9, 0) else tuple
-list_ = List if sys.version_info < (3, 9, 0) else list
 
 
 def parallelized() -> Parallelizable[int]:
@@ -44,6 +38,6 @@ def collected(standard: Collect[int]) -> int:
 
 
 @dataloader()
-def sample_dataloader() -> tuple_[list_[str], dict]:
+def sample_dataloader() -> tuple[list[str], dict]:
     """Grouping here as the rest test annotations"""
     return ["a", "b", "c"], {}

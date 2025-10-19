@@ -18,7 +18,6 @@
 import functools
 import inspect
 import logging
-import sys
 from types import CodeType, FunctionType, ModuleType
 from typing import Any, Callable, Collection, Dict, List, Optional, Set, Tuple, Type, Union
 
@@ -229,10 +228,7 @@ def python_to_spark_type(python_type: Type[Union[int, float, bool, str, bytes]])
         raise ValueError("Unsupported Python type: " + str(python_type))
 
 
-if sys.version_info < (3, 9):
-    _list = (List[int], List[float], List[bool], List[str], List[bytes])
-else:
-    _list = (list[int], list[float], list[bool], list[str], list[bytes])
+_list = (list[int], list[float], list[bool], list[str], list[bytes])
 
 
 def get_spark_type(return_type: Any) -> types.DataType:

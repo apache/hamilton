@@ -711,14 +711,8 @@ def test_load_from_with_multiple_inputs():
     assert len(fg) == 5
 
 
-import sys
-
-if sys.version_info >= (3, 9):
-    dict_ = dict
-    tuple_ = tuple
-else:
-    dict_ = Dict
-    tuple_ = Tuple
+dict_ = dict
+tuple_ = tuple
 
 
 # Mock functions for dataloader & datasaver testing
@@ -770,10 +764,6 @@ def test_dl_validate_incorrect_functions(func):
         dl.validate(func)
 
 
-@pytest.mark.skipif(
-    sys.version_info < (3, 9, 0),
-    reason="dataloader not guarenteed to work with subscripted tuples on 3.8",
-)
 def test_dl_validate_with_correct_function():
     dl = dataloader()
     try:

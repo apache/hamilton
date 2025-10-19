@@ -18,14 +18,10 @@
 import inspect
 import sys
 import typing
-from typing import Any, Iterable, Optional, Protocol, Tuple, Type, TypeVar, Union
+from typing import Any, Iterable, Literal, Optional, Protocol, Tuple, Type, TypeVar, Union
 
 import typing_inspect
 
-if sys.version_info >= (3, 9):
-    from typing import Literal
-else:
-    Literal = None
 from hamilton.registry import COLUMN_TYPE, DF_TYPE_AND_COLUMN_TYPES
 
 BASE_ARGS_FOR_GENERICS = (typing.T,)

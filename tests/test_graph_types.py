@@ -216,28 +216,24 @@ def test_json_serializable_dict():
             json.dumps(hamilton_node.as_dict())
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires Python 3.9 or higher")
 def test_remove_docstring(func_a: str, func_a_docstring: str):
     func_a_no_whitespace = func_a.strip()
     stripped = graph_types._remove_docs_and_comments(func_a_docstring)
     assert func_a_no_whitespace == stripped
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires Python 3.9 or higher")
 def test_remove_multiline(func_a: str, func_a_multiline: str):
     func_a_no_whitespace = func_a.strip()
     stripped = graph_types._remove_docs_and_comments(func_a_multiline)
     assert func_a_no_whitespace == stripped
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires Python 3.9 or higher")
 def test_remove_comment(func_a: str, func_a_comment: str):
     func_a_no_whitespace = func_a.strip()
     stripped = graph_types._remove_docs_and_comments(func_a_comment)
     assert func_a_no_whitespace == stripped
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires Python 3.9 or higher")
 @pytest.mark.parametrize("strip", [True, False])
 def test_different_hash_function_body(func_a: str, func_a_body: str, strip: bool):
     """Gives different hash for different function body"""
@@ -246,7 +242,6 @@ def test_different_hash_function_body(func_a: str, func_a_body: str, strip: bool
     assert func_a_hash != func_a_body_hash
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires Python 3.9 or higher")
 @pytest.mark.parametrize("strip", [True, False])
 def test_different_hash_docstring(func_a: str, func_a_docstring: str, strip: bool):
     """Same hash if strip docstring, else different hash"""
@@ -255,7 +250,6 @@ def test_different_hash_docstring(func_a: str, func_a_docstring: str, strip: boo
     assert (func_a_hash == func_a_docstring_hash) is (True if strip else False)
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires Python 3.9 or higher")
 @pytest.mark.parametrize("strip", [True, False])
 def test_different_hash_multiline_docstring(func_a: str, func_a_multiline: str, strip: bool):
     """Same hash if strip multiline docstring, else different hash"""
@@ -264,7 +258,6 @@ def test_different_hash_multiline_docstring(func_a: str, func_a_multiline: str, 
     assert (func_a_hash == func_a_multiline_hash) is (True if strip else False)
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires Python 3.9 or higher")
 @pytest.mark.parametrize("strip", [True, False])
 def test_different_hash_comment(func_a: str, func_a_comment: str, strip: bool):
     """Same hash if strip comment, else different hash"""

@@ -15,24 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import sys
 from pathlib import Path
 
-import pytest
-
-PY38_OR_BELOW = sys.version_info < (3, 9)
-pytestmark = pytest.mark.skipif(
-    PY38_OR_BELOW, reason="Breaks for python 3.8 and below due to backports dependency."
-)
-
-if not PY38_OR_BELOW:
-    import dlt
-    from dlt.destinations import filesystem
-
-    from hamilton.plugins.dlt_extensions import DltDestinationSaver, DltResourceLoader
-
+import dlt
 import pandas as pd
 import pyarrow as pa
+import pytest
+from dlt.destinations import filesystem
+
+from hamilton.plugins.dlt_extensions import DltDestinationSaver, DltResourceLoader
 
 
 def pandas_df():

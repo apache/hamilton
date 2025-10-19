@@ -16,20 +16,14 @@
 # under the License.
 
 import collections
-import sys
 import typing
-from typing import Any, Dict, List, Union
+from typing import Annotated, Any, Dict, List, Union
 
 import pandas as pd
 import pytest
 
 from hamilton import htypes
 from hamilton.htypes import check_instance
-
-if sys.version_info >= (3, 9):
-    from typing import Annotated
-else:
-    from typing_extensions import Annotated
 
 
 class X:
@@ -308,24 +302,12 @@ def test_check_input_type_match(node_type, input_value):
     assert actual is True
 
 
-# We cannot parameterize this as the parameterization cannot be
-# included if the
-@pytest.mark.skipif(
-    sys.version_info < (3, 9, 0),
-    reason="Type hinting generics in standard collections " "is only supported in 3.9+",
-)
 def test_check_input_types_subscripted_generics_dict_str_Any():
     """Tests check_input_type of SimplePythonDataFrameGraphAdapter"""
     actual = htypes.check_input_type(dict[str, typing.Any], {})
     assert actual is True
 
 
-# We cannot parameterize this as the parameterization cannot be
-# included if the
-@pytest.mark.skipif(
-    sys.version_info < (3, 9, 0),
-    reason="Type hinting generics in standard collections " "is only supported in 3.9+",
-)
 def test_check_input_types_subscripted_generics_list_Any():
     """Tests check_input_type of SimplePythonDataFrameGraphAdapter"""
     actual = htypes.check_input_type(list[typing.Any], [])
@@ -340,10 +322,8 @@ def test_check_instance_with_non_generic_type():
 def test_check_instance_with_generic_list_type():
     assert check_instance([1, 2, 3], List[int])
     assert not check_instance([1, 2, "3"], List[int])
-    if sys.version_info >= (3, 9):
-        # skip 3.8 -- not worth fixing
-        assert check_instance([1, 2, 3], List)
-        assert check_instance([1, 2, "3"], List)
+    assert check_instance([1, 2, 3], List)
+    assert check_instance([1, 2, "3"], List)
 
 
 def test_check_instance_with_list_type():
@@ -354,10 +334,8 @@ def test_check_instance_with_list_type():
 def test_check_instance_with_generic_dict_type():
     assert check_instance({"key1": 1, "key2": 2}, Dict[str, int])
     assert not check_instance({"key1": 1, "key2": "2"}, Dict[str, int])
-    if sys.version_info >= (3, 9):
-        # skip 3.8 -- not worth fixing
-        assert check_instance({"key1": 1, "key2": 2}, Dict)
-        assert check_instance({"key1": 1, "key2": "2"}, Dict)
+    assert check_instance({"key1": 1, "key2": 2}, Dict)
+    assert check_instance({"key1": 1, "key2": "2"}, Dict)
 
 
 def test_check_instance_with_dict_type():
@@ -391,7 +369,6 @@ def test_check_instance_with_union_type():
     assert not check_instance({"key1": 1, "key2": 2}, Union[int, str])
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python 3.9 or higher")
 def test_check_instance_with_union_type_and_literal():
     from typing import Literal
 
@@ -400,7 +377,6 @@ def test_check_instance_with_union_type_and_literal():
     assert not check_instance("c", Union[Literal["a"], Literal["b"]])
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python 3.9 or higher")
 def test_non_generic_dict_and_list():
     assert check_instance([1, 2, 3], list[int])
     assert not check_instance([1, 2, "3"], list[int])

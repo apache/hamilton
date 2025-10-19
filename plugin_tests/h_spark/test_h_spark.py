@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import sys
 
 import numpy as np
 import pandas as pd
@@ -356,7 +355,6 @@ def test_get_spark_type_basic_types(return_type, expected_spark_type):
 
 
 # 2. Lists of basic Python types
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python 3.9 or higher")
 @pytest.mark.parametrize(
     "return_type,expected_spark_type",
     [

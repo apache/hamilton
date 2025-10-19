@@ -16,11 +16,9 @@
 # under the License.
 
 import pathlib
-import sys
 
 import lancedb
 import numpy as np
-import pytest
 from datasets import Dataset, DatasetDict
 
 from hamilton.plugins import huggingface_extensions
@@ -59,7 +57,6 @@ def test_hfds_parquet_saver(tmp_path: pathlib.Path):
     assert saver.applies_to(Dataset)
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires Python 3.9 or higher")
 def test_hfds_lancedb_saver(tmp_path: pathlib.Path):
     db_client = lancedb.connect(tmp_path / "lancedb")
     saver = huggingface_extensions.HuggingFaceDSLanceDBSaver(db_client, "test_table")
