@@ -10,6 +10,7 @@ Apache Software Foundation links.
    :glob:
    :hidden:
 
+   downloads
    Apache Software Foundation <https://www.apache.org/>
    License <https://www.apache.org/licenses/>
    Events <https://www.apache.org/events/current-event.html>
@@ -19,6 +20,7 @@ Apache Software Foundation links.
    Thanks <https://www.apache.org/foundation/thanks.html>
    Code of Conduct <https://www.apache.org/foundation/policies/conduct.html>
 
+- :doc:`Downloads <downloads>`
 - `Foundation <https://www.apache.org/>`_
 - `License <https://www.apache.org/licenses/>`_
 - `Events <https://www.apache.org/events/current-event.html>`_
