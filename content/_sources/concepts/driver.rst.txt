@@ -163,7 +163,7 @@ Next step
 Now, you know the basics of authoring and executing Apache Hamilton dataflows! We encourage you to:
 
 - Write some code with our `interactive tutorials <https://www.tryhamilton.dev/intro>`_
-- Kickstart your project with `community dataflows <https://hub.dagworks.io/docs/>`_
+- Kickstart your project with `community resources <../ecosystem/index.html>`_
 
 The next **Concepts** pages cover notions to write more expressive and powerful code. If you feel stuck or constrained with the basics, it's probably a good time to (re)visit them. They include:
 

@@ -313,10 +313,12 @@
 <ul>
 <li class="toctree-l1"><a class="reference external" href="https://hamilton.apache.org/_static/Hamilton.pdf">PDF</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<p class="caption" role="heading"><span class="caption-text">COMMUNITY</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../community/">Meet-ups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem/">Ecosystem</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
 <ul>
@@ -410,6 +412,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../reference/result-builders/Pandas/">Pandas</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/result-builders/Polars/">Polars</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/result-builders/Dask/">Dask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/result-builders/PyArrow/">plugins.h_pyarrow.PyarrowTableResult</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/result-builders/Custom/">Custom ResultBuilder</a></li>
 </ul>
 </li>
@@ -448,13 +451,6 @@
 <li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/policies/conduct.html">Code of Conduct</a></li>
 </ul>
 </li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">EXTERNAL RESOURCES</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://www.tryhamilton.dev/">tryhamilton.dev</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://hub.dagworks.io/docs/">Dataflow Hub</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://blog.dagworks.io/">Blog</a></li>
 </ul>
 
 </div>
@@ -519,7 +515,7 @@ Apache Hamilton also comes with a <a class="reference internal" href="../hamilto
 <h1>Why should you use Apache Hamilton (incubating)?<a class="headerlink" href="#why-should-you-use-apache-hamilton-incubating" title="Link to this heading">¶</a></h1>
 <p><strong>Facilitate collaboration</strong>. By focusing on functions, Apache Hamilton avoids sprawling code hierarchy and generates flat dataflows. Well-scoped functions make it easier to add features, complete code reviews, debug pipeline failures, and hand-off projects. Visualizations can be generated directly from your code to better understand and document it.
 Integration with the <a class="reference internal" href="../hamilton-ui/"><span class="std std-doc">Apache Hamilton UI</span></a> allows you to track lineage, catalog code &amp; artifacts, and monitor your dataflows.</p>
-<p><strong>Reduce development time</strong>. Apache Hamilton dataflows are reusable across projects and context (e.g., pipeline vs. web service). The benefits of developing robust and well-tested solutions are multiplied by reusability. Off-the-shelf dataflows are available on the <a class="reference external" href="https://hub.dagworks.io/">Apache Hamilton Hub</a>.</p>
+<p><strong>Reduce development time</strong>. Apache Hamilton dataflows are reusable across projects and context (e.g., pipeline vs. web service). The benefits of developing robust and well-tested solutions are multiplied by reusability. Explore community-contributed dataflows in the <a class="reference internal" href="../ecosystem/"><span class="std std-doc">ecosystem</span></a>.</p>
 <p><strong>Own your platform</strong>. Apache Hamilton helps you integrate the frameworks and tools of your stack. Apache Hamilton’s features are easy to extend and customize to your needs. This flexibility enables self-serve designs and ultimately reduces the risks of vendor lock-in.</p>
 <p><strong>Scale your dataflow</strong>. Apache Hamilton separates transformation logic from execution, allowing you to seamlessly scale via remote execution (AWS, Modal, etc.) and specialized computation engines (Spark, Ray, duckdb etc.). Apache Hamilton was battle tested under intensive enterprise data workloads.</p>
 <p>Here’s a quick overview of benefits that Apache Hamilton provides as compared to other tools:</p>

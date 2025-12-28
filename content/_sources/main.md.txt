@@ -20,7 +20,7 @@ The ABC of Apache Hamilton
 **Facilitate collaboration**. By focusing on functions, Apache Hamilton avoids sprawling code hierarchy and generates flat dataflows. Well-scoped functions make it easier to add features, complete code reviews, debug pipeline failures, and hand-off projects. Visualizations can be generated directly from your code to better understand and document it.
 Integration with the [Apache Hamilton UI](hamilton-ui/index.rst) allows you to track lineage, catalog code & artifacts, and monitor your dataflows.
 
-**Reduce development time**. Apache Hamilton dataflows are reusable across projects and context (e.g., pipeline vs. web service). The benefits of developing robust and well-tested solutions are multiplied by reusability. Off-the-shelf dataflows are available on the [Apache Hamilton Hub](https://hub.dagworks.io/).
+**Reduce development time**. Apache Hamilton dataflows are reusable across projects and context (e.g., pipeline vs. web service). The benefits of developing robust and well-tested solutions are multiplied by reusability. Explore community-contributed dataflows in the [ecosystem](ecosystem/index.md).
 
 **Own your platform**. Apache Hamilton helps you integrate the frameworks and tools of your stack. Apache Hamilton's features are easy to extend and customize to your needs. This flexibility enables self-serve designs and ultimately reduces the risks of vendor lock-in.
 
