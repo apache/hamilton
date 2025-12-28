@@ -20,6 +20,9 @@ jobs:
         node-version: [16.x]
     steps:
     - uses: actions/checkout@v3
+    - name: Check for missing Apache 2 license headers
+      run: python3 scripts/check_license_headers.py
+      working-directory: ${{ github.workspace }}
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:

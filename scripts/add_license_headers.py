@@ -1,10 +1,32 @@
 #!/usr/bin/env python3
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
 """Script to add Apache 2 license headers to files in the Hamilton repository."""
 
 import json
 import sys
 from pathlib import Path
 from typing import List
+
+# TODO: Simplify this script if we add more file types. Since the license text
+# (including line breaks) stays the same, we really just need different comment
+# character insertion helpers based on file extension rather than duplicating
+# the full license text for each file type.
 
 # Apache 2 license header for Python files
 PYTHON_LICENSE_HEADER = """# Licensed to the Apache Software Foundation (ASF) under one
@@ -87,7 +109,7 @@ SQL_LICENSE_HEADER = """-- Licensed to the Apache Software Foundation (ASF) unde
 """
 
 
-def add_license_to_python(file_path: Path, content: str) -> str:
+def add_license_to_python(content: str) -> str:
     """Add Apache 2 license header to Python file content."""
     # Handle shebang lines - preserve them at the top
     lines = content.split("\n", 1)
@@ -102,12 +124,12 @@ def add_license_to_python(file_path: Path, content: str) -> str:
         return PYTHON_LICENSE_HEADER + content
 
 
-def add_license_to_markdown(file_path: Path, content: str) -> str:
+def add_license_to_markdown(content: str) -> str:
     """Add Apache 2 license header to Markdown file content."""
     return MARKDOWN_LICENSE_HEADER + content
 
 
-def add_license_to_notebook(file_path: Path, content: str) -> str:
+def add_license_to_notebook(content: str) -> str:
     """Add Apache 2 license header to Jupyter notebook."""
     try:
         notebook = json.loads(content)
@@ -126,7 +148,7 @@ def add_license_to_notebook(file_path: Path, content: str) -> str:
     return json.dumps(notebook, indent=1, ensure_ascii=False)
 
 
-def add_license_to_shell(file_path: Path, content: str) -> str:
+def add_license_to_shell(content: str) -> str:
     """Add Apache 2 license header to shell script or Dockerfile.
 
     Uses same logic as Python files (# comments, handle shebang).
@@ -144,7 +166,7 @@ def add_license_to_shell(file_path: Path, content: str) -> str:
         return PYTHON_LICENSE_HEADER + content
 
 
-def add_license_to_sql(file_path: Path, content: str) -> str:
+def add_license_to_sql(content: str) -> str:
     """Add Apache 2 license header to SQL file content."""
     return SQL_LICENSE_HEADER + content
 
@@ -166,29 +188,33 @@ def add_license_header(file_path: Path, dry_run: bool = False) -> bool:
         print(f"  ✗ Error reading {file_path}: {e}")
         return False
 
-    # Check if file already has a license header
-    if "Licensed to the Apache Software Foundation" in content or "Apache License" in content:
+    # Check if file already has a license header (check first 20 lines only)
+    first_lines = "\n".join(content.split("\n")[:20])
+    if (
+        "Licensed to the Apache Software Foundation" in first_lines
+        or "Apache License" in first_lines
+    ):
         print(f"  ↷ Skipping {file_path} (already has license header)")
         return False
 
     # Determine file type and add appropriate header
     try:
         if file_path.suffix == ".py":
-            new_content = add_license_to_python(file_path, content)
+            new_content = add_license_to_python(content)
         elif file_path.suffix == ".md":
-            new_content = add_license_to_markdown(file_path, content)
+            new_content = add_license_to_markdown(content)
         elif file_path.suffix == ".ipynb":
-            new_content = add_license_to_notebook(file_path, content)
+            new_content = add_license_to_notebook(content)
         elif file_path.suffix == ".sh":
-            new_content = add_license_to_shell(file_path, content)
+            new_content = add_license_to_shell(content)
         elif file_path.suffix == ".sql":
-            new_content = add_license_to_sql(file_path, content)
+            new_content = add_license_to_sql(content)
         elif file_path.name == "Dockerfile":
             # Dockerfiles use # comments like shell scripts
-            new_content = add_license_to_shell(file_path, content)
+            new_content = add_license_to_shell(content)
         elif file_path.name == "README":
             # README files without extension are usually markdown
-            new_content = add_license_to_markdown(file_path, content)
+            new_content = add_license_to_markdown(content)
         else:
             print(f"  ✗ Unsupported file type: {file_path.suffix} ({file_path.name})")
             return False

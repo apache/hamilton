@@ -36,6 +36,9 @@ jobs:
           --health-retries 10
     steps:
       - uses: actions/checkout@v3
+      - name: Check for missing Apache 2 license headers
+        run: |
+          python3 scripts/check_license_headers.py
       - name: Set up Python
         uses: actions/setup-python@v4
         with:

@@ -66,6 +66,11 @@ jobs:
             uv run pre-commit install
             uv run pre-commit run --all-files
 
+        - name: Check for missing Apache 2 license headers
+          if: ${{ runner.os == 'Linux' }}
+          run: |
+            python3 scripts/check_license_headers.py
+
         - name: Test hamilton main package
           run: |
             uv sync --group test

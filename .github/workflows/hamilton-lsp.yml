@@ -23,6 +23,9 @@ jobs:
         working-directory: dev_tools/language_server
     steps:
     - uses: actions/checkout@v3
+    - name: Check for missing Apache 2 license headers
+      run: python3 scripts/check_license_headers.py
+      working-directory: ${{ github.workspace }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
