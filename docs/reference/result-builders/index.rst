@@ -14,4 +14,5 @@ Reference
    Pandas
    Polars
    Dask
+   PyArrow
    Custom
