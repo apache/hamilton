@@ -1,5 +1,13 @@
 ## Off-the-shelf Apache Hamilton Dataflows
 
+> **Disclaimer**
+>
+> Apache Hamilton is an effort undergoing incubation at the Apache Software Foundation (ASF), sponsored by the Apache Incubator PMC.
+>
+> Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects.
+>
+> While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+
 Here you'll find documentation about the sf-hamilton-contrib package that curates a collection of Apache Hamilton Dataflows that are
 ready to be used in your own projects. They are user-contributed and maintained, with
 the goal of making it easier for you to get started with Apache Hamilton.

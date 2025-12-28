@@ -1,5 +1,13 @@
 # Apache Hamilton UI SDK: Client Code &amp; Related
 
+> **Disclaimer**
+>
+> Apache Hamilton is an effort undergoing incubation at the Apache Software Foundation (ASF), sponsored by the Apache Incubator PMC.
+>
+> Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects.
+>
+> While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+
 Welcome to using the Apache Hamilton UI!
 
 Here are instructions on how to get started with tracking, and managing your Apache Hamilton
