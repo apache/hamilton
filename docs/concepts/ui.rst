@@ -1,1 +1,1 @@
-../hamilton-ui/ui.rst
+.. include:: ../hamilton-ui/ui.rst

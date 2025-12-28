@@ -71,9 +71,11 @@ Test your changes locally with `pre-commit`...
 pre-commit run --all-files
 ```
 
-...and by following the steps in ["How to run unit tests"](#how-to-run-unit-tests).
+...and by following the steps in [How to run unit tests](#how-to-run-unit-tests).
 
 Navigate to https://github.com/apache/hamilton/pulls and open a pull request.
+
+(how-to-run-unit-tests)=
 
 ## How to run unit tests
 
@@ -133,7 +135,7 @@ See https://circleci.com/docs/local-cli/ for details.
 Once you have installed it you just need to run `circleci local execute` from the root directory and it'll run the entire suite of tests
 that are setup to run each time you push a commit to a branch in github.
 
-# Pushing to pypi
+## Pushing to pypi
 These are the steps to push to pypi. This is taken from the [python packaging tutorial](https://packaging.python.org/tutorials/packaging-projects/#generating-distribution-archives).
 
 1. Have an account & be granted the ability to push to sf-hamilton on testpypi & real pypi.
@@ -150,7 +152,7 @@ These are the steps to push to pypi. This is taken from the [python packaging tu
 8. Double check you can download and install what you just pushed in a fresh environment. A good thing to test is to
    run the hello world example.
 
-# Announcing your release
+## Announcing your release
 
 Now that you've pushed to pypi, announce your release! We plan to automate this, but for now...
 
@@ -159,7 +161,7 @@ See [1.2.0](https://github.com/apache/hamilton/releases/tag/sf-hamilton-1.2.0) f
 2. Announce on the #announcements channel in slack, following the format presented there.
 3. Thanks for contributing!
 
-# Pushing to Anaconda
+## Pushing to Anaconda
 These are the steps to push to Anaconda after you have built and pushed to PyPi successfully.
 
 1. Make sure you have conda installed with conda-build. See [these instructions](https://conda.io/projects/conda-build/en/latest/install-conda-build.html).
