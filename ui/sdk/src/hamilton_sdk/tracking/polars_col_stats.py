@@ -95,7 +95,9 @@ def histogram(col: pl.Series, num_hist_bins: int = 10) -> Dict[str, int]:
     except pl.InvalidOperationError:
         # happens for Date data types. TODO: convert them to numeric so we can get a histogram.
         return {}
-    return dict(zip(hist_dict["category"], hist_dict["count"]))
+    # Sort by category to ensure consistent ordering across Python versions
+    result = dict(zip(hist_dict["category"], hist_dict["count"]))
+    return dict(sorted(result.items()))
 
 
 def numeric_column_stats(
@@ -142,11 +144,12 @@ def datetime_column_stats(
     histogram: Dict[str, int],
 ) -> dfs.DatetimeColumnStatistics:
     # TODO: push these conversions into Hamilton functions.
-    min = min.isoformat() if isinstance(min, (pl.Date, pl.Datetime, datetime.date)) else min
-    max = max.isoformat() if isinstance(max, (pl.Date, pl.Datetime, datetime.date)) else max
-    mean = mean.isoformat() if isinstance(mean, (pl.Date, pl.Datetime, datetime.date)) else mean
+    # Note: datetime.datetime is a subclass of datetime.date, so checking datetime.date catches both
+    min = min.isoformat() if isinstance(min, datetime.date) else min
+    max = max.isoformat() if isinstance(max, datetime.date) else max
+    mean = mean.isoformat() if isinstance(mean, datetime.date) else mean
     quantiles = {
-        q: v if not isinstance(v, pl.Datetime) else v.isoformat() for q, v in quantiles.items()
+        q: v.isoformat() if isinstance(v, datetime.date) else v for q, v in quantiles.items()
     }
     return dfs.DatetimeColumnStatistics(
         name=name,

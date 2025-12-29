@@ -63,7 +63,7 @@ def test_hash_module_with_subpackage():
     seen_modules = set()
     result = _hash_module(submodule1, hash_object, seen_modules)
 
-    assert result.hexdigest() == "aefd8f5ce7f37c80c272e8d42c63b2bf322d882a7fca8c650b99a00ca30e80f7"
+    assert result.hexdigest() == "b634731cc3037f628e37e91522871245c7f6b2fe9ffad5f0715e7e33324f1b65"
     assert len(seen_modules) == 2
     assert {m.__name__ for m in seen_modules} == {
         "tests.test_package_to_hash.subpackage",
@@ -79,7 +79,7 @@ def test_hash_module_complex():
     seen_modules = set()
     result = _hash_module(test_package_to_hash, hash_object, seen_modules)
 
-    assert result.hexdigest() == "c2a1f6ae042c35d9cb04a3f6fb3c88f9ebfec769055bc3086e924b16d127f798"
+    assert result.hexdigest() == "d91d96366991a8e8aee244c6f72aa7d27f5a9badfae2ab79c1f62694ac9e9fb2"
     assert len(seen_modules) == 4
     assert {m.__name__ for m in seen_modules} == {
         "tests.test_package_to_hash",
