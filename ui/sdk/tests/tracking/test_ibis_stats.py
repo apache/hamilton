@@ -26,7 +26,7 @@ def test_compute_stats_ibis_table():
         columns=["one", "two", "three"],
         index=[5, 6],
     )
-    result = ibis.memtable(df, name="t")
+    result = ibis.memtable(df)
     # result = Table({"a": "int", "b": "string"})
     node_name = "test_node"
     node_tags = {}
