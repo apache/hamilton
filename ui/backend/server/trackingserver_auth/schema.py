@@ -28,19 +28,19 @@ from trackingserver_auth.models import APIKey, Team, User, UserTeamMembership
 class UserOut(ModelSchema):
     class Meta:
         model = User
-        model_fields = ["id", "email", "first_name", "last_name"]
+        fields = ["id", "email", "first_name", "last_name"]
 
 
 class TeamOut(ModelSchema):
     class Meta:
         model = Team
-        model_fields = ["id", "name", "auth_provider_type", "auth_provider_organization_id"]
+        fields = ["id", "name", "auth_provider_type", "auth_provider_organization_id"]
 
 
 class ApiKeyOut(ModelSchema):
     class Meta:
         model = APIKey
-        model_fields = ["id", "key_name", "key_start", "is_active", "created_at", "updated_at"]
+        fields = ["id", "key_name", "key_start", "is_active", "created_at", "updated_at"]
 
 
 ##########################################
