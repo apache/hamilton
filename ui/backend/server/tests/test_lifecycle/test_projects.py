@@ -25,7 +25,7 @@ async def _setup_sample_project(
     )
     post_response = await async_client.post(
         "/api/v1/projects",
-        data=project_to_create.dict(),
+        data=project_to_create.model_dump(),
         content_type="application/json",
         headers={"test_username": username},
     )

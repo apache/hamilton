@@ -120,7 +120,7 @@ async def predict_model_version1(request: PredictRequest) -> dict:
     :return: a dictionary with the prediction value.
     """
     # one liner to quickly create some series from the request.
-    input_series = pd.DataFrame([request.dict()]).to_dict(orient="series")
+    input_series = pd.DataFrame([request.model_dump()]).to_dict(orient="series")
     # create the features -- point here is we're reusing the same code as in the training!
     # with the ability to provide static values for things like `age_mean` and `age_std_dev`.
     features = await dr.execute(

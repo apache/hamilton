@@ -28,7 +28,7 @@ def compute_stats_pydantic(
     if hasattr(result, "dump_model"):
         llm_result = result.dump_model()
     else:
-        llm_result = result.dict()
+        llm_result = result.model_dump()
     return {
         "observability_type": "dict",
         "observability_value": {

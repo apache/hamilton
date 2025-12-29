@@ -64,7 +64,7 @@ async def create_dag_run(request, dag_template_id: int, dag_run: DAGRunIn) -> DA
     user, teams = request.auth
     logger.info(f"Creating DAG run for dag template: {dag_template_id} for user: {user.email}")
     dag_run_created = await DAGRun.objects.acreate(
-        **dag_run.dict(), dag_template_id=dag_template_id, launched_by_id=user.id
+        **dag_run.model_dump(), dag_template_id=dag_template_id, launched_by_id=user.id
     )
     logger.info(f"Created DAG run for dag template: {dag_template_id}")
     return DAGRunOut.from_orm(dag_run_created)
@@ -300,7 +300,7 @@ async def bulk_log(
     )
     logger.info(f"Updated {len(task_updates_to_save)} task updates for dag run: {dag_run_id}")
     node_attributes_to_create = [
-        NodeRunAttribute(**attribute.dict(), dag_run_id=dag_run.id)
+        NodeRunAttribute(**attribute.model_dump(), dag_run_id=dag_run.id)
         for attribute in node_run_attributes
     ]
     logger.info(

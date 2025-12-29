@@ -23,7 +23,7 @@ async def _setup_dag_template(
     project_id, *_ = await _setup_sample_project(async_client, username)
     post_dag_template_response = await async_client.post(
         f"/api/v1/dag_templates?{urlencode({'project_id': project_id})}",
-        data=dag_template_to_generate.dict(),
+        data=dag_template_to_generate.model_dump(),
         content_type="application/json",
         headers={"test_username": username},
     )
@@ -76,7 +76,7 @@ async def test_create_and_check_dag_template_exists(async_client: AsyncClient, d
     project_id, *_ = await _setup_sample_project(async_client, username)
     post_dag_template_response = await async_client.post(
         f"/api/v1/dag_templates?{urlencode({'project_id': project_id})}",
-        data=dag_template_to_generate.dict(),
+        data=dag_template_to_generate.model_dump(),
         content_type="application/json",
         headers={"test_username": username},
     )
@@ -106,7 +106,7 @@ async def test_create_and_update_empty_dag_run(async_client: AsyncClient, db):
     )
     update_dag_run_response = await async_client.put(
         f"/api/v1/dag_runs/{run_id}/",
-        data=dag_run_update.dict(),
+        data=dag_run_update.model_dump(),
         content_type="application/json",
         headers={"test_username": username},
     )

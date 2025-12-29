@@ -74,7 +74,9 @@ async def create_dag_template(
     code_log = dag_template.code_log
     if code_log is not None:
         logger.info(f"Saving code log for project {project_id} for {user.email}")
-        code_log_url = await blob_store.write_obj("project" + str(project_id), code_log.dict())
+        code_log_url = await blob_store.write_obj(
+            "project" + str(project_id), code_log.model_dump()
+        )
         logger.info(f"Stored code for project {project_id} for {user.email} at {code_log_url}")
         code_log_store = blob_store.store()
         code_log_schema_version = 1
@@ -102,7 +104,7 @@ async def create_dag_template(
     logger.info(f"Created DAG template for project : {project_id} for {user.email}")
     code_artifacts_created = await CodeArtifact.objects.abulk_create(
         [
-            CodeArtifact(**code_artifact.dict(), dag_template_id=dag_template_created.id)
+            CodeArtifact(**code_artifact.model_dump(), dag_template_id=dag_template_created.id)
             for code_artifact in dag_template.code_artifacts
         ],
         ignore_conflicts=False,
@@ -115,7 +117,11 @@ async def create_dag_template(
 
     for node in dag_template.nodes:
         node_template = NodeTemplate(
-            **{key: value for key, value in node.dict().items() if key != "code_artifact_pointers"},
+            **{
+                key: value
+                for key, value in node.model_dump().items()
+                if key != "code_artifact_pointers"
+            },
             dag_template_id=dag_template_created.id,
         )
         node_templates_to_create.append(node_template)
@@ -400,7 +406,7 @@ async def get_full_dag_templates(request, dag_template_ids: str) -> List[DAGTemp
             # TODO -- assert that the blob store matches he one we have available
             code_log = await blob_store.read_obj(dag_template.code_log_url)
             return DAGTemplateOutWithData(
-                **dag_template.dict(),
+                **dag_template.model_dump(),
                 # TODO -- fix this -- this is due to something weird with the ID names in from_orm
                 code_artifacts=code_artifacts_out,
                 nodes=nodes_out,

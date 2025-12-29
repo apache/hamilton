@@ -151,7 +151,7 @@ async def get_project_by_id(
             project_id=project_id, type__in=attribute_types
         ).all()
     ]
-    return ProjectOutWithAttributes(**project_out.dict(), attributes=attributes)
+    return ProjectOutWithAttributes(**project_out.model_dump(), attributes=attributes)
 
 
 @router.put("/v1/projects/{project_id}", response=ProjectOut, tags=["projects"])
@@ -288,7 +288,7 @@ async def get_projects(
         )
     return [
         ProjectOutWithAttributes(
-            **project.dict(), attributes=project_id_to_attributes.get(project.id, [])
+            **project.model_dump(), attributes=project_id_to_attributes.get(project.id, [])
         )
         for project in projects
     ]

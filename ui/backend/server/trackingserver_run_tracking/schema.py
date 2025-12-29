@@ -50,7 +50,7 @@ class DAGRunOut(ModelSchema):
     def create_with_username(cls, orm_model: DAGRun) -> "DAGRunOut":
         return DAGRunOut(
             **{
-                **DAGRunOut.from_orm(orm_model).dict(),
+                **DAGRunOut.from_orm(orm_model).model_dump(),
                 **{
                     "username_resolved": (
                         orm_model.launched_by.email if orm_model.launched_by else None
@@ -95,7 +95,7 @@ class NodeRunOutWithAttributes(NodeRunOut):
     def from_data(cls, node_run: NodeRun, attributes: List[NodeRunAttributeOut]):
         return NodeRunOutWithAttributes(
             **{
-                **NodeRunOut.from_orm(node_run).dict(),
+                **NodeRunOut.from_orm(node_run).model_dump(),
                 **{"attributes": attributes, "dag_run_id": node_run.dag_run_id},
             }
         )
@@ -109,7 +109,7 @@ class DAGRunOutWithData(DAGRunOut):
     def from_data(cls, dag_run: DAGRun, node_runs: List[NodeRunOutWithAttributes]):
         return DAGRunOutWithData(
             **{
-                **DAGRunOut.from_orm(dag_run).dict(),
+                **DAGRunOut.from_orm(dag_run).model_dump(),
                 # Not sure why this isn't showing up -- todo, clean this up across the board
                 **{"node_runs": node_runs, "dag_template_id": dag_run.dag_template_id},
             }
@@ -129,7 +129,7 @@ class NodeRunOutWithExtraData(NodeRunOut, BaseModel):
     def from_orm(cls, obj, dag_template_id):
         node_run_out = NodeRunOut.from_orm(obj)
         return NodeRunOutWithExtraData(
-            **node_run_out.dict(),
+            **node_run_out.model_dump(),
             dag_template_id=dag_template_id,
             dag_run_id=obj.dag_run_id,
         )
