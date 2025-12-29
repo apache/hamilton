@@ -54,6 +54,12 @@ import polars.selectors
 if hasattr(polars.selectors, "_selector_proxy_"):
     from polars.selectors import _selector_proxy_  # noqa
 
+    # Make Selector available for type hints
+    Selector = type(_selector_proxy_)
+else:
+    # Stub for older polars versions
+    Selector = Type
+
 # for polars 0.18.0 we need to check what to do.
 from polars._typing import CsvEncoding, SchemaDefinition
 
