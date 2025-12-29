@@ -19,12 +19,12 @@ from hamilton_sdk.tracking import pydantic_stats
 from pydantic import BaseModel
 
 
-class TestModel(BaseModel):
+class ModelTest(BaseModel):
     name: str
     value: int
 
 
-class TestModel2(BaseModel):
+class ModelTest2(BaseModel):
     name: str
     value: int
 
@@ -37,7 +37,7 @@ class EmptyModel(BaseModel):
 
 
 def test_compute_stats_df_with_dump_model():
-    model = TestModel2(name="test", value=2)
+    model = ModelTest2(name="test", value=2)
     result = pydantic_stats.compute_stats_pydantic(model, "node1", {"tag1": "value1"})
     assert result["observability_type"] == "dict"
     assert result["observability_value"]["type"] == str(type(model))
@@ -46,7 +46,7 @@ def test_compute_stats_df_with_dump_model():
 
 
 def test_compute_stats_df_without_dump_model():
-    model = TestModel(name="test", value=1)
+    model = ModelTest(name="test", value=1)
     result = pydantic_stats.compute_stats_pydantic(model, "node1", {"tag1": "value1"})
     assert result["observability_type"] == "dict"
     assert result["observability_value"]["type"] == str(type(model))
