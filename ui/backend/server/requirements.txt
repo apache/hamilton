@@ -23,7 +23,7 @@ ddtrace==1.15.0
 Deprecated==1.2.14
 Django==4.2.27
 django-extensions==3.2.3
-django-ninja==1.0b1
+django-ninja>=1.1.0
 envier==0.4.0
 frozenlist==1.4.0
 idna==3.7
