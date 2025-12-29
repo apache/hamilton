@@ -27,7 +27,7 @@ def test_compute_stats_df():
             "b": ["a", "b", "c", "d", "e"],
             "c": [True, False, True, False, True],
             "d": [1.0, 2.0, 3.0, 4.0, 5.0],
-            "e": pl.Series(["a", "b", "c", "d", "e"], dtype=pl.Categorical),
+            "e": pl.Series(["a", "a", "b", "c", "d"], dtype=pl.Categorical),
             "f": pl.Series(["a", "b", "c", "d", "e"], dtype=pl.Utf8),
             "g": pl.Series(["a", "b", "c", "d", "e"], dtype=pl.Object),
             "h": pl.Series(
@@ -117,15 +117,15 @@ def test_compute_stats_df():
             "e": {
                 "base_data_type": "category",
                 "count": 5,
-                "data_type": "Categorical(ordering='physical')",
-                "domain": {"a": 1, "b": 1, "c": 1, "d": 1, "e": 1},
+                "data_type": "Categorical",
+                "domain": {"a": 2, "b": 1, "c": 1, "d": 1},
                 "empty": 0,
                 "missing": 0,
                 "name": "e",
                 "pos": 4,
-                "top_freq": 1,
+                "top_freq": 2,
                 "top_value": "a",
-                "unique": 5,
+                "unique": 4,
             },
             "f": {
                 "avg_str_len": 1.0,

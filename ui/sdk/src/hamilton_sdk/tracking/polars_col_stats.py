@@ -48,6 +48,9 @@ def zeros(col: pl.Series) -> int:
     except ValueError:
         # e.g. comparing datetime
         return 0
+    except NotImplementedError:
+        # Polars 1.0+ raises NotImplementedError for Date types
+        return 0
     if str(result) == "NotImplemented":
         return 0
     return result.sum()

@@ -18,6 +18,7 @@
 from typing import Any, Dict
 
 import polars as pl
+from polars import selectors
 
 if not hasattr(pl, "Series"):
     raise ImportError("Polars is not installed")
@@ -54,10 +55,10 @@ def _compute_stats(df: pl.DataFrame) -> Dict[str, Dict[str, Any]]:
     """
     category_types = df.select([pl.col(pl.Categorical)])
     string_types = df.select([pl.col(pl.Utf8)])
-    numeric_types = df.select([pl.col(pl.NUMERIC_DTYPES)])
+    numeric_types = df.select(selectors.numeric())
     bool_types = df.select([pl.col(pl.Boolean)])
     # df.select([pl.col(pl.Object)])
-    date_types = df.select([pl.col(pl.TEMPORAL_DTYPES)])
+    date_types = df.select(selectors.temporal())
     # get all other columns that have not been selected
     # df.select(
     #     ~cs.by_dtype([pl.Categorical, pl.Utf8, pl.Boolean, pl.Object])
