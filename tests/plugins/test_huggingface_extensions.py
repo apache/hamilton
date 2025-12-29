@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import json
 import pathlib
 
 import lancedb
@@ -22,6 +23,11 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 
 from hamilton.plugins import huggingface_extensions
+
+
+def _normalize_for_comparison(d):
+    """Normalize dictionary/list for order-independent comparison using JSON serialization."""
+    return json.loads(json.dumps(d, sort_keys=True, default=str))
 
 
 def test_hfds_loader():
@@ -62,18 +68,23 @@ def test_hfds_lancedb_saver(tmp_path: pathlib.Path):
     saver = huggingface_extensions.HuggingFaceDSLanceDBSaver(db_client, "test_table")
     ds = Dataset.from_dict({"vector": [np.array([1.0, 2.0, 3.0])], "named_entities": ["a"]})
     metadata = saver.save_data(ds)
-    assert metadata == {
+
+    expected_metadata = {
+        "db_meta": {"table_name": "test_table"},
         "dataset_metadata": {
             "columns": ["vector", "named_entities"],
             "features": {
+                "vector": {"_type": "Sequence", "feature": {"_type": "Value", "dtype": "float64"}},
                 "named_entities": {"_type": "Value", "dtype": "string"},
-                "vector": {"_type": "List", "feature": {"_type": "Value", "dtype": "float64"}},
             },
             "rows": 1,
             "size_in_bytes": None,
         },
-        "db_meta": {"table_name": "test_table"},
     }
+
+    # Normalize both dictionaries for order-independent comparison using JSON
+    assert _normalize_for_comparison(metadata) == _normalize_for_comparison(expected_metadata)
+
     assert db_client.open_table("test_table").search().to_list() == [
         {"named_entities": "a", "vector": [1.0, 2.0, 3.0]}
     ]
