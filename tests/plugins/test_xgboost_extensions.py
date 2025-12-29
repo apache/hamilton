@@ -16,6 +16,7 @@
 # under the License.
 
 import pathlib
+import sys
 
 import pytest
 import xgboost
@@ -39,6 +40,11 @@ def fitted_xgboost_booster() -> xgboost.Booster:
     return booster
 
 
+@pytest.mark.xfail(
+    condition=sys.version_info >= (3, 11),
+    reason="scikitlearn library incompatibility issue with Python 3.11+",
+    strict=False,
+)
 def test_xgboost_model_json_writer(
     fitted_xgboost_model: xgboost.XGBModel, tmp_path: pathlib.Path
 ) -> None:
@@ -51,7 +57,11 @@ def test_xgboost_model_json_writer(
     assert metadata[FILE_METADATA]["path"] == str(model_path)
 
 
-@pytest.mark.xfail(condition=True, reason="scikitlearn library incompatibility issue", strict=False)
+@pytest.mark.xfail(
+    condition=sys.version_info >= (3, 11),
+    reason="scikitlearn library incompatibility issue with Python 3.11+",
+    strict=False,
+)
 def test_xgboost_model_json_reader(
     fitted_xgboost_model: xgboost.XGBModel, tmp_path: pathlib.Path
 ) -> None:
