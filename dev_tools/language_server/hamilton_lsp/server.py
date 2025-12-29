@@ -39,7 +39,14 @@ from lsprotocol.types import (
     SymbolKind,
     VersionedTextDocumentIdentifier,
 )
-from pygls.server import LanguageServer
+
+# Handle both pygls 1.x and 2.x
+try:
+    # pygls 2.0+
+    from pygls.lsp.server import LanguageServer
+except ImportError:
+    # pygls 1.x
+    from pygls.server import LanguageServer
 
 from hamilton import ad_hoc_utils
 from hamilton.graph import FunctionGraph, create_graphviz_graph
