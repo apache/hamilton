@@ -19,7 +19,14 @@ import abc
 import asyncio
 import atexit
 import datetime
-from datetime import UTC
+from datetime import timezone
+
+# Compatibility for Python < 3.11
+try:
+    from datetime import UTC
+except ImportError:
+    UTC = timezone.utc
+
 import functools
 import logging
 import queue

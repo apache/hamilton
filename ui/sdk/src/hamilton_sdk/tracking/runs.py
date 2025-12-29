@@ -23,6 +23,13 @@ import time as py_time
 import traceback
 from contextlib import contextmanager
 from datetime import datetime, timezone
+
+# Compatibility for Python < 3.11
+try:
+    from datetime import UTC
+except ImportError:
+    UTC = timezone.utc
+
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from hamilton_sdk.tracking import constants, data_observation
@@ -128,12 +135,12 @@ class TrackingState:
         """Called at start of run"""
         logger.info("Clocked beginning of run")
         self.status = Status.RUNNING
-        self.start_time = datetime.now(timezone.utc)
+        self.start_time = datetime.now(UTC)
 
     def clock_end(self, status: Status):
         """Called at end of run"""
         logger.info(f"Clocked end of run with status: {status}")
-        self.end_time = datetime.now(timezone.utc)
+        self.end_time = datetime.now(UTC)
         self.status = status
 
     def update_task(self, task_name: str, task_run: TaskRun):
@@ -226,7 +233,7 @@ class RunTracker:
 
         task_run = TaskRun(node_name=node_.name)  # node run.
         task_run.status = Status.RUNNING
-        task_run.start_time = datetime.now(timezone.utc)
+        task_run.start_time = datetime.now(UTC)
         self.tracking_state.update_task(node_.name, task_run)
         try:
             result = original_do_node_execute(run_id, node_, kwargs, task_id)
@@ -239,13 +246,13 @@ class RunTracker:
             task_run.status = Status.SUCCESS
             task_run.result_type = type(result)
             task_run.result_summary = result_summary
-            task_run.end_time = datetime.now(timezone.utc)
+            task_run.end_time = datetime.now(UTC)
             self.tracking_state.update_task(node_.name, task_run)
             logger.debug(f"Node: {node_.name} ran successfully")
             return result
         except dq_base.DataValidationError as e:
             task_run.status = Status.FAILURE
-            task_run.end_time = datetime.now(timezone.utc)
+            task_run.end_time = datetime.now(UTC)
             task_run.error = serialize_data_quality_error(e)
             self.tracking_state.update_status(Status.FAILURE)
             self.tracking_state.update_task(node_.name, task_run)
@@ -253,7 +260,7 @@ class RunTracker:
             raise e
         except Exception as e:
             task_run.status = Status.FAILURE
-            task_run.end_time = datetime.now(timezone.utc)
+            task_run.end_time = datetime.now(UTC)
             task_run.error = serialize_error()
             self.tracking_state.update_status(Status.FAILURE)
             self.tracking_state.update_task(node_.name, task_run)

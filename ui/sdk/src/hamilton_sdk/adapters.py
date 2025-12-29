@@ -16,13 +16,19 @@
 # under the License.
 
 import datetime
-from datetime import UTC
 import hashlib
 import logging
 import os
 import random
 import traceback
 from datetime import timezone
+
+# Compatibility for Python < 3.11
+try:
+    from datetime import UTC
+except ImportError:
+    UTC = timezone.utc
+
 from types import ModuleType
 from typing import Any, Callable, Dict, List, Optional, Union
 
@@ -200,7 +206,7 @@ class HamiltonTracker(
         in_sample = self.is_in_sample(task_id)
         task_run = TaskRun(node_name=node_.name, is_in_sample=in_sample)
         task_run.status = Status.RUNNING
-        task_run.start_time = datetime.datetime.now(timezone.utc)
+        task_run.start_time = datetime.datetime.now(UTC)
         tracking_state.update_task(node_.name, task_run)
         self.task_runs[run_id][node_.name] = task_run
 
@@ -278,7 +284,7 @@ class HamiltonTracker(
         logger.debug("post_node_execute %s %s", run_id, task_id)
         task_run: TaskRun = self.task_runs[run_id][node_.name]
         tracking_state = self.tracking_states[run_id]
-        task_run.end_time = datetime.datetime.now(timezone.utc)
+        task_run.end_time = datetime.datetime.now(UTC)
 
         other_results = []
         if success:
@@ -527,7 +533,7 @@ class AsyncHamiltonTracker(
 
         task_run = TaskRun(node_name=node_.name)
         task_run.status = Status.RUNNING
-        task_run.start_time = datetime.datetime.now(timezone.utc)
+        task_run.start_time = datetime.datetime.now(UTC)
         tracking_state.update_task(node_.name, task_run)
         self.task_runs[run_id][node_.name] = task_run
 
@@ -559,7 +565,7 @@ class AsyncHamiltonTracker(
         logger.debug("post_node_execute %s", run_id)
         task_run = self.task_runs[run_id][node_.name]
         tracking_state = self.tracking_states[run_id]
-        task_run.end_time = datetime.datetime.now(timezone.utc)
+        task_run.end_time = datetime.datetime.now(UTC)
         other_results = []
 
         if success:
