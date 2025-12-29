@@ -69,6 +69,8 @@ def test_hfds_lancedb_saver(tmp_path: pathlib.Path):
     ds = Dataset.from_dict({"vector": [np.array([1.0, 2.0, 3.0])], "named_entities": ["a"]})
     metadata = saver.save_data(ds)
 
+    # Different versions of HuggingFace datasets use either 'Sequence' or 'List' for array types
+    # Both are semantically equivalent, so we normalize this for comparison
     expected_metadata = {
         "db_meta": {"table_name": "test_table"},
         "dataset_metadata": {
@@ -82,8 +84,26 @@ def test_hfds_lancedb_saver(tmp_path: pathlib.Path):
         },
     }
 
-    # Normalize both dictionaries for order-independent comparison using JSON
-    assert _normalize_for_comparison(metadata) == _normalize_for_comparison(expected_metadata)
+    # Normalize _type values: 'List' and 'Sequence' are equivalent
+    def normalize_feature_types(d):
+        if isinstance(d, dict):
+            result = {}
+            for k, v in d.items():
+                if k == "_type" and v in ("List", "Sequence"):
+                    result[k] = "Sequence"  # Normalize to Sequence
+                else:
+                    result[k] = normalize_feature_types(v)
+            return result
+        elif isinstance(d, list):
+            return [normalize_feature_types(item) for item in d]
+        return d
+
+    # Normalize both dictionaries for order-independent comparison and feature type equivalence
+    normalized_metadata = normalize_feature_types(metadata)
+    normalized_expected = normalize_feature_types(expected_metadata)
+    assert _normalize_for_comparison(normalized_metadata) == _normalize_for_comparison(
+        normalized_expected
+    )
 
     assert db_client.open_table("test_table").search().to_list() == [
         {"named_entities": "a", "vector": [1.0, 2.0, 3.0]}
