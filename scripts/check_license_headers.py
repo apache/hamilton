@@ -20,31 +20,103 @@
 
 import sys
 from pathlib import Path
-from typing import List, Set
+from typing import List
 
 # License header patterns to check for
-LICENSE_PATTERNS = [
+# ASF-specific header (our standard)
+ASF_LICENSE_PATTERNS = [
     "Licensed to the Apache Software Foundation (ASF)",
     "Apache License, Version 2.0",
 ]
 
-# File extensions to check
-PYTHON_EXTENSIONS = {".py"}
-MARKDOWN_EXTENSIONS = {".md"}
-NOTEBOOK_EXTENSIONS = {".ipynb"}
-SHELL_EXTENSIONS = {".sh"}
-SQL_EXTENSIONS = {".sql"}
-TYPESCRIPT_EXTENSIONS = {".ts", ".tsx"}
-JAVASCRIPT_EXTENSIONS = {".js", ".jsx"}
-ALL_EXTENSIONS = (
-    PYTHON_EXTENSIONS
-    | MARKDOWN_EXTENSIONS
-    | NOTEBOOK_EXTENSIONS
-    | SHELL_EXTENSIONS
-    | SQL_EXTENSIONS
-    | TYPESCRIPT_EXTENSIONS
-    | JAVASCRIPT_EXTENSIONS
-)
+# Third-party Apache 2.0 headers (also acceptable)
+# Note: Some third-party headers may have spaces in the URL
+THIRD_PARTY_APACHE_PATTERNS = [
+    "Apache License, Version 2.0",
+    "www.apache.org/licenses/LICENSE-2.0",
+]
+
+# File extensions to EXCLUDE from checking (based on what exists in this repo)
+EXCLUDED_EXTENSIONS = {
+    # Python compiled/generated
+    ".pyc",
+    ".pyi",  # Type stubs
+    ".pyx",  # Cython
+    ".pxd",  # Cython headers
+    ".pxi",  # Cython includes
+    # Compiled binaries
+    ".so",
+    ".dylib",
+    ".jar",
+    # Images and media
+    ".png",
+    ".svg",
+    ".ttf",
+    ".afm",  # Adobe font metrics
+    # Config/data files
+    ".json",
+    ".jsonl",
+    ".yaml",
+    ".yml",
+    ".toml",
+    ".cfg",  # setup.cfg, etc.
+    ".conf",  # nginx.conf, etc.
+    ".xml",  # Test data, config files
+    ".csv",
+    ".fwf",  # Fixed-width format test data
+    ".dot",  # Graphviz DOT files
+    ".npy",  # NumPy arrays
+    ".mat",  # MATLAB data
+    ".sav",  # SPSS data
+    ".po",  # Gettext translations
+    ".mo",  # Compiled translations
+    ".template",  # Template config files
+    # Build/generated files
+    ".map",  # Source maps
+    ".gz",
+    ".log",
+    ".typed",  # PEP 561 marker
+    # Web assets (usually don't have license headers)
+    ".css",
+    ".scss",
+    ".html",
+    # JavaScript config files (these are code but often generated)
+    ".eslintrc",
+    ".nycrc",
+    ".npmignore",
+    ".editorconfig",
+    # Template files
+    ".j2",
+    ".jinja2",
+    # Documentation that doesn't need headers
+    ".txt",
+    ".rst",
+    # Other
+    ".gitkeep",
+    ".asc",  # GPG keys
+    ".cmd",  # Windows batch
+    ".coffee",  # CoffeeScript (if any)
+    ".mjs",  # ES modules (often generated)
+    ".cjs",  # CommonJS modules (often generated)
+    ".mts",  # TypeScript ES modules
+    ".flow",  # Flow type definitions
+    ".in",  # MANIFEST.in, etc.
+}
+
+# Specific filenames to exclude (exact matches)
+EXCLUDED_FILENAMES = {
+    # Lock files
+    "package-lock.json",
+    "yarn.lock",
+    "poetry.lock",
+    "uv.lock",
+    # License/legal files
+    "LICENSE",
+    "NOTICE",
+    "CHANGELOG",
+    # OS files
+    ".DS_Store",
+}
 
 # Directories to skip
 SKIP_DIRS = {
@@ -84,47 +156,69 @@ def should_skip_path(path: Path) -> bool:
 
 
 def has_license_header(file_path: Path, num_lines: int = 20) -> bool:
-    """Check if a file has the Apache 2 license header."""
+    """Check if a file has an Apache 2 license header (ASF or third-party)."""
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             content = "".join(f.readlines()[:num_lines])
 
-        # Check if all license patterns are present in the first N lines
-        return all(pattern in content for pattern in LICENSE_PATTERNS)
+        # Check if all ASF license patterns are present
+        has_asf_header = all(pattern in content for pattern in ASF_LICENSE_PATTERNS)
+
+        # Check if all third-party Apache 2.0 patterns are present
+        has_third_party_header = all(pattern in content for pattern in THIRD_PARTY_APACHE_PATTERNS)
+
+        # Accept either ASF or third-party Apache 2.0 headers
+        return has_asf_header or has_third_party_header
     except (UnicodeDecodeError, PermissionError):
         # Skip files that can't be read as text
         return True  # Assume they're fine to avoid false positives
 
 
-def find_files_without_license(
-    root_dir: Path, extensions: Set[str] = ALL_EXTENSIONS, include_special: bool = True
-) -> List[Path]:
+def find_files_without_license(root_dir: Path) -> List[Path]:
     """Find all files without Apache 2 license headers.
+
+    Uses an exclusion-based approach: checks all files except those with
+    excluded extensions or filenames.
 
     Args:
         root_dir: Root directory to search
-        extensions: Set of file extensions to check
-        include_special: Whether to include special files like Dockerfile and README (no extension)
+
+    Returns:
+        Sorted list of file paths without license headers
     """
     files_without_license = []
-
-    # Special files to check (by exact name, not extension)
-    SPECIAL_FILES = {"Dockerfile", "README"}
 
     for file_path in root_dir.rglob("*"):
         # Skip directories
         if file_path.is_dir():
             continue
 
-        # Check if file matches by extension or by special name
-        matches_extension = file_path.suffix in extensions
-        matches_special = include_special and file_path.name in SPECIAL_FILES
-
-        if not (matches_extension or matches_special):
-            continue
-
         # Skip if in excluded paths
         if should_skip_path(file_path):
+            continue
+
+        # Skip if extension is in exclusion list
+        if file_path.suffix in EXCLUDED_EXTENSIONS:
+            continue
+
+        # Skip if filename is in exclusion list
+        if file_path.name in EXCLUDED_FILENAMES:
+            continue
+
+        # Skip editor backup files (emacs, vim, etc.)
+        if (
+            file_path.name.startswith("#")
+            or file_path.name.endswith("~")
+            or file_path.name.endswith("#")
+        ):
+            continue
+
+        # Skip files without extensions that aren't special files
+        if (
+            not file_path.suffix
+            and not file_path.name.startswith("Dockerfile")
+            and file_path.name != "README"
+        ):
             continue
 
         # Check for license header
@@ -139,44 +233,13 @@ def main():
     # Get repository root (parent of scripts directory)
     repo_root = Path(__file__).parent.parent
 
-    # Allow specifying extensions via command line
-    if len(sys.argv) > 1:
-        extension_arg = sys.argv[1]
-        if extension_arg == "py":
-            extensions = PYTHON_EXTENSIONS
-        elif extension_arg == "md":
-            extensions = MARKDOWN_EXTENSIONS
-        elif extension_arg == "ipynb":
-            extensions = NOTEBOOK_EXTENSIONS
-        elif extension_arg == "sh":
-            extensions = SHELL_EXTENSIONS
-        elif extension_arg == "sql":
-            extensions = SQL_EXTENSIONS
-        elif extension_arg == "ts":
-            extensions = TYPESCRIPT_EXTENSIONS
-        elif extension_arg == "js":
-            extensions = JAVASCRIPT_EXTENSIONS
-        elif extension_arg == "special":
-            # Check only Dockerfile and README files
-            extensions = set()
-        else:
-            extensions = ALL_EXTENSIONS
-    else:
-        extensions = ALL_EXTENSIONS
-
-    # Only include special files (Dockerfile, README) if checking all or "special" type
-    include_special = len(sys.argv) <= 1 or (
-        len(sys.argv) > 1 and sys.argv[1] in ["special", "all"]
-    )
-
     print(f"Checking for Apache 2 license headers in {repo_root}")
-    if extensions:
-        print(f"Extensions: {', '.join(sorted(extensions))}")
-    if include_special:
-        print("Including: Dockerfile, README files")
+    print("Mode: Checking all files except excluded types")
+    print(f"Excluded extensions: {len(EXCLUDED_EXTENSIONS)} types")
+    print(f"Excluded filenames: {len(EXCLUDED_FILENAMES)} patterns")
     print()
 
-    files_without_license = find_files_without_license(repo_root, extensions, include_special)
+    files_without_license = find_files_without_license(repo_root)
 
     if not files_without_license:
         print("✓ All files have license headers!")

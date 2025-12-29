@@ -23,90 +23,62 @@ import sys
 from pathlib import Path
 from typing import List
 
-# TODO: Simplify this script if we add more file types. Since the license text
-# (including line breaks) stays the same, we really just need different comment
-# character insertion helpers based on file extension rather than duplicating
-# the full license text for each file type.
+# Base Apache 2 license text (without comment characters)
+# This is used by all formatters below to generate file-type-specific headers
+LICENSE_LINES = [
+    "Licensed to the Apache Software Foundation (ASF) under one",
+    "or more contributor license agreements.  See the NOTICE file",
+    "distributed with this work for additional information",
+    "regarding copyright ownership.  The ASF licenses this file",
+    "to you under the Apache License, Version 2.0 (the",
+    '"License"); you may not use this file except in compliance',
+    "with the License.  You may obtain a copy of the License at",
+    "",
+    "  http://www.apache.org/licenses/LICENSE-2.0",
+    "",
+    "Unless required by applicable law or agreed to in writing,",
+    "software distributed under the License is distributed on an",
+    '"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY',
+    "KIND, either express or implied.  See the License for the",
+    "specific language governing permissions and limitations",
+    "under the License.",
+]
 
-# Apache 2 license header for Python files
-PYTHON_LICENSE_HEADER = """# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements.  See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership.  The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License.  You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied.  See the License for the
-# specific language governing permissions and limitations
-# under the License.
 
-"""
+def format_hash_comment(lines: List[str]) -> str:
+    """Format license as # comments (for Python, Shell, etc.)."""
+    return "\n".join(f"# {line}" if line else "#" for line in lines) + "\n\n"
 
-# Apache 2 license header for Markdown files (using HTML comments)
-MARKDOWN_LICENSE_HEADER = """<!--
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
 
-  http://www.apache.org/licenses/LICENSE-2.0
+def format_dash_comment(lines: List[str]) -> str:
+    """Format license as -- comments (for SQL)."""
+    return "\n".join(f"-- {line}" if line else "--" for line in lines) + "\n\n"
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
--->
 
-"""
+def format_c_style_comment(lines: List[str]) -> str:
+    """Format license as /* */ comments (for TypeScript, JavaScript, etc.)."""
+    formatted_lines = ["/*"]
+    for line in lines:
+        formatted_lines.append(f" * {line}" if line else " *")
+    formatted_lines.append(" */")
+    return "\n".join(formatted_lines) + "\n\n"
 
-# Apache 2 license header text for Jupyter notebooks (as markdown cell content)
-NOTEBOOK_LICENSE_TEXT = """Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
 
-  http://www.apache.org/licenses/LICENSE-2.0
+def format_html_comment(lines: List[str]) -> str:
+    """Format license as HTML comments (for Markdown)."""
+    formatted_lines = ["<!--"]
+    formatted_lines.extend(lines)
+    formatted_lines.append("-->")
+    return "\n".join(formatted_lines) + "\n\n"
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License."""
 
-# Apache 2 license header for SQL files (using -- comments)
-SQL_LICENSE_HEADER = """-- Licensed to the Apache Software Foundation (ASF) under one
--- or more contributor license agreements.  See the NOTICE file
--- distributed with this work for additional information
--- regarding copyright ownership.  The ASF licenses this file
--- to you under the Apache License, Version 2.0 (the
--- "License"); you may not use this file except in compliance
--- with the License.  You may obtain a copy of the License at
---
---   http://www.apache.org/licenses/LICENSE-2.0
---
--- Unless required by applicable law or agreed to in writing,
--- software distributed under the License is distributed on an
--- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
--- KIND, either express or implied.  See the License for the
--- specific language governing permissions and limitations
--- under the License.
-
-"""
+# Pre-generate common license headers
+PYTHON_LICENSE_HEADER = format_hash_comment(LICENSE_LINES)
+SQL_LICENSE_HEADER = format_dash_comment(LICENSE_LINES)
+TYPESCRIPT_LICENSE_HEADER = format_c_style_comment(LICENSE_LINES)
+MARKDOWN_LICENSE_HEADER = format_html_comment(LICENSE_LINES)
+# For notebooks, we need just the plain text
+NOTEBOOK_LICENSE_TEXT = "\n".join(LICENSE_LINES)
 
 
 def add_license_to_python(content: str) -> str:
@@ -171,6 +143,11 @@ def add_license_to_sql(content: str) -> str:
     return SQL_LICENSE_HEADER + content
 
 
+def add_license_to_typescript(content: str) -> str:
+    """Add Apache 2 license header to TypeScript/JavaScript file content."""
+    return TYPESCRIPT_LICENSE_HEADER + content
+
+
 def add_license_header(file_path: Path, dry_run: bool = False) -> bool:
     """Add Apache 2 license header to a file.
 
@@ -209,7 +186,9 @@ def add_license_header(file_path: Path, dry_run: bool = False) -> bool:
             new_content = add_license_to_shell(content)
         elif file_path.suffix == ".sql":
             new_content = add_license_to_sql(content)
-        elif file_path.name == "Dockerfile":
+        elif file_path.suffix in {".ts", ".tsx", ".js", ".jsx"}:
+            new_content = add_license_to_typescript(content)
+        elif file_path.name == "Dockerfile" or file_path.name.startswith("Dockerfile."):
             # Dockerfiles use # comments like shell scripts
             new_content = add_license_to_shell(content)
         elif file_path.name == "README":
@@ -269,7 +248,6 @@ def main():
     files_to_update: List[Path] = []
     with open(list_file, "r") as f:
         for line in f:
-            original_line = line
             line = line.strip()
             # Skip header lines and empty lines
             if (
@@ -277,20 +255,15 @@ def main():
                 or line.startswith("Checking")
                 or line.startswith("Extensions")
                 or line.startswith("Found")
+                or line.startswith("Mode:")
+                or line.startswith("Excluded")
             ):
                 continue
-            # Skip lines that look like section headers (not starting with space and not a file path)
-            if (
-                not original_line.startswith(" ")
-                and not line.startswith("examples")
-                and not line.startswith("hamilton")
-                and "/" not in line
-            ):
-                continue
-            # Remove leading spaces
+            # Try to parse as a file path - if it exists, add it
+            # This is more robust than trying to guess if it's a header line
             file_path = line
             full_path = repo_root / file_path
-            if full_path.exists():
+            if full_path.exists() and full_path.is_file():
                 files_to_update.append(full_path)
 
     if not files_to_update:
