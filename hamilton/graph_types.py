@@ -70,7 +70,15 @@ def _remove_docs_and_comments(source: str) -> str:
         if not isinstance(n.body[0], ast.Expr):
             continue
 
-        if not hasattr(n.body[0], "value") or not isinstance(n.body[0].value, ast.Str):
+        # In Python 3.8+, string literals (including docstrings) are ast.Constant nodes
+        # ast.Str is deprecated and will be removed in Python 3.14
+        if not hasattr(n.body[0], "value"):
+            continue
+
+        value = n.body[0].value
+        is_docstring = isinstance(value, ast.Constant) and isinstance(value.value, str)
+
+        if not is_docstring:
             continue
 
         # skip docstring
