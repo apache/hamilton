@@ -18,6 +18,7 @@
 import base64
 import datetime
 import logging
+from datetime import UTC
 from typing import IO, Any, Dict, List, Optional, Union
 
 from hamilton.function_modifiers import config
@@ -178,7 +179,7 @@ def metadata(
         out.update(caption_metadata)
     if additional_metadata is not None:
         out.update(additional_metadata)
-    out.update({"execution_time": datetime.datetime.utcnow().isoformat()})
+    out.update({"execution_time": datetime.datetime.now(UTC).isoformat()})
     return out
 
 

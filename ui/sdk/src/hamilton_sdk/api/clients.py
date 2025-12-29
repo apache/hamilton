@@ -19,6 +19,7 @@ import abc
 import asyncio
 import atexit
 import datetime
+from datetime import UTC
 import functools
 import logging
 import queue
@@ -486,7 +487,7 @@ class BasicSynchronousHamiltonClient(HamiltonClient):
             headers=self._common_headers(),
             json=make_json_safe(
                 {
-                    "run_start_time": datetime.datetime.utcnow(),  # TODO -- ensure serializable
+                    "run_start_time": datetime.datetime.now(UTC),  # TODO -- ensure serializable
                     "tags": tags,
                     # TODO: make the following replace with summary stats if it's large data, e.g. dataframes.
                     "inputs": make_json_safe(inputs),  # TODO -- ensure serializable
@@ -533,7 +534,7 @@ class BasicSynchronousHamiltonClient(HamiltonClient):
         logger.debug(f"Logging end of DAG run {dag_run_id} with status {status}")
         response = requests.put(
             f"{self.base_url}/dag_runs/{dag_run_id}/",
-            json=make_json_safe({"run_status": status, "run_end_time": datetime.datetime.utcnow()}),
+            json=make_json_safe({"run_status": status, "run_end_time": datetime.datetime.now(UTC)}),
             headers=self._common_headers(),
             verify=self.verify,
         )
@@ -823,7 +824,7 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
                 f"{self.base_url}/dag_runs?dag_template_id={dag_template_id}",
                 json=make_json_safe(
                     {
-                        "run_start_time": datetime.datetime.utcnow(),  # TODO -- ensure serializable
+                        "run_start_time": datetime.datetime.now(UTC),  # TODO -- ensure serializable
                         "tags": tags,
                         # TODO: make the following replace with summary stats if it's large data, e.g. dataframes.
                         "inputs": make_json_safe(inputs),  # TODO -- ensure serializable
@@ -862,7 +863,7 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
     async def log_dag_run_end(self, dag_run_id: int, status: str):
         logger.debug(f"Logging end of DAG run {dag_run_id} with status {status}")
         url = f"{self.base_url}/dag_runs/{dag_run_id}/"
-        data = make_json_safe({"run_status": status, "run_end_time": datetime.datetime.utcnow()})
+        data = make_json_safe({"run_status": status, "run_end_time": datetime.datetime.now(UTC)})
         headers = self._common_headers()
         async with aiohttp.ClientSession() as session:
             async with session.put(url, json=data, headers=headers, ssl=self.ssl) as response:

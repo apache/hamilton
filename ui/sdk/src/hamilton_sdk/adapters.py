@@ -16,6 +16,7 @@
 # under the License.
 
 import datetime
+from datetime import UTC
 import hashlib
 import logging
 import os
@@ -368,7 +369,7 @@ class HamiltonTracker(
         dw_run_id = self.dw_run_ids[run_id]
         tracking_state = self.tracking_states[run_id]
         tracking_state.clock_end(status=Status.SUCCESS if success else Status.FAILURE)
-        finally_block_time = datetime.datetime.utcnow()
+        finally_block_time = datetime.datetime.now(UTC)
         if tracking_state.status != Status.SUCCESS:
             # TODO: figure out how to handle crtl+c stuff
             # -- we are at the mercy of Hamilton here.
@@ -644,7 +645,7 @@ class AsyncHamiltonTracker(
         dw_run_id = self.dw_run_ids[run_id]
         tracking_state = self.tracking_states[run_id]
         tracking_state.clock_end(status=Status.SUCCESS if success else Status.FAILURE)
-        finally_block_time = datetime.datetime.utcnow()
+        finally_block_time = datetime.datetime.now(UTC)
         if tracking_state.status != Status.SUCCESS:
             # TODO: figure out how to handle crtl+c stuff
             tracking_state.status = Status.FAILURE
