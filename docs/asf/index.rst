@@ -52,7 +52,7 @@ Once subscribed, send messages to users@hamilton.apache.org
 
 **Archives**
 
-`View past discussions <https://lists.apache.org/list.html?users@hamilton.apache.org>`_
+`View users list archives <https://lists.apache.org/list.html?users@hamilton.apache.org>`_
 
 Dev Mailing List
 ----------------
@@ -73,4 +73,4 @@ Once subscribed, send messages to dev@hamilton.apache.org
 
 **Archives**
 
-`View past discussions <https://lists.apache.org/list.html?dev@hamilton.apache.org>`_
+`View dev list archives <https://lists.apache.org/list.html?dev@hamilton.apache.org>`_
