@@ -36,6 +36,7 @@ GitHub <https://github.com/apache/hamilton>
 :hidden: True
 :caption: REFERENCE
 
+tryhamilton.dev <https://www.tryhamilton.dev/>
 reference/decorators/index
 reference/drivers/index
 reference/caching/index
