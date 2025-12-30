@@ -10,23 +10,19 @@ The [user guide](../concepts/index.rst) gives a complete overview of Apache Hami
 
 The [reference documentation](../reference/dataflows/index.rst) details Apache Hamilton's public API.
 
+## 🌐 Ecosystem & Integrations
+
+The [ecosystem page](../ecosystem/index.md) lists all built-in integrations (pandas, Polars, Spark, etc.) and external community resources. Find reusable dataflows, blog posts, and video tutorials there.
+
 ## ✍ tryhamilton.dev
 
 The [tryhamilton.dev](https://tryhamilton.dev) website provides interactive tutorials in-browser to learn specific Apache Hamilton concepts.
 
-## 🛠 Dataflow Hub
-
-The [Apache Hamilton Dataflow Hub](https://hub.dagworks.io/docs/) hosts user-created dataflows that are easy to download and reuse in your project.
-
-## 💡 Blog
-
-The [DAGWorks Blog](https://blog.dagworks.io/) publishes articles on problems Apache Hamilton helps solve, reference architectures, and new features.
-
 ## 👋 Slack
 The [Slack channel](https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g) is the ideal place to ask questions, request features, and give feedback.
 
-## 📣 Talks
-See [our youtube for the most up to date recordings](https://www.youtube.com/@DAGWorks-Inc/playlists) - we are slow to list them here.
+## 📣 Talks & Videos
+See the [ecosystem page](../ecosystem/index.md) for links to video content and conference talks.
 
 * 2024-02 &nbsp;&nbsp; Apache Hamilton Meet-up for February
     * [Recording](https://www.youtube.com/watch?v=ks672Lm0CJo.)
@@ -105,7 +101,8 @@ See [our youtube for the most up to date recordings](https://www.youtube.com/@DA
 
 
 ## 📰 External Blogs
-For the latest blog posts, see the [DAGWorks's Blog](https://blog.dagworks.io/).
+
+For external resources including blogs, see the [ecosystem page](../ecosystem/index.md). Here are some notable blog posts about Apache Hamilton:
 
 * 2024-03 &nbsp;&nbsp; [RAG: ingestion and chunking using Apache Hamilton and scaling to Ray, Dask, or PySpark](https://blog.dagworks.io/p/rag-ingestion-and-chunking-using)
 * 2024-02 &nbsp;&nbsp; [A command line tool to improve your development workflow](https://blog.dagworks.io/p/a-command-line-tool-to-improve-your)

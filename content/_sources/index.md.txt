@@ -24,16 +24,19 @@ PDF <https://hamilton.apache.org/_static/Hamilton.pdf>
 
 ```{toctree}
 :hidden: True
-:caption: Community
+:caption: COMMUNITY
 
 community/index
+ecosystem/index
 Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>
+GitHub <https://github.com/apache/hamilton>
 ```
 
 ```{toctree}
 :hidden: True
 :caption: REFERENCE
 
+tryhamilton.dev <https://www.tryhamilton.dev/>
 reference/decorators/index
 reference/drivers/index
 reference/caching/index
@@ -50,14 +53,4 @@ reference/disabling-telemetry.md
 :caption: ASF
 
 asf/index
-```
-
-```{toctree}
-:hidden: True
-:caption: EXTERNAL RESOURCES
-
-GitHub <https://github.com/apache/hamilton>
-tryhamilton.dev <https://www.tryhamilton.dev/>
-Dataflow Hub <https://hub.dagworks.io/docs/>
-Blog <https://blog.dagworks.io/>
 ```
