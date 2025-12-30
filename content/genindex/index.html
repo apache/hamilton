@@ -311,10 +311,12 @@
 <ul>
 <li class="toctree-l1"><a class="reference external" href="https://hamilton.apache.org/_static/Hamilton.pdf">PDF</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<p class="caption" role="heading"><span class="caption-text">COMMUNITY</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../community/">Meet-ups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ecosystem/">Ecosystem</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
 <ul>
@@ -408,6 +410,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../reference/result-builders/Pandas/">Pandas</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/result-builders/Polars/">Polars</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/result-builders/Dask/">Dask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/result-builders/PyArrow/">plugins.h_pyarrow.PyarrowTableResult</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../reference/result-builders/Custom/">Custom ResultBuilder</a></li>
 </ul>
 </li>
@@ -446,13 +449,6 @@
 <li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/policies/conduct.html">Code of Conduct</a></li>
 </ul>
 </li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">EXTERNAL RESOURCES</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://www.tryhamilton.dev/">tryhamilton.dev</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://hub.dagworks.io/docs/">Dataflow Hub</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://blog.dagworks.io/">Blog</a></li>
 </ul>
 
 </div>
@@ -707,6 +703,8 @@
 </li>
           <li><a href="../reference/result-builders/Polars/#hamilton.plugins.h_polars.PolarsDataFrameResult.build_result">(hamilton.plugins.h_polars.PolarsDataFrameResult method)</a>
 </li>
+          <li><a href="../reference/result-builders/PyArrow/#hamilton.plugins.h_pyarrow.PyarrowTableResult.build_result">(hamilton.plugins.h_pyarrow.PyarrowTableResult method)</a>
+</li>
           <li><a href="../reference/graph-adapters/PySparkUDFGraphAdapter/#hamilton.plugins.h_spark.PySparkUDFGraphAdapter.build_result">(hamilton.plugins.h_spark.PySparkUDFGraphAdapter method)</a>
 </li>
           <li><a href="../reference/graph-adapters/SparkKoalasGraphAdapter/#hamilton.plugins.h_spark.SparkKoalasGraphAdapter.build_result">(hamilton.plugins.h_spark.SparkKoalasGraphAdapter method)</a>
@@ -918,6 +916,8 @@
           <li><a href="../reference/graph-adapters/DaskGraphAdapter/#hamilton.plugins.h_dask.DaskGraphAdapter.do_build_result">(hamilton.plugins.h_dask.DaskGraphAdapter method)</a>
 </li>
           <li><a href="../reference/lifecycle-hooks/Narwhals/#hamilton.plugins.h_narwhals.NarwhalsDataFrameResultBuilder.do_build_result">(hamilton.plugins.h_narwhals.NarwhalsDataFrameResultBuilder method)</a>
+</li>
+          <li><a href="../reference/result-builders/PyArrow/#hamilton.plugins.h_pyarrow.PyarrowTableResult.do_build_result">(hamilton.plugins.h_pyarrow.PyarrowTableResult method)</a>
 </li>
           <li><a href="../reference/graph-adapters/RayGraphAdapter/#hamilton.plugins.h_ray.RayGraphAdapter.do_build_result">(hamilton.plugins.h_ray.RayGraphAdapter method)</a>
 </li>
@@ -1284,6 +1284,8 @@
 </li>
           <li><a href="../reference/lifecycle-hooks/Narwhals/#hamilton.plugins.h_narwhals.NarwhalsDataFrameResultBuilder.input_types">(hamilton.plugins.h_narwhals.NarwhalsDataFrameResultBuilder method)</a>
 </li>
+          <li><a href="../reference/result-builders/PyArrow/#hamilton.plugins.h_pyarrow.PyarrowTableResult.input_types">(hamilton.plugins.h_pyarrow.PyarrowTableResult method)</a>
+</li>
           <li><a href="../reference/graph-adapters/SparkKoalasGraphAdapter/#hamilton.plugins.h_spark.SparkKoalasGraphAdapter.input_types">(hamilton.plugins.h_spark.SparkKoalasGraphAdapter method)</a>
 </li>
           <li><a href="../reference/graph-adapters/ThreadPoolFutureAdapter/#hamilton.plugins.h_threadpool.FutureAdapter.input_types">(hamilton.plugins.h_threadpool.FutureAdapter method)</a>
@@ -1432,6 +1434,8 @@
           <li><a href="../reference/graph-adapters/DaskGraphAdapter/#hamilton.plugins.h_dask.DaskGraphAdapter.output_type">(hamilton.plugins.h_dask.DaskGraphAdapter method)</a>
 </li>
           <li><a href="../reference/lifecycle-hooks/Narwhals/#hamilton.plugins.h_narwhals.NarwhalsDataFrameResultBuilder.output_type">(hamilton.plugins.h_narwhals.NarwhalsDataFrameResultBuilder method)</a>
+</li>
+          <li><a href="../reference/result-builders/PyArrow/#hamilton.plugins.h_pyarrow.PyarrowTableResult.output_type">(hamilton.plugins.h_pyarrow.PyarrowTableResult method)</a>
 </li>
           <li><a href="../reference/graph-adapters/SparkKoalasGraphAdapter/#hamilton.plugins.h_spark.SparkKoalasGraphAdapter.output_type">(hamilton.plugins.h_spark.SparkKoalasGraphAdapter method)</a>
 </li>
@@ -1619,6 +1623,8 @@
         <li><a href="../reference/lifecycle-hooks/ProgressBar/#hamilton.plugins.h_tqdm.ProgressBar">ProgressBar (class in hamilton.plugins.h_tqdm)</a>
 </li>
         <li><a href="../reference/dataflows/pull_module/#hamilton.dataflows.pull_module">pull_module() (in module hamilton.dataflows)</a>
+</li>
+        <li><a href="../reference/result-builders/PyArrow/#hamilton.plugins.h_pyarrow.PyarrowTableResult">PyarrowTableResult (class in hamilton.plugins.h_pyarrow)</a>
 </li>
         <li><a href="../reference/graph-adapters/PySparkUDFGraphAdapter/#hamilton.plugins.h_spark.PySparkUDFGraphAdapter">PySparkUDFGraphAdapter (class in hamilton.plugins.h_spark)</a>
 </li>

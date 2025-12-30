@@ -313,10 +313,12 @@
 <ul>
 <li class="toctree-l1"><a class="reference external" href="https://hamilton.apache.org/_static/Hamilton.pdf">PDF</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Community</span></p>
+<p class="caption" role="heading"><span class="caption-text">COMMUNITY</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../community/">Meet-ups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ecosystem/">Ecosystem</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
 <ul class="current">
@@ -410,6 +412,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../result-builders/Pandas/">Pandas</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../result-builders/Polars/">Polars</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../result-builders/Dask/">Dask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../result-builders/PyArrow/">plugins.h_pyarrow.PyarrowTableResult</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../result-builders/Custom/">Custom ResultBuilder</a></li>
 </ul>
 </li>
@@ -448,13 +451,6 @@
 <li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/policies/conduct.html">Code of Conduct</a></li>
 </ul>
 </li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">EXTERNAL RESOURCES</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://www.tryhamilton.dev/">tryhamilton.dev</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://hub.dagworks.io/docs/">Dataflow Hub</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://blog.dagworks.io/">Blog</a></li>
 </ul>
 
 </div>
@@ -590,7 +586,7 @@ source<code class="docutils literal notranslate"><span class="pre">Union</span><
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L509-L540">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L503-L534">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-odd"><td>json</td>
 <td><dl class="field-list">
@@ -690,7 +686,7 @@ file<code class="docutils literal notranslate"><span class="pre">Union</span></c
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L78-L184">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L72-L178">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-even"><td>csv</td>
 <td><dl class="field-list">
@@ -727,7 +723,7 @@ file<code class="docutils literal notranslate"><span class="pre">Union</span></c
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L249-L310">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L243-L304">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-even"><td>parquet</td>
 <td><dl class="field-list">
@@ -799,7 +795,7 @@ source<code class="docutils literal notranslate"><span class="pre">Union</span><
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L360-L410">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L354-L404">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-even"><td>feather</td>
 <td><dl class="field-list">
@@ -862,7 +858,7 @@ file<code class="docutils literal notranslate"><span class="pre">Union</span></c
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L444-L475">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L438-L469">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-odd"><td>database</td>
 <td><dl class="field-list">
@@ -871,7 +867,7 @@ query<code class="docutils literal notranslate"><span class="pre">str</span></co
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L726-L771">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L720-L765">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-even"><td>spreadsheet</td>
 <td><dl class="field-list">
@@ -880,7 +876,7 @@ source<code class="docutils literal notranslate"><span class="pre">Union</span><
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L567-L614">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L561-L608">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-odd"><td>dlt</td>
 <td><dl class="field-list">
@@ -941,7 +937,7 @@ file<code class="docutils literal notranslate"><span class="pre">Union</span></c
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/><code class="docutils literal notranslate"><span class="pre">LazyFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L542-L565">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L536-L559">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-odd"><td>json</td>
 <td><dl class="field-list">
@@ -1050,7 +1046,7 @@ file<code class="docutils literal notranslate"><span class="pre">Union</span></c
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/><code class="docutils literal notranslate"><span class="pre">LazyFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L186-L247">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L180-L241">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-odd"><td>parquet</td>
 <td><dl class="field-list">
@@ -1068,7 +1064,7 @@ file<code class="docutils literal notranslate"><span class="pre">Union</span></c
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/><code class="docutils literal notranslate"><span class="pre">LazyFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L312-L358">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L306-L352">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-odd"><td>sql</td>
 <td><dl class="field-list">
@@ -1122,7 +1118,7 @@ file<code class="docutils literal notranslate"><span class="pre">Union=None</spa
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/><code class="docutils literal notranslate"><span class="pre">LazyFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L412-L442">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L406-L436">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-odd"><td>orc</td>
 <td><dl class="field-list">
@@ -1149,7 +1145,7 @@ file<code class="docutils literal notranslate"><span class="pre">Union</span></c
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/><code class="docutils literal notranslate"><span class="pre">LazyFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L477-L507">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L471-L501">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-even"><td>database</td>
 <td><dl class="field-list">
@@ -1158,7 +1154,7 @@ table_name<code class="docutils literal notranslate"><span class="pre">str</span
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/><code class="docutils literal notranslate"><span class="pre">LazyFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L773-L810">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L767-L804">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-odd"><td>spreadsheet</td>
 <td><dl class="field-list">
@@ -1167,7 +1163,7 @@ workbook<code class="docutils literal notranslate"><span class="pre">Union</span
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/><code class="docutils literal notranslate"><span class="pre">LazyFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L616-L724">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L610-L718">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
 <tr class="row-even"><td>png</td>
 <td><dl class="field-list">

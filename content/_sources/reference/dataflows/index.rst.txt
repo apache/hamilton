@@ -3,8 +3,8 @@ Dataflows
 ==============
 
 Here lies reference documentation for `dataflows` module functions that
-integrate with the `hub.dagworks.io <https://hub.dagworks.io>`_ so you can pull off-the-shelf dataflows
-and get started quickly with Apache Hamilton.
+enable you to discover and use community-contributed dataflows. See the `ecosystem page <../../ecosystem/index.html>`_
+for available dataflow resources.
 
 Reference
 ---------
