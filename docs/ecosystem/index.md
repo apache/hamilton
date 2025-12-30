@@ -186,9 +186,14 @@ If you've created a plugin or integration for Apache Hamilton, we'd love to incl
 
 ### Support & Questions
 
-- 💬 [Slack Community](https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g)
-- 🐛 [GitHub Issues](https://github.com/apache/hamilton/issues)
-- 📖 [Documentation](https://hamilton.apache.org)
+- 💬 [Slack Community](https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g) - Real-time chat and community support
+- 🐛 [GitHub Issues](https://github.com/apache/hamilton/issues) - Bug reports and feature requests
+- 📖 [Documentation](https://hamilton.apache.org) - Comprehensive guides and API reference
+- 📧 **Mailing List** - Join the Apache Hamilton users mailing list for discussions and announcements
+  - **How to Subscribe**: Send an empty email to [users-subscribe@hamilton.apache.org](mailto:users-subscribe@hamilton.apache.org). Use a subject line like "subscribe" to avoid spam filters. Await a confirmation message and follow the instructions to complete the process.
+  - **How to Unsubscribe**: Send an empty message to [users-unsubscribe@hamilton.apache.org](mailto:users-unsubscribe@hamilton.apache.org) from the same email address used to subscribe.
+  - **How to Post**: Once subscribed, post messages to [users@hamilton.apache.org](mailto:users@hamilton.apache.org)
+  - **Archives**: [View past discussions](https://lists.apache.org/list.html?users@hamilton.apache.org)
 
 ---
 
