@@ -55,7 +55,7 @@ from polars.datatypes import DataType, DataTypeClass  # noqa: F401
 
 from hamilton import registry
 from hamilton.io import utils
-from hamilton.io.data_adapters import DataLoader
+from hamilton.io.data_adapters import DataLoader, DataSaver
 
 DATAFRAME_TYPE = pl.LazyFrame
 COLUMN_TYPE = pl.Expr
@@ -297,13 +297,13 @@ class PolarsScanFeatherReader(DataLoader):
         return "feather"
 
 
-
 @dataclasses.dataclass
-class PolarsSinkParquetWriter(DataLoader):
+class PolarsSinkParquetWriter(DataSaver):
     """
     Class specifically to handle writing parquet files with Polars LazyFrame.
     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_parquet.html
     """
+
     path: Union[str, Path]
     # kwargs:
     compression: str = "zstd"
@@ -311,11 +311,11 @@ class PolarsSinkParquetWriter(DataLoader):
     statistics: bool = False
     row_group_size: Optional[int] = None
     data_page_size: Optional[int] = None
-    
+
     @classmethod
     def applicable_types(cls) -> Collection[Type]:
         return [DATAFRAME_TYPE]
-    
+
     def _get_writing_kwargs(self):
         kwargs = {}
         if self.compression is not None:
@@ -329,23 +329,24 @@ class PolarsSinkParquetWriter(DataLoader):
         if self.data_page_size is not None:
             kwargs["data_page_size"] = self.data_page_size
         return kwargs
-    
+
     def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
         data.sink_parquet(self.path, **self._get_writing_kwargs())
         metadata = utils.get_file_metadata(self.path)
         return metadata
-    
+
     @classmethod
     def name(cls) -> str:
         return "parquet"
 
 
 @dataclasses.dataclass
-class PolarsSinkCSVWriter(DataLoader):
+class PolarsSinkCSVWriter(DataSaver):
     """
     Class specifically to handle writing CSV files with Polars LazyFrame.
     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_csv.html
     """
+
     path: Union[str, Path]
     # kwargs:
     include_bom: bool = False
@@ -360,11 +361,11 @@ class PolarsSinkCSVWriter(DataLoader):
     float_precision: Optional[int] = None
     null_value: Optional[str] = None
     quote_style: Optional[str] = None
-    
+
     @classmethod
     def applicable_types(cls) -> Collection[Type]:
         return [DATAFRAME_TYPE]
-    
+
     def _get_writing_kwargs(self):
         kwargs = {}
         if self.include_bom is not None:
@@ -392,69 +393,70 @@ class PolarsSinkCSVWriter(DataLoader):
         if self.quote_style is not None:
             kwargs["quote_style"] = self.quote_style
         return kwargs
-    
+
     def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
         data.sink_csv(self.path, **self._get_writing_kwargs())
         metadata = utils.get_file_metadata(self.path)
         return metadata
-    
+
     @classmethod
     def name(cls) -> str:
         return "csv"
 
 
 @dataclasses.dataclass
-class PolarsSinkIPCWriter(DataLoader):
+class PolarsSinkIPCWriter(DataSaver):
     """
     Class specifically to handle writing IPC/Feather files with Polars LazyFrame.
     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_ipc.html
     """
+
     path: Union[str, Path]
     # kwargs:
     compression: Optional[str] = "zstd"
-    
+
     @classmethod
     def applicable_types(cls) -> Collection[Type]:
         return [DATAFRAME_TYPE]
-    
+
     def _get_writing_kwargs(self):
         kwargs = {}
         if self.compression is not None:
             kwargs["compression"] = self.compression
         return kwargs
-    
+
     def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
         data.sink_ipc(self.path, **self._get_writing_kwargs())
         metadata = utils.get_file_metadata(self.path)
         return metadata
-    
+
     @classmethod
     def name(cls) -> str:
         return "ipc"
 
 
 @dataclasses.dataclass
-class PolarsSinkNDJSONWriter(DataLoader):
+class PolarsSinkNDJSONWriter(DataSaver):
     """
     Class specifically to handle writing NDJSON files with Polars LazyFrame.
     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_ndjson.html
     Note: Load support for NDJSON is not yet implemented.
     """
+
     path: Union[str, Path]
-    
+
     @classmethod
     def applicable_types(cls) -> Collection[Type]:
         return [DATAFRAME_TYPE]
-    
+
     def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
         data.sink_ndjson(self.path)
         metadata = utils.get_file_metadata(self.path)
         return metadata
-    
+
     @classmethod
     def name(cls) -> str:
         return "ndjson"
-
 
 
 def register_data_loaders():

@@ -27,6 +27,10 @@ from hamilton.plugins.polars_lazyframe_extensions import (
     PolarsScanCSVReader,
     PolarsScanFeatherReader,
     PolarsScanParquetReader,
+    PolarsSinkCSVWriter,
+    PolarsSinkIPCWriter,
+    PolarsSinkNDJSONWriter,
+    PolarsSinkParquetWriter,
 )
 from hamilton.plugins.polars_post_1_0_0_extensions import (
     PolarsAvroReader,
@@ -193,3 +197,75 @@ def test_polars_spreadsheet(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
     assert write_kwargs["include_header"] is True
     assert "raise_if_empty" in read_kwargs
     assert read_kwargs["raise_if_empty"] is True
+
+
+def test_polars_sink_parquet(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
+    file = tmp_path / "test_sink.parquet"
+
+    writer = PolarsSinkParquetWriter(path=file)
+    kwargs = writer._get_writing_kwargs()
+    metadata = writer.save_data(df)
+
+    # Read back the data to verify it was written correctly
+    reader = PolarsScanParquetReader(file=file)
+    df2, _ = reader.load_data(pl.LazyFrame)
+
+    assert PolarsSinkParquetWriter.applicable_types() == [pl.LazyFrame]
+    assert kwargs["compression"] == "zstd"
+    assert kwargs["statistics"] is False
+    assert file.exists()
+    assert metadata["file_metadata"]["path"] == str(file)
+    assert_frame_equal(df.collect(), df2.collect())
+
+
+def test_polars_sink_csv(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
+    file = tmp_path / "test_sink.csv"
+
+    writer = PolarsSinkCSVWriter(path=file)
+    kwargs = writer._get_writing_kwargs()
+    metadata = writer.save_data(df)
+
+    # Read back the data to verify it was written correctly
+    reader = PolarsScanCSVReader(file=file)
+    df2, _ = reader.load_data(pl.LazyFrame)
+
+    assert PolarsSinkCSVWriter.applicable_types() == [pl.LazyFrame]
+    assert kwargs["separator"] == ","
+    assert kwargs["include_header"] is True
+    assert kwargs["batch_size"] == 1024
+    assert file.exists()
+    assert metadata["file_metadata"]["path"] == str(file)
+    assert_frame_equal(df.collect(), df2.collect())
+
+
+def test_polars_sink_ipc(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
+    file = tmp_path / "test_sink.ipc"
+
+    writer = PolarsSinkIPCWriter(path=file)
+    kwargs = writer._get_writing_kwargs()
+    metadata = writer.save_data(df)
+
+    # Read back the data to verify it was written correctly
+    reader = PolarsScanFeatherReader(source=file)
+    df2, _ = reader.load_data(pl.LazyFrame)
+
+    assert PolarsSinkIPCWriter.applicable_types() == [pl.LazyFrame]
+    assert kwargs["compression"] == "zstd"
+    assert file.exists()
+    assert metadata["file_metadata"]["path"] == str(file)
+    assert_frame_equal(df.collect(), df2.collect())
+
+
+def test_polars_sink_ndjson(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
+    file = tmp_path / "test_sink.ndjson"
+
+    writer = PolarsSinkNDJSONWriter(path=file)
+    metadata = writer.save_data(df)
+
+    # Read back the data to verify it was written correctly
+    df2 = pl.read_ndjson(file)
+
+    assert PolarsSinkNDJSONWriter.applicable_types() == [pl.LazyFrame]
+    assert file.exists()
+    assert metadata["file_metadata"]["path"] == str(file)
+    assert_frame_equal(df.collect(), df2)
