@@ -565,6 +565,64 @@ class PolarsJSONWriter(DataSaver):
 
 
 @dataclasses.dataclass
+class PolarsNDJSONReader(DataLoader):
+    """
+    Class specifically to handle loading NDJSON (newline-delimited JSON) files with Polars.
+    Should map to https://docs.pola.rs/api/python/stable/reference/api/polars.read_ndjson.html
+    """
+
+    source: Union[str, Path, IOBase, bytes]
+    schema: SchemaDefinition = None
+    schema_overrides: SchemaDefinition = None
+
+    @classmethod
+    def applicable_types(cls) -> Collection[Type]:
+        return [DATAFRAME_TYPE]
+
+    def _get_loading_kwargs(self):
+        kwargs = {}
+        if self.schema is not None:
+            kwargs["schema"] = self.schema
+        if self.schema_overrides is not None:
+            kwargs["schema_overrides"] = self.schema_overrides
+        return kwargs
+
+    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+        df = pl.read_ndjson(self.source, **self._get_loading_kwargs())
+        metadata = utils.get_file_metadata(self.source)
+        return df, metadata
+
+    @classmethod
+    def name(cls) -> str:
+        return "ndjson"
+
+
+@dataclasses.dataclass
+class PolarsNDJSONWriter(DataSaver):
+    """
+    Class specifically to handle saving NDJSON (newline-delimited JSON) files with Polars.
+    Should map to https://docs.pola.rs/api/python/stable/reference/api/polars.DataFrame.write_ndjson.html
+    """
+
+    file: Union[IOBase, str, Path]
+
+    @classmethod
+    def applicable_types(cls) -> Collection[Type]:
+        return [DATAFRAME_TYPE, pl.LazyFrame]
+
+    def save_data(self, data: Union[DATAFRAME_TYPE, pl.LazyFrame]) -> Dict[str, Any]:
+        if isinstance(data, pl.LazyFrame):
+            data = data.collect()
+
+        data.write_ndjson(self.file)
+        return utils.get_file_and_dataframe_metadata(self.file, data)
+
+    @classmethod
+    def name(cls) -> str:
+        return "ndjson"
+
+
+@dataclasses.dataclass
 class PolarsSpreadsheetReader(DataLoader):
     """
     Class specifically to handle loading Spreadsheet files with Polars.
@@ -822,6 +880,8 @@ def register_data_loaders():
         PolarsAvroWriter,
         PolarsJSONReader,
         PolarsJSONWriter,
+        PolarsNDJSONReader,
+        PolarsNDJSONWriter,
         PolarsDatabaseReader,
         PolarsDatabaseWriter,
         PolarsSpreadsheetReader,

@@ -37,6 +37,8 @@ from hamilton.plugins.polars_post_1_0_0_extensions import (
     PolarsFeatherWriter,
     PolarsJSONReader,
     PolarsJSONWriter,
+    PolarsNDJSONReader,
+    PolarsNDJSONWriter,
     PolarsParquetWriter,
     PolarsSpreadsheetReader,
     PolarsSpreadsheetWriter,
@@ -140,6 +142,22 @@ def test_polars_json(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
 
     assert PolarsJSONWriter.applicable_types() == [pl.DataFrame, pl.LazyFrame]
     assert PolarsJSONReader.applicable_types() == [pl.DataFrame]
+    assert df2.shape == (2, 2)
+    assert "schema" not in kwargs2
+    assert_frame_equal(df.collect(), df2)
+
+
+def test_polars_ndjson(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
+    file = tmp_path / "test.ndjson"
+    writer = PolarsNDJSONWriter(file=file)
+    writer.save_data(df)
+
+    reader = PolarsNDJSONReader(source=file)
+    kwargs2 = reader._get_loading_kwargs()
+    df2, metadata = reader.load_data(pl.DataFrame)
+
+    assert PolarsNDJSONWriter.applicable_types() == [pl.DataFrame, pl.LazyFrame]
+    assert PolarsNDJSONReader.applicable_types() == [pl.DataFrame]
     assert df2.shape == (2, 2)
     assert "schema" not in kwargs2
     assert_frame_equal(df.collect(), df2)
