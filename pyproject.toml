@@ -93,10 +93,9 @@ dev = [
   "ruff==0.5.7", # this should match `.pre-commit-config.yaml`
 ]
 test = [
-  "connectorx<=0.3.2; python_version=='3.8'",
-  "connectorx; python_version!='3.8'",
+  "connectorx",
   "dask[complete]",
-  "dask-expr>=1.1.14; python_version >= '3.10'", # Bugfix only available after py3.10 https://github.com/dask/dask-expr/pull/1150
+  "dask-expr>=1.1.14",
   "datasets>=2.18.0", # huggingface datasets -- https://github.com/huggingface/datasets/issues/6737#issuecomment-2107336816
   "diskcache",
   "dlt",
@@ -117,15 +116,13 @@ test = [
   "polars",
   "pyarrow",
   "pydantic >=2.0",
-  "pyreadstat<1.2.8; python_version <= '3.9'", # for SPSS data loader
-  "pyreadstat; python_version > '3.9'", # for SPSS data loader
+  "pyreadstat", # for SPSS data loader
   "pytest",
   "pytest-asyncio",
   "pytest-cov",
   "PyYAML",
   "scikit-learn",
-  "sqlalchemy==1.4.49; python_version == '3.7.*'",
-  "sqlalchemy; python_version >= '3.8'",
+  "sqlalchemy",
   "typer",
   "xgboost",
   "xlsx2csv", # for excel data loader
@@ -135,7 +132,7 @@ docs = [
   {include-group = "dev"},
   "alabaster>=0.7,<0.8,!=0.7.5", # read the docs pins
   "commonmark==0.9.1", # read the docs pins
-  "dask-expr>=1.1.14; python_version >= '3.10'", # Bugfix only available after py3.10 https://github.com/dask/dask-expr/pull/1150
+  "dask-expr>=1.1.14",
   "dask[distributed]",
   "ddtrace<3.0",
   "diskcache",
@@ -200,7 +197,7 @@ slack = "https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8
 
 [tool.ruff]
 line-length = 100
-target-version = "py38"  # Must include only the earliest supported version
+target-version = "py310"  # Must include only the earliest supported version
 
 [tool.ruff.format]
 docstring-code-format = false

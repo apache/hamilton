@@ -79,15 +79,6 @@ jobs:
 
 
         - name: Test integrations
-          if: ${{ matrix.python-version == '3.9' }}
-          run: |
-            uv sync --group test --extra pandera
-            uv pip install -r tests/integrations/pandera/requirements.txt
-            uv pip install dask-expr
-            uv run pytest tests/integrations
-
-        - name: Test integrations
-          if: ${{ matrix.python-version != '3.9' }}
           run: |
             uv sync --group test --extra pandera
             uv pip install -r tests/integrations/pandera/requirements.txt
@@ -111,15 +102,11 @@ jobs:
             uv run pytest plugin_tests/h_narwhals
 
         - name: Test dask
-          # Dask supports >= py3.9
-          if: ${{ matrix.python-version != '3.8' }}
           run: |
             uv sync --group test --extra dask
             uv run pytest plugin_tests/h_dask
 
         - name: Test ray
-          # Ray supports >= py3.9
-          if: ${{ matrix.python-version != '3.8' }}
           env:
             RAY_ENABLE_UV_RUN_RUNTIME_ENV: 0 # https://github.com/ray-project/ray/issues/53848
           run: |
@@ -127,8 +114,7 @@ jobs:
             uv run pytest plugin_tests/h_ray
 
         - name: Test pyspark
-          # Spark supports >= py3.9
-          if: ${{ matrix.python-version != '3.8' && runner.os == 'Linux' }}
+          if: ${{ runner.os == 'Linux' }}
           env:
             PYSPARK_SUBMIT_ARGS: "--conf spark.sql.ansi.enabled=false pyspark-shell"
           run: |
@@ -139,8 +125,7 @@ jobs:
             uv run pytest plugin_tests/h_spark
 
         - name: Test pyspark
-          # Spark supports >= py3.9
-          if: ${{ matrix.python-version != '3.8' && runner.os != 'Linux' }}
+          if: ${{ runner.os != 'Linux' }}
           env:
             PYSPARK_SUBMIT_ARGS: "--conf spark.sql.ansi.enabled=false pyspark-shell"
           run: |
@@ -151,7 +136,7 @@ jobs:
 
         - name: Test vaex
           # Vaex supports <= py3.10 and numpy<2
-          if: ${{ runner.os == 'Linux' && (matrix.python-version == '3.8' || matrix.python-version == '3.9' || matrix.python-version == '3.10') }}
+          if: ${{ runner.os == 'Linux' && matrix.python-version == '3.10' }}
           run: |
             sudo apt-get install --no-install-recommends --yes libpcre3-dev cargo
             uv sync --group test --extra vaex
@@ -160,7 +145,7 @@ jobs:
 
         - name: Test vaex
           # Vaex supports <= py3.10 and numpy<2
-          if: ${{ runner.os != 'Linux' && (matrix.python-version == '3.8' || matrix.python-version == '3.9' || matrix.python-version == '3.10') }}
+          if: ${{ runner.os != 'Linux' && matrix.python-version == '3.10' }}
           run: |
             uv sync --group test --extra vaex
             uv pip install "numpy<2"

@@ -121,7 +121,7 @@ The following values for `TASK` are recognized:
 Choose a Python version and task.
 
 ```shell
-PYTHON_VERSION='3.8'
+PYTHON_VERSION='3.10'
 TASK=tests
 ```
 
