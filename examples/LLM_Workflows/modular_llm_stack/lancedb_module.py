@@ -68,7 +68,9 @@ def data_objects(
     assert len(ids) == len(titles) == len(text_contents) == len(embeddings)
     return [
         dict(squad_id=id_, title=title, context=context, vector=embedding, **metadata)
-        for id_, title, context, embedding in zip(ids, titles, text_contents, embeddings)
+        for id_, title, context, embedding in zip(
+            ids, titles, text_contents, embeddings, strict=False
+        )
     ]
 
 

@@ -105,7 +105,7 @@ def fetch_articles(url, cutoff_date):
             None,
         ),
     ]
-    for _i, (anchor, time_el) in enumerate(zip(anchors, timeEls)):
+    for _i, (anchor, time_el) in enumerate(zip(anchors, timeEls, strict=False)):
         link = anchor["href"]
         text = anchor.get_text()
 

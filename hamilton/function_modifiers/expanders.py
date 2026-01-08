@@ -1065,7 +1065,9 @@ class unpack_fields(base.SingleNodeNodeTransformer):
 
         output_nodes = [node_.copy_with(callabl=tuple_generator)]
 
-        for idx, (field_name, field_type) in enumerate(zip(self.fields, self.field_types)):
+        for idx, (field_name, field_type) in enumerate(
+            zip(self.fields, self.field_types, strict=False)
+        ):
 
             def extractor(field_index: int = idx, **kwargs) -> field_type:  # type: ignore
                 # This extractor is constructed to avoid closure issues.

@@ -58,7 +58,7 @@ def data_objects(
     assert len(ids) == len(titles) == len(text_contents)
     return [
         dict(_id=id, title=title, Description=text_content)
-        for id, title, text_content in zip(ids, titles, text_contents)
+        for id, title, text_content in zip(ids, titles, text_contents, strict=False)
         if id is not None and title is not None or text_content is not None
     ]
 

@@ -133,7 +133,8 @@ def raw_probabilities(raw_data: str) -> pd.DataFrame:
     days = [int(item.split(", ")[1].split()[0]) for item in raw_data]
     probability = [float(item.split()[5].replace("%", "")) / 100 for item in raw_data]
     probabilities_data = [
-        (week * 7 + day, probability) for week, day, probability in zip(weeks, days, probability)
+        (week * 7 + day, probability)
+        for week, day, probability in zip(weeks, days, probability, strict=False)
     ]
     probabilities_df = pd.DataFrame(probabilities_data)
     probabilities_df.columns = ["days", "probability"]

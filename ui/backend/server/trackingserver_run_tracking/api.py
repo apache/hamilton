@@ -426,7 +426,7 @@ async def get_latest_template_runs(
     return CatalogZoomResponse(
         node_runs=[
             NodeRunOutWithExtraData.from_orm(node_run, dag_template_id=dag_template_id)
-            for (node_run, dag_template_id) in zip(node_runs, all_dag_versions)
+            for (node_run, dag_template_id) in zip(node_runs, all_dag_versions, strict=False)
         ],
         node_templates=[
             NodeTemplateOut.from_orm(node_template) for node_template in node_templates

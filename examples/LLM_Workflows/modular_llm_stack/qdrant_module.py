@@ -59,7 +59,7 @@ def data_objects(
     ids = list(range(len(ids)))
     payloads = [
         dict(id=_id, text_content=text_content, title=title, **metadata)
-        for _id, title, text_content in zip(ids, titles, text_contents)
+        for _id, title, text_content in zip(ids, titles, text_contents, strict=False)
     ]
     embeddings = [x.tolist() for x in embeddings]
     return dict(ids=ids, vectors=embeddings, payload=payloads)

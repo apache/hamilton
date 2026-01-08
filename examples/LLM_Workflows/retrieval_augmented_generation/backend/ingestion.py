@@ -212,7 +212,9 @@ def store_documents(
                 uuid=document_uuid,
             )
 
-            chunk_iterator = zip(pdf_obj["chunked_text"], pdf_obj["chunked_embeddings"])
+            chunk_iterator = zip(
+                pdf_obj["chunked_text"], pdf_obj["chunked_embeddings"], strict=False
+            )
             for chunk_idx, (chunk_text, chunk_embedding) in enumerate(chunk_iterator):
                 chunk_object = dict(content=chunk_text, chunk_index=chunk_idx)
                 chunk_uuid = generate_uuid5(chunk_object, "Chunk")

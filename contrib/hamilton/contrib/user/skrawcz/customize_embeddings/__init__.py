@@ -409,7 +409,7 @@ def _accuracy_and_se(
         threshold = threshold_thousandths / 1000
         total = 0
         correct = 0
-        for cs, ls in zip(cosine_similarity, labeled_similarity):
+        for cs, ls in zip(cosine_similarity, labeled_similarity, strict=False):
             total += 1
             if cs > threshold:
                 prediction = 1

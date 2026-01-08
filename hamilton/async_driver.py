@@ -38,7 +38,7 @@ async def await_dict_of_tasks(task_dict: Dict[str, typing.Awaitable]) -> Dict[st
     keys = sorted(task_dict.keys())
     coroutines = [task_dict[key] for key in keys]
     coroutines_gathered = await asyncio.gather(*coroutines)
-    return dict(zip(keys, coroutines_gathered))
+    return dict(zip(keys, coroutines_gathered, strict=False))
 
 
 async def process_value(val: Any) -> Any:

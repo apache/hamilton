@@ -67,11 +67,11 @@ def _convert_params_from_df(parameterization: pd.DataFrame) -> List[Parameterize
     for _, column_set in parameterization.iterrows():
         parameterization = {
             arg: dep_type(col_value)
-            for arg, col_value, dep_type in zip(args, column_set, dep_types_converted)
+            for arg, col_value, dep_type in zip(args, column_set, dep_types_converted, strict=False)
             if dep_type is not None
         }
         extracted_columns = [
-            col for col, dep_type in zip(column_set, dep_types) if dep_type == "out"
+            col for col, dep_type in zip(column_set, dep_types, strict=False) if dep_type == "out"
         ]
         out.append(ParameterizedExtract(tuple(extracted_columns), parameterization))
     return out

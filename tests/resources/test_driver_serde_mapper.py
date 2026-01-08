@@ -27,7 +27,7 @@ def mapper(
 ) -> Parallelizable[dict]:
     if final_vars is None:
         final_vars = []
-    for dr, input_ in zip(drivers, inputs):
+    for dr, input_ in zip(drivers, inputs, strict=False):
         yield {
             "dr": dr,
             "final_vars": final_vars or dr.list_available_variables(),

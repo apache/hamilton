@@ -61,6 +61,7 @@ def extract_schema_facet(metadata):
             for k, v in zip(
                 metadata["dataframe_metadata"]["column_names"],
                 metadata["dataframe_metadata"]["datatypes"],
+                strict=False,
             )
         ]
         schema_facet = facet_v2.schema_dataset.SchemaDatasetFacet(

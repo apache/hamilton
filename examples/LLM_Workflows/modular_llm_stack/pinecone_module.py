@@ -62,7 +62,7 @@ def data_objects(
     assert len(ids) == len(titles) == len(embeddings)
     properties = [dict(title=title, **metadata) for title in titles]
     embeddings = [x.tolist() for x in embeddings]
-    return list(zip(ids, embeddings, properties))
+    return list(zip(ids, embeddings, properties, strict=False))
 
 
 def push_to_vector_db(

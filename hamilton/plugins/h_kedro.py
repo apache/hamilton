@@ -35,7 +35,7 @@ def expand_k_node(base_node: HNode, outputs: List[str]) -> List[HNode]:
     """
 
     def _convert_output_from_tuple_to_dict(node_result: Any, node_kwargs: Dict[str, Any]):
-        return {out: v for out, v in zip(outputs, node_result)}
+        return {out: v for out, v in zip(outputs, node_result, strict=False)}
 
     # NOTE isinstance(Any, type) is False for Python < 3.11
     extractor = extract_fields(fields={out: Any for out in outputs})
@@ -91,7 +91,7 @@ def k_node_to_h_nodes(node: KNode) -> List[HNode]:
 
     # remap the function parameters to the node `inputs` and clean Kedro `parameters` name
     new_params = {}
-    for param, k_input in zip(params, node.inputs):
+    for param, k_input in zip(params, node.inputs, strict=False):
         if k_input.startswith("params:"):
             k_input = k_input.partition("params:")[-1]
 

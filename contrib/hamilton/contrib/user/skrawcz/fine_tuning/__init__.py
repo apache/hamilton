@@ -657,7 +657,7 @@ def hold_out_set_predictions(
             )
             predictions.append(prediction)
             questions.append(tokenizer.decode(sample["input_ids"], skip_special_tokens=True))
-    return list(zip(questions, predictions))
+    return list(zip(questions, predictions, strict=False))
 
 
 if __name__ == "__main__":
