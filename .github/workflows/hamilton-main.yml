@@ -27,6 +27,7 @@ jobs:
           - '3.11'
           - '3.12'
           - '3.13'
+          - '3.14'
     env:
       UV_PRERELEASE: "allow"
       HAMILTON_TELEMETRY_ENABLED: false
