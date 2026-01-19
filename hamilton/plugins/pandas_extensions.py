@@ -210,11 +210,6 @@ class PandasCSVReader(DataLoader):
             kwargs["skip_blank_lines"] = self.skip_blank_lines
         if self.parse_dates is not None:
             kwargs["parse_dates"] = self.parse_dates
-        if pandas_version < Version("2.0"):
-            if self.keep_date_col is not None:
-                kwargs["keep_date_col"] = self.keep_date_col
-            if self.verbose is not None:
-                kwargs["verbose"] = self.verbose
         if self.date_format is not None:
             kwargs["date_format"] = self.date_format
         if self.dayfirst is not None:
@@ -257,13 +252,17 @@ class PandasCSVReader(DataLoader):
             kwargs["float_precision"] = self.float_precision
         if self.storage_options is not None:
             kwargs["storage_options"] = self.storage_options
-        if self.delim_whitespace is not None:
-            if pandas_version < Version("2.0"):
+        if pandas_version < Version("2.0"):
+            if self.keep_date_col is not None:
+                kwargs["keep_date_col"] = self.keep_date_col
+            if self.verbose is not None:
+                kwargs["verbose"] = self.verbose
+            if self.delim_whitespace is not None:
                 kwargs["delim_whitespace"] = self.delim_whitespace
-            elif self.delim_whitespace:
-                kwargs.setdefault("sep", r"\s+")
-        if pandas_version >= Version("2.0") and self.dtype_backend is not None:
-            kwargs["dtype_backend"] = self.dtype_backend
+
+        if pandas_version >= Version("2.0"):
+            if self.dtype_backend is not None:
+                kwargs["dtype_backend"] = self.dtype_backend
 
         return kwargs
 
