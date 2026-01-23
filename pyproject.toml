@@ -74,7 +74,7 @@ pyspark = [
   # we have to run these dependencies because Spark does not check to ensure the right target was called
   "pyspark[pandas_on_spark,sql]",
 ]
-ray = ["ray>=2.0.0", "pyarrow"]
+ray = ["ray>=2.0.0; python_version < '3.14'", "pyarrow"]
 rich = ["rich"]
 sdk = ["sf-hamilton-sdk"]
 slack = ["slack-sdk"]
@@ -94,7 +94,7 @@ dev = [
   "ruff==0.5.7", # this should match `.pre-commit-config.yaml`
 ]
 test = [
-  "connectorx",
+  "connectorx; python_version < '3.14'",
   "dask[complete]",
   "dask-expr>=1.1.14",
   "datasets>=2.18.0", # huggingface datasets -- https://github.com/huggingface/datasets/issues/6737#issuecomment-2107336816
@@ -102,22 +102,22 @@ test = [
   "dlt",
   "fsspec",
   "graphviz",
-  "kaleido",
-  "kedro",
-  "lancedb",
-  "lightgbm",
+  "kaleido; python_version < '3.14'",
+  "kedro; python_version < '3.14'",
+  "lancedb; python_version < '3.14'",
+  "lightgbm; python_version < '3.14'",
   "lxml",
   "lz4",
   "matplotlib",
-  "mlflow",
+  "mlflow; python_version <= '3.13'",
   "networkx",
   "openpyxl", # for excel data loader
   "pandera[dask]",
-  "plotly",
-  "polars",
+  "plotly; python_version < '3.14'",
+  "polars; python_version < '3.14'",
   "pyarrow",
   "pydantic >=2.0",
-  "pyreadstat", # for SPSS data loader
+  "pyreadstat; python_version < '3.14'", # for SPSS data loader
   "pytest",
   "pytest-asyncio",
   "pytest-cov",
@@ -125,7 +125,7 @@ test = [
   "scikit-learn",
   "sqlalchemy",
   "typer",
-  "xgboost",
+  "xgboost; python_version < '3.14'",
   "xlsx2csv", # for excel data loader
   "xlsxwriter",  # Excel export requires 'xlsxwriter'
 ]
