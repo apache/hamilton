@@ -283,34 +283,57 @@ def create_graphviz_graph(
         name and type but values can be overridden. Overriding is currently
         used for materializers since `type_` is stored in n.tags.
 
+        If a node has a 'display_name' tag, it will be used as the label
+        instead of the node name. This allows human-readable names in
+        visualizations while keeping Python-valid identifiers as node names.
+        See: https://github.com/apache/hamilton/issues/1413
+
         ref: https://graphviz.org/doc/info/shapes.html#html
         """
-        name = n.name if name is None else name
+        # Determine display name: explicit name param > display_name tag > node.name
+        if name is not None:
+            display_name = name
+        elif n.tags.get("display_name"):
+            display_name = n.tags["display_name"]
+            # Handle case where display_name is a list (use first element)
+            if isinstance(display_name, list):
+                display_name = display_name[0] if display_name else n.name
+        else:
+            display_name = n.name
+
         if type_string is None:
             type_string = get_type_as_string(n.type) if get_type_as_string(n.type) else ""
 
         # We need to ensure that name and type string are HTML-escaped
-        # strings to avoid syntax errors. This is particular important
-        # because config *values* are passed through this function
+        # strings to avoid syntax errors. This is particularly important
+        # because config *values* and display_name tags are passed through this function
         # see issue: https://github.com/apache/hamilton/issues/1200
         # see graphviz ref: https://graphviz.org/doc/info/shapes.html#html
         if len(type_string) > MAX_STRING_LENGTH:
             type_string = type_string[:MAX_STRING_LENGTH] + "[...]"
 
+        escaped_display_name = html.escape(display_name, quote=True)
         escaped_type_string = html.escape(type_string, quote=True)
-        return f"<<b>{name}</b><br /><br /><i>{escaped_type_string}</i>>"
+        return f"<<b>{escaped_display_name}</b><br /><br /><i>{escaped_type_string}</i>>"
 
     def _get_input_label(input_nodes: FrozenSet[node.Node]) -> str:
-        """Get a graphviz HTML-like node label formatted aspyer a table.
+        """Get a graphviz HTML-like node label formatted as a table.
         Each row is a different input node with one column containing
-        the name and the other the type.
+        the name (or display_name if present) and the other the type.
         ref: https://graphviz.org/doc/info/shapes.html#html
         """
         rows = []
         for dep in input_nodes:
-            name = dep.name
+            # Use display_name tag if present, otherwise use node name
+            display_name = dep.tags.get("display_name", dep.name)
+            # Handle case where display_name is a list (use first element)
+            if isinstance(display_name, list):
+                display_name = display_name[0] if display_name else dep.name
             type_string = get_type_as_string(dep.type) if get_type_as_string(dep.type) else ""
-            rows.append(f"<tr><td>{name}</td><td>{type_string}</td></tr>")
+            # HTML escape for security
+            escaped_display_name = html.escape(display_name, quote=True)
+            escaped_type_string = html.escape(type_string, quote=True)
+            rows.append(f"<tr><td>{escaped_display_name}</td><td>{escaped_type_string}</td></tr>")
         return f"<<table border=\"0\">{''.join(rows)}</table>>"
 
     def _get_node_type(n: node.Node) -> str:

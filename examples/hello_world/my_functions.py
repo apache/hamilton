@@ -17,6 +17,8 @@
 
 import pandas as pd
 
+from hamilton.function_modifiers import tag
+
 """
 Notes:
   1. This file is used for all the [ray|dask|spark]/hello_world examples.
@@ -25,11 +27,13 @@ Notes:
 """
 
 
+@tag(display_name="Rolling 3-Week Average Spend")
 def avg_3wk_spend(spend: pd.Series) -> pd.Series:
     """Rolling 3 week average spend."""
     return spend.rolling(3).mean()
 
 
+@tag(display_name="Cost Per Signup")
 def spend_per_signup(spend: pd.Series, signups: pd.Series) -> pd.Series:
     """The cost per signup in relation to spend."""
     return spend / signups
