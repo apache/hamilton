@@ -322,9 +322,7 @@ def test_pandas_table_reader(tmp_path: pathlib.Path) -> None:
     ]
 
 
-@pytest.mark.skipif(
-    sys.version_info >= (3, 14), reason="pyreadstat not available on Python 3.14"
-)
+@pytest.mark.skipif(sys.version_info >= (3, 14), reason="pyreadstat not available on Python 3.14")
 def test_pandas_spss_reader(tmp_path: pathlib.Path) -> None:
     import pyreadstat
 

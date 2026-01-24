@@ -25,22 +25,24 @@ telemetry.disable_telemetry()
 # Skip tests that require packages not yet available on Python 3.14
 collect_ignore = []
 if sys.version_info >= (3, 14):
-    collect_ignore.extend([
-        # polars - no Python 3.14 support yet
-        "plugins/test_polars_extensions.py",
-        "plugins/test_polars_lazyframe_extensions.py",
-        "resources/narwhals_example.py",
-        # plotly - no Python 3.14 support yet
-        "plugins/test_plotly_extensions.py",
-        # xgboost - no Python 3.14 support yet
-        "plugins/test_xgboost_extensions.py",
-        # lightgbm - no Python 3.14 support yet
-        "plugins/test_lightgbm_extensions.py",
-        # mlflow - no Python 3.14 support yet
-        "plugins/test_mlflow_extension.py",
-        # kedro - no Python 3.14 support yet
-        "plugins/test_h_kedro.py",
-        "plugins/test_kedro_extensions.py",
-        # lancedb - no Python 3.14 support yet
-        "plugins/test_huggingface_extensions.py",
-    ])
+    collect_ignore.extend(
+        [
+            # polars - no Python 3.14 support yet
+            "plugins/test_polars_extensions.py",
+            "plugins/test_polars_lazyframe_extensions.py",
+            "resources/narwhals_example.py",
+            # plotly - no Python 3.14 support yet
+            "plugins/test_plotly_extensions.py",
+            # xgboost - no Python 3.14 support yet
+            "plugins/test_xgboost_extensions.py",
+            # lightgbm - no Python 3.14 support yet
+            "plugins/test_lightgbm_extensions.py",
+            # mlflow - no Python 3.14 support yet
+            "plugins/test_mlflow_extension.py",
+            # kedro - no Python 3.14 support yet
+            "plugins/test_h_kedro.py",
+            "plugins/test_kedro_extensions.py",
+            # lancedb - no Python 3.14 support yet
+            "plugins/test_huggingface_extensions.py",
+        ]
+    )
