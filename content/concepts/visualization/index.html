@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex/"><link rel="search" title="Search" href="../../search/"><link rel="next" title="Materialization" href="../materialization/"><link rel="prev" title="Driver" href="../driver/">
         <link rel="canonical" href="https://hamilton.apache.org/concepts/visualization/">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
         <title>Visualization - Hamilton</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
@@ -632,6 +632,23 @@
 <section id="configure-your-visualization">
 <h2>Configure your visualization<a class="headerlink" href="#configure-your-visualization" title="Link to this heading">¶</a></h2>
 <p>All of the above visualization functions share parameters to customize the visualization (e.g., hide legend, hide inputs). Learn more by reviewing the API reference for <a class="reference external" href="https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.display_all_functions">Driver.display_all_functions()</a>; parameters should apply to all other visualizations.</p>
+<section id="custom-node-labels-with-display-name">
+<h3>Custom node labels with display_name<a class="headerlink" href="#custom-node-labels-with-display-name" title="Link to this heading">¶</a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code> decorator with <code class="docutils literal notranslate"><span class="pre">display_name</span></code> to show human-readable labels in visualizations while keeping valid Python identifiers as function names. This is useful for creating presentation-ready diagrams or adding business-friendly names:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">tag</span>
+
+<span class="nd">@tag</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Parse Raw JSON&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_raw_json</span><span class="p">(</span><span class="n">raw_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+
+<span class="nd">@tag</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Transform to DataFrame&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">transform_to_df</span><span class="p">(</span><span class="n">parse_raw_json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">parse_raw_json</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When visualized, nodes will display “Parse Raw JSON” and “Transform to DataFrame” instead of their function names. This keeps your code Pythonic while making visualizations more readable for stakeholders.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">display_name</span></code> only affects visualization labels - the actual node names used in code and execution remain the function names.</p>
+</section>
 <section id="apply-custom-style">
 <span id="custom-visualization-style"></span><h3>Apply custom style<a class="headerlink" href="#apply-custom-style" title="Link to this heading">¶</a></h3>
 <p>By default, each node is labeled with name and type, and stylized (shape, color, outline, etc.). By passing a function to the parameter <code class="docutils literal notranslate"><span class="pre">custom_style_function</span></code>, you can customize the node style based on its attributes. This pairs nicely with the <code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code> function modifier (learn more <a class="reference internal" href="../function-modifiers/#tag-decorators"><span class="std std-ref">Add metadata to a node</span></a>)</p>
@@ -754,6 +771,7 @@
 </li>
 <li><a class="reference internal" href="#view-node-dependencies">View node dependencies</a></li>
 <li><a class="reference internal" href="#configure-your-visualization">Configure your visualization</a><ul>
+<li><a class="reference internal" href="#custom-node-labels-with-display-name">Custom node labels with display_name</a></li>
 <li><a class="reference internal" href="#apply-custom-style">Apply custom style</a></li>
 </ul>
 </li>
@@ -769,8 +787,8 @@
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=187304be"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

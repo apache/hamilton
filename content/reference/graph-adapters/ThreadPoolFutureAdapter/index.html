@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex/"><link rel="search" title="Search" href="../../../search/"><link rel="next" title="CachingGraphAdapter" href="../CachingGraphAdapter/"><link rel="prev" title="h_async.AsyncGraphAdapter" href="../AsyncGraphAdapter/">
         <link rel="canonical" href="https://hamilton.apache.org/reference/graph-adapters/ThreadPoolFutureAdapter/">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
         <title>h_threadpool.FutureAdapter - Hamilton</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
@@ -500,7 +500,7 @@
 This is useful when you have a graph with many nodes that can be executed in parallel.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.plugins.h_threadpool.FutureAdapter">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_threadpool.</span></span><span class="sig-name descname"><span class="pre">FutureAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thread_name_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../lifecycle-hooks/ResultBuilder/#hamilton.lifecycle.api.ResultBuilder" title="hamilton.lifecycle.api.ResultBuilder"><span class="pre">ResultBuilder</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.plugins.h_threadpool.FutureAdapter" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_threadpool.</span></span><span class="sig-name descname"><span class="pre">FutureAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thread_name_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../lifecycle-hooks/ResultBuilder/#hamilton.lifecycle.api.ResultBuilder" title="hamilton.lifecycle.api.ResultBuilder"><span class="pre">ResultBuilder</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.plugins.h_threadpool.FutureAdapter" title="Link to this definition">¶</a></dt>
 <dd><p>Adapter that lazily submits each function for execution to a ThreadpoolExecutor.</p>
 <p>This adapter has similar behavior to the async Hamilton driver which allows for parallel execution of functions.</p>
 <p>This adapter works because we don’t have to worry about object serialization.</p>
@@ -673,8 +673,8 @@ This is optional for backwards compatibility, but is recommended.</p>
     </aside>
   </div>
 </div><script src="../../../_static/documentation_options.js?v=187304be"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

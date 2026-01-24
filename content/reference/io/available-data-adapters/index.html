@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex/"><link rel="search" title="Search" href="../../../search/"><link rel="next" title="Data Adapters" href="../adapter-documentation/"><link rel="prev" title="I/O" href="../">
         <link rel="canonical" href="https://hamilton.apache.org/reference/io/available-data-adapters/">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
         <title>Using Data Adapters - Hamilton</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
@@ -582,7 +582,7 @@ filepath_or_buffer<code class="docutils literal notranslate"><span class="pre">U
 </tr>
 <tr class="row-even"><td>json</td>
 <td><dl class="field-list">
-source<code class="docutils literal notranslate"><span class="pre">Union</span></code><br/>schema<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>schema_overrides<code class="docutils literal notranslate"><span class="pre">Union=None</span></code></dl>
+source<code class="docutils literal notranslate"><span class="pre">Union</span></code><br/>schema<code class="docutils literal notranslate"><span class="pre">collections.abc.Mapping[str,</span> <span class="pre">typing.Union[ForwardRef('DataTypeClass'),</span> <span class="pre">ForwardRef('DataType'),</span> <span class="pre">type[int],</span> <span class="pre">type[float],</span> <span class="pre">type[bool],</span> <span class="pre">type[str],</span> <span class="pre">type['date'],</span> <span class="pre">type['time'],</span> <span class="pre">type['datetime'],</span> <span class="pre">type['timedelta'],</span> <span class="pre">type[list[typing.Any]],</span> <span class="pre">type[tuple[typing.Any,</span> <span class="pre">...]],</span> <span class="pre">type[bytes],</span> <span class="pre">type[object],</span> <span class="pre">type['Decimal'],</span> <span class="pre">type[None],</span> <span class="pre">NoneType]]</span> <span class="pre">|</span> <span class="pre">collections.abc.Sequence[str</span> <span class="pre">|</span> <span class="pre">tuple[str,</span> <span class="pre">typing.Union[ForwardRef('DataTypeClass'),</span> <span class="pre">ForwardRef('DataType'),</span> <span class="pre">type[int],</span> <span class="pre">type[float],</span> <span class="pre">type[bool],</span> <span class="pre">type[str],</span> <span class="pre">type['date'],</span> <span class="pre">type['time'],</span> <span class="pre">type['datetime'],</span> <span class="pre">type['timedelta'],</span> <span class="pre">type[list[typing.Any]],</span> <span class="pre">type[tuple[typing.Any,</span> <span class="pre">...]],</span> <span class="pre">type[bytes],</span> <span class="pre">type[object],</span> <span class="pre">type['Decimal'],</span> <span class="pre">type[None],</span> <span class="pre">NoneType]]]=None</span></code><br/>schema_overrides<code class="docutils literal notranslate"><span class="pre">collections.abc.Mapping[str,</span> <span class="pre">typing.Union[ForwardRef('DataTypeClass'),</span> <span class="pre">ForwardRef('DataType'),</span> <span class="pre">type[int],</span> <span class="pre">type[float],</span> <span class="pre">type[bool],</span> <span class="pre">type[str],</span> <span class="pre">type['date'],</span> <span class="pre">type['time'],</span> <span class="pre">type['datetime'],</span> <span class="pre">type['timedelta'],</span> <span class="pre">type[list[typing.Any]],</span> <span class="pre">type[tuple[typing.Any,</span> <span class="pre">...]],</span> <span class="pre">type[bytes],</span> <span class="pre">type[object],</span> <span class="pre">type['Decimal'],</span> <span class="pre">type[None],</span> <span class="pre">NoneType]]</span> <span class="pre">|</span> <span class="pre">collections.abc.Sequence[str</span> <span class="pre">|</span> <span class="pre">tuple[str,</span> <span class="pre">typing.Union[ForwardRef('DataTypeClass'),</span> <span class="pre">ForwardRef('DataType'),</span> <span class="pre">type[int],</span> <span class="pre">type[float],</span> <span class="pre">type[bool],</span> <span class="pre">type[str],</span> <span class="pre">type['date'],</span> <span class="pre">type['time'],</span> <span class="pre">type['datetime'],</span> <span class="pre">type['timedelta'],</span> <span class="pre">type[list[typing.Any]],</span> <span class="pre">type[tuple[typing.Any,</span> <span class="pre">...]],</span> <span class="pre">type[bytes],</span> <span class="pre">type[object],</span> <span class="pre">type['Decimal'],</span> <span class="pre">type[None],</span> <span class="pre">NoneType]]]=None</span></code></dl>
 </td>
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/></dl>
@@ -861,25 +861,34 @@ file<code class="docutils literal notranslate"><span class="pre">Union</span></c
 </td>
 <td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L444-L475">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
-<tr class="row-odd"><td>database</td>
+<tr class="row-odd"><td>ndjson</td>
+<td><dl class="field-list">
+source<code class="docutils literal notranslate"><span class="pre">Union</span></code><br/>schema<code class="docutils literal notranslate"><span class="pre">collections.abc.Mapping[str,</span> <span class="pre">typing.Union[ForwardRef('DataTypeClass'),</span> <span class="pre">ForwardRef('DataType'),</span> <span class="pre">type[int],</span> <span class="pre">type[float],</span> <span class="pre">type[bool],</span> <span class="pre">type[str],</span> <span class="pre">type['date'],</span> <span class="pre">type['time'],</span> <span class="pre">type['datetime'],</span> <span class="pre">type['timedelta'],</span> <span class="pre">type[list[typing.Any]],</span> <span class="pre">type[tuple[typing.Any,</span> <span class="pre">...]],</span> <span class="pre">type[bytes],</span> <span class="pre">type[object],</span> <span class="pre">type['Decimal'],</span> <span class="pre">type[None],</span> <span class="pre">NoneType]]</span> <span class="pre">|</span> <span class="pre">collections.abc.Sequence[str</span> <span class="pre">|</span> <span class="pre">tuple[str,</span> <span class="pre">typing.Union[ForwardRef('DataTypeClass'),</span> <span class="pre">ForwardRef('DataType'),</span> <span class="pre">type[int],</span> <span class="pre">type[float],</span> <span class="pre">type[bool],</span> <span class="pre">type[str],</span> <span class="pre">type['date'],</span> <span class="pre">type['time'],</span> <span class="pre">type['datetime'],</span> <span class="pre">type['timedelta'],</span> <span class="pre">type[list[typing.Any]],</span> <span class="pre">type[tuple[typing.Any,</span> <span class="pre">...]],</span> <span class="pre">type[bytes],</span> <span class="pre">type[object],</span> <span class="pre">type['Decimal'],</span> <span class="pre">type[None],</span> <span class="pre">NoneType]]]=None</span></code><br/>schema_overrides<code class="docutils literal notranslate"><span class="pre">collections.abc.Mapping[str,</span> <span class="pre">typing.Union[ForwardRef('DataTypeClass'),</span> <span class="pre">ForwardRef('DataType'),</span> <span class="pre">type[int],</span> <span class="pre">type[float],</span> <span class="pre">type[bool],</span> <span class="pre">type[str],</span> <span class="pre">type['date'],</span> <span class="pre">type['time'],</span> <span class="pre">type['datetime'],</span> <span class="pre">type['timedelta'],</span> <span class="pre">type[list[typing.Any]],</span> <span class="pre">type[tuple[typing.Any,</span> <span class="pre">...]],</span> <span class="pre">type[bytes],</span> <span class="pre">type[object],</span> <span class="pre">type['Decimal'],</span> <span class="pre">type[None],</span> <span class="pre">NoneType]]</span> <span class="pre">|</span> <span class="pre">collections.abc.Sequence[str</span> <span class="pre">|</span> <span class="pre">tuple[str,</span> <span class="pre">typing.Union[ForwardRef('DataTypeClass'),</span> <span class="pre">ForwardRef('DataType'),</span> <span class="pre">type[int],</span> <span class="pre">type[float],</span> <span class="pre">type[bool],</span> <span class="pre">type[str],</span> <span class="pre">type['date'],</span> <span class="pre">type['time'],</span> <span class="pre">type['datetime'],</span> <span class="pre">type['timedelta'],</span> <span class="pre">type[list[typing.Any]],</span> <span class="pre">type[tuple[typing.Any,</span> <span class="pre">...]],</span> <span class="pre">type[bytes],</span> <span class="pre">type[object],</span> <span class="pre">type['Decimal'],</span> <span class="pre">type[None],</span> <span class="pre">NoneType]]]=None</span></code></dl>
+</td>
+<td><dl class="field-list">
+<code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/></dl>
+</td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L567-L598">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+</tr>
+<tr class="row-even"><td>database</td>
 <td><dl class="field-list">
 query<code class="docutils literal notranslate"><span class="pre">str</span></code><br/>connection<code class="docutils literal notranslate"><span class="pre">Union</span></code><br/>iter_batches<code class="docutils literal notranslate"><span class="pre">bool=False</span></code><br/>batch_size<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>schema_overrides<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>infer_schema_length<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>execute_options<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code></dl>
 </td>
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L726-L771">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L784-L829">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
-<tr class="row-even"><td>spreadsheet</td>
+<tr class="row-odd"><td>spreadsheet</td>
 <td><dl class="field-list">
 source<code class="docutils literal notranslate"><span class="pre">Union</span></code><br/>sheet_id<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>sheet_name<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>engine<code class="docutils literal notranslate"><span class="pre">Literal=xlsx2csv</span></code><br/>engine_options<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>read_options<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>schema_overrides<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>raise_if_empty<code class="docutils literal notranslate"><span class="pre">bool=True</span></code></dl>
 </td>
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L567-L614">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L625-L672">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
-<tr class="row-odd"><td>dlt</td>
+<tr class="row-even"><td>dlt</td>
 <td><dl class="field-list">
 resource<code class="docutils literal notranslate"><span class="pre">DltResource</span></code></dl>
 </td>
@@ -888,7 +897,7 @@ resource<code class="docutils literal notranslate"><span class="pre">DltResource
 </td>
 <td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/dlt_extensions.py#L57-L95">hamilton.plugins.dlt_extensions</a></td>
 </tr>
-<tr class="row-even"><td>mlflow</td>
+<tr class="row-odd"><td>mlflow</td>
 <td><dl class="field-list">
 model_uri<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>mode<code class="docutils literal notranslate"><span class="pre">Literal=tracking</span></code><br/>run_id<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>path<code class="docutils literal notranslate"><span class="pre">Union=model</span></code><br/>model_name<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>version<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>version_alias<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>flavor<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>mlflow_kwargs<code class="docutils literal notranslate"><span class="pre">Dict=None</span></code></dl>
 </td>
@@ -1148,25 +1157,34 @@ file<code class="docutils literal notranslate"><span class="pre">Union</span></c
 </td>
 <td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L477-L507">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
-<tr class="row-even"><td>database</td>
+<tr class="row-even"><td>ndjson</td>
+<td><dl class="field-list">
+file<code class="docutils literal notranslate"><span class="pre">Union</span></code></dl>
+</td>
+<td><dl class="field-list">
+<code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/><code class="docutils literal notranslate"><span class="pre">LazyFrame</span></code><br/></dl>
+</td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L600-L623">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+</tr>
+<tr class="row-odd"><td>database</td>
 <td><dl class="field-list">
 table_name<code class="docutils literal notranslate"><span class="pre">str</span></code><br/>connection<code class="docutils literal notranslate"><span class="pre">Union</span></code><br/>if_table_exists<code class="docutils literal notranslate"><span class="pre">Literal=fail</span></code><br/>engine<code class="docutils literal notranslate"><span class="pre">Literal=sqlalchemy</span></code></dl>
 </td>
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/><code class="docutils literal notranslate"><span class="pre">LazyFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L773-L810">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L831-L868">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
-<tr class="row-odd"><td>spreadsheet</td>
+<tr class="row-even"><td>spreadsheet</td>
 <td><dl class="field-list">
 workbook<code class="docutils literal notranslate"><span class="pre">Union</span></code><br/>worksheet<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>position<code class="docutils literal notranslate"><span class="pre">Union=A1</span></code><br/>table_style<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>table_name<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>column_formats<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>dtype_formats<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>conditional_formats<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>header_format<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>column_totals<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>column_widths<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>row_totals<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>row_heights<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>sparklines<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>formulas<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>float_precision<code class="docutils literal notranslate"><span class="pre">int=3</span></code><br/>include_header<code class="docutils literal notranslate"><span class="pre">bool=True</span></code><br/>autofilter<code class="docutils literal notranslate"><span class="pre">bool=True</span></code><br/>autofit<code class="docutils literal notranslate"><span class="pre">bool=False</span></code><br/>hidden_columns<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>hide_gridlines<code class="docutils literal notranslate"><span class="pre">bool=None</span></code><br/>sheet_zoom<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>freeze_panes<code class="docutils literal notranslate"><span class="pre">Union=None</span></code></dl>
 </td>
 <td><dl class="field-list">
 <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><br/><code class="docutils literal notranslate"><span class="pre">LazyFrame</span></code><br/></dl>
 </td>
-<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L616-L724">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
+<td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/polars_post_1_0_0_extensions.py#L674-L782">hamilton.plugins.polars_post_1_0_0_extensions</a></td>
 </tr>
-<tr class="row-even"><td>png</td>
+<tr class="row-odd"><td>png</td>
 <td><dl class="field-list">
 path<code class="docutils literal notranslate"><span class="pre">Union</span></code><br/>dpi<code class="docutils literal notranslate"><span class="pre">float=200</span></code><br/>format<code class="docutils literal notranslate"><span class="pre">str=png</span></code><br/>metadata<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>bbox_inches<code class="docutils literal notranslate"><span class="pre">str=None</span></code><br/>pad_inches<code class="docutils literal notranslate"><span class="pre">float=0.1</span></code><br/>backend<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>papertype<code class="docutils literal notranslate"><span class="pre">str=None</span></code><br/>transparent<code class="docutils literal notranslate"><span class="pre">bool=None</span></code><br/>bbox_extra_artists<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>pil_kwargs<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code></dl>
 </td>
@@ -1175,7 +1193,7 @@ path<code class="docutils literal notranslate"><span class="pre">Union</span></c
 </td>
 <td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/sklearn_plot_extensions.py#L64-L119">hamilton.plugins.sklearn_plot_extensions</a></td>
 </tr>
-<tr class="row-odd"><td>dlt</td>
+<tr class="row-even"><td>dlt</td>
 <td><dl class="field-list">
 pipeline<code class="docutils literal notranslate"><span class="pre">Pipeline</span></code><br/>table_name<code class="docutils literal notranslate"><span class="pre">str</span></code><br/>primary_key<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>write_disposition<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>columns<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>schema<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>loader_file_format<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code></dl>
 </td>
@@ -1184,7 +1202,7 @@ pipeline<code class="docutils literal notranslate"><span class="pre">Pipeline</s
 </td>
 <td><a href="https://github.com/apache/hamilton/blob/main/hamilton/plugins/dlt_extensions.py#L98-L149">hamilton.plugins.dlt_extensions</a></td>
 </tr>
-<tr class="row-even"><td>mlflow</td>
+<tr class="row-odd"><td>mlflow</td>
 <td><dl class="field-list">
 path<code class="docutils literal notranslate"><span class="pre">Union=model</span></code><br/>register_as<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>flavor<code class="docutils literal notranslate"><span class="pre">Union=None</span></code><br/>run_id<code class="docutils literal notranslate"><span class="pre">Optional=None</span></code><br/>mlflow_kwargs<code class="docutils literal notranslate"><span class="pre">Dict=None</span></code></dl>
 </td>
@@ -1261,8 +1279,8 @@ path<code class="docutils literal notranslate"><span class="pre">Union=model</sp
     </aside>
   </div>
 </div><script src="../../../_static/documentation_options.js?v=187304be"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

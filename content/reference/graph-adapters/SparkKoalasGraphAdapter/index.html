@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex/"><link rel="search" title="Search" href="../../../search/"><link rel="next" title="Lifecycle Adapters" href="../../lifecycle-hooks/"><link rel="prev" title="h_ray.RayGraphAdapter" href="../RayGraphAdapter/">
         <link rel="canonical" href="https://hamilton.apache.org/reference/graph-adapters/SparkKoalasGraphAdapter/">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
         <title>h_spark.SparkKoalasGraphAdapter - Hamilton</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
@@ -501,7 +501,7 @@ and you should feel comfortable giving the code for a spin - let us know how it 
 you find any. We’d love feedback if you are using these to know how to improve them or graduate them.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.plugins.h_spark.SparkKoalasGraphAdapter">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_spark.</span></span><span class="sig-name descname"><span class="pre">SparkKoalasGraphAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spark_session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../result-builders/Generic/#hamilton.base.ResultMixin" title="hamilton.base.ResultMixin"><span class="pre">ResultMixin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spine_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.plugins.h_spark.SparkKoalasGraphAdapter" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_spark.</span></span><span class="sig-name descname"><span class="pre">SparkKoalasGraphAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spark_session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../result-builders/Generic/#hamilton.base.ResultMixin" title="hamilton.base.ResultMixin"><span class="pre">ResultMixin</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spine_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.plugins.h_spark.SparkKoalasGraphAdapter" title="Link to this definition">¶</a></dt>
 <dd><p>Class representing what’s required to make Hamilton run on Spark with Koalas, i.e. Pandas on Spark.</p>
 <p>This walks the graph and translates it to run onto <a class="reference external" href="https://spark.apache.org/&quot;">Apache Spark</a>     using the     <a class="reference external" href="https://spark.apache.org/docs/latest/api/python/user_guide/pandas_on_spark/index.html">Pandas API on Spark</a></p>
 <p>Use <cite>pip install sf-hamilton[spark]</cite> to get the dependencies required to run this.</p>
@@ -581,7 +581,7 @@ you find any. We’d love feedback if you are using these to know how to improve
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.plugins.h_spark.SparkKoalasGraphAdapter.check_input_type">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_input_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.plugins.h_spark.SparkKoalasGraphAdapter.check_input_type" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">check_input_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.plugins.h_spark.SparkKoalasGraphAdapter.check_input_type" title="Link to this definition">¶</a></dt>
 <dd><p>Function to equate an input value, with expected node type.</p>
 <p>We need this to equate pandas and koalas objects/types.</p>
 <dl class="field-list simple">
@@ -599,7 +599,7 @@ you find any. We’d love feedback if you are using these to know how to improve
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.plugins.h_spark.SparkKoalasGraphAdapter.check_node_type_equivalence">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_node_type_equivalence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.plugins.h_spark.SparkKoalasGraphAdapter.check_node_type_equivalence" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">check_node_type_equivalence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.plugins.h_spark.SparkKoalasGraphAdapter.check_node_type_equivalence" title="Link to this definition">¶</a></dt>
 <dd><p>Function to help equate pandas with koalas types.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -809,8 +809,8 @@ This is optional for backwards compatibility, but is recommended.</p>
     </aside>
   </div>
 </div><script src="../../../_static/documentation_options.js?v=187304be"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

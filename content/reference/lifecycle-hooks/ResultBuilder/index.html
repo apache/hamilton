@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex/"><link rel="search" title="Search" href="../../../search/"><link rel="next" title="lifecycle.LegacyResultMixin" href="../LegacyResultMixin/"><link rel="prev" title="Lifecycle Adapters" href="../">
         <link rel="canonical" href="https://hamilton.apache.org/reference/lifecycle-hooks/ResultBuilder/">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
         <title>lifecycle.ResultBuilder - Hamilton</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
@@ -498,14 +498,14 @@
 <h1>lifecycle.ResultBuilder<a class="headerlink" href="#lifecycle-resultbuilder" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.lifecycle.api.ResultBuilder">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hamilton.lifecycle.api.</span></span><span class="sig-name descname"><span class="pre">ResultBuilder</span></span><a class="headerlink" href="#hamilton.lifecycle.api.ResultBuilder" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.lifecycle.api.</span></span><span class="sig-name descname"><span class="pre">ResultBuilder</span></span><a class="headerlink" href="#hamilton.lifecycle.api.ResultBuilder" title="Link to this definition">¶</a></dt>
 <dd><p>Abstract class for building results. All result builders should inherit from this class and implement the build_result function.
 Note that applicable_input_type and output_type are optional, but recommended, for backwards
 compatibility. They let us type-check this. They will default to Any, which means that they’ll
 connect to anything.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.lifecycle.api.ResultBuilder.build_result">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#hamilton.lifecycle.api.ResultBuilder.build_result" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">build_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#hamilton.lifecycle.api.ResultBuilder.build_result" title="Link to this definition">¶</a></dt>
 <dd><p>Given a set of outputs, build the result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -519,7 +519,7 @@ connect to anything.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.lifecycle.api.ResultBuilder.do_build_result">
-<em class="property"><span class="k"><span class="pre">final</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">do_build_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#hamilton.lifecycle.api.ResultBuilder.do_build_result" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">final</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">do_build_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#hamilton.lifecycle.api.ResultBuilder.do_build_result" title="Link to this definition">¶</a></dt>
 <dd><p>Implements the do_build_result method from the BaseDoBuildResult class.
 This is kept from the user as the public-facing API is build_result, allowing us to change the
 API/implementation of the internal set of hooks</p>
@@ -636,8 +636,8 @@ This is optional for backwards compatibility, but is recommended.</p>
     </aside>
   </div>
 </div><script src="../../../_static/documentation_options.js?v=187304be"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex/"><link rel="search" title="Search" href="../../../search/"><link rel="next" title="Dataflows" href="../../dataflows/"><link rel="prev" title="Using Data Adapters" href="../available-data-adapters/">
         <link rel="canonical" href="https://hamilton.apache.org/reference/io/adapter-documentation/">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
         <title>Data Adapters - Hamilton</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
@@ -499,13 +499,13 @@
 <p>Reference for data adapter base classes:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataLoader">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hamilton.io.data_adapters.</span></span><span class="sig-name descname"><span class="pre">DataLoader</span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.io.data_adapters.</span></span><span class="sig-name descname"><span class="pre">DataLoader</span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader" title="Link to this definition">¶</a></dt>
 <dd><p>Base class for data loaders. Data loaders are used to load data from a data source.
 Note that they are inherently polymorphic – they declare what type(s) they can load to,
 and may choose to load differently depending on the type they are loading to.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataLoader.applicable_types">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">applicable_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.applicable_types" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">applicable_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.applicable_types" title="Link to this definition">¶</a></dt>
 <dd><p>Returns the types that this data loader can load to.
 These will be checked against the desired type to determine
 whether this is a suitable loader for that type.</p>
@@ -523,7 +523,7 @@ what is happening.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataLoader.applies_to">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">applies_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.applies_to" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">applies_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.applies_to" title="Link to this definition">¶</a></dt>
 <dd><p>Tells whether or not this data loader can load to a specific type.
 For instance, a CSV data loader might be able to load to a dataframe,
 a json, but not an integer.</p>
@@ -542,7 +542,7 @@ construct this, delayed, with a factory.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataLoader.can_load">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.can_load" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">can_load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.can_load" title="Link to this definition">¶</a></dt>
 <dd><p>Returns whether this adapter can “load” data.
 Subclasses are meant to implement this function to
 tell the framework what to do with them.</p>
@@ -555,7 +555,7 @@ tell the framework what to do with them.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataLoader.can_save">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.can_save" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">can_save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.can_save" title="Link to this definition">¶</a></dt>
 <dd><p>Returns whether this adapter can “save” data.
 Subclasses are meant to implement this function to
 tell the framework what to do with them.</p>
@@ -568,7 +568,7 @@ tell the framework what to do with them.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataLoader.get_optional_arguments">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_optional_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.get_optional_arguments" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_optional_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.get_optional_arguments" title="Link to this definition">¶</a></dt>
 <dd><p>Gives the optional arguments for the class.
 Note that this just uses the type hints from the dataclass.</p>
 <dl class="field-list simple">
@@ -580,7 +580,7 @@ Note that this just uses the type hints from the dataclass.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataLoader.get_required_arguments">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_required_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.get_required_arguments" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_required_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.get_required_arguments" title="Link to this definition">¶</a></dt>
 <dd><p>Gives the required arguments for the class.
 Note that this just uses the type hints from the dataclass.</p>
 <dl class="field-list simple">
@@ -592,7 +592,7 @@ Note that this just uses the type hints from the dataclass.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataLoader.load_data">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.load_data" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.load_data" title="Link to this definition">¶</a></dt>
 <dd><p>Loads the data from the data source.
 Note this uses the constructor parameters to determine
 how to load the data.</p>
@@ -605,7 +605,7 @@ how to load the data.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataLoader.name">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.name" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataLoader.name" title="Link to this definition">¶</a></dt>
 <dd><p>Returns the name of the data loader. This is used to register the data loader
 with the load_from decorator.</p>
 <dl class="field-list simple">
@@ -619,13 +619,13 @@ with the load_from decorator.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataSaver">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hamilton.io.data_adapters.</span></span><span class="sig-name descname"><span class="pre">DataSaver</span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.io.data_adapters.</span></span><span class="sig-name descname"><span class="pre">DataSaver</span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver" title="Link to this definition">¶</a></dt>
 <dd><p>Base class for data savers. Data savers are used to save data to a data source.
 Note that they are inherently polymorphic – they declare what type(s) they can save from,
 and may choose to save differently depending on the type they are saving from.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataSaver.applicable_types">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">applicable_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.applicable_types" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">applicable_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.applicable_types" title="Link to this definition">¶</a></dt>
 <dd><p>Returns the types that this data loader can load to.
 These will be checked against the desired type to determine
 whether this is a suitable loader for that type.</p>
@@ -643,7 +643,7 @@ what is happening.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataSaver.applies_to">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">applies_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.applies_to" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">applies_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.applies_to" title="Link to this definition">¶</a></dt>
 <dd><p>Tells whether or not this data saver can ingest a specific type to save it.</p>
 <p>I.e. is the adapter type a superclass of the passed in type?</p>
 <p>This is a classmethod as it will be easier to validate, and we have to
@@ -660,7 +660,7 @@ construct this, delayed, with a factory.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataSaver.can_load">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.can_load" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">can_load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.can_load" title="Link to this definition">¶</a></dt>
 <dd><p>Returns whether this adapter can “load” data.
 Subclasses are meant to implement this function to
 tell the framework what to do with them.</p>
@@ -673,7 +673,7 @@ tell the framework what to do with them.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataSaver.can_save">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.can_save" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">can_save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.can_save" title="Link to this definition">¶</a></dt>
 <dd><p>Returns whether this adapter can “save” data.
 Subclasses are meant to implement this function to
 tell the framework what to do with them.</p>
@@ -686,7 +686,7 @@ tell the framework what to do with them.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataSaver.get_optional_arguments">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_optional_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.get_optional_arguments" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_optional_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.get_optional_arguments" title="Link to this definition">¶</a></dt>
 <dd><p>Gives the optional arguments for the class.
 Note that this just uses the type hints from the dataclass.</p>
 <dl class="field-list simple">
@@ -698,7 +698,7 @@ Note that this just uses the type hints from the dataclass.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataSaver.get_required_arguments">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_required_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.get_required_arguments" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_required_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.get_required_arguments" title="Link to this definition">¶</a></dt>
 <dd><p>Gives the required arguments for the class.
 Note that this just uses the type hints from the dataclass.</p>
 <dl class="field-list simple">
@@ -710,7 +710,7 @@ Note that this just uses the type hints from the dataclass.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataSaver.name">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.name" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.name" title="Link to this definition">¶</a></dt>
 <dd><p>Returns the name of the data loader. This is used to register the data loader
 with the load_from decorator.</p>
 <dl class="field-list simple">
@@ -722,7 +722,7 @@ with the load_from decorator.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.DataSaver.save_data">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.save_data" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.DataSaver.save_data" title="Link to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Saves the data to the data source.</dt><dd><p>Note this uses the constructor parameters to determine
 how to save the data.</p>
@@ -741,10 +741,10 @@ by the data loader in the loading tuple.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.AdapterCommon">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hamilton.io.data_adapters.</span></span><span class="sig-name descname"><span class="pre">AdapterCommon</span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.io.data_adapters.</span></span><span class="sig-name descname"><span class="pre">AdapterCommon</span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon" title="Link to this definition">¶</a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.AdapterCommon.applicable_types">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">applicable_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.applicable_types" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">applicable_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.applicable_types" title="Link to this definition">¶</a></dt>
 <dd><p>Returns the types that this data loader can load to.
 These will be checked against the desired type to determine
 whether this is a suitable loader for that type.</p>
@@ -762,7 +762,7 @@ what is happening.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.AdapterCommon.applies_to">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">applies_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.applies_to" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">applies_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.applies_to" title="Link to this definition">¶</a></dt>
 <dd><p>Tells whether or not this adapter applies to the given type.</p>
 <p>Note: you need to understand the edge direction to properly determine applicability.
 For loading data, the loader type needs to be a subclass of the type being loaded into.
@@ -781,7 +781,7 @@ construct this, delayed, with a factory.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.AdapterCommon.can_load">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.can_load" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">can_load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.can_load" title="Link to this definition">¶</a></dt>
 <dd><p>Returns whether this adapter can “load” data.
 Subclasses are meant to implement this function to
 tell the framework what to do with them.</p>
@@ -794,7 +794,7 @@ tell the framework what to do with them.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.AdapterCommon.can_save">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.can_save" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">can_save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.can_save" title="Link to this definition">¶</a></dt>
 <dd><p>Returns whether this adapter can “save” data.
 Subclasses are meant to implement this function to
 tell the framework what to do with them.</p>
@@ -807,7 +807,7 @@ tell the framework what to do with them.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.AdapterCommon.get_optional_arguments">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_optional_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.get_optional_arguments" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_optional_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.get_optional_arguments" title="Link to this definition">¶</a></dt>
 <dd><p>Gives the optional arguments for the class.
 Note that this just uses the type hints from the dataclass.</p>
 <dl class="field-list simple">
@@ -819,7 +819,7 @@ Note that this just uses the type hints from the dataclass.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.AdapterCommon.get_required_arguments">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_required_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.get_required_arguments" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_required_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.get_required_arguments" title="Link to this definition">¶</a></dt>
 <dd><p>Gives the required arguments for the class.
 Note that this just uses the type hints from the dataclass.</p>
 <dl class="field-list simple">
@@ -831,7 +831,7 @@ Note that this just uses the type hints from the dataclass.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.io.data_adapters.AdapterCommon.name">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.name" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hamilton.io.data_adapters.AdapterCommon.name" title="Link to this definition">¶</a></dt>
 <dd><p>Returns the name of the data loader. This is used to register the data loader
 with the load_from decorator.</p>
 <dl class="field-list simple">
@@ -958,8 +958,8 @@ with the load_from decorator.</p>
     </aside>
   </div>
 </div><script src="../../../_static/documentation_options.js?v=187304be"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>

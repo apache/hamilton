@@ -166,6 +166,27 @@ Configure your visualization
 
 All of the above visualization functions share parameters to customize the visualization (e.g., hide legend, hide inputs). Learn more by reviewing the API reference for `Driver.display_all_functions() <https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.display_all_functions>`_; parameters should apply to all other visualizations.
 
+Custom node labels with display_name
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use the ``@tag`` decorator with ``display_name`` to show human-readable labels in visualizations while keeping valid Python identifiers as function names. This is useful for creating presentation-ready diagrams or adding business-friendly names:
+
+.. code-block:: python
+
+    from hamilton.function_modifiers import tag
+
+    @tag(display_name="Parse Raw JSON")
+    def parse_raw_json(raw_data: str) -> dict:
+        return json.loads(raw_data)
+
+    @tag(display_name="Transform to DataFrame")
+    def transform_to_df(parse_raw_json: dict) -> pd.DataFrame:
+        return pd.DataFrame(parse_raw_json)
+
+When visualized, nodes will display "Parse Raw JSON" and "Transform to DataFrame" instead of their function names. This keeps your code Pythonic while making visualizations more readable for stakeholders.
+
+Note that ``display_name`` only affects visualization labels - the actual node names used in code and execution remain the function names.
+
 .. _custom-visualization-style:
 
 Apply custom style

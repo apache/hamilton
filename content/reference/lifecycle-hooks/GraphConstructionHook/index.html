@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex/"><link rel="search" title="Search" href="../../../search/"><link rel="next" title="lifecycle.api.TaskSubmissionHook" href="../TaskSubmissionHook/"><link rel="prev" title="lifecycle.api.StaticValidator" href="../StaticValidator/">
         <link rel="canonical" href="https://hamilton.apache.org/reference/lifecycle-hooks/GraphConstructionHook/">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
         <title>lifecycle.api.GraphConstructionHook - Hamilton</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
@@ -498,7 +498,7 @@
 <h1>lifecycle.api.GraphConstructionHook<a class="headerlink" href="#lifecycle-api-graphconstructionhook" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.lifecycle.api.GraphConstructionHook">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hamilton.lifecycle.api.</span></span><span class="sig-name descname"><span class="pre">GraphConstructionHook</span></span><a class="headerlink" href="#hamilton.lifecycle.api.GraphConstructionHook" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.lifecycle.api.</span></span><span class="sig-name descname"><span class="pre">GraphConstructionHook</span></span><a class="headerlink" href="#hamilton.lifecycle.api.GraphConstructionHook" title="Link to this definition">¶</a></dt>
 <dd><p>Hook that is run after graph construction. This allows you to register/capture info on the graph.
 Note that, in the case of materialization, this may be called multiple times (once when we create the graph,
 once when we materialize). Currently information into that is not exposed to the user, but we will be adding that in future
@@ -520,7 +520,7 @@ iterations.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.lifecycle.api.GraphConstructionHook.run_after_graph_construction">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_after_graph_construction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">HamiltonGraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">future_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.lifecycle.api.GraphConstructionHook.run_after_graph_construction" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">run_after_graph_construction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">HamiltonGraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">future_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.lifecycle.api.GraphConstructionHook.run_after_graph_construction" title="Link to this definition">¶</a></dt>
 <dd><p>Hook that is run post graph construction. This allows you to register/capture info on the graph.
 A common pattern is to store something in your object’s state here so that you can use it later
 (E.G. compute a hash on the graph)</p>
@@ -625,8 +625,8 @@ A common pattern is to store something in your object’s state here so that you
     </aside>
   </div>
 </div><script src="../../../_static/documentation_options.js?v=187304be"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     </body>
 </html>
