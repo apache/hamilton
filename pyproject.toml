@@ -84,7 +84,7 @@ ui = ["sf-hamilton-ui"]
 
 # vaex -- on >=py3.11 only core part available https://github.com/vaexio/vaex/pull/2331#issuecomment-2437198176
 vaex = [
-  "vaex; python_version <= '3.10'"
+  "vaex; python_version == '3.10'"
   ]
 visualization = ["graphviz", "networkx"]
 
