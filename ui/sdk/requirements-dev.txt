@@ -1,6 +1,6 @@
 black
 openapi-python-client
 pandera # for cli examples
-pre-commit
+prek
 ruff
 scikit-learn # for cli examples

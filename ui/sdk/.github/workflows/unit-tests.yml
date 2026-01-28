@@ -28,7 +28,7 @@ jobs:
         python -m pip install -r requirements-dev.txt
     - name: Run pre-commit hooks
       run: |
-        pre-commit run --all-files
+        prek run --all-files
     - name: Test with pytest
       run: |
         pip install -r requirements-test.txt

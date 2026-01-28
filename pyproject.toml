@@ -90,7 +90,7 @@ visualization = ["graphviz", "networkx"]
 
 [dependency-groups]
 dev = [
-  "pre-commit",
+  "prek",
   "ruff==0.5.7", # this should match `.pre-commit-config.yaml`
 ]
 test = [
@@ -157,7 +157,7 @@ docs = [
   "pyarrow >= 1.0.0",
   "pydantic >=2.0",
   "pyspark",
-    "openlineage-python",
+  "openlineage-python",
   "PyYAML",
   "ray",
   "readthedocs-sphinx-ext<2.3", # read the docs pins

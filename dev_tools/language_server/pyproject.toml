@@ -40,7 +40,7 @@ dependencies = [
 
 [project.optional-dependencies]
 test = [
-    "pre-commit",
+    "prek",
     "pytest",
 ]
 

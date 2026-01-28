@@ -60,12 +60,12 @@ jobs:
             activate-environment: true
 
         # It's enough to do it on single OS
-        - name: Check linting with pre-commit
+        - name: Check linting with prek
           if: ${{ runner.os == 'Linux' }}
           run: |
             uv sync --dev
-            uv run pre-commit install
-            uv run pre-commit run --all-files
+            uv run prek install
+            uv run prek run --all-files
 
         - name: Check for missing Apache 2 license headers
           if: ${{ runner.os == 'Linux' }}
