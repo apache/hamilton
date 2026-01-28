@@ -16,12 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<p align="center">
-  <img src="_static/hamilton-incubator-logo.svg"
-       width="240"
-       alt="Apache Hamilton (Incubator Podling) Logo">
-</p>
+```{figure} _static/hamilton-incubator-logo.svg
+:align: center
+:width: 240px
 
+Apache Hamilton (Incubator Podling) logo
 
 ```{include} main.md
 
