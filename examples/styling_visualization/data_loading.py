@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 
 import pandas as pd
 
@@ -23,8 +22,8 @@ from hamilton.function_modifiers import extract_columns, tag, tag_outputs
 
 
 def _sanitize_columns(
-    df_columns: List[str],
-) -> List[str]:
+    df_columns: list[str],
+) -> list[str]:
     """Helper function to sanitize column names.
 
     :param df_columns: the current column names

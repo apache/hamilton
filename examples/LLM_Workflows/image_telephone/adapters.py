@@ -19,7 +19,8 @@ import dataclasses
 import io
 import json
 import logging
-from typing import Any, Collection, Dict, Type
+from collections.abc import Collection
+from typing import Any
 from urllib import parse
 
 import boto3
@@ -39,12 +40,12 @@ class JSONS3DataSaver(DataSaver):
     bucket: str
     key: str
 
-    def save_data(self, data: dict) -> Dict[str, Any]:
+    def save_data(self, data: dict) -> dict[str, Any]:
         data = json.dumps(data).encode()
         client.put_object(Body=data, Bucket=self.bucket, Key=self.key)
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [dict]
 
     @classmethod
@@ -74,7 +75,7 @@ class ImageS3DataSaver(DataSaver):
     format: str
     # image_convert_params: Optional[Dict[str, Any]] = None
 
-    def save_data(self, data: str) -> Dict[str, Any]:
+    def save_data(self, data: str) -> dict[str, Any]:
         image = _load_image(data, self.format)
         in_mem_file = io.BytesIO()
         image.save(in_mem_file, format=self.format)
@@ -83,7 +84,7 @@ class ImageS3DataSaver(DataSaver):
         return {"key": self.key, "bucket": self.bucket}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [str]  # URL or local path
 
     @classmethod
@@ -97,13 +98,13 @@ class LocalImageSaver(DataSaver):
     format: str
     # image_convert_params: Optional[Dict[str, Any]] = dataclasses.field(default_factory=dict)
 
-    def save_data(self, data: str) -> Dict[str, Any]:
+    def save_data(self, data: str) -> dict[str, Any]:
         image = _load_image(data, self.format)
         image.save(self.path, format=self.format)
         return {"path": self.path}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [str]  # URL or local path
 
     @classmethod

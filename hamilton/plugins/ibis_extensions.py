@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Type
+from typing import Any
 
 from hamilton import registry
 
@@ -65,7 +65,7 @@ class SchemaValidatorIbis(base.DataValidator):
         return "schema"
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return issubclass(datatype, ir.Table)
 
     def description(self) -> str:

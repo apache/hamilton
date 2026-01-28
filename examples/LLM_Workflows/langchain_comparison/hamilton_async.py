@@ -16,7 +16,6 @@
 # under the License.
 
 # hamilton_async.py
-from typing import List
 
 import openai
 
@@ -29,11 +28,11 @@ def joke_prompt(topic: str) -> str:
     return f"Tell me a short joke about {topic}"
 
 
-def joke_messages(joke_prompt: str) -> List[dict]:
+def joke_messages(joke_prompt: str) -> list[dict]:
     return [{"role": "user", "content": joke_prompt}]
 
 
-async def joke_response(llm_client: openai.AsyncOpenAI, joke_messages: List[dict]) -> str:
+async def joke_response(llm_client: openai.AsyncOpenAI, joke_messages: list[dict]) -> str:
     response = await llm_client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=joke_messages,

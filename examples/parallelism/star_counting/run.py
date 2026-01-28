@@ -16,7 +16,6 @@
 # under the License.
 
 import logging
-from typing import Tuple
 
 import click
 import functions
@@ -74,7 +73,7 @@ def _get_executor(mode: str):
     required=False,
     help="Where to run remote tasks.",
 )
-def main(github_api_key: str, repositories: Tuple[str, ...], mode: str):
+def main(github_api_key: str, repositories: tuple[str, ...], mode: str):
     remote_executor, shutdown = _get_executor(mode)
     dr = (
         driver.Builder()

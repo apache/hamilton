@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Optional
 
 import ibis
 import ibis.expr.types as ir
@@ -42,7 +41,7 @@ def feature_table(raw_table: ir.Table) -> ir.Table:
 def feature_set(
     feature_table: ir.Table,
     feature_selection: list[str],
-    condition: Optional[ibis.common.deferred.Deferred] = None,
+    condition: ibis.common.deferred.Deferred | None = None,
 ) -> ir.Table:
     """Select feature columns and filter rows"""
     return feature_table[feature_selection].filter(condition)

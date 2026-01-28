@@ -47,7 +47,6 @@ polars_extension.py`, etc.
 
 import importlib
 import inspect
-from typing import Tuple
 
 from hamilton.experimental.databackend import AbstractBackend
 
@@ -152,7 +151,7 @@ class AbstractNumpyArray(AbstractBackend):
     _backends = [("numpy", "ndarray")]
 
 
-def register_backends() -> Tuple[Tuple[type], Tuple[type]]:
+def register_backends() -> tuple[tuple[type], tuple[type]]:
     """Register databackends defined in this module that
     include `DataFrame` and `Column` in their class name
     """

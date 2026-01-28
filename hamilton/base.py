@@ -23,7 +23,7 @@ It cannot import hamilton.graph, or hamilton.driver.
 import abc
 import collections
 import logging
-from typing import Any, Dict, List, Optional, Tuple, Type, Union
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -76,15 +76,15 @@ class DictResult(ResultMixin):
     """
 
     @staticmethod
-    def build_result(**outputs: Dict[str, Any]) -> Dict:
+    def build_result(**outputs: dict[str, Any]) -> dict:
         """This function builds a simple dict of output -> computed values."""
         return outputs
 
-    def input_types(self) -> Optional[List[Type[Type]]]:
+    def input_types(self) -> list[type[type]] | None:
         return [Any]
 
-    def output_type(self) -> Type:
-        return Dict[str, Any]
+    def output_type(self) -> type:
+        return dict[str, Any]
 
 
 class PandasDataFrameResult(ResultMixin):
@@ -108,8 +108,8 @@ class PandasDataFrameResult(ResultMixin):
 
     @staticmethod
     def pandas_index_types(
-        outputs: Dict[str, Any],
-    ) -> Tuple[Dict[str, List[str]], Dict[str, List[str]], Dict[str, List[str]]]:
+        outputs: dict[str, Any],
+    ) -> tuple[dict[str, list[str]], dict[str, list[str]], dict[str, list[str]]]:
         """This function creates three dictionaries according to whether there is an index type or not.
 
         The three dicts we create are:
@@ -124,7 +124,7 @@ class PandasDataFrameResult(ResultMixin):
         time_indexes = collections.defaultdict(list)
         no_indexes = collections.defaultdict(list)
 
-        def index_key_name(pd_object: Union[pd.DataFrame, pd.Series]) -> str:
+        def index_key_name(pd_object: pd.DataFrame | pd.Series) -> str:
             """Creates a string helping identify the index and it's type.
             Useful for disambiguating time related indexes."""
             return f"{pd_object.index.__class__.__name__}:::{pd_object.index.dtype}"
@@ -160,9 +160,9 @@ class PandasDataFrameResult(ResultMixin):
 
     @staticmethod
     def check_pandas_index_types_match(
-        all_index_types: Dict[str, List[str]],
-        time_indexes: Dict[str, List[str]],
-        no_indexes: Dict[str, List[str]],
+        all_index_types: dict[str, list[str]],
+        time_indexes: dict[str, list[str]],
+        no_indexes: dict[str, list[str]],
     ) -> bool:
         """Checks that pandas index types match.
 
@@ -212,7 +212,7 @@ class PandasDataFrameResult(ResultMixin):
         return types_match
 
     @staticmethod
-    def build_result(**outputs: Dict[str, Any]) -> pd.DataFrame:
+    def build_result(**outputs: dict[str, Any]) -> pd.DataFrame:
         """Builds a Pandas DataFrame from the outputs.
 
         This function will check the index types of the outputs, and log warnings if they don't match.
@@ -244,7 +244,7 @@ class PandasDataFrameResult(ResultMixin):
         return pd.DataFrame(outputs)  # this does an implicit outer join based on index.
 
     @staticmethod
-    def build_dataframe_with_dataframes(outputs: Dict[str, Any]) -> pd.DataFrame:
+    def build_dataframe_with_dataframes(outputs: dict[str, Any]) -> pd.DataFrame:
         """Builds a dataframe from the outputs in an "outer join" manner based on index.
 
         The behavior of pd.Dataframe(outputs) is that it will do an outer join based on indexes of the Series passed in.
@@ -294,12 +294,12 @@ class PandasDataFrameResult(ResultMixin):
 
         return pd.DataFrame(flattened_outputs)
 
-    def input_types(self) -> List[Type[Type]]:
+    def input_types(self) -> list[type[type]]:
         """Currently this just shoves anything into a dataframe. We should probably
         tighten this up."""
         return [Any]
 
-    def output_type(self) -> Type:
+    def output_type(self) -> type:
         return pd.DataFrame
 
 
@@ -324,7 +324,7 @@ class StrictIndexTypePandasDataFrameResult(PandasDataFrameResult):
     """
 
     @staticmethod
-    def build_result(**outputs: Dict[str, Any]) -> pd.DataFrame:
+    def build_result(**outputs: dict[str, Any]) -> pd.DataFrame:
         # TODO check inputs are pd.Series, arrays, or scalars -- else error
         output_index_type_tuple = PandasDataFrameResult.pandas_index_types(outputs)
         indexes_match = PandasDataFrameResult.check_pandas_index_types_match(
@@ -357,7 +357,7 @@ class NumpyMatrixResult(ResultMixin):
     """
 
     @staticmethod
-    def build_result(**outputs: Dict[str, Any]) -> np.matrix:
+    def build_result(**outputs: dict[str, Any]) -> np.matrix:
         """Builds a numpy matrix from the passed in, inputs.
 
         Note: this does not check that the inputs are all numpy arrays/array like things.
@@ -397,11 +397,11 @@ class NumpyMatrixResult(ResultMixin):
         # Create the matrix with columns as rows and then transpose
         return np.asmatrix(list_of_columns).T
 
-    def input_types(self) -> List[Type[Type]]:
+    def input_types(self) -> list[type[type]]:
         """Currently returns anything as numpy types are relatively new and"""
         return [Any]  # Typing
 
-    def output_type(self) -> Type:
+    def output_type(self) -> type:
         return pd.DataFrame
 
 
@@ -422,14 +422,14 @@ class SimplePythonDataFrameGraphAdapter(HamiltonGraphAdapter, PandasDataFrameRes
     """
 
     @staticmethod
-    def check_input_type(node_type: Type, input_value: Any) -> bool:
+    def check_input_type(node_type: type, input_value: Any) -> bool:
         return htypes.check_input_type(node_type, input_value)
 
     @staticmethod
-    def check_node_type_equivalence(node_type: Type, input_type: Type) -> bool:
+    def check_node_type_equivalence(node_type: type, input_type: type) -> bool:
         return node_type == input_type
 
-    def execute_node(self, node: node.Node, kwargs: Dict[str, Any]) -> Any:
+    def execute_node(self, node: node.Node, kwargs: dict[str, Any]) -> Any:
         return node.callable(**kwargs)
 
 
@@ -453,11 +453,11 @@ class SimplePythonGraphAdapter(SimplePythonDataFrameGraphAdapter):
             result_builder = DictResult()
         self.result_builder = result_builder
 
-    def build_result(self, **outputs: Dict[str, Any]) -> Any:
+    def build_result(self, **outputs: dict[str, Any]) -> Any:
         """Delegates to the result builder function supplied."""
         return self.result_builder.build_result(**outputs)
 
-    def output_type(self) -> Type:
+    def output_type(self) -> type:
         return self.result_builder.output_type()
 
 

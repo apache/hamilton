@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict, Union
 
 import pandas as pd
 from sklearn import base
@@ -33,7 +32,7 @@ def train_test_split_func(
     target: pd.Series,
     validation_size_fraction: float,
     random_state: int,
-) -> Dict[str, Union[pd.DataFrame, pd.Series]]:
+) -> dict[str, pd.DataFrame | pd.Series]:
     """Function that creates the training & test splits.
 
     It this then extracted out into constituent components and used downstream.
@@ -55,7 +54,7 @@ def train_test_split_func(
     return {"X_train": X_train, "X_test": X_test, "y_train": y_train, "y_test": y_test}
 
 
-def prefit_random_forest(random_state: int, max_depth: Union[int, None]) -> base.ClassifierMixin:
+def prefit_random_forest(random_state: int, max_depth: int | None) -> base.ClassifierMixin:
     """Returns a Random Forest Classifier with the specified parameters.
 
     :param random_state: random state for reproducibility.

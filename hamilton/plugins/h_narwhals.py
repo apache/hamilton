@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, Optional, Type, Union
+from typing import Any
 
 import narwhals as nw
 
@@ -55,10 +55,10 @@ class NarwhalsAdapter(api.NodeExecutionMethod):
         self,
         *,
         node_name: str,
-        node_tags: Dict[str, Any],
+        node_tags: dict[str, Any],
         node_callable: Any,
-        node_kwargs: Dict[str, Any],
-        task_id: Optional[str],
+        node_kwargs: dict[str, Any],
+        task_id: str | None,
         **future_kwargs: Any,
     ) -> Any:
         """This method is responsible for executing the node and returning the result.
@@ -109,7 +109,7 @@ class NarwhalsDataFrameResultBuilder(api.ResultBuilder):
         )
     """
 
-    def __init__(self, result_builder: Union[api.ResultBuilder, api.LegacyResultMixin]):
+    def __init__(self, result_builder: api.ResultBuilder | api.LegacyResultMixin):
         self.result_builder = result_builder
 
     def build_result(self, **outputs: Any) -> Any:
@@ -127,7 +127,7 @@ class NarwhalsDataFrameResultBuilder(api.ResultBuilder):
 
         return self.result_builder.build_result(**de_narwhaled_outputs)
 
-    def output_type(self) -> Type:
+    def output_type(self) -> type:
         """Returns the output type of this result builder
         :return: the type that this creates
         """

@@ -40,7 +40,6 @@ import hashlib
 import logging
 import sys
 from collections.abc import Mapping, Sequence, Set
-from typing import Dict
 
 from hamilton.experimental import h_databackends
 
@@ -183,7 +182,7 @@ def hash_unordered_mapping(obj, *args, depth: int = 0, **kwargs) -> str:
         hash_mapping(foo) == hash_mapping(bar)
     """
 
-    hashed_mapping: Dict[str, str] = {}
+    hashed_mapping: dict[str, str] = {}
     for key, value in obj.items():
         hashed_mapping[hash_value(key, depth=depth + 1)] = hash_value(value, depth=depth + 1)
 

@@ -21,8 +21,6 @@ it is useful to have a few tests that demonstrate that common use-cases are supp
 
 Note we also have some more end-to-end cases in test_layered.py"""
 
-from typing import Dict
-
 import pandas as pd
 
 from hamilton.function_modifiers import base as fm_base
@@ -58,7 +56,7 @@ def test_subdag_and_extract_fields():
 
     @extract_fields({"foo": int, "bar": int})
     @subdag(foo, bar)
-    def foo_bar(foo: int, bar: pd.Series) -> Dict[str, int]:
+    def foo_bar(foo: int, bar: pd.Series) -> dict[str, int]:
         return {"foo": foo, "bar": bar}
 
     nodes = fm_base.resolve_nodes(foo_bar, {})
@@ -80,7 +78,7 @@ def test_subdag_and_extract_fields_with_tags():
     @tag(a="c", target_="bar")
     @extract_fields({"foo": int, "bar": int})
     @subdag(foo, bar)
-    def foo_bar(foo: int, bar: pd.Series) -> Dict[str, int]:
+    def foo_bar(foo: int, bar: pd.Series) -> dict[str, int]:
         return {"foo": foo, "bar": bar}
 
     nodes = fm_base.resolve_nodes(foo_bar, {})
@@ -102,7 +100,7 @@ def test_subdag_and_extract_fields_dangling_nodes():
 
     @extract_fields({"foo": int, "bar": int})
     @subdag(foo, bar)
-    def foo_bar(foo: int) -> Dict[str, int]:
+    def foo_bar(foo: int) -> dict[str, int]:
         return {"foo": foo, "bar": 5}
 
     nodes = fm_base.resolve_nodes(foo_bar, {})

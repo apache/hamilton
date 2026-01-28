@@ -16,8 +16,9 @@
 # under the License.
 
 import sys
+from collections.abc import Callable, Collection
 from types import ModuleType
-from typing import Any, Callable, Collection, Dict, List, Tuple, Type, Union, get_type_hints
+from typing import Any, get_type_hints
 
 import polars as pl
 
@@ -62,9 +63,7 @@ class PolarsDataFrameResult(base.ResultMixin):
     Note: this is just a first attempt at something for Polars. Think it should handle more? Come chat/open a PR!
     """
 
-    def build_result(
-        self, **outputs: Dict[str, Union[pl.Series, pl.DataFrame, Any]]
-    ) -> pl.DataFrame:
+    def build_result(self, **outputs: dict[str, pl.Series | pl.DataFrame | Any]) -> pl.DataFrame:
         """This is the method that Hamilton will call to build the final result. It will pass in the results
         of the requested outputs that you passed in to the execute() method.
 
@@ -88,7 +87,7 @@ class PolarsDataFrameResult(base.ResultMixin):
         # happen for mixed outputs that include scalars for example.
         return pl.DataFrame(outputs)
 
-    def output_type(self) -> Type:
+    def output_type(self) -> type:
         return pl.DataFrame
 
 
@@ -174,13 +173,13 @@ class with_columns(with_columns_base):
 
     def __init__(
         self,
-        *load_from: Union[Callable, ModuleType],
-        columns_to_pass: List[str] = None,
+        *load_from: Callable | ModuleType,
+        columns_to_pass: list[str] = None,
         pass_dataframe_as: str = None,
         on_input: str = None,
-        select: List[str] = None,
+        select: list[str] = None,
         namespace: str = None,
-        config_required: List[str] = None,
+        config_required: list[str] = None,
     ):
         """Instantiates a ``@with_columns`` decorator.
 
@@ -219,8 +218,8 @@ class with_columns(with_columns_base):
         )
 
     def _create_column_nodes(
-        self, fn: Callable, inject_parameter: str, params: Dict[str, Type[Type]]
-    ) -> List[node.Node]:
+        self, fn: Callable, inject_parameter: str, params: dict[str, type[type]]
+    ) -> list[node.Node]:
         output_type = params[inject_parameter]
 
         def temp_fn(**kwargs) -> Any:
@@ -240,8 +239,8 @@ class with_columns(with_columns_base):
         return out_nodes[1:]
 
     def get_initial_nodes(
-        self, fn: Callable, params: Dict[str, Type[Type]]
-    ) -> Tuple[str, Collection[node.Node]]:
+        self, fn: Callable, params: dict[str, type[type]]
+    ) -> tuple[str, Collection[node.Node]]:
         """Selects the correct dataframe and optionally extracts out columns."""
         inject_parameter = _default_inject_parameter(fn=fn, target_dataframe=self.target_dataframe)
         with_columns_base.validate_dataframe(
@@ -259,7 +258,7 @@ class with_columns(with_columns_base):
 
         return inject_parameter, initial_nodes
 
-    def get_subdag_nodes(self, fn: Callable, config: Dict[str, Any]) -> Collection[node.Node]:
+    def get_subdag_nodes(self, fn: Callable, config: dict[str, Any]) -> Collection[node.Node]:
         return subdag.collect_nodes(config, self.subdag_functions)
 
     def chain_subdag_nodes(

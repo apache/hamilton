@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict, List
 
 import numpy as np
 import pandas as pd
@@ -52,8 +51,8 @@ def preprocessed_data__dev(df: pd.DataFrame) -> pd.DataFrame:
     )
 )
 def split_indices(
-    preprocessed_data: pd.DataFrame, validation_user_ids: List[int]
-) -> Dict[str, pd.DataFrame]:
+    preprocessed_data: pd.DataFrame, validation_user_ids: list[int]
+) -> dict[str, pd.DataFrame]:
     """Creating train-validation splits based on the list of `validation_user_ids`"""
     validation_selection_mask = preprocessed_data.id.isin([int(i) for i in validation_user_ids])
 
@@ -63,7 +62,7 @@ def split_indices(
     )
 
 
-def data_stats(preprocessed_data: pd.DataFrame, feature_set: List[str]) -> pd.DataFrame:
+def data_stats(preprocessed_data: pd.DataFrame, feature_set: list[str]) -> pd.DataFrame:
     return preprocessed_data[feature_set].describe()
 
 
@@ -71,7 +70,7 @@ def data_stats(preprocessed_data: pd.DataFrame, feature_set: List[str]) -> pd.Da
     X_train=dict(df=source("train_df"), feature_set=source("feature_set")),
     X_validation=dict(df=source("validation_df"), feature_set=source("feature_set")),
 )
-def features(df: pd.DataFrame, feature_set: List[str]) -> np.ndarray:
+def features(df: pd.DataFrame, feature_set: list[str]) -> np.ndarray:
     """Select features from `preprocessed_data` based on `feature_set`"""
     return df[feature_set].to_numpy()
 

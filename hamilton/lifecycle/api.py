@@ -17,8 +17,9 @@
 
 import abc
 from abc import ABC
+from collections.abc import Collection
 from types import ModuleType
-from typing import TYPE_CHECKING, Any, Collection, Dict, List, Optional, Tuple, Type, final
+from typing import TYPE_CHECKING, Any, final
 
 from hamilton import graph_types, node
 
@@ -81,13 +82,13 @@ class ResultBuilder(BaseDoBuildResult, abc.ABC):
 
     @override
     @final
-    def do_build_result(self, outputs: Dict[str, Any]) -> Any:
+    def do_build_result(self, outputs: dict[str, Any]) -> Any:
         """Implements the do_build_result method from the BaseDoBuildResult class.
         This is kept from the user as the public-facing API is build_result, allowing us to change the
         API/implementation of the internal set of hooks"""
         return self.build_result(**outputs)
 
-    def input_types(self) -> List[Type[Type]]:
+    def input_types(self) -> list[type[type]]:
         """Gives the applicable types to this result builder.
         This is optional for backwards compatibility, but is recommended.
 
@@ -95,7 +96,7 @@ class ResultBuilder(BaseDoBuildResult, abc.ABC):
         """
         return [Any]
 
-    def output_type(self) -> Type:
+    def output_type(self) -> type:
         """Returns the output type of this result builder
         :return: the type that this creates
         """
@@ -129,7 +130,7 @@ class GraphAdapter(
 
     @staticmethod
     @abc.abstractmethod
-    def check_input_type(node_type: Type, input_value: Any) -> bool:
+    def check_input_type(node_type: type, input_value: Any) -> bool:
         """Used to check whether the user inputs match what the execution strategy & functions can handle.
 
         Static purely for legacy reasons.
@@ -142,7 +143,7 @@ class GraphAdapter(
 
     @staticmethod
     @abc.abstractmethod
-    def check_node_type_equivalence(node_type: Type, input_type: Type) -> bool:
+    def check_node_type_equivalence(node_type: type, input_type: type) -> bool:
         """Used to check whether two types are equivalent.
 
         Static, purely for legacy reasons.
@@ -159,7 +160,7 @@ class GraphAdapter(
     @override
     @final
     def do_node_execute(
-        self, run_id: str, node_: node.Node, kwargs: Dict[str, Any], task_id: Optional[str] = None
+        self, run_id: str, node_: node.Node, kwargs: dict[str, Any], task_id: str | None = None
     ) -> Any:
         return self.execute_node(node_, kwargs)
 
@@ -174,7 +175,7 @@ class GraphAdapter(
         return self.check_node_type_equivalence(type_to, type_from)
 
     @abc.abstractmethod
-    def execute_node(self, node: node.Node, kwargs: Dict[str, Any]) -> Any:
+    def execute_node(self, node: node.Node, kwargs: dict[str, Any]) -> Any:
         """Given a node that represents a hamilton function, execute it.
         Note, in some adapters this might just return some type of "future".
 
@@ -193,12 +194,12 @@ class NodeExecutionHook(BasePreNodeExecute, BasePostNodeExecute, abc.ABC):
         self,
         *,
         node_name: str,
-        node_tags: Dict[str, Any],
-        node_kwargs: Dict[str, Any],
+        node_tags: dict[str, Any],
+        node_kwargs: dict[str, Any],
         node_return_type: type,
-        task_id: Optional[str],
+        task_id: str | None,
         run_id: str,
-        node_input_types: Dict[str, Any],
+        node_input_types: dict[str, Any],
         **future_kwargs: Any,
     ):
         """Hook that is executed prior to node execution.
@@ -221,8 +222,8 @@ class NodeExecutionHook(BasePreNodeExecute, BasePostNodeExecute, abc.ABC):
         *,
         run_id: str,
         node_: node.Node,
-        kwargs: Dict[str, Any],
-        task_id: Optional[str] = None,
+        kwargs: dict[str, Any],
+        task_id: str | None = None,
     ):
         """Wraps the before_execution method, providing a bridge to an external-facing API. Do not override this!"""
         self.run_before_node_execution(
@@ -240,13 +241,13 @@ class NodeExecutionHook(BasePreNodeExecute, BasePostNodeExecute, abc.ABC):
         self,
         *,
         node_name: str,
-        node_tags: Dict[str, Any],
-        node_kwargs: Dict[str, Any],
+        node_tags: dict[str, Any],
+        node_kwargs: dict[str, Any],
         node_return_type: type,
         result: Any,
-        error: Optional[Exception],
+        error: Exception | None,
         success: bool,
-        task_id: Optional[str],
+        task_id: str | None,
         run_id: str,
         **future_kwargs: Any,
     ):
@@ -272,11 +273,11 @@ class NodeExecutionHook(BasePreNodeExecute, BasePostNodeExecute, abc.ABC):
         *,
         run_id: str,
         node_: node.Node,
-        kwargs: Dict[str, Any],
+        kwargs: dict[str, Any],
         success: bool,
-        error: Optional[Exception],
-        result: Optional[Any],
-        task_id: Optional[str] = None,
+        error: Exception | None,
+        result: Any | None,
+        task_id: str | None = None,
     ):
         """Wraps the after_execution method, providing a bridge to an external-facing API. Do not override this!"""
         self.run_after_node_execution(
@@ -303,8 +304,8 @@ class GraphExecutionHook(BasePreGraphExecute, BasePostGraphExecute):
         run_id: str,
         graph: "FunctionGraph",
         success: bool,
-        error: Optional[Exception],
-        results: Optional[Dict[str, Any]],
+        error: Exception | None,
+        results: dict[str, Any] | None,
     ):
         """Just delegates to the interface method, passing in the right data."""
         return self.run_after_graph_execution(
@@ -322,9 +323,9 @@ class GraphExecutionHook(BasePreGraphExecute, BasePostGraphExecute):
         *,
         run_id: str,
         graph: "FunctionGraph",
-        final_vars: List[str],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        final_vars: list[str],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
     ):
         """Implementation of the pre_graph_execute hook. This just converts the inputs to
         the format the user-facing hook is expecting -- performing a walk of the DAG to pass in
@@ -345,9 +346,9 @@ class GraphExecutionHook(BasePreGraphExecute, BasePostGraphExecute):
         self,
         *,
         graph: graph_types.HamiltonGraph,
-        final_vars: List[str],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        final_vars: list[str],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
         execution_path: Collection[str],
         run_id: str,
         **future_kwargs: Any,
@@ -372,8 +373,8 @@ class GraphExecutionHook(BasePreGraphExecute, BasePostGraphExecute):
         *,
         graph: graph_types.HamiltonGraph,
         success: bool,
-        error: Optional[Exception],
-        results: Optional[Dict[str, Any]],
+        error: Exception | None,
+        results: dict[str, Any] | None,
         run_id: str,
         **future_kwargs: Any,
     ):
@@ -400,10 +401,10 @@ class TaskSubmissionHook(BasePreTaskSubmission, abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
-        spawning_task_id: Optional[str],
+        nodes: list["node.Node"],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         self.run_before_task_submission(
@@ -422,10 +423,10 @@ class TaskSubmissionHook(BasePreTaskSubmission, abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
-        spawning_task_id: Optional[str],
+        nodes: list["node.Node"],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
         **future_kwargs,
     ):
@@ -454,11 +455,11 @@ class TaskReturnHook(BasePostTaskReturn, abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
+        nodes: list["node.Node"],
         result: Any,
         success: bool,
-        error: Optional[Exception],
-        spawning_task_id: Optional[str],
+        error: Exception | None,
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         self.run_after_task_return(
@@ -478,11 +479,11 @@ class TaskReturnHook(BasePostTaskReturn, abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
+        nodes: list["node.Node"],
         result: Any,
         success: bool,
-        error: Optional[Exception],
-        spawning_task_id: Optional[str],
+        error: Exception | None,
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
         **future_kwargs,
     ):
@@ -511,10 +512,10 @@ class TaskExecutionHook(BasePreTaskExecute, BasePostTaskExecute, abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
-        spawning_task_id: Optional[str],
+        nodes: list["node.Node"],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         self.run_before_task_execution(
@@ -532,11 +533,11 @@ class TaskExecutionHook(BasePreTaskExecute, BasePostTaskExecute, abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
-        results: Optional[Dict[str, Any]],
+        nodes: list["node.Node"],
+        results: dict[str, Any] | None,
         success: bool,
         error: Exception,
-        spawning_task_id: Optional[str],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         self.run_after_task_execution(
@@ -556,10 +557,10 @@ class TaskExecutionHook(BasePreTaskExecute, BasePostTaskExecute, abc.ABC):
         *,
         task_id: str,
         run_id: str,
-        nodes: List[HamiltonNode],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
-        spawning_task_id: Optional[str],
+        nodes: list[HamiltonNode],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
         **future_kwargs,
     ):
@@ -583,11 +584,11 @@ class TaskExecutionHook(BasePreTaskExecute, BasePostTaskExecute, abc.ABC):
         *,
         task_id: str,
         run_id: str,
-        nodes: List[HamiltonNode],
-        results: Optional[Dict[str, Any]],
+        nodes: list[HamiltonNode],
+        results: dict[str, Any] | None,
         success: bool,
         error: Exception,
-        spawning_task_id: Optional[str],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
         **future_kwargs,
     ):
@@ -662,8 +663,8 @@ class NodeExecutionMethod(BaseDoNodeExecute):
         *,
         run_id: str,
         node_: node.Node,
-        kwargs: Dict[str, Any],
-        task_id: Optional[str] = None,
+        kwargs: dict[str, Any],
+        task_id: str | None = None,
     ) -> Any:
         return self.run_to_execute_node(
             node_name=node_.name,
@@ -680,10 +681,10 @@ class NodeExecutionMethod(BaseDoNodeExecute):
         self,
         *,
         node_name: str,
-        node_tags: Dict[str, Any],
+        node_tags: dict[str, Any],
         node_callable: Any,
-        node_kwargs: Dict[str, Any],
-        task_id: Optional[str],
+        node_kwargs: dict[str, Any],
+        task_id: str | None,
         is_expand: bool,
         is_collect: bool,
         **future_kwargs: Any,
@@ -727,7 +728,7 @@ class StaticValidator(BaseValidateGraph, BaseValidateNode):
 
     def run_to_validate_node(
         self, *, node: HamiltonNode, **future_kwargs
-    ) -> Tuple[bool, Optional[str]]:
+    ) -> tuple[bool, str | None]:
         """Override this to build custom node validations! Defaults to just returning that a node is valid so you don't have to implement it if you want to just implement a single method.
         Runs post node construction to validate a node. You have access to a bunch of metadata about the node, stored in the hamilton_node argument
 
@@ -741,7 +742,7 @@ class StaticValidator(BaseValidateGraph, BaseValidateNode):
 
     def run_to_validate_graph(
         self, graph: HamiltonGraph, **future_kwargs
-    ) -> Tuple[bool, Optional[str]]:
+    ) -> tuple[bool, str | None]:
         """Override this to build custom DAG validations! Default to just returning that the graph is valid, so you don't have to implement it if you want to just implement a single method.
         Runs post graph construction to validate a graph. You have access to a bunch of metadata about the graph, stored in the graph argument.
 
@@ -754,14 +755,14 @@ class StaticValidator(BaseValidateGraph, BaseValidateNode):
 
     @override
     @final
-    def validate_node(self, *, created_node: node.Node) -> Tuple[bool, Optional[Exception]]:
+    def validate_node(self, *, created_node: node.Node) -> tuple[bool, Exception | None]:
         return self.run_to_validate_node(node=HamiltonNode.from_node(created_node))
 
     @override
     @final
     def validate_graph(
-        self, *, graph: "FunctionGraph", modules: List[ModuleType], config: Dict[str, Any]
-    ) -> Tuple[bool, Optional[Exception]]:
+        self, *, graph: "FunctionGraph", modules: list[ModuleType], config: dict[str, Any]
+    ) -> tuple[bool, Exception | None]:
         return self.run_to_validate_graph(graph=HamiltonGraph.from_graph(graph))
 
 
@@ -771,16 +772,16 @@ class TaskGroupingHook(BasePostTaskGroup, BasePostTaskExpand):
 
     @override
     @final
-    def post_task_group(self, *, run_id: str, task_ids: List[str]):
+    def post_task_group(self, *, run_id: str, task_ids: list[str]):
         return self.run_after_task_grouping(run_id=run_id, task_ids=task_ids)
 
     @override
     @final
-    def post_task_expand(self, *, run_id: str, task_id: str, parameters: Dict[str, Any]):
+    def post_task_expand(self, *, run_id: str, task_id: str, parameters: dict[str, Any]):
         return self.run_after_task_expansion(run_id=run_id, task_id=task_id, parameters=parameters)
 
     @abc.abstractmethod
-    def run_after_task_grouping(self, *, run_id: str, task_ids: List[str], **future_kwargs):
+    def run_after_task_grouping(self, *, run_id: str, task_ids: list[str], **future_kwargs):
         """Runs after task grouping. This allows you to capture information about which tasks were
         created for a given run.
 
@@ -792,7 +793,7 @@ class TaskGroupingHook(BasePostTaskGroup, BasePostTaskExpand):
 
     @abc.abstractmethod
     def run_after_task_expansion(
-        self, *, run_id: str, task_id: str, parameters: Dict[str, Any], **future_kwargs
+        self, *, run_id: str, task_id: str, parameters: dict[str, Any], **future_kwargs
     ):
         """Runs after task expansion in Parallelize/Collect blocks. This allows you to capture information
         about the task that was expanded.
@@ -813,13 +814,13 @@ class GraphConstructionHook(BasePostGraphConstruct, abc.ABC):
     """
 
     def post_graph_construct(
-        self, *, graph: "FunctionGraph", modules: List[ModuleType], config: Dict[str, Any]
+        self, *, graph: "FunctionGraph", modules: list[ModuleType], config: dict[str, Any]
     ):
         self.run_after_graph_construction(graph=HamiltonGraph.from_graph(graph), config=config)
 
     @abc.abstractmethod
     def run_after_graph_construction(
-        self, *, graph: HamiltonGraph, config: Dict[str, Any], **future_kwargs: Any
+        self, *, graph: HamiltonGraph, config: dict[str, Any], **future_kwargs: Any
     ):
         """Hook that is run post graph construction. This allows you to register/capture info on the graph.
         A common pattern is to store something in your object's state here so that you can use it later

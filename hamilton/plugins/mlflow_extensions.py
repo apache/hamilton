@@ -17,8 +17,9 @@
 
 import dataclasses
 import pathlib
+from collections.abc import Collection
 from types import ModuleType
-from typing import Any, Collection, Dict, Literal, Optional, Tuple, Type, Union
+from typing import Any, Literal
 
 try:
     import mlflow
@@ -40,11 +41,11 @@ class MLFlowModelSaver(DataSaver):
     :param mlflow_kwargs: Arguments for `.log_model()`. Can be flavor-specific.
     """
 
-    path: Union[str, pathlib.Path] = "model"
-    register_as: Optional[str] = None
-    flavor: Optional[Union[str, ModuleType]] = None
-    run_id: Optional[str] = None
-    mlflow_kwargs: Dict[str, Any] = None
+    path: str | pathlib.Path = "model"
+    register_as: str | None = None
+    flavor: str | ModuleType | None = None
+    run_id: str | None = None
+    mlflow_kwargs: dict[str, Any] = None
 
     def __post_init__(self):
         self.mlflow_kwargs = self.mlflow_kwargs or {}
@@ -54,10 +55,10 @@ class MLFlowModelSaver(DataSaver):
         return "mlflow"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [Any]
 
-    def save_data(self, data) -> Dict[str, Any]:
+    def save_data(self, data) -> dict[str, Any]:
         if self.flavor:
             flavor = self.flavor
         else:
@@ -125,15 +126,15 @@ class MLFlowModelLoader(DataLoader):
     :param mlflow_kwargs: Arguments for `.load_model()`. Can be flavor-specific.
     """
 
-    model_uri: Optional[str] = None
+    model_uri: str | None = None
     mode: Literal["tracking", "registry"] = "tracking"
-    run_id: Optional[str] = None
-    path: Union[str, pathlib.Path] = "model"
-    model_name: Optional[str] = None
-    version: Optional[Union[str, int]] = None
-    version_alias: Optional[str] = None
-    flavor: Optional[Union[ModuleType, str]] = None
-    mlflow_kwargs: Dict[str, Any] = None
+    run_id: str | None = None
+    path: str | pathlib.Path = "model"
+    model_name: str | None = None
+    version: str | int | None = None
+    version_alias: str | None = None
+    flavor: ModuleType | str | None = None
+    mlflow_kwargs: dict[str, Any] = None
 
     # __post_init__ is required to set kwargs as empty dict because
     # can't set: kwargs: Dict[str, Any] = dataclasses.field(default_factory=dict)
@@ -170,10 +171,10 @@ class MLFlowModelLoader(DataLoader):
         return "mlflow"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [Any]
 
-    def load_data(self, type_: Type) -> Tuple[Any, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[Any, dict[str, Any]]:
         model_info = mlflow.models.model.get_model_info(self.model_uri)
         metadata = {k.strip("_"): v for k, v in model_info.__dict__.items()}
 

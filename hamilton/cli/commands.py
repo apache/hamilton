@@ -16,13 +16,12 @@
 # under the License.
 
 from pathlib import Path
-from typing import List, Optional
 
 from hamilton import ad_hoc_utils, driver
 from hamilton.cli import logic
 
 
-def build(modules: List[Path], context_path: Optional[Path] = None):
+def build(modules: list[Path], context_path: Path | None = None):
     """Build a Hamilton driver from the passed modules, and
     load the Driver config from the context file.
 
@@ -43,11 +42,11 @@ def build(modules: List[Path], context_path: Optional[Path] = None):
 
 def diff(
     current_dr: driver.Driver,
-    modules: List[Path],
-    git_reference: Optional[str] = "HEAD",
+    modules: list[Path],
+    git_reference: str | None = "HEAD",
     view: bool = False,
     output_file_path: Path = Path("./diff.png"),
-    context_path: Optional[Path] = None,
+    context_path: Path | None = None,
 ) -> dict:
     """Get the diff of"""
     context = logic.load_context(context_path) if context_path else {}

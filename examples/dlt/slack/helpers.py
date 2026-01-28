@@ -17,7 +17,8 @@
 
 """Slack source helpers."""
 
-from typing import Any, Generator, Iterable, List, Optional
+from collections.abc import Generator, Iterable
+from typing import Any
 from urllib.parse import urljoin
 
 import pendulum
@@ -98,7 +99,7 @@ class SlackAPI:
         return {"Authorization": f"Bearer {self.access_token}"}
 
     def parameters(
-        self, params: Optional[Dict[str, Any]] = None, next_cursor: str = None
+        self, params: Dict[str, Any] | None = None, next_cursor: str = None
     ) -> Dict[str, str]:
         """
         Generate the query parameters to use for the request.
@@ -136,7 +137,7 @@ class SlackAPI:
         return next(extract_jsonpath(cursor_jsonpath, response), None)
 
     def _convert_datetime_fields(
-        self, item: Dict[str, Any], datetime_fields: List[str]
+        self, item: Dict[str, Any], datetime_fields: list[str]
     ) -> Dict[str, Any]:
         """Convert timestamp fields in the item to pendulum datetime objects.
 
@@ -167,7 +168,7 @@ class SlackAPI:
         resource: str,
         response_path: str = None,
         params: Dict[str, Any] = None,
-        datetime_fields: List[str] = None,
+        datetime_fields: list[str] = None,
         context: Dict[str, Any] = None,
     ) -> Iterable[TDataItem]:
         """Get all pages from slack using requests.

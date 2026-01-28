@@ -16,7 +16,7 @@
 # under the License.
 
 import logging
-from typing import Any, Type
+from typing import Any
 
 from packaging import version
 
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 try:
     from xlsxwriter.workbook import Workbook
 except ImportError:
-    Workbook = Type
+    Workbook = type
 
 try:
     import polars as pl

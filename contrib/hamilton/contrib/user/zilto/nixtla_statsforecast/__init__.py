@@ -16,7 +16,8 @@
 # under the License.
 
 import logging
-from typing import Callable, Optional
+from collections.abc import Callable
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -155,8 +156,8 @@ def inference_predictions(
 
 
 def plotting_config(
-    plot_uids: Optional[list[str]] = None,
-    plot_models: Optional[list[str]] = None,
+    plot_uids: list[str] | None = None,
+    plot_models: list[str] | None = None,
     plot_anomalies: bool = False,
     plot_confidence_percentile: list[float] = [90.0],  # noqa: B006
     plot_engine: str = "matplotlib",

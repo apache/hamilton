@@ -18,7 +18,6 @@
 import logging
 import os
 import shutil
-from typing import List
 
 import click
 import git
@@ -62,7 +61,7 @@ def _get_base_template_dir(base_contrib_path: str):
 
 def _create_username_dir_if_not_exists(
     base_contrib_path: str, sanitized_username: str, username: str
-) -> List[str]:
+) -> list[str]:
     to_add = []
     username_dir = os.path.join(base_contrib_path, sanitized_username)
     if not os.path.exists(username_dir):
@@ -108,7 +107,7 @@ def _create_username_dir_if_not_exists(
 
 def _create_dataflow_dir_if_not_exists(
     base_contrib_path: str, sanitized_username: str, dataflow_name: str
-) -> List[str]:
+) -> list[str]:
     to_add = []
     dataflow_dir = os.path.join(base_contrib_path, sanitized_username, dataflow_name)
     if not os.path.exists(dataflow_dir):
@@ -140,7 +139,7 @@ def _create_dataflow_dir_if_not_exists(
     return to_add
 
 
-def _git_add(files_to_add: List[str], git_repo_path: str):
+def _git_add(files_to_add: list[str], git_repo_path: str):
     repo = git.Repo(git_repo_path)
     repo.index.add(files_to_add)
     logger.info(f"Adding files {files_to_add} to git! Happy developing!")

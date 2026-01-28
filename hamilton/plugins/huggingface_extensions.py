@@ -16,19 +16,11 @@
 # under the License.
 
 import dataclasses
+from collections.abc import Collection, Mapping, Sequence
 from os import PathLike
 from typing import (
     Any,
     BinaryIO,
-    Collection,
-    Dict,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
-    Tuple,
-    Type,
-    Union,
 )
 
 try:
@@ -68,29 +60,29 @@ class HuggingFaceDSLoader(DataLoader):
     """Data loader for hugging face datasets. Uses load_data method."""
 
     path: str
-    dataset_name: Optional[str] = None  # this can't be `name` because it clashes with `.name()`
-    data_dir: Optional[str] = None
-    data_files: Optional[Union[str, Sequence[str], Mapping[str, Union[str, Sequence[str]]]]] = None
-    split: Optional[str] = None
-    cache_dir: Optional[str] = None
-    features: Optional[Features] = None
-    download_config: Optional[DownloadConfig] = None
-    download_mode: Optional[Union[DownloadMode, str]] = None
-    verification_mode: Optional[Union[VerificationMode, str]] = None
+    dataset_name: str | None = None  # this can't be `name` because it clashes with `.name()`
+    data_dir: str | None = None
+    data_files: str | Sequence[str] | Mapping[str, str | Sequence[str]] | None = None
+    split: str | None = None
+    cache_dir: str | None = None
+    features: Features | None = None
+    download_config: DownloadConfig | None = None
+    download_mode: DownloadMode | str | None = None
+    verification_mode: VerificationMode | str | None = None
     ignore_verifications = "deprecated"
-    keep_in_memory: Optional[bool] = None
+    keep_in_memory: bool | None = None
     save_infos: bool = False
-    revision: Optional[Union[str, Version]] = None
-    token: Optional[Union[bool, str]] = None
+    revision: str | Version | None = None
+    token: bool | str | None = None
     use_auth_token = "deprecated"
     task = "deprecated"
     streaming: bool = False
-    num_proc: Optional[int] = None
-    storage_options: Optional[Dict] = None
-    config_kwargs: Optional[Dict] = None
+    num_proc: int | None = None
+    storage_options: dict | None = None
+    config_kwargs: dict | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return list(HF_types)
 
     def _get_loading_kwargs(self) -> dict:
@@ -98,7 +90,7 @@ class HuggingFaceDSLoader(DataLoader):
         kwargs = dataclasses.asdict(self)
         # we send path separately
         del kwargs["path"]
-        config_kwargs: Optional[dict] = kwargs.pop("config_kwargs", None)
+        config_kwargs: dict | None = kwargs.pop("config_kwargs", None)
         if config_kwargs:
             # add config kwargs as needed.
             kwargs.update(config_kwargs)
@@ -108,7 +100,7 @@ class HuggingFaceDSLoader(DataLoader):
 
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[Union[HF_types], Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[HF_types, dict[str, Any]]:
         """Loads the data set given the path and class values."""
         ds = load_dataset(self.path, **self._get_loading_kwargs())
         is_dataset = isinstance(ds, Dataset)
@@ -128,16 +120,16 @@ class HuggingFaceDSLoader(DataLoader):
 class HuggingFaceDSParquetSaver(DataSaver):
     """Saves a Huggingface dataset to parquet."""
 
-    path_or_buf: Union[PathLike, BinaryIO]
-    batch_size: Optional[int] = None
-    parquet_writer_kwargs: Optional[dict] = None
+    path_or_buf: PathLike | BinaryIO
+    batch_size: int | None = None
+    parquet_writer_kwargs: dict | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return list(HF_types)
 
     @classmethod
-    def applies_to(cls, type_: Type[Type]) -> bool:
+    def applies_to(cls, type_: type[type]) -> bool:
         return type_ in HF_types
 
     def _get_saving_kwargs(self) -> dict:
@@ -145,14 +137,14 @@ class HuggingFaceDSParquetSaver(DataSaver):
         kwargs = dataclasses.asdict(self)
         # we put path_or_buff as a positional argument
         del kwargs["path_or_buf"]
-        parquet_writer_kwargs: Optional[dict] = kwargs.pop("parquet_writer_kwargs", None)
+        parquet_writer_kwargs: dict | None = kwargs.pop("parquet_writer_kwargs", None)
         if parquet_writer_kwargs:
             # add config kwargs as needed.
             kwargs.update(parquet_writer_kwargs)
 
         return kwargs
 
-    def save_data(self, ds: Union[HF_types]) -> Dict[str, Any]:
+    def save_data(self, ds: HF_types) -> dict[str, Any]:
         """Saves the data to parquet."""
         is_dataset = isinstance(ds, Dataset)
         ds.to_parquet(self.path_or_buf, **self._get_saving_kwargs())
@@ -197,14 +189,14 @@ if lancedb is not None:
 
         db_client: lancedb.DBConnection
         table_name: str
-        columns_to_write: List[str] = None  # None means all.
+        columns_to_write: list[str] = None  # None means all.
         write_batch_size: int = 100
 
         @classmethod
-        def applicable_types(cls) -> Collection[Type]:
+        def applicable_types(cls) -> Collection[type]:
             return list(HF_types)
 
-        def save_data(self, ds: Union[HF_types]) -> Dict[str, Any]:
+        def save_data(self, ds: HF_types) -> dict[str, Any]:
             """This batches writes to lancedb."""
             ds.map(
                 _batch_write,

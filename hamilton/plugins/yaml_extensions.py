@@ -22,7 +22,8 @@ except ImportError as e:
 
 import dataclasses
 import pathlib
-from typing import Any, Collection, Dict, Tuple, Type, Union
+from collections.abc import Collection
+from typing import Any, Union
 
 from hamilton import registry
 from hamilton.io.data_adapters import DataLoader, DataSaver
@@ -34,17 +35,17 @@ AcceptedTypes = Union[PrimitiveTypes]
 
 @dataclasses.dataclass
 class YAMLDataLoader(DataLoader):
-    path: Union[str, pathlib.Path]
+    path: str | pathlib.Path
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [*PrimitiveTypes]
 
     @classmethod
     def name(cls) -> str:
         return "yaml"
 
-    def load_data(self, type_: Type) -> Tuple[AcceptedTypes, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[AcceptedTypes, dict[str, Any]]:
         path = self.path
         if isinstance(self.path, str):
             path = pathlib.Path(self.path)
@@ -55,17 +56,17 @@ class YAMLDataLoader(DataLoader):
 
 @dataclasses.dataclass
 class YAMLDataSaver(DataSaver):
-    path: Union[str, pathlib.Path]
+    path: str | pathlib.Path
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [*PrimitiveTypes]
 
     @classmethod
     def name(cls) -> str:
         return "yaml"
 
-    def save_data(self, data: AcceptedTypes) -> Dict[str, Any]:
+    def save_data(self, data: AcceptedTypes) -> dict[str, Any]:
         path = self.path
         if isinstance(path, str):
             path = pathlib.Path(path)

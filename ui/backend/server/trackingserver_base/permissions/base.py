@@ -33,9 +33,7 @@ class permission:
 
     DECORATED_ATTR = "decorated_with_auth_function"
 
-    def __init__(
-        self, auth_function: typing.Callable[..., typing.Awaitable[typing.Tuple[bool, str]]]
-    ):
+    def __init__(self, auth_function: typing.Callable[..., typing.Awaitable[tuple[bool, str]]]):
         """Initializes an auth_with decorator
 
         @param auth_function:
@@ -76,7 +74,7 @@ class permission:
         return output_function
 
 
-async def not_allowed(request: typing.Any) -> typing.Tuple[bool, str]:
+async def not_allowed(request: typing.Any) -> tuple[bool, str]:
     """Checks if a user can create an API key.
 
     @param request:
@@ -85,7 +83,7 @@ async def not_allowed(request: typing.Any) -> typing.Tuple[bool, str]:
     return False, "This operation is not allowed."
 
 
-async def allowed(request: typing.Any) -> typing.Tuple[bool, str]:
+async def allowed(request: typing.Any) -> tuple[bool, str]:
     """Checks if a user can create an API key.
 
     @param request:

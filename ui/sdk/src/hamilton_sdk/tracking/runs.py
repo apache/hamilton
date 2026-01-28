@@ -30,7 +30,8 @@ try:
 except ImportError:
     UTC = timezone.utc
 
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Optional
+from collections.abc import Callable
 
 from hamilton_sdk.tracking import constants, data_observation
 from hamilton_sdk.tracking.data_observation import ObservationType
@@ -63,7 +64,7 @@ for module in _modules_to_import:
 
 def process_result(
     result: Any, node: h_node.Node
-) -> Tuple[Optional[ObservationType], Optional[ObservationType], List[ObservationType]]:
+) -> tuple[Optional[ObservationType], Optional[ObservationType], list[ObservationType]]:
     """Processes result -- this is purely a by-type mapping.
     Note that this doesn't actually do anything yet -- the idea is that we can return DQ
     results, and do other stuff with other results -- E.G. summary stats on dataframes,
@@ -128,7 +129,7 @@ class TrackingState:
         self.start_time = None
         self.end_time = None
         self.run_id = run_id
-        self.task_map: Dict[str, TaskRun] = {}
+        self.task_map: dict[str, TaskRun] = {}
         self.update_status(Status.UNINITIALIZED)
 
     def clock_start(self):
@@ -166,7 +167,7 @@ class TrackingState:
         )
 
 
-def serialize_error() -> List[str]:
+def serialize_error() -> list[str]:
     """Serialize an error to a string.
     Note we should probably have this *unparsed*, so we can display in the UI,
     but its OK for now to just have the string.
@@ -180,7 +181,7 @@ def serialize_error() -> List[str]:
     return traceback.format_exception(exc_type, exc_value, exc_tb)
 
 
-def serialize_data_quality_error(e: dq_base.DataValidationError) -> List[str]:
+def serialize_data_quality_error(e: dq_base.DataValidationError) -> list[str]:
     """Santizes data quality errors to make them more readable for the platform.
 
     Note: this is hacky code.
@@ -215,7 +216,7 @@ class RunTracker:
         original_do_node_execute: Callable,
         run_id: str,
         node_: h_node.Node,
-        kwargs: Dict[str, Any],
+        kwargs: dict[str, Any],
         task_id: Optional[str],
     ) -> Any:
         """Given a node that represents a hamilton function, execute it.

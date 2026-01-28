@@ -31,7 +31,7 @@ def start_date() -> str:
 
 
 def lineitem_filtered(lineitem: ps.DataFrame, start_date: str) -> ps.DataFrame:
-    return lineitem.filter((lineitem.l_shipdate <= start_date))
+    return lineitem.filter(lineitem.l_shipdate <= start_date)
 
 
 def disc_price(

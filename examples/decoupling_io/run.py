@@ -17,7 +17,6 @@
 
 # Since this is not in plugins we need to import it *before* doing anything else
 import importlib
-from typing import List, Union
 
 import click
 
@@ -42,7 +41,7 @@ modules = {
 }
 
 
-def get_materializers(which_stage: str) -> List[Union[MaterializerFactory, ExtractorFactory]]:
+def get_materializers(which_stage: str) -> list[MaterializerFactory | ExtractorFactory]:
     """Gives the set of materializers for the driver to run, separated out by stages.
     This demonstrates the evolution of additional materializers by stage, so that you can run
     stages individually using the same driver.

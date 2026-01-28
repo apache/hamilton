@@ -17,7 +17,7 @@
 
 import ast
 import concurrent
-from typing import Callable, Generator, List
+from collections.abc import Callable, Generator
 
 import openai
 import pandas as pd
@@ -45,14 +45,14 @@ def summarize_paper_from_summaries_prompt() -> str:
 
 
 @retry(wait=wait_random_exponential(min=1, max=40), stop=stop_after_attempt(3))
-def user_query_embedding(user_query: str, embedding_model_name: str) -> List[float]:
+def user_query_embedding(user_query: str, embedding_model_name: str) -> list[float]:
     """Get the embedding for a user query from OpenAI API."""
     response = openai.Embedding.create(input=user_query, model=embedding_model_name)
     return response["data"][0]["embedding"]
 
 
 def relatedness(
-    user_query_embedding: List[float],
+    user_query_embedding: list[float],
     embeddings: pd.Series,
     relatedness_fn: Callable = lambda x, y: 1 - spatial.distance.cosine(x, y),
 ) -> pd.Series:

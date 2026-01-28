@@ -92,7 +92,7 @@ def converted_and_saved(
     image: Image,
     file_to_convert: ToConvert,
     new_format: str = "jpeg",
-    image_params: Optional[Dict[str, Any]] = None,
+    image_params: dict[str, Any] | None = None,
 ) -> Converted:
     """Returns a list of all files to convert."""
     s3 = _s3()
@@ -121,7 +121,7 @@ def converted_and_saved(
     )
 
 
-def all_converted_and_saved(converted_and_saved: Collect[Converted]) -> List[Converted]:
+def all_converted_and_saved(converted_and_saved: Collect[Converted]) -> list[Converted]:
     """Returns a list of all downloaded locations"""
     return list(converted_and_saved)
 

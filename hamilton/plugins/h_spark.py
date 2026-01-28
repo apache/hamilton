@@ -18,8 +18,9 @@
 import functools
 import inspect
 import logging
+from collections.abc import Callable, Collection
 from types import CodeType, FunctionType, ModuleType
-from typing import Any, Callable, Collection, Dict, List, Optional, Set, Tuple, Type, Union
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -48,7 +49,7 @@ class KoalasDataFrameResult(base.ResultMixin):
     """Mixin for building a koalas dataframe from the result"""
 
     @staticmethod
-    def build_result(**outputs: Dict[str, Any]) -> ps.DataFrame:
+    def build_result(**outputs: dict[str, Any]) -> ps.DataFrame:
         """Right now this class is just used for signaling the return type."""
         pass
 
@@ -121,7 +122,7 @@ class SparkKoalasGraphAdapter(base.HamiltonGraphAdapter, base.ResultMixin):
         self.spine_column = spine_column
 
     @staticmethod
-    def check_input_type(node_type: Type, input_value: Any) -> bool:
+    def check_input_type(node_type: type, input_value: Any) -> bool:
         """Function to equate an input value, with expected node type.
 
         We need this to equate pandas and koalas objects/types.
@@ -141,7 +142,7 @@ class SparkKoalasGraphAdapter(base.HamiltonGraphAdapter, base.ResultMixin):
         return htypes.check_input_type(node_type, input_value)
 
     @staticmethod
-    def check_node_type_equivalence(node_type: Type, input_type: Type) -> bool:
+    def check_node_type_equivalence(node_type: type, input_type: type) -> bool:
         """Function to help equate pandas with koalas types.
 
         :param node_type: the declared node type.
@@ -158,7 +159,7 @@ class SparkKoalasGraphAdapter(base.HamiltonGraphAdapter, base.ResultMixin):
             return True
         return node_type == input_type
 
-    def execute_node(self, node: node.Node, kwargs: Dict[str, Any]) -> Any:
+    def execute_node(self, node: node.Node, kwargs: dict[str, Any]) -> Any:
         """Function that is called as we walk the graph to determine how to execute a hamilton function.
 
         :param node: the node from the graph.
@@ -167,7 +168,7 @@ class SparkKoalasGraphAdapter(base.HamiltonGraphAdapter, base.ResultMixin):
         """
         return node.callable(**kwargs)
 
-    def build_result(self, **outputs: Dict[str, Any]) -> Union[pd.DataFrame, ps.DataFrame, dict]:
+    def build_result(self, **outputs: dict[str, Any]) -> pd.DataFrame | ps.DataFrame | dict:
         if isinstance(self.result_builder, base.DictResult):
             return self.result_builder.build_result(**outputs)
         # we don't use the actual function for building right now, we use this hacky equivalent
@@ -181,7 +182,7 @@ class SparkKoalasGraphAdapter(base.HamiltonGraphAdapter, base.ResultMixin):
             return df
 
 
-def numpy_to_spark_type(numpy_type: Type) -> types.DataType:
+def numpy_to_spark_type(numpy_type: type) -> types.DataType:
     """Function to convert a numpy type to a Spark type.
 
     :param numpy_type: the numpy type to convert.
@@ -207,7 +208,7 @@ def numpy_to_spark_type(numpy_type: Type) -> types.DataType:
         raise ValueError("Unsupported NumPy type: " + str(numpy_type))
 
 
-def python_to_spark_type(python_type: Type[Union[int, float, bool, str, bytes]]) -> types.DataType:
+def python_to_spark_type(python_type: type[int | float | bool | str | bytes]) -> types.DataType:
     """Function to convert a Python type to a Spark type.
 
     :param python_type: the Python type to convert.
@@ -245,7 +246,7 @@ def get_spark_type(return_type: Any) -> types.DataType:
         )
 
 
-def _get_pandas_annotations(node_: node.Node, bound_parameters: Dict[str, Any]) -> Dict[str, bool]:
+def _get_pandas_annotations(node_: node.Node, bound_parameters: dict[str, Any]) -> dict[str, bool]:
     """Given a function, return a dictionary of the parameters that are annotated as pandas series.
 
     :param hamilton_udf: the function to check.
@@ -266,10 +267,10 @@ def _get_pandas_annotations(node_: node.Node, bound_parameters: Dict[str, Any]) 
 
 def _determine_parameters_to_bind(
     actual_kwargs: dict,
-    df_columns: Set[str],
-    node_input_types: Dict[str, Tuple],
+    df_columns: set[str],
+    node_input_types: dict[str, tuple],
     node_name: str,
-) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+) -> tuple[dict[str, Any], dict[str, Any]]:
     """Function that we use to bind inputs to the function, or determine we should pull them from the dataframe.
 
     It does two things:
@@ -300,7 +301,7 @@ def _determine_parameters_to_bind(
     return params_from_df, bind_parameters
 
 
-def _inspect_kwargs(kwargs: Dict[str, Any]) -> Tuple[DataFrame, Dict[str, Any]]:
+def _inspect_kwargs(kwargs: dict[str, Any]) -> tuple[DataFrame, dict[str, Any]]:
     """Inspects kwargs, removes any dataframes, and returns the (presumed single) dataframe, with remaining kwargs.
 
     :param kwargs: the inputs to the function.
@@ -317,7 +318,7 @@ def _inspect_kwargs(kwargs: Dict[str, Any]) -> Tuple[DataFrame, Dict[str, Any]]:
     return df, actual_kwargs
 
 
-def _format_pandas_udf(func_name: str, ordered_params: List[str]) -> str:
+def _format_pandas_udf(func_name: str, ordered_params: list[str]) -> str:
     formatting_params = {
         "name": func_name,
         "return_type": "pd.Series",
@@ -331,7 +332,7 @@ def {name}({params}) -> {return_type}:
     return func_string
 
 
-def _format_udf(func_name: str, ordered_params: List[str]) -> str:
+def _format_udf(func_name: str, ordered_params: list[str]) -> str:
     formatting_params = {
         "name": func_name,
         "params": ", ".join(ordered_params),
@@ -346,8 +347,8 @@ def {name}({params}):
 
 def _fabricate_spark_function(
     node_: node.Node,
-    params_to_bind: Dict[str, Any],
-    params_from_df: Dict[str, Any],
+    params_to_bind: dict[str, Any],
+    params_from_df: dict[str, Any],
     pandas_udf: bool,
 ) -> FunctionType:
     """Fabricates a spark compatible UDF. We have to do this as we don't actually have a funtion
@@ -383,7 +384,7 @@ def _fabricate_spark_function(
     return FunctionType(func_code, {**globals(), **{"partial_fn": partial_fn}}, func_name)
 
 
-def _lambda_udf(df: DataFrame, node_: node.Node, actual_kwargs: Dict[str, Any]) -> DataFrame:
+def _lambda_udf(df: DataFrame, node_: node.Node, actual_kwargs: dict[str, Any]) -> DataFrame:
     """Function to create a lambda UDF for a function.
 
     This functions does the following:
@@ -457,14 +458,14 @@ class PySparkUDFGraphAdapter(base.SimplePythonDataFrameGraphAdapter):
         self.call_count = 0
 
     @staticmethod
-    def check_input_type(node_type: Type, input_value: Any) -> bool:
+    def check_input_type(node_type: type, input_value: Any) -> bool:
         """If the input is a pyspark dataframe, skip, else delegate the check."""
         if isinstance(input_value, DataFrame):
             return True
         return htypes.check_input_type(node_type, input_value)
 
     @staticmethod
-    def check_node_type_equivalence(node_type: Type, input_type: Type) -> bool:
+    def check_node_type_equivalence(node_type: type, input_type: type) -> bool:
         """Checks for the htype.column annotation and deals with it."""
         # Good Cases:
         # [pd.Series, int] -> [pd.Series, int]
@@ -480,7 +481,7 @@ class PySparkUDFGraphAdapter(base.SimplePythonDataFrameGraphAdapter):
             series_to_primitive = False
         return exact_match or series_to_series or series_to_primitive
 
-    def execute_node(self, node: node.Node, kwargs: Dict[str, Any]) -> Any:
+    def execute_node(self, node: node.Node, kwargs: dict[str, Any]) -> Any:
         """Given a node to execute, process it and apply a UDF if applicable.
 
         :param node: the node we're processing.
@@ -511,7 +512,7 @@ class PySparkUDFGraphAdapter(base.SimplePythonDataFrameGraphAdapter):
         logger.debug("%s, After, %s", node.name, df.columns)
         return df
 
-    def build_result(self, **outputs: Dict[str, Any]) -> DataFrame:
+    def build_result(self, **outputs: dict[str, Any]) -> DataFrame:
         """Builds the result and brings it back to this running process.
 
         :param outputs: the dictionary of key -> Union[ray object reference | value]
@@ -540,9 +541,9 @@ def sparkify_node_with_udf(
     node_: node.Node,
     linear_df_dependency_name: str,
     base_df_dependency_name: str,
-    base_df_dependency_param: Optional[str],
-    dependent_columns_in_group: Set[str],
-    dependent_columns_from_dataframe: Set[str],
+    base_df_dependency_param: str | None,
+    dependent_columns_in_group: set[str],
+    dependent_columns_from_dataframe: set[str],
 ) -> node.Node:
     """ """
     """Turns a node into a spark node. This does the following:
@@ -573,8 +574,8 @@ def sparkify_node_with_udf(
     def new_callable(
         __linear_df_dependency_name: str = linear_df_dependency_name,
         __base_df_dependency_name: str = base_df_dependency_name,
-        __dependent_columns_in_group: Set[str] = dependent_columns_in_group,
-        __dependent_columns_from_dataframe: Set[str] = dependent_columns_from_dataframe,
+        __dependent_columns_in_group: set[str] = dependent_columns_in_group,
+        __dependent_columns_from_dataframe: set[str] = dependent_columns_from_dataframe,
         __base_df_dependency_param: str = base_df_dependency_param,
         __node: node.Node = node_,
         **kwargs,
@@ -630,7 +631,7 @@ def sparkify_node_with_udf(
 
 
 def derive_dataframe_parameter(
-    param_types: Dict[str, Type], requested_parameter: str, location_name: Callable
+    param_types: dict[str, type], requested_parameter: str, location_name: Callable
 ) -> str:
     dataframe_parameters = {
         param for param, val in param_types.items() if custom_subclass_check(val, DataFrame)
@@ -731,7 +732,7 @@ class require_columns(fm_base.NodeTransformer):
         self._columns = columns
 
     def transform_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Generates nodes for the `@require_columns` decorator.
 
@@ -772,7 +773,7 @@ class require_columns(fm_base.NodeTransformer):
         # if it returns a column, we just turn it into a withColumn expression
         if custom_subclass_check(node_.type, Column):
 
-            def transform_output(output: Column, kwargs: Dict[str, Any]) -> DataFrame:
+            def transform_output(output: Column, kwargs: dict[str, Any]) -> DataFrame:
                 return kwargs[param].withColumn(node_.name, output)
 
             node_out = node_out.transform_output(transform_output, DataFrame)
@@ -789,7 +790,7 @@ class require_columns(fm_base.NodeTransformer):
         _derive_first_dataframe_parameter_from_fn(fn)
 
     @staticmethod
-    def _extract_dataframe_params(node_: node.Node) -> List[str]:
+    def _extract_dataframe_params(node_: node.Node) -> list[str]:
         """Extracts the dataframe parameters from a node.
 
         :param node_: Node to extract from
@@ -829,9 +830,9 @@ class require_columns(fm_base.NodeTransformer):
         node_: node.Node,
         linear_df_dependency_name: str,
         base_df_dependency_name: str,
-        base_df_param_name: Optional[str],
-        dependent_columns_from_upstream: Set[str],
-        dependent_columns_from_dataframe: Set[str],
+        base_df_param_name: str | None,
+        dependent_columns_from_upstream: set[str],
+        dependent_columns_from_dataframe: set[str],
     ) -> node.Node:
         """Transforms a pyspark node into a node that can be run as part of a `with_columns` group.
         This is only for non-UDF nodes that have already been transformed by `@transforms`.
@@ -890,7 +891,7 @@ class require_columns(fm_base.NodeTransformer):
         return node_
 
 
-def _identify_upstream_dataframe_nodes(nodes: List[node.Node]) -> List[str]:
+def _identify_upstream_dataframe_nodes(nodes: list[node.Node]) -> list[str]:
     """Gives the upstream dataframe name. This is the only ps.DataFrame parameter not
     produced from within the subdag.
 
@@ -921,14 +922,14 @@ def _identify_upstream_dataframe_nodes(nodes: List[node.Node]) -> List[str]:
 class with_columns(with_columns_base):
     def __init__(
         self,
-        *load_from: Union[Callable, ModuleType],
-        columns_to_pass: List[str] = None,
+        *load_from: Callable | ModuleType,
+        columns_to_pass: list[str] = None,
         pass_dataframe_as: str = None,
         on_input: str = None,
-        select: List[str] = None,
+        select: list[str] = None,
         namespace: str = None,
         mode: str = "append",
-        config_required: List[str] = None,
+        config_required: list[str] = None,
     ):
         """Initializes a with_columns decorator for spark. This allows you to efficiently run
          groups of map operations on a dataframe, represented as pandas/primitives UDFs. This
@@ -1027,7 +1028,7 @@ class with_columns(with_columns_base):
         self.mode = mode
 
     @staticmethod
-    def _prep_nodes(initial_nodes: List[node.Node]) -> List[node.Node]:
+    def _prep_nodes(initial_nodes: list[node.Node]) -> list[node.Node]:
         """Prepares nodes by decorating "default" UDFs with transform.
         This allows us to use the sparkify_node function in transforms
         for both the default ones and the decorated ones.
@@ -1047,7 +1048,7 @@ class with_columns(with_columns_base):
 
     @staticmethod
     def create_selector_node(
-        upstream_name: str, columns: List[str], node_name: str = "select"
+        upstream_name: str, columns: list[str], node_name: str = "select"
     ) -> node.Node:
         """Creates a selector node. The sole job of this is to select just the specified columns.
         Note this is a utility function that's only called here.
@@ -1070,7 +1071,7 @@ class with_columns(with_columns_base):
 
     @staticmethod
     def create_drop_node(
-        upstream_name: str, columns: List[str], node_name: str = "select"
+        upstream_name: str, columns: list[str], node_name: str = "select"
     ) -> node.Node:
         """Creates a drop node. The sole job of this is to drop just the specified columns.
         Note this is a utility function that's only called here.
@@ -1091,7 +1092,7 @@ class with_columns(with_columns_base):
             input_types={upstream_name: DataFrame},
         )
 
-    def _validate_dataframe_subdag_parameter(self, nodes: List[node.Node], fn_name: str):
+    def _validate_dataframe_subdag_parameter(self, nodes: list[node.Node], fn_name: str):
         all_upstream_dataframe_nodes = _identify_upstream_dataframe_nodes(nodes)
         initial_schema = set(self.initial_schema) if self.initial_schema is not None else set()
         candidates_for_upstream_dataframe = set(all_upstream_dataframe_nodes) - set(initial_schema)
@@ -1125,12 +1126,12 @@ class with_columns(with_columns_base):
                     f"Instead, we found: {upstream_dependency}."
                 )
 
-    def required_config(self) -> List[str]:
+    def required_config(self) -> list[str]:
         return self.config_required
 
     def get_initial_nodes(
-        self, fn: Callable, params: Dict[str, Type[Type]]
-    ) -> Tuple[str, Collection[node.Node]]:
+        self, fn: Callable, params: dict[str, type[type]]
+    ) -> tuple[str, Collection[node.Node]]:
         inject_parameter = _derive_first_dataframe_parameter_from_fn(fn=fn)
         with_columns_base.validate_dataframe(
             fn=fn,
@@ -1142,7 +1143,7 @@ class with_columns(with_columns_base):
         initial_nodes = []
         return inject_parameter, initial_nodes
 
-    def get_subdag_nodes(self, fn: Callable, config: Dict[str, Any]) -> Collection[node.Node]:
+    def get_subdag_nodes(self, fn: Callable, config: dict[str, Any]) -> Collection[node.Node]:
         initial_nodes = subdag.collect_nodes(config, self.subdag_functions)
         transformed_nodes = with_columns._prep_nodes(initial_nodes)
 
@@ -1237,12 +1238,12 @@ class with_columns(with_columns_base):
 class select(with_columns):
     def __init__(
         self,
-        *load_from: Union[Callable, ModuleType],
-        columns_to_pass: List[str] = None,
+        *load_from: Callable | ModuleType,
+        columns_to_pass: list[str] = None,
         pass_dataframe_as: str = None,
-        output_cols: List[str] = None,
+        output_cols: list[str] = None,
         namespace: str = None,
-        config_required: List[str] = None,
+        config_required: list[str] = None,
     ):
         """Initializes a select decorator for spark. This allows you to efficiently run
          groups of map operations on a dataframe, represented as pandas/primitives UDFs. This

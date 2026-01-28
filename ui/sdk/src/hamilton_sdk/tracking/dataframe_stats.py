@@ -16,7 +16,7 @@
 # under the License.
 
 from dataclasses import dataclass
-from typing import Any, Dict, Union
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -79,12 +79,12 @@ class NumericColumnStatistics(BaseColumnStatistics):
     """Inspired by TFDV's ColumnStatistics proto."""
 
     zeros: int
-    min: Union[float, int]
-    max: Union[float, int]
+    min: float | int
+    max: float | int
     mean: float
     std: float
-    quantiles: Dict[float, float]
-    histogram: Dict[str, int]
+    quantiles: dict[float, float]
+    histogram: dict[str, int]
     base_data_type: str = "numeric"
 
 
@@ -100,7 +100,7 @@ class CategoryColumnStatistics(BaseColumnStatistics):
     """Inspired by TFDV's ColumnStatistics proto."""
 
     empty: int
-    domain: Dict[str, int]
+    domain: dict[str, int]
     top_value: str
     top_freq: int
     unique: int

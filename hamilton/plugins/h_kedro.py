@@ -16,7 +16,7 @@
 # under the License.
 
 import inspect
-from typing import Any, Dict, List, Optional, Tuple, Type
+from typing import Any
 
 from kedro.pipeline.node import Node as KNode
 from kedro.pipeline.pipeline import Pipeline as KPipeline
@@ -27,28 +27,28 @@ from hamilton.lifecycle import base as lifecycle_base
 from hamilton.node import Node as HNode
 
 
-def expand_k_node(base_node: HNode, outputs: List[str]) -> List[HNode]:
+def expand_k_node(base_node: HNode, outputs: list[str]) -> list[HNode]:
     """Manually apply `@extract_fields()` on a Hamilton node.Node for a Kedro
     node that specifies >1 `outputs`.
 
     The number of nodes == len(outputs) + 1 because it includes the `base_node`
     """
 
-    def _convert_output_from_tuple_to_dict(node_result: Any, node_kwargs: Dict[str, Any]):
+    def _convert_output_from_tuple_to_dict(node_result: Any, node_kwargs: dict[str, Any]):
         return {out: v for out, v in zip(outputs, node_result, strict=False)}
 
     # NOTE isinstance(Any, type) is False for Python < 3.11
     extractor = extract_fields(fields={out: Any for out in outputs})
     func = base_node.originating_functions[0]
-    if issubclass(func.__annotations__["return"], Tuple):
-        base_node = base_node.transform_output(_convert_output_from_tuple_to_dict, Dict)
-        func.__annotations__["return"] = Dict
+    if issubclass(func.__annotations__["return"], tuple):
+        base_node = base_node.transform_output(_convert_output_from_tuple_to_dict, dict)
+        func.__annotations__["return"] = dict
 
     extractor.validate(func)
     return list(extractor.transform_node(base_node, {}, func))
 
 
-def k_node_to_h_nodes(node: KNode) -> List[HNode]:
+def k_node_to_h_nodes(node: KNode) -> list[HNode]:
     """Convert a Kedro node to a list of Hamilton nodes.
     If the Kedro node specifies 1 output, generate 1 Hamilton node.
     If it generate >1 output, generate len(outputs) + 1 to include the base node + extracted fields.
@@ -73,7 +73,7 @@ def k_node_to_h_nodes(node: KNode) -> List[HNode]:
     output_type = func_sig.return_annotation
     if output_type is None:
         # manually creating `hamilton.node.Node` doesn't accept `typ=None`
-        output_type = Type[None]  # NoneType is introduced in Python 3.10
+        output_type = type[None]  # NoneType is introduced in Python 3.10
 
     base_node = HNode(
         name=base_node_name,
@@ -104,7 +104,7 @@ def k_node_to_h_nodes(node: KNode) -> List[HNode]:
 
 def kedro_pipeline_to_driver(
     *pipelines: KPipeline,
-    builder: Optional[driver.Builder] = None,
+    builder: driver.Builder | None = None,
 ) -> driver.Driver:
     """Convert one or mode Kedro `Pipeline` to a Hamilton `Driver`.
     Pass a Hamilton `Builder` to include lifecycle adapters in your `Driver`.

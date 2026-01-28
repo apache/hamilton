@@ -19,7 +19,7 @@ import dataclasses
 import functools
 import inspect
 import typing
-from typing import Any, Dict, List, Optional, Protocol, Set, Type, Union
+from typing import Any, Protocol
 
 from hamilton import base, common, graph, lifecycle, node
 from hamilton.function_modifiers.adapters import LoadFromDecorator, SaveToDecorator
@@ -109,8 +109,8 @@ class extractor_meta__(type):
 
 
 def process_kwargs(
-    data_saver_kwargs: Dict[str, Union[Any, SingleDependency]],
-) -> Dict[str, SingleDependency]:
+    data_saver_kwargs: dict[str, Any | SingleDependency],
+) -> dict[str, SingleDependency]:
     """Processes raw strings from the user, converting them into dependency specs.
     This goes according to the following rules.
 
@@ -135,8 +135,8 @@ class ExtractorFactory:
     def __init__(
         self,
         target: str,
-        loaders: List[Type[DataLoader]],
-        **data_loader_kwargs: Union[Any, SingleDependency],
+        loaders: list[type[DataLoader]],
+        **data_loader_kwargs: Any | SingleDependency,
     ):
         """Instantiates an ExtractorFactory. Note this is not a public API -- this is
         internally what gets called (through a factory method) to create it. Called using `from_`,
@@ -150,7 +150,7 @@ class ExtractorFactory:
         self.loaders = loaders
         self.data_loader_kwargs = process_kwargs(data_loader_kwargs)
 
-    def generate_nodes(self, fn_graph: graph.FunctionGraph) -> List[node.Node]:
+    def generate_nodes(self, fn_graph: graph.FunctionGraph) -> list[node.Node]:
         """Resolves the extractor, returning the set of nodes that should get
         added to the function graph. Note that this is an upsert operation --
         these nodes can replace existing nodes.
@@ -178,9 +178,9 @@ class MaterializerFactory:
     def __init__(
         self,
         id: str,
-        savers: List[Type[DataSaver]],
-        result_builder: Optional[base.ResultMixin],
-        dependencies: List[Union[str, Any]],
+        savers: list[type[DataSaver]],
+        result_builder: base.ResultMixin | None,
+        dependencies: list[str | Any],
         **data_saver_kwargs: Any,
     ):
         """Creates a materializer factory.
@@ -200,7 +200,7 @@ class MaterializerFactory:
         self.dependencies = dependencies
         self.data_saver_kwargs = process_kwargs(data_saver_kwargs)
 
-    def sanitize_dependencies(self, module_set: Set[str]) -> "MaterializerFactory":
+    def sanitize_dependencies(self, module_set: set[str]) -> "MaterializerFactory":
         """Sanitizes the dependencies to ensure they're strings.
 
         This replaces the internal value for self.dependencies and returns a new object.
@@ -218,7 +218,7 @@ class MaterializerFactory:
             **self.data_saver_kwargs,
         )
 
-    def _resolve_dependencies(self, fn_graph: graph.FunctionGraph) -> List[node.Node]:
+    def _resolve_dependencies(self, fn_graph: graph.FunctionGraph) -> list[node.Node]:
         out = []
         missing_nodes = []
         for name in self.dependencies:
@@ -232,7 +232,7 @@ class MaterializerFactory:
             )
         return [fn_graph.nodes[name] for name in self.dependencies]
 
-    def generate_nodes(self, fn_graph: graph.FunctionGraph) -> List[node.Node]:
+    def generate_nodes(self, fn_graph: graph.FunctionGraph) -> list[node.Node]:
         """Generates additional nodes from a materializer, returning the set of nodes that should get
         appended to the function graph. This does two things:
 
@@ -286,25 +286,25 @@ class _MaterializerFactoryProtocol(Protocol):
     def __call__(
         self,
         id: str,
-        dependencies: List[str],
+        dependencies: list[str],
         combine: lifecycle.ResultBuilder = None,
-        **kwargs: Union[str, SingleDependency],
+        **kwargs: str | SingleDependency,
     ) -> MaterializerFactory:
         pass
 
 
 @typing.runtime_checkable
 class _ExtractorFactoryProtocol(Protocol):
-    def __call__(self, target: str, **kwargs: Union[str, SingleDependency]) -> ExtractorFactory:
+    def __call__(self, target: str, **kwargs: str | SingleDependency) -> ExtractorFactory:
         pass
 
 
-def partial_materializer(data_savers: List[Type[DataSaver]]) -> _MaterializerFactoryProtocol:
+def partial_materializer(data_savers: list[type[DataSaver]]) -> _MaterializerFactoryProtocol:
     """Creates a partial materializer, with the specified data savers."""
 
     def create_materializer_factory(
         id: str,
-        dependencies: List[str],
+        dependencies: list[str],
         combine: base.ResultMixin = None,
         **kwargs: typing.Any,
     ) -> MaterializerFactory:
@@ -320,7 +320,7 @@ def partial_materializer(data_savers: List[Type[DataSaver]]) -> _MaterializerFac
 
 
 def partial_extractor(
-    data_loaders: List[Type[DataLoader]],
+    data_loaders: list[type[DataLoader]],
 ) -> _ExtractorFactoryProtocol:
     """Creates a partial materializer, with the specified data savers."""
 
@@ -371,8 +371,8 @@ def _set_materializer_attrs():
     This is so one can get auto-complete"""
 
     def with_modified_signature(
-        fn: Type[_MaterializerFactoryProtocol],
-        dataclasses_union: List[Type[dataclasses.dataclass]],
+        fn: type[_MaterializerFactoryProtocol],
+        dataclasses_union: list[type[dataclasses.dataclass]],
         key: str,
     ):
         """Modifies the signature to include the parameters from *all* dataclasses.
@@ -455,8 +455,8 @@ _set_materializer_attrs()
 
 def modify_graph(
     fn_graph: FunctionGraph,
-    materializer_factories: List[MaterializerFactory],
-    extractor_factories: List[ExtractorFactory],
+    materializer_factories: list[MaterializerFactory],
+    extractor_factories: list[ExtractorFactory],
 ) -> FunctionGraph:
     """Modifies the function graph, adding in the specified materialization/loader nodes.
 

@@ -16,8 +16,9 @@
 # under the License.
 
 import logging
+from collections.abc import Callable, Sequence
 from types import FunctionType
-from typing import Any, Callable, Optional, Sequence
+from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +36,7 @@ with contrib.catch_import_errors(__name__, __file__, logger):
 from hamilton.function_modifiers import config, extract_fields
 
 
-def model_config(seed: int = 0, model_config_override: Optional[dict] = None) -> dict:
+def model_config(seed: int = 0, model_config_override: dict | None = None) -> dict:
     """XGBoost model configuration
     ref: https://xgboost.readthedocs.io/en/stable/parameter.html
 
@@ -68,7 +69,7 @@ def model_config(seed: int = 0, model_config_override: Optional[dict] = None) ->
     return config
 
 
-def optuna_distributions(optuna_distributions_override: Optional[dict] = None) -> dict:
+def optuna_distributions(optuna_distributions_override: dict | None = None) -> dict:
     """Distributions of hyperparameters to search during optimization
 
     :param optuna_distributions_override: Hyperparameter distributions to explore
@@ -150,10 +151,10 @@ def cross_validation_folds(
 
 def study(
     higher_is_better: bool,
-    pruner: Optional[optuna.pruners.BasePruner] = None,
-    sampler: Optional[optuna.samplers.BaseSampler] = None,
-    study_storage: Optional[str] = None,
-    study_name: Optional[str] = None,
+    pruner: optuna.pruners.BasePruner | None = None,
+    sampler: optuna.samplers.BaseSampler | None = None,
+    study_storage: str | None = None,
+    study_name: str | None = None,
     load_if_exists: bool = False,
 ) -> optuna.study.Study:
     """Create an optuna study; use the XGBoost + Optuna integration for pruning

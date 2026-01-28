@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List, Optional
 
 from ninja import ModelSchema, Schema
 from trackingserver_template.models import CodeArtifact, DAGTemplate, NodeTemplate
@@ -33,7 +32,7 @@ class NodeTemplateIn(ModelSchema):
         # Exclude the foreign keys
         exclude = ["id", "dag_template", "created_at", "updated_at", "code_artifacts"]
 
-    code_artifact_pointers: List[
+    code_artifact_pointers: list[
         str
     ]  # Pointers to code artifacts, which are uniue by DAGTemplate/Name
 
@@ -45,7 +44,7 @@ class NodeTemplateOut(ModelSchema):
         model = NodeTemplate
         fields = "__all__"
 
-    primary_code_artifact: Optional[str] = None
+    primary_code_artifact: str | None = None
 
 
 class File(Schema):
@@ -54,12 +53,12 @@ class File(Schema):
 
 
 class CodeLog(Schema):
-    files: List[File]
+    files: list[File]
 
 
 class DAGTemplateIn(ModelSchema):
-    nodes: List[NodeTemplateIn]
-    code_artifacts: List[CodeArtifactIn]
+    nodes: list[NodeTemplateIn]
+    code_artifacts: list[CodeArtifactIn]
     code_log: CodeLog
 
     class Meta:
@@ -95,11 +94,11 @@ class CodeArtifactOut(ModelSchema):
 
 
 class DAGTemplateOutWithData(DAGTemplateOut):
-    nodes: List[NodeTemplateOut]
-    code_artifacts: List[CodeArtifactOut]
-    code: Optional[CodeLog]
+    nodes: list[NodeTemplateOut]
+    code_artifacts: list[CodeArtifactOut]
+    code: CodeLog | None
 
 
 class CatalogResponse(Schema):
-    nodes: List[NodeTemplateOut]
-    code_artifacts: List[CodeArtifactOut]
+    nodes: list[NodeTemplateOut]
+    code_artifacts: list[CodeArtifactOut]

@@ -17,7 +17,6 @@
 
 import inspect
 import re
-from typing import Type
 
 from lsprotocol.types import (
     TEXT_DOCUMENT_COMPLETION,
@@ -54,7 +53,7 @@ from hamilton.graph_types import HamiltonGraph
 from hamilton_lsp import __version__
 
 
-def _type_to_string(type_: Type):
+def _type_to_string(type_: type):
     """Return the full path of type, but may not be accessible from document
     For example, `pandas.core.series.Series` while document defines `pandas as pd`
     """

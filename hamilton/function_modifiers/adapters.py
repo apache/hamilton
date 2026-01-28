@@ -18,7 +18,8 @@
 import inspect
 import logging
 import typing
-from typing import Any, Callable, Collection, Dict, List, Optional, Tuple, Type
+from collections.abc import Callable, Collection
+from typing import Any
 
 import typing_inspect
 
@@ -46,7 +47,7 @@ class AdapterFactory:
     """Factory for data loaders. This handles the fact that we pass in source(...) and value(...)
     parameters to the data loaders."""
 
-    def __init__(self, adapter_cls: Type[AdapterCommon], **kwargs: ParametrizedDependency):
+    def __init__(self, adapter_cls: type[AdapterCommon], **kwargs: ParametrizedDependency):
         """Initializes an adapter factory. This takes in parameterized dependencies
         and stores them for later resolution.
 
@@ -97,7 +98,7 @@ class AdapterFactory:
         return self.adapter_cls(**resolved_kwargs)
 
 
-def resolve_kwargs(kwargs: Dict[str, Any]) -> Tuple[Dict[str, str], Dict[str, Any]]:
+def resolve_kwargs(kwargs: dict[str, Any]) -> tuple[dict[str, str], dict[str, Any]]:
     """Resolves kwargs to a list of dependencies, and a dictionary of name
     to resolved literal values.
 
@@ -116,15 +117,15 @@ def resolve_kwargs(kwargs: Dict[str, Any]) -> Tuple[Dict[str, str], Dict[str, An
 
 
 def resolve_adapter_class(
-    type_: Type[Type], loader_classes: List[Type[AdapterCommon]]
-) -> Optional[Type[AdapterCommon]]:
+    type_: type[type], loader_classes: list[type[AdapterCommon]]
+) -> type[AdapterCommon] | None:
     """Resolves the loader class for a function. This will return the most recently
     registered loader class that applies to the injection type, hence the reversed order.
 
     :param fn: Function to inject the loaded data into.
     :return: The loader class to use.
     """
-    applicable_adapters: List[Type[AdapterCommon]] = []
+    applicable_adapters: list[type[AdapterCommon]] = []
     loaders_with_any = []
     for loader_cls in reversed(loader_classes):
         # We do this here, rather than in applies_to, as its a bit of a special case
@@ -150,7 +151,7 @@ def resolve_adapter_class(
 class LoadFromDecorator(NodeInjector):
     def __init__(
         self,
-        loader_classes: typing.Sequence[Type[DataLoader]],
+        loader_classes: typing.Sequence[type[DataLoader]],
         inject_=None,
         **kwargs: ParametrizedDependency,
     ):
@@ -165,7 +166,7 @@ class LoadFromDecorator(NodeInjector):
         self.kwargs = kwargs
         self.inject = inject_
 
-    def _select_param_to_inject(self, params: List[str], fn: Callable) -> str:
+    def _select_param_to_inject(self, params: list[str], fn: Callable) -> str:
         """Chooses a parameter to inject, given the parameters available. If self.inject is None
         (meaning we inject the only parameter), then that's the one. If it is not None, then
         we need to ensure it is one of the available parameters, in which case we choose it.
@@ -185,8 +186,8 @@ class LoadFromDecorator(NodeInjector):
         return self.inject
 
     def get_loader_nodes(
-        self, inject_parameter: str, load_type: Type[Type], namespace: str = None
-    ) -> List[node.Node]:
+        self, inject_parameter: str, load_type: type[type], namespace: str = None
+    ) -> list[node.Node]:
         loader_cls = resolve_adapter_class(
             load_type,
             self.loader_classes,
@@ -205,12 +206,12 @@ class LoadFromDecorator(NodeInjector):
 
         def load_data(
             __loader_factory: AdapterFactory = loader_factory,
-            __load_type: Type[Type] = load_type,
+            __load_type: type[type] = load_type,
             __resolved_kwargs=resolved_kwargs,
             __dependencies=dependencies_inverted,
             __optional_params=loader_cls.get_optional_arguments(),  # noqa: B008
             **input_kwargs: Any,
-        ) -> Tuple[load_type, Dict[str, Any]]:
+        ) -> tuple[load_type, dict[str, Any]]:
             input_args_with_fixed_dependencies = {
                 __dependencies.get(key, key): value for key, value in input_kwargs.items()
             }
@@ -242,7 +243,7 @@ class LoadFromDecorator(NodeInjector):
         loader_node = node.Node(
             name=f"{inject_parameter}",
             callabl=load_data,
-            typ=Tuple[Dict[str, Any], load_type],
+            typ=tuple[dict[str, Any], load_type],
             input_types=input_types,
             tags={
                 "hamilton.data_loader": True,
@@ -284,8 +285,8 @@ class LoadFromDecorator(NodeInjector):
         return [loader_node, filter_node]
 
     def inject_nodes(
-        self, params: Dict[str, Type[Type]], config: Dict[str, Any], fn: Callable
-    ) -> Tuple[Collection[node.Node], Dict[str, str]]:
+        self, params: dict[str, type[type]], config: dict[str, Any], fn: Callable
+    ) -> tuple[Collection[node.Node], dict[str, str]]:
         """Generates two nodes:
         1. A node that loads the data from the data source, and returns that + metadata
         2. A node that takes the data from the data source, injects it into, and runs, the function.
@@ -305,7 +306,7 @@ class LoadFromDecorator(NodeInjector):
 
         return [loader_node, filter_node], {inject_parameter: filter_node.name}
 
-    def _get_inject_parameter_from_function(self, fn: Callable) -> Tuple[str, Type[Type]]:
+    def _get_inject_parameter_from_function(self, fn: Callable) -> tuple[str, type[type]]:
         """Gets the name of the parameter to inject the data into.
 
         :param fn: The function to decorate.
@@ -471,7 +472,7 @@ class load_from(metaclass=load_from__meta__):
 
     @classmethod
     def decorator_factory(
-        cls, loaders: typing.Sequence[Type[DataLoader]]
+        cls, loaders: typing.Sequence[type[DataLoader]]
     ) -> Callable[..., LoadFromDecorator]:
         """Effectively a partial function for the load_from decorator. Broken into its own (
         rather than using functools.partial) as it is a little clearer to parse.
@@ -510,7 +511,7 @@ class save_to__meta__(type):
 class SaveToDecorator(SingleNodeNodeTransformer):
     def __init__(
         self,
-        saver_classes_: typing.Sequence[Type[DataSaver]],
+        saver_classes_: typing.Sequence[type[DataSaver]],
         output_name_: str = None,
         target_: str = None,
         **kwargs: ParametrizedDependency,
@@ -522,7 +523,7 @@ class SaveToDecorator(SingleNodeNodeTransformer):
         self.target = target_
 
     def create_saver_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> node.Node:
         artifact_name = self.artifact_name
         artifact_namespace = ()
@@ -554,7 +555,7 @@ class SaveToDecorator(SingleNodeNodeTransformer):
             __resolved_kwargs=resolved_kwargs,
             __data_node_name=node_to_save,
             **input_kwargs,
-        ) -> Dict[str, Any]:
+        ) -> dict[str, Any]:
             input_args_with_fixed_dependencies = {
                 __dependencies.get(key, key): value for key, value in input_kwargs.items()
             }
@@ -587,7 +588,7 @@ class SaveToDecorator(SingleNodeNodeTransformer):
         save_node = node.Node(
             name=artifact_name,
             callabl=save_data,
-            typ=Dict[str, Any],
+            typ=dict[str, Any],
             input_types=input_types,
             namespace=artifact_namespace,
             tags={
@@ -599,7 +600,7 @@ class SaveToDecorator(SingleNodeNodeTransformer):
         return save_node
 
     def transform_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Transforms the node to a data saver.
 
@@ -691,7 +692,7 @@ class save_to(metaclass=save_to__meta__):
 
     @classmethod
     def decorator_factory(
-        cls, savers: typing.Sequence[Type[DataSaver]]
+        cls, savers: typing.Sequence[type[DataSaver]]
     ) -> Callable[..., SaveToDecorator]:
         """Effectively a partial function for the load_from decorator. Broken into its own (
         rather than using functools.partial) as it is a little clearer to parse.
@@ -778,7 +779,7 @@ class dataloader(NodeCreator):
                 f"Function: {fn.__qualname__} must return a tuple of type (SOME_TYPE, dict[str, ...]). Instead got (SOME_TYPE, dict[{second_arg_params[0]}, ...]"
             )
 
-    def generate_nodes(self, fn: Callable, config) -> List[node.Node]:
+    def generate_nodes(self, fn: Callable, config) -> list[node.Node]:
         """Generates two nodes. We have to add tags appropriately.
 
         The first one is just the fn - with a slightly different name.
@@ -877,10 +878,10 @@ class datasaver(NodeCreator):
                 f"Function: {fn.__qualname__} must have a return annotation."
             )
         # check that the return type is a dict
-        if return_annotation not in (dict, Dict):
+        if return_annotation not in (dict, dict):
             raise InvalidDecoratorException(f"Function: {fn.__qualname__} must return a dict.")
 
-    def generate_nodes(self, fn: Callable, config) -> List[node.Node]:
+    def generate_nodes(self, fn: Callable, config) -> list[node.Node]:
         """Generates same node but all this does is add tags to it.
         :param fn:
         :param config:

@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Callable, Dict, List, Union
+from collections.abc import Callable
 
 import pytest
 
@@ -28,8 +28,8 @@ from hamilton.execution.graph_functions import (
 
 
 def _create_dummy_dag(
-    adjacency_map: Dict[str, List[str]], dict_output: bool = False
-) -> Union[List[node.Node], Dict[str, node.Node]]:
+    adjacency_map: dict[str, list[str]], dict_output: bool = False
+) -> list[node.Node] | dict[str, node.Node]:
     name_map = {}
     for name, dependencies in adjacency_map.items():
         input_types = {dep: object for dep in dependencies}

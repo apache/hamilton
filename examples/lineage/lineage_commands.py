@@ -20,8 +20,6 @@ The code  is an example utility script that you could write
 to help you interface with Hamilton and its lineage capabilities.
 """
 
-from typing import Dict, List
-
 import data_loading
 import features
 import model_pipeline
@@ -100,7 +98,7 @@ def visualize_upstream(dr: driver.Driver, end_node: str, image_path: str) -> Non
     )
 
 
-def what_source_data_teams_are_upstream(dr: driver.Driver, output_name: str) -> List[dict]:
+def what_source_data_teams_are_upstream(dr: driver.Driver, output_name: str) -> list[dict]:
     """Function to return a list of teams that own the source data that is upstream of the output_name.
 
     :param dr: the driver object to use to query.
@@ -121,7 +119,7 @@ def what_source_data_teams_are_upstream(dr: driver.Driver, output_name: str) -> 
     return teams
 
 
-def what_pii_is_used_where(dr: driver.Driver) -> Dict[str, List[dict]]:
+def what_pii_is_used_where(dr: driver.Driver) -> dict[str, list[dict]]:
     """Function to return a dictionary of PII to artifacts that consume that PII directly or indirectly.
 
     :param dr: the driver object
@@ -144,7 +142,7 @@ def what_pii_is_used_where(dr: driver.Driver) -> Dict[str, List[dict]]:
     return pii_to_artifacts
 
 
-def what_artifacts_are_downstream(dr: driver.Driver, source_name: str) -> List[dict]:
+def what_artifacts_are_downstream(dr: driver.Driver, source_name: str) -> list[dict]:
     """Function to return a list of artifacts that are downstream of a given source.
 
     :param dr: driver object to query.
@@ -165,7 +163,7 @@ def what_artifacts_are_downstream(dr: driver.Driver, source_name: str) -> List[d
     return artifacts
 
 
-def what_classifiers_are_downstream(dr: driver.Driver, start_node: str) -> List[dict]:
+def what_classifiers_are_downstream(dr: driver.Driver, start_node: str) -> list[dict]:
     """Shows that you can also filter nodes based on output type.
 
     :param dr: driver object to query.
@@ -186,7 +184,7 @@ def what_classifiers_are_downstream(dr: driver.Driver, start_node: str) -> List[
     return models
 
 
-def what_nodes_are_on_path_between(dr: driver.Driver, start_node: str, end_node: str) -> List[dict]:
+def what_nodes_are_on_path_between(dr: driver.Driver, start_node: str, end_node: str) -> list[dict]:
     """Function that returns the nodes that are on the path between two nodes.
 
     :param dr: driver object to query.

@@ -19,7 +19,8 @@ import abc
 import dataclasses
 import enum
 import typing
-from typing import Any, Dict, List, Mapping, Sequence, Type
+from collections.abc import Mapping, Sequence
+from typing import Any
 
 import typing_inspect
 
@@ -73,7 +74,7 @@ class ConfigDependency(SingleDependency):
 class GroupedDependency(ParametrizedDependency, abc.ABC):
     @classmethod
     @abc.abstractmethod
-    def resolve_dependency_type(cls, annotated_type: Type[Type], param_name: str) -> Type[Type]:
+    def resolve_dependency_type(cls, annotated_type: type[type], param_name: str) -> type[type]:
         """Resolves dependency type for an annotated parameter. E.G. List[str] -> str,
         or Dict[str, int] -> int.
 
@@ -86,10 +87,10 @@ class GroupedDependency(ParametrizedDependency, abc.ABC):
 
 @dataclasses.dataclass
 class GroupedListDependency(GroupedDependency):
-    sources: List[ParametrizedDependency]
+    sources: list[ParametrizedDependency]
 
     @classmethod
-    def resolve_dependency_type(cls, annotated_type: Type[Sequence[Type]], param_name: str):
+    def resolve_dependency_type(cls, annotated_type: type[Sequence[type]], param_name: str):
         if typing_inspect.is_optional_type(
             annotated_type
         ):  # need to pull out the type from Optional.
@@ -116,13 +117,13 @@ class GroupedListDependency(GroupedDependency):
 
 @dataclasses.dataclass
 class GroupedDictDependency(GroupedDependency):
-    sources: typing.Dict[str, ParametrizedDependency]
+    sources: dict[str, ParametrizedDependency]
 
     def get_dependency_type(self) -> ParametrizedDependencySource:
         return ParametrizedDependencySource.GROUPED_DICT
 
     @classmethod
-    def resolve_dependency_type(cls, annotated_type: Type[Mapping[str, Type]], param_name: str):
+    def resolve_dependency_type(cls, annotated_type: type[Mapping[str, type]], param_name: str):
         if typing_inspect.is_optional_type(
             annotated_type
         ):  # need to pull out the type from Optional.
@@ -184,8 +185,8 @@ def configuration(dependency_on: str) -> ConfigDependency:
 
 
 def _validate_group_params(
-    dependency_args: List[ParametrizedDependency],
-    dependency_kwargs: Dict[str, ParametrizedDependency],
+    dependency_args: list[ParametrizedDependency],
+    dependency_kwargs: dict[str, ParametrizedDependency],
 ):
     """Validates the following for params to group(...):
     1. That either dependency_args or dependency_kwargs is non-empty, but not both.

@@ -16,7 +16,6 @@
 # under the License.
 
 import logging
-from typing import List, Optional, Tuple
 
 from django.http import HttpRequest
 from ninja.security.http import HttpAuthBase
@@ -37,7 +36,7 @@ TEST_USERS = {
 
 
 class TestAPIAuthenticator(HttpAuthBase):
-    async def __call__(self, request: HttpRequest) -> Optional[Tuple[User, List[Team]]]:
+    async def __call__(self, request: HttpRequest) -> tuple[User, list[Team]] | None:
         """This is a test authenticator that can be used for local development.
 
         TODO -- utilize ensure_* here when we've abstracted away auth a little more

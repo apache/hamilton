@@ -16,7 +16,6 @@
 # under the License.
 
 import pickle
-from typing import Tuple
 
 import pandas as pd
 
@@ -35,13 +34,13 @@ Narrative:
 
 
 @dataloader()
-def user_dataset(file_ds_path: str) -> Tuple[pd.DataFrame, dict]:
+def user_dataset(file_ds_path: str) -> tuple[pd.DataFrame, dict]:
     df = pd.read_csv(file_ds_path)
     return df, utils.get_file_and_dataframe_metadata(file_ds_path, df)
 
 
 @dataloader()
-def purchase_dataset(db_client: object) -> Tuple[pd.DataFrame, dict]:
+def purchase_dataset(db_client: object) -> tuple[pd.DataFrame, dict]:
     query = "SELECT * FROM purchase_data"
     df = pd.read_sql(query, con=db_client)
     metadata = {

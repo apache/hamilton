@@ -17,7 +17,8 @@
 
 import dataclasses
 import pickle
-from typing import Any, Collection, Dict, Type
+from collections.abc import Collection
+from typing import Any
 
 import numpy as np
 from sklearn import base
@@ -38,12 +39,12 @@ class NumpyMatrixToCSV(DataSaver):
         if not self.path.endswith(".csv"):
             raise ValueError(f"CSV files must end with .csv, got {self.path}")
 
-    def save_data(self, data: np.ndarray) -> Dict[str, Any]:
+    def save_data(self, data: np.ndarray) -> dict[str, Any]:
         np.savetxt(self.path, data, delimiter=self.sep)
         return utils.get_file_metadata(self.path)
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [np.ndarray]
 
     @classmethod
@@ -55,12 +56,12 @@ class NumpyMatrixToCSV(DataSaver):
 class SKLearnPickler(DataSaver):
     path: str
 
-    def save_data(self, data: base.ClassifierMixin) -> Dict[str, Any]:
+    def save_data(self, data: base.ClassifierMixin) -> dict[str, Any]:
         pickle.dump(data, open(self.path, "wb"))
         return utils.get_file_metadata(self.path)
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [base.ClassifierMixin]
 
     @classmethod

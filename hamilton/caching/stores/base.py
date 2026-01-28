@@ -17,8 +17,9 @@
 
 import abc
 import pickle
+from collections.abc import Sequence
 from datetime import datetime, timedelta, timezone
-from typing import Any, Optional, Sequence, Tuple, Type
+from typing import Any
 
 from hamilton.htypes import custom_subclass_check
 from hamilton.io.data_adapters import DataLoader, DataSaver
@@ -33,7 +34,7 @@ class ResultRetrievalError(Exception):
 # Ideally, it would be done earlier in the caching lifecycle.
 def search_data_adapter_registry(
     name: str, type_: type
-) -> Tuple[Type[DataSaver], Type[DataLoader]]:
+) -> tuple[type[DataSaver], type[DataLoader]]:
     """Find pair of DataSaver and DataLoader registered with `name` and supporting `type_`"""
     if name not in SAVER_REGISTRY or name not in LOADER_REGISTRY:
         raise KeyError(
@@ -75,7 +76,7 @@ class ResultStore(abc.ABC):
         """Store ``result`` keyed by ``data_version``."""
 
     @abc.abstractmethod
-    def get(self, data_version: str, **kwargs) -> Optional[Any]:
+    def get(self, data_version: str, **kwargs) -> Any | None:
         """Try to retrieve ``result`` keyed by ``data_version``.
         If retrieval misses, return ``None``.
         """
@@ -105,14 +106,14 @@ class MetadataStore(abc.ABC):
         """Setup the metadata store and log the start of the run"""
 
     @abc.abstractmethod
-    def set(self, cache_key: str, data_version: str, **kwargs) -> Optional[Any]:
+    def set(self, cache_key: str, data_version: str, **kwargs) -> Any | None:
         """Store the mapping ``cache_key -> data_version``.
         Can include other metadata (e.g., node name, run id, code version) depending
         on the implementation.
         """
 
     @abc.abstractmethod
-    def get(self, cache_key: str, **kwargs) -> Optional[str]:
+    def get(self, cache_key: str, **kwargs) -> str | None:
         """Try to retrieve ``data_version`` keyed by ``cache_key``.
         If retrieval misses return ``None``.
         """
@@ -185,9 +186,9 @@ class StoredResult:
     def new(
         cls,
         value: Any,
-        expires_in: Optional[timedelta] = None,
-        saver: Optional[DataSaver] = None,
-        loader: Optional[DataLoader] = None,
+        expires_in: timedelta | None = None,
+        saver: DataSaver | None = None,
+        loader: DataLoader | None = None,
     ) -> "StoredResult":
         if expires_in is not None and not isinstance(expires_in, timedelta):
             expires_in = timedelta(seconds=expires_in)

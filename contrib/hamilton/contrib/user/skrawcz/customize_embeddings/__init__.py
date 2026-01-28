@@ -63,7 +63,7 @@ client = openai.OpenAI()
 
 
 @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
-def _get_embedding(text: str, model="text-similarity-davinci-001", **kwargs) -> List[float]:
+def _get_embedding(text: str, model="text-similarity-davinci-001", **kwargs) -> list[float]:
     """Get embedding from OpenAI API.
     :param text: text to embed.
     :param model: the embedding model to use.
@@ -394,7 +394,7 @@ def embedded_data_set(
 
 def _accuracy_and_se(
     cosine_similarity: list[float], labeled_similarity: list[int]
-) -> Tuple[float, float]:
+) -> tuple[float, float]:
     """Calculate accuracy (and its standard error) of predicting label=1 if similarity>x
 
      x is optimized by sweeping from -1 to 1 in steps of 0.01
@@ -465,7 +465,7 @@ def accuracy_computation(
     return a, se
 
 
-def _embedding_multiplied_by_matrix(embedding: List[float], matrix: torch.tensor) -> np.array:
+def _embedding_multiplied_by_matrix(embedding: list[float], matrix: torch.tensor) -> np.array:
     """Helper function to multiply an embedding by a matrix."""
     embedding_tensor = torch.tensor(embedding).float()
     modified_embedding = embedding_tensor @ matrix
@@ -530,7 +530,7 @@ def optimize_matrix(
         embedding_column_1: str,
         embedding_column_2: str,
         similarity_label_column: str,
-    ) -> Tuple[torch.tensor, torch.tensor, torch.tensor]:
+    ) -> tuple[torch.tensor, torch.tensor, torch.tensor]:
         e1 = np.stack(np.array(df[embedding_column_1].values))
         e2 = np.stack(np.array(df[embedding_column_2].values))
         s = np.stack(np.array(df[similarity_label_column].astype("float").values))
@@ -638,7 +638,7 @@ def optimize_matrix(
     optimization_result_matrices=group(*[source(k) for k in optimization_parameterization.keys()])
 )
 def optimization_results(
-    optimization_result_matrices: List[pd.DataFrame],
+    optimization_result_matrices: list[pd.DataFrame],
 ) -> pd.DataFrame:
     """Combine optimization results into one dataframe."""
     return pd.concat(optimization_result_matrices)

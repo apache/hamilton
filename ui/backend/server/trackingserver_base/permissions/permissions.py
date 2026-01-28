@@ -58,7 +58,7 @@ user_can_phone_home = allowed
 user_can_create_api_key = allowed
 
 
-async def user_can_delete_api_key(request: typing.Any, api_key_id: int) -> typing.Tuple[bool, str]:
+async def user_can_delete_api_key(request: typing.Any, api_key_id: int) -> tuple[bool, str]:
     """Checks if a user can delete an API key.
 
     @param request:
@@ -88,7 +88,7 @@ async def _visibility_valid_for_user(request, visibility: Visibility) -> bool:
     return True
 
 
-async def user_can_create_project(request, project: ProjectIn) -> typing.Tuple[bool, str]:
+async def user_can_create_project(request, project: ProjectIn) -> tuple[bool, str]:
     """Any user can create a project. They just have to be logged in.
     The only exception is if they have "public" on their project, then it can't be created
     unless they're a DAGWorks member.
@@ -102,7 +102,7 @@ async def user_can_create_project(request, project: ProjectIn) -> typing.Tuple[b
     return True, ""
 
 
-async def user_project_visibility(request, project: Project) -> typing.Optional[str]:
+async def user_project_visibility(request, project: Project) -> str | None:
     user_memberships = await amap(
         lambda membership: membership.role,
         ProjectUserMembership.objects.filter(project=project.id, user=request.auth[0]).all(),
@@ -121,7 +121,7 @@ async def user_project_visibility(request, project: Project) -> typing.Optional[
     return None
 
 
-async def user_can_get_project_by_id(request, project_id: int) -> typing.Tuple[bool, str]:
+async def user_can_get_project_by_id(request, project_id: int) -> tuple[bool, str]:
     """Checks if a user can get a project by ID, given a certain ID
 
     @param request:
@@ -153,7 +153,7 @@ async def user_can_write_to_project(request, project_id: int):
 
 async def user_can_update_project(
     request, project: ProjectUpdate, project_id: int
-) -> typing.Tuple[bool, str]:
+) -> tuple[bool, str]:
     """Checks if a user can get a project by ID, given a certain ID
 
     @param request: Request with auth information
@@ -170,9 +170,7 @@ async def user_can_update_project(
     return True, ""
 
 
-async def user_can_get_dag_template(
-    request: typing.Any, dag_template_ids: str
-) -> typing.Tuple[bool, str]:
+async def user_can_get_dag_template(request: typing.Any, dag_template_ids: str) -> tuple[bool, str]:
     """Tells whether or not the user can get a DAG template. This is only visible
     iff the project with which the corresponding project version is associated is visible.
 
@@ -201,9 +199,7 @@ async def user_can_update_dag_template(request: typing.Any, dag_template_id: int
     return True, ""
 
 
-async def user_can_get_dag_templates(
-    request: typing.Any, project_id: int
-) -> typing.Tuple[bool, str]:
+async def user_can_get_dag_templates(request: typing.Any, project_id: int) -> tuple[bool, str]:
     if project_id is not None:
         can_read_project, message = await user_can_get_project_by_id(request, project_id)
         if not can_read_project:

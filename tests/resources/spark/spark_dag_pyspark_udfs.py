@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Callable, List
+from collections.abc import Callable
 
 import pandas as pd
 import pyspark.sql as ps
@@ -38,7 +38,7 @@ def spark_session() -> ps.SparkSession:
     return spark
 
 
-def _module(user_controls_initial_dataframe: bool) -> List[Callable]:
+def _module(user_controls_initial_dataframe: bool) -> list[Callable]:
     out = []
     if user_controls_initial_dataframe:
 

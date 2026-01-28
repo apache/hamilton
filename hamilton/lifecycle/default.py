@@ -25,8 +25,9 @@ import pprint
 import random
 import shelve
 import time
+from collections.abc import Callable
 from functools import partial
-from typing import Any, Callable, Dict, List, Optional, Type, Union
+from typing import Any, Union
 
 from hamilton import graph_types, htypes
 from hamilton.graph_types import HamiltonGraph
@@ -41,15 +42,15 @@ logger = logging.getLogger(__name__)
 
 NodeFilter = Union[
     Callable[
-        [str, Dict[str, Any]], bool
+        [str, dict[str, Any]], bool
     ],  # filter function for nodes, mapping node name to a boolean
-    List[str],  # list of node names to run
+    list[str],  # list of node names to run
     str,  # node name to run
     None,  # run all nodes
 ]  # filter function for nodes, mapping node name and node tags to a boolean
 
 
-def should_run_node(node_name: str, node_tags: Dict[str, Any], node_filter: NodeFilter) -> bool:
+def should_run_node(node_name: str, node_tags: dict[str, Any], node_filter: NodeFilter) -> bool:
     if node_filter is None:
         return True
     if isinstance(node_filter, str):
@@ -83,7 +84,7 @@ class PrintLn(NodeExecutionHook):
             raise ValueError(f"Verbosity must be one of [1, 2], got {verbosity}")
 
     @staticmethod
-    def _format_node_name(node_name: str, task_id: Optional[str]) -> str:
+    def _format_node_name(node_name: str, task_id: str | None) -> str:
         """Formats a node name and task id into a unique node name."""
         if task_id is not None:
             return f"{task_id}:{node_name}"
@@ -116,9 +117,9 @@ class PrintLn(NodeExecutionHook):
         self,
         *,
         node_name: str,
-        node_tags: Dict[str, Any],
-        node_kwargs: Dict[str, Any],
-        task_id: Optional[str],
+        node_tags: dict[str, Any],
+        node_kwargs: dict[str, Any],
+        task_id: str | None,
         **future_kwargs: Any,
     ):
         """Runs before a node executes. Prints out the node name and inputs if verbosity is 2.
@@ -142,12 +143,12 @@ class PrintLn(NodeExecutionHook):
         self,
         *,
         node_name: str,
-        node_tags: Dict[str, Any],
-        node_kwargs: Dict[str, Any],
+        node_tags: dict[str, Any],
+        node_kwargs: dict[str, Any],
         result: Any,
-        error: Optional[Exception],
+        error: Exception | None,
         success: bool,
-        task_id: Optional[str],
+        task_id: str | None,
         **future_kwargs: Any,
     ):
         """Runs after a node executes. Prints out the node name and time it took, the output if verbosity is 1.
@@ -212,10 +213,10 @@ class PDBDebugger(NodeExecutionHook, NodeExecutionMethod):
         self,
         *,
         node_name: str,
-        node_tags: Dict[str, Any],
+        node_tags: dict[str, Any],
         node_callable: Any,
-        node_kwargs: Dict[str, Any],
-        task_id: Optional[str],
+        node_kwargs: dict[str, Any],
+        task_id: str | None,
         **future_kwargs: Any,
     ) -> Any:
         """Executes the node with a PDB debugger. This modifies the global PDBDebugger.CONTEXT variable to contain information about the node,
@@ -241,16 +242,14 @@ class PDBDebugger(NodeExecutionHook, NodeExecutionMethod):
             "future_kwargs": future_kwargs,
         }
         logger.warning(
-            (
-                f"Placing you in a PDB debugger for node {node_name}."
-                "\nYou can access additional node information via PDBDebugger.CONTEXT. Data is:"
-                f"\n - node_name: {PDBDebugger._truncate_repr(node_name)}"
-                f"\n - node_tags: {PDBDebugger._truncate_repr(node_tags)}"
-                f"\n - node_callable: {PDBDebugger._truncate_repr(node_callable)}"
-                f"\n - node_kwargs: {PDBDebugger._truncate_repr(', '.join(list(node_kwargs.keys())))}"
-                f"\n - task_id: {PDBDebugger._truncate_repr(task_id)}"
-                f"\n - future_kwargs: {PDBDebugger._truncate_repr(future_kwargs)}"
-            )
+            f"Placing you in a PDB debugger for node {node_name}."
+            "\nYou can access additional node information via PDBDebugger.CONTEXT. Data is:"
+            f"\n - node_name: {PDBDebugger._truncate_repr(node_name)}"
+            f"\n - node_tags: {PDBDebugger._truncate_repr(node_tags)}"
+            f"\n - node_callable: {PDBDebugger._truncate_repr(node_callable)}"
+            f"\n - node_kwargs: {PDBDebugger._truncate_repr(', '.join(list(node_kwargs.keys())))}"
+            f"\n - task_id: {PDBDebugger._truncate_repr(task_id)}"
+            f"\n - future_kwargs: {PDBDebugger._truncate_repr(future_kwargs)}"
         )
         out = pdb.runcall(node_callable, **node_kwargs)
         logger.info(f"Finished executing node {node_name}.")
@@ -267,10 +266,10 @@ class PDBDebugger(NodeExecutionHook, NodeExecutionMethod):
         self,
         *,
         node_name: str,
-        node_tags: Dict[str, Any],
-        node_kwargs: Dict[str, Any],
+        node_tags: dict[str, Any],
+        node_kwargs: dict[str, Any],
         node_return_type: type,
-        task_id: Optional[str],
+        task_id: str | None,
         **future_kwargs: Any,
     ):
         """Executes before a node executes. Does nothing, just runs pdb.set_trace()
@@ -285,15 +284,13 @@ class PDBDebugger(NodeExecutionHook, NodeExecutionMethod):
         """
         if should_run_node(node_name, node_tags, self.node_filter) and self.run_before:
             logger.warning(
-                (
-                    f"Placing you in a PDB debugger prior to execution of node: {node_name}."
-                    "\nYou can access additional node information via the following variables:"
-                    f"\n - node_name: {PDBDebugger._truncate_repr(node_name)}"
-                    f"\n - node_tags: {PDBDebugger._truncate_repr(node_tags)}"
-                    f"\n - node_kwargs: {PDBDebugger._truncate_repr(', '.join(list(node_kwargs.keys())))}"
-                    f"\n - node_return_type: {PDBDebugger._truncate_repr(node_return_type)}"
-                    f"\n - task_id: {PDBDebugger._truncate_repr(task_id)}"
-                )
+                f"Placing you in a PDB debugger prior to execution of node: {node_name}."
+                "\nYou can access additional node information via the following variables:"
+                f"\n - node_name: {PDBDebugger._truncate_repr(node_name)}"
+                f"\n - node_tags: {PDBDebugger._truncate_repr(node_tags)}"
+                f"\n - node_kwargs: {PDBDebugger._truncate_repr(', '.join(list(node_kwargs.keys())))}"
+                f"\n - node_return_type: {PDBDebugger._truncate_repr(node_return_type)}"
+                f"\n - task_id: {PDBDebugger._truncate_repr(task_id)}"
             )
             pdb.set_trace()
 
@@ -301,13 +298,13 @@ class PDBDebugger(NodeExecutionHook, NodeExecutionMethod):
         self,
         *,
         node_name: str,
-        node_tags: Dict[str, Any],
-        node_kwargs: Dict[str, Any],
+        node_tags: dict[str, Any],
+        node_kwargs: dict[str, Any],
         node_return_type: type,
         result: Any,
-        error: Optional[Exception],
+        error: Exception | None,
         success: bool,
-        task_id: Optional[str],
+        task_id: str | None,
         **future_kwargs: Any,
     ):
         """Executes after a node, whether or not it was successful. Does nothing, just runs pdb.set_trace().
@@ -324,18 +321,16 @@ class PDBDebugger(NodeExecutionHook, NodeExecutionMethod):
         """
         if should_run_node(node_name, node_tags, self.node_filter) and self.run_after:
             logger.warning(
-                (
-                    f"Placing you in a PDB debugger post execution of node: {node_name}."
-                    "\nYou can access additional node information via the following variables:"
-                    f"\n - node_name: {PDBDebugger._truncate_repr(node_name)}"
-                    f"\n - node_tags: {PDBDebugger._truncate_repr(node_tags)}"
-                    f"\n - node_kwargs: {PDBDebugger._truncate_repr(', '.join(list(node_kwargs.keys())))}"
-                    f"\n - node_return_type: {PDBDebugger._truncate_repr(node_return_type)}"
-                    f"\n - result: {PDBDebugger._truncate_repr(result)}"
-                    f"\n - error: {PDBDebugger._truncate_repr(error)}"
-                    f"\n - success: {PDBDebugger._truncate_repr(success)}"
-                    f"\n - task_id: {PDBDebugger._truncate_repr(task_id)}"
-                )
+                f"Placing you in a PDB debugger post execution of node: {node_name}."
+                "\nYou can access additional node information via the following variables:"
+                f"\n - node_name: {PDBDebugger._truncate_repr(node_name)}"
+                f"\n - node_tags: {PDBDebugger._truncate_repr(node_tags)}"
+                f"\n - node_kwargs: {PDBDebugger._truncate_repr(', '.join(list(node_kwargs.keys())))}"
+                f"\n - node_return_type: {PDBDebugger._truncate_repr(node_return_type)}"
+                f"\n - result: {PDBDebugger._truncate_repr(result)}"
+                f"\n - error: {PDBDebugger._truncate_repr(error)}"
+                f"\n - success: {PDBDebugger._truncate_repr(success)}"
+                f"\n - task_id: {PDBDebugger._truncate_repr(task_id)}"
             )
             pdb.set_trace()
 
@@ -356,9 +351,7 @@ class CacheAdapter(NodeExecutionHook, NodeExecutionMethod, GraphExecutionHook):
 
     nodes_history_key: str = "_nodes_history"
 
-    def __init__(
-        self, cache_vars: Union[List[str], None] = None, cache_path: str = "./hamilton-cache"
-    ):
+    def __init__(self, cache_vars: list[str] | None = None, cache_path: str = "./hamilton-cache"):
         """Initialize the cache
 
         :param cache_vars: List of nodes for which to store/load results. Passing None will use the cache
@@ -368,10 +361,10 @@ class CacheAdapter(NodeExecutionHook, NodeExecutionMethod, GraphExecutionHook):
         self.cache_vars = cache_vars or []
         self.cache_path = cache_path
         self.cache = shelve.open(self.cache_path)
-        self.nodes_history: Dict[str, List[str]] = self.cache.get(
+        self.nodes_history: dict[str, list[str]] = self.cache.get(
             key=CacheAdapter.nodes_history_key, default=dict()
         )
-        self.used_nodes_hash: Dict[str, str] = dict()
+        self.used_nodes_hash: dict[str, str] = dict()
         self.cache.close()
 
         logger.warning(
@@ -388,7 +381,7 @@ class CacheAdapter(NodeExecutionHook, NodeExecutionMethod, GraphExecutionHook):
             self.cache_vars = [n.name for n in graph.nodes]
 
     def run_to_execute_node(
-        self, *, node_name: str, node_callable: Any, node_kwargs: Dict[str, Any], **kwargs
+        self, *, node_name: str, node_callable: Any, node_kwargs: dict[str, Any], **kwargs
     ):
         """Create cache key based on node callable hash (equiv. to HamiltonNode.version) and
         the node inputs (`node_kwargs`).If key in cache (cache hit), load result; else (cache miss),
@@ -416,7 +409,7 @@ class CacheAdapter(NodeExecutionHook, NodeExecutionMethod, GraphExecutionHook):
         return node_callable(**node_kwargs)
 
     def run_after_node_execution(
-        self, *, node_name: str, node_kwargs: Dict[str, Any], result: Any, **kwargs
+        self, *, node_name: str, node_kwargs: dict[str, Any], result: Any, **kwargs
     ):
         """If `run_to_execute_node` was a cache miss (hash stored in `used_nodes_hash`),
         store the computed result in cache
@@ -444,7 +437,7 @@ class CacheAdapter(NodeExecutionHook, NodeExecutionMethod, GraphExecutionHook):
         pass
 
     @staticmethod
-    def create_key(node_hash: str, node_inputs: Dict[str, Any]) -> str:
+    def create_key(node_hash: str, node_inputs: dict[str, Any]) -> str:
         """Pickle objects into bytes then get their hash value"""
         digest = hashlib.sha256()
         digest.update(node_hash.encode())
@@ -504,12 +497,12 @@ class FunctionInputOutputTypeChecker(NodeExecutionHook):
     def run_before_node_execution(
         self,
         node_name: str,
-        node_tags: Dict[str, Any],
-        node_kwargs: Dict[str, Any],
+        node_tags: dict[str, Any],
+        node_kwargs: dict[str, Any],
         node_return_type: type,
-        task_id: Optional[str],
+        task_id: str | None,
         run_id: str,
-        node_input_types: Dict[str, Any],
+        node_input_types: dict[str, Any],
         **future_kwargs: Any,
     ):
         """Checks that the result type matches the expected node return type."""
@@ -523,13 +516,13 @@ class FunctionInputOutputTypeChecker(NodeExecutionHook):
     def run_after_node_execution(
         self,
         node_name: str,
-        node_tags: Dict[str, Any],
-        node_kwargs: Dict[str, Any],
+        node_tags: dict[str, Any],
+        node_kwargs: dict[str, Any],
         node_return_type: type,
         result: Any,
-        error: Optional[Exception],
+        error: Exception | None,
         success: bool,
-        task_id: Optional[str],
+        task_id: str | None,
         run_id: str,
         **future_kwargs: Any,
     ):
@@ -601,7 +594,7 @@ class GracefulErrorAdapter(NodeExecutionMethod):
 
     def __init__(
         self,
-        error_to_catch: Type[Exception],
+        error_to_catch: type[Exception],
         sentinel_value: Any = SENTINEL_DEFAULT,
         try_all_parallel: bool = True,
         allow_injection: bool = True,
@@ -729,7 +722,7 @@ class GracefulErrorAdapter(NodeExecutionMethod):
         self,
         *,
         node_callable: Any,
-        node_kwargs: Dict[str, Any],
+        node_kwargs: dict[str, Any],
         is_expand: bool,
         is_collect: bool,
         **future_kwargs: Any,

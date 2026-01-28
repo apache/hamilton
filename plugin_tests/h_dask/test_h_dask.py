@@ -207,9 +207,7 @@ dd_test_case_ids = [
 
 
 @pytest.mark.parametrize("outputs, expected", dd_test_cases, ids=dd_test_case_ids)
-def test_DDFR_build_result_pandas(
-    client, outputs: typing.Dict[str, typing.Any], expected: dd.DataFrame
-):
+def test_DDFR_build_result_pandas(client, outputs: dict[str, typing.Any], expected: dd.DataFrame):
     """Tests using pandas objects works"""
     actual = h_dask.DaskDataFrameResult.build_result(**outputs)
     actual_pdf = actual.compute().convert_dtypes(dtype_backend="pyarrow")
@@ -218,9 +216,7 @@ def test_DDFR_build_result_pandas(
 
 
 @pytest.mark.parametrize("outputs, expected", dd_test_cases, ids=dd_test_case_ids)
-def test_DDFR_build_result_dask(
-    client, outputs: typing.Dict[str, typing.Any], expected: dd.DataFrame
-):
+def test_DDFR_build_result_dask(client, outputs: dict[str, typing.Any], expected: dd.DataFrame):
     """Tests that using dask objects works."""
     dask_outputs = {}
     for k, v in outputs.items():

@@ -19,7 +19,7 @@ import abc
 import dataclasses
 import enum
 import logging
-from typing import Any, Dict, List, Tuple, Type
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ class DataValidationLevel(enum.Enum):
 class ValidationResult:
     passes: bool  # Whether or not this passed the validation
     message: str  # Error message or success message
-    diagnostics: Dict[str, Any] = dataclasses.field(
+    diagnostics: dict[str, Any] = dataclasses.field(
         default_factory=dict
     )  # Any extra diagnostics information needed, free-form
 
@@ -53,7 +53,7 @@ class DataValidator(abc.ABC):
         return self._importance
 
     @abc.abstractmethod
-    def applies_to(self, datatype: Type[Type]) -> bool:
+    def applies_to(self, datatype: type[type]) -> bool:
         """Whether or not this data validator can apply to the specified dataset
 
         :param datatype:
@@ -105,7 +105,7 @@ def _create_error_string(node_name, validation_result, validator):
     )
 
 
-def act_fail_bulk(node_name: str, failures: List[Tuple[ValidationResult, DataValidator]]):
+def act_fail_bulk(node_name: str, failures: list[tuple[ValidationResult, DataValidator]]):
     """This is the current default for acting on the validation result when you want to fail.
     Note that we might move this at some point -- we'll want to make it configurable. But for now, this
     seems like a fine place to put it.
@@ -135,7 +135,7 @@ class BaseDefaultValidator(DataValidator, abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         pass
 
     @abc.abstractmethod

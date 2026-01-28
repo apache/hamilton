@@ -18,7 +18,6 @@
 import gc
 import logging
 import os
-from typing import Dict
 
 import pandas as pd
 import utils
@@ -124,7 +123,7 @@ def sales_train_validation(
 )
 def submission_loader(
     submission_path: str = "/kaggle/input/m5-forecasting-accuracy/sample_submission.csv",
-) -> Dict[str, pd.DataFrame]:
+) -> dict[str, pd.DataFrame]:
     """Loads the submission data.
 
     The notebook I got this from did some weird splitting with test1 and test 2.

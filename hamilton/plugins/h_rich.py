@@ -15,7 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Collection, List
+from collections.abc import Collection
+from typing import Any
 
 import rich.progress
 
@@ -109,7 +110,7 @@ class RichProgressBar(TaskExecutionHook, TaskGroupingHook, GraphExecutionHook, N
         self._progress.stop()  # in case progress thread is lagging
 
     @override
-    def run_after_task_grouping(self, *, task_ids: List[str], **kwargs):
+    def run_after_task_grouping(self, *, task_ids: list[str], **kwargs):
         # Change the total of the task group to the number of tasks in the group
         self._progress.update(self._progress.task_ids[0], total=len(task_ids))
         self._task_based = True

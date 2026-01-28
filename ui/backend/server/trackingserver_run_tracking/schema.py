@@ -16,7 +16,7 @@
 # under the License.
 
 import datetime
-from typing import List, Literal, Optional
+from typing import Literal
 
 from ninja import ModelSchema, Schema
 from pydantic import BaseModel
@@ -34,7 +34,7 @@ class DAGRunUpdate(Schema):
     # TODO -- find a better way of representing this
     run_status: Literal[tuple(ExecutionStatus.values)]
     run_end_time: datetime.datetime
-    upsert_tags: Optional[dict] = None
+    upsert_tags: dict | None = None
 
 
 class DAGRunOut(ModelSchema):
@@ -44,7 +44,7 @@ class DAGRunOut(ModelSchema):
         model = DAGRun
         fields = "__all__"
 
-    username_resolved: Optional[str] = None
+    username_resolved: str | None = None
 
     @classmethod
     def create_with_username(cls, orm_model: DAGRun) -> "DAGRunOut":
@@ -88,11 +88,11 @@ class NodeRunAttributeOut(ModelSchema):
 
 
 class NodeRunOutWithAttributes(NodeRunOut):
-    attributes: List[NodeRunAttributeOut]
+    attributes: list[NodeRunAttributeOut]
     dag_run_id: int
 
     @classmethod
-    def from_data(cls, node_run: NodeRun, attributes: List[NodeRunAttributeOut]):
+    def from_data(cls, node_run: NodeRun, attributes: list[NodeRunAttributeOut]):
         return NodeRunOutWithAttributes(
             **{
                 **NodeRunOut.from_orm(node_run).model_dump(),
@@ -102,11 +102,11 @@ class NodeRunOutWithAttributes(NodeRunOut):
 
 
 class DAGRunOutWithData(DAGRunOut):
-    node_runs: List[NodeRunOutWithAttributes]
+    node_runs: list[NodeRunOutWithAttributes]
     dag_template_id: int
 
     @classmethod
-    def from_data(cls, dag_run: DAGRun, node_runs: List[NodeRunOutWithAttributes]):
+    def from_data(cls, dag_run: DAGRun, node_runs: list[NodeRunOutWithAttributes]):
         return DAGRunOutWithData(
             **{
                 **DAGRunOut.from_orm(dag_run).model_dump(),
@@ -117,8 +117,8 @@ class DAGRunOutWithData(DAGRunOut):
 
 
 class DagRunsBulkRequest(BaseModel):
-    attributes: List[NodeRunAttributeIn]
-    task_updates: List[NodeRunIn]
+    attributes: list[NodeRunAttributeIn]
+    task_updates: list[NodeRunIn]
 
 
 class NodeRunOutWithExtraData(NodeRunOut, BaseModel):
@@ -139,6 +139,6 @@ class NodeRunOutWithExtraData(NodeRunOut, BaseModel):
 # We're doing a weird join
 # We should probably just have the right ofreign key
 class CatalogZoomResponse(BaseModel):
-    node_runs: List[NodeRunOutWithExtraData]
-    node_templates: List[NodeTemplateOut]
-    code_artifacts: List[CodeArtifactOut]
+    node_runs: list[NodeRunOutWithExtraData]
+    node_templates: list[NodeTemplateOut]
+    code_artifacts: list[CodeArtifactOut]

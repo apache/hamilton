@@ -16,7 +16,7 @@
 # under the License.
 
 import logging
-from typing import Any, Dict, List, Union
+from typing import Any
 
 import diskcache
 
@@ -29,11 +29,11 @@ def _bytes_to_mb(kb: int) -> float:
     return kb / (1024**2)
 
 
-def evict_all_except(nodes_to_keep: Dict[str, node.Node], cache: diskcache.Cache) -> int:
+def evict_all_except(nodes_to_keep: dict[str, node.Node], cache: diskcache.Cache) -> int:
     """Evicts all nodes and node version except those passed.
     Remaining nodes may have multiple entries for different input values
     """
-    nodes_history: Dict[str, List[str]] = cache.get(key=DiskCacheAdapter.nodes_history_key)  # type: ignore
+    nodes_history: dict[str, list[str]] = cache.get(key=DiskCacheAdapter.nodes_history_key)  # type: ignore
 
     new_nodes_history = dict()
     eviction_counter = 0
@@ -94,15 +94,15 @@ class DiskCacheAdapter(
     nodes_history_key: str = "_nodes_history"
 
     def __init__(
-        self, cache_vars: Union[List[str], None] = None, cache_path: str = ".", **cache_settings
+        self, cache_vars: list[str] | None = None, cache_path: str = ".", **cache_settings
     ):
         self.cache_vars = cache_vars or []
         self.cache_path = cache_path
         self.cache = diskcache.Cache(directory=cache_path, **cache_settings)
-        self.nodes_history: Dict[str, List[str]] = self.cache.get(
+        self.nodes_history: dict[str, list[str]] = self.cache.get(
             key=DiskCacheAdapter.nodes_history_key, default=dict()
         )  # type: ignore
-        self.used_nodes_hash: Dict[str, str] = dict()
+        self.used_nodes_hash: dict[str, str] = dict()
 
         logger.warning(
             "The `DiskCacheAdapter` is deprecated and will be removed in Hamilton 2.0. "
@@ -117,7 +117,7 @@ class DiskCacheAdapter(
             self.cache_vars = [n.name for n in graph.nodes]
 
     def run_to_execute_node(
-        self, *, node_name: str, node_callable: Any, node_kwargs: Dict[str, Any], **kwargs
+        self, *, node_name: str, node_callable: Any, node_kwargs: dict[str, Any], **kwargs
     ):
         """Create hash key then use cached value if exist"""
         if node_name not in self.cache_vars:

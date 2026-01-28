@@ -15,7 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Callable, Collection, Dict, List, Optional
+from collections.abc import Callable, Collection
+from typing import Any
 
 from . import base
 
@@ -26,16 +27,16 @@ replacing if/else/switch statements in standard dataflow definition libraries"""
 class ConfigResolver:
     """Base class for resolving configuration so we can share the tooling between different functions."""
 
-    def __init__(self, resolves: Callable[[Dict[str, Any]], bool], config_used: List[str]):
+    def __init__(self, resolves: Callable[[dict[str, Any]], bool], config_used: list[str]):
         self.resolves = resolves
         self._config_used = config_used
 
     @property
-    def optional_config(self) -> Dict[str, Any]:
+    def optional_config(self) -> dict[str, Any]:
         """Gives the optional configuration for this resolver -- to be used by the @config decorator."""
         return {key: None for key in self._config_used}
 
-    def __call__(self, config: Dict[str, Any]) -> bool:
+    def __call__(self, config: dict[str, Any]) -> bool:
         return self.resolves(config)
 
     @staticmethod
@@ -47,7 +48,7 @@ class ConfigResolver:
         :return: a configuration decorator
         """
 
-        def resolves(configuration: Dict[str, Any]) -> bool:
+        def resolves(configuration: dict[str, Any]) -> bool:
             return all(value == configuration.get(key) for key, value in key_value_pairs.items())
 
         return ConfigResolver(resolves, config_used=list(key_value_pairs.keys()))
@@ -60,7 +61,7 @@ class ConfigResolver:
         :return: a configuration decorator
         """
 
-        def resolves(configuration: Dict[str, Any]) -> bool:
+        def resolves(configuration: dict[str, Any]) -> bool:
             return all(value != configuration.get(key) for key, value in key_value_pairs.items())
 
         return ConfigResolver(resolves, config_used=list(key_value_pairs.keys()))
@@ -74,7 +75,7 @@ class ConfigResolver:
         :return: a configuration decorator
         """
 
-        def resolves(configuration: Dict[str, Any]) -> bool:
+        def resolves(configuration: dict[str, Any]) -> bool:
             return all(
                 configuration.get(key) in value for key, value in key_value_group_pairs.items()
             )
@@ -89,7 +90,7 @@ class ConfigResolver:
         :return: a configuration decorator
         """
 
-        def resolves(configuration: Dict[str, Any]) -> bool:
+        def resolves(configuration: dict[str, Any]) -> bool:
             return all(
                 configuration.get(key) not in value for key, value in key_value_group_pairs.items()
             )
@@ -151,9 +152,9 @@ class config(base.NodeResolver):
 
     def __init__(
         self,
-        resolves: Callable[[Dict[str, Any]], bool],
+        resolves: Callable[[dict[str, Any]], bool],
         target_name: str = None,
-        config_used: List[str] = None,
+        config_used: list[str] = None,
     ):
         """Decorator that resolves a function based on the configuration...
 
@@ -166,7 +167,7 @@ class config(base.NodeResolver):
         self.target_name = target_name
         self._config_used = config_used
 
-    def required_config(self) -> Optional[List[str]]:
+    def required_config(self) -> list[str] | None:
         """This returns the required configuration elements. Note that "none"
         is a sentinel value that means that we actaully don't know what
         it uses. If either required or optional configs are None, we
@@ -180,7 +181,7 @@ class config(base.NodeResolver):
         """
         return None if self._config_used is None else []
 
-    def optional_config(self) -> Optional[Dict[str, Any]]:
+    def optional_config(self) -> dict[str, Any] | None:
         """Everything is optional with None as the required value"""
         return {key: None for key in self._config_used} if self._config_used is not None else None
 
@@ -189,7 +190,7 @@ class config(base.NodeResolver):
             return self.target_name
         return base.sanitize_function_name(fn.__name__)
 
-    def resolve(self, fn, config: Dict[str, Any]) -> Callable:
+    def resolve(self, fn, config: dict[str, Any]) -> Callable:
         if not self.does_resolve(config):
             return None
         # attaches config keys used to resolve function
@@ -295,7 +296,7 @@ class hamilton_exclude(base.NodeResolver):
     def __init__(self):
         pass
 
-    def resolve(self, *args, **kwargs) -> Optional[Callable]:
+    def resolve(self, *args, **kwargs) -> Callable | None:
         """Returning None defaults to not be included in the DAG.
 
         :param fn: Function to resolve

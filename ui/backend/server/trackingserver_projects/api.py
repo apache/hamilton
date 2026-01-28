@@ -16,7 +16,6 @@
 # under the License.
 
 import logging
-import typing
 
 from django.db.models import Q
 from ninja import Router
@@ -52,8 +51,8 @@ router = Router(tags=["projects"])
 
 
 async def _add_attributes_to_project(
-    project: Project, attributes: typing.List[ProjectAttributeIn]
-) -> typing.List[ProjectAttribute]:
+    project: Project, attributes: list[ProjectAttributeIn]
+) -> list[ProjectAttribute]:
     attributes_to_add = []
     for attribute in attributes:
         attribute_to_add = ProjectAttributeIn.to_model(attribute, project_id=project.id)
@@ -66,7 +65,7 @@ async def _add_attributes_to_project(
 # Or use the first solutino here: https://stackoverflow.com/questions/74575922/how-to-use-transaction-with-async-functions-in-django
 async def _update_project_membership(
     project: Project, visibility: Visibility
-) -> typing.List[ProjectMembership]:
+) -> list[ProjectMembership]:
     """This is lazy -- it just deletes then rewrites it. This is rarely done so I'm not worried.
 
     @param project: Project to update
@@ -124,12 +123,12 @@ async def create_project(request, project: ProjectIn) -> ProjectOut:
 
 @router.get(
     "/v1/projects/{project_id}",
-    response=typing.Optional[ProjectOutWithAttributes],
+    response=ProjectOutWithAttributes | None,
     tags=["projects"],
 )
 @permission(user_can_get_project_by_id)
 async def get_project_by_id(
-    request, project_id: int, attribute_types: typing.Optional[str] = None
+    request, project_id: int, attribute_types: str | None = None
 ) -> ProjectOutWithAttributes:
     """Gets a project by ID
 
@@ -160,7 +159,7 @@ async def update_project(
     request,
     project_id: int,
     project: ProjectUpdate,
-    attributes: typing.List[ProjectAttributeIn] = None,
+    attributes: list[ProjectAttributeIn] = None,
 ) -> ProjectOut:
     """Updates a project. Note that attributes are append only.
 
@@ -198,8 +197,8 @@ async def update_project(
 
 
 async def _get_visible_projects(
-    user: User, organizations: typing.List[Team], limit: int, offset: int = None
-) -> typing.List[typing.Tuple[Project, str]]:
+    user: User, organizations: list[Team], limit: int, offset: int = None
+) -> list[tuple[Project, str]]:
     """Gets all projects that the user has access to
 
     @param user: The user
@@ -244,11 +243,11 @@ async def _get_visible_projects(
     # return visible_projects
 
 
-@router.get("/v1/projects", response=typing.List[ProjectOutWithAttributes], tags=["projects"])
+@router.get("/v1/projects", response=list[ProjectOutWithAttributes], tags=["projects"])
 @permission(user_can_get_projects)
 async def get_projects(
-    request, attribute_types: typing.Optional[str] = None, limit: int = 100, offset: int = 0
-) -> typing.List[ProjectOutWithAttributes]:
+    request, attribute_types: str | None = None, limit: int = 100, offset: int = 0
+) -> list[ProjectOutWithAttributes]:
     """Gets a list of projects visible by a user, auto-paginating.
     TODO -- fix to use actual pagination on the db side
 
@@ -259,7 +258,7 @@ async def get_projects(
     @return: A list of projects
     """
     user, orgs = request.auth
-    orgs: typing.List[Team]
+    orgs: list[Team]
     user: User
     attribute_types = attribute_types.split(",") if attribute_types is not None else []
     logger.info(f"Getting projects for {user.email} with orgs: {[org.name for org in orgs]}")

@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict
 
 import map_transforms
 import pandas as pd
@@ -98,7 +97,7 @@ def base_df(spark_session: ps.SparkSession) -> ps.DataFrame:
         "spend_std_dev": float,
     }
 )
-def spend_statistics(base_df: ps.DataFrame) -> Dict[str, float]:
+def spend_statistics(base_df: ps.DataFrame) -> dict[str, float]:
     """Computes the mean and standard deviation of the spend column.
     Note that this is a blocking (collect) operation,
     but it doesn't have to be if you use an aggregation. In that case

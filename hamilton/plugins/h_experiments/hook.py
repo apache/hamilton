@@ -25,7 +25,7 @@ import string
 import uuid
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from hamilton import graph_types, lifecycle
 from hamilton.plugins.h_experiments.cache import JsonCache
@@ -77,7 +77,7 @@ class NodeImplementation:
 class NodeInput:
     name: str
     value: Any
-    default_value: Optional[Any]
+    default_value: Any | None
 
 
 @dataclass
@@ -144,8 +144,8 @@ class ExperimentTracker(
         self,
         *,
         graph: graph_types.HamiltonGraph,
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
         **kwargs,
     ):
         """Store execution metadata: graph hash, inputs, overrides"""

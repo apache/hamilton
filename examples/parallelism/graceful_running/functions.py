@@ -15,8 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from collections.abc import Callable, Iterable
 from itertools import cycle
-from typing import Any, Callable, Iterable, List, Tuple, Union
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -49,7 +50,7 @@ def load_data() -> pd.DataFrame:
 
 
 def split_to_groups(
-    load_data: pd.DataFrame, funcs: List[Splitter]
+    load_data: pd.DataFrame, funcs: list[Splitter]
 ) -> Parallelizable[tuple[str, pd.DataFrame]]:
     """Split data into interesting groups."""
     for func in funcs:
@@ -67,7 +68,7 @@ def average(data: pd.DataFrame) -> float:
     return data.Views.mean()
 
 
-def model_fit(data: pd.DataFrame, group_name: str) -> Tuple[float, float, float]:
+def model_fit(data: pd.DataFrame, group_name: str) -> tuple[float, float, float]:
     """Imagine a model fit that doesn't always work."""
     if "Method:TV" in group_name:
         raise Exception("Fake floating point error, e.g.")
@@ -79,9 +80,9 @@ def model_fit(data: pd.DataFrame, group_name: str) -> Tuple[float, float, float]
 
 @accept_error_sentinels
 def gather_metrics(
-    group_name: Union[str, None],
-    average: Union[float, None],
-    model_fit: Union[Tuple[float, float, float], None],
+    group_name: str | None,
+    average: float | None,
+    model_fit: tuple[float, float, float] | None,
 ) -> dict[str, Any]:
     answer = {
         "Name": group_name,

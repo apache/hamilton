@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Optional
 
 from hamilton.graph_types import HamiltonNode
 from hamilton.lifecycle import api
@@ -24,7 +23,7 @@ from hamilton.lifecycle import api
 class MyTagValidator(api.StaticValidator):
     def run_to_validate_node(
         self, *, node: HamiltonNode, **future_kwargs
-    ) -> tuple[bool, Optional[str]]:
+    ) -> tuple[bool, str | None]:
         if node.tags.get("node_type", "") == "output":
             table_name = node.tags.get("table_name")
             if not table_name:  # None or empty

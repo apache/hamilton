@@ -16,8 +16,9 @@
 # under the License.
 
 import dataclasses
+from collections.abc import Collection
 from pathlib import Path
-from typing import Any, Collection, Dict, Literal, Optional, Tuple, Type, Union
+from typing import Any, Literal, Union
 
 try:
     import lightgbm
@@ -37,16 +38,16 @@ LIGHTGBM_MODEL_TYPES_ANNOTATION = Union[lightgbm.LGBMModel, lightgbm.Booster, li
 class LightGBMFileWriter(DataSaver):
     """Write LighGBM models and boosters to a file"""
 
-    path: Union[str, Path]
-    num_iteration: Optional[int] = None
+    path: str | Path
+    num_iteration: int | None = None
     start_iteration: int = 0
     importance_type: Literal["split", "gain"] = "split"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return LIGHTGBM_MODEL_TYPES
 
-    def save_data(self, data: LIGHTGBM_MODEL_TYPES_ANNOTATION) -> Dict[str, Any]:
+    def save_data(self, data: LIGHTGBM_MODEL_TYPES_ANNOTATION) -> dict[str, Any]:
         if isinstance(data, lightgbm.LGBMModel):
             data = data.booster_
 
@@ -67,15 +68,15 @@ class LightGBMFileWriter(DataSaver):
 class LightGBMFileReader(DataLoader):
     """Load LighGBM models and boosters from a file"""
 
-    path: Union[str, Path]
+    path: str | Path
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return LIGHTGBM_MODEL_TYPES
 
     def load_data(
-        self, type_: Type
-    ) -> Tuple[Union[lightgbm.Booster, lightgbm.CVBooster], Dict[str, Any]]:
+        self, type_: type
+    ) -> tuple[lightgbm.Booster | lightgbm.CVBooster, dict[str, Any]]:
         model = type_(model_file=self.path)
         metadata = utils.get_file_metadata(self.path)
         return model, metadata

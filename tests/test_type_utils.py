@@ -17,7 +17,7 @@
 
 import collections
 import typing
-from typing import Annotated, Any, Dict, List, Union
+from typing import Annotated, Any, Union
 
 import pandas as pd
 import pytest
@@ -46,24 +46,24 @@ custom_type = typing.TypeVar("FOOBAR")
         (typing.Any, custom_type, True),
         (int, int, True),
         (int, float, False),
-        (typing.List[int], typing.List, True),
-        (typing.List, typing.List[float], True),
-        (typing.List, list, True),
-        (typing.Dict, dict, True),
-        (dict, typing.Dict, True),
-        (list, typing.List, True),
-        (list, typing.List, True),
-        (typing.List[int], typing.List[float], False),
-        (typing.Dict, typing.List, False),
-        (typing.Mapping, typing.Dict, True),
+        (list[int], list, True),
+        (list, list[float], True),
+        (list, list, True),
+        (dict, dict, True),
+        (dict, dict, True),
+        (list, list, True),
+        (list, list, True),
+        (list[int], list[float], False),
+        (dict, list, False),
+        (typing.Mapping, dict, True),
         (typing.Mapping, dict, True),
         (dict, typing.Mapping, False),
-        (typing.Dict, typing.Mapping, False),
-        (typing.Iterable, typing.List, True),
-        (typing.Tuple[str, str], typing.Tuple[str, str], True),
-        (typing.Tuple[str, str], typing.Tuple[str], False),
-        (typing.Tuple[str, str], typing.Tuple, True),
-        (typing.Tuple, typing.Tuple[str, str], True),
+        (dict, typing.Mapping, False),
+        (typing.Iterable, list, True),
+        (tuple[str, str], tuple[str, str], True),
+        (tuple[str, str], tuple[str], False),
+        (tuple[str, str], tuple, True),
+        (tuple, tuple[str, str], True),
         (typing.Union[str, str], typing.Union[str, str], True),
         (X, X, True),
         (X, Y, True),
@@ -77,9 +77,9 @@ custom_type = typing.TypeVar("FOOBAR")
         (typing.Union[int, float], X, False),
         (collections.Counter, collections.Counter, True),
         (dict, collections.Counter, True),
-        (typing.Dict, collections.Counter, True),
+        (dict, collections.Counter, True),
         # These are not subclasses of each other, see issue 42
-        (typing.FrozenSet[int], typing.Set[int], False),
+        (frozenset[int], set[int], False),
         (htypes.column[pd.Series, int], pd.Series, True),
         (htypes.column[pd.Series, int], int, False),
         (typing.Any, pd.DataFrame, True),
@@ -99,7 +99,7 @@ def test_custom_subclass_check(param_type, requested_type, expected):
         (custom_type, custom_type, True),
         (int, int, True),
         (int, float, False),
-        (typing.Dict, typing.Any, True),
+        (dict, typing.Any, True),
         (X, X, True),
         (X, Y, True),
         (pd.Series, pd.Series, True),
@@ -137,7 +137,7 @@ def test_validate_types_happy(type_):
     [
         htypes.column[pd.DataFrame, int],
         htypes.column[pd.DataFrame, float],
-        htypes.column[pd.Series, typing.Dict[str, typing.Any]],
+        htypes.column[pd.Series, dict[str, typing.Any]],
     ],
 )
 def test_validate_types_sad(type_):
@@ -152,9 +152,9 @@ def test_validate_types_sad(type_):
         (int, int, True),
         (int, float, False),
         # Not safe so we return false
-        (typing.List[int], typing.List, False),
-        (typing.FrozenSet[int], typing.Set[int], False),
-        (typing.Dict, dict, False),
+        (list[int], list, False),
+        (frozenset[int], set[int], False),
+        (dict, dict, False),
     ],
 )
 def test__safe_subclass(candidate, type_, expected):
@@ -169,17 +169,17 @@ def test__safe_subclass(candidate, type_, expected):
         (typing.Any),
         (int),
         (float),
-        (typing.List[int]),
-        (typing.List),
+        (list[int]),
+        (list),
         (list),
         (typing.Iterable),
-        (typing.Dict),
+        (dict),
         (dict),
         (typing.Mapping),
         (collections.Counter),
-        (typing.Tuple[str, str]),
-        (typing.Tuple[str]),
-        (typing.Tuple),
+        (tuple[str, str]),
+        (tuple[str]),
+        (tuple),
         (typing.Union[str, str]),
         (X),
         (Y),
@@ -189,8 +189,8 @@ def test__safe_subclass(candidate, type_, expected):
         (typing.Union[custom_type, X]),
         (typing.Union[float, str]),
         (typing.Union[int, float]),
-        (typing.FrozenSet[int]),
-        (typing.Set[int]),
+        (frozenset[int]),
+        (set[int]),
         (pd.Series),
         (htypes.column[pd.Series, int]),
         (pd.DataFrame),
@@ -215,8 +215,8 @@ def test_type_as_string_with_annotated_type():
     "node_type,input_value",
     [
         (pd.DataFrame, pd.Series([1, 2, 3])),
-        (typing.List, {}),
-        (typing.Dict, []),
+        (list, {}),
+        (dict, []),
         (dict, []),
         (list, {}),
         (int, 1.0),
@@ -255,8 +255,8 @@ T = typing.TypeVar("T")
         (typing.Any, None),
         (pd.Series, pd.Series([1, 2, 3])),
         (T, None),
-        (typing.List, []),
-        (typing.Dict, {}),
+        (list, []),
+        (dict, {}),
         (dict, {}),
         (list, []),
         (int, 1),
@@ -320,10 +320,10 @@ def test_check_instance_with_non_generic_type():
 
 
 def test_check_instance_with_generic_list_type():
-    assert check_instance([1, 2, 3], List[int])
-    assert not check_instance([1, 2, "3"], List[int])
-    assert check_instance([1, 2, 3], List)
-    assert check_instance([1, 2, "3"], List)
+    assert check_instance([1, 2, 3], list[int])
+    assert not check_instance([1, 2, "3"], list[int])
+    assert check_instance([1, 2, 3], list)
+    assert check_instance([1, 2, "3"], list)
 
 
 def test_check_instance_with_list_type():
@@ -332,10 +332,10 @@ def test_check_instance_with_list_type():
 
 
 def test_check_instance_with_generic_dict_type():
-    assert check_instance({"key1": 1, "key2": 2}, Dict[str, int])
-    assert not check_instance({"key1": 1, "key2": "2"}, Dict[str, int])
-    assert check_instance({"key1": 1, "key2": 2}, Dict)
-    assert check_instance({"key1": 1, "key2": "2"}, Dict)
+    assert check_instance({"key1": 1, "key2": 2}, dict[str, int])
+    assert not check_instance({"key1": 1, "key2": "2"}, dict[str, int])
+    assert check_instance({"key1": 1, "key2": 2}, dict)
+    assert check_instance({"key1": 1, "key2": "2"}, dict)
 
 
 def test_check_instance_with_dict_type():
@@ -344,9 +344,9 @@ def test_check_instance_with_dict_type():
 
 
 def test_check_instance_with_nested_generic_type():
-    assert check_instance([{"key1": 1, "key2": 2}, {"key3": 3, "key4": 4}], List[Dict[str, int]])
+    assert check_instance([{"key1": 1, "key2": 2}, {"key3": 3, "key4": 4}], list[dict[str, int]])
     assert not check_instance(
-        [{"key1": 1, "key2": 2}, {"key3": 3, "key4": "4"}], List[Dict[str, int]]
+        [{"key1": 1, "key2": 2}, {"key3": 3, "key4": "4"}], list[dict[str, int]]
     )
 
 

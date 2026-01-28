@@ -19,7 +19,7 @@ import abc
 import collections
 import enum
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from hamilton.execution.grouping import NodeGroupPurpose, TaskImplementation, TaskSpec
 
@@ -49,9 +49,9 @@ class ResultCache(abc.ABC):
     @abc.abstractmethod
     def write(
         self,
-        results: Dict[str, Any],
-        group_id: Optional[str] = None,
-        spawning_task_id: Optional[str] = None,
+        results: dict[str, Any],
+        group_id: str | None = None,
+        spawning_task_id: str | None = None,
     ):
         """Writes results to the cache. This is called after a task is run.
 
@@ -63,11 +63,11 @@ class ResultCache(abc.ABC):
     @abc.abstractmethod
     def read(
         self,
-        keys: List[str],
-        group_id: Optional[str] = None,
-        spawning_task_id: Optional[str] = None,
+        keys: list[str],
+        group_id: str | None = None,
+        spawning_task_id: str | None = None,
         optional: bool = False,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Reads results in bulk from the cache.
 
         :param spawning_task_id: Task ID of the task that spawned the task
@@ -83,19 +83,17 @@ class ResultCache(abc.ABC):
 class DictBasedResultCache(ResultCache):
     """Cache of intermediate results. Will likely want to add pruning to this..."""
 
-    def __init__(self, cache: Dict[str, Any]):
+    def __init__(self, cache: dict[str, Any]):
         self.cache = cache
 
-    def _format_key(
-        self, group_id: Optional[str], spawning_task_id: Optional[str], key: str
-    ) -> str:
+    def _format_key(self, group_id: str | None, spawning_task_id: str | None, key: str) -> str:
         return ":".join([item for item in [spawning_task_id, group_id, key] if item is not None])
 
     def write(
         self,
-        results: Dict[str, Any],
-        group_id: Optional[str] = None,
-        spawning_task_id: Optional[str] = None,
+        results: dict[str, Any],
+        group_id: str | None = None,
+        spawning_task_id: str | None = None,
     ):
         results_with_key_assigned = {
             self._format_key(group_id, spawning_task_id, key): value
@@ -105,11 +103,11 @@ class DictBasedResultCache(ResultCache):
 
     def read(
         self,
-        keys: List[str],
-        group_id: Optional[str] = None,
-        spawning_task_id: Optional[str] = None,
+        keys: list[str],
+        group_id: str | None = None,
+        spawning_task_id: str | None = None,
         optional: bool = False,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Reads results in bulk from the cache. If its optional, we don't mind if its not there.
 
         :param keys: Keys to read
@@ -139,7 +137,7 @@ class ExecutionState:
     3. Prep the task for execution (give it the results it needs)
     """
 
-    def __init__(self, tasks: List[TaskSpec], result_cache: ResultCache, run_id: str):
+    def __init__(self, tasks: list[TaskSpec], result_cache: ResultCache, run_id: str):
         """Initializes an ExecutionState to all uninitialized. TBD if we want to add in an initialization
         step that can, say, read from a db.
 
@@ -162,7 +160,7 @@ class ExecutionState:
         self.base_reverse_dependencies = self.compute_reverse_dependencies(tasks)
 
     @staticmethod
-    def compute_reverse_dependencies(tasks: List[TaskSpec]) -> Dict[str, List[TaskSpec]]:
+    def compute_reverse_dependencies(tasks: list[TaskSpec]) -> dict[str, list[TaskSpec]]:
         """Computes dependencies in reverse order, E.G. what tasks depend on this task.
 
         :param tasks:
@@ -174,7 +172,7 @@ class ExecutionState:
                 reverse_dependencies[dependency].append(task)
         return reverse_dependencies
 
-    def _initialize_task_pool(self, tasks: List[TaskSpec]):
+    def _initialize_task_pool(self, tasks: list[TaskSpec]):
         """Initializes the task pool to all nodes that have no dependencies.
 
         :param tasks:
@@ -187,7 +185,7 @@ class ExecutionState:
             if len(task.base_dependencies) == 0:
                 self.realize_task(task, None, None, None)
 
-    def _initialize_base_task_pool(self, tasks: List[TaskSpec]):
+    def _initialize_base_task_pool(self, tasks: list[TaskSpec]):
         """Initializes the base task pool to all nodes.
 
         :param tasks:
@@ -210,10 +208,10 @@ class ExecutionState:
     def realize_task(
         self,
         task_spec: TaskSpec,
-        spawning_task: Optional[str],
-        group_id: Optional[str],
-        dependencies: Dict[str, List[str]] = None,
-        bind: Dict[str, Any] = None,
+        spawning_task: str | None,
+        group_id: str | None,
+        dependencies: dict[str, list[str]] = None,
+        bind: dict[str, Any] = None,
     ):
         """Creates a task and enqueues it to the internal queue. This takes a task in "Plan" state
         (E.G. a TaskSpec), and trasnforms it into execution-ready state, freezing the dependencies.
@@ -255,9 +253,9 @@ class ExecutionState:
     def realize_parameterized_group(
         self,
         spawning_task_id: str,
-        parameterizations: Dict[str, Any],
+        parameterizations: dict[str, Any],
         input_to_parameterize: str,
-    ) -> List[TaskImplementation]:
+    ) -> list[TaskImplementation]:
         """Parameterizes an unordered expand group. These are tasks that are all part of the same
         group. For every result in the list, the input of the next task gets the result.
 
@@ -332,7 +330,7 @@ class ExecutionState:
             out.append(new_task)
         return out
 
-    def write_task_results(self, writer: TaskImplementation, results: Dict[str, Any]):
+    def write_task_results(self, writer: TaskImplementation, results: dict[str, Any]):
         results_to_write = results
         if writer.purpose.is_expander():
             # In this case we need to write each result individually
@@ -342,9 +340,7 @@ class ExecutionState:
         # write the rest with the appropriate namespace
         self.result_cache.write(results_to_write, writer.group_id, writer.spawning_task_id)
 
-    def update_task_state(
-        self, task_id: str, new_state: TaskState, results: Optional[Dict[str, Any]]
-    ):
+    def update_task_state(self, task_id: str, new_state: TaskState, results: dict[str, Any] | None):
         """Updates the state of a task based on an external push.
         This also determines which tasks to create/enqueue next. If the node finished succesfully,
         this has two steps:
@@ -514,7 +510,7 @@ class ExecutionState:
         }
         return task.bind(dynamic_inputs)
 
-    def release_next_task(self) -> Optional[TaskImplementation]:
+    def release_next_task(self) -> TaskImplementation | None:
         """Gives the next task to run, and inserts inputs it needs to run.
         Note that this can return None, which means there is nothing to run. That indicates that,
         either:

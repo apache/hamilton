@@ -40,7 +40,7 @@ def openai_client() -> openai.OpenAI:
     return openai.OpenAI()
 
 
-def _encode_image(image_path_or_file: Union[str, IO], ext: str):
+def _encode_image(image_path_or_file: str | IO, ext: str):
     """Helper fn to return a base-64 encoded image"""
     file_like_object = (
         image_path_or_file
@@ -79,8 +79,8 @@ def processed_image_url(image_url: str) -> str:
 
 def caption_prompt(
     core_prompt: str,
-    additional_prompt: Optional[str] = None,
-    descriptiveness: Optional[str] = None,
+    additional_prompt: str | None = None,
+    descriptiveness: str | None = None,
 ) -> str:
     """Returns the prompt used to describe an image"""
     out = core_prompt
@@ -128,7 +128,7 @@ def caption_embeddings(
     openai_client: openai.OpenAI,
     embeddings_model: str = DEFAULT_EMBEDDINGS_MODEL,
     generated_caption: str = None,
-) -> List[float]:
+) -> list[float]:
     """Returns the embeddings for a generated caption"""
     data = (
         openai_client.embeddings.create(
@@ -158,7 +158,7 @@ def caption_metadata(
 
 @config.when(include_embeddings=True)
 def embeddings_metadata(
-    caption_embeddings: List[float],
+    caption_embeddings: list[float],
     embeddings_model: str = DEFAULT_EMBEDDINGS_MODEL,
 ) -> dict:
     """Returns metadata for the embeddings portion of the workflow"""
@@ -170,9 +170,9 @@ def embeddings_metadata(
 
 def metadata(
     embeddings_metadata: dict,
-    caption_metadata: Optional[dict] = None,
-    additional_metadata: Optional[dict] = None,
-) -> Dict[str, Any]:
+    caption_metadata: dict | None = None,
+    additional_metadata: dict | None = None,
+) -> dict[str, Any]:
     """Returns the response to a given chat"""
     out = embeddings_metadata
     if caption_metadata is not None:

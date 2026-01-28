@@ -20,8 +20,9 @@ import inspect
 import sys
 import typing
 from collections import defaultdict
+from collections.abc import Callable, Collection
 from types import ModuleType
-from typing import Any, Callable, Collection, Dict, List, Optional, Tuple, Type, TypedDict, Union
+from typing import Any, TypedDict
 
 _sys_version_info = sys.version_info
 _version_tuple = (_sys_version_info.major, _sys_version_info.minor, _sys_version_info.micro)
@@ -60,7 +61,7 @@ def derive_type(dependency: dependencies.LiteralDependency):
 
 
 def create_identity_node(
-    from_: str, typ: Type[Type], name: str, namespace: Tuple[str, ...], tags: Dict[str, Any]
+    from_: str, typ: type[type], name: str, namespace: tuple[str, ...], tags: dict[str, Any]
 ) -> node.Node:
     """Creates an identity node -- this passes through the exact
     value returned by the upstream node.
@@ -87,7 +88,7 @@ def create_identity_node(
     )
 
 
-def extract_all_known_types(nodes: Collection[node.Node]) -> Dict[str, Type[Type]]:
+def extract_all_known_types(nodes: Collection[node.Node]) -> dict[str, type[type]]:
     """Extracts all known types from a set of nodes given the dependencies.
     We have to do this as we don't know the dependency types at compile-time of
     upstream nodes. That said, this is only used for guessing dependency types of
@@ -106,7 +107,7 @@ def extract_all_known_types(nodes: Collection[node.Node]) -> Dict[str, Type[Type
 
 
 def create_static_node(
-    typ: Type, name: str, value: Any, namespace: Tuple[str, ...], tags: Dict[str, Any]
+    typ: type, name: str, value: Any, namespace: tuple[str, ...], tags: dict[str, Any]
 ) -> node.Node:
     """Utility function to create a static node -- this helps us bridge nodes together.
 
@@ -125,7 +126,7 @@ def create_static_node(
     )
 
 
-def _validate_config_inputs(config: Dict[str, Any], inputs: Dict[str, Any]):
+def _validate_config_inputs(config: dict[str, Any], inputs: dict[str, Any]):
     """Validates that the inputs specified in the config are valid.
 
     :param original_config: Original configuration
@@ -149,8 +150,8 @@ def _validate_config_inputs(config: Dict[str, Any], inputs: Dict[str, Any]):
 
 
 def _resolve_subdag_configuration(
-    configuration: Dict[str, Any], fields: Dict[str, Any], function_name: str
-) -> Dict[str, Any]:
+    configuration: dict[str, Any], fields: dict[str, Any], function_name: str
+) -> dict[str, Any]:
     """Resolves the configuration for a subdag.
 
     :param configuration: the Hamilton configuration
@@ -249,12 +250,12 @@ class subdag(base.NodeCreator):
 
     def __init__(
         self,
-        *load_from: Union[ModuleType, Callable],
-        inputs: Dict[str, ParametrizedDependency] = None,
-        config: Dict[str, Any] = None,
+        *load_from: ModuleType | Callable,
+        inputs: dict[str, ParametrizedDependency] = None,
+        config: dict[str, Any] = None,
         namespace: str = None,
         final_node_name: str = None,
-        external_inputs: List[str] = None,
+        external_inputs: list[str] = None,
     ):
         """Adds a subDAG to the main DAG.
 
@@ -283,8 +284,8 @@ class subdag(base.NodeCreator):
 
     @staticmethod
     def collect_functions(
-        load_from: Union[Collection[ModuleType], Collection[Callable]],
-    ) -> List[Callable]:
+        load_from: Collection[ModuleType] | Collection[Callable],
+    ) -> list[Callable]:
         """Utility function to collect functions from a list of callables/modules.
 
         :param load_from: A list of callables or modules to load from
@@ -302,7 +303,7 @@ class subdag(base.NodeCreator):
         return out
 
     @staticmethod
-    def collect_nodes(config: Dict[str, Any], subdag_functions: List[Callable]) -> List[node.Node]:
+    def collect_nodes(config: dict[str, Any], subdag_functions: list[Callable]) -> list[node.Node]:
         nodes = []
         for fn in subdag_functions:
             for node_ in base.resolve_nodes(fn, config):
@@ -356,11 +357,11 @@ class subdag(base.NodeCreator):
 
     @staticmethod
     def add_namespace(
-        nodes: List[node.Node],
+        nodes: list[node.Node],
         namespace: str,
-        inputs: Dict[str, Any] = None,
-        config: Dict[str, Any] = None,
-    ) -> List[node.Node]:
+        inputs: dict[str, Any] = None,
+        config: dict[str, Any] = None,
+    ) -> list[node.Node]:
         """Utility function to add a namespace to nodes.
 
         :param nodes:
@@ -475,7 +476,7 @@ class subdag(base.NodeCreator):
         """
         return fn.__name__ if self.final_node_name is None else self.final_node_name
 
-    def generate_nodes(self, fn: Callable, configuration: Dict[str, Any]) -> Collection[node.Node]:
+    def generate_nodes(self, fn: Callable, configuration: dict[str, Any]) -> Collection[node.Node]:
         # Resolve all nodes from passed in functions
         # if self.config has configuration() or value() in it, we need to resolve it
         resolved_config = _resolve_subdag_configuration(configuration, self.config, fn.__name__)
@@ -512,7 +513,7 @@ class subdag(base.NodeCreator):
 
         self._validate_parameterization()
 
-    def required_config(self) -> Optional[List[str]]:
+    def required_config(self) -> list[str] | None:
         """Currently we do not filter for subdag as we do not *statically* know what configuration
         is required. This is because we need to parse the function so that we can figure it out,
         and that is not available at the time that we call required_config. We need to think about
@@ -528,9 +529,9 @@ class subdag(base.NodeCreator):
 
 
 class SubdagParams(TypedDict):
-    inputs: NotRequired[Dict[str, ParametrizedDependency]]
-    config: NotRequired[Dict[str, Any]]
-    external_inputs: NotRequired[List[str]]
+    inputs: NotRequired[dict[str, ParametrizedDependency]]
+    config: NotRequired[dict[str, Any]]
+    external_inputs: NotRequired[list[str]]
 
 
 class parameterized_subdag(base.NodeCreator):
@@ -592,12 +593,12 @@ class parameterized_subdag(base.NodeCreator):
 
     def __init__(
         self,
-        *load_from: Union[ModuleType, Callable],
-        inputs: Dict[
-            str, Union[dependencies.ParametrizedDependency, dependencies.LiteralDependency]
+        *load_from: ModuleType | Callable,
+        inputs: dict[
+            str, dependencies.ParametrizedDependency | dependencies.LiteralDependency
         ] = None,
-        config: Dict[str, Any] = None,
-        external_inputs: List[str] = None,
+        config: dict[str, Any] = None,
+        external_inputs: list[str] = None,
         **parameterization: SubdagParams,
     ):
         """Initializes a parameterized_subdag decorator.
@@ -625,7 +626,7 @@ class parameterized_subdag(base.NodeCreator):
         self.parameterization = parameterization
         self.external_inputs = external_inputs if external_inputs is not None else []
 
-    def _gather_subdag_generators(self) -> List[subdag]:
+    def _gather_subdag_generators(self) -> list[subdag]:
         subdag_generators = []
         for key, parameterization in self.parameterization.items():
             subdag_generators.append(
@@ -640,7 +641,7 @@ class parameterized_subdag(base.NodeCreator):
             )
         return subdag_generators
 
-    def generate_nodes(self, fn: Callable, config: Dict[str, Any]) -> List[node.Node]:
+    def generate_nodes(self, fn: Callable, config: dict[str, Any]) -> list[node.Node]:
         generated_nodes = []
         for subdag_generator in self._gather_subdag_generators():
             generated_nodes.extend(subdag_generator.generate_nodes(fn, config))
@@ -650,7 +651,7 @@ class parameterized_subdag(base.NodeCreator):
         for subdag_generator in self._gather_subdag_generators():
             subdag_generator.validate(fn)
 
-    def required_config(self) -> Optional[List[str]]:
+    def required_config(self) -> list[str] | None:
         """See note for subdag.required_config -- this is the same pattern.
 
         :return: Any required config items.
@@ -658,7 +659,7 @@ class parameterized_subdag(base.NodeCreator):
         return None
 
 
-def prune_nodes(nodes: List[node.Node], select: Optional[List[str]] = None) -> List[node.Node]:
+def prune_nodes(nodes: list[node.Node], select: list[str] | None = None) -> list[node.Node]:
     """Prunes the nodes to only include those upstream from the select columns.
     Conducts a depth-first search using the nodes `input_types` field.
 
@@ -725,7 +726,7 @@ class with_columns_base(base.NodeInjector, abc.ABC):
     # TODO: if we rename the column nodes into something smarter this can be avoided and
     # can also modify columns in place
     @staticmethod
-    def contains_duplicates(nodes_: List[node.Node]) -> bool:
+    def contains_duplicates(nodes_: list[node.Node]) -> bool:
         """Ensures that we don't run into name clashing of columns and group operations.
 
         In the case when we extract columns for the user, because ``columns_to_pass`` was used, we want
@@ -743,7 +744,7 @@ class with_columns_base(base.NodeInjector, abc.ABC):
 
     @staticmethod
     def validate_dataframe(
-        fn: Callable, inject_parameter: str, params: Dict[str, Type[Type]], required_type: Type
+        fn: Callable, inject_parameter: str, params: dict[str, type[type]], required_type: type
     ) -> None:
         input_types = typing.get_type_hints(fn)
         if inject_parameter not in params:
@@ -762,14 +763,14 @@ class with_columns_base(base.NodeInjector, abc.ABC):
 
     def __init__(
         self,
-        *load_from: Union[Callable, ModuleType],
-        columns_to_pass: List[str] = None,
+        *load_from: Callable | ModuleType,
+        columns_to_pass: list[str] = None,
         pass_dataframe_as: str = None,
         on_input: str = None,
-        select: List[str] = None,
+        select: list[str] = None,
         namespace: str = None,
-        config_required: List[str] = None,
-        dataframe_type: Type = None,
+        config_required: list[str] = None,
+        dataframe_type: type = None,
     ):
         """Instantiates a ``@with_columns`` decorator.
 
@@ -832,13 +833,13 @@ class with_columns_base(base.NodeInjector, abc.ABC):
 
         self.dataframe_type = dataframe_type
 
-    def required_config(self) -> List[str]:
+    def required_config(self) -> list[str]:
         return self.config_required
 
     @abc.abstractmethod
     def get_initial_nodes(
-        self, fn: Callable, params: Dict[str, Type[Type]]
-    ) -> Tuple[str, Collection[node.Node]]:
+        self, fn: Callable, params: dict[str, type[type]]
+    ) -> tuple[str, Collection[node.Node]]:
         """Preparation stage where columns get extracted into nodes. In case `pass_dataframe_as` or `on_input` is
         used, this should return an empty list (no column nodes) since the users will extract it
         themselves.
@@ -851,7 +852,7 @@ class with_columns_base(base.NodeInjector, abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get_subdag_nodes(self, fn: Callable, config: Dict[str, Any]) -> Collection[node.Node]:
+    def get_subdag_nodes(self, fn: Callable, config: dict[str, Any]) -> Collection[node.Node]:
         """Creates subdag from the passed in module / functions.
 
         :param config: Configuration with which the DAG was constructed.
@@ -873,8 +874,8 @@ class with_columns_base(base.NodeInjector, abc.ABC):
         pass
 
     def inject_nodes(
-        self, params: Dict[str, Type[Type]], config: Dict[str, Any], fn: Callable
-    ) -> Tuple[List[node.Node], Dict[str, str]]:
+        self, params: dict[str, type[type]], config: dict[str, Any], fn: Callable
+    ) -> tuple[list[node.Node], dict[str, str]]:
         namespace = fn.__name__ if self.namespace is None else self.namespace
 
         inject_parameter, initial_nodes = self.get_initial_nodes(fn=fn, params=params)

@@ -17,7 +17,8 @@
 
 import dataclasses
 from collections import Counter
-from typing import Any, Collection, Dict, List, Tuple, Type
+from collections.abc import Collection
+from typing import Any
 
 import pandas as pd
 import pytest
@@ -71,10 +72,10 @@ class MockDataLoader(DataLoader):
     default_param_3: str = "6"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [int]
 
-    def load_data(self, type_: Type[int]) -> Tuple[int, Dict[str, Any]]:
+    def load_data(self, type_: type[int]) -> tuple[int, dict[str, Any]]:
         return ..., {"required_param": self.required_param, "default_param": self.default_param}
 
     @classmethod
@@ -220,7 +221,7 @@ def test_load_from_decorator_validate_fails_inject_missing_param():
 
 @dataclasses.dataclass
 class StringDataLoader(DataLoader):
-    def load_data(self, type_: Type) -> Tuple[str, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[str, dict[str, Any]]:
         return "foo", {"loader": "string_data_loader"}
 
     @classmethod
@@ -228,7 +229,7 @@ class StringDataLoader(DataLoader):
         return "dummy"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [str]
 
 
@@ -236,7 +237,7 @@ class StringDataLoader(DataLoader):
 class AnyDataLoader(DataLoader):
     value: Any
 
-    def load_data(self, type_: Type) -> Tuple[Any, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[Any, dict[str, Any]]:
         return self.value, {"loader": "any_data_loader"}
 
     @classmethod
@@ -244,13 +245,13 @@ class AnyDataLoader(DataLoader):
         return "dummy"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [Any]
 
 
 @dataclasses.dataclass
 class IntDataLoader(DataLoader):
-    def load_data(self, type_: Type) -> Tuple[int, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[int, dict[str, Any]]:
         return 1, {"loader": "int_data_loader"}
 
     @classmethod
@@ -258,17 +259,17 @@ class IntDataLoader(DataLoader):
         return "dummy"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [int]
 
 
 @dataclasses.dataclass
 class IntDataLoader2(DataLoader):
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [int]
 
-    def load_data(self, type_: Type) -> Tuple[int, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[int, dict[str, Any]]:
         return 2, {"loader": "int_data_loader_2"}
 
     @classmethod
@@ -344,7 +345,7 @@ def test_validate_selects_correct_type():
     ],
 )
 def test_resolve_correct_loader_class(
-    type_: Type[Type], classes: List[Type[DataLoader]], correct_class: Type[DataLoader]
+    type_: type[type], classes: list[type[DataLoader]], correct_class: type[DataLoader]
 ):
     assert resolve_adapter_class(type_, classes) == correct_class
 
@@ -434,13 +435,13 @@ def test_load_from_decorator_end_to_end_with_multiple():
 )
 def test_load_from_decorator_json_file(source_):
     @load_from.json(path=source_)
-    def raw_json_data(data: Dict[str, Any]) -> Dict[str, Any]:
+    def raw_json_data(data: dict[str, Any]) -> dict[str, Any]:
         return data
 
-    def number_employees(raw_json_data: Dict[str, Any]) -> int:
+    def number_employees(raw_json_data: dict[str, Any]) -> int:
         return len(raw_json_data["employees"])
 
-    def sum_age(raw_json_data: Dict[str, Any]) -> float:
+    def sum_age(raw_json_data: dict[str, Any]) -> float:
         return sum([employee["age"] for employee in raw_json_data["employees"]])
 
     def mean_age(sum_age: float, number_employees: int) -> float:
@@ -500,13 +501,13 @@ class MarkingSaver(DataSaver):
     markers: set
     more_markers: set
 
-    def save_data(self, data: int) -> Dict[str, Any]:
+    def save_data(self, data: int) -> dict[str, Any]:
         self.markers.add(data)
         self.more_markers.add(data)
         return {}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [int, dict]
 
     @classmethod
@@ -570,11 +571,11 @@ class DefaultFactoryLoader(DataLoader):
     def __post_init__(self):
         self.param2 = self.field_with_factory + 1
 
-    def load_data(self, type_: Type[int]) -> Tuple[int, Dict[str, Any]]:
+    def load_data(self, type_: type[int]) -> tuple[int, dict[str, Any]]:
         return self.param2, {}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [int]
 
     @classmethod
@@ -602,11 +603,11 @@ class DefaultFactorySaver(DataSaver):
     def __post_init__(self):
         self.param2 = self.field_with_factory + 1
 
-    def save_data(self, data: int) -> Dict[str, Any]:
+    def save_data(self, data: int) -> dict[str, Any]:
         return {}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [int]
 
     @classmethod
@@ -631,11 +632,11 @@ def test_saver_default_factory_field():
 class OptionalParamDataLoader(DataLoader):
     param: int = 1
 
-    def load_data(self, type_: Type[int]) -> Tuple[int, Dict[str, Any]]:
+    def load_data(self, type_: type[int]) -> tuple[int, dict[str, Any]]:
         return self.param, {}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [int]
 
     @classmethod
@@ -720,7 +721,7 @@ def correct_dl_function(foo: int) -> tuple_[int, dict_]:
     return 1, {}
 
 
-def correct_dl_function_with_subscripts(foo: int) -> tuple_[Dict[str, int], Dict[str, str]]:
+def correct_dl_function_with_subscripts(foo: int) -> tuple_[dict[str, int], dict[str, str]]:
     return {"a": 1}, {"b": "c"}
 
 
@@ -744,7 +745,7 @@ def incorrect_second_element_function() -> tuple_[int, list]:
     return 1, []
 
 
-def incorrect_dict_subscript() -> tuple_[int, Dict[int, str]]:
+def incorrect_dict_subscript() -> tuple_[int, dict[int, str]]:
     return 1, {1: "a"}
 
 

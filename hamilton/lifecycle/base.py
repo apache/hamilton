@@ -47,8 +47,9 @@ import asyncio
 import collections
 import dataclasses
 import inspect
+from collections.abc import Callable
 from types import ModuleType
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Set, Tuple, Type, Union
+from typing import TYPE_CHECKING, Any, Union
 
 from hamilton import htypes
 
@@ -69,16 +70,16 @@ else:
 # as it is a clear, simple way to manage the metadata. This allows us to track the registered hooks/methods/validators.
 
 # A set of registered hooks -- each one refers to a string
-REGISTERED_SYNC_HOOKS: Set[str] = set()
-REGISTERED_ASYNC_HOOKS: Set[str] = set()
+REGISTERED_SYNC_HOOKS: set[str] = set()
+REGISTERED_ASYNC_HOOKS: set[str] = set()
 
 # A set of registered methods -- each one refers to a string, which is the name of the metho
-REGISTERED_SYNC_METHODS: Set[str] = set()
-REGISTERED_ASYNC_METHODS: Set[str] = set()
+REGISTERED_SYNC_METHODS: set[str] = set()
+REGISTERED_ASYNC_METHODS: set[str] = set()
 
 # A set of registered validators -- these have attached Exception data to them
 # Note we do not curently have async validators -- see no need now
-REGISTERED_SYNC_VALIDATORS: Set[str] = set()
+REGISTERED_SYNC_VALIDATORS: set[str] = set()
 
 # constants to refer to internally for hooks
 SYNC_HOOK = "hooks"
@@ -95,7 +96,7 @@ SYNC_VALIDATOR = "validators"
 @dataclasses.dataclass
 class ValidationResult:
     success: bool
-    error: Optional[str]
+    error: str | None
     validator: object  # validator so we can make the error message more friendly
 
 
@@ -110,7 +111,7 @@ class InvalidLifecycleAdapter(Exception):
 
 
 def validate_lifecycle_adapter_function(
-    fn: Callable, returns_value: bool, return_type: Optional[Type] = None
+    fn: Callable, returns_value: bool, return_type: type | None = None
 ):
     """Validates that a function has arguments that are keyword-only,
     and either does or does not return a value, depending on the value of returns_value.
@@ -313,7 +314,7 @@ class BaseDoValidateInput(abc.ABC):
 @lifecycle.base_validator("validate_node")
 class BaseValidateNode(abc.ABC):
     @abc.abstractmethod
-    def validate_node(self, *, created_node: "node.Node") -> Tuple[bool, Optional[Exception]]:
+    def validate_node(self, *, created_node: "node.Node") -> tuple[bool, Exception | None]:
         """Validates a node. This will raise an InvalidNodeException
         if the node is invalid.
 
@@ -330,9 +331,9 @@ class BaseValidateGraph(abc.ABC):
         self,
         *,
         graph: "graph.FunctionGraph",
-        modules: List[ModuleType],
-        config: Dict[str, Any],
-    ) -> Tuple[bool, Optional[str]]:
+        modules: list[ModuleType],
+        config: dict[str, Any],
+    ) -> tuple[bool, str | None]:
         """Validates the graph. This will raise an InvalidNodeException
 
         :param graph: Graph that has been constructed.
@@ -349,8 +350,8 @@ class BasePostGraphConstruct(abc.ABC):
         self,
         *,
         graph: "graph.FunctionGraph",
-        modules: List[ModuleType],
-        config: Dict[str, Any],
+        modules: list[ModuleType],
+        config: dict[str, Any],
     ):
         """Hooks that is called after the graph is constructed.
 
@@ -368,8 +369,8 @@ class BasePostGraphConstructAsync(abc.ABC):
         self,
         *,
         graph: "graph.FunctionGraph",
-        modules: List[ModuleType],
-        config: Dict[str, Any],
+        modules: list[ModuleType],
+        config: dict[str, Any],
     ):
         """Asynchronous hook that is called after the graph is constructed.
 
@@ -388,9 +389,9 @@ class BasePreGraphExecute(abc.ABC):
         *,
         run_id: str,
         graph: "graph.FunctionGraph",
-        final_vars: List[str],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        final_vars: list[str],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
     ):
         """Hook that is called immediately prior to graph execution.
 
@@ -411,9 +412,9 @@ class BasePreGraphExecuteAsync(abc.ABC):
         *,
         run_id: str,
         graph: "graph.FunctionGraph",
-        final_vars: List[str],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        final_vars: list[str],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
     ):
         """Asynchronous Hook that is called immediately prior to graph execution.
 
@@ -429,7 +430,7 @@ class BasePreGraphExecuteAsync(abc.ABC):
 @lifecycle.base_hook("post_task_group")
 class BasePostTaskGroup(abc.ABC):
     @abc.abstractmethod
-    def post_task_group(self, *, run_id: str, task_ids: List[str]):
+    def post_task_group(self, *, run_id: str, task_ids: list[str]):
         """Hook that is called immediately after a task group is created. Note that this is only useful in dynamic
         execution, although we reserve the right to add this back into the standard hamilton execution pattern.
 
@@ -441,7 +442,7 @@ class BasePostTaskGroup(abc.ABC):
 @lifecycle.base_hook("post_task_expand")
 class BasePostTaskExpand(abc.ABC):
     @abc.abstractmethod
-    def post_task_expand(self, *, run_id: str, task_id: str, parameters: Dict[str, Any]):
+    def post_task_expand(self, *, run_id: str, task_id: str, parameters: dict[str, Any]):
         """Hook that is called immediately after a task is expanded into parallelizable tasks. Note that this is only useful
         in dynamic execution.
 
@@ -459,10 +460,10 @@ class BasePreTaskSubmission(abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
-        spawning_task_id: Optional[str],
+        nodes: list["node.Node"],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         """Hook that is called immediately prior to task submission to an executor as a task future.
@@ -488,10 +489,10 @@ class BasePreTaskExecute(abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
-        spawning_task_id: Optional[str],
+        nodes: list["node.Node"],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         """Hook that is called immediately prior to task execution. Note that this is only useful in dynamic
@@ -516,10 +517,10 @@ class BasePreTaskExecuteAsync(abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
-        spawning_task_id: Optional[str],
+        nodes: list["node.Node"],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         """Hook that is called immediately prior to task execution. Note that this is only useful in dynamic
@@ -544,8 +545,8 @@ class BasePreNodeExecute(abc.ABC):
         *,
         run_id: str,
         node_: "node.Node",
-        kwargs: Dict[str, Any],
-        task_id: Optional[str] = None,
+        kwargs: dict[str, Any],
+        task_id: str | None = None,
     ):
         """Hook that is called immediately prior to node execution.
 
@@ -565,8 +566,8 @@ class BasePreNodeExecuteAsync(abc.ABC):
         *,
         run_id: str,
         node_: "node.Node",
-        kwargs: Dict[str, Any],
-        task_id: Optional[str] = None,
+        kwargs: dict[str, Any],
+        task_id: str | None = None,
     ):
         """Asynchronous hook that is called immediately prior to node execution.
 
@@ -586,8 +587,8 @@ class BaseDoNodeExecute(abc.ABC):
         *,
         run_id: str,
         node_: "node.Node",
-        kwargs: Dict[str, Any],
-        task_id: Optional[str] = None,
+        kwargs: dict[str, Any],
+        task_id: str | None = None,
     ) -> Any:
         """Method that is called to implement node execution. This can replace the execution of a node
         with something all together, augment it, or delegate it.
@@ -607,7 +608,7 @@ class BaseDoRemoteExecute(abc.ABC):
         self,
         *,
         node: "node.Node",
-        kwargs: Dict[str, Any],
+        kwargs: dict[str, Any],
         execute_lifecycle_for_node: Callable,
     ) -> Any:
         """Method that is called to implement correct remote execution of hooks. This makes sure that all the pre-node and post-node hooks get executed in the remote environment which is necessary for some adapters. Node execution is called the same as before through "do_node_execute".
@@ -628,8 +629,8 @@ class BaseDoNodeExecuteAsync(abc.ABC):
         *,
         run_id: str,
         node_: "node.Node",
-        kwargs: Dict[str, Any],
-        task_id: Optional[str] = None,
+        kwargs: dict[str, Any],
+        task_id: str | None = None,
     ) -> Any:
         """Asynchronous method that is called to implement node execution. This can replace the execution of a node
         with something all together, augment it, or delegate it.
@@ -650,11 +651,11 @@ class BasePostNodeExecute(abc.ABC):
         *,
         run_id: str,
         node_: "node.Node",
-        kwargs: Dict[str, Any],
+        kwargs: dict[str, Any],
         success: bool,
-        error: Optional[Exception],
-        result: Optional[Any],
-        task_id: Optional[str] = None,
+        error: Exception | None,
+        result: Any | None,
+        task_id: str | None = None,
     ):
         """Hook that is called immediately after node execution.
 
@@ -677,11 +678,11 @@ class BasePostNodeExecuteAsync(abc.ABC):
         *,
         run_id: str,
         node_: "node.Node",
-        kwargs: Dict[str, Any],
+        kwargs: dict[str, Any],
         success: bool,
-        error: Optional[Exception],
+        error: Exception | None,
         result: Any,
-        task_id: Optional[str] = None,
+        task_id: str | None = None,
     ):
         """Hook that is called immediately after node execution.
 
@@ -704,11 +705,11 @@ class BasePostTaskExecute(abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
-        results: Optional[Dict[str, Any]],
+        nodes: list["node.Node"],
+        results: dict[str, Any] | None,
         success: bool,
         error: Exception,
-        spawning_task_id: Optional[str],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         """Hook called immediately after task execution. Note that this is only useful in dynamic
@@ -734,11 +735,11 @@ class BasePostTaskExecuteAsync(abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
-        results: Optional[Dict[str, Any]],
+        nodes: list["node.Node"],
+        results: dict[str, Any] | None,
         success: bool,
         error: Exception,
-        spawning_task_id: Optional[str],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         """Asynchronous Hook called immediately after task execution. Note that this is only useful in dynamic
@@ -764,11 +765,11 @@ class BasePostTaskReturn(abc.ABC):
         *,
         run_id: str,
         task_id: str,
-        nodes: List["node.Node"],
+        nodes: list["node.Node"],
         result: Any,
         success: bool,
         error: Exception,
-        spawning_task_id: Optional[str],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         """Hook called immediately after a task returns from an executor. Note that this is only
@@ -795,8 +796,8 @@ class BasePostGraphExecute(abc.ABC):
         run_id: str,
         graph: "graph.FunctionGraph",
         success: bool,
-        error: Optional[Exception],
-        results: Optional[Dict[str, Any]],
+        error: Exception | None,
+        results: dict[str, Any] | None,
     ):
         """Hook called immediately after graph execution.
 
@@ -818,8 +819,8 @@ class BasePostGraphExecuteAsync(abc.ABC):
         run_id: str,
         graph: "graph.FunctionGraph",
         success: bool,
-        error: Optional[Exception],
-        results: Optional[Dict[str, Any]],
+        error: Exception | None,
+        results: dict[str, Any] | None,
     ):
         """Asynchronous Hook called immediately after graph execution.
 
@@ -893,7 +894,7 @@ class LifecycleAdapterSet:
         self.sync_methods, self.async_methods = self._get_lifecycle_methods()
         self.sync_validators = self._get_lifecycle_validators()
 
-    def _uniqify_adapters(self, adapters: List[LifecycleAdapter]) -> List[LifecycleAdapter]:
+    def _uniqify_adapters(self, adapters: list[LifecycleAdapter]) -> list[LifecycleAdapter]:
         """Removes duplicate adapters from the list of adapters -- this often happens on how they're passed in
         and we don't want to have the same adapter twice. Specifically, this came up due to parsing/splitting out adapters
         with async lifecycle hooks -- there were cases in which we were passed duplicates. This was compounded as we would pass
@@ -909,7 +910,7 @@ class LifecycleAdapterSet:
 
     def _get_lifecycle_validators(
         self,
-    ) -> Dict[str, List[LifecycleAdapter]]:
+    ) -> dict[str, list[LifecycleAdapter]]:
         sync_validators = collections.defaultdict(set)
         for adapter in self.adapters:
             for cls in inspect.getmro(adapter.__class__):
@@ -920,7 +921,7 @@ class LifecycleAdapterSet:
 
     def _get_lifecycle_hooks(
         self,
-    ) -> Tuple[Dict[str, List[LifecycleAdapter]], Dict[str, List[LifecycleAdapter]]]:
+    ) -> tuple[dict[str, list[LifecycleAdapter]], dict[str, list[LifecycleAdapter]]]:
         sync_hooks = collections.defaultdict(list)
         async_hooks = collections.defaultdict(list)
         for adapter in self.adapters:
@@ -940,7 +941,7 @@ class LifecycleAdapterSet:
 
     def _get_lifecycle_methods(
         self,
-    ) -> Tuple[Dict[str, List[LifecycleAdapter]], Dict[str, List[LifecycleAdapter]]]:
+    ) -> tuple[dict[str, list[LifecycleAdapter]], dict[str, list[LifecycleAdapter]]]:
         sync_methods = collections.defaultdict(set)
         async_methods = collections.defaultdict(set)
         for adapter in self.adapters:
@@ -968,7 +969,7 @@ class LifecycleAdapterSet:
             {method: list(adapters) for method, adapters in async_methods.items()},
         )
 
-    def does_hook(self, hook_name: str, is_async: Optional[bool] = None) -> bool:
+    def does_hook(self, hook_name: str, is_async: bool | None = None) -> bool:
         """Whether or not a hook is implemented by any of the adapters in this group.
         If this hook is not registered, this will raise a ValueError.
 
@@ -991,7 +992,7 @@ class LifecycleAdapterSet:
         has_sync = hook_name in self.sync_hooks
         return (has_async or has_sync) if either else has_async if is_async else has_sync
 
-    def does_method(self, method_name: str, is_async: Optional[bool] = None) -> bool:
+    def does_method(self, method_name: str, is_async: bool | None = None) -> bool:
         """Whether a method is implemented by any of the adapters in this group.
         If this method is not registered, this will raise a ValueError.
 
@@ -1094,7 +1095,7 @@ class LifecycleAdapterSet:
 
     def call_all_validators_sync(
         self, validator_name: str, output_only_failures: bool = True, **kwargs
-    ) -> List[ValidationResult]:
+    ) -> list[ValidationResult]:
         """Calls all the lifecycle validators in this group, by validator name (stage)
 
         :param validator_name: Name of the validators to call
@@ -1109,7 +1110,7 @@ class LifecycleAdapterSet:
         return results
 
     @property
-    def adapters(self) -> List[LifecycleAdapter]:
+    def adapters(self) -> list[LifecycleAdapter]:
         """Gives the adapters in this group
 
         :return: A list of adapters

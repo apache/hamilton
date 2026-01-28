@@ -17,7 +17,6 @@
 
 import logging
 import os
-from typing import List
 
 from trackingserver_auth.models import Team, User, UserTeamMembership
 from trackingserver_base import notifications
@@ -25,7 +24,7 @@ from trackingserver_base import notifications
 logger = logging.getLogger(__name__)
 
 
-async def ensure_user_only_part_of_orgs(user: User, orgs: List[Team]):
+async def ensure_user_only_part_of_orgs(user: User, orgs: list[Team]):
     """Ensures that the user is part of the organization.
     If not, adds them to the organization.
     @param user: Relevant user

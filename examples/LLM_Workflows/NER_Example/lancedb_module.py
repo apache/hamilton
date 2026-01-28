@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Union
 
 import lancedb
 import numpy as np
@@ -31,7 +30,7 @@ def db_client() -> lancedb.DBConnection:
 
 
 def _write_to_lancedb(
-    data: Union[list[dict], pa.Table], db: lancedb.DBConnection, table_name: str
+    data: list[dict] | pa.Table, db: lancedb.DBConnection, table_name: str
 ) -> int:
     """Helper function to write to lancedb.
 

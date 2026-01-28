@@ -16,7 +16,6 @@
 # under the License.
 
 import uuid
-from typing import List, Optional
 
 from trackingserver_auth.models import Team, User, UserTeamMembership
 
@@ -61,7 +60,7 @@ async def setup_random_user_with_n_teams(n: int):
     return user, teams
 
 
-async def assert_user_state(email: str, exists: bool) -> Optional[User]:
+async def assert_user_state(email: str, exists: bool) -> User | None:
     try:
         out = await User.objects.aget(email=email)
         assert exists, "User should exist"
@@ -70,7 +69,7 @@ async def assert_user_state(email: str, exists: bool) -> Optional[User]:
         assert not exists, "User should not exist"
 
 
-async def assert_team_state(team_id: str, exists: bool) -> Optional[Team]:
+async def assert_team_state(team_id: str, exists: bool) -> Team | None:
     try:
         out = await Team.objects.aget(auth_provider_organization_id=team_id)
         assert exists, "Team should exist"
@@ -81,7 +80,7 @@ async def assert_team_state(team_id: str, exists: bool) -> Optional[Team]:
 
 async def assert_user_only_part_of_teams(
     user: User,
-    teams: List[Team],
+    teams: list[Team],
 ):
     memberships = [
         item

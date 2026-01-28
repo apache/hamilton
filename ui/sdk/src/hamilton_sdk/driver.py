@@ -31,7 +31,8 @@ import logging
 import operator
 import os
 from types import ModuleType
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Optional
+from collections.abc import Callable
 
 from hamilton_sdk.api.clients import UnauthorizedException
 
@@ -54,7 +55,7 @@ logger = logging.getLogger(__name__)
 
 
 def _hash_module(
-    module: ModuleType, hash_object: hashlib.sha256, seen_modules: Set[ModuleType]
+    module: ModuleType, hash_object: hashlib.sha256, seen_modules: set[ModuleType]
 ) -> hashlib.sha256:
     """Generate a hash of the specified module and its imports.
 
@@ -124,7 +125,7 @@ def _hash_module(
     return hash_object
 
 
-def _get_modules_hash(modules: Tuple[ModuleType]) -> str:
+def _get_modules_hash(modules: tuple[ModuleType]) -> str:
     """Generate a hash of the contents of the specified modules.
 
     It recursively hashes the contents of the modules and their imports, and only does so
@@ -217,7 +218,7 @@ def _derive_version_control_info(module_hash: str) -> GitInfo:
 
 
 def filter_json_dict_to_serializable(
-    dict_to_filter: Dict[str, Any], curr_result: Dict[str, Any] = None
+    dict_to_filter: dict[str, Any], curr_result: dict[str, Any] = None
 ):
     if curr_result is None:
         curr_result = {}
@@ -263,7 +264,7 @@ class DefaultExecutionMethod(BaseDoNodeExecute):
         *,
         run_id: str,
         node_: node.Node,
-        kwargs: Dict[str, Any],
+        kwargs: dict[str, Any],
         task_id: Optional[str] = None,
     ) -> Any:
         return node_(**kwargs)
@@ -272,13 +273,13 @@ class DefaultExecutionMethod(BaseDoNodeExecute):
 class Driver(driver.Driver):
     def __init__(
         self,
-        config: Dict[str, Any],
+        config: dict[str, Any],
         *modules: ModuleType,
         project_id: int,
         api_key: str,
         username: str,
         dag_name: str,
-        tags: Dict[str, str] = None,
+        tags: dict[str, str] = None,
         client_factory: Callable[
             [str, str, str], clients.HamiltonClient
         ] = clients.BasicSynchronousHamiltonClient,
@@ -382,10 +383,10 @@ class Driver(driver.Driver):
 
     def execute(
         self,
-        final_vars: List[Union[str, Callable]],
-        overrides: Dict[str, Any] = None,
+        final_vars: list[str | Callable],
+        overrides: dict[str, Any] = None,
         display_graph: bool = False,
-        inputs: Dict[str, Any] = None,
+        inputs: dict[str, Any] = None,
     ) -> Any:
         logger.warning(
             f"\nCapturing execution run. All runs for project can be found at "
@@ -395,12 +396,12 @@ class Driver(driver.Driver):
 
     def raw_execute(
         self,
-        final_vars: List[str],
-        overrides: Dict[str, Any] = None,
+        final_vars: list[str],
+        overrides: dict[str, Any] = None,
         display_graph: bool = False,
-        inputs: Dict[str, Any] = None,
+        inputs: dict[str, Any] = None,
         _fn_graph: graph.FunctionGraph = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         return super(Driver, self).raw_execute(
             final_vars, overrides, display_graph, inputs, _fn_graph
         )
@@ -408,10 +409,10 @@ class Driver(driver.Driver):
     def materialize(
         self,
         *materializers: materialization.MaterializerFactory,
-        additional_vars: List[Union[str, Callable, Variable]] = None,
-        overrides: Dict[str, Any] = None,
-        inputs: Dict[str, Any] = None,
-    ) -> Tuple[Any, Dict[str, Any]]:
+        additional_vars: list[str | Callable | Variable] = None,
+        overrides: dict[str, Any] = None,
+        inputs: dict[str, Any] = None,
+    ) -> tuple[Any, dict[str, Any]]:
         return super(Driver, self).materialize(
             *materializers, additional_vars=additional_vars, overrides=overrides, inputs=inputs
         )
@@ -458,7 +459,7 @@ def hash_dag(dag: graph.FunctionGraph) -> str:
     return digest.hexdigest()
 
 
-def hash_dag_modules(dag: graph.FunctionGraph, modules: List[ModuleType]):
+def hash_dag_modules(dag: graph.FunctionGraph, modules: list[ModuleType]):
     modules_by_path = {}
     for module in modules:
         if hasattr(module, "__file__") and module.__file__ is not None:
@@ -506,7 +507,7 @@ def _convert_node_dependencies(node: Node) -> dict:
     }
 
 
-def _convert_classifications(node_: Node) -> List[str]:
+def _convert_classifications(node_: Node) -> list[str]:
     out = []
     if (
         node_.tags.get("hamilton.data_loader")
@@ -522,7 +523,7 @@ def _convert_classifications(node_: Node) -> List[str]:
     return out
 
 
-def _extract_node_templates_from_function_graph(fn_graph: graph.FunctionGraph) -> List[dict]:
+def _extract_node_templates_from_function_graph(fn_graph: graph.FunctionGraph) -> list[dict]:
     """Converts a function graph to a list of nodes that the DAGWorks graph can understand.
 
     @param fn: Function graph to convert
@@ -603,7 +604,7 @@ def getsourcelines(object, stop: Callable = None) -> tuple:
 
 def extract_code_artifacts_from_function_graph(
     fn_graph: graph.FunctionGraph, vcs_info: GitInfo, repo_base_path: str
-) -> List[dict]:
+) -> list[dict]:
     """Converts a function graph to a list of code artifacts that the function graph uses.
 
     @param fn_graph: Function graph to convert.
@@ -658,7 +659,7 @@ def extract_code_artifacts_from_function_graph(
     return out
 
 
-def extract_attributes_from_tracking_state(tracking_state: TrackingState) -> List[dict]:
+def extract_attributes_from_tracking_state(tracking_state: TrackingState) -> list[dict]:
     """Extracts attributes from tracking state. We'll likely rewrite this shortly --
     this is just to bridge so we can get the client out. Next, we'll want it putting
     stuff on a queue, and then sends it over in batches. The tracking state is a hack
@@ -704,7 +705,7 @@ def extract_attributes_from_tracking_state(tracking_state: TrackingState) -> Lis
 
 def extract_task_updates_from_tracking_state(
     tracking_state: TrackingState, fg: graph.FunctionGraph
-) -> List[dict]:
+) -> list[dict]:
     """Extracts task updates from tracking state. We'll likely rewrite this shortly --
     this is a hack (using the tracking state) -- we'll want to extract these as we go along,
     and we'll want it putting stuff on a queue, and then sends it over in batches.
@@ -731,7 +732,7 @@ def extract_task_updates_from_tracking_state(
     return out
 
 
-def _slurp_code(fg: graph.FunctionGraph, repo_base: str) -> List[dict]:
+def _slurp_code(fg: graph.FunctionGraph, repo_base: str) -> list[dict]:
     modules = set()
     for node_ in fg.nodes.values():
         originating_functions = node_.originating_functions
@@ -754,13 +755,13 @@ class DAGWorksGraphExecutor(driver.GraphExecutor):
         self,
         wrapping_executor: driver.GraphExecutor,
         client: clients.HamiltonClient,
-        run_tags: Dict[str, str],
+        run_tags: dict[str, str],
         dagworks_ui_url: str,
         project_id: int,
         repo_base: str,
         vcs_info: GitInfo,
         dag_name: str,
-        graph_modules: List[ModuleType],
+        graph_modules: list[ModuleType],
         initial_graph: graph.FunctionGraph,
     ):
         self.executor = wrapping_executor
@@ -811,11 +812,11 @@ class DAGWorksGraphExecutor(driver.GraphExecutor):
     def execute(
         self,
         fg: graph.FunctionGraph,
-        final_vars: List[Union[str, Callable, Variable]],
-        overrides: Dict[str, Any],
-        inputs: Dict[str, Any],
+        final_vars: list[str | Callable | Variable],
+        overrides: dict[str, Any],
+        inputs: dict[str, Any],
         run_id: str,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Executes a graph in a blocking function.
 
         :param fg: Graph to execute
@@ -873,5 +874,5 @@ class DAGWorksGraphExecutor(driver.GraphExecutor):
                     f"{self.dagworks_ui_url}/dashboard/project/{self.project_id}/runs/{dag_run_id}\n"
                 )
 
-    def validate(self, nodes_to_execute: List[node.Node]):
+    def validate(self, nodes_to_execute: list[node.Node]):
         pass

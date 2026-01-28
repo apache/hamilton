@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Union
 
 import torch
 from datasets import Dataset, load_dataset  # noqa: F401
@@ -129,7 +128,7 @@ def retriever(
 
 
 def _extract_named_entities_text(
-    title_text_batch: Union[LazyBatch, list[str]], _ner_pipeline
+    title_text_batch: LazyBatch | list[str], _ner_pipeline
 ) -> list[list[str]]:
     """Helper function to extract named entities given a batch of text."""
     # extract named entities using the NER pipeline

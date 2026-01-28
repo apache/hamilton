@@ -18,7 +18,6 @@
 import asyncio
 import logging
 import time
-from typing import List, Optional
 
 from common.django_utils import alist
 from django.db.models import F, Window
@@ -158,7 +157,7 @@ async def create_dag_template(
 
 
 @router.get(
-    "/v1/dag_templates/exists/", response=Optional[DAGTemplateOut], tags=["projects", "templates"]
+    "/v1/dag_templates/exists/", response=DAGTemplateOut | None, tags=["projects", "templates"]
 )
 @permission(user_can_get_project_by_id)
 async def dag_template_exists(
@@ -190,7 +189,7 @@ async def dag_template_exists(
 
 
 @router.get(
-    "/v1/dag_templates/latest/", response=List[DAGTemplateOut], tags=["projects", "templates"]
+    "/v1/dag_templates/latest/", response=list[DAGTemplateOut], tags=["projects", "templates"]
 )
 @permission(user_can_get_dag_templates)
 async def get_latest_dag_templates(
@@ -198,7 +197,7 @@ async def get_latest_dag_templates(
     project_id: int,
     limit: int = 100,
     offset: int = 0,
-) -> List[DAGTemplateOut]:
+) -> list[DAGTemplateOut]:
     """Gets all DAG templates for a given project version.
     Note that this does not return the nodes, just the templates, as this is a bulk query.
 
@@ -343,11 +342,11 @@ async def get_dag_template_catalog(
 
 @router.get(
     "/v1/dag_templates/{str:dag_template_ids}",
-    response=List[DAGTemplateOutWithData],
+    response=list[DAGTemplateOutWithData],
     tags=["templates"],
 )
 @permission(user_can_get_dag_template)
-async def get_full_dag_templates(request, dag_template_ids: str) -> List[DAGTemplateOutWithData]:
+async def get_full_dag_templates(request, dag_template_ids: str) -> list[DAGTemplateOutWithData]:
     """Gets the full DAG template, joined with the created nodes, for the given DAG template ID.
     @param request: The request
     @return:  The full DAG template (with nodes).
@@ -400,7 +399,7 @@ async def get_full_dag_templates(request, dag_template_ids: str) -> List[DAGTemp
         # as python is weird with closures
         async def load_dag_template(
             dag_template=dag_template, code_artifacts_out=code_artifacts_out, nodes_out=nodes_out
-        ) -> Optional[DAGTemplateOutWithData]:
+        ) -> DAGTemplateOutWithData | None:
             if dag_template.code_log_store == "none":
                 return None
             # TODO -- assert that the blob store matches he one we have available

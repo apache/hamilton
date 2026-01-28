@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 
 import openai
 
@@ -23,7 +22,7 @@ prompt_template = "Tell me a short joke about {topic}"
 client = openai.OpenAI()
 
 
-def call_chat_model(messages: List[dict]) -> str:
+def call_chat_model(messages: list[dict]) -> str:
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=messages,

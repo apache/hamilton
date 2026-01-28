@@ -20,7 +20,7 @@ import datetime
 import json
 import logging
 from enum import Enum
-from typing import Any, Union
+from typing import Any
 
 import numpy as np
 
@@ -42,7 +42,7 @@ class CustomEncoder(json.JSONEncoder):
             return str_object
 
 
-def make_json_safe(item: Union[dict, list, str, float, int, bool]) -> Any:
+def make_json_safe(item: dict | list | str | float | int | bool) -> Any:
     """
     Converts an item to json-serializable format, converting datetime objects to string.
 

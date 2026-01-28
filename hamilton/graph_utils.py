@@ -16,15 +16,15 @@
 # under the License.
 
 import inspect
+from collections.abc import Callable
 from types import ModuleType
-from typing import Callable, List, Tuple
 
 
 def is_submodule(child: ModuleType, parent: ModuleType):
     return parent.__name__ in child.__name__
 
 
-def find_functions(function_module: ModuleType) -> List[Tuple[str, Callable]]:
+def find_functions(function_module: ModuleType) -> list[tuple[str, Callable]]:
     """Function to determine the set of functions we want to build a graph from.
 
     This iterates through the function module and grabs all function definitions.

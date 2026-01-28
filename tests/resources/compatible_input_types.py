@@ -15,10 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Union
 
-
-def b(a: Union[int, str]) -> int:
+def b(a: int | str) -> int:
     return a
 
 

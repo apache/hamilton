@@ -17,7 +17,8 @@
 
 import logging
 import numbers
-from typing import Any, Iterable, List, Tuple, Type, Union
+from collections.abc import Iterable
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -28,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataInRangeValidatorPandasSeries(base.BaseDefaultValidator):
-    def __init__(self, range: Tuple[float, float], importance: str):
+    def __init__(self, range: tuple[float, float], importance: str):
         """Data validator that tells if data is in a range. This applies to primitives (ints, floats).
 
         :param range: Inclusive range of parameters
@@ -41,7 +42,7 @@ class DataInRangeValidatorPandasSeries(base.BaseDefaultValidator):
         return "range"
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return issubclass(datatype, pd.Series)  # TODO -- handle dataframes?
 
     def description(self) -> str:
@@ -86,7 +87,7 @@ class DataInValuesValidatorPandasSeries(base.BaseDefaultValidator):
         return "values_in"
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return issubclass(datatype, pd.Series)  # TODO -- handle dataframes?
 
     def description(self) -> str:
@@ -121,7 +122,7 @@ class DataInValuesValidatorPandasSeries(base.BaseDefaultValidator):
 
 
 class DataInRangeValidatorPrimitives(base.BaseDefaultValidator):
-    def __init__(self, range: Tuple[numbers.Real, numbers.Real], importance: str):
+    def __init__(self, range: tuple[numbers.Real, numbers.Real], importance: str):
         """Data validator that tells if data is in a range. This applies to primitives (ints, floats).
 
         :param range: Inclusive range of parameters
@@ -130,7 +131,7 @@ class DataInRangeValidatorPrimitives(base.BaseDefaultValidator):
         self.range = range
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return issubclass(datatype, numbers.Real)
 
     def description(self) -> str:
@@ -170,7 +171,7 @@ class DataInValuesValidatorPrimitives(base.BaseDefaultValidator):
         return "values_in"
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return issubclass(datatype, numbers.Real) or issubclass(
             datatype, str
         )  # TODO support list, dict and typing.* variants
@@ -178,7 +179,7 @@ class DataInValuesValidatorPrimitives(base.BaseDefaultValidator):
     def description(self) -> str:
         return f"Validates that python values are from a fixed set of values: ({self.values})."
 
-    def validate(self, data: Union[numbers.Real, str]) -> base.ValidationResult:
+    def validate(self, data: numbers.Real | str) -> base.ValidationResult:
         if hasattr(data, "dask"):
             data = data.compute()
         is_valid_value = data in self.values
@@ -208,7 +209,7 @@ class MaxFractionNansValidatorPandasSeries(base.BaseDefaultValidator):
         return "{0:.2%}".format(fraction)
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return issubclass(datatype, pd.Series)
 
     def description(self) -> str:
@@ -260,7 +261,7 @@ class AllowNaNsValidatorPandasSeries(MaxFractionNansValidatorPandasSeries):
 
 
 class DataTypeValidatorPandasSeries(base.BaseDefaultValidator):
-    def __init__(self, data_type: Type[Type], importance: str):
+    def __init__(self, data_type: type[type], importance: str):
         """Constructor
 
         :param data_type: the numpy data type to expect.
@@ -270,7 +271,7 @@ class DataTypeValidatorPandasSeries(base.BaseDefaultValidator):
         self.datatype = data_type
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return issubclass(datatype, pd.Series)
 
     def description(self) -> str:
@@ -293,7 +294,7 @@ class DataTypeValidatorPandasSeries(base.BaseDefaultValidator):
 
 
 class DataTypeValidatorPrimitives(base.BaseDefaultValidator):
-    def __init__(self, data_type: Type[Type], importance: str):
+    def __init__(self, data_type: type[type], importance: str):
         """Constructor
 
         :param data_type: the python data type to expect.
@@ -303,14 +304,14 @@ class DataTypeValidatorPrimitives(base.BaseDefaultValidator):
         self.datatype = data_type
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return issubclass(datatype, numbers.Real) or datatype in (str, bool)
 
     def description(self) -> str:
         return f"Validates that the datatype of the pandas series is a subclass of: {self.datatype}"
 
     def validate(
-        self, data: Union[numbers.Real, str, bool, int, float, list, dict]
+        self, data: numbers.Real | str | bool | int | float | list | dict
     ) -> base.ValidationResult:
         if hasattr(data, "dask"):
             data = data.compute()
@@ -336,7 +337,7 @@ class MaxStandardDevValidatorPandasSeries(base.BaseDefaultValidator):
         self.max_standard_dev = max_standard_dev
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return issubclass(datatype, pd.Series)
 
     def description(self) -> str:
@@ -362,12 +363,12 @@ class MaxStandardDevValidatorPandasSeries(base.BaseDefaultValidator):
 
 
 class MeanInRangeValidatorPandasSeries(base.BaseDefaultValidator):
-    def __init__(self, mean_in_range: Tuple[float, float], importance: str):
+    def __init__(self, mean_in_range: tuple[float, float], importance: str):
         super(MeanInRangeValidatorPandasSeries, self).__init__(importance)
         self.mean_in_range = mean_in_range
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return issubclass(datatype, pd.Series)
 
     def description(self) -> str:
@@ -398,7 +399,7 @@ class AllowNoneValidator(base.BaseDefaultValidator):
         self.allow_none = allow_none
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return True
 
     def description(self) -> str:
@@ -425,7 +426,7 @@ class AllowNoneValidator(base.BaseDefaultValidator):
 
 
 class StrContainsValidator(base.BaseDefaultValidator):
-    def __init__(self, contains: Union[str, List[str]], importance: str):
+    def __init__(self, contains: str | list[str], importance: str):
         super(StrContainsValidator, self).__init__(importance)
         if isinstance(contains, str):
             self.contains = [contains]
@@ -433,7 +434,7 @@ class StrContainsValidator(base.BaseDefaultValidator):
             self.contains = contains
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return datatype == str
 
     def description(self) -> str:
@@ -457,7 +458,7 @@ class StrContainsValidator(base.BaseDefaultValidator):
 
 
 class StrDoesNotContainValidator(base.BaseDefaultValidator):
-    def __init__(self, does_not_contain: Union[str, List[str]], importance: str):
+    def __init__(self, does_not_contain: str | list[str], importance: str):
         super(StrDoesNotContainValidator, self).__init__(importance)
         if isinstance(does_not_contain, str):
             self.does_not_contain = [does_not_contain]
@@ -465,7 +466,7 @@ class StrDoesNotContainValidator(base.BaseDefaultValidator):
             self.does_not_contain = does_not_contain
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return datatype == str
 
     def description(self) -> str:
@@ -526,11 +527,11 @@ _append_pandera_to_default_validators()
 
 
 def resolve_default_validators(
-    output_type: Type[Type],
+    output_type: type[type],
     importance: str,
-    available_validators: List[Type[base.BaseDefaultValidator]] = None,
+    available_validators: list[type[base.BaseDefaultValidator]] = None,
     **default_validator_kwargs,
-) -> List[base.BaseDefaultValidator]:
+) -> list[base.BaseDefaultValidator]:
     """Resolves default validators given a set pof parameters and the type to which they apply.
     Note that each (kwarg, type) combination should map to a validator
     :param importance: importance level of the validator to instantiate

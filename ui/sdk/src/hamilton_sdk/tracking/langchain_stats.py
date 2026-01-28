@@ -19,7 +19,7 @@
 Module to pull a few things from langchain objects.
 """
 
-from typing import Any, Dict
+from typing import Any
 
 from hamilton_sdk.tracking import data_observation
 from langchain_core import documents as lc_documents
@@ -29,7 +29,7 @@ from langchain_core import messages as lc_messages
 @data_observation.compute_stats.register(lc_messages.BaseMessage)
 def compute_stats_lc_messages(
     result: lc_messages.BaseMessage, node_name: str, node_tags: dict
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     result = {"value": result.content, "type": result.type}
 
     return {
@@ -42,7 +42,7 @@ def compute_stats_lc_messages(
 @data_observation.compute_stats.register(lc_documents.Document)
 def compute_stats_lc_docs(
     result: lc_documents.Document, node_name: str, node_tags: dict
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     if hasattr(result, "to_document"):
         return data_observation.compute_stats(result.to_document(), node_name, node_tags)
     else:

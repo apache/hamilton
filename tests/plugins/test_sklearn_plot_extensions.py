@@ -16,7 +16,6 @@
 # under the License.
 
 import pathlib
-from typing import Type
 
 import numpy as np
 import pytest
@@ -37,32 +36,32 @@ from hamilton.plugins.sklearn_plot_extensions import SklearnPlotSaver
 if hasattr(metrics, "PredictionErrorDisplay"):
     PredictionErrorDisplay = metrics.PredictionErrorDisplay
 else:
-    PredictionErrorDisplay = Type
+    PredictionErrorDisplay = type
 
 if hasattr(inspection, "DecisionBoundaryDisplay"):
     DecisionBoundaryDisplay = inspection.DecisionBoundaryDisplay
 else:
-    DecisionBoundaryDisplay = Type
+    DecisionBoundaryDisplay = type
 
 if hasattr(inspection, "PartialDependenceDisplay"):
     PartialDependenceDisplay = inspection.PartialDependenceDisplay
 else:
-    PartialDependenceDisplay = Type
+    PartialDependenceDisplay = type
 
 if hasattr(inspection, "partial_dependence"):
     partial_dependence = inspection.partial_dependence
 else:
-    partial_dependence = Type
+    partial_dependence = type
 
 if hasattr(model_selection, "LearningCurveDisplay"):
     LearningCurveDisplay = model_selection.LearningCurveDisplay
 else:
-    LearningCurveDisplay = Type
+    LearningCurveDisplay = type
 
 if hasattr(model_selection, "ValidationCurveDisplay"):
     ValidationCurveDisplay = model_selection.ValidationCurveDisplay
 else:
-    ValidationCurveDisplay = Type
+    ValidationCurveDisplay = type
 
 
 @pytest.fixture

@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict
+from typing import Any
 
 import pydantic
 from hamilton_sdk.tracking import data_observation
@@ -24,7 +24,7 @@ from hamilton_sdk.tracking import data_observation
 @data_observation.compute_stats.register
 def compute_stats_pydantic(
     result: pydantic.BaseModel, node_name: str, node_tags: dict
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     if hasattr(result, "dump_model"):
         llm_result = result.dump_model()
     else:

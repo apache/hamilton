@@ -17,8 +17,8 @@
 
 import base64
 import io
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator
 
 import arxiv
 import fastapi
@@ -113,7 +113,7 @@ def raw_text(pdf_content: io.BytesIO) -> str:
     Throw exception if unable to read PDF
     """
     reader = PyPDF2.PdfReader(pdf_content)
-    pdf_text = " ".join((page.extract_text() for page in reader.pages))
+    pdf_text = " ".join(page.extract_text() for page in reader.pages)
     return pdf_text
 
 

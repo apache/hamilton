@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict
 
 from hamilton.function_modifiers import (
     extract_fields,
@@ -52,5 +51,5 @@ def a() -> int:
     .on_output(["field_1", "field_3"]),  # applied to field_1 and field_3
 )
 @extract_fields({"field_1": int, "field_2": int, "field_3": int})
-def foo(a: int) -> Dict[str, int]:
+def foo(a: int) -> dict[str, int]:
     return {"field_1": 1, "field_2": 2, "field_3": 3}

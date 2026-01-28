@@ -16,28 +16,20 @@
 # under the License.
 
 import dataclasses
+from collections.abc import Collection, Mapping, Sequence
 from io import BytesIO, IOBase, TextIOWrapper
 from pathlib import Path
 from typing import (
     Any,
     BinaryIO,
-    Collection,
-    Dict,
-    List,
     Literal,
-    Mapping,
-    Optional,
-    Sequence,
     TextIO,
-    Tuple,
-    Type,
-    Union,
 )
 
 try:
     from xlsxwriter.workbook import Workbook
 except ImportError:
-    Workbook = Type
+    Workbook = type
 
 import polars as pl
 from polars._typing import ConnectionOrCursor
@@ -58,14 +50,14 @@ if hasattr(polars.selectors, "_selector_proxy_"):
     Selector = type(_selector_proxy_)
 else:
     # Stub for older polars versions
-    Selector = Type
+    Selector = type
 
 # for polars 0.18.0 we need to check what to do.
 from polars._typing import CsvEncoding, SchemaDefinition
 
-CsvQuoteStyle = Type
+CsvQuoteStyle = type
 
-IpcCompression = Type
+IpcCompression = type
 
 from hamilton import registry
 from hamilton.io import utils
@@ -81,18 +73,18 @@ class PolarsCSVReader(DataLoader):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_csv.html
     """
 
-    file: Union[str, TextIO, BytesIO, Path, BinaryIO, bytes]
+    file: str | TextIO | BytesIO | Path | BinaryIO | bytes
     # kwargs:
     has_header: bool = True
     include_header: bool = True
-    columns: Union[Sequence[int], Sequence[str]] = None
+    columns: Sequence[int] | Sequence[str] = None
     new_columns: Sequence[str] = None
     separator: str = ","
     comment_char: str = None
     quote_char: str = '"'
     skip_rows: int = 0
-    dtypes: Union[Mapping[str, Any], Sequence[Any]] = None
-    null_values: Union[str, Sequence[str], Dict[str, str]] = None
+    dtypes: Mapping[str, Any] | Sequence[Any] = None
+    null_values: str | Sequence[str] | dict[str, str] = None
     missing_utf8_is_empty_string: bool = False
     ignore_errors: bool = False
     try_parse_dates: bool = False
@@ -100,11 +92,11 @@ class PolarsCSVReader(DataLoader):
     infer_schema_length: int = 100
     batch_size: int = 8192
     n_rows: int = None
-    encoding: Union[CsvEncoding, str] = "utf8"
+    encoding: CsvEncoding | str = "utf8"
     low_memory: bool = False
     rechunk: bool = True
     use_pyarrow: bool = False
-    storage_options: Dict[str, Any] = None
+    storage_options: dict[str, Any] = None
     skip_rows_after_header: int = 0
     row_count_name: str = None
     row_count_offset: int = 0
@@ -113,7 +105,7 @@ class PolarsCSVReader(DataLoader):
     raise_if_empty: bool = True
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_loading_kwargs(self):
@@ -172,7 +164,7 @@ class PolarsCSVReader(DataLoader):
             kwargs["raise_if_empty"] = self.raise_if_empty
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_csv(self.file, **self._get_loading_kwargs())
 
         metadata = utils.get_file_and_dataframe_metadata(self.file, df)
@@ -189,7 +181,7 @@ class PolarsCSVWriter(DataSaver):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.DataFrame.write_csv.html
     """
 
-    file: Union[BytesIO, TextIOWrapper, str, Path]
+    file: BytesIO | TextIOWrapper | str | Path
     # kwargs:
     include_header: bool = True
     separator: str = ","
@@ -204,7 +196,7 @@ class PolarsCSVWriter(DataSaver):
     quote_style: CsvQuoteStyle = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE, pl.LazyFrame]
 
     def _get_saving_kwargs(self):
@@ -235,7 +227,7 @@ class PolarsCSVWriter(DataSaver):
             kwargs["quote_style"] = self.quote_style
         return kwargs
 
-    def save_data(self, data: Union[DATAFRAME_TYPE, pl.LazyFrame]) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
         data.write_csv(self.file, **self._get_saving_kwargs())
@@ -252,23 +244,23 @@ class PolarsParquetReader(DataLoader):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_parquet.html
     """
 
-    file: Union[str, TextIO, BytesIO, Path, BinaryIO, bytes]
+    file: str | TextIO | BytesIO | Path | BinaryIO | bytes
     # kwargs:
-    columns: Union[List[int], List[str]] = None
+    columns: list[int] | list[str] = None
     n_rows: int = None
     use_pyarrow: bool = False
     memory_map: bool = True
-    storage_options: Dict[str, Any] = None
+    storage_options: dict[str, Any] = None
     parallel: Any = "auto"
     row_count_name: str = None
     row_count_offset: int = 0
     low_memory: bool = False
-    pyarrow_options: Dict[str, Any] = None
+    pyarrow_options: dict[str, Any] = None
     use_statistics: bool = True
     rechunk: bool = True
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_loading_kwargs(self):
@@ -299,7 +291,7 @@ class PolarsParquetReader(DataLoader):
             kwargs["rechunk"] = self.rechunk
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_parquet(self.file, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.file, df)
         return df, metadata
@@ -315,17 +307,17 @@ class PolarsParquetWriter(DataSaver):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.DataFrame.write_parquet.html
     """
 
-    file: Union[BytesIO, TextIOWrapper, str, Path]
+    file: BytesIO | TextIOWrapper | str | Path
     # kwargs:
     compression: Any = "zstd"
     compression_level: int = None
     statistics: bool = False
     row_group_size: int = None
     use_pyarrow: bool = False
-    pyarrow_options: Dict[str, Any] = None
+    pyarrow_options: dict[str, Any] = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE, pl.LazyFrame]
 
     def _get_saving_kwargs(self):
@@ -344,7 +336,7 @@ class PolarsParquetWriter(DataSaver):
             kwargs["pyarrow_options"] = self.pyarrow_options
         return kwargs
 
-    def save_data(self, data: Union[DATAFRAME_TYPE, pl.LazyFrame]) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
 
@@ -364,19 +356,19 @@ class PolarsFeatherReader(DataLoader):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_ipc.html
     """
 
-    source: Union[str, BinaryIO, BytesIO, Path, bytes]
+    source: str | BinaryIO | BytesIO | Path | bytes
     # kwargs:
-    columns: Optional[Union[List[str], List[int]]] = None
-    n_rows: Optional[int] = None
+    columns: list[str] | list[int] | None = None
+    n_rows: int | None = None
     use_pyarrow: bool = False
     memory_map: bool = True
-    storage_options: Optional[Dict[str, Any]] = None
-    row_count_name: Optional[str] = None
+    storage_options: dict[str, Any] | None = None
+    row_count_name: str | None = None
     row_count_offset: int = 0
     rechunk: bool = True
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_loading_kwargs(self):
@@ -399,7 +391,7 @@ class PolarsFeatherReader(DataLoader):
             kwargs["rechunk"] = self.rechunk
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_ipc(self.source, **self._get_loading_kwargs())
         metadata = utils.get_file_metadata(self.source)
         return df, metadata
@@ -416,12 +408,12 @@ class PolarsFeatherWriter(DataSaver):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.DataFrame.write_ipc.html
     """
 
-    file: Optional[Union[BinaryIO, BytesIO, str, Path]] = None
+    file: BinaryIO | BytesIO | str | Path | None = None
     # kwargs:
     compression: IpcCompression = "uncompressed"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE, pl.LazyFrame]
 
     def _get_saving_kwargs(self):
@@ -430,7 +422,7 @@ class PolarsFeatherWriter(DataSaver):
             kwargs["compression"] = self.compression
         return kwargs
 
-    def save_data(self, data: Union[DATAFRAME_TYPE, pl.LazyFrame]) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
         data.write_ipc(self.file, **self._get_saving_kwargs())
@@ -447,13 +439,13 @@ class PolarsAvroReader(DataLoader):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_avro.html
     """
 
-    file: Union[str, TextIO, BytesIO, Path, BinaryIO, bytes]
+    file: str | TextIO | BytesIO | Path | BinaryIO | bytes
     # kwargs:
-    columns: Union[List[int], List[str], None] = None
-    n_rows: Union[int, None] = None
+    columns: list[int] | list[str] | None = None
+    n_rows: int | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_loading_kwargs(self):
@@ -464,7 +456,7 @@ class PolarsAvroReader(DataLoader):
             kwargs["n_rows"] = self.n_rows
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_avro(self.file, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.file, df)
         return df, metadata
@@ -480,12 +472,12 @@ class PolarsAvroWriter(DataSaver):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.DataFrame.write_avro.html
     """
 
-    file: Union[BytesIO, TextIOWrapper, str, Path]
+    file: BytesIO | TextIOWrapper | str | Path
     # kwargs:
     compression: Any = "uncompressed"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE, pl.LazyFrame]
 
     def _get_saving_kwargs(self):
@@ -494,7 +486,7 @@ class PolarsAvroWriter(DataSaver):
             kwargs["compression"] = self.compression
         return kwargs
 
-    def save_data(self, data: Union[DATAFRAME_TYPE, pl.LazyFrame]) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
 
@@ -513,12 +505,12 @@ class PolarsJSONReader(DataLoader):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_json.html
     """
 
-    source: Union[str, Path, IOBase, bytes]
+    source: str | Path | IOBase | bytes
     schema: SchemaDefinition = None
     schema_overrides: SchemaDefinition = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_loading_kwargs(self):
@@ -529,7 +521,7 @@ class PolarsJSONReader(DataLoader):
             kwargs["schema_overrides"] = self.schema_overrides
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_json(self.source, **self._get_loading_kwargs())
         metadata = utils.get_file_metadata(self.source)
         return df, metadata
@@ -546,13 +538,13 @@ class PolarsJSONWriter(DataSaver):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.DataFrame.write_json.html
     """
 
-    file: Union[IOBase, str, Path]
+    file: IOBase | str | Path
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE, pl.LazyFrame]
 
-    def save_data(self, data: Union[DATAFRAME_TYPE, pl.LazyFrame]) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
 
@@ -571,12 +563,12 @@ class PolarsNDJSONReader(DataLoader):
     Should map to https://docs.pola.rs/api/python/stable/reference/api/polars.read_ndjson.html
     """
 
-    source: Union[str, Path, IOBase, bytes]
+    source: str | Path | IOBase | bytes
     schema: SchemaDefinition = None
     schema_overrides: SchemaDefinition = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_loading_kwargs(self):
@@ -587,7 +579,7 @@ class PolarsNDJSONReader(DataLoader):
             kwargs["schema_overrides"] = self.schema_overrides
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_ndjson(self.source, **self._get_loading_kwargs())
         metadata = utils.get_file_metadata(self.source)
         return df, metadata
@@ -604,13 +596,13 @@ class PolarsNDJSONWriter(DataSaver):
     Should map to https://docs.pola.rs/api/python/stable/reference/api/polars.DataFrame.write_ndjson.html
     """
 
-    file: Union[IOBase, str, Path]
+    file: IOBase | str | Path
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE, pl.LazyFrame]
 
-    def save_data(self, data: Union[DATAFRAME_TYPE, pl.LazyFrame]) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
 
@@ -629,18 +621,18 @@ class PolarsSpreadsheetReader(DataLoader):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_excel.html
     """
 
-    source: Union[str, Path, IOBase, bytes]
+    source: str | Path | IOBase | bytes
     # kwargs:
-    sheet_id: Union[int, Sequence[int], None] = None
-    sheet_name: Union[str, List[str], Tuple[str], None] = None
+    sheet_id: int | Sequence[int] | None = None
+    sheet_name: str | list[str] | tuple[str] | None = None
     engine: Literal["xlsx2csv", "openpyxl", "pyxlsb", "odf", "xlrd", "xlsxwriter"] = "xlsx2csv"
-    engine_options: Union[Dict[str, Any], None] = None
-    read_options: Union[Dict[str, Any], None] = None
-    schema_overrides: Union[Dict[str, Any], None] = None
+    engine_options: dict[str, Any] | None = None
+    read_options: dict[str, Any] | None = None
+    schema_overrides: dict[str, Any] | None = None
     raise_if_empty: bool = True
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_loading_kwargs(self):
@@ -661,7 +653,7 @@ class PolarsSpreadsheetReader(DataLoader):
             kwargs["raise_if_empty"] = self.raise_if_empty
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_excel(self.source, **self._get_loading_kwargs())
         metadata = utils.get_file_metadata(self.source)
         return df, metadata
@@ -684,43 +676,38 @@ class PolarsSpreadsheetWriter(DataSaver):
     from polars._typing import ColumnTotalsDefinition, RowTotalsDefinition
     from polars.datatypes import DataType, DataTypeClass
 
-    workbook: Union[Workbook, BytesIO, Path, str]
-    worksheet: Union[str, None] = None
+    workbook: Workbook | BytesIO | Path | str
+    worksheet: str | None = None
     # kwargs:
-    position: Union[Tuple[int, int], str] = "A1"
-    table_style: Union[str, Dict[str, Any], None] = None
-    table_name: Union[str, None] = None
-    column_formats: Union[
-        Mapping[Union[str, Tuple[str, ...]], Union[str, Mapping[str, str]]], None
-    ] = None
-    dtype_formats: Union[Dict[Union[DataType, DataTypeClass], str], None] = None
-    conditional_formats: Union[
-        Mapping[
-            Union[str, Collection[str]],
-            Union[str, Union[Mapping[str, Any], Sequence[Union[str, Mapping[str, Any]]]]],
-        ],
-        None,
-    ] = None
-    header_format: Union[Dict[str, Any], None] = None
-    column_totals: Union[ColumnTotalsDefinition, None] = None
-    column_widths: Union[Mapping[str, Union[Tuple[str, ...], int]], int, None] = None
-    row_totals: Union[RowTotalsDefinition, None] = None
-    row_heights: Union[Dict[Union[int, Tuple[int, ...]], int], int, None] = None
-    sparklines: Union[Dict[str, Union[Sequence[str], Dict[str, Any]]], None] = None
-    formulas: Union[Dict[str, Union[str, Dict[str, str]]], None] = None
+    position: tuple[int, int] | str = "A1"
+    table_style: str | dict[str, Any] | None = None
+    table_name: str | None = None
+    column_formats: Mapping[str | tuple[str, ...], str | Mapping[str, str]] | None = None
+    dtype_formats: dict[DataType | DataTypeClass, str] | None = None
+    conditional_formats: (
+        Mapping[str | Collection[str], str | Mapping[str, Any] | Sequence[str | Mapping[str, Any]]]
+        | None
+    ) = None
+    header_format: dict[str, Any] | None = None
+    column_totals: ColumnTotalsDefinition | None = None
+    column_widths: Mapping[str, tuple[str, ...] | int] | int | None = None
+    row_totals: RowTotalsDefinition | None = None
+    row_heights: dict[int | tuple[int, ...], int] | int | None = None
+    sparklines: dict[str, Sequence[str] | dict[str, Any]] | None = None
+    formulas: dict[str, str | dict[str, str]] | None = None
     float_precision: int = 3
     include_header: bool = True
     autofilter: bool = True
     autofit: bool = False
-    hidden_columns: Union[Sequence[str], str, None] = None
+    hidden_columns: Sequence[str] | str | None = None
     hide_gridlines: bool = None
-    sheet_zoom: Union[int, None] = None
-    freeze_panes: Union[
-        str, Tuple[int, int], Tuple[str, int, int], Tuple[int, int, int, int], None
-    ] = None
+    sheet_zoom: int | None = None
+    freeze_panes: (
+        str | tuple[int, int] | tuple[str, int, int] | tuple[int, int, int, int] | None
+    ) = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE, pl.LazyFrame]
 
     def _get_saving_kwargs(self):
@@ -769,7 +756,7 @@ class PolarsSpreadsheetWriter(DataSaver):
             kwargs["freeze_panes"] = self.freeze_panes
         return kwargs
 
-    def save_data(self, data: Union[DATAFRAME_TYPE, pl.LazyFrame]) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
 
@@ -788,16 +775,16 @@ class PolarsDatabaseReader(DataLoader):
     """
 
     query: str
-    connection: Union[ConnectionOrCursor, str]
+    connection: ConnectionOrCursor | str
     # kwargs:
     iter_batches: bool = False
-    batch_size: Union[int, None] = None
-    schema_overrides: Union[Dict[str, Any], None] = None
-    infer_schema_length: Union[int, None] = None
-    execute_options: Union[Dict[str, Any], None] = None
+    batch_size: int | None = None
+    schema_overrides: dict[str, Any] | None = None
+    infer_schema_length: int | None = None
+    execute_options: dict[str, Any] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_loading_kwargs(self):
@@ -814,7 +801,7 @@ class PolarsDatabaseReader(DataLoader):
             kwargs["execute_options"] = self.execute_options
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_database(
             query=self.query,
             connection=self.connection,
@@ -835,12 +822,12 @@ class PolarsDatabaseWriter(DataSaver):
     """
 
     table_name: str
-    connection: Union[ConnectionOrCursor, str]
+    connection: ConnectionOrCursor | str
     if_table_exists: Literal["fail", "replace", "append"] = "fail"
     engine: Literal["auto", "sqlalchemy", "adbc"] = "sqlalchemy"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE, pl.LazyFrame]
 
     def _get_saving_kwargs(self):
@@ -851,7 +838,7 @@ class PolarsDatabaseWriter(DataSaver):
             kwargs["engine"] = self.engine
         return kwargs
 
-    def save_data(self, data: Union[DATAFRAME_TYPE, pl.LazyFrame]) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
 

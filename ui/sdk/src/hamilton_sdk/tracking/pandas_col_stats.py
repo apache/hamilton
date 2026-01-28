@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict, List, Union
 
 import pandas as pd
 from hamilton_sdk.tracking import dataframe_stats as dfs
@@ -37,11 +36,11 @@ def zeros(col: pd.Series) -> int:
     return (col == 0).sum()
 
 
-def min(col: pd.Series) -> Union[float, int]:
+def min(col: pd.Series) -> float | int:
     return col.min()
 
 
-def max(col: pd.Series) -> Union[float, int]:
+def max(col: pd.Series) -> float | int:
     return col.max()
 
 
@@ -53,15 +52,15 @@ def std(col: pd.Series) -> float:
     return col.std()
 
 
-def quantile_cuts() -> List[float]:
+def quantile_cuts() -> list[float]:
     return [0.10, 0.25, 0.50, 0.75, 0.90]
 
 
-def quantiles(col: pd.Series, quantile_cuts: List[float]) -> Dict[float, float]:
+def quantiles(col: pd.Series, quantile_cuts: list[float]) -> dict[float, float]:
     return col.quantile(quantile_cuts).to_dict()
 
 
-def histogram(col: pd.Series, num_hist_bins: int = 10) -> Dict[str, int]:
+def histogram(col: pd.Series, num_hist_bins: int = 10) -> dict[str, int]:
     try:
         hist_counts = (
             col.value_counts(
@@ -78,18 +77,18 @@ def histogram(col: pd.Series, num_hist_bins: int = 10) -> Dict[str, int]:
 
 
 def numeric_column_stats(
-    name: Union[str, int],
+    name: str | int,
     position: int,
     data_type: str,
     count: int,
     missing: int,
     zeros: int,
-    min: Union[float, int],
-    max: Union[float, int],
+    min: float | int,
+    max: float | int,
     mean: float,
     std: float,
-    quantiles: Dict[float, float],
-    histogram: Dict[str, int],
+    quantiles: dict[float, float],
+    histogram: dict[str, int],
 ) -> dfs.NumericColumnStatistics:
     return dfs.NumericColumnStatistics(
         name=name,
@@ -108,18 +107,18 @@ def numeric_column_stats(
 
 
 def datetime_column_stats(
-    name: Union[str, int],
+    name: str | int,
     position: int,
     data_type: str,
     count: int,
     missing: int,
     zeros: int,
-    min: Union[float, int],
-    max: Union[float, int],
+    min: float | int,
+    max: float | int,
     mean: float,
     std: float,
-    quantiles: Dict[float, float],
-    histogram: Dict[str, int],
+    quantiles: dict[float, float],
+    histogram: dict[str, int],
 ) -> dfs.DatetimeColumnStatistics:
     # TODO: push these conversions into Hamilton functions.
     min = min.isoformat() if isinstance(min, pd.Timestamp) else min
@@ -165,7 +164,7 @@ def value_counts(col: pd.Series) -> pd.Series:
     return col.value_counts()
 
 
-def domain(value_counts: pd.Series) -> Dict[str, int]:
+def domain(value_counts: pd.Series) -> dict[str, int]:
     return value_counts.to_dict()
 
 
@@ -182,13 +181,13 @@ def unique(col: pd.Series) -> int:
 
 
 def category_column_stats(
-    name: Union[str, int],
+    name: str | int,
     position: int,
     data_type: str,
     count: int,
     missing: int,
     empty: int,
-    domain: Dict[str, int],
+    domain: dict[str, int],
     top_value: str,
     top_freq: int,
     unique: int,
@@ -208,7 +207,7 @@ def category_column_stats(
 
 
 def string_column_stats(
-    name: Union[str, int],
+    name: str | int,
     position: int,
     data_type: str,
     avg_str_len: float,
@@ -230,7 +229,7 @@ def string_column_stats(
 
 
 def boolean_column_stats(
-    name: Union[str, int],
+    name: str | int,
     position: int,
     data_type: str,
     count: int,
@@ -248,7 +247,7 @@ def boolean_column_stats(
 
 
 def unhandled_column_stats(
-    name: Union[str, int],
+    name: str | int,
     position: int,
     data_type: str,
     count: int,

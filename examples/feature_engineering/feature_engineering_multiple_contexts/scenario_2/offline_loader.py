@@ -21,8 +21,6 @@ Module that contains logic to load data for the offline ETL process.
 We use this to build our offline ETL featurization process.
 """
 
-from typing import List
-
 import pandas as pd
 
 from hamilton.function_modifiers import extract_columns, load_from, source, value
@@ -53,7 +51,7 @@ data_columns = [
 ]
 
 
-def _sanitize_columns(df_columns: List[str]) -> List[str]:
+def _sanitize_columns(df_columns: list[str]) -> list[str]:
     """Renames columns to be valid hamilton names -- and lower cases them.
 
     :param df_columns: the current column names.

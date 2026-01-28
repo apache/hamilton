@@ -17,7 +17,6 @@
 
 from pathlib import Path
 from types import ModuleType
-from typing import Dict, List, Union
 
 from hamilton import driver
 
@@ -48,7 +47,7 @@ def get_git_base_directory() -> str:
         raise FileNotFoundError("Git command not found. Please make sure Git is installed.") from e
 
 
-def get_git_reference(git_relative_path: Union[str, Path], git_reference: str) -> str:
+def get_git_reference(git_relative_path: str | Path, git_reference: str) -> str:
     """Get the source code from the specified file and git reference"""
     import subprocess
 
@@ -72,11 +71,11 @@ def get_git_reference(git_relative_path: Union[str, Path], git_reference: str) -
         raise FileNotFoundError("Git command not found. Please make sure Git is installed.") from e
 
 
-def version_hamilton_functions(module: ModuleType) -> Dict[str, str]:
+def version_hamilton_functions(module: ModuleType) -> dict[str, str]:
     """Hash the source code of Hamilton functions from a module"""
     from hamilton import graph_types, graph_utils
 
-    origins_version: Dict[str, str] = dict()
+    origins_version: dict[str, str] = dict()
 
     for origin_name, _ in graph_utils.find_functions(module):
         origin_callable = getattr(module, origin_name)
@@ -85,7 +84,7 @@ def version_hamilton_functions(module: ModuleType) -> Dict[str, str]:
     return origins_version
 
 
-def hash_hamilton_nodes(dr: driver.Driver) -> Dict[str, str]:
+def hash_hamilton_nodes(dr: driver.Driver) -> dict[str, str]:
     """Hash the source code of Hamilton functions from nodes in a Driver"""
     from hamilton import graph_types
 
@@ -93,7 +92,7 @@ def hash_hamilton_nodes(dr: driver.Driver) -> Dict[str, str]:
     return {n.name: n.version for n in graph.nodes}
 
 
-def map_nodes_to_functions(dr: driver.Driver) -> Dict[str, str]:
+def map_nodes_to_functions(dr: driver.Driver) -> dict[str, str]:
     """Get a mapping from node name to Hamilton function name"""
     from hamilton import graph_types
 
@@ -111,7 +110,7 @@ def map_nodes_to_functions(dr: driver.Driver) -> Dict[str, str]:
     return node_to_function
 
 
-def hash_dataflow(nodes_version: Dict[str, str]) -> str:
+def hash_dataflow(nodes_version: dict[str, str]) -> str:
     """Create a dataflow hash from the hashes of its nodes"""
     import hashlib
 
@@ -120,8 +119,8 @@ def hash_dataflow(nodes_version: Dict[str, str]) -> str:
 
 
 def load_modules_from_git(
-    module_paths: List[Path], git_reference: str = "HEAD"
-) -> List[ModuleType]:
+    module_paths: list[Path], git_reference: str = "HEAD"
+) -> list[ModuleType]:
     """Dynamically import modules for a git reference"""
     from hamilton import ad_hoc_utils
 
@@ -138,9 +137,9 @@ def load_modules_from_git(
 
 
 def diff_nodes_against_functions(
-    nodes_version: Dict[str, str],
-    origins_version: Dict[str, str],
-    node_to_origin: Dict[str, str],
+    nodes_version: dict[str, str],
+    origins_version: dict[str, str],
+    node_to_origin: dict[str, str],
 ) -> dict:
     """Compare the nodes version from a built Driver to
     the origins version from module source code when a second
@@ -184,7 +183,7 @@ def diff_nodes_against_functions(
     )
 
 
-def diff_versions(current_map: Dict[str, str], reference_map: Dict[str, str]) -> dict:
+def diff_versions(current_map: dict[str, str], reference_map: dict[str, str]) -> dict:
     """Generic diff of two {name: hash} mappings (can be node or origin name)
 
     :mapping_v1: mapping from node (or function) name to its function hash
@@ -214,9 +213,9 @@ def _custom_diff_style(
     *,
     node,
     node_class,
-    current_only: List[str],
-    reference_only: List[str],
-    edit: List[str],
+    current_only: list[str],
+    reference_only: list[str],
+    edit: list[str],
 ):
     """Custom visualization style for the diff of 2 dataflows"""
     if node.name in current_only:
@@ -237,9 +236,9 @@ def _custom_diff_style(
 def visualize_diff(
     current_dr: driver.Driver,
     reference_dr: driver.Driver,
-    current_only: List[str],
-    reference_only: List[str],
-    edit: List[str],
+    current_only: list[str],
+    reference_only: list[str],
+    edit: list[str],
 ):
     """Visualize the diff of 2 dataflows.
 

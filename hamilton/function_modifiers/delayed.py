@@ -17,7 +17,8 @@
 
 import enum
 import inspect
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from collections.abc import Callable
+from typing import Any
 
 from hamilton import settings
 from hamilton.function_modifiers.base import (
@@ -34,7 +35,7 @@ class ResolveAt(enum.Enum):
 VALID_PARAM_KINDS = [inspect.Parameter.POSITIONAL_OR_KEYWORD, inspect.Parameter.KEYWORD_ONLY]
 
 
-def extract_and_validate_params(fn: Callable) -> Tuple[List[str], Dict[str, Any]]:
+def extract_and_validate_params(fn: Callable) -> tuple[list[str], dict[str, Any]]:
     """Gets the parameters from a function, while validating that
     the function has *only* named arguments.
 
@@ -140,13 +141,13 @@ class resolve(DynamicResolver):
         self.decorate_with = decorate_with
         self._required_config, self._optional_config = extract_and_validate_params(decorate_with)
 
-    def required_config(self) -> Optional[List[str]]:
+    def required_config(self) -> list[str] | None:
         return self._required_config
 
-    def optional_config(self) -> Optional[Dict[str, Any]]:
+    def optional_config(self) -> dict[str, Any] | None:
         return self._optional_config
 
-    def resolve(self, config: Dict[str, Any], fn: Callable) -> NodeTransformLifecycle:
+    def resolve(self, config: dict[str, Any], fn: Callable) -> NodeTransformLifecycle:
         if not config[settings.ENABLE_POWER_USER_MODE]:
             raise InvalidDecoratorException(
                 "Dynamic functions are only allowed in power user mode!"

@@ -17,7 +17,6 @@
 
 import json
 import uuid
-from typing import Tuple
 
 import falkordb
 import openai
@@ -128,7 +127,7 @@ run_cypher_query_tool_description = {
     reads=[],
     writes=["question", "chat_history"],
 )
-def human_converse(state: State, user_question: str) -> Tuple[dict, State]:
+def human_converse(state: State, user_question: str) -> tuple[dict, State]:
     """Human converse step -- make sure we get input, and store it as state."""
     new_state = state.update(question=user_question)
     new_state = new_state.append(chat_history={"role": "user", "content": user_question})
@@ -161,7 +160,7 @@ def AI_create_cypher_query(state: State, client: openai.Client) -> tuple[dict, S
     reads=["tool_calls", "chat_history"],
     writes=["tool_calls", "chat_history"],
 )
-def tool_call(state: State, graph: falkordb.Graph) -> Tuple[dict, State]:
+def tool_call(state: State, graph: falkordb.Graph) -> tuple[dict, State]:
     """Tool call step -- execute the tool call."""
     tool_calls = state.get("tool_calls", [])
     new_state = state

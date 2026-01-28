@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Tuple
 
 import pandas as pd
 from pandas.core.groupby import generic
@@ -24,7 +23,7 @@ from sklearn import preprocessing
 from hamilton.function_modifiers import parameterize, source
 
 
-def _label_encoder(col: pd.Series) -> Tuple[preprocessing.LabelEncoder, pd.Series]:
+def _label_encoder(col: pd.Series) -> tuple[preprocessing.LabelEncoder, pd.Series]:
     """Creates an encoder, fits itself on the input, and then transforms the input.
 
     :param col: the column to encode.

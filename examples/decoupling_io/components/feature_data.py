@@ -19,8 +19,6 @@
 This is a module that contains our feature transforms.
 """
 
-from typing import Dict, List, Set
-
 import pandas as pd
 from sklearn import impute, model_selection, preprocessing  # import KNNImputer
 
@@ -28,8 +26,8 @@ from hamilton.function_modifiers import extract_columns, extract_fields
 
 
 def _sanitize_columns(
-    df_columns: List[str],
-) -> List[str]:
+    df_columns: list[str],
+) -> list[str]:
     """Helper function to sanitize column names.
 
     :param df_columns: the current column names
@@ -52,7 +50,7 @@ def passengers_df(titanic_data: pd.DataFrame) -> pd.DataFrame:
     return raw_passengers_df
 
 
-def rare_titles() -> Set[str]:
+def rare_titles() -> set[str]:
     """Rare titles we've curated"""
     return {
         "Capt",
@@ -81,7 +79,7 @@ def normalized_name(name: pd.Series) -> pd.Series:
     return name.apply(lambda x: x.split(",")[1].split(".")[0].strip())
 
 
-def title(normalized_name: pd.Series, rare_titles: Set[str]) -> pd.Series:
+def title(normalized_name: pd.Series, rare_titles: set[str]) -> pd.Series:
     return normalized_name.apply(lambda n: "rare" if n in rare_titles else n)
 
 
@@ -241,7 +239,7 @@ def target(survived: pd.Series) -> pd.Series:
 @extract_fields({"train_set": pd.DataFrame, "test_set": pd.DataFrame})
 def train_test_split(
     data_set: pd.DataFrame, target: pd.Series, test_size: float
-) -> Dict[str, pd.DataFrame]:
+) -> dict[str, pd.DataFrame]:
     """Splits the dataset into train & test.
 
     :param data_set: the dataset with all features already computed

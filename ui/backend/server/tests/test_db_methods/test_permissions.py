@@ -18,7 +18,6 @@
 import dataclasses
 import datetime
 import uuid
-from typing import List, Tuple
 
 import pytest
 from trackingserver_auth.models import Team, User, UserTeamMembership
@@ -50,7 +49,7 @@ from trackingserver_template.models import DAGTemplate
 
 @dataclasses.dataclass
 class MockRequest:
-    auth: Tuple[User, List[Team]]
+    auth: tuple[User, list[Team]]
 
 
 async def _get_authenticated_request(email: str) -> MockRequest:
@@ -352,7 +351,7 @@ async def test_user_cannot_write_to_project_that_does_not_exist(db):
 
 
 # utility method for setting up projects for future testing
-async def _setup_project_accessible_only_by(user_email: str, role: str) -> Tuple[Project, User]:
+async def _setup_project_accessible_only_by(user_email: str, role: str) -> tuple[Project, User]:
     user = await User.objects.aget(email=user_email)
     project = await Project.objects.acreate(name="test", description="test", creator=user, tags={})
     await ProjectUserMembership.objects.acreate(project=project, user=user, role=role)
@@ -374,7 +373,7 @@ async def test_user_cannot_write_to_project_with_no_access(db):
 
 async def _setup_project_and_dag_template(
     user_email: str, role: str
-) -> Tuple[DAGTemplate, Project, User]:
+) -> tuple[DAGTemplate, Project, User]:
     (
         project,
         user_creating_project,
@@ -495,7 +494,7 @@ async def test_user_cannot_write_to_dag_template_with_no_access(db):
 
 async def _setup_project_dag_template_and_run(
     user_email: str, role: str
-) -> Tuple[DAGRun, DAGTemplate, Project, User]:
+) -> tuple[DAGRun, DAGTemplate, Project, User]:
     (
         dag_template,
         project,

@@ -48,7 +48,7 @@ from hamilton.plugins.polars_post_1_0_0_extensions import (  # isort: skip
 try:
     from xlsxwriter.workbook import Workbook
 except ImportError:
-    Workbook = typing.Type
+    Workbook = type
 
 
 @pytest.fixture

@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, Tuple
+from typing import Any
 
 import numpy as np
 import numpy.typing as npt
@@ -55,13 +55,13 @@ def area_under_curve(
 
 
 def plot_species_distribution(
-    meshgrid: Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]],
+    meshgrid: tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]],
     prediction_train: npt.NDArray[np.float64],
     land_reference: npt.NDArray[np.float64],
     levels: npt.NDArray[np.float64],
     bunch: Bunch,
     area_under_curve: float,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     return {
         "X": meshgrid[0],
         "Y": meshgrid[1],

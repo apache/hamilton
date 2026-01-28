@@ -16,7 +16,6 @@
 # under the License.
 
 import asyncio
-from typing import Dict
 
 import pandas as pd
 
@@ -45,7 +44,7 @@ async def another_async_func(simple_non_async_func: int) -> int:
 @hamilton.function_modifiers.extract_fields(dict(result_1=int, result_2=int))
 def non_async_func_with_decorator(
     async_func_with_param: int, another_async_func: int
-) -> Dict[str, int]:
+) -> dict[str, int]:
     return {"result_1": another_async_func + 1, "result_2": async_func_with_param + 1}
 
 

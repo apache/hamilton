@@ -17,7 +17,7 @@
 
 from collections import Counter
 from types import ModuleType
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
@@ -350,10 +350,10 @@ def test_multi_hook():
             self,
             run_id: str,
             task_id: str,
-            nodes: List[node.Node],
-            inputs: Dict[str, Any],
-            overrides: Dict[str, Any],
-            spawning_task_id: Optional[str],
+            nodes: list[node.Node],
+            inputs: dict[str, Any],
+            overrides: dict[str, Any],
+            spawning_task_id: str | None,
             purpose: NodeGroupPurpose,
         ):
             pass
@@ -362,8 +362,8 @@ def test_multi_hook():
             self,
             run_id: str,
             node_: node.Node,
-            kwargs: Dict[str, Any],
-            task_id: Optional[str] = None,
+            kwargs: dict[str, Any],
+            task_id: str | None = None,
         ):
             return node_(**kwargs)
 
@@ -371,11 +371,11 @@ def test_multi_hook():
             self,
             run_id: str,
             task_id: str,
-            nodes: List[node.Node],
-            results: Optional[Dict[str, Any]],
+            nodes: list[node.Node],
+            results: dict[str, Any] | None,
             success: bool,
             error: Exception,
-            spawning_task_id: Optional[str],
+            spawning_task_id: str | None,
             purpose: NodeGroupPurpose,
         ):
             pass
@@ -384,7 +384,7 @@ def test_multi_hook():
             pass
 
         def post_graph_construct(
-            self, graph: "FunctionGraph", modules: List[ModuleType], config: Dict[str, Any]
+            self, graph: "FunctionGraph", modules: list[ModuleType], config: dict[str, Any]
         ):
             pass
 
@@ -392,14 +392,14 @@ def test_multi_hook():
             self,
             run_id: str,
             graph: "FunctionGraph",
-            final_vars: List[str],
-            inputs: Dict[str, Any],
-            overrides: Dict[str, Any],
+            final_vars: list[str],
+            inputs: dict[str, Any],
+            overrides: dict[str, Any],
         ):
             pass
 
         def pre_node_execute(
-            self, run_id: str, node_: Node, kwargs: Dict[str, Any], task_id: Optional[str] = None
+            self, run_id: str, node_: Node, kwargs: dict[str, Any], task_id: str | None = None
         ):
             pass
 
@@ -407,11 +407,11 @@ def test_multi_hook():
             self,
             run_id: str,
             node_: node.Node,
-            kwargs: Dict[str, Any],
+            kwargs: dict[str, Any],
             success: bool,
-            error: Optional[Exception],
-            result: Optional[Any],
-            task_id: Optional[str] = None,
+            error: Exception | None,
+            result: Any | None,
+            task_id: str | None = None,
         ):
             pass
 
@@ -420,15 +420,15 @@ def test_multi_hook():
             run_id: str,
             graph: "FunctionGraph",
             success: bool,
-            error: Optional[Exception],
-            results: Optional[Dict[str, Any]],
+            error: Exception | None,
+            results: dict[str, Any] | None,
         ):
             pass
 
-        def post_task_group(self, run_id: str, task_ids: List[str]):
+        def post_task_group(self, run_id: str, task_ids: list[str]):
             pass
 
-        def post_task_expand(self, run_id: str, task_id: str, parameters: Dict[str, Any]):
+        def post_task_expand(self, run_id: str, task_id: str, parameters: dict[str, Any]):
             pass
 
         def pre_task_submission(
@@ -436,10 +436,10 @@ def test_multi_hook():
             *,
             run_id: str,
             task_id: str,
-            nodes: List[Node],
-            inputs: Dict[str, Any],
-            overrides: Dict[str, Any],
-            spawning_task_id: Optional[str],
+            nodes: list[Node],
+            inputs: dict[str, Any],
+            overrides: dict[str, Any],
+            spawning_task_id: str | None,
             purpose: NodeGroupPurpose,
         ):
             pass
@@ -449,11 +449,11 @@ def test_multi_hook():
             *,
             run_id: str,
             task_id: str,
-            nodes: List[Node],
+            nodes: list[Node],
             result: Any,
             success: bool,
             error: Exception,
-            spawning_task_id: Optional[str],
+            spawning_task_id: str | None,
             purpose: NodeGroupPurpose,
         ):
             pass

@@ -16,7 +16,6 @@
 # under the License.
 
 import logging
-import typing
 
 from ninja import Router
 from trackingserver_auth.models import APIKey
@@ -80,9 +79,9 @@ async def create_api_key(request, api_key: ApiKeyIn) -> str:
     return api_key
 
 
-@router.get("/v1/api_keys", response=typing.List[ApiKeyOut], tags=["auth"])
+@router.get("/v1/api_keys", response=list[ApiKeyOut], tags=["auth"])
 @permission(user_can_get_api_keys)
-async def get_api_keys(request, limit: int = 100) -> typing.List[ApiKeyOut]:
+async def get_api_keys(request, limit: int = 100) -> list[ApiKeyOut]:
     """Gets the API keys for the current user.
     All users can get this. Note that these are not in plaintext.
 

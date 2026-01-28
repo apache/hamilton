@@ -16,7 +16,6 @@
 # under the License.
 
 import typing
-from typing import List
 
 import pandera
 from pandera import typing as pa_typing
@@ -88,7 +87,7 @@ class check_output(BaseDataValidationDecorator):
         self.importance = importance
         self.target = target
 
-    def get_validators(self, node_to_validate: node.Node) -> List[dq_base.DataValidator]:
+    def get_validators(self, node_to_validate: node.Node) -> list[dq_base.DataValidator]:
         """Gets validators for the node. Delegates to the standard check_output(schema=...) decorator.
 
         :param node_to_validate: Node to validate

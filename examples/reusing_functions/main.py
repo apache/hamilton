@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict
+from typing import Any
 
 import pandas as pd
 import reusable_subdags
@@ -119,7 +119,7 @@ class TimeSeriesJoinResultsBuilder(ResultMixin):
             return False
         return True
 
-    def build_result(self, **outputs: Dict[str, Any]) -> Any:
+    def build_result(self, **outputs: dict[str, Any]) -> Any:
         non_ts_output = [
             key
             for key, value in outputs.items()

@@ -16,7 +16,7 @@
 # under the License.
 
 import uuid
-from typing import Any, Dict, Tuple
+from typing import Any
 
 import pytest
 from django.test import AsyncClient
@@ -26,7 +26,7 @@ from trackingserver_projects.schema import ProjectIn, ProjectUpdate, Visibility
 
 async def _setup_sample_project(
     async_client: AsyncClient, username
-) -> Tuple[int, str, Dict[str, Any]]:
+) -> tuple[int, str, dict[str, Any]]:
     user_loaded = await User.objects.aget(email=username)
     project_name = str(uuid.uuid4())
     project_to_create = ProjectIn(

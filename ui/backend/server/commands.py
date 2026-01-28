@@ -24,7 +24,6 @@ import time
 import webbrowser
 from contextlib import contextmanager
 from enum import Enum
-from typing import Optional
 
 import requests
 from django.core.management import execute_from_command_line
@@ -112,7 +111,7 @@ def run(
     no_migration: bool,
     no_open: bool,
     settings_file: str,
-    config_file: Optional[str],
+    config_file: str | None,
 ):
     if not hasattr(SettingsFile, settings_file):
         raise ValueError(f"Invalid settings file: {settings_file}")

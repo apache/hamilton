@@ -16,7 +16,6 @@
 # under the License.
 
 # hamilton_batch.py
-from typing import List
 
 import openai
 
@@ -37,11 +36,11 @@ def joke_prompt(topic: str) -> str:
     return f"Tell me a short joke about {topic}"
 
 
-def joke_messages(joke_prompt: str) -> List[dict]:
+def joke_messages(joke_prompt: str) -> list[dict]:
     return [{"role": "user", "content": joke_prompt}]
 
 
-def joke_response(llm_client: openai.OpenAI, joke_messages: List[dict]) -> str:
+def joke_response(llm_client: openai.OpenAI, joke_messages: list[dict]) -> str:
     response = llm_client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=joke_messages,
@@ -49,7 +48,7 @@ def joke_response(llm_client: openai.OpenAI, joke_messages: List[dict]) -> str:
     return response.choices[0].message.content
 
 
-def joke_responses(joke_response: Collect[str]) -> List[str]:
+def joke_responses(joke_response: Collect[str]) -> list[str]:
     return list(joke_response)
 
 

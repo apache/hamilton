@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 
 from hamilton.execution.grouping import NodeGroup, NodeGroupPurpose, TaskSpec
 
@@ -28,7 +27,7 @@ group_purpose_icons = {
 }
 
 
-def print_node_groups(node_groups: List[NodeGroup]):
+def print_node_groups(node_groups: list[NodeGroup]):
     """Prints out the node groups in a clean, tree-like format.
 
     :param node_groups:
@@ -41,7 +40,7 @@ def print_node_groups(node_groups: List[NodeGroup]):
             print(f"   • {node_.name} [ƒ({','.join(map(lambda n: n.name, node_.dependencies))})]")
 
 
-def print_tasks(tasks: List[TaskSpec]):
+def print_tasks(tasks: list[TaskSpec]):
     """Prints out the node groups in a clean, tree-like format.
 
     :param tasks:

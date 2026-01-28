@@ -17,8 +17,9 @@
 
 """Fetches Slack Conversations, History and logs."""
 
+from collections.abc import Iterable
 from functools import partial
-from typing import Any, Dict, Iterable, List, Literal, Optional, Tuple
+from typing import Any, Dict, List, Literal, Optional, Tuple
 
 import dlt
 from dlt.common.typing import TAnyDateTime, TDataItem
@@ -38,9 +39,9 @@ from .settings import (
 def slack_source(
     page_size: int = MAX_PAGE_SIZE,
     access_token: str = dlt.secrets.value,
-    start_date: Optional[TAnyDateTime] = DEFAULT_START_DATE,
-    end_date: Optional[TAnyDateTime] = None,
-    selected_channels: Optional[List[str]] = dlt.config.value,
+    start_date: TAnyDateTime | None = DEFAULT_START_DATE,
+    end_date: TAnyDateTime | None = None,
+    selected_channels: list[str] | None = dlt.config.value,
     table_per_channel: bool = True,
     replies: bool = False,
 ) -> Iterable[DltResource]:
@@ -62,8 +63,8 @@ def slack_source(
         Iterable[DltResource]: A list of DltResource objects representing the data resources.
     """
 
-    end_dt: Optional[DateTime] = ensure_dt_type(end_date)
-    start_dt: Optional[DateTime] = ensure_dt_type(start_date)
+    end_dt: DateTime | None = ensure_dt_type(end_date)
+    start_dt: DateTime | None = ensure_dt_type(start_date)
     write_disposition: Literal["append", "merge"] = "append" if end_date is None else "merge"
 
     api = SlackAPI(
@@ -72,8 +73,8 @@ def slack_source(
     )
 
     def get_channels(
-        slack_api: SlackAPI, selected_channels: Optional[List[str]]
-    ) -> Tuple[List[TDataItem], List[TDataItem]]:
+        slack_api: SlackAPI, selected_channels: list[str] | None
+    ) -> tuple[list[TDataItem], list[TDataItem]]:
         """
         Returns channel fetched from slack and list of selected channels.
 
@@ -84,7 +85,7 @@ def slack_source(
         Returns:
             Tuple[List[TDataItem], List[TDataItem]]: fetched channels and selected fetched channels.
         """
-        channels: List[TDataItem] = []
+        channels: list[TDataItem] = []
         for page_data in slack_api.get_pages(
             resource="conversations.list",
             response_path="$.channels[*]",
@@ -127,7 +128,7 @@ def slack_source(
             yield page_data
 
     def get_messages(
-        channel_data: Dict[str, Any], start_date_ts: float, end_date_ts: float
+        channel_data: dict[str, Any], start_date_ts: float, end_date_ts: float
     ) -> Iterable[TDataItem]:
         """
         Generator, which gets channel messages for specific dates.
@@ -154,7 +155,7 @@ def slack_source(
         ):
             yield page_data
 
-    def get_thread_replies(messages: List[Dict[str, Any]]) -> Iterable[TDataItem]:
+    def get_thread_replies(messages: list[dict[str, Any]]) -> Iterable[TDataItem]:
         """
         Generator, which gets replies for each message.
         Args:
@@ -209,7 +210,7 @@ def slack_source(
             yield from get_messages(channel_data, start_date_ts, end_date_ts)
 
     def per_table_messages_resource(
-        channel_data: Dict[str, Any],
+        channel_data: dict[str, Any],
         created_at: dlt.sources.incremental[DateTime] = None,
     ) -> Iterable[TDataItem]:
         """Yield all messages for a given channel as a DLT resource. Keep blocks column without normalization.

@@ -16,7 +16,6 @@
 # under the License.
 
 import logging
-from typing import List, Union
 
 import numpy as np
 import pandas as pd
@@ -39,7 +38,7 @@ def split_data(
     create_model_input_table: pd.DataFrame,
     test_size: float,
     random_state: int,
-    features: List[str],
+    features: list[str],
 ) -> dict:
     """Splits data into features and targets training and test sets.
 
@@ -84,7 +83,7 @@ def evaluate_model(
     train_model: LinearRegression,
     X_test: pd.DataFrame,
     y_test: pd.Series,
-) -> Union[float, np.ndarray]:
+) -> float | np.ndarray:
     """Calculates and logs the coefficient of determination.
 
     Args:

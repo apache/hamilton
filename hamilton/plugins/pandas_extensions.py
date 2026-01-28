@@ -18,31 +18,27 @@
 import abc
 import csv
 import dataclasses
-from collections.abc import Hashable
+from collections.abc import Callable, Collection, Hashable, Iterator
 from datetime import datetime
 from io import BufferedReader, BytesIO, StringIO
 from pathlib import Path
-from typing import Any, Callable, Collection, Dict, Iterator, List, Optional, Tuple, Type, Union
+from typing import Any, TypeAlias
 
 try:
     import pandas as pd
 except ImportError as e:
     raise NotImplementedError("Pandas is not installed.") from e
 
+from collections.abc import Iterable, Mapping, Sequence
 from typing import Literal
-
-try:
-    from collections.abc import Iterable, Mapping, Sequence
-except ImportError:
-    from collections import Iterable, Mapping, Sequence
 
 try:
     import fsspec
     import pyarrow.fs
 
-    FILESYSTEM_TYPE = Optional[Union[pyarrow.fs.FileSystem, fsspec.spec.AbstractFileSystem]]
+    FILESYSTEM_TYPE = pyarrow.fs.FileSystem | fsspec.spec.AbstractFileSystem | None
 except ImportError:
-    FILESYSTEM_TYPE = Optional[Type]
+    FILESYSTEM_TYPE = type | None
 
 from sqlite3 import Connection
 
@@ -56,9 +52,9 @@ from hamilton.io.data_adapters import DataLoader, DataSaver
 DATAFRAME_TYPE = pd.DataFrame
 COLUMN_TYPE = pd.Series
 
-JSONSerializable = Optional[Union[str, float, bool, List, Dict]]
-IndexLabel = Optional[Union[Hashable, Iterator[Hashable]]]
-Dtype = Union[ExtensionDtype, NpDtype]
+JSONSerializable: TypeAlias = str | float | bool | list | dict | None
+IndexLabel: TypeAlias = Hashable | Iterator[Hashable] | None
+Dtype: TypeAlias = ExtensionDtype | NpDtype
 
 
 @registry.get_column.register(pd.DataFrame)
@@ -91,15 +87,15 @@ class DataFrameDataLoader(DataLoader, DataSaver, abc.ABC):
     we are good to go."""
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     @abc.abstractmethod
-    def load_data(self, type_: Type[DATAFRAME_TYPE]) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type[DATAFRAME_TYPE]) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         pass
 
     @abc.abstractmethod
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         pass
 
 
@@ -111,65 +107,64 @@ class PandasCSVReader(DataLoader):
     """
 
     # the filepath_or_buffer param will be changed to path for backwards compatibility
-    path: Union[str, Path, BytesIO, BufferedReader]
+    path: str | Path | BytesIO | BufferedReader
     # kwargs
-    sep: Union[str, None] = ","
-    delimiter: Optional[str] = None
-    header: Union[Sequence, int, Literal["infer"], None] = "infer"
-    names: Optional[Sequence] = None
-    index_col: Optional[Union[Hashable, Sequence, Literal[False]]] = None
-    usecols: Optional[Union[List[Hashable], Callable, tuple]] = None
-    dtype: Optional[Union[Dtype, Dict[Hashable, Dtype]]] = None
-    engine: Optional[Literal["c", "python", "pyarrow", "python-fwf"]] = None
-    converters: Optional[Mapping] = None
-    true_values: Optional[List] = None
-    false_values: Optional[List] = None
-    skipinitialspace: Optional[bool] = False
-    skiprows: Optional[Union[List[int], int, Callable[[Hashable], bool]]] = None
+    sep: str | None = ","
+    delimiter: str | None = None
+    header: Sequence | int | Literal["infer"] | None = "infer"
+    names: Sequence | None = None
+    index_col: Hashable | Sequence | Literal[False] | None = None
+    usecols: list[Hashable] | Callable | tuple | None = None
+    dtype: Dtype | dict[Hashable, Dtype] | None = None
+    engine: Literal["c", "python", "pyarrow", "python-fwf"] | None = None
+    converters: Mapping | None = None
+    true_values: list | None = None
+    false_values: list | None = None
+    skipinitialspace: bool | None = False
+    skiprows: list[int] | int | Callable[[Hashable], bool] | None = None
     skipfooter: int = 0
-    nrows: Optional[int] = None
-    na_values: Optional[Union[Hashable, Iterable, Mapping]] = None
+    nrows: int | None = None
+    na_values: Hashable | Iterable | Mapping | None = None
     keep_default_na: bool = True
     na_filter: bool = True
     verbose: bool = False
     skip_blank_lines: bool = True
-    parse_dates: Optional[Union[bool, Sequence, None]] = False
+    parse_dates: bool | Sequence | None | None = False
     keep_date_col: bool = False
-    date_format: Optional[str] = None
+    date_format: str | None = None
     dayfirst: bool = False
     cache_dates: bool = True
     iterator: bool = False
-    chunksize: Optional[int] = None
-    compression: Optional[
-        Union[Literal["infer", "gzip", "bz2", "zip", "xz", "zstd", "tar"], Dict[str, Any]]
-    ] = "infer"
-    thousands: Optional[str] = None
+    chunksize: int | None = None
+    compression: (
+        Literal["infer", "gzip", "bz2", "zip", "xz", "zstd", "tar"] | dict[str, Any] | None
+    ) = "infer"
+    thousands: str | None = None
     decimal: str = "."
-    lineterminator: Optional[str] = None
-    quotechar: Optional[str] = None
+    lineterminator: str | None = None
+    quotechar: str | None = None
     quoting: int = 0
     doublequote: bool = True
-    escapechar: Optional[str] = None
-    comment: Optional[str] = None
+    escapechar: str | None = None
+    comment: str | None = None
     encoding: str = "utf-8"
-    encoding_errors: Union[
-        Literal["strict", "ignore", "replace", "backslashreplace", "surrogateescape"],
-        str,
-    ] = "strict"
-    dialect: Optional[Union[str, csv.Dialect]] = None
-    on_bad_lines: Union[Literal["error", "warn", "skip"], Callable] = "error"
+    encoding_errors: (
+        Literal["strict", "ignore", "replace", "backslashreplace", "surrogateescape"] | str
+    ) = "strict"
+    dialect: str | csv.Dialect | None = None
+    on_bad_lines: Literal["error", "warn", "skip"] | Callable = "error"
     delim_whitespace: bool = False
     low_memory: bool = True
     memory_map: bool = False
-    float_precision: Optional[Literal["high", "legacy", "round_trip"]] = None
-    storage_options: Optional[Dict[str, Any]] = None
+    float_precision: Literal["high", "legacy", "round_trip"] | None = None
+    storage_options: dict[str, Any] | None = None
     dtype_backend: Literal["pyarrow", "numpy_nullable"] = "numpy_nullable"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.sep is not None:
             kwargs["sep"] = self.sep
@@ -262,7 +257,7 @@ class PandasCSVReader(DataLoader):
 
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pd.read_csv(self.path, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.path, df)
         return df, metadata
@@ -278,36 +273,36 @@ class PandasCSVWriter(DataSaver):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html
     """
 
-    path: Union[str, Path, BytesIO, BufferedReader]
+    path: str | Path | BytesIO | BufferedReader
     # kwargs
-    sep: Union[str, None] = ","
+    sep: str | None = ","
     na_rep: str = ""
-    float_format: Optional[Union[str, Callable]] = None
-    columns: Optional[Sequence] = None
-    header: Optional[Union[bool, List[str]]] = True
-    index: Optional[bool] = False
-    index_label: Optional[IndexLabel] = None
+    float_format: str | Callable | None = None
+    columns: Sequence | None = None
+    header: bool | list[str] | None = True
+    index: bool | None = False
+    index_label: IndexLabel | None = None
     mode: str = "w"
-    encoding: Optional[str] = None
-    compression: Optional[
-        Union[Literal["infer", "gzip", "bz2", "zip", "xz", "zstd", "tar"], Dict[str, Any]]
-    ] = "infer"
-    quoting: Optional[int] = None
-    quotechar: Optional[str] = '"'
-    lineterminator: Optional[str] = None
-    chunksize: Optional[int] = None
-    date_format: Optional[str] = None
+    encoding: str | None = None
+    compression: (
+        Literal["infer", "gzip", "bz2", "zip", "xz", "zstd", "tar"] | dict[str, Any] | None
+    ) = "infer"
+    quoting: int | None = None
+    quotechar: str | None = '"'
+    lineterminator: str | None = None
+    chunksize: int | None = None
+    date_format: str | None = None
     doublequote: bool = True
-    escapechar: Optional[str] = None
+    escapechar: str | None = None
     decimal: str = "."
     errors: str = "strict"
-    storage_options: Optional[Dict[str, Any]] = None
+    storage_options: dict[str, Any] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_saving_kwargs(self) -> Dict[str, Any]:
+    def _get_saving_kwargs(self) -> dict[str, Any]:
         # Puts kwargs in a dict
         kwargs = {}
         if self.sep is not None:
@@ -353,7 +348,7 @@ class PandasCSVWriter(DataSaver):
 
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.to_csv(self.path, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.path, data)
 
@@ -368,18 +363,18 @@ class PandasParquetReader(DataLoader):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html#pandas.read_parquet
     """
 
-    path: Union[str, Path, BytesIO, BufferedReader]
+    path: str | Path | BytesIO | BufferedReader
     # kwargs
     engine: Literal["auto", "pyarrow", "fastparquet"] = "auto"
-    columns: Optional[List[str]] = None
-    storage_options: Optional[Dict[str, Any]] = None
+    columns: list[str] | None = None
+    storage_options: dict[str, Any] | None = None
     use_nullable_dtypes: bool = False
     dtype_backend: Literal["numpy_nullable", "pyarrow"] = "numpy_nullable"
-    filesystem: Optional[str] = None
-    filters: Optional[Union[List[Tuple], List[List[Tuple]]]] = None
+    filesystem: str | None = None
+    filters: list[tuple] | list[list[tuple]] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_loading_kwargs(self):
@@ -401,7 +396,7 @@ class PandasParquetReader(DataLoader):
 
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         # Loads the data and returns the df and metadata of the pickle
         df = pd.read_parquet(self.path, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.path, df)
@@ -418,20 +413,20 @@ class PandasParquetWriter(DataSaver):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_parquet.html#pandas.DataFrame.to_parquet
     """
 
-    path: Union[str, Path, BytesIO, BufferedReader]
+    path: str | Path | BytesIO | BufferedReader
     # kwargs
     engine: Literal["auto", "pyarrow", "fastparquet"] = "auto"
-    compression: Optional[str] = "snappy"
-    index: Optional[bool] = None
-    partition_cols: Optional[List[str]] = None
-    storage_options: Optional[Dict[str, Any]] = None
-    extra_kwargs: Optional[Dict[str, Any]] = None
+    compression: str | None = "snappy"
+    index: bool | None = None
+    partition_cols: list[str] | None = None
+    storage_options: dict[str, Any] | None = None
+    extra_kwargs: dict[str, Any] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_saving_kwargs(self) -> Dict[str, Any]:
+    def _get_saving_kwargs(self) -> dict[str, Any]:
         # Puts kwargs in a dict
         kwargs = {}
         if self.engine is not None:
@@ -448,7 +443,7 @@ class PandasParquetWriter(DataSaver):
             kwargs.update(self.extra_kwargs)
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.to_parquet(self.path, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.path, data)
 
@@ -463,20 +458,20 @@ class PandasPickleReader(DataLoader):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.read_pickle.html#pandas.read_pickle
     """
 
-    filepath_or_buffer: Union[str, Path, BytesIO, BufferedReader] = None
-    path: Union[str, Path, BytesIO, BufferedReader] = (
+    filepath_or_buffer: str | Path | BytesIO | BufferedReader = None
+    path: str | Path | BytesIO | BufferedReader = (
         None  # alias for `filepath_or_buffer` to keep reading/writing args symmetric.
     )
     # kwargs:
-    compression: Union[str, Dict[str, Any], None] = "infer"
-    storage_options: Optional[Dict[str, Any]] = None
+    compression: str | dict[str, Any] | None = "infer"
+    storage_options: dict[str, Any] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         # Returns type for which data loader is available
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         # Puts kwargs in a dict
         kwargs = {}
         if self.compression is not None:
@@ -485,7 +480,7 @@ class PandasPickleReader(DataLoader):
             kwargs["storage_options"] = self.storage_options
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         # Loads the data and returns the df and metadata of the pickle
         df = pd.read_pickle(self.filepath_or_buffer, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.filepath_or_buffer, df)
@@ -518,17 +513,17 @@ class PandasPickleWriter(DataSaver):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_pickle.html#pandas.DataFrame.to_pickle
     """
 
-    path: Union[str, Path, BytesIO, BufferedReader]
+    path: str | Path | BytesIO | BufferedReader
     # kwargs:
-    compression: Union[str, Dict[str, Any], None] = "infer"
+    compression: str | dict[str, Any] | None = "infer"
     protocol: int = pickle_protocol_default
-    storage_options: Optional[Dict[str, Any]] = None
+    storage_options: dict[str, Any] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_saving_kwargs(self) -> Dict[str, Any]:
+    def _get_saving_kwargs(self) -> dict[str, Any]:
         # Puts kwargs in a dict
         kwargs = {}
         if self.compression is not None:
@@ -539,7 +534,7 @@ class PandasPickleWriter(DataSaver):
             kwargs["storage_options"] = self.storage_options
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.to_pickle(self.path, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.path, data)
 
@@ -559,31 +554,31 @@ class PandasJsonReader(DataLoader):
     Should map to https://pandas.pydata.org/docs/reference/api/pandas.read_json.html
     """
 
-    filepath_or_buffer: Union[str, Path, BytesIO, BufferedReader]
+    filepath_or_buffer: str | Path | BytesIO | BufferedReader
     # kwargs
-    chunksize: Optional[int] = None
-    compression: Optional[Union[str, Dict[str, Any]]] = "infer"
-    convert_axes: Optional[bool] = None
-    convert_dates: Union[bool, List[str]] = True
-    date_unit: Optional[str] = None
-    dtype: Optional[Union[Dtype, Dict[Hashable, Dtype]]] = None
-    dtype_backend: Optional[str] = None
-    encoding: Optional[str] = None
-    encoding_errors: Optional[str] = "strict"
+    chunksize: int | None = None
+    compression: str | dict[str, Any] | None = "infer"
+    convert_axes: bool | None = None
+    convert_dates: bool | list[str] = True
+    date_unit: str | None = None
+    dtype: Dtype | dict[Hashable, Dtype] | None = None
+    dtype_backend: str | None = None
+    encoding: str | None = None
+    encoding_errors: str | None = "strict"
     engine: str = "ujson"
     keep_default_dates: bool = True
     lines: bool = False
-    nrows: Optional[int] = None
-    orient: Optional[str] = None
+    nrows: int | None = None
+    orient: str | None = None
     precise_float: bool = False
-    storage_options: Optional[Dict[str, Any]] = None
+    storage_options: dict[str, Any] | None = None
     typ: str = "frame"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.chunksize is not None:
             kwargs["chunksize"] = self.chunksize
@@ -621,7 +616,7 @@ class PandasJsonReader(DataLoader):
             kwargs["typ"] = self.typ
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pd.read_json(self.filepath_or_buffer, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.filepath_or_buffer, df)
         return df, metadata
@@ -642,23 +637,23 @@ class PandasJsonWriter(DataSaver):
     Should map to https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_json.html
     """
 
-    filepath_or_buffer: Union[str, Path, BytesIO, BufferedReader]
+    filepath_or_buffer: str | Path | BytesIO | BufferedReader
     # kwargs
     compression: str = "infer"
     date_format: str = "epoch"
     date_unit: str = "ms"
-    default_handler: Optional[Callable[[Any], JSONSerializable]] = None
+    default_handler: Callable[[Any], JSONSerializable] | None = None
     double_precision: int = 10
     force_ascii: bool = True
-    index: Optional[bool] = None
+    index: bool | None = None
     indent: int = 0
     lines: bool = False
     mode: str = "w"
-    orient: Optional[str] = None
-    storage_options: Optional[Dict[str, Any]] = None
+    orient: str | None = None
+    storage_options: dict[str, Any] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
@@ -689,7 +684,7 @@ class PandasJsonWriter(DataSaver):
             kwargs["storage_options"] = self.storage_options
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.to_json(self.filepath_or_buffer, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.filepath_or_buffer, data)
 
@@ -711,22 +706,22 @@ class PandasSqlReader(DataLoader):
     """
 
     query_or_table: str
-    db_connection: Union[str, Connection]  # can pass in SQLAlchemy engine/connection
+    db_connection: str | Connection  # can pass in SQLAlchemy engine/connection
     # kwarg
-    chunksize: Optional[int] = None
+    chunksize: int | None = None
     coerce_float: bool = True
-    columns: Optional[List[str]] = None
-    dtype: Optional[Union[Dtype, Dict[Hashable, Dtype]]] = None
-    dtype_backend: Optional[str] = None
-    index_col: Optional[Union[str, List[str]]] = None
-    params: Optional[Union[List, Tuple, Dict]] = None
-    parse_dates: Optional[Union[List, Dict]] = None
+    columns: list[str] | None = None
+    dtype: Dtype | dict[Hashable, Dtype] | None = None
+    dtype_backend: str | None = None
+    index_col: str | list[str] | None = None
+    params: list | tuple | dict | None = None
+    parse_dates: list | dict | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.chunksize is not None:
             kwargs["chunksize"] = self.chunksize
@@ -746,7 +741,7 @@ class PandasSqlReader(DataLoader):
             kwargs["parse_dates"] = self.parse_dates
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pd.read_sql(self.query_or_table, self.db_connection, **self._get_loading_kwargs())
         sql_metadata = utils.get_sql_metadata(self.query_or_table, df)
         df_metadata = utils.get_dataframe_metadata(df)
@@ -772,19 +767,19 @@ class PandasSqlWriter(DataSaver):
     table_name: str
     db_connection: Any  # can pass in SQLAlchemy engine/connection
     # kwargs
-    chunksize: Optional[int] = None
-    dtype: Optional[Union[Dtype, Dict[Hashable, Dtype]]] = None
+    chunksize: int | None = None
+    dtype: Dtype | dict[Hashable, Dtype] | None = None
     if_exists: str = "fail"
     index: bool = True
-    index_label: Optional[IndexLabel] = None
-    method: Optional[Union[str, Callable]] = None
-    schema: Optional[str] = None
+    index_label: IndexLabel | None = None
+    method: str | Callable | None = None
+    schema: str | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_saving_kwargs(self) -> Dict[str, Any]:
+    def _get_saving_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.chunksize is not None:
             kwargs["chunksize"] = self.chunksize
@@ -802,7 +797,7 @@ class PandasSqlWriter(DataSaver):
             kwargs["schema"] = self.schema
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         results = data.to_sql(self.table_name, self.db_connection, **self._get_saving_kwargs())
         sql_metadata = utils.get_sql_metadata(self.table_name, results)
         df_metadata = utils.get_dataframe_metadata(data)
@@ -821,29 +816,29 @@ class PandasXmlReader(DataLoader):
     Requires `lxml`. See https://pandas.pydata.org/docs/getting_started/install.html#xml
     """
 
-    path_or_buffer: Union[str, Path, BytesIO, BufferedReader]
+    path_or_buffer: str | Path | BytesIO | BufferedReader
     # kwargs
-    xpath: Optional[str] = "./*"
-    namespace: Optional[Dict[str, str]] = None
-    elems_only: Optional[bool] = False
-    attrs_only: Optional[bool] = False
-    names: Optional[List[str]] = None
-    dtype: Optional[Dict[str, Any]] = None
-    converters: Optional[Dict[Union[int, str], Any]] = None
-    parse_dates: Union[bool, List[Union[int, str, List[List], Dict[str, List[int]]]]] = False
-    encoding: Optional[str] = "utf-8"
+    xpath: str | None = "./*"
+    namespace: dict[str, str] | None = None
+    elems_only: bool | None = False
+    attrs_only: bool | None = False
+    names: list[str] | None = None
+    dtype: dict[str, Any] | None = None
+    converters: dict[int | str, Any] | None = None
+    parse_dates: bool | list[int | str | list[list] | dict[str, list[int]]] = False
+    encoding: str | None = "utf-8"
     parser: str = "lxml"
-    stylesheet: Union[str, Path, BytesIO, BufferedReader] = None
-    iterparse: Optional[Dict[str, List[str]]] = None
-    compression: Union[str, Dict[str, Any], None] = "infer"
-    storage_options: Optional[Dict[str, Any]] = None
+    stylesheet: str | Path | BytesIO | BufferedReader = None
+    iterparse: dict[str, list[str]] | None = None
+    compression: str | dict[str, Any] | None = "infer"
+    storage_options: dict[str, Any] | None = None
     dtype_backend: str = "numpy_nullable"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.xpath is not None:
             kwargs["xpath"] = self.xpath
@@ -881,7 +876,7 @@ class PandasXmlReader(DataLoader):
             kwargs["dtype_backend"] = self.dtype_backend
         return kwargs
 
-    def load_data(self, type: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         # Loads the data and returns the df and metadata of the xml
         df = pd.read_xml(self.path_or_buffer, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.path_or_buffer, df)
@@ -900,26 +895,26 @@ class PandasXmlWriter(DataSaver):
     Requires `lxml`. See https://pandas.pydata.org/docs/getting_started/install.html#xml.
     """
 
-    path_or_buffer: Union[str, Path, BytesIO, BufferedReader]
+    path_or_buffer: str | Path | BytesIO | BufferedReader
     # kwargs
     index: bool = True
     root_name: str = "data"
     row_name: str = "row"
-    na_rep: Optional[str] = None
-    attr_cols: Optional[List[str]] = None
-    elems_cols: Optional[List[str]] = None
-    namespaces: Optional[Dict[str, str]] = None
-    prefix: Optional[str] = None
+    na_rep: str | None = None
+    attr_cols: list[str] | None = None
+    elems_cols: list[str] | None = None
+    namespaces: dict[str, str] | None = None
+    prefix: str | None = None
     encoding: str = "utf-8"
     xml_declaration: bool = True
     pretty_print: bool = True
     parser: str = "lxml"
-    stylesheet: Optional[Union[str, Path, BytesIO, BufferedReader]] = None
-    compression: Union[str, Dict[str, Any], None] = "infer"
-    storage_options: Optional[Dict[str, Any]] = None
+    stylesheet: str | Path | BytesIO | BufferedReader | None = None
+    compression: str | dict[str, Any] | None = "infer"
+    storage_options: dict[str, Any] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
@@ -956,7 +951,7 @@ class PandasXmlWriter(DataSaver):
             kwargs["storage_options"] = self.storage_options
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.to_xml(self.path_or_buffer, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.path_or_buffer, data)
 
@@ -971,31 +966,31 @@ class PandasHtmlReader(DataLoader):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.read_html.html
     """
 
-    io: Union[str, Path, BytesIO, BufferedReader]
+    io: str | Path | BytesIO | BufferedReader
     # kwargs
-    match: Optional[str] = ".+"
-    flavor: Optional[Union[str, Sequence]] = None
-    header: Optional[Union[int, Sequence]] = None
-    index_col: Optional[Union[int, Sequence]] = None
-    skiprows: Optional[Union[int, Sequence, slice]] = None
-    attrs: Optional[Dict[str, str]] = None
-    parse_dates: Optional[bool] = None
-    thousands: Optional[str] = ","
-    encoding: Optional[str] = None
+    match: str | None = ".+"
+    flavor: str | Sequence | None = None
+    header: int | Sequence | None = None
+    index_col: int | Sequence | None = None
+    skiprows: int | Sequence | slice | None = None
+    attrs: dict[str, str] | None = None
+    parse_dates: bool | None = None
+    thousands: str | None = ","
+    encoding: str | None = None
     decimal: str = "."
-    converters: Optional[Dict[Any, Any]] = None
+    converters: dict[Any, Any] | None = None
     na_values: Iterable = None
     keep_default_na: bool = True
     displayed_only: bool = True
-    extract_links: Optional[Literal["header", "footer", "body", "all"]] = None
+    extract_links: Literal["header", "footer", "body", "all"] | None = None
     dtype_backend: Literal["pyarrow", "numpy_nullable"] = "numpy_nullable"
-    storage_options: Optional[Dict[str, Any]] = None
+    storage_options: dict[str, Any] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.match is not None:
             kwargs["match"] = self.match
@@ -1034,7 +1029,7 @@ class PandasHtmlReader(DataLoader):
 
         return kwargs
 
-    def load_data(self, type: Type) -> Tuple[List[DATAFRAME_TYPE], Dict[str, Any]]:
+    def load_data(self, type: type) -> tuple[list[DATAFRAME_TYPE], dict[str, Any]]:
         # Loads the data and returns the df and metadata of the xml
         df = pd.read_html(self.io, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.io, df[0])
@@ -1051,33 +1046,33 @@ class PandasHtmlWriter(DataSaver):
     Should map to https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_html.html#pandas.DataFrame.to_html
     """
 
-    buf: Union[str, Path, StringIO, None] = None
+    buf: str | Path | StringIO | None = None
     # kwargs
-    columns: Optional[List[str]] = None
-    col_space: Optional[Union[str, int, List, Dict]] = None
-    header: Optional[bool] = True
-    index: Optional[bool] = True
-    na_rep: Optional[str] = "NaN"
-    formatters: Optional[Union[List, Tuple, Dict]] = None
-    float_format: Optional[str] = None
-    sparsify: Optional[bool] = True
-    index_names: Optional[bool] = True
+    columns: list[str] | None = None
+    col_space: str | int | list | dict | None = None
+    header: bool | None = True
+    index: bool | None = True
+    na_rep: str | None = "NaN"
+    formatters: list | tuple | dict | None = None
+    float_format: str | None = None
+    sparsify: bool | None = True
+    index_names: bool | None = True
     justify: str = None
-    max_rows: Optional[int] = None
-    max_cols: Optional[int] = None
+    max_rows: int | None = None
+    max_cols: int | None = None
     show_dimensions: bool = False
     decimal: str = "."
     bold_rows: bool = True
-    classes: Union[str, List[str], Tuple, None] = None
-    escape: Optional[bool] = True
+    classes: str | list[str] | tuple | None = None
+    escape: bool | None = True
     notebook: Literal[True, False] = False
     border: int = None
-    table_id: Optional[str] = None
+    table_id: str | None = None
     render_links: bool = False
-    encoding: Optional[str] = "utf-8"
+    encoding: str | None = "utf-8"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
@@ -1129,7 +1124,7 @@ class PandasHtmlWriter(DataSaver):
 
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.to_html(self.buf, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.buf, data)
 
@@ -1144,27 +1139,27 @@ class PandasStataReader(DataLoader):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.read_stata.html#pandas.read_stata
     """
 
-    filepath_or_buffer: Union[str, Path, BytesIO, BufferedReader]
+    filepath_or_buffer: str | Path | BytesIO | BufferedReader
     # kwargs
     convert_dates: bool = True
     convert_categoricals: bool = True
-    index_col: Optional[str] = None
+    index_col: str | None = None
     convert_missing: bool = False
     preserve_dtypes: bool = True
-    columns: Optional[Sequence] = None
+    columns: Sequence | None = None
     order_categoricals: bool = True
-    chunksize: Optional[int] = None
+    chunksize: int | None = None
     iterator: bool = False
-    compression: Union[
-        Dict[str, Any], Literal["infer", "gzip", "bz2", "zip", "xz", "zstd", "tar"]
-    ] = "infer"
-    storage_options: Optional[Dict[str, Any]] = None
+    compression: dict[str, Any] | Literal["infer", "gzip", "bz2", "zip", "xz", "zstd", "tar"] = (
+        "infer"
+    )
+    storage_options: dict[str, Any] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.convert_dates is not None:
             kwargs["convert_dates"] = self.convert_dates
@@ -1191,7 +1186,7 @@ class PandasStataReader(DataLoader):
 
         return kwargs
 
-    def load_data(self, type: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         # Loads the data and returns the df and metadata of the xml
         df = pd.read_stata(self.filepath_or_buffer, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.filepath_or_buffer, df)
@@ -1208,24 +1203,24 @@ class PandasStataWriter(DataSaver):
     Should map to https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_stata.html
     """
 
-    path: Union[str, Path, BufferedReader] = None
+    path: str | Path | BufferedReader = None
     # kwargs
-    convert_dates: Optional[Dict[Hashable, str]] = None
+    convert_dates: dict[Hashable, str] | None = None
     write_index: bool = True
-    byteorder: Optional[str] = None
-    time_stamp: Optional[datetime] = None
-    data_label: Optional[str] = None
-    variable_labels: Optional[Dict[Hashable, str]] = None
+    byteorder: str | None = None
+    time_stamp: datetime | None = None
+    data_label: str | None = None
+    variable_labels: dict[Hashable, str] | None = None
     version: Literal[114, 117, 118, 119] = 114
-    convert_strl: Optional[str] = None
-    compression: Union[
-        Dict[str, Any], Literal["infer", "gzip", "bz2", "zip", "xz", "zstd", "tar"]
-    ] = "infer"
-    storage_options: Optional[Dict[str, Any]] = None
-    value_labels: Optional[Dict[Hashable, str]] = None
+    convert_strl: str | None = None
+    compression: dict[str, Any] | Literal["infer", "gzip", "bz2", "zip", "xz", "zstd", "tar"] = (
+        "infer"
+    )
+    storage_options: dict[str, Any] | None = None
+    value_labels: dict[Hashable, str] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
@@ -1255,7 +1250,7 @@ class PandasStataWriter(DataSaver):
 
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.to_stata(self.path, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.path, data)
 
@@ -1270,18 +1265,18 @@ class PandasFeatherReader(DataLoader):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.read_feather.html
     """
 
-    path: Union[str, Path, BytesIO, BufferedReader]
+    path: str | Path | BytesIO | BufferedReader
     # kwargs
-    columns: Optional[Sequence] = None
+    columns: Sequence | None = None
     use_threads: bool = True
-    storage_options: Optional[Dict[str, Any]] = None
+    storage_options: dict[str, Any] | None = None
     dtype_backend: Literal["pyarrow", "numpy_nullable"] = "numpy_nullable"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.columns is not None:
             kwargs["columns"] = self.columns
@@ -1294,7 +1289,7 @@ class PandasFeatherReader(DataLoader):
 
         return kwargs
 
-    def load_data(self, type: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         # Loads the data and returns the df and metadata of the xml
         df = pd.read_feather(self.path, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.path, df)
@@ -1314,16 +1309,16 @@ class PandasFeatherWriter(DataSaver):
     Requires `lz4` https://pypi.org/project/lz4/
     """
 
-    path: Union[str, Path, BytesIO, BufferedReader]
+    path: str | Path | BytesIO | BufferedReader
     # kwargs
-    dest: Optional[str] = None
+    dest: str | None = None
     compression: Literal["zstd", "lz4", "uncompressed"] = None
-    compression_level: Optional[int] = None
-    chunksize: Optional[int] = None
-    version: Optional[int] = 2
+    compression_level: int | None = None
+    chunksize: int | None = None
+    version: int | None = 2
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
@@ -1341,7 +1336,7 @@ class PandasFeatherWriter(DataSaver):
 
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.to_feather(self.path, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.path, data)
 
@@ -1357,17 +1352,17 @@ class PandasORCReader(DataLoader):
     Maps to: https://pandas.pydata.org/docs/reference/api/pandas.read_orc.html#pandas.read_orc
     """
 
-    path: Union[str, Path, BytesIO, BufferedReader]
+    path: str | Path | BytesIO | BufferedReader
     # kwargs
-    columns: Optional[List[str]] = None
+    columns: list[str] | None = None
     dtype_backend: Literal["pyarrow", "numpy_nullable"] = "numpy_nullable"
-    filesystem: Optional[FILESYSTEM_TYPE] = None
+    filesystem: FILESYSTEM_TYPE | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.columns is not None:
             kwargs["columns"] = self.columns
@@ -1378,7 +1373,7 @@ class PandasORCReader(DataLoader):
 
         return kwargs
 
-    def load_data(self, type: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         # Loads the data and returns the df and metadata of the orc
         df = pd.read_orc(self.path, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.path, df)
@@ -1396,14 +1391,14 @@ class PandasORCWriter(DataSaver):
     Maps to: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_orc.html
     """
 
-    path: Union[str, Path, BytesIO, BufferedReader]
+    path: str | Path | BytesIO | BufferedReader
     # kwargs
     engine: Literal["pyarrow"] = "pyarrow"
-    index: Optional[bool] = None
-    engine_kwargs: Optional[Union[Dict[str, Any], None]] = None
+    index: bool | None = None
+    engine_kwargs: dict[str, Any] | None | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
@@ -1417,7 +1412,7 @@ class PandasORCWriter(DataSaver):
 
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.to_orc(self.path, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.path, data)
 
@@ -1432,44 +1427,44 @@ class PandasExcelReader(DataLoader):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.read_excel.html
     """
 
-    path: Union[str, Path, BytesIO, BufferedReader] = None
+    path: str | Path | BytesIO | BufferedReader = None
     # kwargs:
     # inspect.get_type_hints doesn't work with type aliases,
     # which are used in pandas.read_excel.
     # So we have to list all the arguments in plain code.
-    sheet_name: Union[str, int, List[Union[int, str]], None] = 0
-    header: Union[int, Sequence, None] = 0
-    names: Optional[Sequence] = None
-    index_col: Union[int, str, Sequence, None] = None
-    usecols: Union[int, str, Sequence, Sequence, Callable[[str], bool], None] = None
-    dtype: Union[Dtype, Dict[Hashable, Dtype], None] = None
-    engine: Optional[Literal["xlrd", "openpyxl", "odf", "pyxlsb", "calamine"]] = None
-    converters: Union[Dict[str, Callable], Dict[int, Callable], None] = None
-    true_values: Optional[Iterable] = None
-    false_values: Optional[Iterable] = None
-    skiprows: Union[Sequence, int, Callable[[int], object], None] = None
-    nrows: Optional[int] = None
+    sheet_name: str | int | list[int | str] | None = 0
+    header: int | Sequence | None = 0
+    names: Sequence | None = None
+    index_col: int | str | Sequence | None = None
+    usecols: int | str | Sequence | Sequence | Callable[[str], bool] | None = None
+    dtype: Dtype | dict[Hashable, Dtype] | None = None
+    engine: Literal["xlrd", "openpyxl", "odf", "pyxlsb", "calamine"] | None = None
+    converters: dict[str, Callable] | dict[int, Callable] | None = None
+    true_values: Iterable | None = None
+    false_values: Iterable | None = None
+    skiprows: Sequence | int | Callable[[int], object] | None = None
+    nrows: int | None = None
     na_values = None  # in pandas.read_excel there are not type hints for na_values
     keep_default_na: bool = True
     na_filter: bool = True
     verbose: bool = False
-    parse_dates: Union[List[Union[int, str]], Dict[str, List[Union[int, str]]], bool] = False
+    parse_dates: list[int | str] | dict[str, list[int | str]] | bool = False
     # date_parser: Optional[Callable]  # date_parser is deprecated since pandas=2.0.0
-    date_format: Union[Dict[Hashable, str], str, None] = None
-    thousands: Optional[str] = None
+    date_format: dict[Hashable, str] | str | None = None
+    thousands: str | None = None
     decimal: str = "."
-    comment: Optional[str] = None
+    comment: str | None = None
     skipfooter: int = 0
-    storage_options: Optional[Dict[str, Any]] = None
+    storage_options: dict[str, Any] | None = None
     dtype_backend: Literal["pyarrow", "numpy_nullable"] = "numpy_nullable"
-    engine_kwargs: Optional[Dict[str, Any]] = None
+    engine_kwargs: dict[str, Any] | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         # Returns type for which data loader is available
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         # Puts kwargs in a dict
         kwargs = dataclasses.asdict(self)
 
@@ -1484,7 +1479,7 @@ class PandasExcelReader(DataLoader):
 
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         # Loads the data and returns the df and metadata of the excel file
         df = pd.read_excel(self.path, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.path, df)
@@ -1502,36 +1497,36 @@ class PandasExcelWriter(DataSaver):
     Additional parameters passed to https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_excel.html
     """
 
-    path: Union[str, Path, BytesIO]
+    path: str | Path | BytesIO
     # kwargs:
     # inspect.get_type_hints doesn't work with type aliases,
     # which are used in pandas.DataFrame.to_excel.
     # So we have to list all the arguments in plain code
     sheet_name: str = "Sheet1"
     na_rep: str = ""
-    float_format: Optional[str] = None
-    columns: Optional[Sequence] = None
-    header: Union[Sequence, bool] = True
+    float_format: str | None = None
+    columns: Sequence | None = None
+    header: Sequence | bool = True
     index: bool = True
-    index_label: Optional[IndexLabel] = None
+    index_label: IndexLabel | None = None
     startrow: int = 0
     startcol: int = 0
-    engine: Optional[Literal["openpyxl", "xlsxwriter"]] = None
+    engine: Literal["openpyxl", "xlsxwriter"] | None = None
     merge_cells: bool = True
     inf_rep: str = "inf"
-    freeze_panes: Optional[Tuple[int, int]] = None
-    storage_options: Optional[Dict[str, Any]] = None
-    engine_kwargs: Optional[Dict[str, Any]] = None
-    mode: Optional[Literal["w", "a"]] = "w"
-    if_sheet_exists: Optional[Literal["error", "new", "replace", "overlay"]] = None
+    freeze_panes: tuple[int, int] | None = None
+    storage_options: dict[str, Any] | None = None
+    engine_kwargs: dict[str, Any] | None = None
+    mode: Literal["w", "a"] | None = "w"
+    if_sheet_exists: Literal["error", "new", "replace", "overlay"] | None = None
     datetime_format: str = None
     date_format: str = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_saving_kwargs(self) -> Dict[str, Any]:
+    def _get_saving_kwargs(self) -> dict[str, Any]:
         # Puts kwargs in a dict
         kwargs = dataclasses.asdict(self)
 
@@ -1562,7 +1557,7 @@ class PandasExcelWriter(DataSaver):
 
         return writer_kwargs, to_excel_kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> Dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         writer_kwargs, to_excel_kwargs = self._get_saving_kwargs()
 
         with pd.ExcelWriter(self.path, **writer_kwargs) as writer:
@@ -1580,62 +1575,62 @@ class PandasTableReader(DataLoader):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.read_table.html
     """
 
-    filepath_or_buffer: Union[str, Path, BytesIO, BufferedReader]
+    filepath_or_buffer: str | Path | BytesIO | BufferedReader
     # kwargs
-    sep: Union[str, None] = None
-    delimiter: Optional[str] = None
-    header: Union[int, Sequence, str, None] = "infer"
-    names: Optional[Sequence] = None
-    index_col: Union[int, str, Sequence, None] = None
-    usecols: Union[Sequence, None] = None
-    dtype: Union[Dtype, Dict[Hashable, Dtype], None] = None
-    engine: Optional[Literal["c", "python", "pyarrow"]] = None
-    converters: Optional[Dict[Hashable, Callable]] = None
-    true_values: Optional[Iterable] = None
-    false_values: Optional[Iterable] = None
+    sep: str | None = None
+    delimiter: str | None = None
+    header: int | Sequence | str | None = "infer"
+    names: Sequence | None = None
+    index_col: int | str | Sequence | None = None
+    usecols: Sequence | None = None
+    dtype: Dtype | dict[Hashable, Dtype] | None = None
+    engine: Literal["c", "python", "pyarrow"] | None = None
+    converters: dict[Hashable, Callable] | None = None
+    true_values: Iterable | None = None
+    false_values: Iterable | None = None
     skipinitialspace: bool = False
-    skiprows: Optional[Union[List[int], int, List[Callable]]] = None
+    skiprows: list[int] | int | list[Callable] | None = None
     skipfooter: int = 0
-    nrows: Optional[int] = None
-    na_values: Optional[Union[Hashable, Iterable, Dict[Hashable, Iterable]]] = None
+    nrows: int | None = None
+    na_values: Hashable | Iterable | dict[Hashable, Iterable] | None = None
     keep_default_na: bool = True
     na_filter: bool = True
     verbose: bool = False
     skip_blank_lines: bool = True
-    parse_dates: Union[List[Union[int, str]], Dict[str, List[Union[int, str]]], bool] = False
+    parse_dates: list[int | str] | dict[str, list[int | str]] | bool = False
     infer_datetime_format: bool = False
     keep_date_col: bool = False
-    date_parser: Optional[Callable] = None
-    date_format: Optional[Union[str, str]] = None
+    date_parser: Callable | None = None
+    date_format: str | str | None = None
     dayfirst: bool = False
     cache_dates: bool = True
     iterator: bool = False
-    chunksize: Optional[int] = None
-    compression: Union[str, Dict] = "infer"
-    thousands: Optional[str] = None
+    chunksize: int | None = None
+    compression: str | dict = "infer"
+    thousands: str | None = None
     decimal: str = "."
-    lineterminator: Optional[str] = None
-    quotechar: Optional[str] = '"'
+    lineterminator: str | None = None
+    quotechar: str | None = '"'
     quoting: int = 0
     doublequote: bool = True
-    escapechar: Optional[str] = None
-    comment: Optional[str] = None
-    encoding: Optional[str] = None
-    encoding_errors: Optional[str] = "strict"
-    dialect: Optional[str] = None
-    on_bad_lines: Union[Literal["error", "warn", "skip"], Callable] = "error"
+    escapechar: str | None = None
+    comment: str | None = None
+    encoding: str | None = None
+    encoding_errors: str | None = "strict"
+    dialect: str | None = None
+    on_bad_lines: Literal["error", "warn", "skip"] | Callable = "error"
     delim_whitespace: bool = False
     low_memory: bool = True
     memory_map: bool = False
-    float_precision: Optional[Literal["high", "legacy", "round_trip"]] = None
-    storage_options: Optional[Dict] = None
+    float_precision: Literal["high", "legacy", "round_trip"] | None = None
+    storage_options: dict | None = None
     dtype_backend: Literal["numpy_nullable", "pyarrow"] = "numpy_nullable"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         # Puts kwargs in a dict
         kwargs = dataclasses.asdict(self)
 
@@ -1645,7 +1640,7 @@ class PandasTableReader(DataLoader):
 
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         # Loads the data and returns the df and metadata of the table
         df = pd.read_table(self.filepath_or_buffer, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.filepath_or_buffer, df)
@@ -1662,18 +1657,18 @@ class PandasFWFReader(DataLoader):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.read_fwf.html
     """
 
-    filepath_or_buffer: Union[str, Path, BytesIO, BufferedReader]
+    filepath_or_buffer: str | Path | BytesIO | BufferedReader
     # kwargs
-    colspecs: Union[str, List[Tuple[int, int]], Tuple[int, int]] = "infer"
-    widths: Optional[List[int]] = None
+    colspecs: str | list[tuple[int, int]] | tuple[int, int] = "infer"
+    widths: list[int] | None = None
     infer_nrows: int = 100
     dtype_backend: Literal["numpy_nullable", "pyarrow"] = "numpy_nullable"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         # Puts kwargs in a dict
         kwargs = dataclasses.asdict(self)
 
@@ -1683,7 +1678,7 @@ class PandasFWFReader(DataLoader):
 
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         # Loads the data and returns the df and metadata of the fwf file
         df = pd.read_fwf(self.filepath_or_buffer, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.filepath_or_buffer, df)
@@ -1700,17 +1695,17 @@ class PandasSPSSReader(DataLoader):
     Maps to https://pandas.pydata.org/docs/reference/api/pandas.read_spss.html
     """
 
-    path: Union[str, Path]
+    path: str | Path
     # kwargs
-    usecols: Optional[Union[List[Hashable], Callable[[str], bool]]] = None
+    usecols: list[Hashable] | Callable[[str], bool] | None = None
     convert_categoricals: bool = True
     dtype_backend: Literal["pyarrow", "numpy_nullable"] = "numpy_nullable"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> Dict[str, Any]:
+    def _get_loading_kwargs(self) -> dict[str, Any]:
         # Puts kwargs in a dict
         kwargs = dataclasses.asdict(self)
 
@@ -1720,7 +1715,7 @@ class PandasSPSSReader(DataLoader):
 
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         # Loads the data and returns the df and metadata of the spss file
         df = pd.read_spss(self.path, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.path, df)

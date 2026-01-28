@@ -26,8 +26,9 @@ if sys.platform in ("emscripten", "wasi"):
 else:
     from concurrent.futures.process import ProcessPoolExecutor
 
+from collections.abc import Callable
 from concurrent.futures import Executor, Future, ThreadPoolExecutor
-from typing import Any, Callable, Dict, List, Protocol
+from typing import Any, Protocol
 
 from hamilton import node
 from hamilton.execution.graph_functions import execute_subdag
@@ -105,7 +106,7 @@ def _modify_callable(node_source: node.NodeType, callabl: Callable):
     return callabl
 
 
-def base_execute_task(task: TaskImplementation) -> Dict[str, Any]:
+def base_execute_task(task: TaskImplementation) -> dict[str, Any]:
     """This is a utility function to execute a base task. In an ideal world this would be recursive,
     (as in we can use the same task execution/management system as we would otherwise)
     but for now we just call out to good old DFS. Note that this only returns the result that
@@ -359,7 +360,7 @@ class ExecutionManager(abc.ABC):
     theoretically add metadata in a task as well.
     """
 
-    def __init__(self, executors: List[TaskExecutor]):
+    def __init__(self, executors: list[TaskExecutor]):
         """Initializes the execution manager. Note this does not start it up/claim resources --
         you need to call init() to do that.
 

@@ -16,7 +16,7 @@
 # under the License.
 
 from types import ModuleType
-from typing import Any, Dict, List, Optional, Tuple, Type
+from typing import Any
 
 import pytest
 
@@ -76,7 +76,7 @@ def _valid_function_self_kwargs(self, *, a: int, b: int) -> int:
     ],
 )
 def test_validate_lifecycle_adapter_function_success(
-    fn, returns_value: bool, specified_return_value: Optional[Type]
+    fn, returns_value: bool, specified_return_value: type | None
 ):
     """Test that the lifecycle adapter function works as expected."""
     validate_lifecycle_adapter_function(
@@ -165,7 +165,7 @@ def test_base_method_decorator_async():
 def test_base_validator_decorator():
     @lifecycle.base_validator("sync_validator")
     class TestValidatorSync:
-        def sync_validator(self) -> Tuple[bool, Optional[str]]:
+        def sync_validator(self) -> tuple[bool, str | None]:
             return True, None
 
     assert getattr(TestValidatorSync, SYNC_VALIDATOR) == "sync_validator"
@@ -188,8 +188,8 @@ def test_lifecycle_adapter_set_with_multiple_hooks():
             run_id: str,
             graph: FunctionGraph,
             success: bool,
-            error: Optional[Exception],
-            results: Optional[Dict[str, Any]],
+            error: Exception | None,
+            results: dict[str, Any] | None,
         ):
             pass
 
@@ -222,8 +222,8 @@ def test_lifecycle_adapter_set_with_single_multi_hook():
             run_id: str,
             graph: "FunctionGraph",
             success: bool,
-            error: Optional[Exception],
-            results: Optional[Dict[str, Any]],
+            error: Exception | None,
+            results: dict[str, Any] | None,
         ):
             pass
 
@@ -249,8 +249,8 @@ def test_lifecycle_adapter_set_with_multiple_methods():
             *,
             run_id: str,
             node_: node.Node,
-            kwargs: Dict[str, Any],
-            task_id: Optional[str] = None,
+            kwargs: dict[str, Any],
+            task_id: str | None = None,
         ) -> Any:
             return 1
 
@@ -287,8 +287,8 @@ def test_lifecycle_adapter_set_with_single_multi_method():
             *,
             run_id: str,
             node_: node.Node,
-            kwargs: Dict[str, Any],
-            task_id: Optional[str] = None,
+            kwargs: dict[str, Any],
+            task_id: str | None = None,
         ) -> Any:
             return 1
 
@@ -324,8 +324,8 @@ def test_lifecycle_adapter_set_with_multiple_validators():
 
     class MockGraphValidator(BaseValidateGraph, ExtendToTrackCalls):
         def validate_graph(
-            self, *, graph: "FunctionGraph", modules: List[ModuleType], config: Dict[str, Any]
-        ) -> Tuple[bool, Optional[str]]:
+            self, *, graph: "FunctionGraph", modules: list[ModuleType], config: dict[str, Any]
+        ) -> tuple[bool, str | None]:
             return False, "Validating graph"
 
     adapter_set = LifecycleAdapterSet(
@@ -352,12 +352,12 @@ def test_lifecycle_adapter_set_with_single_multi_validator():
     assert not null_adapter_set.does_validation("validate_graph")
 
     class MockMultiValidator(BaseValidateNode, BaseValidateGraph, ExtendToTrackCalls):
-        def validate_node(self, *, created_node: node.Node) -> Tuple[bool, Optional[str]]:
+        def validate_node(self, *, created_node: node.Node) -> tuple[bool, str | None]:
             return False, "Validating node"
 
         def validate_graph(
-            self, *, graph: "FunctionGraph", modules: List[ModuleType], config: Dict[str, Any]
-        ) -> Tuple[bool, Optional[str]]:
+            self, *, graph: "FunctionGraph", modules: list[ModuleType], config: dict[str, Any]
+        ) -> tuple[bool, str | None]:
             return False, "Validating graph"
 
     adapter_set = LifecycleAdapterSet(

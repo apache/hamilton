@@ -16,7 +16,7 @@
 # under the License.
 
 import enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from pydantic import BaseModel, Field, RootModel
 
@@ -64,8 +64,8 @@ class DWDescribeV003_NumericColumnStatistics(DWDescribeV003_BaseColumnStatistics
     max: float
     mean: float
     std: float
-    quantiles: Dict[float, float]
-    histogram: Dict[str, int]
+    quantiles: dict[float, float]
+    histogram: dict[str, int]
 
 
 class DWDescribeV003_DatetimeColumnStatistics(DWDescribeV003_BaseColumnStatistics):
@@ -74,7 +74,7 @@ class DWDescribeV003_DatetimeColumnStatistics(DWDescribeV003_BaseColumnStatistic
 
 class DWDescribeV003_CategoryColumnStatistics(DWDescribeV003_BaseColumnStatistics):
     empty: int
-    domain: Dict[str, int]
+    domain: dict[str, int]
     top_value: str
     top_freq: int
     unique: int
@@ -88,16 +88,14 @@ class DWDescribeV003_StringColumnStatistics(DWDescribeV003_BaseColumnStatistics)
 
 class Attribute__dagworks_describe__3(
     RootModel[
-        Dict[
+        dict[
             str,
-            Union[
-                DWDescribeV003_UnhandledColumnStatistics,
-                DWDescribeV003_BooleanColumnStatistics,
-                DWDescribeV003_NumericColumnStatistics,
-                DWDescribeV003_DatetimeColumnStatistics,
-                DWDescribeV003_CategoryColumnStatistics,
-                DWDescribeV003_StringColumnStatistics,
-            ],
+            DWDescribeV003_UnhandledColumnStatistics
+            | DWDescribeV003_BooleanColumnStatistics
+            | DWDescribeV003_NumericColumnStatistics
+            | DWDescribeV003_DatetimeColumnStatistics
+            | DWDescribeV003_CategoryColumnStatistics
+            | DWDescribeV003_StringColumnStatistics,
         ]
     ]
 ):
@@ -125,7 +123,7 @@ class Attribute__dict__2(Attribute):
 class Attribute__error__1(Attribute):
     _describes: Describe = "node"
     _version: int = 1
-    stack_trace: List[str]
+    stack_trace: list[str]
 
 
 class PandasDescribeNumericColumn(BaseModel):
@@ -141,14 +139,14 @@ class PandasDescribeNumericColumn(BaseModel):
 
 
 class PandasDescribeCategoricalColumn(BaseModel):
-    count: Optional[int]
+    count: int | None
     unique: int
     top: Any
-    freq: Optional[int]
+    freq: int | None
 
 
 class Attribute__pandas_describe__1(
-    RootModel[Dict[str, Union[PandasDescribeNumericColumn, PandasDescribeCategoricalColumn]]]
+    RootModel[dict[str, PandasDescribeNumericColumn | PandasDescribeCategoricalColumn]]
 ):
     _describes: Describe = "node"
     _version: int = 1
@@ -167,5 +165,5 @@ class Attribute__primitive__1(Attribute):
 class Attribute__unsupported__1(Attribute):
     _describes: Describe = "node"
     _version: int = 1
-    action: Optional[str] = None
-    unsupported_type: Optional[str] = None
+    action: str | None = None
+    unsupported_type: str | None = None

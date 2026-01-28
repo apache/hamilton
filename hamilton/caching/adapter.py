@@ -23,8 +23,9 @@ import json
 import logging
 import pathlib
 import uuid
+from collections.abc import Callable, Collection
 from datetime import datetime, timezone
-from typing import Any, Callable, Collection, Dict, List, Literal, Optional, TypeVar, Union
+from typing import Any, Literal, TypeVar
 
 import hamilton.node
 from hamilton import graph_types
@@ -156,9 +157,9 @@ class CachingEvent:
     actor: Literal["adapter", "metadata_store", "result_store"]
     event_type: CachingEventType
     node_name: str
-    task_id: Optional[str] = None
-    msg: Optional[str] = None
-    value: Optional[Any] = None
+    task_id: str | None = None
+    msg: str | None = None
+    value: Any | None = None
     timestamp: float = dataclasses.field(
         default_factory=lambda: datetime.now(timezone.utc).timestamp()
     )
@@ -214,16 +215,16 @@ class HamiltonCacheAdapter(
 
     def __init__(
         self,
-        path: Union[str, pathlib.Path] = ".hamilton_cache",
-        metadata_store: Optional[MetadataStore] = None,
-        result_store: Optional[ResultStore] = None,
-        default: Optional[Union[Literal[True], Collection[str]]] = None,
-        recompute: Optional[Union[Literal[True], Collection[str]]] = None,
-        ignore: Optional[Union[Literal[True], Collection[str]]] = None,
-        disable: Optional[Union[Literal[True], Collection[str]]] = None,
-        default_behavior: Optional[CACHING_BEHAVIORS] = None,
-        default_loader_behavior: Optional[CACHING_BEHAVIORS] = None,
-        default_saver_behavior: Optional[CACHING_BEHAVIORS] = None,
+        path: str | pathlib.Path = ".hamilton_cache",
+        metadata_store: MetadataStore | None = None,
+        result_store: ResultStore | None = None,
+        default: Literal[True] | Collection[str] | None = None,
+        recompute: Literal[True] | Collection[str] | None = None,
+        ignore: Literal[True] | Collection[str] | None = None,
+        disable: Literal[True] | Collection[str] | None = None,
+        default_behavior: CACHING_BEHAVIORS | None = None,
+        default_loader_behavior: CACHING_BEHAVIORS | None = None,
+        default_saver_behavior: CACHING_BEHAVIORS | None = None,
         log_to_file: bool = False,
         **kwargs,
     ):
@@ -263,21 +264,21 @@ class HamiltonCacheAdapter(
         self.default_saver_behavior = default_saver_behavior
 
         # attributes populated at execution time
-        self.run_ids: List[str] = []
-        self._fn_graphs: Dict[str, FunctionGraph] = {}  # {run_id: graph}
-        self._data_savers: Dict[str, Collection[str]] = {}  # {run_id: list[node_name]}
-        self._data_loaders: Dict[str, Collection[str]] = {}  # {run_id: list[node_name]}
-        self.behaviors: Dict[
-            str, Dict[str, CachingBehavior]
+        self.run_ids: list[str] = []
+        self._fn_graphs: dict[str, FunctionGraph] = {}  # {run_id: graph}
+        self._data_savers: dict[str, Collection[str]] = {}  # {run_id: list[node_name]}
+        self._data_loaders: dict[str, Collection[str]] = {}  # {run_id: list[node_name]}
+        self.behaviors: dict[
+            str, dict[str, CachingBehavior]
         ] = {}  # {run_id: {node_name: behavior}}
-        self.data_versions: Dict[
-            str, Dict[str, Union[str, Dict[str, str]]]
+        self.data_versions: dict[
+            str, dict[str, str | dict[str, str]]
         ] = {}  # {run_id: {node_name: version}} or {run_id: {node_name: {task_id: version}}}
-        self.code_versions: Dict[str, Dict[str, str]] = {}  # {run_id: {node_name: version}}
-        self.cache_keys: Dict[
-            str, Dict[str, Union[str, Dict[str, str]]]
+        self.code_versions: dict[str, dict[str, str]] = {}  # {run_id: {node_name: version}}
+        self.cache_keys: dict[
+            str, dict[str, str | dict[str, str]]
         ] = {}  # {run_id: {node_name: key}} or {run_id: {node_name: {task_id: key}}}
-        self._logs: Dict[str, List[CachingEvent]] = {}  # {run_id: [logs]}
+        self._logs: dict[str, list[CachingEvent]] = {}  # {run_id: [logs]}
 
     @property
     def last_run_id(self):
@@ -319,9 +320,9 @@ class HamiltonCacheAdapter(
         node_name: str,
         actor: Literal["adapter", "metadata_store", "result_store"],
         event_type: CachingEventType,
-        msg: Optional[str] = None,
-        value: Optional[Any] = None,
-        task_id: Optional[str] = None,
+        msg: str | None = None,
+        value: Any | None = None,
+        task_id: str | None = None,
     ) -> None:
         """Add a single event to logs stored in state, keyed by run_id
 
@@ -362,7 +363,7 @@ class HamiltonCacheAdapter(
 
     def _log_by_node_name(
         self, run_id: str, level: Literal["debug", "info"] = "info"
-    ) -> Dict[str, List[str]]:
+    ) -> dict[str, list[str]]:
         """For a given run, group logs to key them by ``node_name`` or ``(node_name, run_id)`` if applicable."""
         run_logs = collections.defaultdict(list)
         for event in self._logs[run_id]:
@@ -377,7 +378,7 @@ class HamiltonCacheAdapter(
             run_logs[key].append(event)
         return dict(run_logs)
 
-    def logs(self, run_id: Optional[str] = None, level: Literal["debug", "info"] = "info") -> dict:
+    def logs(self, run_id: str | None = None, level: Literal["debug", "info"] = "info") -> dict:
         """Execution logs of the cache adapter.
 
         :param run_id: If ``None``, return all logged runs. If provided a ``run_id``, group logs by node.
@@ -428,10 +429,10 @@ class HamiltonCacheAdapter(
     def _view_run(
         fn_graph: FunctionGraph,
         logs,
-        final_vars: List[str],
+        final_vars: list[str],
         inputs: dict,
         overrides: dict,
-        output_file_path: Optional[str] = None,
+        output_file_path: str | None = None,
     ):
         """Create a Hamilton visualization of the execution and the cache hits/misses.
 
@@ -468,7 +469,7 @@ class HamiltonCacheAdapter(
 
     # TODO make this work directly from the metadata_store too
     # visualization from logs is convenient when debugging someone else's issue
-    def view_run(self, run_id: Optional[str] = None, output_file_path: Optional[str] = None):
+    def view_run(self, run_id: str | None = None, output_file_path: str | None = None):
         """View the dataflow execution, including cache hits/misses.
 
         :param run_id: If ``None``, view the last run. If provided a ``run_id``, view that run.
@@ -534,7 +535,7 @@ class HamiltonCacheAdapter(
         )
 
     def _get_node_role(
-        self, run_id: str, node_name: str, task_id: Optional[str]
+        self, run_id: str, node_name: str, task_id: str | None
     ) -> NodeRoleInTaskExecution:
         """Determine based on the node name and task_id if a node is part of parallel execution."""
         if task_id is None:
@@ -552,9 +553,7 @@ class HamiltonCacheAdapter(
 
         return role
 
-    def get_cache_key(
-        self, run_id: str, node_name: str, task_id: Optional[str] = None
-    ) -> Union[str, S]:
+    def get_cache_key(self, run_id: str, node_name: str, task_id: str | None = None) -> str | S:
         """Get the ``cache_key`` stored in-memory for a specific ``run_id``, ``node_name``, and ``task_id``.
 
         This method is public-facing and can be used directly to inspect the cache.
@@ -597,7 +596,7 @@ class HamiltonCacheAdapter(
         return cache_key
 
     def _set_cache_key(
-        self, run_id: str, node_name: str, cache_key: str, task_id: Optional[str] = None
+        self, run_id: str, node_name: str, cache_key: str, task_id: str | None = None
     ) -> None:
         """Set the ``cache_key`` stored in-memory for a specific ``run_id``, ``node_name``, and ``task_id``.
 
@@ -631,8 +630,8 @@ class HamiltonCacheAdapter(
         )
 
     def _get_memory_data_version(
-        self, run_id: str, node_name: str, task_id: Optional[str] = None
-    ) -> Union[str, S]:
+        self, run_id: str, node_name: str, task_id: str | None = None
+    ) -> str | S:
         """Get the ``data_version`` stored in-memory for a specific ``run_id``, ``node_name``, and ``task_id``.
 
         The behavior depends on the ``CacheBehavior`` (e.g., RECOMPUTE, IGNORE, DISABLE, DEFAULT) and
@@ -675,8 +674,8 @@ class HamiltonCacheAdapter(
         return data_version
 
     def _get_stored_data_version(
-        self, run_id: str, node_name: str, cache_key: str, task_id: Optional[str] = None
-    ) -> Union[str, S]:
+        self, run_id: str, node_name: str, cache_key: str, task_id: str | None = None
+    ) -> str | S:
         """Get the ``data_version`` stored in the metadata store associated with the ``cache_key``.
 
         The ``run_id``, ``node_name``, and ``task_id`` are included only for logging purposes.
@@ -698,9 +697,9 @@ class HamiltonCacheAdapter(
         self,
         run_id: str,
         node_name: str,
-        cache_key: Optional[str] = None,
-        task_id: Optional[str] = None,
-    ) -> Union[str, S]:
+        cache_key: str | None = None,
+        task_id: str | None = None,
+    ) -> str | S:
         """Get the ``data_version``  for a specific ``run_id``, ``node_name``, and ``task_id``.
 
         This method is public-facing and can be used directly to inspect the cache. This will check data versions
@@ -737,7 +736,7 @@ class HamiltonCacheAdapter(
         return data_version
 
     def _set_memory_metadata(
-        self, run_id: str, node_name: str, data_version: str, task_id: Optional[str] = None
+        self, run_id: str, node_name: str, data_version: str, task_id: str | None = None
     ) -> None:
         """Set in-memory data_version whether a task_id is specified or not"""
         assert data_version is not None
@@ -774,7 +773,7 @@ class HamiltonCacheAdapter(
         node_name: str,
         cache_key: str,
         data_version: str,
-        task_id: Optional[str] = None,
+        task_id: str | None = None,
     ) -> None:
         """Set data_version in the metadata store associated with the cache_key"""
         self.metadata_store.set(
@@ -794,7 +793,7 @@ class HamiltonCacheAdapter(
         )
 
     def _version_data(
-        self, node_name: str, run_id: str, result: Any, task_id: Optional[str] = None
+        self, node_name: str, run_id: str, result: Any, task_id: str | None = None
     ) -> str:
         """Create a unique data version for the result"""
         data_version = fingerprinting.hash_value(result)
@@ -827,7 +826,7 @@ class HamiltonCacheAdapter(
         # stuff the internal function call to not log event
         return self._version_data(result=result, run_id=run_id, node_name=None)
 
-    def version_code(self, node_name: str, run_id: Optional[str] = None) -> str:
+    def version_code(self, node_name: str, run_id: str | None = None) -> str:
         """Create a unique code version for the source code defining the node"""
         run_id = self.last_run_id if run_id is None else run_id
         node = self._fn_graphs[run_id].nodes[node_name]
@@ -838,8 +837,8 @@ class HamiltonCacheAdapter(
         run_id: str,
         node_name: str,
         node_callable: Callable,
-        node_kwargs: Dict[str, Any],
-        task_id: Optional[str] = None,
+        node_kwargs: dict[str, Any],
+        task_id: str | None = None,
     ) -> Any:
         """Simple wrapper that logs the regular execution of a node."""
         logger.debug(node_name)
@@ -856,10 +855,10 @@ class HamiltonCacheAdapter(
     @staticmethod
     def _resolve_node_behavior(
         node: hamilton.node.Node,
-        default: Optional[Collection[str]] = None,
-        disable: Optional[Collection[str]] = None,
-        recompute: Optional[Collection[str]] = None,
-        ignore: Optional[Collection[str]] = None,
+        default: Collection[str] | None = None,
+        disable: Collection[str] | None = None,
+        recompute: Collection[str] | None = None,
+        ignore: Collection[str] | None = None,
         default_behavior: CACHING_BEHAVIORS = "default",
         default_loader_behavior: CACHING_BEHAVIORS = "default",
         default_saver_behavior: CACHING_BEHAVIORS = "default",
@@ -906,7 +905,7 @@ class HamiltonCacheAdapter(
         else:
             return CachingBehavior.from_string(default_behavior)
 
-    def resolve_behaviors(self, run_id: str) -> Dict[str, CachingBehavior]:
+    def resolve_behaviors(self, run_id: str) -> dict[str, CachingBehavior]:
         """Resolve the caching behavior for each node based on the ``@cache`` decorator
         and the ``Builder.with_cache()`` parameters for a specific ``run_id``.
 
@@ -1011,10 +1010,10 @@ class HamiltonCacheAdapter(
     def resolve_code_versions(
         self,
         run_id: str,
-        final_vars: Optional[List[str]] = None,
-        inputs: Optional[Dict[str, Any]] = None,
-        overrides: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, str]:
+        final_vars: list[str] | None = None,
+        inputs: dict[str, Any] | None = None,
+        overrides: dict[str, Any] | None = None,
+    ) -> dict[str, str]:
         """Resolve the code version for each node for a specific ``run_id``.
 
         This is a user-facing method.
@@ -1083,8 +1082,8 @@ class HamiltonCacheAdapter(
 
     @staticmethod
     def _resolve_default_parameter_values(
-        node_: hamilton.node.Node, node_kwargs: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        node_: hamilton.node.Node, node_kwargs: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         If a node uses the function's default parameter values, they won't be part of the
         node_kwargs. To ensure a consistent `cache_key` we want to retrieve default parameter
@@ -1104,9 +1103,9 @@ class HamiltonCacheAdapter(
         *,
         run_id: str,
         graph: FunctionGraph,
-        final_vars: List[str],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        final_vars: list[str],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
     ):
         """Set up the state of the adapter for a new execution.
 
@@ -1152,8 +1151,8 @@ class HamiltonCacheAdapter(
         *,
         run_id: str,
         node_: hamilton.node.Node,
-        kwargs: Dict[str, Any],
-        task_id: Optional[str] = None,
+        kwargs: dict[str, Any],
+        task_id: str | None = None,
         **future_kwargs,
     ):
         """Before node execution or retrieval, create the cache_key and set it in memory.
@@ -1253,8 +1252,8 @@ class HamiltonCacheAdapter(
         *,
         run_id: str,
         node_: hamilton.node.Node,
-        kwargs: Dict[str, Any],
-        task_id: Optional[str] = None,
+        kwargs: dict[str, Any],
+        task_id: str | None = None,
         **future_kwargs,
     ):
         """Try to retrieve stored result from previous executions or execute the node.
@@ -1406,10 +1405,10 @@ class HamiltonCacheAdapter(
         *,
         run_id: str,
         node_: hamilton.node.Node,
-        result: Optional[str],
+        result: str | None,
         success: bool = True,
-        error: Optional[Exception] = None,
-        task_id: Optional[str] = None,
+        error: Exception | None = None,
+        task_id: str | None = None,
         **future_kwargs,
     ):
         """Get the cache_key and data_version stored in memory (respectively from

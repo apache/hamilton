@@ -17,7 +17,8 @@
 
 import dataclasses
 import pathlib
-from typing import IO, Any, Collection, Dict, List, Optional, Type, Union
+from collections.abc import Collection
+from typing import IO, Any
 
 try:
     import plotly.graph_objects
@@ -35,11 +36,11 @@ class PlotlyStaticWriter(DataSaver):
     ref: https://plotly.com/python/static-image-export/
     """
 
-    path: Union[str, pathlib.Path, IO]
-    format: Optional[str] = None
-    width: Optional[int] = None
-    height: Optional[int] = None
-    scale: Optional[Union[int, float]] = None
+    path: str | pathlib.Path | IO
+    format: str | None = None
+    width: int | None = None
+    height: int | None = None
+    scale: int | float | None = None
     validate: bool = True
     engine: str = "auto"
 
@@ -60,12 +61,12 @@ class PlotlyStaticWriter(DataSaver):
 
         return kwargs
 
-    def save_data(self, data: plotly.graph_objects.Figure) -> Dict[str, Any]:
+    def save_data(self, data: plotly.graph_objects.Figure) -> dict[str, Any]:
         data.write_image(file=self.path, **self._get_saving_kwargs())
         return utils.get_file_metadata(self.path)
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [plotly.graph_objects.Figure]
 
     @classmethod
@@ -79,21 +80,21 @@ class PlotlyInteractiveWriter(DataSaver):
     ref: https://plotly.com/python/interactive-html-export/
     """
 
-    path: Union[str, pathlib.Path, IO]
-    config: Optional[Dict] = None
+    path: str | pathlib.Path | IO
+    config: dict | None = None
     auto_play: bool = True
-    include_plotlyjs: Union[bool, str] = (
+    include_plotlyjs: bool | str = (
         True  # or "cdn", "directory", "require", "False", "other string .js"
     )
-    include_mathjax: Union[bool, str] = False  # "cdn", "string .js"
-    post_script: Union[str, List[str], None] = None
+    include_mathjax: bool | str = False  # "cdn", "string .js"
+    post_script: str | list[str] | None = None
     full_html: bool = True
-    animation_opts: Optional[Dict] = None
-    default_width: Union[int, float, str] = "100%"
-    default_height: Union[int, float, str] = "100%"
+    animation_opts: dict | None = None
+    default_width: int | float | str = "100%"
+    default_height: int | float | str = "100%"
     validate: bool = True
     auto_open: bool = True
-    div_id: Optional[str] = None
+    div_id: str | None = None
 
     def _get_saving_kwargs(self) -> dict:
         kwargs = {}
@@ -123,12 +124,12 @@ class PlotlyInteractiveWriter(DataSaver):
             kwargs["div_id"] = self.div_id
         return kwargs
 
-    def save_data(self, data: plotly.graph_objects.Figure) -> Dict[str, Any]:
+    def save_data(self, data: plotly.graph_objects.Figure) -> dict[str, Any]:
         data.write_html(file=self.path, **self._get_saving_kwargs())
         return utils.get_file_metadata(self.path)
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [plotly.graph_objects.Figure]
 
     @classmethod

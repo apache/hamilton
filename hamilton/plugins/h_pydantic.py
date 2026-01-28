@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 
 from pydantic import BaseModel
 
@@ -117,7 +116,7 @@ class check_output(BaseDataValidationDecorator):
         self.importance = importance
         self.target = target
 
-    def get_validators(self, node_to_validate: node.Node) -> List[dq_base.DataValidator]:
+    def get_validators(self, node_to_validate: node.Node) -> list[dq_base.DataValidator]:
         output_type = node_to_validate.type
         if not custom_subclass_check(output_type, BaseModel):
             raise InvalidDecoratorException(

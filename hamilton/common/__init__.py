@@ -16,12 +16,13 @@
 # under the License.
 
 # code in this module should no depend on much
-from typing import Any, Callable, List, Optional, Set, Tuple, Union
+from collections.abc import Callable
+from typing import Any, List, Optional, Set, Tuple, Union
 
 
 def convert_output_value(
-    output_value: Union[str, Callable, Any], module_set: Set[str]
-) -> Tuple[Optional[str], Optional[str]]:
+    output_value: str | Callable | Any, module_set: set[str]
+) -> tuple[str | None, str | None]:
     """Converts output values that one can request into strings.
 
     It checks that if it's a function, it's in the passed in module set.
@@ -51,8 +52,8 @@ def convert_output_value(
 
 
 def convert_output_values(
-    output_values: List[Union[str, Callable, Any]], module_set: Set[str]
-) -> List[str]:
+    output_values: list[str | Callable | Any], module_set: set[str]
+) -> list[str]:
     """Checks & converts outputs values to strings. This is used in building dependencies for the DAG.
 
     :param output_values: the values to convert.

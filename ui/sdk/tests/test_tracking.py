@@ -17,7 +17,8 @@
 
 import functools
 from datetime import datetime, timezone
-from typing import Any, Callable, Dict, List
+from typing import Any
+from collections.abc import Callable
 
 import pytest
 from hamilton_sdk import driver
@@ -64,19 +65,19 @@ class MockHamiltonClient(HamiltonClient):
         project_id: int,
         dag_hash: str,
         code_hash: str,
-        nodes: List[dict],
-        code_artifacts: List[dict],
+        nodes: list[dict],
+        code_artifacts: list[dict],
         name: str,
         config: dict,
-        tags: Dict[str, Any],
-        code: List[dict],
+        tags: dict[str, Any],
+        code: list[dict],
         vcs_info: GitInfo,
     ):
         return 1
 
     @track_calls
     def create_and_start_dag_run(
-        self, dag_template_id: int, tags: Dict[str, str], inputs: Dict[str, Any], outputs: List[str]
+        self, dag_template_id: int, tags: dict[str, str], inputs: dict[str, Any], outputs: list[str]
     ) -> int:
         return 100
 
@@ -84,9 +85,9 @@ class MockHamiltonClient(HamiltonClient):
     def update_tasks(
         self,
         dag_run_id: int,
-        attributes: List[dict],
-        task_updates: List[dict],
-        in_samples: List[bool] = None,
+        attributes: list[dict],
+        task_updates: list[dict],
+        in_samples: list[bool] = None,
     ):
         pass
 

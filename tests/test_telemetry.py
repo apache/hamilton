@@ -19,7 +19,7 @@ import configparser
 import os
 import sys
 import uuid
-from typing import Any, Dict, Type
+from typing import Any
 from unittest import mock
 
 import pytest
@@ -152,14 +152,14 @@ def test_sanitize_error_general():
 # classes for the tests below
 class CustomAdapter(base.HamiltonGraphAdapter):
     @staticmethod
-    def check_input_type(node_type: Type, input_value: Any) -> bool:
+    def check_input_type(node_type: type, input_value: Any) -> bool:
         pass
 
     @staticmethod
-    def check_node_type_equivalence(node_type: Type, input_type: Type) -> bool:
+    def check_node_type_equivalence(node_type: type, input_type: type) -> bool:
         pass
 
-    def execute_node(self, node: node.Node, kwargs: Dict[str, Any]) -> Any:
+    def execute_node(self, node: node.Node, kwargs: dict[str, Any]) -> Any:
         pass
 
     def __init__(self, result_builder: base.ResultMixin):

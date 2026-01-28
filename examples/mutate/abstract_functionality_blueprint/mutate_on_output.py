@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, List
+from typing import Any
 
 import pandas as pd
 
@@ -47,7 +47,7 @@ def data_3() -> pd.DataFrame:
 
 
 @extract_fields({"field_1": pd.Series, "field_2": pd.Series})
-def feat_A(data_1: pd.DataFrame, data_2: pd.DataFrame) -> Dict[str, pd.Series]:
+def feat_A(data_1: pd.DataFrame, data_2: pd.DataFrame) -> dict[str, pd.Series]:
     df = (
         data_1.set_index("col_2").join(data_2.reset_index(names=["col_3"]).set_index("col_1"))
     ).reset_index(names=["col_0"])
@@ -83,7 +83,7 @@ def filter_(some_data: pd.DataFrame) -> pd.DataFrame:
 # data 2
 # this is for value
 @mutate(apply_to(data_2), missing_row=value(["c", 145]))
-def add_missing_value(some_data: pd.DataFrame, missing_row: List[Any]) -> pd.DataFrame:
+def add_missing_value(some_data: pd.DataFrame, missing_row: list[Any]) -> pd.DataFrame:
     """Add row to dataframe.
 
     The functions decorated with mutate can be viewed as steps in pipe_output in the order they

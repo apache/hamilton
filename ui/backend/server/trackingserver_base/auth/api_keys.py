@@ -18,7 +18,6 @@
 import logging
 import os
 import secrets
-from typing import Tuple
 
 from passlib.handlers.pbkdf2 import pbkdf2_sha256
 from trackingserver_auth.models import APIKey, User
@@ -64,7 +63,7 @@ async def validate_api_key(user_email: str, api_key: str) -> bool:
     return False
 
 
-async def create_api_key_for_user(user: User, key_name: str) -> Tuple[str, APIKey]:
+async def create_api_key_for_user(user: User, key_name: str) -> tuple[str, APIKey]:
     """Creates an API key for the user. This is a one-way operation, so we can't
     recover the key once the reference is lost. That's OK -- they'll create another.
 

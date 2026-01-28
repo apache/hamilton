@@ -16,8 +16,9 @@
 # under the License.
 
 import dataclasses
+from collections.abc import Collection
 from os import PathLike
-from typing import Any, Collection, Dict, Tuple, Type, Union
+from typing import Any, Union
 
 try:
     import xgboost
@@ -39,13 +40,13 @@ class XGBoostJsonWriter(DataSaver):
     See differences with pickle format: https://xgboost.readthedocs.io/en/stable/tutorials/saving_model.html
     """
 
-    path: Union[str, PathLike]
+    path: str | PathLike
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return XGBOOST_MODEL_TYPES
 
-    def save_data(self, data: XGBOOST_MODEL_TYPES_ANNOTATION) -> Dict[str, Any]:
+    def save_data(self, data: XGBOOST_MODEL_TYPES_ANNOTATION) -> dict[str, Any]:
         data.save_model(self.path)
         return utils.get_file_metadata(self.path)
 
@@ -60,13 +61,13 @@ class XGBoostJsonReader(DataLoader):
     See differences with pickle format: https://xgboost.readthedocs.io/en/stable/tutorials/saving_model.html
     """
 
-    path: Union[str, bytearray, PathLike]
+    path: str | bytearray | PathLike
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return XGBOOST_MODEL_TYPES
 
-    def load_data(self, type_: Type) -> Tuple[XGBOOST_MODEL_TYPES_ANNOTATION, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[XGBOOST_MODEL_TYPES_ANNOTATION, dict[str, Any]]:
         model = type_()
         model.load_model(self.path)
         metadata = utils.get_file_metadata(self.path)

@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import importlib
 import logging
-from typing import TYPE_CHECKING, Any, Dict, List
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
@@ -40,9 +40,9 @@ class HamiltonTransformer(BaseEstimator, TransformerMixin):
     def __init__(
         self,
         config: dict = None,
-        modules: List[ModuleType] = None,
+        modules: list[ModuleType] = None,
         adapter: base.HamiltonGraphAdapter = None,
-        final_vars: List[str] = None,
+        final_vars: list[str] = None,
     ):
         self.config = {} if config is None else config
         self.modules = [] if modules is None else modules
@@ -83,7 +83,7 @@ class HamiltonTransformer(BaseEstimator, TransformerMixin):
         """
         return {"requires_fit": True, "requires_y": False}
 
-    def fit(self, X, y=None, overrides: Dict[str, Any] = None) -> HamiltonTransformer:
+    def fit(self, X, y=None, overrides: dict[str, Any] = None) -> HamiltonTransformer:
         """Instantiate Hamilton driver.Driver object
 
         :param X: Input 2D array

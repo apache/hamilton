@@ -29,20 +29,13 @@ import time
 # required if we want to run this code stand alone.
 import typing
 import uuid
+from collections.abc import Callable, Collection, Sequence
 from datetime import datetime
 from types import ModuleType
 from typing import (
     Any,
-    Callable,
-    Collection,
-    Dict,
-    List,
     Literal,
     Optional,
-    Sequence,
-    Set,
-    Tuple,
-    Union,
 )
 
 import pandas as pd
@@ -124,11 +117,11 @@ class GraphExecutor(abc.ABC):
     def execute(
         self,
         fg: graph.FunctionGraph,
-        final_vars: List[Union[str, Callable, Variable]],
-        overrides: Dict[str, Any],
-        inputs: Dict[str, Any],
+        final_vars: list[str | Callable | Variable],
+        overrides: dict[str, Any],
+        inputs: dict[str, Any],
         run_id: str,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Executes a graph in a blocking function.
 
         :param fg: Graph to execute
@@ -142,7 +135,7 @@ class GraphExecutor(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def validate(self, nodes_to_execute: List[node.Node]):
+    def validate(self, nodes_to_execute: list[node.Node]):
         """Validates whether the executor can execute the given graph.
         Some executors allow API constructs that others do not support
         (such as Parallelizable[]/Collect[])
@@ -156,14 +149,14 @@ class GraphExecutor(abc.ABC):
 class DefaultGraphExecutor(GraphExecutor):
     DEFAULT_TASK_NAME = "root"  # Not task-based, so we just assign a default name for a task
 
-    def __init__(self, adapter: Optional[lifecycle_base.LifecycleAdapterSet] = None):
+    def __init__(self, adapter: lifecycle_base.LifecycleAdapterSet | None = None):
         """Constructor for the default graph executor.
 
         :param adapter: Adapter to use for execution (optional).
         """
         self.adapter = adapter
 
-    def validate(self, nodes_to_execute: List[node.Node]):
+    def validate(self, nodes_to_execute: list[node.Node]):
         """The default graph executor cannot handle parallelizable[]/collect[] nodes.
 
         :param nodes_to_execute:
@@ -180,11 +173,11 @@ class DefaultGraphExecutor(GraphExecutor):
     def execute(
         self,
         fg: graph.FunctionGraph,
-        final_vars: List[str],
-        overrides: Dict[str, Any],
-        inputs: Dict[str, Any],
+        final_vars: list[str],
+        overrides: dict[str, Any],
+        inputs: dict[str, Any],
         run_id: str,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Basic executor for a function graph. Does no task-based execution, just does a DFS
         and executes the graph in order, in memory."""
         memoized_computation = dict()  # memoized storage
@@ -201,7 +194,7 @@ class DefaultGraphExecutor(GraphExecutor):
 
 
 class TaskBasedGraphExecutor(GraphExecutor):
-    def validate(self, nodes_to_execute: List[node.Node]):
+    def validate(self, nodes_to_execute: list[node.Node]):
         """Currently this can run every valid graph"""
         pass
 
@@ -225,11 +218,11 @@ class TaskBasedGraphExecutor(GraphExecutor):
     def execute(
         self,
         fg: graph.FunctionGraph,
-        final_vars: List[str],
-        overrides: Dict[str, Any],
-        inputs: Dict[str, Any],
+        final_vars: list[str],
+        overrides: dict[str, Any],
+        inputs: dict[str, Any],
         run_id: str,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Executes a graph, task by task. This blocks until completion.
 
         This does the following:
@@ -332,13 +325,10 @@ class Driver:
 
     @staticmethod
     def normalize_adapter_input(
-        adapter: Optional[
-            Union[
-                lifecycle_base.LifecycleAdapter,
-                List[lifecycle_base.LifecycleAdapter],
-                lifecycle_base.LifecycleAdapterSet,
-            ]
-        ],
+        adapter: lifecycle_base.LifecycleAdapter
+        | list[lifecycle_base.LifecycleAdapter]
+        | lifecycle_base.LifecycleAdapterSet
+        | None,
         use_legacy_adapter: bool = True,
     ) -> lifecycle_base.LifecycleAdapterSet:
         """Normalizes the adapter argument in the driver to a list of adapters. Adds back the legacy adapter if needed.
@@ -426,13 +416,13 @@ class Driver:
 
     def __init__(
         self,
-        config: Dict[str, Any],
+        config: dict[str, Any],
         *modules: ModuleType,
-        adapter: Optional[
-            Union[lifecycle_base.LifecycleAdapter, List[lifecycle_base.LifecycleAdapter]]
-        ] = None,
+        adapter: lifecycle_base.LifecycleAdapter
+        | list[lifecycle_base.LifecycleAdapter]
+        | None = None,
         allow_module_overrides: bool = False,
-        _materializers: typing.Sequence[Union[ExtractorFactory, MaterializerFactory]] = None,
+        _materializers: typing.Sequence[ExtractorFactory | MaterializerFactory] = None,
         _graph_executor: GraphExecutor = None,
         _use_legacy_adapter: bool = True,
     ):
@@ -506,9 +496,9 @@ class Driver:
 
     def capture_constructor_telemetry(
         self,
-        error: Optional[str],
-        modules: Tuple[ModuleType],
-        config: Dict[str, Any],
+        error: str | None,
+        modules: tuple[ModuleType],
+        config: dict[str, Any],
         adapter: lifecycle_base.LifecycleAdapterSet,
     ):
         """Captures constructor telemetry. Notes:
@@ -548,13 +538,11 @@ class Driver:
     @staticmethod
     def validate_inputs(
         fn_graph: graph.FunctionGraph,
-        adapter: Union[
-            lifecycle_base.LifecycleAdapter,
-            List[lifecycle_base.LifecycleAdapter],
-            lifecycle_base.LifecycleAdapterSet,
-        ],
+        adapter: lifecycle_base.LifecycleAdapter
+        | list[lifecycle_base.LifecycleAdapter]
+        | lifecycle_base.LifecycleAdapterSet,
         user_nodes: Collection[node.Node],
-        inputs: typing.Optional[Dict[str, Any]] = None,
+        inputs: dict[str, Any] | None = None,
         nodes_set: Collection[node.Node] = None,
     ):
         """Validates that inputs meet our expectations. This means that:
@@ -609,10 +597,10 @@ class Driver:
 
     def execute(
         self,
-        final_vars: List[Union[str, Callable, Variable]],
-        overrides: Dict[str, Any] = None,
+        final_vars: list[str | Callable | Variable],
+        overrides: dict[str, Any] = None,
         display_graph: bool = False,
-        inputs: Dict[str, Any] = None,
+        inputs: dict[str, Any] = None,
     ) -> Any:
         """Executes computation.
 
@@ -677,7 +665,7 @@ class Driver:
             )
         return outputs
 
-    def _create_final_vars(self, final_vars: List[Union[str, Callable, Variable]]) -> List[str]:
+    def _create_final_vars(self, final_vars: list[str | Callable | Variable]) -> list[str]:
         """Creates the final variables list - converting functions names as required.
 
         :param final_vars:
@@ -689,10 +677,10 @@ class Driver:
 
     def capture_execute_telemetry(
         self,
-        error: Optional[str],
-        final_vars: List[str],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        error: str | None,
+        final_vars: list[str],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
         run_successful: bool,
         duration: float,
     ):
@@ -715,8 +703,8 @@ class Driver:
                     run_successful,
                     duration,
                     len(final_vars) if final_vars else 0,
-                    len(overrides) if isinstance(overrides, Dict) else 0,
-                    len(inputs) if isinstance(overrides, Dict) else 0,
+                    len(overrides) if isinstance(overrides, dict) else 0,
+                    len(inputs) if isinstance(overrides, dict) else 0,
                     self.driver_run_id,
                     error,
                 )
@@ -735,12 +723,12 @@ class Driver:
     )
     def raw_execute(
         self,
-        final_vars: List[str],
-        overrides: Dict[str, Any] = None,
+        final_vars: list[str],
+        overrides: dict[str, Any] = None,
         display_graph: bool = False,
-        inputs: Dict[str, Any] = None,
+        inputs: dict[str, Any] = None,
         _fn_graph: graph.FunctionGraph = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Raw execute function that does the meat of execute.
 
         Don't use this entry point for execution directly. Always go through `.execute()` or `.materialize()`.
@@ -811,13 +799,13 @@ class Driver:
 
     def __raw_execute(
         self,
-        final_vars: List[str],
-        overrides: Dict[str, Any] = None,
+        final_vars: list[str],
+        overrides: dict[str, Any] = None,
         display_graph: bool = False,
-        inputs: Dict[str, Any] = None,
+        inputs: dict[str, Any] = None,
         _fn_graph: graph.FunctionGraph = None,
         _run_id: str = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Raw execute function that does the meat of execute.
 
         Private method since the result building and post_graph_execute lifecycle hooks are performed outside and so this returns an incomplete result.
@@ -861,8 +849,8 @@ class Driver:
 
     @capture_function_usage
     def list_available_variables(
-        self, *, tag_filter: Dict[str, Union[Optional[str], List[str]]] = None
-    ) -> List[Variable]:
+        self, *, tag_filter: dict[str, str | None | list[str]] = None
+    ) -> list[Variable]:
         """Returns available variables, i.e. outputs.
 
         These variables correspond 1:1 with nodes in the DAG, and contain the following information:
@@ -970,12 +958,12 @@ class Driver:
     def _visualize_execution_helper(
         fn_graph: graph.FunctionGraph,
         adapter: lifecycle_base.LifecycleAdapterSet,
-        final_vars: List[str],
+        final_vars: list[str],
         output_file_path: str,
         render_kwargs: dict,
-        inputs: Dict[str, Any] = None,
+        inputs: dict[str, Any] = None,
         graphviz_kwargs: dict = None,
-        overrides: Dict[str, Any] = None,
+        overrides: dict[str, Any] = None,
         show_legend: bool = True,
         orient: str = "LR",
         hide_inputs: bool = False,
@@ -1052,12 +1040,12 @@ class Driver:
     @capture_function_usage
     def visualize_execution(
         self,
-        final_vars: List[Union[str, Callable, Variable]],
+        final_vars: list[str | Callable | Variable],
         output_file_path: str = None,
         render_kwargs: dict = None,
-        inputs: Dict[str, Any] = None,
+        inputs: dict[str, Any] = None,
         graphviz_kwargs: dict = None,
-        overrides: Dict[str, Any] = None,
+        overrides: dict[str, Any] = None,
         show_legend: bool = True,
         orient: str = "LR",
         hide_inputs: bool = False,
@@ -1124,9 +1112,9 @@ class Driver:
     @capture_function_usage
     def export_execution(
         self,
-        final_vars: List[str],
-        inputs: Dict[str, Any] = None,
-        overrides: Dict[str, Any] = None,
+        final_vars: list[str],
+        inputs: dict[str, Any] = None,
+        overrides: dict[str, Any] = None,
     ) -> str:
         """Method to create JSON representation of the Graph.
 
@@ -1146,7 +1134,7 @@ class Driver:
     @capture_function_usage
     def has_cycles(
         self,
-        final_vars: List[Union[str, Callable, Variable]],
+        final_vars: list[str | Callable | Variable],
         _fn_graph: graph.FunctionGraph = None,
     ) -> bool:
         """Checks that the created graph does not have cycles.
@@ -1162,7 +1150,7 @@ class Driver:
         return self.graph.has_cycles(nodes, user_nodes)
 
     @capture_function_usage
-    def what_is_downstream_of(self, *node_names: str) -> List[Variable]:
+    def what_is_downstream_of(self, *node_names: str) -> list[Variable]:
         """Tells you what is downstream of this function(s), i.e. node(s).
 
         :param node_names: names of function(s) that are starting points for traversing the graph.
@@ -1306,7 +1294,7 @@ class Driver:
             logger.warning(f"Unable to import {e}", exc_info=True)
 
     @capture_function_usage
-    def what_is_upstream_of(self, *node_names: str) -> List[Variable]:
+    def what_is_upstream_of(self, *node_names: str) -> list[Variable]:
         """Tells you what is upstream of this function(s), i.e. node(s).
 
         :param node_names: names of function(s) that are starting points for traversing the graph backwards.
@@ -1319,7 +1307,7 @@ class Driver:
     @capture_function_usage
     def what_is_the_path_between(
         self, upstream_node_name: str, downstream_node_name: str
-    ) -> List[Variable]:
+    ) -> list[Variable]:
         """Tells you what nodes are on the path between two nodes.
 
         Note: this is inclusive of the two nodes, and returns an unsorted list of nodes.
@@ -1345,7 +1333,7 @@ class Driver:
 
     def _get_nodes_between(
         self, upstream_node_name: str, downstream_node_name: str
-    ) -> Set[node.Node]:
+    ) -> set[node.Node]:
         """Gets the nodes representing the path between two nodes, inclusive of the two nodes.
 
         Assumes that the nodes exist in the graph.
@@ -1365,7 +1353,7 @@ class Driver:
         self,
         upstream_node_name: str,
         downstream_node_name: str,
-        output_file_path: Optional[str] = None,
+        output_file_path: str | None = None,
         render_kwargs: dict = None,
         graphviz_kwargs: dict = None,
         strict_path_visualization: bool = False,
@@ -1467,8 +1455,8 @@ class Driver:
             logger.warning(f"Unable to import {e}", exc_info=True)
 
     def _process_materializers(
-        self, materializers: typing.Sequence[Union[MaterializerFactory, ExtractorFactory]]
-    ) -> Tuple[List[MaterializerFactory], List[ExtractorFactory]]:
+        self, materializers: typing.Sequence[MaterializerFactory | ExtractorFactory]
+    ) -> tuple[list[MaterializerFactory], list[ExtractorFactory]]:
         """Processes materializers, splitting them into materializers and extractors.
         Note that this also sanitizes the variable names in the materializer dependencies,
         so one can pass in functions instead of strings.
@@ -1488,13 +1476,11 @@ class Driver:
     @capture_function_usage
     def materialize(
         self,
-        *materializers: Union[
-            materialization.MaterializerFactory, materialization.ExtractorFactory
-        ],
-        additional_vars: List[Union[str, Callable, Variable]] = None,
-        overrides: Dict[str, Any] = None,
-        inputs: Dict[str, Any] = None,
-    ) -> Tuple[Any, Dict[str, Any]]:
+        *materializers: materialization.MaterializerFactory | materialization.ExtractorFactory,
+        additional_vars: list[str | Callable | Variable] = None,
+        overrides: dict[str, Any] = None,
+        inputs: dict[str, Any] = None,
+    ) -> tuple[Any, dict[str, Any]]:
         """Executes and materializes with ad-hoc materializers (`to`) and extractors (`from_`).This does the following:
 
         1. Creates a new graph, appending the desired materialization nodes and prepending the desired extraction nodes
@@ -1748,13 +1734,13 @@ class Driver:
     @capture_function_usage
     def visualize_materialization(
         self,
-        *materializers: Union[MaterializerFactory, ExtractorFactory],
+        *materializers: MaterializerFactory | ExtractorFactory,
         output_file_path: str = None,
         render_kwargs: dict = None,
-        additional_vars: List[Union[str, Callable, Variable]] = None,
-        inputs: Dict[str, Any] = None,
+        additional_vars: list[str | Callable | Variable] = None,
+        inputs: dict[str, Any] = None,
         graphviz_kwargs: dict = None,
-        overrides: Dict[str, Any] = None,
+        overrides: dict[str, Any] = None,
         show_legend: bool = True,
         orient: str = "LR",
         hide_inputs: bool = False,
@@ -1817,9 +1803,9 @@ class Driver:
 
     def validate_execution(
         self,
-        final_vars: List[Union[str, Callable, Variable]],
-        overrides: Dict[str, Any] = None,
-        inputs: Dict[str, Any] = None,
+        final_vars: list[str | Callable | Variable],
+        overrides: dict[str, Any] = None,
+        inputs: dict[str, Any] = None,
     ):
         """Validates execution of the graph. One can call this to validate execution, independently of actually executing.
         Note this has no return -- it will raise a ValueError if there is an issue.
@@ -1836,9 +1822,9 @@ class Driver:
     def validate_materialization(
         self,
         *materializers: materialization.MaterializerFactory,
-        additional_vars: List[Union[str, Callable, Variable]] = None,
-        overrides: Dict[str, Any] = None,
-        inputs: Dict[str, Any] = None,
+        additional_vars: list[str | Callable | Variable] = None,
+        overrides: dict[str, Any] = None,
+        inputs: dict[str, Any] = None,
     ):
         """Validates materialization of the graph. Effectively .materialize() with a dry-run.
         Note this has no return -- it will raise a ValueError if there is an issue.
@@ -1899,7 +1885,7 @@ class Builder:
 
         self.legacy_graph_adapter = None
         # Standard execution fields
-        self.adapters: List[lifecycle_base.LifecycleAdapter] = []
+        self.adapters: list[lifecycle_base.LifecycleAdapter] = []
 
         # Dynamic execution fields
         self.execution_manager = None
@@ -1933,7 +1919,7 @@ class Builder:
         self.v2_executor = True
         return self
 
-    def with_config(self, config: Dict[str, Any]) -> "Builder":
+    def with_config(self, config: dict[str, Any]) -> "Builder":
         """Adds the specified configuration to the config.
         This can be called multilple times -- later calls will take precedence.
 
@@ -1978,7 +1964,7 @@ class Builder:
         return self
 
     def with_materializers(
-        self, *materializers: Union[ExtractorFactory, MaterializerFactory]
+        self, *materializers: ExtractorFactory | MaterializerFactory
     ) -> "Builder":
         """Add materializer nodes to the `Driver`
         The generated nodes can be referenced by name in `.execute()`
@@ -2003,13 +1989,13 @@ class Builder:
 
     def with_cache(
         self,
-        path: Union[str, pathlib.Path] = ".hamilton_cache",
-        metadata_store: Optional[MetadataStore] = None,
-        result_store: Optional[ResultStore] = None,
-        default: Optional[Union[Literal[True], Sequence[str]]] = None,
-        recompute: Optional[Union[Literal[True], Sequence[str]]] = None,
-        ignore: Optional[Union[Literal[True], Sequence[str]]] = None,
-        disable: Optional[Union[Literal[True], Sequence[str]]] = None,
+        path: str | pathlib.Path = ".hamilton_cache",
+        metadata_store: MetadataStore | None = None,
+        result_store: ResultStore | None = None,
+        default: Literal[True] | Sequence[str] | None = None,
+        recompute: Literal[True] | Sequence[str] | None = None,
+        ignore: Literal[True] | Sequence[str] | None = None,
+        disable: Literal[True] | Sequence[str] | None = None,
         default_behavior: Literal["default", "recompute", "disable", "ignore"] = "default",
         default_loader_behavior: Literal["default", "recompute", "disable", "ignore"] = "default",
         default_saver_behavior: Literal["default", "recompute", "disable", "ignore"] = "default",
@@ -2073,7 +2059,7 @@ class Builder:
         return self
 
     @property
-    def cache(self) -> Optional[HamiltonCacheAdapter]:
+    def cache(self) -> HamiltonCacheAdapter | None:
         """Attribute to check if a cache was set, either via `.with_cache()` or
         `.with_adapters(SmartCacheAdapter())`
 

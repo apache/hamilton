@@ -17,8 +17,9 @@
 
 import logging
 import pprint
+from collections.abc import Collection
 from functools import partial
-from typing import Any, Collection, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 from hamilton import node
 from hamilton.lifecycle.base import LifecycleAdapterSet
@@ -30,7 +31,7 @@ We will likely want to genericize them so we're dealing with anything, not just 
 """
 
 
-def topologically_sort_nodes(nodes: List[node.Node]) -> List[node.Node]:
+def topologically_sort_nodes(nodes: list[node.Node]) -> list[node.Node]:
     """Topologically sorts a list of nodes based on their dependencies.
     Note that we bypass utilizing the preset dependencies/depended_on_by attributes of the node,
     as we may want to use this before these nodes get put in a function graph.
@@ -79,7 +80,7 @@ def topologically_sort_nodes(nodes: List[node.Node]) -> List[node.Node]:
     return sorted_nodes
 
 
-def get_node_levels(topologically_sorted_nodes: List[node.Node]) -> Dict[str, int]:
+def get_node_levels(topologically_sorted_nodes: list[node.Node]) -> dict[str, int]:
     """Gets the levels for a group of topologically sorted nodes.
     This only works if its topologically sorted, of course...
 
@@ -98,7 +99,7 @@ def get_node_levels(topologically_sorted_nodes: List[node.Node]) -> Dict[str, in
     return node_levels
 
 
-def combine_config_and_inputs(config: Dict[str, Any], inputs: Dict[str, Any]) -> Dict[str, Any]:
+def combine_config_and_inputs(config: dict[str, Any], inputs: dict[str, Any]) -> dict[str, Any]:
     """Validates and combines config and inputs, ensuring that they're mutually disjoint.
     :param config: Config to construct, run the DAG with.
     :param inputs: Inputs to run the DAG on at runtime
@@ -165,13 +166,13 @@ def create_error_message(kwargs: dict, node_: node.Node, step: str) -> str:
 
 def execute_subdag(
     nodes: Collection[node.Node],
-    inputs: Dict[str, Any],
+    inputs: dict[str, Any],
     adapter: LifecycleAdapterSet = None,
-    computed: Dict[str, Any] = None,
-    overrides: Dict[str, Any] = None,
+    computed: dict[str, Any] = None,
+    overrides: dict[str, Any] = None,
     run_id: str = None,
     task_id: str = None,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Base function to execute a subdag. This conducts a depth first traversal of the graph.
 
     :param nodes: Nodes to compute
@@ -274,7 +275,7 @@ def execute_lifecycle_for_node(
     __adapter: LifecycleAdapterSet,
     __run_id: str,
     __task_id: str,
-    **__kwargs: Dict[str, Any],
+    **__kwargs: dict[str, Any],
 ):
     """Helper function to properly execute node lifecycle.
 
@@ -351,7 +352,7 @@ def execute_lifecycle_for_node(
 def nodes_between(
     end_node: node.Node,
     search_condition: lambda node_: bool,
-) -> Tuple[Optional[node.Node], List[node.Node]]:
+) -> tuple[node.Node | None, list[node.Node]]:
     """Utility function to search backwards from an end node to a start node.
     This returns all nodes for which both of the following conditions are met:
 
@@ -399,7 +400,7 @@ def nodes_between(
     return search_node, list(out)
 
 
-def node_is_required_by_anything(node_: node.Node, node_set: Set[node.Node]) -> bool:
+def node_is_required_by_anything(node_: node.Node, node_set: set[node.Node]) -> bool:
     """Checks dependencies on this node and determines if at least one requires it.
 
     Nodes can be optionally depended upon, i.e. the function parameter has a default value. We want to check that

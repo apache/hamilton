@@ -15,7 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Collection, Dict, List, Optional
+from collections.abc import Collection
+from typing import Any
 
 import tqdm
 
@@ -78,9 +79,9 @@ class ProgressBar(
         self,
         *,
         graph: graph_types.HamiltonGraph,
-        final_vars: List[str],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        final_vars: list[str],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
         execution_path: Collection[str],
         **future_kwargs: Any,
     ):
@@ -98,10 +99,10 @@ class ProgressBar(
         self,
         *,
         node_name: str,
-        node_tags: Dict[str, Any],
-        node_kwargs: Dict[str, Any],
+        node_tags: dict[str, Any],
+        node_kwargs: dict[str, Any],
         node_return_type: type,
-        task_id: Optional[str],
+        task_id: str | None,
         **future_kwargs: Any,
     ):
         name_display = self._get_node_name_display(node_name)

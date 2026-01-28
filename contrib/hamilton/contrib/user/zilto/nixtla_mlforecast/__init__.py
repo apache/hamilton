@@ -16,7 +16,8 @@
 # under the License.
 
 import logging
-from typing import Any, Callable, Iterable, Optional, Union
+from collections.abc import Callable, Iterable
+from typing import Any, TypeAlias
 
 logger = logging.getLogger(__name__)
 
@@ -38,12 +39,12 @@ with contrib.catch_import_errors(__name__, __file__, logger):
 
 
 # sklearn compliant models (including XGBoost and LightGBM) subclass BaseEstimator
-MODELS_TYPE = Union[
-    BaseEstimator, list[BaseEstimator], dict[str, BaseEstimator]
-]  # equivalent to mlforecast.core.Models
-LAG_TRANSFORMS_TYPE = dict[int, list[Union[Callable, tuple[Callable, Any]]]]
-DATE_FEATURES_TYPE = Iterable[Union[str, Callable]]
-CONFIDENCE_INTERVAL_TYPE = Optional[list[Union[int, float]]]
+MODELS_TYPE = (
+    BaseEstimator | list[BaseEstimator] | dict[str, BaseEstimator]
+)  # equivalent to mlforecast.core.Models
+LAG_TRANSFORMS_TYPE: TypeAlias = dict[int, list[Callable | tuple[Callable, Any]]]
+DATE_FEATURES_TYPE: TypeAlias = Iterable[str | Callable]
+CONFIDENCE_INTERVAL_TYPE: TypeAlias = list[int | float] | None
 
 
 def base_models() -> MODELS_TYPE:
@@ -81,11 +82,11 @@ def date_features() -> DATE_FEATURES_TYPE:
 
 def forecaster(
     base_models: MODELS_TYPE,
-    freq: Union[int, str] = "M",
-    lags: Optional[list[int]] = None,
-    lag_transforms: Optional[LAG_TRANSFORMS_TYPE] = None,
-    date_features: Optional[DATE_FEATURES_TYPE] = None,
-    target_transforms: Optional[list[BaseTargetTransform]] = None,
+    freq: int | str = "M",
+    lags: list[int] | None = None,
+    lag_transforms: LAG_TRANSFORMS_TYPE | None = None,
+    date_features: DATE_FEATURES_TYPE | None = None,
+    target_transforms: list[BaseTargetTransform] | None = None,
     num_threads: int = 1,
 ) -> MLForecast:
     """Create the forecasting harness with data and models
@@ -106,15 +107,15 @@ def forecaster(
 def cross_validation_predictions(
     forecaster: MLForecast,
     dataset: pd.DataFrame,
-    static_features: Optional[list[str]] = None,
+    static_features: list[str] | None = None,
     dropna: bool = True,
-    keep_last_n_inputs: Optional[int] = None,
-    train_models_for_n_horizons: Optional[int] = None,
+    keep_last_n_inputs: int | None = None,
+    train_models_for_n_horizons: int | None = None,
     confidence_percentile: CONFIDENCE_INTERVAL_TYPE = None,
     cv_n_windows: int = 2,
     cv_forecast_horizon: int = 12,
-    cv_step_size: Optional[int] = None,
-    cv_input_size: Optional[int] = None,
+    cv_step_size: int | None = None,
+    cv_input_size: int | None = None,
     cv_refit: bool = True,
     cv_save_train_predictions: bool = True,
 ) -> pd.DataFrame:
@@ -182,10 +183,10 @@ def best_model_per_series(cross_validation_evaluation: pd.DataFrame) -> pd.Serie
 def fitted_forecaster(
     forecaster: MLForecast,
     dataset: pd.DataFrame,
-    static_features: Optional[list[str]] = None,
+    static_features: list[str] | None = None,
     dropna: bool = True,
-    keep_last_n: Optional[int] = None,
-    train_models_for_n_horizons: Optional[int] = None,
+    keep_last_n: int | None = None,
+    train_models_for_n_horizons: int | None = None,
     save_train_predictions: bool = True,
 ) -> MLForecast:
     """Fit models over full dataset"""
@@ -202,9 +203,9 @@ def fitted_forecaster(
 def inference_predictions(
     fitted_forecaster: MLForecast,
     inference_forecast_horizon: int = 12,
-    inference_uids: Optional[list[str]] = None,
-    inference_dataset: Optional[pd.DataFrame] = None,
-    inference_exogenous: Optional[pd.DataFrame] = None,
+    inference_uids: list[str] | None = None,
+    inference_dataset: pd.DataFrame | None = None,
+    inference_exogenous: pd.DataFrame | None = None,
     confidence_percentile: CONFIDENCE_INTERVAL_TYPE = None,
 ) -> pd.DataFrame:
     """Infer values using the trained models
@@ -221,8 +222,8 @@ def inference_predictions(
 
 def plotting_config(
     plot_max_n_series: int = 4,
-    plot_uids: Optional[list[str]] = None,
-    plot_models: Optional[list[str]] = None,
+    plot_uids: list[str] | None = None,
+    plot_models: list[str] | None = None,
     plot_anomalies: bool = False,
     plot_confidence_percentile: CONFIDENCE_INTERVAL_TYPE = None,
     plot_engine: str = "matplotlib",

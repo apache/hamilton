@@ -21,7 +21,7 @@ That is, this code does not embed an executor within the logic of the code. Inst
 """
 
 import tempfile
-from typing import Generator, Union
+from collections.abc import Generator
 
 import tiktoken
 from openai import OpenAI
@@ -64,7 +64,7 @@ def summarize_text_from_summaries_prompt(content_type: str = "an academic paper"
 
 
 @config.when(file_type="pdf")
-def raw_text(pdf_source: Union[str, bytes, tempfile.SpooledTemporaryFile]) -> str:
+def raw_text(pdf_source: str | bytes | tempfile.SpooledTemporaryFile) -> str:
     """Takes a filepath to a PDF and returns a string of the PDF's contents
     :param pdf_source: the path, or the temporary file, to the PDF.
     :return: the text of the PDF.

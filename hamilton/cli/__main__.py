@@ -20,9 +20,10 @@ import json
 import logging
 import os
 import warnings
+from collections.abc import Callable
 from pathlib import Path
 from pprint import pprint
-from typing import Annotated, Any, Callable, List, Optional
+from typing import Annotated, Any
 
 import typer
 
@@ -45,17 +46,17 @@ class Response:
 
 
 class CliState:
-    verbose: Optional[bool] = None
-    json_out: Optional[bool] = None
-    dr: Optional[driver.Driver] = None
-    name: Optional[str] = None
+    verbose: bool | None = None
+    json_out: bool | None = None
+    dr: driver.Driver | None = None
+    name: str | None = None
 
 
 cli = typer.Typer(rich_markup_mode="rich")
 state = CliState()
 
 MODULES_ANNOTATIONS = Annotated[
-    List[Path],
+    list[Path],
     typer.Argument(
         help="Paths to Hamilton modules",
         exists=True,
@@ -66,12 +67,12 @@ MODULES_ANNOTATIONS = Annotated[
 ]
 
 NAME_ANNOTATIONS = Annotated[
-    Optional[str],
+    str | None,
     typer.Option("--name", "-n", help="Name of the dataflow. Default: Derived from MODULES."),
 ]
 
 CONTEXT_ANNOTATIONS = Annotated[
-    Optional[Path],
+    Path | None,
     typer.Option(
         "--context",
         "-ctx",
@@ -303,7 +304,7 @@ def ui(
     no_migration: bool = False,
     no_open: bool = False,
     settings_file: str = "mini",
-    config_file: Optional[str] = None,
+    config_file: str | None = None,
 ):
     """Runs the Hamilton UI on sqllite in port 8241"""
     try:

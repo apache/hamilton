@@ -25,8 +25,6 @@ Note:
     the driver choose which one to use for the DAG. For the purposes of this example, we decided one file is simpler.
 """
 
-from typing import List
-
 import pandas as pd
 
 from hamilton.function_modifiers import config, extract_columns, load_from, source, value
@@ -56,7 +54,7 @@ data_columns = [
 ]
 
 
-def _sanitize_columns(df_columns: List[str]) -> List[str]:
+def _sanitize_columns(df_columns: list[str]) -> list[str]:
     """Renames columns to be valid hamilton names -- and lower cases them.
 
     :param df_columns: the current column names.

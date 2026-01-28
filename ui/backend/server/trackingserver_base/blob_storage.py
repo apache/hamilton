@@ -20,7 +20,6 @@ import json
 import logging
 import os
 import uuid
-from typing import Optional
 
 try:
     import aiobotocore.session
@@ -108,8 +107,8 @@ class S3BlobStore(BlobStore):
         self,
         bucket_name: str,
         global_prefix: str,
-        region_name: Optional[str] = None,
-        endpoint_url: Optional[str] = None,
+        region_name: str | None = None,
+        endpoint_url: str | None = None,
     ):
         self.bucket_name = bucket_name
         self.region_name = region_name

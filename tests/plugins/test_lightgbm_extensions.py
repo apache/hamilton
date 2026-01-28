@@ -16,7 +16,6 @@
 # under the License.
 
 import pathlib
-from typing import Union
 
 import lightgbm
 import numpy as np
@@ -49,7 +48,7 @@ def fitted_lightgbm_cvbooster() -> lightgbm.CVBooster:
     [fitted_lightgbm_model(), fitted_lightgbm_booster(), fitted_lightgbm_cvbooster()],
 )
 def test_lightgbm_file_writer(
-    fitted_lightgbm: Union[lightgbm.LGBMModel, lightgbm.Booster, lightgbm.CVBooster],
+    fitted_lightgbm: lightgbm.LGBMModel | lightgbm.Booster | lightgbm.CVBooster,
     tmp_path: pathlib.Path,
 ) -> None:
     model_path = tmp_path / "model.lgbm"
@@ -66,7 +65,7 @@ def test_lightgbm_file_writer(
     [fitted_lightgbm_model(), fitted_lightgbm_booster(), fitted_lightgbm_cvbooster()],
 )
 def test_xgboost_model_file_reader(
-    fitted_lightgbm: Union[lightgbm.LGBMModel, lightgbm.Booster, lightgbm.CVBooster],
+    fitted_lightgbm: lightgbm.LGBMModel | lightgbm.Booster | lightgbm.CVBooster,
     tmp_path: pathlib.Path,
 ) -> None:
     model_path = tmp_path / "model.lgbm"

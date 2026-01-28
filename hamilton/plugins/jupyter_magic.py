@@ -21,7 +21,7 @@ import json
 import os
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Set, Tuple, Union
+from typing import Any
 
 from IPython.core.magic import Magics, cell_magic, line_magic, magics_class
 from IPython.core.magic_arguments import argument, magic_arguments, parse_argstring
@@ -32,7 +32,7 @@ from IPython.utils.process import arg_split
 from hamilton import ad_hoc_utils, driver
 
 
-def get_assigned_variables(module_node: ast.Module) -> Set[str]:
+def get_assigned_variables(module_node: ast.Module) -> set[str]:
     """Get the set of variable names assigned in a AST Module"""
     assigned_vars = set()
 
@@ -50,7 +50,7 @@ def get_assigned_variables(module_node: ast.Module) -> Set[str]:
     return assigned_vars
 
 
-def execute_and_get_assigned_values(shell: InteractiveShellApp, cell: str) -> Dict[str, Any]:
+def execute_and_get_assigned_values(shell: InteractiveShellApp, cell: str) -> dict[str, Any]:
     """Execute source code from a cell in the user namespace and collect
     the values of all assigned variables into a dictionary.
     """
@@ -155,7 +155,7 @@ def determine_notebook_type() -> str:
     return "default"
 
 
-def parse_known_argstring(magic_func, argstring) -> Tuple[argparse.Namespace, List[str]]:
+def parse_known_argstring(magic_func, argstring) -> tuple[argparse.Namespace, list[str]]:
     """IPython magic arguments parsing doesn't allow unknown args.
     Used instead of IPython.core.magic_arguments.parse_argstring
 
@@ -186,7 +186,7 @@ class HamiltonMagics(Magics):
         self.notebook_env = determine_notebook_type()
         self.incremental_cells_state = defaultdict(dict)
 
-    def resolve_unknown_args_cell_to_module(self, unknown: List[str]):
+    def resolve_unknown_args_cell_to_module(self, unknown: list[str]):
         """Handle unknown arguments. It won't make the magic execution fail."""
 
         # deprecated in V2 because it's less useful since `%%cell_to_module` can execute itself
@@ -211,7 +211,7 @@ class HamiltonMagics(Magics):
         if any(arg in ("-h", "--help") for arg in unknown):
             print(help(self.cell_to_module))
 
-    def resolve_config_arg(self, config_arg) -> Union[bool, dict]:
+    def resolve_config_arg(self, config_arg) -> bool | dict:
         # default case: didn't receive `-c/--config`. Set an empty dict
         if config_arg is None:
             config = {}

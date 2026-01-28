@@ -17,7 +17,8 @@
 
 import dataclasses
 import pathlib
-from typing import IO, Any, Collection, Dict, Optional, Tuple, Type, Union
+from collections.abc import Collection
+from typing import IO, Any
 
 try:
     import numpy as np
@@ -37,11 +38,11 @@ class NumpyNpyWriter(DataSaver):
     ref: https://numpy.org/doc/stable/reference/routines.io.html
     """
 
-    path: Union[str, pathlib.Path, IO]
-    allow_pickle: Optional[bool] = None
-    fix_imports: Optional[bool] = None
+    path: str | pathlib.Path | IO
+    allow_pickle: bool | None = None
+    fix_imports: bool | None = None
 
-    def save_data(self, data: np.ndarray) -> Dict[str, Any]:
+    def save_data(self, data: np.ndarray) -> dict[str, Any]:
         np.save(
             file=self.path,
             arr=data,
@@ -51,7 +52,7 @@ class NumpyNpyWriter(DataSaver):
         return utils.get_file_metadata(self.path)
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [np.ndarray]
 
     @classmethod
@@ -65,17 +66,17 @@ class NumpyNpyReader(DataLoader):
     ref: https://numpy.org/doc/stable/reference/routines.io.html
     """
 
-    path: Union[str, pathlib.Path, IO]
-    mmap_mode: Optional[str] = None
-    allow_pickle: Optional[bool] = None
-    fix_imports: Optional[bool] = None
+    path: str | pathlib.Path | IO
+    mmap_mode: str | None = None
+    allow_pickle: bool | None = None
+    fix_imports: bool | None = None
     encoding: Literal["ASCII", "latin1", "bytes"] = "ASCII"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [np.ndarray]
 
-    def load_data(self, type_: Type) -> Tuple[np.ndarray, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[np.ndarray, dict[str, Any]]:
         array = np.load(
             file=self.path,
             mmap_mode=self.mmap_mode,

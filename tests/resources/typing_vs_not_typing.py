@@ -19,13 +19,11 @@
 Module for dummy functions to test graph things with.
 """
 
-from typing import Dict
-
 # we import this to check we don't pull in this function when parsing this module.
 from tests.resources import only_import_me
 
 
-def A(b: int, c: int) -> Dict:
+def A(b: int, c: int) -> dict:
     """Function that outputs a typing type."""
     return {"a": b + c}
 
@@ -46,6 +44,6 @@ def A2(x: int, y: int) -> dict:
     return {"a": x + y}
 
 
-def B2(A2: Dict) -> int:
+def B2(A2: dict) -> int:
     """Graph function depending on A2 but saying it's a typing type."""
     return A["a"] + 1

@@ -17,14 +17,14 @@
 
 import json
 from functools import singledispatch
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import pandas as pd
 from hamilton_sdk.tracking import sql_utils
 from hamilton_sdk.tracking import constants
 
 # Multiple observations per are allowed
-ObservationType = Dict[str, Any]
+ObservationType = dict[str, Any]
 
 
 @singledispatch
@@ -62,7 +62,7 @@ def compute_stats(result, node_name: str, node_tags: dict) -> Optional[Observati
 
 
 @singledispatch
-def compute_additional_results(result, node_name: str, node_tags: dict) -> List[ObservationType]:
+def compute_additional_results(result, node_name: str, node_tags: dict) -> list[ObservationType]:
     """The default schema will be None, and filtered out.
     We can polymoorphically implement this for different types of results.
 

@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 
 from hamilton.function_modifiers import config
 from hamilton.htypes import Collect, Parallelizable
@@ -66,15 +65,15 @@ def other_math(distro: int) -> float:
 
 
 @accept_error_sentinels
-def gather_math(some_math: float, other_math: float) -> List[float]:
+def gather_math(some_math: float, other_math: float) -> list[float]:
     return [some_math, other_math]
 
 
-def distro_end(gather_math: Collect[List[float]]) -> List[float]:
+def distro_end(gather_math: Collect[list[float]]) -> list[float]:
     ans = [x for x in gather_math]
     return ans
 
 
-def distro_gather(some_math: Collect[float]) -> List[float]:
+def distro_gather(some_math: Collect[float]) -> list[float]:
     ans = [x for x in some_math]
     return ans

@@ -19,7 +19,7 @@ import dataclasses
 import functools
 import logging
 import types
-from typing import Callable, Optional, Tuple, Union
+from collections.abc import Callable
 
 from hamilton import version
 
@@ -36,7 +36,7 @@ class Version:
         return (self.major, self.minor, self.patch) > (other.major, other.minor, other.patch)
 
     @staticmethod
-    def from_version_tuple(version_tuple: Tuple[Union[int, str], ...]) -> "Version":
+    def from_version_tuple(version_tuple: tuple[int | str, ...]) -> "Version":
         version_ = version_tuple
         if len(version_) > 3:  # This means we have an RC
             version_ = version_tuple[0:3]  # Then let's ignore it
@@ -75,16 +75,16 @@ class deprecated:
 
     """
 
-    warn_starting: Union[Tuple[int, int, int], Version]
-    fail_starting: Union[Tuple[int, int, int], Version]
-    use_this: Optional[
-        Callable
-    ]  # If this is None, it means this functionality is no longer supported.
+    warn_starting: tuple[int, int, int] | Version
+    fail_starting: tuple[int, int, int] | Version
+    use_this: (
+        Callable | None
+    )  # If this is None, it means this functionality is no longer supported.
     explanation: str
-    migration_guide: Optional[
-        str
-    ]  # If this is None, this means that the use_this is a drop in replacement
-    current_version: Union[Tuple[int, int, int], Version] = dataclasses.field(
+    migration_guide: (
+        str | None
+    )  # If this is None, this means that the use_this is a drop in replacement
+    current_version: tuple[int, int, int] | Version = dataclasses.field(
         default_factory=lambda: CURRENT_VERSION
     )
     warn_action: Callable[[str], None] = dataclasses.field(default=logger.warning)
@@ -97,7 +97,7 @@ class deprecated:
         raise DeprecationError(message)
 
     @staticmethod
-    def _ensure_version_type(version_spec: Union[Tuple[int, int, int], Version]) -> Version:
+    def _ensure_version_type(version_spec: tuple[int, int, int] | Version) -> Version:
         if isinstance(version_spec, tuple):
             return Version(*version_spec)
         return version_spec

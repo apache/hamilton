@@ -62,7 +62,7 @@ def raw_dataset(
     validation_size: float = 0.8,
     input_text_key: str = "question",
     output_text_key: str = "reply",
-) -> Dict[str, Dataset]:
+) -> dict[str, Dataset]:
     """Loads the raw dataset from disk and splits it into train and test sets.
 
     :param data_path: the path to the dataset.

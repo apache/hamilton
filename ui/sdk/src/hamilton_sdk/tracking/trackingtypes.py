@@ -18,7 +18,7 @@
 import dataclasses
 import enum
 from datetime import datetime
-from typing import List, Optional, Type
+from typing import Optional
 
 
 class Status(enum.Enum):
@@ -34,10 +34,10 @@ class TaskRun:
     status: Status = dataclasses.field(default_factory=lambda: Status.UNINITIALIZED)
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
-    result_type: Optional[Type[Type]] = None
+    result_type: Optional[type[type]] = None
     # TODO -- determine the best kind of result data here
     result_summary: Optional[dict] = None
-    error: Optional[List[str]] = None  # Serialization of error, broken into lines...
+    error: Optional[list[str]] = None  # Serialization of error, broken into lines...
     is_in_sample: bool = True  # this isn't sent anywhere; so it's not in to_dict().
 
     def to_dict(self):
@@ -58,7 +58,7 @@ class DAGRun:
 
     run_id: str
     status: Status
-    tasks: List[TaskRun]
+    tasks: list[TaskRun]
     start_time: datetime
     end_time: datetime
     schema_version: int

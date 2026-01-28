@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict
 
 import pytest
 
@@ -45,7 +44,7 @@ def _instantiate_metadata_store(metadata_store_cls, tmp_path):
 def _mock_cache_key(
     node_name: str = "foo",
     code_version: str = "FOO-1",
-    dependencies_data_versions: Dict[str, str] = None,
+    dependencies_data_versions: dict[str, str] = None,
 ) -> str:
     """Utility to create a valid cache key from mock values.
     This is helpful because ``code_version`` and ``data_version`` found in ``dependencies_data_versions``

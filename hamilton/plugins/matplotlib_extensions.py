@@ -16,8 +16,9 @@
 # under the License.
 
 import dataclasses
+from collections.abc import Collection
 from os import PathLike
-from typing import IO, Any, Collection, Dict, List, Optional, Tuple, Type, Union
+from typing import IO, Any
 
 try:
     from matplotlib.artist import Artist
@@ -37,20 +38,20 @@ class MatplotlibWriter(DataSaver):
     ref: https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure
     """
 
-    path: Union[str, PathLike, IO]
-    dpi: Optional[Union[float, str]] = None
-    format: Optional[str] = None
-    metadata: Optional[Dict] = None
-    bbox_inches: Optional[Union[str, Bbox]] = None
-    pad_inches: Optional[Union[float, str]] = None
-    facecolor: Optional[Union[str, float, Tuple]] = None
-    edgecolor: Optional[Union[str, float, Tuple]] = None
-    backend: Optional[str] = None
-    orientation: Optional[str] = None
-    papertype: Optional[str] = None
-    transparent: Optional[bool] = None
-    bbox_extra_artists: Optional[List[Artist]] = None
-    pil_kwargs: Optional[Dict] = None
+    path: str | PathLike | IO
+    dpi: float | str | None = None
+    format: str | None = None
+    metadata: dict | None = None
+    bbox_inches: str | Bbox | None = None
+    pad_inches: float | str | None = None
+    facecolor: str | float | tuple | None = None
+    edgecolor: str | float | tuple | None = None
+    backend: str | None = None
+    orientation: str | None = None
+    papertype: str | None = None
+    transparent: bool | None = None
+    bbox_extra_artists: list[Artist] | None = None
+    pil_kwargs: dict | None = None
 
     def _get_saving_kwargs(self) -> dict:
         kwargs = {}
@@ -81,13 +82,13 @@ class MatplotlibWriter(DataSaver):
 
         return kwargs
 
-    def save_data(self, data: Figure) -> Dict[str, Any]:
+    def save_data(self, data: Figure) -> dict[str, Any]:
         data.savefig(fname=self.path, **self._get_saving_kwargs())
         # TODO make utils.get_file_metadata() safer for when self.path is IO type
         return utils.get_file_metadata(self.path)
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [Figure]
 
     @classmethod

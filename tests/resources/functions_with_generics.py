@@ -19,20 +19,20 @@
 Module for functions with genercis to test graph things with.
 """
 
-from typing import Dict, List, Mapping, Tuple
+from collections.abc import Mapping
 
 
-def A(b: Dict, c: int) -> Tuple[Dict, int]:
+def A(b: dict, c: int) -> tuple[dict, int]:
     """Function that should become part of the graph - A"""
     return b, c
 
 
-def B(A: Tuple[Dict, int]) -> List:
+def B(A: tuple[dict, int]) -> list:
     """Function that should become part of the graph - B"""
     return [A, A]
 
 
-def C(B: list) -> Dict:
+def C(B: list) -> dict:
     return {"foo": B}
 
 

@@ -22,7 +22,7 @@ import os
 import urllib.parse
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import altair as alt
 import boto3
@@ -86,7 +86,7 @@ def download_s3_file(s3_client, bucket_name, file_key, _transform=lambda x: x):
 
 
 @st.cache_data(ttl=100)
-def query_data(bucket: str, paths: Tuple[str, ...], _s3_client, _transform) -> Any:
+def query_data(bucket: str, paths: tuple[str, ...], _s3_client, _transform) -> Any:
     """Function to query metadata from the s3 bucket"""
     file_contents = {}
 
@@ -107,7 +107,7 @@ def get_url(key: str) -> str:
     return f"https://d1lf8m1wnxcl0a.cloudfront.net/{key}"
 
 
-def list_prompts_and_images(prompt: str, paths: Tuple[str, ...]) -> tuple[list[str], list[str]]:
+def list_prompts_and_images(prompt: str, paths: tuple[str, ...]) -> tuple[list[str], list[str]]:
     """Lists out prompts and images paths, given an image name (prompt)"""
     prompt_entries = [p for p in paths if p.endswith(".json")]
     image_entries = [p for p in paths if p.endswith(".jpeg") & ("original" not in p.split("/")[-1])]
@@ -233,7 +233,7 @@ def embedding_path_plot(vis_dims, image_list, highlight_idx, image_name):
     st.altair_chart(altair_chart, use_container_width=True, theme="streamlit")
 
 
-def prompt_dropdown(items: List[str], incomplete_items) -> str:
+def prompt_dropdown(items: list[str], incomplete_items) -> str:
     """Selects the seed image (prompt) -- also updates the URL state"""
     query_params = st.experimental_get_query_params()
     key = "seed_image"
@@ -366,7 +366,7 @@ def s3():
 
 
 @st.cache_data(ttl=100)  # every 20 seconds we'll update?
-def list_files_in_bucket(_s3_client, bucket) -> Dict[str, tuple[str, ...]]:
+def list_files_in_bucket(_s3_client, bucket) -> dict[str, tuple[str, ...]]:
     """Gets name of all files in the s3 bucket grouped by the prefix (first directory)."""
     paginator = _s3_client.get_paginator("list_objects_v2")
     pages = paginator.paginate(Bucket=bucket)
@@ -438,7 +438,7 @@ def explore_display():
 
 
 @st.cache_data()
-def load_resources() -> Tuple[str, str, str, str]:
+def load_resources() -> tuple[str, str, str, str]:
     """Returns the code for the dataflow and the code for the adapter"""
     # TODO -- get this to work when we have hamilton contrib
     is_local_mode = os.environ.get("LOCAL_MODE", "false").lower() == "true"

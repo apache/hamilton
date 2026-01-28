@@ -39,8 +39,6 @@ Note this will also have a simple API to work with:
     optimistic_net_acquisition_cost
 """
 
-from typing import Dict
-
 import numpy as np
 import pandas as pd
 
@@ -57,11 +55,11 @@ from hamilton.function_modifiers import (
 )
 
 
-def start_date(date_range: Dict[str, str]) -> str:
+def start_date(date_range: dict[str, str]) -> str:
     return date_range["start_date"]
 
 
-def end_date(date_range: Dict[str, str]) -> str:
+def end_date(date_range: dict[str, str]) -> str:
     return date_range["end_date"]
 
 
@@ -71,7 +69,7 @@ def _identity(**kwargs: int) -> int:
 
 
 @extract_fields(fields={"us_churn": int, "ca_churn": dict})
-def weekly_churn() -> Dict[str, int]:
+def weekly_churn() -> dict[str, int]:
     """Weekly churn for both regions. A little contrived so we can use extract_fields"""
     return {"us_churn": 3, "ca_churn": 2}
 
@@ -142,7 +140,7 @@ def acquisition_cost(signups_source: pd.Series, spend: pd.Series) -> pd.Series:
     return spend / signups_source
 
 
-def _prefix_dict_values(prefix: str, dict_to_prefix: Dict[str, str]):
+def _prefix_dict_values(prefix: str, dict_to_prefix: dict[str, str]):
     """Smoke screen tests to ensure we can work with complex types.
     Contrived relationship to the theme...
 
@@ -158,12 +156,12 @@ def date_prefix() -> str:
 
 
 @does(_prefix_dict_values, prefix="date_prefix", dict_to_prefix="date_range")
-def prefixed_date_info(date_prefix: str, date_range: Dict[str, str]) -> Dict[str, str]:
+def prefixed_date_info(date_prefix: str, date_range: dict[str, str]) -> dict[str, str]:
     """Smoke screen tests to ensure we can work with complex types."""
 
 
 def series_with_start_date_end_date(
-    weeks: pd.Series, prefixed_date_info: Dict[str, str]
+    weeks: pd.Series, prefixed_date_info: dict[str, str]
 ) -> pd.Series:
     """Smoke screen tests to ensure we can work with complex types."""
     return weeks.apply(

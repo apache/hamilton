@@ -19,7 +19,6 @@ import inspect
 import pathlib
 import uuid
 from itertools import permutations
-from typing import List
 
 import pandas as pd
 import pytest
@@ -999,7 +998,7 @@ def test_function_graph_display_fields_shared_schema():
         config=config,
     )
 
-    def _get_occurances(var: str, lines: List[str]):
+    def _get_occurances(var: str, lines: list[str]):
         return [item for item in lines if var in item]
 
     # We just need to make sure these show up twice

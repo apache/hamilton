@@ -19,8 +19,9 @@ import json
 import logging
 import os
 import pickle
+from collections.abc import Callable
 from functools import singledispatch
-from typing import Any, Callable, Dict, Optional, Set, Type
+from typing import Any
 
 import typing_inspect
 
@@ -301,9 +302,9 @@ class CachingGraphAdapter(SimplePythonGraphAdapter):
         self,
         cache_path: str,
         *args,
-        force_compute: Optional[Set[str]] = None,
-        writers: Optional[Dict[str, Callable[[Any, str, str], None]]] = None,
-        readers: Optional[Dict[str, Callable[[Any, str], Any]]] = None,
+        force_compute: set[str] | None = None,
+        writers: dict[str, Callable[[Any, str, str], None]] | None = None,
+        readers: dict[str, Callable[[Any, str], Any]] | None = None,
         **kwargs,
     ):
         """Constructs the adapter.
@@ -357,12 +358,12 @@ class CachingGraphAdapter(SimplePythonGraphAdapter):
         self._check_format(fmt)
         return self.readers[fmt](expected_type, filepath)
 
-    def _get_empty_expected_type(self, expected_type: Type) -> Any:
+    def _get_empty_expected_type(self, expected_type: type) -> Any:
         if typing_inspect.is_generic_type(expected_type):
             return typing_inspect.get_origin(expected_type)()
         return expected_type()  # This ASSUMES that we can just do `str()`, `pd.DataFrame()`, etc.
 
-    def execute_node(self, node: Node, kwargs: Dict[str, Any]) -> Any:
+    def execute_node(self, node: Node, kwargs: dict[str, Any]) -> Any:
         """Executes nodes conditionally according to caching rules.
 
         This node is executed if at least one of these is true:
@@ -406,7 +407,7 @@ class CachingGraphAdapter(SimplePythonGraphAdapter):
             self.computed_nodes.add(node.name)
         return node.callable(**kwargs)
 
-    def build_result(self, **outputs: Dict[str, Any]) -> Any:
+    def build_result(self, **outputs: dict[str, Any]) -> Any:
         """Clears the computed nodes information and delegates to the super class."""
         self.computed_nodes = set()
         return super().build_result(**outputs)

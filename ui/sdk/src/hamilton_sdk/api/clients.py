@@ -34,7 +34,8 @@ import ssl
 import threading
 import time
 from collections import defaultdict
-from typing import Any, Callable, Dict, List, Union
+from typing import Any
+from collections.abc import Callable
 from urllib.parse import urlencode
 
 import aiohttp
@@ -111,12 +112,12 @@ class HamiltonClient:
         project_id: int,
         dag_hash: str,
         code_hash: str,
-        nodes: List[dict],
-        code_artifacts: List[dict],
+        nodes: list[dict],
+        code_artifacts: list[dict],
         name: str,
         config: dict,
-        tags: Dict[str, Any],
-        code: List[dict],
+        tags: dict[str, Any],
+        code: list[dict],
         vcs_info: GitInfo,  # TODO -- separate this out so we can support more code version types -- just pass it directly to the client
     ) -> int:
         """Registers a project version with the Hamilton BE API.
@@ -139,9 +140,9 @@ class HamiltonClient:
     def create_and_start_dag_run(
         self,
         dag_template_id: int,
-        tags: Dict[str, str],
-        inputs: Dict[str, Any],
-        outputs: List[str],
+        tags: dict[str, str],
+        inputs: dict[str, Any],
+        outputs: list[str],
     ) -> int:
         """Logs a DAG run to the Hamilton BE API.
 
@@ -159,9 +160,9 @@ class HamiltonClient:
     def update_tasks(
         self,
         dag_run_id: int,
-        attributes: List[dict],
-        task_updates: List[dict],
-        in_samples: List[bool] = None,
+        attributes: list[dict],
+        task_updates: list[dict],
+        in_samples: list[bool] = None,
     ):
         """Updates the tasks + attributes in a DAG run. Does not change the DAG run's status.
 
@@ -194,7 +195,7 @@ class BasicSynchronousHamiltonClient(HamiltonClient):
         username: str,
         h_api_url: str,
         base_path: str = "/api/v1",
-        verify: Union[str, bool] = True,
+        verify: str | bool = True,
     ):
         """Initializes a Hamilton API client
 
@@ -317,7 +318,7 @@ class BasicSynchronousHamiltonClient(HamiltonClient):
             except queue.Empty:
                 break
 
-    def _common_headers(self) -> Dict[str, Any]:
+    def _common_headers(self) -> dict[str, Any]:
         """Yields the common headers for all requests.
 
         @return: a dictionary of headers.
@@ -343,7 +344,7 @@ class BasicSynchronousHamiltonClient(HamiltonClient):
         project_id: int,
         code_hash: str,
         vcs_info: GitInfo,
-        slurp_code: Callable[[], Dict[str, str]],
+        slurp_code: Callable[[], dict[str, str]],
     ) -> int:
         logger.debug(f"Checking if code version {code_hash} exists for project {project_id}")
         response = requests.get(
@@ -421,12 +422,12 @@ class BasicSynchronousHamiltonClient(HamiltonClient):
         project_id: int,
         dag_hash: str,
         code_hash: str,
-        nodes: List[dict],
-        code_artifacts: List[dict],
+        nodes: list[dict],
+        code_artifacts: list[dict],
         name: str,
         config: dict,
-        tags: Dict[str, Any],
-        code: List[dict],
+        tags: dict[str, Any],
+        code: list[dict],
         vcs_info: GitInfo,
     ) -> int:
         logger.debug(
@@ -486,7 +487,7 @@ class BasicSynchronousHamiltonClient(HamiltonClient):
             raise
 
     def create_and_start_dag_run(
-        self, dag_template_id: int, tags: Dict[str, str], inputs: Dict[str, Any], outputs: List[str]
+        self, dag_template_id: int, tags: dict[str, str], inputs: dict[str, Any], outputs: list[str]
     ) -> int:
         logger.debug(f"Creating DAG run for project version {dag_template_id}")
         response = requests.post(
@@ -517,9 +518,9 @@ class BasicSynchronousHamiltonClient(HamiltonClient):
     def update_tasks(
         self,
         dag_run_id: int,
-        attributes: List[dict],
-        task_updates: List[dict],
-        in_samples: List[bool] = None,
+        attributes: list[dict],
+        task_updates: list[dict],
+        in_samples: list[bool] = None,
     ):
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(
@@ -560,7 +561,7 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
         username: str,
         h_api_url: str,
         base_path: str = "/api/v1",
-        verify: Union[str, bool] = True,
+        verify: str | bool = True,
     ):
         """Initializes an async Hamilton API client
 
@@ -641,7 +642,7 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
                 batch = []
                 last_flush_time = time.time()
 
-    def _common_headers(self) -> Dict[str, Any]:
+    def _common_headers(self) -> dict[str, Any]:
         """Yields the common headers for all requests.
 
         @return: a dictionary of headers.
@@ -670,7 +671,7 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
         project_id: int,
         code_hash: str,
         vcs_info: GitInfo,
-        slurp_code: Callable[[], Dict[str, str]],
+        slurp_code: Callable[[], dict[str, str]],
     ) -> int:
         logger.debug(f"Checking if code version {code_hash} exists for project {project_id}")
         async with aiohttp.ClientSession() as session:
@@ -751,12 +752,12 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
         project_id: int,
         dag_hash: str,
         code_hash: str,
-        nodes: List[dict],
-        code_artifacts: List[dict],
+        nodes: list[dict],
+        code_artifacts: list[dict],
         name: str,
         config: dict,
-        tags: Dict[str, Any],
-        code: List[dict],
+        tags: dict[str, Any],
+        code: list[dict],
         vcs_info: GitInfo,
     ) -> int:
         logger.debug(
@@ -823,7 +824,7 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
                     raise
 
     async def create_and_start_dag_run(
-        self, dag_template_id: int, tags: Dict[str, str], inputs: Dict[str, Any], outputs: List[str]
+        self, dag_template_id: int, tags: dict[str, str], inputs: dict[str, Any], outputs: list[str]
     ) -> int:
         logger.debug(f"Creating DAG run for project version {dag_template_id}")
         async with aiohttp.ClientSession() as session:
@@ -855,9 +856,9 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
     async def update_tasks(
         self,
         dag_run_id: int,
-        attributes: List[dict],
-        task_updates: List[dict],
-        in_samples: List[bool] = None,
+        attributes: list[dict],
+        task_updates: list[dict],
+        in_samples: list[bool] = None,
     ):
         logger.debug(
             f"Updating tasks for DAG run {dag_run_id} with {len(attributes)} "

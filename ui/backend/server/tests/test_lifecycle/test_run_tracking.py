@@ -17,7 +17,6 @@
 
 import collections
 import datetime
-from typing import List, Tuple
 from urllib.parse import urlencode
 
 import pytest
@@ -34,7 +33,7 @@ from tests.test_lifecycle.test_templates import (
 
 async def _setup_dag_template(
     async_client: AsyncClient, username
-) -> Tuple[int, List[NodeTemplateIn]]:
+) -> tuple[int, list[NodeTemplateIn]]:
     sample_nodes, sample_code_artifacts = _generate_some_sample_nodes(5, 10)
     dag_template_to_generate = _generate_sample_dag_template(sample_nodes, sample_code_artifacts)
     project_id, *_ = await _setup_sample_project(async_client, username)

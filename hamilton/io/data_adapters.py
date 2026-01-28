@@ -18,7 +18,8 @@
 import abc
 import dataclasses
 import typing
-from typing import Any, Collection, Dict, Tuple, Type
+from collections.abc import Collection
+from typing import Any
 
 from hamilton.htypes import custom_subclass_check
 
@@ -26,7 +27,7 @@ from hamilton.htypes import custom_subclass_check
 class AdapterCommon(abc.ABC):
     @classmethod
     @abc.abstractmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         """Returns the types that this data loader can load to.
         These will be checked against the desired type to determine
         whether this is a suitable loader for that type.
@@ -44,7 +45,7 @@ class AdapterCommon(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def applies_to(cls, type_: Type[Type]) -> bool:
+    def applies_to(cls, type_: type[type]) -> bool:
         """Tells whether or not this adapter applies to the given type.
 
         Note: you need to understand the edge direction to properly determine applicability.
@@ -78,7 +79,7 @@ class AdapterCommon(abc.ABC):
             )
 
     @classmethod
-    def get_required_arguments(cls) -> Dict[str, Type[Type]]:
+    def get_required_arguments(cls) -> dict[str, type[type]]:
         """Gives the required arguments for the class.
         Note that this just uses the type hints from the dataclass.
 
@@ -93,7 +94,7 @@ class AdapterCommon(abc.ABC):
         }
 
     @classmethod
-    def get_optional_arguments(cls) -> Dict[str, Type[Type]]:
+    def get_optional_arguments(cls) -> dict[str, type[type]]:
         """Gives the optional arguments for the class.
         Note that this just uses the type hints from the dataclass.
 
@@ -135,7 +136,7 @@ class DataLoader(AdapterCommon, abc.ABC):
     """
 
     @abc.abstractmethod
-    def load_data(self, type_: Type[Type]) -> Tuple[Type, Dict[str, Any]]:
+    def load_data(self, type_: type[type]) -> tuple[type, dict[str, Any]]:
         """Loads the data from the data source.
         Note this uses the constructor parameters to determine
         how to load the data.
@@ -149,7 +150,7 @@ class DataLoader(AdapterCommon, abc.ABC):
         return True
 
     @classmethod
-    def applies_to(cls, type_: Type[Type]) -> bool:
+    def applies_to(cls, type_: type[type]) -> bool:
         """Tells whether or not this data loader can load to a specific type.
         For instance, a CSV data loader might be able to load to a dataframe,
         a json, but not an integer.
@@ -176,7 +177,7 @@ class DataSaver(AdapterCommon, abc.ABC):
     """
 
     @abc.abstractmethod
-    def save_data(self, data: Any) -> Dict[str, Any]:
+    def save_data(self, data: Any) -> dict[str, Any]:
         """Saves the data to the data source.
             Note this uses the constructor parameters to determine
             how to save the data.
@@ -192,7 +193,7 @@ class DataSaver(AdapterCommon, abc.ABC):
         return True
 
     @classmethod
-    def applies_to(cls, type_: Type[Type]) -> bool:
+    def applies_to(cls, type_: type[type]) -> bool:
         """Tells whether or not this data saver can ingest a specific type to save it.
 
         I.e. is the adapter type a superclass of the passed in type?

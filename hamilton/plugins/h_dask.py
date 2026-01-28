@@ -131,7 +131,7 @@ class DaskGraphAdapter(base.HamiltonGraphAdapter):
         self.compute_at_end = compute_at_end
 
     @staticmethod
-    def check_input_type(node_type: typing.Type, input_value: typing.Any) -> bool:
+    def check_input_type(node_type: type, input_value: typing.Any) -> bool:
         # NOTE: the type of dask Delayed is unknown until they are computed
         if isinstance(input_value, Delayed):
             return True
@@ -142,14 +142,14 @@ class DaskGraphAdapter(base.HamiltonGraphAdapter):
         return htypes.check_input_type(node_type, input_value)
 
     @staticmethod
-    def check_node_type_equivalence(node_type: typing.Type, input_type: typing.Type) -> bool:
+    def check_node_type_equivalence(node_type: type, input_type: type) -> bool:
         if node_type == dask.array.Array and input_type == pd.Series:
             return True
         elif node_type == dask.dataframe.Series and input_type == pd.Series:
             return True
         return node_type == input_type
 
-    def execute_node(self, node: node.Node, kwargs: typing.Dict[str, typing.Any]) -> typing.Any:
+    def execute_node(self, node: node.Node, kwargs: dict[str, typing.Any]) -> typing.Any:
         """Function that is called as we walk the graph to determine how to execute a hamilton function.
 
         :param node: the node from the graph.
@@ -168,7 +168,7 @@ class DaskGraphAdapter(base.HamiltonGraphAdapter):
             dask_key_name=dask_key_name,  # this is what shows up in the dask console
         )
 
-    def build_result(self, **outputs: typing.Dict[str, typing.Any]) -> typing.Any:
+    def build_result(self, **outputs: dict[str, typing.Any]) -> typing.Any:
         """Builds the result and brings it back to this running process.
 
         :param outputs: the dictionary of key -> Union[delayed object reference | value]
@@ -198,7 +198,7 @@ class DaskGraphAdapter(base.HamiltonGraphAdapter):
 
 class DaskDataFrameResult(base.ResultMixin):
     @staticmethod
-    def build_result(**outputs: typing.Dict[str, typing.Any]) -> typing.Any:
+    def build_result(**outputs: dict[str, typing.Any]) -> typing.Any:
         """Builds a dask dataframe from the outputs.
 
         This has some assumptions:

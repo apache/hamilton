@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Type
 
 import pandas as pd
 
@@ -28,7 +27,7 @@ class SampleDataValidator1(BaseDefaultValidator):
         self.equal_to = equal_to
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return datatype == int
 
     def description(self) -> str:
@@ -77,7 +76,7 @@ class SampleDataValidator2(DataValidator):
         )
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return datatype == pd.Series
 
     @classmethod
@@ -109,7 +108,7 @@ class SampleDataValidator3(DataValidator):
         )
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         return datatype == pd.Series
 
     @classmethod

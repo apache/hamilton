@@ -16,7 +16,6 @@
 # under the License.
 
 import datetime
-from typing import Dict, List, Union
 
 import polars as pl
 from hamilton_sdk.tracking import dataframe_stats as dfs
@@ -56,11 +55,11 @@ def zeros(col: pl.Series) -> int:
     return result.sum()
 
 
-def min(col: pl.Series) -> Union[float, int]:
+def min(col: pl.Series) -> float | int:
     return col.min()
 
 
-def max(col: pl.Series) -> Union[float, int]:
+def max(col: pl.Series) -> float | int:
     return col.max()
 
 
@@ -72,11 +71,11 @@ def std(col: pl.Series) -> float:
     return col.std()
 
 
-def quantile_cuts() -> List[float]:
+def quantile_cuts() -> list[float]:
     return [0.10, 0.25, 0.50, 0.75, 0.90]
 
 
-def quantiles(col: pl.Series, quantile_cuts: List[float]) -> Dict[float, float]:
+def quantiles(col: pl.Series, quantile_cuts: list[float]) -> dict[float, float]:
     result = {}
     try:
         for q in quantile_cuts:
@@ -86,7 +85,7 @@ def quantiles(col: pl.Series, quantile_cuts: List[float]) -> Dict[float, float]:
     return result
 
 
-def histogram(col: pl.Series, num_hist_bins: int = 10) -> Dict[str, int]:
+def histogram(col: pl.Series, num_hist_bins: int = 10) -> dict[str, int]:
     """This is different than pandas... requires polars 0.20+"""
     if all(col.is_null()):
         return {}
@@ -107,12 +106,12 @@ def numeric_column_stats(
     count: int,
     missing: int,
     zeros: int,
-    min: Union[float, int],
-    max: Union[float, int],
+    min: float | int,
+    max: float | int,
     mean: float,
     std: float,
-    quantiles: Dict[float, float],
-    histogram: Dict[str, int],
+    quantiles: dict[float, float],
+    histogram: dict[str, int],
 ) -> dfs.NumericColumnStatistics:
     return dfs.NumericColumnStatistics(
         name=name,
@@ -137,11 +136,11 @@ def datetime_column_stats(
     count: int,
     missing: int,
     zeros: int,
-    min: Union[float, int],
-    max: Union[float, int],
+    min: float | int,
+    max: float | int,
     mean: float,
-    quantiles: Dict[float, float],
-    histogram: Dict[str, int],
+    quantiles: dict[float, float],
+    histogram: dict[str, int],
 ) -> dfs.DatetimeColumnStatistics:
     # TODO: push these conversions into Hamilton functions.
     # Note: datetime.datetime is a subclass of datetime.date, so checking datetime.date catches both
@@ -193,7 +192,7 @@ def value_counts(col: pl.Series) -> pl.DataFrame:
         return v_counts
 
 
-def domain(value_counts: pl.DataFrame) -> Dict[str, int]:
+def domain(value_counts: pl.DataFrame) -> dict[str, int]:
     result = value_counts.to_dict(as_series=False)
     if "counts" in result:
         counter_column = "counts"
@@ -205,11 +204,11 @@ def domain(value_counts: pl.DataFrame) -> Dict[str, int]:
     return dict(zip(result[col_name], result.get(counter_column)))
 
 
-def top_value(domain: Dict[str, int]) -> str:
+def top_value(domain: dict[str, int]) -> str:
     return next(iter(domain.keys()))
 
 
-def top_freq(domain: Dict[str, int]) -> int:
+def top_freq(domain: dict[str, int]) -> int:
     return next(iter(domain.values()))
 
 
@@ -224,7 +223,7 @@ def category_column_stats(
     count: int,
     missing: int,
     empty: int,
-    domain: Dict[str, int],
+    domain: dict[str, int],
     top_value: str,
     top_freq: int,
     unique: int,

@@ -16,7 +16,7 @@
 # under the License.
 
 import functools
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import pyspark.sql as ps
 from hamilton_sdk.tracking import data_observation
@@ -63,7 +63,7 @@ base_schema = {
 
 # quick cache to ensure we don't compute twice
 @functools.lru_cache(maxsize=128)
-def _introspect(df: ps.DataFrame) -> Dict[str, Any]:
+def _introspect(df: ps.DataFrame) -> dict[str, Any]:
     """Introspect a PySpark dataframe and return a dictionary of statistics.
 
     :param df: PySpark dataframe to introspect.
@@ -128,7 +128,7 @@ def compute_schema_psdf(
 @data_observation.compute_additional_results.register
 def compute_additional_psdf(
     result: ps.DataFrame, node_name: str, node_tags: dict
-) -> List[ObservationType]:
+) -> list[ObservationType]:
     o_value = _introspect(result)
     return [
         {

@@ -16,7 +16,6 @@
 # under the License.
 
 import inspect
-from typing import List, Set
 
 import pandas as pd
 import pytest
@@ -164,10 +163,10 @@ def test_does_function_modifier():
 
 
 def test_does_function_modifier_complex_types():
-    def setify(**kwargs: List[int]) -> Set[int]:
+    def setify(**kwargs: list[int]) -> set[int]:
         return set(sum(kwargs.values(), []))
 
-    def to_modify(param1: List[int], param2: List[int]) -> int:
+    def to_modify(param1: list[int], param2: list[int]) -> int:
         """This sums the inputs it gets..."""
         pass
 
@@ -226,7 +225,7 @@ def test_model_modifier():
     }
 
     class LinearCombination(models.BaseModel):
-        def get_dependents(self) -> List[str]:
+        def get_dependents(self) -> list[str]:
             return list(self.config_parameters.keys())
 
         def predict(self, **columns: pd.Series) -> pd.Series:

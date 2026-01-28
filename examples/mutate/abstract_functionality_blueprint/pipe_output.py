@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, List
+from typing import Any
 
 import pandas as pd
 
@@ -36,7 +36,7 @@ def test_foo(a, b, c):
 # data 2
 # this is for value
 @hamilton_exclude
-def add_missing_value(some_data: pd.DataFrame, missing_row: List[Any]) -> pd.DataFrame:
+def add_missing_value(some_data: pd.DataFrame, missing_row: list[Any]) -> pd.DataFrame:
     some_data.loc[-1] = missing_row
     return some_data
 

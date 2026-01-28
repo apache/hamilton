@@ -107,7 +107,7 @@ def downloaded_data(
     return download_location
 
 
-def all_downloaded_data(downloaded_data: Collect[str]) -> List[str]:
+def all_downloaded_data(downloaded_data: Collect[str]) -> list[str]:
     """Returns a list of all downloaded locations"""
     out = []
     for path in downloaded_data:
@@ -120,7 +120,7 @@ def _jsonl_parse(path: str) -> pd.DataFrame:
     return pd.read_json(path, lines=True)
 
 
-def processed_dataframe(all_downloaded_data: List[str]) -> pd.DataFrame:
+def processed_dataframe(all_downloaded_data: list[str]) -> pd.DataFrame:
     """Processes everything into a dataframe"""
     out = []
     for floc in all_downloaded_data:

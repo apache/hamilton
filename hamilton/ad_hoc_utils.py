@@ -25,8 +25,8 @@ import sys
 import tempfile
 import types
 import uuid
+from collections.abc import Callable
 from types import ModuleType
-from typing import Callable, Optional
 
 
 def _copy_func(f):
@@ -81,7 +81,7 @@ def create_temporary_module(*functions: Callable, module_name: str = None) -> Mo
     return module
 
 
-def module_from_source(source: str, module_name: Optional[str] = None) -> ModuleType:
+def module_from_source(source: str, module_name: str | None = None) -> ModuleType:
     """Create a temporary module from source code."""
     module_name = module_name or _generate_unique_temp_module_name()
     module_object = ModuleType(module_name)

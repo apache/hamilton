@@ -15,10 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from random import Random
-from typing import Sequence, Union
 
 from dagster import ConfigurableResource
 from faker import Faker
@@ -121,7 +121,7 @@ class DataGenerator:
         return sorted(signups, key=lambda x: x["registered_at"])
 
     def get_signups_for_dates(
-        self, start_date: datetime, end_date: Union[datetime, None] = None
+        self, start_date: datetime, end_date: datetime | None = None
     ) -> Sequence[Signup]:
         signups = []
 

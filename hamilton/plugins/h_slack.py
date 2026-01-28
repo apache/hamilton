@@ -16,7 +16,7 @@
 # under the License.
 
 import traceback
-from typing import Any, Dict, Optional
+from typing import Any
 
 from slack_sdk import WebClient
 
@@ -64,8 +64,8 @@ class SlackNotifier(NodeExecutionHook):
     def run_before_node_execution(
         self,
         node_name: str,
-        node_tags: Dict[str, Any],
-        node_kwargs: Dict[str, Any],
+        node_tags: dict[str, Any],
+        node_kwargs: dict[str, Any],
         node_return_type: type,
         **future_kwargs: Any,
     ):
@@ -75,13 +75,13 @@ class SlackNotifier(NodeExecutionHook):
     def run_after_node_execution(
         self,
         node_name: str,
-        node_tags: Dict[str, Any],
-        node_kwargs: Dict[str, Any],
+        node_tags: dict[str, Any],
+        node_kwargs: dict[str, Any],
         node_return_type: type,
         result: Any,
-        error: Optional[Exception],
+        error: Exception | None,
         success: bool,
-        task_id: Optional[str],
+        task_id: str | None,
         run_id: str,
         **future_kwargs: Any,
     ):

@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Optional
 
 import logic
 import streamlit as st
@@ -33,8 +32,8 @@ def get_hamilton_driver() -> driver.Driver:
 @st.cache_data
 def _execute(
     final_vars: list[str],
-    inputs: Optional[dict] = None,
-    overrides: Optional[dict] = None,
+    inputs: dict | None = None,
+    overrides: dict | None = None,
 ) -> dict:
     """Generic utility to cache Hamilton results"""
     dr = get_hamilton_driver()

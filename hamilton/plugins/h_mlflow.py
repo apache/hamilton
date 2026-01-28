@@ -18,7 +18,7 @@
 import logging
 import pickle
 import warnings
-from typing import Any, Dict, List, Optional, Type, Union
+from typing import Any
 
 import mlflow
 import mlflow.data
@@ -50,7 +50,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-def get_path_from_metadata(metadata: dict) -> Union[str, None]:
+def get_path_from_metadata(metadata: dict) -> str | None:
     """Retrieve the `path` attribute from DataSaver output metadata"""
     path = None
     if "path" in metadata:
@@ -74,16 +74,16 @@ class MLFlowTracker(
 
     def __init__(
         self,
-        tracking_uri: Optional[str] = None,
-        registry_uri: Optional[str] = None,
-        artifact_location: Optional[str] = None,
+        tracking_uri: str | None = None,
+        registry_uri: str | None = None,
+        artifact_location: str | None = None,
         experiment_name: str = "Hamilton",
-        experiment_tags: Optional[dict] = None,
-        experiment_description: Optional[str] = None,
-        run_id: Optional[str] = None,
-        run_name: Optional[str] = None,
-        run_tags: Optional[dict] = None,
-        run_description: Optional[str] = None,
+        experiment_tags: dict | None = None,
+        experiment_description: str | None = None,
+        run_id: str | None = None,
+        run_name: str | None = None,
+        run_tags: dict | None = None,
+        run_description: str | None = None,
         log_system_metrics: bool = False,
     ):
         """Configure the MLFlow client and experiment for the lifetime of the tracker
@@ -144,8 +144,8 @@ class MLFlowTracker(
         self,
         *,
         run_id: str,
-        final_vars: List[str],
-        inputs: Dict[str, Any],
+        final_vars: list[str],
+        inputs: dict[str, Any],
         graph: graph_types.HamiltonGraph,
         **kwargs,
     ):
@@ -192,7 +192,7 @@ class MLFlowTracker(
         self,
         *,
         node_name: str,
-        node_return_type: Type,
+        node_return_type: type,
         node_tags: dict,
         node_kwargs: dict,
         result: Any,

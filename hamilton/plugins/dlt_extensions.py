@@ -16,7 +16,8 @@
 # under the License.
 
 import dataclasses
-from typing import Any, Collection, Dict, Iterable, Literal, Optional, Sequence, Tuple, Type
+from collections.abc import Collection, Iterable, Sequence
+from typing import Any, Literal
 
 try:
     import dlt
@@ -63,10 +64,10 @@ class DltResourceLoader(DataLoader):
         return "dlt"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [pd.DataFrame]
 
-    def load_data(self, type_: Type) -> Tuple[pd.DataFrame, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[pd.DataFrame, dict[str, Any]]:
         """Creates a pipeline and conduct `extract` and `normalize` steps.
         Then, "load packages" are read with pandas
         """
@@ -105,18 +106,18 @@ class DltDestinationSaver(DataSaver):
 
     pipeline: dlt.Pipeline
     table_name: str
-    primary_key: Optional[str] = None
-    write_disposition: Optional[Literal["skip", "append", "replace", "merge"]] = None
-    columns: Optional[Sequence[TColumnSchema]] = None
-    schema: Optional[Schema] = None
-    loader_file_format: Optional[TLoaderFileFormat] = None
+    primary_key: str | None = None
+    write_disposition: Literal["skip", "append", "replace", "merge"] | None = None
+    columns: Sequence[TColumnSchema] | None = None
+    schema: Schema | None = None
+    loader_file_format: TLoaderFileFormat | None = None
 
     @classmethod
     def name(cls) -> str:
         return "dlt"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return DATAFRAME_TYPES
 
     def _get_kwargs(self) -> dict:
@@ -133,7 +134,7 @@ class DltDestinationSaver(DataSaver):
         return kwargs
 
     # TODO get pyarrow table from polars, dask, etc.
-    def save_data(self, data) -> Dict[str, Any]:
+    def save_data(self, data) -> dict[str, Any]:
         """
         ref: https://dlthub.com/docs/dlt-ecosystem/verified-sources/arrow-pandas
         """

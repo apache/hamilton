@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict
+from typing import Any
 
 import polars as pl
 from polars import selectors
@@ -39,7 +39,7 @@ Notes:
 dr = driver.Builder().with_modules(pls).with_config({"config_key": "config_value"}).build()
 
 
-def _compute_stats(df: pl.DataFrame) -> Dict[str, Dict[str, Any]]:
+def _compute_stats(df: pl.DataFrame) -> dict[str, dict[str, Any]]:
     """Compute statistics on a pandas dataframe.
     for each c in [dataframe|series]:
         if c is numeric:
@@ -66,7 +66,7 @@ def _compute_stats(df: pl.DataFrame) -> Dict[str, Dict[str, Any]]:
     column_order = {col: index for index, col in enumerate(df.columns)}
     stats = {}
 
-    def execute_col(target_output: str, col: pl.Series, name: str, position: int) -> Dict[str, Any]:
+    def execute_col(target_output: str, col: pl.Series, name: str, position: int) -> dict[str, Any]:
         """Get stats on a column."""
         try:
             res = dr.execute(
@@ -102,7 +102,7 @@ def _compute_stats(df: pl.DataFrame) -> Dict[str, Dict[str, Any]]:
 
 
 @data_observation.compute_stats.register
-def compute_stats_df(result: pl.DataFrame, node_name: str, node_tags: dict) -> Dict[str, Any]:
+def compute_stats_df(result: pl.DataFrame, node_name: str, node_tags: dict) -> dict[str, Any]:
     return {
         "observability_type": "dagworks_describe",
         "observability_value": _compute_stats(result),
@@ -111,7 +111,7 @@ def compute_stats_df(result: pl.DataFrame, node_name: str, node_tags: dict) -> D
 
 
 @data_observation.compute_stats.register
-def compute_stats_series(result: pl.Series, node_name: str, node_tags: dict) -> Dict[str, Any]:
+def compute_stats_series(result: pl.Series, node_name: str, node_tags: dict) -> dict[str, Any]:
     return {
         "observability_type": "dagworks_describe",
         "observability_value": _compute_stats(pl.DataFrame({node_name: result})),

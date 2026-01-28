@@ -16,7 +16,8 @@
 # under the License.
 
 import dataclasses
-from typing import Any, Collection, Dict, Tuple, Type, Union
+from collections.abc import Collection
+from typing import Any, Union
 
 from hamilton.io.data_adapters import DataLoader, DataSaver
 
@@ -27,10 +28,10 @@ class MockDataLoader(DataLoader):
     default_param: int = 1
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [bool]
 
-    def load_data(self, type_: Type) -> Tuple[int, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[int, dict[str, Any]]:
         pass
 
     @classmethod
@@ -44,10 +45,10 @@ class MockDataLoader2(DataLoader):
     default_param: int = 1
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [int]
 
-    def load_data(self, type_: Type) -> Tuple[int, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[int, dict[str, Any]]:
         pass
 
     @classmethod
@@ -61,10 +62,10 @@ class MockDataSaver(DataSaver):
     default_param: int = 1
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [bool]
 
-    def save_data(self, type_: Type) -> Tuple[int, Dict[str, Any]]:
+    def save_data(self, type_: type) -> tuple[int, dict[str, Any]]:
         pass
 
     @classmethod
@@ -78,10 +79,10 @@ class MockDataSaver2(DataSaver):
     default_param: int = 1
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [int]
 
-    def save_data(self, type_: Type) -> Tuple[int, Dict[str, Any]]:
+    def save_data(self, type_: type) -> tuple[int, dict[str, Any]]:
         pass
 
     @classmethod
@@ -95,10 +96,10 @@ class MockDataSaver3(DataSaver):
     default_param: int = 1
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [int, float]
 
-    def save_data(self, type_: Type) -> Tuple[int, Dict[str, Any]]:
+    def save_data(self, type_: type) -> tuple[int, dict[str, Any]]:
         pass
 
     @classmethod

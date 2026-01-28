@@ -16,7 +16,6 @@
 # under the License.
 
 import logging
-from typing import List, Optional, Tuple
 
 from django.http import HttpRequest
 from ninja.security.http import HttpAuthBase
@@ -31,10 +30,10 @@ class LocalAPIAuthenticator(HttpAuthBase):
     secure and should not be used in production outside of a very specific VPN context in which
     the team has shared global access."""
 
-    def __init__(self, global_key: Optional[str] = None):
+    def __init__(self, global_key: str | None = None):
         self.global_key = global_key
 
-    async def __call__(self, request: HttpRequest) -> Optional[Tuple[User, List[Team]]]:
+    async def __call__(self, request: HttpRequest) -> tuple[User, list[Team]] | None:
         """This is an authentication client for local mode. It will ensure a user exists with
         the appropriate username.
         """

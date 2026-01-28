@@ -19,7 +19,7 @@
 Modules that mirrors the pipeline the code in the notebook creates.
 """
 
-from typing import NamedTuple, Optional
+from typing import NamedTuple
 
 
 class Chunk(NamedTuple):
@@ -28,8 +28,8 @@ class Chunk(NamedTuple):
     index: int
     document_id: str
     text: str
-    embedding: Optional[list[float]]
-    metadata: Optional[dict[str, str]]
+    embedding: list[float] | None
+    metadata: dict[str, str] | None
 
     def add_embedding(self, embedding: list[float]) -> "Chunk":
         """Required to update chunk with embeddings"""
@@ -46,7 +46,7 @@ class Document(NamedTuple):
     id: str
     url: str
     raw_text: str
-    chunks: Optional[list[Chunk]]
+    chunks: list[Chunk] | None
 
     def add_chunks(self, chunks: list[Chunk]) -> "Document":
         """Required to update the document when Chunks are created"""

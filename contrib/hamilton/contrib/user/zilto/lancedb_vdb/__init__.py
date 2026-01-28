@@ -16,8 +16,9 @@
 # under the License.
 
 import logging
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Union
+from typing import Dict, List, Optional, Union
 
 logger = logging.getLogger(__name__)
 
@@ -33,11 +34,11 @@ with contrib.catch_import_errors(__name__, __file__, logger):
 from hamilton.function_modifiers import tag
 
 VectorType = Union[list, np.ndarray, pa.Array, pa.ChunkedArray]
-DataType = Union[Dict, List[Dict], pd.DataFrame, pa.Table, Iterable[pa.RecordBatch]]
+DataType = Union[dict, list[dict], pd.DataFrame, pa.Table, Iterable[pa.RecordBatch]]
 TableSchema = Union[pa.Schema, LanceModel]
 
 
-def client(uri: Union[str, Path] = "./.lancedb") -> lancedb.DBConnection:
+def client(uri: str | Path = "./.lancedb") -> lancedb.DBConnection:
     """Create a LanceDB connection.
 
     :param uri: path to local LanceDB
@@ -49,7 +50,7 @@ def client(uri: Union[str, Path] = "./.lancedb") -> lancedb.DBConnection:
 def _create_table(
     client: lancedb.DBConnection,
     table_name: str,
-    schema: Optional[TableSchema] = None,
+    schema: TableSchema | None = None,
     overwrite_table: bool = False,
 ) -> lancedb.db.LanceTable:
     """Create a new table based on schema."""
@@ -62,7 +63,7 @@ def _create_table(
 def table_ref(
     client: lancedb.DBConnection,
     table_name: str,
-    schema: Optional[TableSchema] = None,
+    schema: TableSchema | None = None,
     overwrite_table: bool = False,
 ) -> lancedb.db.LanceTable:
     """Create or reference a LanceDB table
@@ -91,7 +92,7 @@ def table_ref(
 
 
 @tag(side_effect="True")
-def reset(client: lancedb.DBConnection) -> Dict[str, List[str]]:
+def reset(client: lancedb.DBConnection) -> dict[str, list[str]]:
     """Drop all existing tables.
 
     :param vdb_client: LanceDB connection.
@@ -106,7 +107,7 @@ def reset(client: lancedb.DBConnection) -> Dict[str, List[str]]:
 
 
 @tag(side_effect="True")
-def insert(table_ref: lancedb.db.LanceTable, data: DataType) -> Dict:
+def insert(table_ref: lancedb.db.LanceTable, data: DataType) -> dict:
     """Push new data to the specified table.
 
     :param table_ref: Reference to the LanceDB table.
@@ -121,7 +122,7 @@ def insert(table_ref: lancedb.db.LanceTable, data: DataType) -> Dict:
 
 
 @tag(side_effect="True")
-def delete(table_ref: lancedb.db.LanceTable, delete_expression: str) -> Dict:
+def delete(table_ref: lancedb.db.LanceTable, delete_expression: str) -> dict:
     """Delete existing data using an SQL expression.
 
     :param table_ref: Reference to the LanceDB table.
@@ -138,8 +139,8 @@ def delete(table_ref: lancedb.db.LanceTable, delete_expression: str) -> Dict:
 def vector_search(
     table_ref: lancedb.db.LanceTable,
     vector_query: VectorType,
-    columns: Optional[List[str]] = None,
-    where: Optional[str] = None,
+    columns: list[str] | None = None,
+    where: str | None = None,
     prefilter_where: bool = False,
     limit: int = 10,
 ) -> pd.DataFrame:
@@ -169,8 +170,8 @@ def vector_search(
 def full_text_search(
     table_ref: lancedb.db.LanceTable,
     full_text_query: str,
-    full_text_index: Union[str, List[str]],
-    where: Optional[str] = None,
+    full_text_index: str | list[str],
+    where: str | None = None,
     limit: int = 10,
     rebuild_index: bool = True,
 ) -> pd.DataFrame:

@@ -17,7 +17,8 @@
 
 import abc
 import dataclasses
-from typing import Any, Collection, Dict, Tuple, Type
+from collections.abc import Collection
+from typing import Any
 
 try:
     import pyspark.sql as ps
@@ -41,11 +42,11 @@ class SparkDataFrameDataLoader(DataLoader):
     spark: SparkSession
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [ps.DataFrame]
 
     @abc.abstractmethod
-    def load_data(self, type_: Type[DataFrame]) -> Tuple[ps.DataFrame, Dict[str, Any]]:
+    def load_data(self, type_: type[DataFrame]) -> tuple[ps.DataFrame, dict[str, Any]]:
         pass
 
 
@@ -56,7 +57,7 @@ class CSVDataLoader(SparkDataFrameDataLoader):
     header: bool = True
     sep: str = ","
 
-    def load_data(self, type_: Type[DataFrame]) -> Tuple[ps.DataFrame, Dict[str, Any]]:
+    def load_data(self, type_: type[DataFrame]) -> tuple[ps.DataFrame, dict[str, Any]]:
         return (
             self.spark.read.csv(self.path, header=self.header, sep=self.sep, inferSchema=True),
             utils.get_file_metadata(self.path),
@@ -73,7 +74,7 @@ class ParquetDataLoader(SparkDataFrameDataLoader):
 
     # We can always make that a list of strings, or make a multiple reader (.multicsv)
 
-    def load_data(self, type_: Type[DataFrame]) -> Tuple[ps.DataFrame, Dict[str, Any]]:
+    def load_data(self, type_: type[DataFrame]) -> tuple[ps.DataFrame, dict[str, Any]]:
         return self.spark.read.parquet(self.path), utils.get_file_metadata(self.path)
 
     @classmethod

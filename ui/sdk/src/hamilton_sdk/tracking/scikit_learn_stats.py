@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 
 from hamilton_sdk.tracking import data_observation
 from sklearn.base import BaseEstimator
@@ -40,7 +39,7 @@ def get_estimator_params(result, *args, **kwargs) -> data_observation.Observatio
 
 
 @data_observation.compute_additional_results.register(BaseEstimator)
-def get_estimator_html(result, *args, **kwargs) -> List[data_observation.ObservationType]:
+def get_estimator_html(result, *args, **kwargs) -> list[data_observation.ObservationType]:
     return [
         {
             "name": "Components",

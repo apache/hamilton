@@ -87,7 +87,7 @@ def _remove_docs_and_comments(source: str) -> str:
     return ast.unparse(parsed)
 
 
-def hash_source_code(source: typing.Union[str, typing.Callable], strip: bool = False) -> str:
+def hash_source_code(source: str | typing.Callable, strip: bool = False) -> str:
     """Hashes the source code of a function (str).
 
     The `strip` parameter requires Python 3.9
@@ -118,14 +118,14 @@ class HamiltonNode:
     Furthermore, we can always add attributes and maintain backwards compatibility."""
 
     name: str
-    type: typing.Type
-    tags: typing.Dict[str, typing.Union[str, typing.List[str]]]
+    type: type
+    tags: dict[str, str | list[str]]
     is_external_input: bool
-    originating_functions: typing.Optional[typing.Tuple[typing.Callable, ...]]
-    documentation: typing.Optional[str]
-    required_dependencies: typing.Set[str]
-    optional_dependencies: typing.Set[str]
-    optional_dependencies_default_values: typing.Dict[str, typing.Any]
+    originating_functions: tuple[typing.Callable, ...] | None
+    documentation: str | None
+    required_dependencies: set[str]
+    optional_dependencies: set[str]
+    optional_dependencies_default_values: dict[str, typing.Any]
 
     def as_dict(self, include_optional_dependencies_default_values: bool = False) -> dict:
         """Create a dictionary representation of the Node that is JSON serializable.
@@ -183,7 +183,7 @@ class HamiltonNode:
         )
 
     @functools.cached_property
-    def version(self) -> typing.Optional[str]:
+    def version(self) -> str | None:
         """Generate a hash of the node originating function source code.
 
         Note that this will be `None` if the node is an external input/has no
@@ -222,7 +222,7 @@ class HamiltonGraph:
     Note that you do not construct this class directly -- instead, you will get this at various points in the API.
     """
 
-    nodes: typing.List[HamiltonNode]
+    nodes: list[HamiltonNode]
     # store the original graph for internal use
 
     @staticmethod
@@ -247,7 +247,7 @@ class HamiltonGraph:
         return hashlib.sha256(str(sorted_node_versions).encode()).hexdigest()
 
     @functools.cached_property
-    def __nodes_lookup(self) -> typing.Dict[str, HamiltonNode]:
+    def __nodes_lookup(self) -> dict[str, HamiltonNode]:
         """Cache the mapping {node_name: node} for faster `__getitem__`"""
         return {n.name: n for n in self.nodes}
 
@@ -259,8 +259,6 @@ class HamiltonGraph:
         """
         return self.__nodes_lookup[key]
 
-    def filter_nodes(
-        self, filter: typing.Callable[[HamiltonNode], bool]
-    ) -> typing.List[HamiltonNode]:
+    def filter_nodes(self, filter: typing.Callable[[HamiltonNode], bool]) -> list[HamiltonNode]:
         """Return Hamilton nodes matching the filter criteria"""
         return [n for n in self.nodes if filter(n) is True]

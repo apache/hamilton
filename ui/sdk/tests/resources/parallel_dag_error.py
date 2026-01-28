@@ -17,7 +17,6 @@
 
 import dataclasses
 import os
-from typing import List
 
 import pandas as pd
 
@@ -25,7 +24,7 @@ from hamilton.function_modifiers import extract_columns, load_from, source
 from hamilton.htypes import Collect, Parallelizable
 
 
-def files(data_dir: str) -> List[str]:
+def files(data_dir: str) -> list[str]:
     """Lists oll files in the data directory"""
 
     out = []
@@ -42,7 +41,7 @@ class CityData:
     weekday_file: str
 
 
-def city_data(files: List[str]) -> Parallelizable[CityData]:
+def city_data(files: list[str]) -> Parallelizable[CityData]:
     """Gathers a list of per-city data for processing/analyzing"""
 
     cities = dict()

@@ -17,7 +17,6 @@
 
 import random
 import string
-from typing import List, Tuple
 
 import pytest
 from django.test import AsyncClient
@@ -35,7 +34,7 @@ from tests.test_lifecycle.test_projects import _setup_sample_project
 
 def _generate_some_sample_nodes(
     n_nodes: int, n_code_artifacts: int
-) -> Tuple[List[NodeTemplateIn], List[CodeArtifactIn]]:
+) -> tuple[list[NodeTemplateIn], list[CodeArtifactIn]]:
     nodes = []
     code_artifacts = []
     for i in range(n_nodes):
@@ -75,7 +74,7 @@ def _generate_some_sample_nodes(
 
 
 def _generate_sample_dag_template(
-    nodes: List[NodeTemplateIn], code_artifacts: List[CodeArtifactIn]
+    nodes: list[NodeTemplateIn], code_artifacts: list[CodeArtifactIn]
 ) -> DAGTemplateIn:
     return DAGTemplateIn(
         name="sample_dag_template",

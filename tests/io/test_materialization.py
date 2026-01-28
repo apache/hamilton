@@ -16,7 +16,8 @@
 # under the License.
 
 import dataclasses
-from typing import Any, Collection, Dict, List, Optional, Tuple, Type
+from collections.abc import Collection
+from typing import Any
 
 import pytest
 
@@ -45,16 +46,16 @@ global_mock_data_saver_cache = {}
 @dataclasses.dataclass
 class MockDataSaver(DataSaver):
     storage_key: str
-    other_storage_key: Optional[str] = None
+    other_storage_key: str | None = None
 
-    def save_data(self, data: Any) -> Dict[str, Any]:
+    def save_data(self, data: Any) -> dict[str, Any]:
         global_mock_data_saver_cache[self.storage_key] = data
         if self.other_storage_key is not None:
             global_mock_data_saver_cache[self.other_storage_key] = data
         return {"saved": True}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [dict]
 
     @classmethod
@@ -66,11 +67,11 @@ class MockDataSaver(DataSaver):
 class MockDataLoader(DataLoader):
     fixed_data: Any
 
-    def load_data(self, type_: Type[Type]) -> Tuple[Type, Dict[str, Any]]:
+    def load_data(self, type_: type[type]) -> tuple[type, dict[str, Any]]:
         return self.fixed_data, {}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [dict]
 
     @classmethod
@@ -80,16 +81,16 @@ class MockDataLoader(DataLoader):
 
 class JoinBuilder(base.ResultMixin):
     @staticmethod
-    def build_result(**outputs: Dict[str, Any]) -> Any:
+    def build_result(**outputs: dict[str, Any]) -> Any:
         out = {}
         for output in outputs.values():
             out.update(output)
         return out
 
-    def output_type(self) -> Type:
+    def output_type(self) -> type:
         return dict
 
-    def input_types(self) -> List[Type]:
+    def input_types(self) -> list[type]:
         return [dict]
 
 
@@ -334,11 +335,11 @@ def test_sanitize_materializer_dependencies_error():
 def test_dynamic_properties_can_be_registered_after_import_for_saver():
     @dataclasses.dataclass
     class CustomDataSaver(DataSaver):
-        def save_data(self, type_: Type[Type]) -> Tuple[Type, Dict[str, Any]]:
+        def save_data(self, type_: type[type]) -> tuple[type, dict[str, Any]]:
             return "value", {}
 
         @classmethod
-        def applicable_types(cls) -> Collection[Type]:
+        def applicable_types(cls) -> Collection[type]:
             return [dict]
 
         @classmethod
@@ -358,11 +359,11 @@ def test_dynamic_properties_can_be_registered_after_import_for_saver():
 def test_dynamic_properties_can_be_registered_after_import_for_loader():
     @dataclasses.dataclass
     class CustomDataLoader(DataLoader):
-        def load_data(self, type_: Type[int]) -> Tuple[Type[int], Dict[str, Any]]:
+        def load_data(self, type_: type[int]) -> tuple[type[int], dict[str, Any]]:
             return int, {}
 
         @classmethod
-        def applicable_types(cls) -> Collection[Type]:
+        def applicable_types(cls) -> Collection[type]:
             return [int]
 
         @classmethod

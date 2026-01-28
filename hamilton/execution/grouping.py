@@ -19,7 +19,8 @@ import abc
 import dataclasses
 import enum
 from collections import defaultdict
-from typing import Any, Collection, Dict, List, Optional, Set, Tuple
+from collections.abc import Collection
+from typing import Any
 
 from hamilton import node
 from hamilton.execution import graph_functions
@@ -59,11 +60,11 @@ class NodeGroup:
     """
 
     base_id: str  # Unique ID for node group.
-    spawning_task_base_id: Optional[str]
-    nodes: List[Node]
+    spawning_task_base_id: str | None
+    nodes: list[Node]
     purpose: NodeGroupPurpose  # TODO -- derive this (or not?)
     # set of available nodes by this task for querying
-    available_nodes: Set[str] = dataclasses.field(init=False)
+    available_nodes: set[str] = dataclasses.field(init=False)
 
     def __post_init__(self):
         self.available_nodes = {node_.name for node_ in self.nodes}
@@ -74,14 +75,14 @@ class NodeGroup:
     def __eq__(self, other):
         return self.base_id == other.base_id
 
-    def get_expander_node(self) -> Optional[Node]:
+    def get_expander_node(self) -> Node | None:
         """Returns the expander node for this node group, if it exists"""
         candidates = [n for n in self.nodes if n.node_role == NodeType.EXPAND]
         if candidates:
             return candidates[0]
         return None
 
-    def get_collector_node(self) -> Optional[Node]:
+    def get_collector_node(self) -> Node | None:
         """Returns the collector node for this node group, if it exists"""
         candidates = [n for n in self.nodes if n.node_role == NodeType.COLLECT]
         if candidates:
@@ -102,11 +103,11 @@ class TaskSpec(NodeGroup):
     """
 
     outputs_to_compute: Collection[str]  # list of output names to compute
-    overrides: Dict[str, Any]  # overrides for the task, fixed at the time of creation
+    overrides: dict[str, Any]  # overrides for the task, fixed at the time of creation
     adapter: lifecycle_base.LifecycleAdapterSet
-    base_dependencies: List[str]  # list of tasks that must be completed before this task can run
+    base_dependencies: list[str]  # list of tasks that must be completed before this task can run
 
-    def get_input_vars(self) -> Tuple[List[str], List[str]]:
+    def get_input_vars(self) -> tuple[list[str], list[str]]:
         """Returns the node-level dependencies for this node group.
         This is all of the sources in the subdag.
 
@@ -148,20 +149,20 @@ class TaskImplementation(TaskSpec):
 
     # task whose result spawned these tasks
     # If this is none, it means the graph itself spawned these tasks
-    group_id: Optional[str]
-    realized_dependencies: Dict[str, List[str]]  # realized dependencies are the actual dependencies
+    group_id: str | None
+    realized_dependencies: dict[str, list[str]]  # realized dependencies are the actual dependencies
     # Note that these are lists as we have "gather" operations
-    spawning_task_id: Optional[str]  # task that spawned this task
+    spawning_task_id: str | None  # task that spawned this task
     task_id: str = dataclasses.field(init=False)
-    dynamic_inputs: Dict[str, Any] = dataclasses.field(default_factory=dict)
+    dynamic_inputs: dict[str, Any] = dataclasses.field(default_factory=dict)
     run_id: str = dataclasses.field(default_factory=str)
 
-    def bind(self, dynamic_inputs: Dict[str, Any]) -> "TaskImplementation":
+    def bind(self, dynamic_inputs: dict[str, Any]) -> "TaskImplementation":
         """Binds dynamic inputs to the task spec, returning a new task spec"""
         return dataclasses.replace(self, dynamic_inputs={**dynamic_inputs, **self.dynamic_inputs})
 
     @staticmethod
-    def determine_task_id(base_id: str, spawning_task: Optional[str], group_id: Optional[str]):
+    def determine_task_id(base_id: str, spawning_task: str | None, group_id: str | None):
         return ".".join(
             filter(lambda i: i is not None, [spawning_task, group_id, base_id])
         )  # This will do for now...
@@ -183,7 +184,7 @@ class GroupingStrategy(abc.ABC):
     """Base class for grouping nodes"""
 
     @abc.abstractmethod
-    def group_nodes(self, nodes: List[node.Node]) -> List[NodeGroup]:
+    def group_nodes(self, nodes: list[node.Node]) -> list[NodeGroup]:
         """Groups nodes into a list of node groups"""
         pass
 
@@ -198,7 +199,7 @@ class GroupByRepeatableBlocks(GroupingStrategy):
     @staticmethod
     def nodes_after_last_expand_block(
         collect_node: node.Node,
-    ) -> Tuple[node.Node, List[node.Node]]:
+    ) -> tuple[node.Node, list[node.Node]]:
         """Utility function to yield all nodes between a start and an end node.
         This returns all nodes for which the following conditions are met:
 
@@ -214,7 +215,7 @@ class GroupByRepeatableBlocks(GroupingStrategy):
 
         return graph_functions.nodes_between(collect_node, is_expander)
 
-    def group_nodes(self, nodes: List[node.Node]) -> List[NodeGroup]:
+    def group_nodes(self, nodes: list[node.Node]) -> list[NodeGroup]:
         """Groups nodes into blocks. This works as follows:
         1. Fina all the Parallelizable[] nodes in the DAG
         2. For each of those, do a DFS until the next Collect[] node
@@ -293,7 +294,7 @@ def convert_node_type_to_group_purpose(node_type: NodeType) -> NodeGroupPurpose:
 class GroupNodesIndividually(GroupingStrategy):
     """Groups nodes into individual blocks."""
 
-    def group_nodes(self, nodes: List[node.Node]):
+    def group_nodes(self, nodes: list[node.Node]):
         return [
             NodeGroup(
                 base_id=node_.name,
@@ -308,7 +309,7 @@ class GroupNodesIndividually(GroupingStrategy):
 class GroupNodesAllAsOne(GroupingStrategy):
     """Groups nodes all into one block. TODO -- add validation."""
 
-    def group_nodes(self, nodes: List[node.Node]):
+    def group_nodes(self, nodes: list[node.Node]):
         return [
             NodeGroup(
                 base_id="root",
@@ -320,7 +321,7 @@ class GroupNodesAllAsOne(GroupingStrategy):
 
 
 class GroupNodesByLevel(GroupingStrategy):
-    def group_nodes(self, nodes: List[node.Node]) -> List[NodeGroup]:
+    def group_nodes(self, nodes: list[node.Node]) -> list[NodeGroup]:
         in_order = topologically_sort_nodes(nodes)
         node_levels = get_node_levels(in_order)
         nodes_by_level = defaultdict(list)
@@ -342,11 +343,11 @@ class GroupNodesByLevel(GroupingStrategy):
 
 
 def create_task_plan(
-    node_groups: List[NodeGroup],
-    outputs: List[str],
-    overrides: Dict[str, Any],
+    node_groups: list[NodeGroup],
+    outputs: list[str],
+    overrides: dict[str, Any],
     adapter: lifecycle_base.LifecycleAdapterSet,
-) -> List[TaskSpec]:
+) -> list[TaskSpec]:
     """Creates tasks from node groups. This occurs after we group and after execute() is called in
     the driver. Knowing what the user wants, we can finally create the tasks.
 

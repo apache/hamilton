@@ -19,7 +19,7 @@ import importlib.resources
 import json
 import os
 import shutil
-from typing import Any, Dict
+from typing import Any
 
 import jinja2
 import loguru
@@ -62,7 +62,7 @@ def print_out_next_steps(location: str, template: str):
 
 
 def fill_and_copy_template(
-    template_data: Dict[str, Any], template_location: str, template_dest: str, executable: bool
+    template_data: dict[str, Any], template_location: str, template_dest: str, executable: bool
 ):
     environment = jinja2.Environment()
     with open(template_location) as f:

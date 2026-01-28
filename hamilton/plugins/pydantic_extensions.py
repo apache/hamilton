@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Type
+from typing import Any
 
 from hamilton.data_quality import base, default_validators
 from hamilton.htypes import custom_subclass_check
@@ -51,13 +51,13 @@ class PydanticModelValidator(base.BaseDefaultValidator):
     :param arbitrary_types_allowed: Whether arbitrary types are allowed in the model
     """
 
-    def __init__(self, model: Type[BaseModel], importance: str):
+    def __init__(self, model: type[BaseModel], importance: str):
         super(PydanticModelValidator, self).__init__(importance)
         self.model = model
         self._model_adapter = TypeAdapter(model)
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         # In addition to checking for a subclass of BaseModel, we also check for dict
         # as this is the standard 'de-serialized' format of pydantic models in python
         return custom_subclass_check(datatype, BaseModel) or custom_subclass_check(datatype, dict)

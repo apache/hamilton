@@ -22,7 +22,7 @@ import importlib
 import logging
 import os
 import pathlib
-from typing import Any, Dict, Literal, Optional, Tuple, Type, get_args
+from typing import Any, Literal, get_args
 
 logger = logging.getLogger(__name__)
 
@@ -51,14 +51,14 @@ ExtensionName = Literal[
     "mlflow",
     "pydantic",
 ]
-HAMILTON_EXTENSIONS: Tuple[ExtensionName, ...] = get_args(ExtensionName)
+HAMILTON_EXTENSIONS: tuple[ExtensionName, ...] = get_args(ExtensionName)
 HAMILTON_AUTOLOAD_ENV = "HAMILTON_AUTOLOAD_EXTENSIONS"
 # NOTE the variable DEFAULT_CONFIG_LOCAITON is redundant with `hamilton.telemetry`
 # but this `registry` module must avoid circular imports
 DEFAULT_CONFIG_LOCATION = pathlib.Path("~/.hamilton.conf").expanduser()
 
 # This is a dictionary of extension name -> dict with dataframe and column types.
-DF_TYPE_AND_COLUMN_TYPES: Dict[str, Dict[str, Type]] = {}
+DF_TYPE_AND_COLUMN_TYPES: dict[str, dict[str, type]] = {}
 
 COLUMN_TYPE = "column_type"
 DATAFRAME_TYPE = "dataframe_type"
@@ -166,7 +166,7 @@ def config_disable_autoload():
         config.write(f)
 
 
-def register_types(extension_name: str, dataframe_type: Type, column_type: Optional[Type]):
+def register_types(extension_name: str, dataframe_type: type, column_type: type | None):
     """Registers the dataframe and column types for the extension. Note that column types are optional
     as some extensions may not have a column type (E.G. spark). In this case, this is not included
 
@@ -207,7 +207,7 @@ def fill_with_scalar(df: Any, column_name: str, scalar_value: Any) -> Any:
     raise NotImplementedError()
 
 
-def get_column_type_from_df_type(dataframe_type: Type) -> Type:
+def get_column_type_from_df_type(dataframe_type: type) -> type:
     """Function to cycle through the registered extensions and return the column type for the dataframe type.
 
     :param dataframe_type: the dataframe type to find the column type for.
@@ -239,7 +239,7 @@ def register_adapter(adapter: Any):
         SAVER_REGISTRY[adapter.name()].append(adapter)
 
 
-def get_registered_dataframe_types() -> Dict[str, Type]:
+def get_registered_dataframe_types() -> dict[str, type]:
     """Returns a dictionary of extension name -> dataframe type.
 
     :return: the dictionary.
@@ -250,7 +250,7 @@ def get_registered_dataframe_types() -> Dict[str, Type]:
     }
 
 
-def get_registered_column_types() -> Dict[str, Type]:
+def get_registered_column_types() -> dict[str, type]:
     """Returns a dictionary of extension name -> column type.
 
     :return: the dictionary.

@@ -18,8 +18,9 @@
 import dataclasses
 import functools
 import inspect
+from collections.abc import Callable
 from types import ModuleType
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any
 
 from hamilton import node
 from hamilton.execution.grouping import NodeGroupPurpose
@@ -53,7 +54,7 @@ class HookCall:
     sequence_number: int
     name: str
     fn: Callable
-    bound_kwargs: Dict[str, Any]
+    bound_kwargs: dict[str, Any]
     result: Any
 
 
@@ -98,7 +99,7 @@ class ExtendToTrackCalls:
         return wrapped
 
     @property
-    def calls(self) -> List[HookCall]:
+    def calls(self) -> list[HookCall]:
         return self._calls
 
     @property
@@ -113,7 +114,7 @@ class TrackingPreDoAnythingHook(BasePreDoAnythingHook, ExtendToTrackCalls):
 
 class TrackingPostGraphConstructHook(ExtendToTrackCalls, BasePostGraphConstruct):
     def post_graph_construct(
-        self, graph: FunctionGraph, modules: List[ModuleType], config: Dict[str, Any]
+        self, graph: FunctionGraph, modules: list[ModuleType], config: dict[str, Any]
     ):
         pass
 
@@ -123,15 +124,15 @@ class TrackingPreGraphExecuteHook(ExtendToTrackCalls, BasePreGraphExecute):
         self,
         run_id: str,
         graph: FunctionGraph,
-        final_vars: List[str],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        final_vars: list[str],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
     ):
         pass
 
 
 class TrackingPostTaskGroupHook(ExtendToTrackCalls, BasePostTaskGroup):
-    def post_task_group(self, run_id: str, task_ids: List[str]):
+    def post_task_group(self, run_id: str, task_ids: list[str]):
         pass
 
 
@@ -140,10 +141,10 @@ class TrackingPreTaskExecuteHook(ExtendToTrackCalls, BasePreTaskExecute):
         self,
         run_id: str,
         task_id: str,
-        nodes: List[node.Node],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
-        spawning_task_id: Optional[str],
+        nodes: list[node.Node],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         pass
@@ -151,7 +152,7 @@ class TrackingPreTaskExecuteHook(ExtendToTrackCalls, BasePreTaskExecute):
 
 class TrackingPreNodeExecuteHook(ExtendToTrackCalls, BasePreNodeExecute):
     def pre_node_execute(
-        self, run_id: str, node_: Node, kwargs: Dict[str, Any], task_id: Optional[str] = None
+        self, run_id: str, node_: Node, kwargs: dict[str, Any], task_id: str | None = None
     ):
         pass
 
@@ -161,11 +162,11 @@ class TrackingPostNodeExecuteHook(ExtendToTrackCalls, BasePostNodeExecute):
         self,
         run_id: str,
         node_: Node,
-        kwargs: Dict[str, Any],
+        kwargs: dict[str, Any],
         success: bool,
-        error: Optional[Exception],
+        error: Exception | None,
         result: Any,
-        task_id: Optional[str] = None,
+        task_id: str | None = None,
     ):
         pass
 
@@ -176,10 +177,10 @@ class TrackingPreTaskSubmissionHook(ExtendToTrackCalls, BasePreTaskSubmission):
         *,
         run_id: str,
         task_id: str,
-        nodes: List[Node],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
-        spawning_task_id: Optional[str],
+        nodes: list[Node],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         pass
@@ -191,11 +192,11 @@ class TrackingPostTaskReturnHook(ExtendToTrackCalls, BasePostTaskReturn):
         *,
         run_id: str,
         task_id: str,
-        nodes: List[Node],
+        nodes: list[Node],
         result: Any,
         success: bool,
         error: Exception,
-        spawning_task_id: Optional[str],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         pass
@@ -206,18 +207,18 @@ class TrackingPostTaskExecuteHook(ExtendToTrackCalls, BasePostTaskExecute):
         self,
         run_id: str,
         task_id: str,
-        nodes: List[node.Node],
-        results: Optional[Dict[str, Any]],
+        nodes: list[node.Node],
+        results: dict[str, Any] | None,
         success: bool,
         error: Exception,
-        spawning_task_id: Optional[str],
+        spawning_task_id: str | None,
         purpose: NodeGroupPurpose,
     ):
         pass
 
 
 class TrackingPostTaskExpandHook(ExtendToTrackCalls, BasePostTaskExpand):
-    def post_task_expand(self, run_id: str, task_id: str, parameters: Dict[str, Any]):
+    def post_task_expand(self, run_id: str, task_id: str, parameters: dict[str, Any]):
         pass
 
 
@@ -227,8 +228,8 @@ class TrackingPostGraphExecuteHook(ExtendToTrackCalls, BasePostGraphExecute):
         run_id: str,
         graph: FunctionGraph,
         success: bool,
-        error: Optional[Exception],
-        results: Optional[Dict[str, Any]],
+        error: Exception | None,
+        results: dict[str, Any] | None,
     ):
         pass
 
@@ -248,7 +249,7 @@ class TrackingDoNodeExecuteHook(ExtendToTrackCalls, BaseDoNodeExecute):
         self._additional_value = additional_value
 
     def do_node_execute(
-        self, run_id: str, node_: node.Node, kwargs: Dict[str, Any], task_id: Optional[str] = None
+        self, run_id: str, node_: node.Node, kwargs: dict[str, Any], task_id: str | None = None
     ) -> Any:
         if node_.type == int and node_.name != "n_iters":
             return node_(**kwargs) + self._additional_value
@@ -264,7 +265,7 @@ class TrackingDoRemoteExecuteHook(ExtendToTrackCalls, BaseDoRemoteExecute):
         self,
         node: "node.Node",
         execute_lifecycle_for_node: Callable,
-        **kwargs: Dict[str, Any],
+        **kwargs: dict[str, Any],
     ) -> Any:
         node_ = node
         if node_.type == int and node_.name != "n_iters":
@@ -277,27 +278,27 @@ class TrackingDoBuildResultMethod(ExtendToTrackCalls, BaseDoBuildResult):
         super().__init__(name)
         self._result = result
 
-    def do_build_result(self, outputs: Dict[str, Any]) -> Any:
+    def do_build_result(self, outputs: dict[str, Any]) -> Any:
         return self._result
 
 
 class TrackingValidateNodeValidator(ExtendToTrackCalls, BaseValidateNode):
-    def __init__(self, name: str, valid: bool, message: Optional[str]):
+    def __init__(self, name: str, valid: bool, message: str | None):
         super().__init__(name)
         self._valid = valid
         self._message = message
 
-    def validate_node(self, *, created_node: node.Node) -> Tuple[bool, Optional[str]]:
+    def validate_node(self, *, created_node: node.Node) -> tuple[bool, str | None]:
         return self._valid, self._message
 
 
 class TrackingValidateGraphValidator(ExtendToTrackCalls, BaseValidateGraph):
-    def __init__(self, name: str, valid: bool, message: Optional[str]):
+    def __init__(self, name: str, valid: bool, message: str | None):
         super().__init__(name)
         self._valid = valid
         self._message = message
 
     def validate_graph(
-        self, *, graph: "FunctionGraph", modules: List[ModuleType], config: Dict[str, Any]
-    ) -> Tuple[bool, Optional[str]]:
+        self, *, graph: "FunctionGraph", modules: list[ModuleType], config: dict[str, Any]
+    ) -> tuple[bool, str | None]:
         return self._valid, self._message

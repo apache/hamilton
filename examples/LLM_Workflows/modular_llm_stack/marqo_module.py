@@ -16,7 +16,7 @@
 # under the License.
 
 import logging
-from typing import Any, Union
+from typing import Any
 
 import marqo
 
@@ -94,7 +94,7 @@ if __name__ == "__main__":
         include_metadata: bool = True,
         include_vectors: bool = False,
         namespace: str = None,
-    ) -> list[dict[str, Union[Union[list[Any], dict], Any]]]:
+    ) -> list[dict[str, list[Any] | dict | Any]]:
         params = {
             "limit": top_k,
             "attributes_to_retrieve": ["*"] if include_metadata else ["_id"],

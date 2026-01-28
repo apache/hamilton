@@ -17,7 +17,7 @@
 
 import collections
 import inspect
-from typing import Any, Type
+from typing import Any
 
 import numpy
 import numpy as np
@@ -250,7 +250,7 @@ def test_resolve_default_validators_error(output_type, kwargs, importance):
     ],
 )
 def test_default_data_validators(
-    cls: Type[hamilton.data_quality.base.BaseDefaultValidator],
+    cls: type[hamilton.data_quality.base.BaseDefaultValidator],
     param: Any,
     data: Any,
     should_pass: bool,

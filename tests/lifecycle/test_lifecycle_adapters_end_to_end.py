@@ -15,8 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from collections.abc import Callable
 from types import ModuleType
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
@@ -304,8 +305,8 @@ def test_multi_hook():
             self,
             run_id: str,
             node_: node.Node,
-            kwargs: Dict[str, Any],
-            task_id: Optional[str] = None,
+            kwargs: dict[str, Any],
+            task_id: str | None = None,
         ):
             return node_(**kwargs)
 
@@ -313,7 +314,7 @@ def test_multi_hook():
             pass
 
         def post_graph_construct(
-            self, graph: "FunctionGraph", modules: List[ModuleType], config: Dict[str, Any]
+            self, graph: "FunctionGraph", modules: list[ModuleType], config: dict[str, Any]
         ):
             pass
 
@@ -321,14 +322,14 @@ def test_multi_hook():
             self,
             run_id: str,
             graph: "FunctionGraph",
-            final_vars: List[str],
-            inputs: Dict[str, Any],
-            overrides: Dict[str, Any],
+            final_vars: list[str],
+            inputs: dict[str, Any],
+            overrides: dict[str, Any],
         ):
             pass
 
         def pre_node_execute(
-            self, run_id: str, node_: Node, kwargs: Dict[str, Any], task_id: Optional[str] = None
+            self, run_id: str, node_: Node, kwargs: dict[str, Any], task_id: str | None = None
         ):
             pass
 
@@ -336,11 +337,11 @@ def test_multi_hook():
             self,
             run_id: str,
             node_: node.Node,
-            kwargs: Dict[str, Any],
+            kwargs: dict[str, Any],
             success: bool,
-            error: Optional[Exception],
-            result: Optional[Any],
-            task_id: Optional[str] = None,
+            error: Exception | None,
+            result: Any | None,
+            task_id: str | None = None,
         ):
             pass
 
@@ -349,8 +350,8 @@ def test_multi_hook():
             run_id: str,
             graph: "FunctionGraph",
             success: bool,
-            error: Optional[Exception],
-            results: Optional[Dict[str, Any]],
+            error: Exception | None,
+            results: dict[str, Any] | None,
         ):
             pass
 
@@ -377,7 +378,7 @@ def test_multi_hook_remote():
             self,
             node: node.Node,
             execute_lifecycle_for_node: Callable,
-            **kwargs: Dict[str, Any],
+            **kwargs: dict[str, Any],
         ):
             return execute_lifecycle_for_node(**kwargs)
 
@@ -385,7 +386,7 @@ def test_multi_hook_remote():
             pass
 
         def post_graph_construct(
-            self, graph: "FunctionGraph", modules: List[ModuleType], config: Dict[str, Any]
+            self, graph: "FunctionGraph", modules: list[ModuleType], config: dict[str, Any]
         ):
             pass
 
@@ -393,14 +394,14 @@ def test_multi_hook_remote():
             self,
             run_id: str,
             graph: "FunctionGraph",
-            final_vars: List[str],
-            inputs: Dict[str, Any],
-            overrides: Dict[str, Any],
+            final_vars: list[str],
+            inputs: dict[str, Any],
+            overrides: dict[str, Any],
         ):
             pass
 
         def pre_node_execute(
-            self, run_id: str, node_: Node, kwargs: Dict[str, Any], task_id: Optional[str] = None
+            self, run_id: str, node_: Node, kwargs: dict[str, Any], task_id: str | None = None
         ):
             pass
 
@@ -408,11 +409,11 @@ def test_multi_hook_remote():
             self,
             run_id: str,
             node_: node.Node,
-            kwargs: Dict[str, Any],
+            kwargs: dict[str, Any],
             success: bool,
-            error: Optional[Exception],
-            result: Optional[Any],
-            task_id: Optional[str] = None,
+            error: Exception | None,
+            result: Any | None,
+            task_id: str | None = None,
         ):
             pass
 
@@ -421,8 +422,8 @@ def test_multi_hook_remote():
             run_id: str,
             graph: "FunctionGraph",
             success: bool,
-            error: Optional[Exception],
-            results: Optional[Dict[str, Any]],
+            error: Exception | None,
+            results: dict[str, Any] | None,
         ):
             pass
 

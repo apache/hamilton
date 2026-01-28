@@ -40,7 +40,6 @@ import platform
 import threading
 import traceback
 import uuid
-from typing import Dict, List, Optional
 from urllib import request
 
 try:
@@ -180,12 +179,12 @@ def create_start_event_json(
     number_of_nodes: int,
     number_of_modules: int,
     number_of_config_items: int,
-    decorators_used: Dict[str, int],
+    decorators_used: dict[str, int],
     graph_adapter_used: str,
-    lifecycle_adapters_used: List[str],
+    lifecycle_adapters_used: list[str],
     result_builder_used: str,
     driver_run_id: uuid.UUID,
-    error: Optional[str],
+    error: str | None,
     graph_executor_class: str,
 ):
     """Creates the start event JSON.
@@ -232,7 +231,7 @@ def create_end_event_json(
     number_of_overrides: int,
     number_of_inputs: int,
     driver_run_id: uuid.UUID,
-    error: Optional[str],
+    error: str | None,
 ):
     """Creates the end event JSON.
 
@@ -458,7 +457,7 @@ def sanitize_error(exc_type, exc_value, exc_traceback) -> str:
         return "FAILED_TO_SANITIZE_ERROR"
 
 
-def get_all_adapters_names(adapter: lifecycle_base.LifecycleAdapterSet) -> List[str]:
+def get_all_adapters_names(adapter: lifecycle_base.LifecycleAdapterSet) -> list[str]:
     """Gives a list of all adapter names in the LifecycleAdapterSet.
     Simply a loop over the adapters it contains.
 

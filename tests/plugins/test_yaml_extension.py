@@ -16,7 +16,6 @@
 # under the License.
 
 import pathlib
-from typing import List, Type
 
 import pytest
 import yaml
@@ -73,7 +72,7 @@ def test_yaml_loader_and_saver(tmp_path: pathlib.Path, data, file_name):
     [(t, [YAMLDataLoader], YAMLDataLoader) for t in PrimitiveTypes],
 )
 def test_resolve_correct_loader_class(
-    type_: Type[Type], classes: List[Type[DataLoader]], correct_class: Type[DataLoader]
+    type_: type[type], classes: list[type[DataLoader]], correct_class: type[DataLoader]
 ):
     assert resolve_adapter_class(type_, classes) == correct_class
 
@@ -83,6 +82,6 @@ def test_resolve_correct_loader_class(
     [(t, [YAMLDataSaver], YAMLDataSaver) for t in PrimitiveTypes],
 )
 def test_resolve_correct_saver_class(
-    type_: Type[Type], classes: List[Type[DataSaver]], correct_class: Type[DataLoader]
+    type_: type[type], classes: list[type[DataSaver]], correct_class: type[DataLoader]
 ):
     assert resolve_adapter_class(type_, classes) == correct_class

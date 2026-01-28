@@ -18,7 +18,8 @@
 import concurrent
 import logging
 import tempfile
-from typing import Generator, Union
+from collections.abc import Generator
+from typing import Union
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +50,7 @@ def summarize_text_from_summaries_prompt(content_type: str = "an academic paper"
 
 
 @config.when(file_type="pdf")
-def raw_text__pdf(pdf_source: Union[str, bytes, tempfile.SpooledTemporaryFile]) -> str:
+def raw_text__pdf(pdf_source: str | bytes | tempfile.SpooledTemporaryFile) -> str:
     """Takes a filepath to a PDF and returns a string of the PDF's contents
     :param pdf_source: the path, or the temporary file, to the PDF.
     :return: the text of the PDF.
@@ -64,7 +65,7 @@ def raw_text__pdf(pdf_source: Union[str, bytes, tempfile.SpooledTemporaryFile]) 
 
 
 @config.when(file_type="txt")
-def raw_text__txt(text_file: Union[str, tempfile.SpooledTemporaryFile]) -> str:
+def raw_text__txt(text_file: str | tempfile.SpooledTemporaryFile) -> str:
     """Takes a filepath to a text file and returns a string of the text file's contents
     :param text_file: the path, or the temporary file, to the text file.
     :return: the contents of the file as a string.

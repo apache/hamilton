@@ -16,7 +16,6 @@
 # under the License.
 
 import datetime
-from typing import Optional
 
 import pandas as pd
 from scipy import stats
@@ -32,7 +31,7 @@ def full_pdf(
     start_date: datetime.datetime,
     due_date: datetime.datetime,
     probability_distribution: stats.rv_continuous,
-    current_date: Optional[datetime.datetime] = None,
+    current_date: datetime.datetime | None = None,
     induction_post_due_date_days: int = 14,
 ) -> pd.Series:
     """Probabilities of delivery on X date on the *full* date range. We'll filter later.

@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Iterable, Tuple
+from collections.abc import Iterable
 
 import click
 import functions
@@ -30,17 +30,17 @@ from hamilton.plugins import h_dask
 # Assume we define some custom methods for splittings
 
 
-def split_on_region(data: pd.DataFrame) -> Iterable[Tuple[str, pd.DataFrame]]:
+def split_on_region(data: pd.DataFrame) -> Iterable[tuple[str, pd.DataFrame]]:
     for idx, grp in data.groupby("Region"):
         yield f"Region:{idx}", grp
 
 
-def split_on_attrs(data: pd.DataFrame) -> Iterable[Tuple[str, pd.DataFrame]]:
+def split_on_attrs(data: pd.DataFrame) -> Iterable[tuple[str, pd.DataFrame]]:
     for (region, method), grp in data.groupby(["Region", "Method"]):
         yield f"Region:{region} - Method:{method}", grp
 
 
-def split_on_views(data: pd.DataFrame) -> Iterable[Tuple[str, pd.DataFrame]]:
+def split_on_views(data: pd.DataFrame) -> Iterable[tuple[str, pd.DataFrame]]:
     yield "Low Views", data[data.Views <= 4000.0]
     yield "High Views", data[data.Views > 4000.0]
 

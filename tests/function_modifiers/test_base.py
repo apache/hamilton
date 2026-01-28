@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Collection, Dict, List
+from collections.abc import Collection
 
 import pytest as pytest
 
@@ -81,7 +81,7 @@ def test_merge_config_sad(config, config_required, config_optional_with_defaults
         base.resolve_config("test", config, config_required, config_optional_with_defaults)
 
 
-def _create_node_set(names_to_deps: Dict[str, List[str]]) -> List[Node]:
+def _create_node_set(names_to_deps: dict[str, list[str]]) -> list[Node]:
     nodes = []
     for name, deps in names_to_deps.items():
         nodes.append(

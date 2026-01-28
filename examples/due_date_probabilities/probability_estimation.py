@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 
 import pandas as pd
 from scipy import stats
@@ -141,7 +140,7 @@ def raw_probabilities(raw_data: str) -> pd.DataFrame:
     return probabilities_df  # .set_index("days")
 
 
-def resampled(raw_probabilities: pd.DataFrame) -> List[int]:
+def resampled(raw_probabilities: pd.DataFrame) -> list[int]:
     sample_data = []
     for _idx, row in raw_probabilities.iterrows():
         count = row.probability * 1000

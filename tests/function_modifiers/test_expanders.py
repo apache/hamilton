@@ -16,7 +16,7 @@
 # under the License.
 
 import sys
-from typing import Any, Dict, List, Optional, Tuple, Type, TypedDict
+from typing import Any, TypedDict
 
 import numpy as np
 import pandas as pd
@@ -328,8 +328,8 @@ def test_validate_extract_fields(fields):
     [
         {"field": np.ndarray, "field2": str},
         {"field": dict, "field2": int, "field3": list, "field4": float, "field5": str},
-        {"field": List[str]},
-        {"field": Dict[str, List[str]]},
+        {"field": list[str]},
+        {"field": dict[str, list[str]]},
     ],
 )
 def test_extract_fields_constructor_happy(fields):
@@ -463,7 +463,7 @@ def test_extract_fields_transform_on_generic_dict_with_explicit_types():
     """Tests whole extract_fields decorator using a generic dict and explicit types."""
     annotation = function_modifiers.extract_fields({"col_1": int, "col_2": int})
 
-    def dummy_dict() -> Dict[str, int]:
+    def dummy_dict() -> dict[str, int]:
         """dummy doc"""
         return {"col_1": 1, "col_2": 2}
 
@@ -473,7 +473,7 @@ def test_extract_fields_transform_on_generic_dict_with_explicit_types():
     assert len(nodes) == 3
     assert nodes[0] == node.Node(
         name=dummy_dict.__name__,
-        typ=Dict[str, int],
+        typ=dict[str, int],
         doc_string=getattr(dummy_dict, "__doc__", ""),
         callabl=dummy_dict,
         tags={"module": "tests.function_modifiers.test_expanders"},
@@ -482,18 +482,18 @@ def test_extract_fields_transform_on_generic_dict_with_explicit_types():
     assert nodes[1].name == "col_1"
     assert nodes[1].type == int
     assert nodes[1].documentation == "dummy doc"  # we default to base function doc.
-    assert nodes[1].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+    assert nodes[1].input_types == {dummy_dict.__name__: (dict[str, int], DependencyType.REQUIRED)}
     assert nodes[2].name == "col_2"
     assert nodes[2].type == int
     assert nodes[2].documentation == "dummy doc"
-    assert nodes[2].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+    assert nodes[2].input_types == {dummy_dict.__name__: (dict[str, int], DependencyType.REQUIRED)}
 
 
 def test_extract_fields_transform_on_generic_dict_with_field_list():
     """Tests whole extract_fields decorator using a generic dict and a list of field names."""
     annotation = function_modifiers.extract_fields(["col_1", "col_2"])
 
-    def dummy_dict() -> Dict[str, int]:
+    def dummy_dict() -> dict[str, int]:
         """dummy doc"""
         return {"col_1": 1, "col_2": 2}
 
@@ -503,7 +503,7 @@ def test_extract_fields_transform_on_generic_dict_with_field_list():
     assert len(nodes) == 3
     assert nodes[0] == node.Node(
         name=dummy_dict.__name__,
-        typ=Dict[str, int],
+        typ=dict[str, int],
         doc_string=getattr(dummy_dict, "__doc__", ""),
         callabl=dummy_dict,
         tags={"module": "tests.function_modifiers.test_expanders"},
@@ -512,18 +512,18 @@ def test_extract_fields_transform_on_generic_dict_with_field_list():
     assert nodes[1].name == "col_1"
     assert nodes[1].type == int
     assert nodes[1].documentation == "dummy doc"  # we default to base function doc.
-    assert nodes[1].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+    assert nodes[1].input_types == {dummy_dict.__name__: (dict[str, int], DependencyType.REQUIRED)}
     assert nodes[2].name == "col_2"
     assert nodes[2].type == int
     assert nodes[2].documentation == "dummy doc"
-    assert nodes[2].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+    assert nodes[2].input_types == {dummy_dict.__name__: (dict[str, int], DependencyType.REQUIRED)}
 
 
 def test_extract_fields_transform_on_generic_dict_with_unpacked_fields():
     """Tests whole extract_fields decorator using a generic dict and unpacked field names."""
     annotation = function_modifiers.extract_fields("col_1", "col_2")
 
-    def dummy_dict() -> Dict[str, int]:
+    def dummy_dict() -> dict[str, int]:
         """dummy doc"""
         return {"col_1": 1, "col_2": 2}
 
@@ -533,7 +533,7 @@ def test_extract_fields_transform_on_generic_dict_with_unpacked_fields():
     assert len(nodes) == 3
     assert nodes[0] == node.Node(
         name=dummy_dict.__name__,
-        typ=Dict[str, int],
+        typ=dict[str, int],
         doc_string=getattr(dummy_dict, "__doc__", ""),
         callabl=dummy_dict,
         tags={"module": "tests.function_modifiers.test_expanders"},
@@ -542,11 +542,11 @@ def test_extract_fields_transform_on_generic_dict_with_unpacked_fields():
     assert nodes[1].name == "col_1"
     assert nodes[1].type == int
     assert nodes[1].documentation == "dummy doc"  # we default to base function doc.
-    assert nodes[1].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+    assert nodes[1].input_types == {dummy_dict.__name__: (dict[str, int], DependencyType.REQUIRED)}
     assert nodes[2].name == "col_2"
     assert nodes[2].type == int
     assert nodes[2].documentation == "dummy doc"
-    assert nodes[2].input_types == {dummy_dict.__name__: (Dict[str, int], DependencyType.REQUIRED)}
+    assert nodes[2].input_types == {dummy_dict.__name__: (dict[str, int], DependencyType.REQUIRED)}
 
 
 def test_extract_fields_transform_on_typed_dict_with_explicit_types():
@@ -687,7 +687,7 @@ def test_extract_fields_transform_not_using_fill_with():
 
 
 def test_unpack_fields_transform_on_explicit_tuple():
-    def dummy() -> Tuple[int, str, int]:
+    def dummy() -> tuple[int, str, int]:
         """dummy doc"""
         return 1, "2", 3
 
@@ -698,7 +698,7 @@ def test_unpack_fields_transform_on_explicit_tuple():
 
     assert nodes[0] == node.Node(
         name=dummy.__name__,
-        typ=Tuple[int, str, int],
+        typ=tuple[int, str, int],
         doc_string=getattr(dummy, "__doc__", ""),
         callabl=dummy,
         tags={"module": "tests.function_modifiers.test_expanders"},
@@ -706,19 +706,19 @@ def test_unpack_fields_transform_on_explicit_tuple():
     assert nodes[1].name == "A"
     assert nodes[1].type == int
     assert nodes[1].documentation == "dummy doc"
-    assert nodes[1].input_types == {dummy.__name__: (Tuple[int, str, int], DependencyType.REQUIRED)}
+    assert nodes[1].input_types == {dummy.__name__: (tuple[int, str, int], DependencyType.REQUIRED)}
     assert nodes[2].name == "B"
     assert nodes[2].type == str
     assert nodes[2].documentation == "dummy doc"
-    assert nodes[2].input_types == {dummy.__name__: (Tuple[int, str, int], DependencyType.REQUIRED)}
+    assert nodes[2].input_types == {dummy.__name__: (tuple[int, str, int], DependencyType.REQUIRED)}
     assert nodes[3].name == "C"
     assert nodes[3].type == int
     assert nodes[3].documentation == "dummy doc"
-    assert nodes[3].input_types == {dummy.__name__: (Tuple[int, str, int], DependencyType.REQUIRED)}
+    assert nodes[3].input_types == {dummy.__name__: (tuple[int, str, int], DependencyType.REQUIRED)}
 
 
 def test_unpack_fields_transform_on_explicit_tuple_subset():
-    def dummy() -> Tuple[int, str, int]:
+    def dummy() -> tuple[int, str, int]:
         """dummy doc"""
         return 1, "2", 3
 
@@ -729,7 +729,7 @@ def test_unpack_fields_transform_on_explicit_tuple_subset():
 
     assert nodes[0] == node.Node(
         name=dummy.__name__,
-        typ=Tuple[int, str, int],
+        typ=tuple[int, str, int],
         doc_string=getattr(dummy, "__doc__", ""),
         callabl=dummy,
         tags={"module": "tests.function_modifiers.test_expanders"},
@@ -737,11 +737,11 @@ def test_unpack_fields_transform_on_explicit_tuple_subset():
     assert nodes[1].name == "A"
     assert nodes[1].type == int
     assert nodes[1].documentation == "dummy doc"
-    assert nodes[1].input_types == {dummy.__name__: (Tuple[int, str, int], DependencyType.REQUIRED)}
+    assert nodes[1].input_types == {dummy.__name__: (tuple[int, str, int], DependencyType.REQUIRED)}
 
 
 def test_unpack_fields_transform_on_indeterminate_tuple():
-    def dummy() -> Tuple[int, ...]:
+    def dummy() -> tuple[int, ...]:
         """dummy doc"""
         return 1, 2, 3
 
@@ -752,7 +752,7 @@ def test_unpack_fields_transform_on_indeterminate_tuple():
 
     assert nodes[0] == node.Node(
         name=dummy.__name__,
-        typ=Tuple[int, ...],
+        typ=tuple[int, ...],
         doc_string=getattr(dummy, "__doc__", ""),
         callabl=dummy,
         tags={"module": "tests.function_modifiers.test_expanders"},
@@ -760,15 +760,15 @@ def test_unpack_fields_transform_on_indeterminate_tuple():
     assert nodes[1].name == "A"
     assert nodes[1].type == int
     assert nodes[1].documentation == "dummy doc"
-    assert nodes[1].input_types == {dummy.__name__: (Tuple[int, ...], DependencyType.REQUIRED)}
+    assert nodes[1].input_types == {dummy.__name__: (tuple[int, ...], DependencyType.REQUIRED)}
     assert nodes[2].name == "B"
     assert nodes[2].type == int
     assert nodes[2].documentation == "dummy doc"
-    assert nodes[2].input_types == {dummy.__name__: (Tuple[int, ...], DependencyType.REQUIRED)}
+    assert nodes[2].input_types == {dummy.__name__: (tuple[int, ...], DependencyType.REQUIRED)}
     assert nodes[3].name == "C"
     assert nodes[3].type == int
     assert nodes[3].documentation == "dummy doc"
-    assert nodes[3].input_types == {dummy.__name__: (Tuple[int, ...], DependencyType.REQUIRED)}
+    assert nodes[3].input_types == {dummy.__name__: (tuple[int, ...], DependencyType.REQUIRED)}
 
 
 @pytest.mark.parametrize(
@@ -935,7 +935,7 @@ def test_parameterized_extract_columns():
 
 
 def test_parametrized_full_replace_groups_with_literal():
-    def add_n(grouped_parameter: List[int]) -> int:
+    def add_n(grouped_parameter: list[int]) -> int:
         return sum(grouped_parameter)
 
     annotation = function_modifiers.parameterize(
@@ -947,7 +947,7 @@ def test_parametrized_full_replace_groups_with_literal():
 
 
 def test_parametrized_full_replace_groups_with_sources():
-    def add_n(grouped_parameter: List[int]) -> int:
+    def add_n(grouped_parameter: list[int]) -> int:
         return sum(grouped_parameter)
 
     annotation = function_modifiers.parameterize(
@@ -965,7 +965,7 @@ def test_parametrized_full_replace_groups_with_sources():
 
 
 def test_parameterized_validate_group():
-    def add_n(grouped_parameter: List[int]) -> int:
+    def add_n(grouped_parameter: list[int]) -> int:
         return sum(grouped_parameter)
 
     annotation = function_modifiers.parameterize(
@@ -993,7 +993,7 @@ def test_parameterized_validate_group_fails(annotation):
 def test_inject_list():
     annotation = function_modifiers.inject(nums=group(value(1), value(2), value(3)))
 
-    def summation(nums: List[int]) -> int:
+    def summation(nums: list[int]) -> int:
         return sum(nums)
 
     (node_,) = annotation.expand_node(node.Node.from_fn(summation), {}, summation)
@@ -1003,7 +1003,7 @@ def test_inject_list():
 def test_inject_dict():
     annotation = function_modifiers.inject(nums=group(one=value(1), two=value(2), three=value(3)))
 
-    def summation(nums: Dict[str, int]) -> int:
+    def summation(nums: dict[str, int]) -> int:
         return nums["one"] + nums["two"] + nums["three"]
 
     (node_,) = annotation.expand_node(node.Node.from_fn(summation), {}, summation)
@@ -1015,7 +1015,7 @@ def test_inject_list_source():
         nums=group(source("one_source"), source("two_source"), source("three_source"))
     )
 
-    def summation(nums: List[int]) -> int:
+    def summation(nums: list[int]) -> int:
         return sum(nums)
 
     (node_,) = annotation.expand_node(node.Node.from_fn(summation), {}, summation)
@@ -1027,7 +1027,7 @@ def test_inject_dict_source():
         nums=group(one=source("one_source"), two=source("two_source"), three=source("three_source"))
     )
 
-    def summation(nums: Dict[str, int]) -> int:
+    def summation(nums: dict[str, int]) -> int:
         return nums["one"] + nums["two"] + nums["three"]
 
     (node_,) = annotation.expand_node(node.Node.from_fn(summation), {}, summation)
@@ -1036,8 +1036,8 @@ def test_inject_dict_source():
 
 def test_inject_multiple_things():
     def contrived_function(
-        int_list: List[int],
-        int_dict: Dict[str, int],
+        int_list: list[int],
+        int_dict: dict[str, int],
         int_value_injected: int,
         int_value_not_injected: int,
     ) -> int:
@@ -1055,18 +1055,18 @@ def test_inject_multiple_things():
 @pytest.mark.parametrize(
     "annotated_type,cls,expected",
     [
-        (List[int], GroupedListDependency, int),
-        (List[List[int]], GroupedListDependency, List[int]),
-        (List[pd.Series], GroupedListDependency, pd.Series),
-        (Dict[str, pd.Series], GroupedDictDependency, pd.Series),
-        (Dict[str, List[int]], GroupedDictDependency, List[int]),
-        (Dict[str, int], GroupedDictDependency, int),
-        (Optional[Dict[str, int]], GroupedDictDependency, int),
-        (Optional[List[int]], GroupedListDependency, int),
+        (list[int], GroupedListDependency, int),
+        (list[list[int]], GroupedListDependency, list[int]),
+        (list[pd.Series], GroupedListDependency, pd.Series),
+        (dict[str, pd.Series], GroupedDictDependency, pd.Series),
+        (dict[str, list[int]], GroupedDictDependency, list[int]),
+        (dict[str, int], GroupedDictDependency, int),
+        (dict[str, int] | None, GroupedDictDependency, int),
+        (list[int] | None, GroupedListDependency, int),
     ],
 )
 def test_resolve_dependency_type_happy(
-    annotated_type: Type[Type], cls: Type[GroupedDependency], expected: Type[Type]
+    annotated_type: type[type], cls: type[GroupedDependency], expected: type[type]
 ):
     assert cls.resolve_dependency_type(annotated_type, "test") == expected
 
@@ -1076,16 +1076,16 @@ def test_resolve_dependency_type_happy(
     [
         (int, GroupedDictDependency),
         (int, GroupedListDependency),
-        (List[int], GroupedDictDependency),
-        (Dict[str, int], GroupedListDependency),
+        (list[int], GroupedDictDependency),
+        (dict[str, int], GroupedListDependency),
         (pd.Series, GroupedDictDependency),
         (pd.Series, GroupedListDependency),
         (pd.DataFrame, GroupedDictDependency),
         (pd.DataFrame, GroupedListDependency),
-        (Dict[int, str], GroupedDictDependency),
+        (dict[int, str], GroupedDictDependency),
     ],
 )
-def test_resolve_dependency_type_sad(annotated_type: Type[Type], cls: Type[GroupedDependency]):
+def test_resolve_dependency_type_sad(annotated_type: type[type], cls: type[GroupedDependency]):
     with pytest.raises(base.InvalidDecoratorException):
         cls.resolve_dependency_type(annotated_type, "test")
 
@@ -1109,7 +1109,7 @@ def test_inject_misconfigured_param_type_dict():
 
 
 def test_inject_misconfigured_param_untyped_generic_list():
-    def foo(x: List) -> int:
+    def foo(x: list) -> int:
         return sum(x)
 
     annotation = function_modifiers.inject(x=group(value(1), value(2)))
@@ -1118,7 +1118,7 @@ def test_inject_misconfigured_param_untyped_generic_list():
 
 
 def test_inject_misconfigured_param_untyped_generic_dict():
-    def foo(x: Dict) -> int:
+    def foo(x: dict) -> int:
         return sum(x)
 
     annotation = function_modifiers.inject(x=group(a=value(1), b=value(2)))
@@ -1160,7 +1160,7 @@ def test_parameterize_repeated_sources():
 
 
 def test_parameterize_repeated_sources_with_group():
-    def foo(x: List[int]) -> int:
+    def foo(x: list[int]) -> int:
         return sum(x)
 
     annotation = function_modifiers.parameterize(

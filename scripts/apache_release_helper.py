@@ -22,7 +22,6 @@ import os
 import shutil
 import subprocess
 import sys
-from typing import Optional
 
 # --- Configuration ---
 # You need to fill these in for your project.
@@ -108,7 +107,7 @@ def update_version(version, rc_num):
         return False
 
 
-def sign_artifacts(archive_name: str) -> Optional[list[str]]:
+def sign_artifacts(archive_name: str) -> list[str] | None:
     """Creates signed files for the designated artifact."""
     files = []
     # Sign the tarball with GPG. The user must have a key configured.

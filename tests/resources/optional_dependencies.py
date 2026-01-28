@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict
+from typing import Any
 
 # Defaults
 _A = 2
@@ -56,7 +56,7 @@ def j(none_result: int, f: int = _F) -> int:
     return none_result
 
 
-def _do_all(a_val: int = _A, b_val: int = _B, d_val: int = _D, f_val: int = _F) -> Dict[str, Any]:
+def _do_all(a_val: int = _A, b_val: int = _B, d_val: int = _D, f_val: int = _F) -> dict[str, Any]:
     c_val = c(a_val, b_val)
     e_val = e(c_val, d_val)
     g_val = g(e_val, f_val)

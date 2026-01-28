@@ -18,7 +18,8 @@
 """Decorators that attach metadata to nodes"""
 
 import json
-from typing import Any, Callable, Dict, List, Literal, Optional, Tuple, Union
+from collections.abc import Callable
+from typing import Any, Literal
 
 from hamilton import htypes, node, registry
 from hamilton.function_modifiers import base
@@ -82,7 +83,7 @@ class tag(base.NodeDecorator):
         *,
         target_: base.TargetType = None,
         bypass_reserved_namespaces_: bool = False,
-        **tags: Union[str, List[str]],
+        **tags: str | list[str],
     ):
         """Constructor for adding tag annotations to a function.
 
@@ -178,7 +179,7 @@ class tag(base.NodeDecorator):
 
 
 class tag_outputs(base.NodeDecorator):
-    def __init__(self, **tag_mapping: Dict[str, Union[str, List[str]]]):
+    def __init__(self, **tag_mapping: dict[str, str | list[str]]):
         """Creates a tag_outputs decorator.
 
         Note that this currently does not validate whether the nodes are spelled correctly as it takes in a superset of\
@@ -227,7 +228,7 @@ class tag_outputs(base.NodeDecorator):
 
 
 class SchemaOutput(tag):
-    def __init__(self, *fields: Tuple[str, str], target_: Optional[str] = None):
+    def __init__(self, *fields: tuple[str, str], target_: str | None = None):
         """Initializes SchemaOutput. See docs for `@schema.output` for more details."""
 
         tag_value = ",".join([f"{key}={value}" for key, value in fields])
@@ -271,7 +272,7 @@ class schema:
     INTERNAL_SCHEMA_OUTPUT_KEY = "hamilton.internal.schema_output"
 
     @staticmethod
-    def output(*fields: Tuple[str, str], target_: Optional[str] = None) -> SchemaOutput:
+    def output(*fields: tuple[str, str], target_: str | None = None) -> SchemaOutput:
         """Initializes a `@schema.output` decorator. This takes in a list of fields, which are tuples of the form
         `(field_name, field_type)`. The field type must be one of the function_modifiers.SchemaTypes types.
 
@@ -302,7 +303,7 @@ class schema:
 
 
 class RayRemote(tag):
-    def __init__(self, **options: Union[int, Dict[str, int]]):
+    def __init__(self, **options: int | dict[str, int]):
         """Initializes RayRemote. See docs for `@ray_remote_options` for more details."""
 
         ray_tags = {f"ray_remote.{option}": json.dumps(value) for option, value in options.items()}
@@ -310,7 +311,7 @@ class RayRemote(tag):
         super(RayRemote, self).__init__(bypass_reserved_namespaces_=True, **ray_tags)
 
 
-def ray_remote_options(**kwargs: Union[int, Dict[str, int]]) -> RayRemote:
+def ray_remote_options(**kwargs: int | dict[str, int]) -> RayRemote:
     """Initializes a `@ray_remote_options` decorator. This takes in a list of options to pass to ray.remote().
 
     Supported options include resources, as well as other options:
@@ -362,8 +363,8 @@ class cache(base.NodeDecorator):
     def __init__(
         self,
         *,
-        behavior: Optional[CACHE_BEHAVIORS] = None,
-        format: Optional[Union[CACHE_MATERIALIZERS, str]] = None,
+        behavior: CACHE_BEHAVIORS | None = None,
+        format: CACHE_MATERIALIZERS | str | None = None,
         target_: base.TargetType = ...,
     ):
         """The ``@cache`` decorator can define the behavior and format of a specific node.

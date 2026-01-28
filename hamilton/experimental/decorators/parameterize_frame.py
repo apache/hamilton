@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 
 import pandas as pd
 
@@ -40,7 +39,7 @@ def _get_dep_type(dep_type: str) -> UpstreamDependency:
     raise ValueError(f"Invalid dep type: {dep_type}")
 
 
-def _get_index_levels(index: pd.MultiIndex) -> List[list]:
+def _get_index_levels(index: pd.MultiIndex) -> list[list]:
     out = [[] for _ in index[0]]
     for specific_index in index:
         for i, key in enumerate(specific_index):
@@ -59,7 +58,7 @@ def _validate_df_parameterization(parameterization: pd.DataFrame):
         )
 
 
-def _convert_params_from_df(parameterization: pd.DataFrame) -> List[ParameterizedExtract]:
+def _convert_params_from_df(parameterization: pd.DataFrame) -> list[ParameterizedExtract]:
     _validate_df_parameterization(parameterization)
     args, dep_types = _get_index_levels(parameterization.columns)
     dep_types_converted = [_get_dep_type(val) for val in dep_types]

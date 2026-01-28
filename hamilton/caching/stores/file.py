@@ -18,7 +18,7 @@
 import inspect
 import shutil
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 try:
     from typing import override
@@ -49,7 +49,7 @@ class FileResultStore(ResultStore):
         file_path.write_bytes(stored_result.save())
 
     @staticmethod
-    def _load_result_from_path(path: Path) -> Optional[StoredResult]:
+    def _load_result_from_path(path: Path) -> StoredResult | None:
         try:
             data = path.read_bytes()
             return StoredResult.load(data)
@@ -73,8 +73,8 @@ class FileResultStore(ResultStore):
         self,
         data_version: str,
         result: Any,
-        saver_cls: Optional[DataSaver] = None,
-        loader_cls: Optional[DataLoader] = None,
+        saver_cls: DataSaver | None = None,
+        loader_cls: DataLoader | None = None,
     ) -> None:
         # != operator on boolean is XOR
         if bool(saver_cls is not None) != bool(loader_cls is not None):
@@ -114,7 +114,7 @@ class FileResultStore(ResultStore):
         self._write_result(result_path, stored_result)
 
     @override
-    def get(self, data_version: str) -> Optional[Any]:
+    def get(self, data_version: str) -> Any | None:
         result_path = self._path_from_data_version(data_version)
         stored_result = self._load_result_from_path(result_path)
 

@@ -16,7 +16,6 @@
 # under the License.
 
 from datetime import datetime
-from typing import Dict, List, Tuple
 
 import pandas as pd
 import requests
@@ -25,7 +24,7 @@ from hamilton.function_modifiers import save_to, value
 from hamilton.htypes import Collect, Parallelizable
 
 
-def starcount_url(repositories: List[str]) -> Parallelizable[str]:
+def starcount_url(repositories: list[str]) -> Parallelizable[str]:
     """Generates API URLs for counting stars on a repo. We do this
     so we can paginate requests later.
 
@@ -37,7 +36,7 @@ def starcount_url(repositories: List[str]) -> Parallelizable[str]:
         yield f"https://api.github.com/repos/{repo}"
 
 
-def star_count(starcount_url: str, github_api_key: str) -> Tuple[str, int]:
+def star_count(starcount_url: str, github_api_key: str) -> tuple[str, int]:
     """Generates the star count for a given repo.
 
     :param starcount_url: URL of the repo
@@ -52,7 +51,7 @@ def star_count(starcount_url: str, github_api_key: str) -> Tuple[str, int]:
     return data["full_name"], data["stargazers_count"]
 
 
-def stars_by_repo(star_count: Collect[Tuple[str, int]]) -> Dict[str, int]:
+def stars_by_repo(star_count: Collect[tuple[str, int]]) -> dict[str, int]:
     """Aggregates the star count for each repo into a dictionary, so we
     can generate paginated requests.
 
@@ -65,7 +64,7 @@ def stars_by_repo(star_count: Collect[Tuple[str, int]]) -> Dict[str, int]:
     return star_count_dict
 
 
-def stargazer_url(stars_by_repo: Dict[str, int], per_page: int = 100) -> Parallelizable[str]:
+def stargazer_url(stars_by_repo: dict[str, int], per_page: int = 100) -> Parallelizable[str]:
     """Generates query objects for each repository, with the correct pagination and offset.
 
     :param stars_by_repo: The star count for each repo

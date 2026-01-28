@@ -30,7 +30,7 @@ with contrib.catch_import_errors(__name__, __file__, logger):
     import openai
 
 
-def llm_client(api_key: Optional[str] = None) -> openai.OpenAI:
+def llm_client(api_key: str | None = None) -> openai.OpenAI:
     """Create an OpenAI client."""
     if api_key is None:
         api_key = os.environ.get("OPENAI_API_KEY")

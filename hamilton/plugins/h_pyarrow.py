@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Type
+from typing import Any
 
 import pyarrow
 from pyarrow.interchange import from_dataframe
@@ -38,7 +38,7 @@ class PyarrowTableResult(ResultBuilder):
     - duckdb results
     """
 
-    def output_type(self) -> Type:
+    def output_type(self) -> type:
         return pyarrow.Table
 
     def build_result(self, **outputs: Any) -> Any:

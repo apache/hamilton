@@ -16,7 +16,6 @@
 # under the License.
 
 import random
-from typing import List
 
 import pandas as pd
 
@@ -26,7 +25,7 @@ is make them load from your sources (or, better, yet, use the load_from decorato
 """
 
 
-def fabricate_client_login_data(client_ids: List[int]) -> pd.DataFrame:
+def fabricate_client_login_data(client_ids: list[int]) -> pd.DataFrame:
     """Fabricates a dataframe of client login data.
     This contains the columns client ID (int) and last_logged_in (datetime)
 
@@ -46,7 +45,7 @@ def fabricate_client_login_data(client_ids: List[int]) -> pd.DataFrame:
     )
 
 
-def fabricate_survey_results_data(client_ids: List[int]) -> pd.DataFrame:
+def fabricate_survey_results_data(client_ids: list[int]) -> pd.DataFrame:
     """Fabricates a dataframe of survey results.
     This has the following (random) columns:
     - budget -- amount they're willing to spend on an order (number between 1 and 1000)

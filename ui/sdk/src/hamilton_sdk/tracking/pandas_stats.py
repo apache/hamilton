@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 
 import pandas as pd
 from hamilton_sdk.tracking import data_observation
@@ -37,7 +37,7 @@ Notes:
 dr = driver.Builder().with_modules(pcs).with_config({"config_key": "config_value"}).build()
 
 
-def _compute_stats(df: pd.DataFrame) -> Dict[str, Dict[str, Any]]:
+def _compute_stats(df: pd.DataFrame) -> dict[str, dict[str, Any]]:
     """Compute statistics on a pandas dataframe.
     for each c in [dataframe|series]:
         if c is numeric:
@@ -64,8 +64,8 @@ def _compute_stats(df: pd.DataFrame) -> Dict[str, Dict[str, Any]]:
     stats = {}
 
     def execute_col(
-        target_output: str, col: pd.Series, name: Union[str, int], position: int
-    ) -> Dict[str, Any]:
+        target_output: str, col: pd.Series, name: str | int, position: int
+    ) -> dict[str, Any]:
         """Get stats on a column."""
         try:
             res = dr.execute(
@@ -131,7 +131,7 @@ def compute_schema(
 
 
 @data_observation.compute_stats.register
-def compute_stats_series(result: pd.Series, node_name: str, node_tags: dict) -> Dict[str, Any]:
+def compute_stats_series(result: pd.Series, node_name: str, node_tags: dict) -> dict[str, Any]:
     col_name = result.name if result.name else node_name
     return {
         "observability_type": "dagworks_describe",

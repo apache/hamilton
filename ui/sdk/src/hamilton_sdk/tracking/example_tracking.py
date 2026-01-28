@@ -19,7 +19,7 @@ import logging
 import os
 import sys
 from types import ModuleType
-from typing import Any, Dict, List
+from typing import Any
 
 import click
 import dagworks.driver
@@ -35,13 +35,13 @@ they use the examples there.
 
 
 def run_and_track(
-    modules: List[ModuleType],
-    inputs: Dict[str, Any],
-    config: Dict[str, Any],
+    modules: list[ModuleType],
+    inputs: dict[str, Any],
+    config: dict[str, Any],
     project: int,
     username: str,
     api_key: str,
-    output_vars: List[str] = None,
+    output_vars: list[str] = None,
 ):
     """Run a hamilton driver and profiles to a file."""
     dr = dagworks.driver.Driver(

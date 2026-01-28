@@ -16,7 +16,6 @@
 # under the License.
 
 import itertools
-from typing import List
 
 import pandas as pd
 import pytest
@@ -80,7 +79,7 @@ def execute_dataflow(
     return results
 
 
-def check_execution(cache, did: List[str] = None, did_not: List[str] = None):
+def check_execution(cache, did: list[str] = None, did_not: list[str] = None):
     did = did if did is not None else []
     did_not = did_not if did_not is not None else []
 
@@ -94,7 +93,7 @@ def check_execution(cache, did: List[str] = None, did_not: List[str] = None):
         )
 
 
-def check_execution_task_based(cache, did: List[str] = None, did_not: List[str] = None):
+def check_execution_task_based(cache, did: list[str] = None, did_not: list[str] = None):
     did = did if did is not None else []
     did_not = did_not if did_not is not None else []
 

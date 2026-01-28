@@ -17,7 +17,8 @@
 
 import abc
 from collections import defaultdict
-from typing import Any, Callable, Collection, Dict, List, Type
+from collections.abc import Callable, Collection
+from typing import Any
 
 from hamilton import node
 from hamilton.data_quality import base as dq_base
@@ -32,7 +33,7 @@ DATA_VALIDATOR_ORIGINAL_OUTPUT_TAG = "hamilton.data_quality.source_node"
 
 class BaseDataValidationDecorator(base.NodeTransformer):
     @abc.abstractmethod
-    def get_validators(self, node_to_validate: node.Node) -> List[dq_base.DataValidator]:
+    def get_validators(self, node_to_validate: node.Node) -> list[dq_base.DataValidator]:
         """Returns a list of validators used to transform the nodes.
 
         :param node_to_validate: Nodes to which the output of the validator will apply
@@ -41,7 +42,7 @@ class BaseDataValidationDecorator(base.NodeTransformer):
         pass
 
     def transform_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         raw_node = node.Node(
             name=node_.name
@@ -159,7 +160,7 @@ class check_output_custom(BaseDataValidationDecorator):
         super(check_output_custom, self).__init__(target=target_)
         self.validators = list(validators)
 
-    def get_validators(self, node_to_validate: node.Node) -> List[dq_base.DataValidator]:
+    def get_validators(self, node_to_validate: node.Node) -> list[dq_base.DataValidator]:
         return self.validators
 
 
@@ -204,7 +205,7 @@ class check_output(BaseDataValidationDecorator):
 
     """
 
-    def get_validators(self, node_to_validate: node.Node) -> List[dq_base.DataValidator]:
+    def get_validators(self, node_to_validate: node.Node) -> list[dq_base.DataValidator]:
         try:
             return default_validators.resolve_default_validators(
                 node_to_validate.type,
@@ -222,7 +223,7 @@ class check_output(BaseDataValidationDecorator):
     def __init__(
         self,
         importance: str = dq_base.DataValidationLevel.WARN.value,
-        default_validator_candidates: List[Type[dq_base.BaseDefaultValidator]] = None,
+        default_validator_candidates: list[type[dq_base.BaseDefaultValidator]] = None,
         target_: base.TargetType = None,
         **default_validator_kwargs: Any,
     ):

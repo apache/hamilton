@@ -20,7 +20,6 @@ This is a module that contains our feature transforms.
 """
 
 import pickle
-from typing import Set
 
 import pandas as pd
 
@@ -33,7 +32,7 @@ from sklearn import (
 from hamilton.function_modifiers import check_output, config
 
 
-def rare_titles() -> Set[str]:
+def rare_titles() -> set[str]:
     """Rare titles we've curated"""
     return {
         "Capt",
@@ -63,7 +62,7 @@ def normalized_name(name: pd.Series) -> pd.Series:
     return name.apply(lambda x: x.split(",")[1].split(".")[0].strip())
 
 
-def title(normalized_name: pd.Series, rare_titles: Set[str]) -> pd.Series:
+def title(normalized_name: pd.Series, rare_titles: set[str]) -> pd.Series:
     return normalized_name.apply(lambda n: "rare" if n in rare_titles else n)
 
 

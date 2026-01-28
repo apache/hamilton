@@ -15,7 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, List, Optional, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 try:
     from typing import override
@@ -31,9 +32,9 @@ from .sqlite import SQLiteMetadataStore
 
 class InMemoryMetadataStore(MetadataStore):
     def __init__(self) -> None:
-        self._data_versions: Dict[str, str] = {}  # {cache_key: data_version}
-        self._cache_keys_by_run: Dict[str, List[str]] = {}  # {run_id: [cache_key]}
-        self._run_ids: List[str] = []
+        self._data_versions: dict[str, str] = {}  # {cache_key: data_version}
+        self._cache_keys_by_run: dict[str, list[str]] = {}  # {run_id: [cache_key]}
+        self._run_ids: list[str] = []
 
     @override
     def __len__(self) -> int:
@@ -52,13 +53,13 @@ class InMemoryMetadataStore(MetadataStore):
         self._run_ids.append(run_id)
 
     @override
-    def set(self, cache_key: str, data_version: str, run_id: str, **kwargs) -> Optional[Any]:
+    def set(self, cache_key: str, data_version: str, run_id: str, **kwargs) -> Any | None:
         """Set the ``data_version`` for ``cache_key`` and associate it with the ``run_id``."""
         self._data_versions[cache_key] = data_version
         self._cache_keys_by_run[run_id].append(cache_key)
 
     @override
-    def get(self, cache_key: str) -> Optional[str]:
+    def get(self, cache_key: str) -> str | None:
         """Retrieve the ``data_version`` for ``cache_key``."""
         return self._data_versions.get(cache_key, None)
 
@@ -72,7 +73,7 @@ class InMemoryMetadataStore(MetadataStore):
         """Delete all stored metadata."""
         self._data_versions.clear()
 
-    def persist_to(self, metadata_store: Optional[MetadataStore] = None) -> None:
+    def persist_to(self, metadata_store: MetadataStore | None = None) -> None:
         """Persist in-memory metadata using another MetadataStore implementation.
 
         :param metadata_store: MetadataStore implementation to use for persistence.
@@ -155,12 +156,12 @@ class InMemoryMetadataStore(MetadataStore):
         return in_memory_metadata_store
 
     @override
-    def get_run_ids(self) -> List[str]:
+    def get_run_ids(self) -> list[str]:
         """Return a list of all ``run_id`` values stored."""
         return self._run_ids
 
     @override
-    def get_run(self, run_id: str) -> List[Dict[str, str]]:
+    def get_run(self, run_id: str) -> list[dict[str, str]]:
         """Return a list of node metadata associated with a run."""
         if self._cache_keys_by_run.get(run_id, None) is None:
             raise IndexError(f"Run ID not found: {run_id}")
@@ -183,7 +184,7 @@ class InMemoryMetadataStore(MetadataStore):
 
 class InMemoryResultStore(ResultStore):
     def __init__(self, persist_on_exit: bool = False) -> None:
-        self._results: Dict[str, StoredResult] = {}  # {data_version: result}
+        self._results: dict[str, StoredResult] = {}  # {data_version: result}
 
     @override
     def exists(self, data_version: str) -> bool:
@@ -195,7 +196,7 @@ class InMemoryResultStore(ResultStore):
         self._results[data_version] = StoredResult.new(value=result)
 
     @override
-    def get(self, data_version: str) -> Optional[Any]:
+    def get(self, data_version: str) -> Any | None:
         stored_result = self._results.get(data_version, None)
         if stored_result is None:
             return None
@@ -222,7 +223,7 @@ class InMemoryResultStore(ResultStore):
         for data_version in to_delete:
             self.delete(data_version)
 
-    def persist_to(self, result_store: Optional[ResultStore] = None) -> None:
+    def persist_to(self, result_store: ResultStore | None = None) -> None:
         """Persist in-memory results using another ``ResultStore`` implementation.
 
         :param result_store: ResultStore implementation to use for persistence.
@@ -238,8 +239,8 @@ class InMemoryResultStore(ResultStore):
     def load_from(
         cls,
         result_store: ResultStore,
-        metadata_store: Optional[MetadataStore] = None,
-        data_versions: Optional[Sequence[str]] = None,
+        metadata_store: MetadataStore | None = None,
+        data_versions: Sequence[str] | None = None,
     ) -> "InMemoryResultStore":
         """Load in-memory results from another ResultStore instance.
 

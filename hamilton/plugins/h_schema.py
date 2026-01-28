@@ -19,8 +19,9 @@ import enum
 import functools
 import json
 import logging
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Dict, Literal, Mapping, NamedTuple, Union
+from typing import Any, Literal, NamedTuple
 
 import pyarrow
 import pyarrow.ipc
@@ -49,7 +50,7 @@ class DiffResult(NamedTuple):
 
 def _diff_mappings(
     current: Mapping[str, Any], reference: Mapping[str, Any]
-) -> Dict[str, DiffResult]:
+) -> dict[str, DiffResult]:
     """Generate the diff for all fields of two mappings.
 
     example:
@@ -355,9 +356,7 @@ def _get_spark_schema(df, **kwargs) -> pyarrow.Schema:
 # ongoing polars discussion: https://github.com/pola-rs/polars/issues/15600
 
 
-def get_dataframe_schema(
-    df: Union[h_databackends.DATAFRAME_TYPES], node: HamiltonNode
-) -> pyarrow.Schema:
+def get_dataframe_schema(df: h_databackends.DATAFRAME_TYPES, node: HamiltonNode) -> pyarrow.Schema:
     """Get pyarrow schema of a node result and store node metadata on the pyarrow schema."""
     schema = _get_arrow_schema(df)
     metadata = dict(
@@ -368,12 +367,12 @@ def get_dataframe_schema(
     return schema.with_metadata(metadata)
 
 
-def load_schema(path: Union[str, Path]) -> pyarrow.Schema:
+def load_schema(path: str | Path) -> pyarrow.Schema:
     """Load pyarrow schema from disk using IPC deserialization"""
     return pyarrow.ipc.read_schema(path)
 
 
-def save_schema(path: Union[str, Path], schema: pyarrow.Schema) -> None:
+def save_schema(path: str | Path, schema: pyarrow.Schema) -> None:
     """Save pyarrow schema to disk using IPC serialization"""
     Path(path).write_bytes(schema.serialize())
 
@@ -400,8 +399,8 @@ class SchemaValidator(NodeExecutionHook, GraphExecutionHook):
             "warn": log a warning with the schema diff
             "fail": raise an exception with the schema diff
         """
-        self.schemas: Dict[str, pyarrow.Schema] = {}
-        self.reference_schemas: Dict[str, pyarrow.Schema] = {}
+        self.schemas: dict[str, pyarrow.Schema] = {}
+        self.reference_schemas: dict[str, pyarrow.Schema] = {}
         self.schema_diffs: dict = {}
         self.schema_dir = schema_dir
         self.check = check
@@ -415,7 +414,7 @@ class SchemaValidator(NodeExecutionHook, GraphExecutionHook):
         Path(schema_dir).mkdir(parents=True, exist_ok=True)
 
     @property
-    def json_schemas(self) -> Dict[str, dict]:
+    def json_schemas(self) -> dict[str, dict]:
         """Return schemas collected during the run"""
         return {
             node_name: pyarrow_schema_to_json(schema) for node_name, schema in self.schemas.items()
@@ -432,7 +431,7 @@ class SchemaValidator(NodeExecutionHook, GraphExecutionHook):
         return Path(self.schema_dir, node_name).with_suffix(".schema")
 
     def run_before_graph_execution(
-        self, *, graph: HamiltonGraph, inputs: Dict[str, Any], overrides: Dict[str, Any], **kwargs
+        self, *, graph: HamiltonGraph, inputs: dict[str, Any], overrides: dict[str, Any], **kwargs
     ):
         """Store schemas of inputs and overrides nodes that are tables or columns."""
         self.h_graph = graph

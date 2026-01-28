@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Type
+from typing import Any
 
 import pandera as pa
 
@@ -34,7 +34,7 @@ class PanderaDataFrameValidator(base.BaseDefaultValidator):
         self.schema = schema
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         for extension_name in pandera_supported_extensions:
             if extension_name in registry.DF_TYPE_AND_COLUMN_TYPES:
                 df_type = registry.DF_TYPE_AND_COLUMN_TYPES[extension_name][registry.DATAFRAME_TYPE]
@@ -80,7 +80,7 @@ class PanderaSeriesSchemaValidator(base.BaseDefaultValidator):
         self.schema = schema
 
     @classmethod
-    def applies_to(cls, datatype: Type[Type]) -> bool:
+    def applies_to(cls, datatype: type[type]) -> bool:
         for extension_name in pandera_supported_extensions:
             if extension_name in registry.DF_TYPE_AND_COLUMN_TYPES:
                 df_type = registry.DF_TYPE_AND_COLUMN_TYPES[extension_name][registry.COLUMN_TYPE]

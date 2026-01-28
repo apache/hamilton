@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, List, Type, Union
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -54,7 +54,7 @@ class VaexDataFrameResult(base.ResultMixin):
 
     def build_result(
         self,
-        **outputs: Dict[str, Union[vaex.expression.Expression, vaex.dataframe.DataFrame, Any]],
+        **outputs: dict[str, vaex.expression.Expression | vaex.dataframe.DataFrame | Any],
     ):
         """This is the method that Hamilton will call to build the final result.
         It will pass in the results of the requested outputs that
@@ -65,9 +65,9 @@ class VaexDataFrameResult(base.ResultMixin):
         """
 
         # We split all outputs into DataFrames, arrays and scalars
-        dfs: List[vaex.dataframe.DataFrame] = []  # Vaex DataFrames from outputs
-        arrays: Dict[str, np.ndarray] = dict()  # arrays from outputs
-        scalars: Dict[str, Any] = dict()  # scalars from outputs
+        dfs: list[vaex.dataframe.DataFrame] = []  # Vaex DataFrames from outputs
+        arrays: dict[str, np.ndarray] = dict()  # arrays from outputs
+        scalars: dict[str, Any] = dict()  # scalars from outputs
 
         for name, value in outputs.items():
             if isinstance(value, vaex.dataframe.DataFrame):
@@ -125,5 +125,5 @@ class VaexDataFrameResult(base.ResultMixin):
 
         return vaex.concat(dfs)
 
-    def output_type(self) -> Type:
+    def output_type(self) -> type:
         return vaex.dataframe.DataFrame

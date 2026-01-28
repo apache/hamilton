@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 
 import openai
 
@@ -26,7 +25,7 @@ client = openai.OpenAI()
 async_client = openai.AsyncOpenAI()
 
 
-async def acall_chat_model(messages: List[dict]) -> str:
+async def acall_chat_model(messages: list[dict]) -> str:
     response = await async_client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=messages,

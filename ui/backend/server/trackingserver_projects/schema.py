@@ -17,7 +17,6 @@
 
 import datetime
 import logging
-import typing
 
 from ninja import ModelSchema, Schema
 from pydantic import Field
@@ -71,10 +70,10 @@ class ProjectUserMembershipOut(ModelSchema):
 class Visibility(Schema):
     # Note that the str for user_ids_visible can be an email, in which case we'll do a lookup
     # It will always save an ID
-    user_ids_visible: typing.List[typing.Union[int, str]]
-    team_ids_visible: typing.List[int]
-    team_ids_writable: typing.List[int]
-    user_ids_writable: typing.List[typing.Union[int, str]]
+    user_ids_visible: list[int | str]
+    team_ids_visible: list[int]
+    team_ids_writable: list[int]
+    user_ids_writable: list[int | str]
 
     async def resolve_ids(self) -> "Visibility":
         """Resolves the user_ids_visible and user_ids_writable to IDs
@@ -113,7 +112,7 @@ class Visibility(Schema):
 
     def to_memberships(
         self, project: Project
-    ) -> typing.Tuple[typing.List[ProjectTeamMembership], typing.List[ProjectUserMembership]]:
+    ) -> tuple[list[ProjectTeamMembership], list[ProjectUserMembership]]:
         """Converts the visibility object to a list of memberships
 
         @param project:
@@ -141,7 +140,7 @@ class Visibility(Schema):
         return team_memberships, user_memberships
 
     @staticmethod
-    def from_memberships(memberships: typing.List[ProjectMembership]) -> "Visibility":
+    def from_memberships(memberships: list[ProjectMembership]) -> "Visibility":
         """Gets the visibility object from a list of memberships
 
         @param memberships:
@@ -167,10 +166,10 @@ class Visibility(Schema):
 
 
 class VisibilityOut(Schema):
-    users_visible: typing.List[UserOut]
-    users_writable: typing.List[UserOut]
-    teams_visible: typing.List[TeamOut]
-    teams_writable: typing.List[TeamOut]
+    users_visible: list[UserOut]
+    users_writable: list[UserOut]
+    teams_visible: list[TeamOut]
+    teams_writable: list[TeamOut]
 
     @staticmethod
     async def from_visibility(visibility: Visibility):
@@ -192,27 +191,21 @@ class VisibilityOut(Schema):
 
 
 class ProjectUpdate(Schema):
-    name: typing.Optional[str] = Field(description="The name of the project", default=None)
-    description: typing.Optional[str] = Field(
-        description="Description of the project", default=None
-    )
-    tags: typing.Optional[typing.Dict[str, str]] = Field(
-        description="Tags for the project", default=None
-    )
-    visibility: typing.Optional[Visibility] = Field(
-        description="Visibility of the project", default=None
-    )
+    name: str | None = Field(description="The name of the project", default=None)
+    description: str | None = Field(description="Description of the project", default=None)
+    tags: dict[str, str] | None = Field(description="Tags for the project", default=None)
+    visibility: Visibility | None = Field(description="Visibility of the project", default=None)
 
 
 class ProjectBase(Schema):
     name: str = Field(description="The name of the project")
     description: str = Field(description="Description of the project")
-    tags: typing.Dict[str, str] = Field(description="Tags for the project")
+    tags: dict[str, str] = Field(description="Tags for the project")
 
 
 class ProjectIn(ProjectBase):
     visibility: Visibility = Field(description="Visibility of the project")
-    attributes: typing.List[ProjectAttributeIn] = Field(
+    attributes: list[ProjectAttributeIn] = Field(
         description="Attributes for the project", default=[]
     )
 
@@ -259,8 +252,8 @@ class ProjectOut(ProjectBase):
 
     @staticmethod
     async def from_models(
-        projects: typing.List[Project], user: User, teams: typing.List[Team]
-    ) -> typing.List["ProjectOut"]:
+        projects: list[Project], user: User, teams: list[Team]
+    ) -> list["ProjectOut"]:
         """
         @return:
         """
@@ -345,4 +338,4 @@ class ProjectOut(ProjectBase):
 
 
 class ProjectOutWithAttributes(ProjectOut):
-    attributes: typing.List[ProjectAttributeOut]
+    attributes: list[ProjectAttributeOut]

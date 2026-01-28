@@ -19,8 +19,6 @@
 This module contains our data loading functions.
 """
 
-from typing import List
-
 import pandas as pd
 import pandera as pa
 from sklearn import datasets
@@ -29,7 +27,7 @@ from sqlalchemy import engine
 from hamilton.function_modifiers import check_output, config, extract_columns
 
 
-def _sanitize_columns(df_columns: List[str]) -> List[str]:
+def _sanitize_columns(df_columns: list[str]) -> list[str]:
     """Renames columns to be valid hamilton names -- and lower cases them.
     :param df_columns: the current column names.
     :return: sanitize column names that work with Hamilton

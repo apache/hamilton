@@ -45,7 +45,7 @@ class ParsingResult:
     parsed: Any
 
 
-def url(urls: List[str]) -> Parallelizable[str]:
+def url(urls: list[str]) -> Parallelizable[str]:
     """Iterate over the list of urls and create one branch per url
 
     :param urls: list of url to scrape and parse
@@ -71,8 +71,8 @@ def html_page(url: str) -> str:
 def parsed_html(
     url: str,
     html_page: str,
-    tags_to_extract: List[str] = ["p", "li", "div"],  # noqa: B006
-    tags_to_remove: List[str] = ["script", "style"],  # noqa: B006
+    tags_to_extract: list[str] = ["p", "li", "div"],  # noqa: B006
+    tags_to_remove: list[str] = ["script", "style"],  # noqa: B006
 ) -> ParsingResult:
     """Parse an HTML string using BeautifulSoup
 
@@ -104,7 +104,7 @@ def parsed_html(
     return ParsingResult(url=url, parsed=content)
 
 
-def parsed_html_collection(parsed_html: Collect[ParsingResult]) -> List[ParsingResult]:
+def parsed_html_collection(parsed_html: Collect[ParsingResult]) -> list[ParsingResult]:
     """Collect parallel branches of `parsed_html`
 
     :param parsed_html: receive the ParsingResult associated with each url

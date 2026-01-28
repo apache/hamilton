@@ -16,8 +16,9 @@
 # under the License.
 
 import dataclasses
+from collections.abc import Collection
 from os import PathLike
-from typing import Any, Collection, Dict, Optional, Type, Union
+from typing import Any, Union
 
 # This is not necessary once this PR gets merged: https://github.com/apache/hamilton/pull/467.
 try:
@@ -62,24 +63,24 @@ SKLEARN_PLOT_TYPES_ANNOTATION = Union[tuple(SKLEARN_PLOT_TYPES)]
 
 @dataclasses.dataclass
 class SklearnPlotSaver(DataSaver):
-    path: Union[str, PathLike]
+    path: str | PathLike
     # kwargs
     dpi: float = 200
     format: str = "png"
-    metadata: Optional[dict] = None
+    metadata: dict | None = None
     bbox_inches: str = None
     pad_inches: float = 0.1
-    backend: Optional[str] = None
+    backend: str | None = None
     papertype: str = None
     transparent: bool = None
-    bbox_extra_artists: Optional[list] = None
-    pil_kwargs: Optional[dict] = None
+    bbox_extra_artists: list | None = None
+    pil_kwargs: dict | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return SKLEARN_PLOT_TYPES
 
-    def _get_saving_kwargs(self) -> Dict[str, Any]:
+    def _get_saving_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.dpi is not None:
             kwargs["dpi"] = self.dpi
@@ -103,7 +104,7 @@ class SklearnPlotSaver(DataSaver):
             kwargs["pil_kwargs"] = self.pil_kwargs
         return kwargs
 
-    def save_data(self, data: SKLEARN_PLOT_TYPES_ANNOTATION) -> Dict[str, Any]:
+    def save_data(self, data: SKLEARN_PLOT_TYPES_ANNOTATION) -> dict[str, Any]:
         data.plot()
         data.figure_.savefig(self.path, **self._get_saving_kwargs())
         return utils.get_file_metadata(self.path)

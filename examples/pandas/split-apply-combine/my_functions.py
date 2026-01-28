@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict
 
 import numpy as np
 import pandas
@@ -29,7 +28,7 @@ from hamilton.function_modifiers import extract_columns, extract_fields, inject,
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-def _tax_rate(df: DataFrame, tax_rates: Dict[str, float]) -> DataFrame:
+def _tax_rate(df: DataFrame, tax_rates: dict[str, float]) -> DataFrame:
     """
     Add a series 'Tax Rate' to the DataFrame based on the tax_rates rules.
     :param df: The DataFrame
@@ -47,7 +46,7 @@ def _tax_rate(df: DataFrame, tax_rates: Dict[str, float]) -> DataFrame:
     return df
 
 
-def _tax_credit(df: DataFrame, tax_credits: Dict[str, float]) -> DataFrame:
+def _tax_credit(df: DataFrame, tax_credits: dict[str, float]) -> DataFrame:
     """
     Add a series 'Tax Credit' to the DataFrame based on the tax_credits rules.
     :param df: The DataFrame
@@ -72,7 +71,7 @@ def _tax_credit(df: DataFrame, tax_credits: Dict[str, float]) -> DataFrame:
 
 @extract_fields({"under_100k": DataFrame, "over_100k": DataFrame})
 # Step 1: DataFrame is split in 2 DataFrames
-def split_dataframe(input: DataFrame) -> Dict[str, DataFrame]:
+def split_dataframe(input: DataFrame) -> dict[str, DataFrame]:
     """
     That function takes the DataFrame in input and split it in 2 DataFrames:
       - under_100k: Rows where 'Income' is under 100k

@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import typing
 
 from ninja import ModelSchema, Schema
 from pydantic import Field
@@ -59,7 +58,7 @@ class PhoneHomeResult(Schema):
 
 class WhoAmIResult(Schema):
     user: UserOut
-    teams: typing.List[TeamOut]
+    teams: list[TeamOut]
 
     @staticmethod
     async def from_user(user: User) -> "WhoAmIResult":

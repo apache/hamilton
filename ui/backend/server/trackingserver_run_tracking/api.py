@@ -17,7 +17,7 @@
 
 import collections
 import logging
-from typing import List, Optional
+from typing import List
 
 from common import django_utils
 from ninja import Router
@@ -70,7 +70,7 @@ async def create_dag_run(request, dag_template_id: int, dag_run: DAGRunIn) -> DA
     return DAGRunOut.from_orm(dag_run_created)
 
 
-@router.get("/v1/dag_runs/latest/", response=List[DAGRunOut], tags=["run_tracking"])
+@router.get("/v1/dag_runs/latest/", response=list[DAGRunOut], tags=["run_tracking"])
 @permission(user_can_get_latest_dag_runs)
 async def get_latest_dag_runs(
     request,
@@ -78,7 +78,7 @@ async def get_latest_dag_runs(
     dag_template_id: int = None,
     limit: int = 100,
     offset: int = 0,
-) -> List[DAGRunOut]:
+) -> list[DAGRunOut]:
     """Gets a list of DAG runs. This accepts one (and only one of) the following:
         - project_id
         - dag_template_id
@@ -117,13 +117,13 @@ async def get_latest_dag_runs(
     return dag_runs
 
 
-@router.get("/v1/dag_runs/{dag_run_ids}", response=List[DAGRunOutWithData], tags=["run_tracking"])
+@router.get("/v1/dag_runs/{dag_run_ids}", response=list[DAGRunOutWithData], tags=["run_tracking"])
 @permission(user_can_get_dag_runs)
 async def get_dag_runs(
     request,
     dag_run_ids: str,
     attrs: List[str] = Query(default=None, alias="attr"),  # noqa
-) -> List[DAGRunOutWithData]:
+) -> list[DAGRunOutWithData]:
     """Queries a DAG run with all the data.
     Note that you must pass an attribute filter, indicating
     the attributes about which you care.
@@ -201,7 +201,7 @@ async def update_dag_run(request, dag_run_id: int, dag_run: DAGRunUpdate) -> DAG
     return DAGRunOut.from_orm(saved)
 
 
-def process_task_updates(node_runs: List[NodeRunIn], dag_run_id: int) -> List[NodeRun]:
+def process_task_updates(node_runs: list[NodeRunIn], dag_run_id: int) -> list[NodeRun]:
     """Processes task updates, returning a list of NodeRuns to save.
     TODO -- squash any task updates on the same task, resolving conflicts
     (E.G. if one is SUCCESS and one is FAILURE).
@@ -314,7 +314,7 @@ async def bulk_log(
 
 @router.get(
     "/v1/node_runs/by_run_ids/{dag_run_ids}",
-    response=List[Optional[NodeRunOutWithAttributes]],
+    response=list[NodeRunOutWithAttributes | None],
     tags=["run_tracking", "cross-runs", "FE-only", "node_tracking"],
 )
 @permission(user_can_get_dag_runs)
@@ -322,7 +322,7 @@ async def get_node_run_for_dags(
     request,
     dag_run_ids: str,
     node_name: str,
-) -> List[Optional[NodeRunOutWithAttributes]]:
+) -> list[NodeRunOutWithAttributes | None]:
     """Gives a specific set of node runs for a certain set of attribute types.
     This enables the DAG viz in the UI to compare nodes with attributes across runs.
     Gives back all node attributes.

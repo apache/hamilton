@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Iterator, List
+from collections.abc import Iterator
 
 import openai
 
@@ -23,7 +23,7 @@ prompt_template = "Tell me a short joke about {topic}"
 client = openai.OpenAI()
 
 
-def stream_chat_model(messages: List[dict]) -> Iterator[str]:
+def stream_chat_model(messages: list[dict]) -> Iterator[str]:
     stream = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=messages,

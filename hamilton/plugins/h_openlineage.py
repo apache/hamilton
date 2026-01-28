@@ -19,7 +19,7 @@ import json
 import sys
 import traceback
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import attr
 from openlineage.client import OpenLineageClient, event_v2, facet_v2
@@ -35,9 +35,9 @@ class HamiltonFacet(facet_v2.RunFacet):
 
     hamilton_run_id: str = attr.ib()
     graph_version: str = attr.ib()
-    final_vars: List[str] = attr.ib()
-    inputs: List[str] = attr.ib()
-    overrides: List[str] = attr.ib()
+    final_vars: list[str] = attr.ib()
+    inputs: list[str] = attr.ib()
+    overrides: list[str] = attr.ib()
 
 
 def get_stack_trace(exception):
@@ -204,9 +204,9 @@ class OpenLineageAdapter(
         self,
         run_id: str,
         graph: h_graph.FunctionGraph,
-        final_vars: List[str],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        final_vars: list[str],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
     ):
         """
         Emits a Run START event.
@@ -258,7 +258,7 @@ class OpenLineageAdapter(
         self.client.emit(run_event)
 
     def pre_node_execute(
-        self, run_id: str, node_: node.Node, kwargs: Dict[str, Any], task_id: Optional[str] = None
+        self, run_id: str, node_: node.Node, kwargs: dict[str, Any], task_id: str | None = None
     ):
         """No event emitted."""
         pass
@@ -267,11 +267,11 @@ class OpenLineageAdapter(
         self,
         run_id: str,
         node_: node.Node,
-        kwargs: Dict[str, Any],
+        kwargs: dict[str, Any],
         success: bool,
-        error: Optional[Exception],
-        result: Optional[Any],
-        task_id: Optional[str] = None,
+        error: Exception | None,
+        result: Any | None,
+        task_id: str | None = None,
     ):
         """
         Run Event: will emit a RUNNING event with updates on input/outputs.
@@ -347,8 +347,8 @@ class OpenLineageAdapter(
         run_id: str,
         graph: h_graph.FunctionGraph,
         success: bool,
-        error: Optional[Exception],
-        results: Optional[Dict[str, Any]],
+        error: Exception | None,
+        results: dict[str, Any] | None,
     ):
         """Emits a Run COMPLETE or FAIL event.
 

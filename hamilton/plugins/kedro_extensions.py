@@ -16,7 +16,8 @@
 # under the License.
 
 import dataclasses
-from typing import Any, Collection, Dict, Optional, Tuple, Type
+from collections.abc import Collection
+from typing import Any
 
 from kedro.io import DataCatalog
 
@@ -51,10 +52,10 @@ class KedroSaver(DataSaver):
     catalog: DataCatalog
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [Any]
 
-    def save_data(self, data: Any) -> Dict[str, Any]:
+    def save_data(self, data: Any) -> dict[str, Any]:
         self.catalog.save(self.dataset_name, data)
         return dict(success=True)
 
@@ -87,13 +88,13 @@ class KedroLoader(DataLoader):
 
     dataset_name: str
     catalog: DataCatalog
-    version: Optional[str] = None
+    version: str | None = None
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [Any]
 
-    def load_data(self, type_: Type) -> Tuple[Any, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[Any, dict[str, Any]]:
         data = self.catalog.load(self.dataset_name, self.version)
         metadata = dict(dataset_name=self.dataset_name, version=self.version)
         return data, metadata

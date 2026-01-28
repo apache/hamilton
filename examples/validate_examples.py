@@ -20,9 +20,12 @@ from __future__ import annotations
 import argparse
 import logging
 import pathlib
-from typing import Sequence
+from typing import TYPE_CHECKING
 
 import nbformat
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 logger = logging.getLogger(__name__)
 

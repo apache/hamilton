@@ -21,7 +21,8 @@ import json
 import os
 import pathlib
 import pickle
-from typing import Any, Collection, Dict, Tuple, Type, Union
+from collections.abc import Collection
+from typing import Any
 
 from hamilton.io.data_adapters import DataLoader, DataSaver
 from hamilton.io.utils import get_file_metadata
@@ -32,10 +33,10 @@ class JSONDataLoader(DataLoader):
     path: str
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [dict, list]
 
-    def load_data(self, type_: Type) -> Tuple[dict, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[dict, dict[str, Any]]:
         with open(self.path, "r") as f:
             return json.load(f), get_file_metadata(self.path)
 
@@ -49,14 +50,14 @@ class JSONDataSaver(DataSaver):
     path: str
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [dict, list]
 
     @classmethod
     def name(cls) -> str:
         return "json"
 
-    def save_data(self, data: Any) -> Dict[str, Any]:
+    def save_data(self, data: Any) -> dict[str, Any]:
         with open(self.path, "w") as f:
             json.dump(data, f)
         return get_file_metadata(self.path)
@@ -67,12 +68,12 @@ class RawFileDataLoader(DataLoader):
     path: str
     encoding: str = "utf-8"
 
-    def load_data(self, type_: Type) -> Tuple[str, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[str, dict[str, Any]]:
         with open(self.path, "r", encoding=self.encoding) as f:
             return f.read(), get_file_metadata(self.path)
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [str]
 
     @classmethod
@@ -86,14 +87,14 @@ class RawFileDataSaver(DataSaver):
     encoding: str = "utf-8"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [str]
 
     @classmethod
     def name(cls) -> str:
         return "file"
 
-    def save_data(self, data: Any) -> Dict[str, Any]:
+    def save_data(self, data: Any) -> dict[str, Any]:
         with open(self.path, "w", encoding=self.encoding) as f:
             f.write(data)
         return get_file_metadata(self.path)
@@ -101,17 +102,17 @@ class RawFileDataSaver(DataSaver):
 
 @dataclasses.dataclass
 class RawFileDataSaverBytes(DataSaver):
-    path: Union[pathlib.Path, str]
+    path: pathlib.Path | str
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [bytes, io.BytesIO]
 
     @classmethod
     def name(cls) -> str:
         return "file"
 
-    def save_data(self, data: Union[bytes, io.BytesIO]) -> Dict[str, Any]:
+    def save_data(self, data: bytes | io.BytesIO) -> dict[str, Any]:
         if isinstance(data, io.BytesIO):
             data_bytes = data.getvalue()  # Extract bytes from BytesIO
         else:
@@ -128,14 +129,14 @@ class PickleLoader(DataLoader):
     path: str
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [object, Any]
 
     @classmethod
     def name(cls) -> str:
         return "pickle"
 
-    def load_data(self, type_: Type[object]) -> Tuple[object, Dict[str, Any]]:
+    def load_data(self, type_: type[object]) -> tuple[object, dict[str, Any]]:
         with open(self.path, "rb") as f:
             return pickle.load(f), get_file_metadata(self.path)
 
@@ -145,14 +146,14 @@ class PickleSaver(DataSaver):
     path: str
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [object]
 
     @classmethod
     def name(cls) -> str:
         return "pickle"
 
-    def save_data(self, data: Any) -> Dict[str, Any]:
+    def save_data(self, data: Any) -> dict[str, Any]:
         with open(self.path, "wb") as f:
             pickle.dump(data, f)
         return get_file_metadata(self.path)
@@ -160,9 +161,9 @@ class PickleSaver(DataSaver):
 
 @dataclasses.dataclass
 class EnvVarDataLoader(DataLoader):
-    names: Tuple[str, ...]
+    names: tuple[str, ...]
 
-    def load_data(self, type_: Type[dict]) -> Tuple[dict, Dict[str, Any]]:
+    def load_data(self, type_: type[dict]) -> tuple[dict, dict[str, Any]]:
         return {name: os.environ[name] for name in self.names}, {}
 
     @classmethod
@@ -170,7 +171,7 @@ class EnvVarDataLoader(DataLoader):
         return "environment"
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [dict]
 
 
@@ -179,10 +180,10 @@ class LiteralValueDataLoader(DataLoader):
     value: Any
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [Any]
 
-    def load_data(self, type_: Type) -> Tuple[dict, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[dict, dict[str, Any]]:
         return self.value, {}
 
     @classmethod
@@ -198,7 +199,7 @@ class InMemoryResult(DataSaver):
     """
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [Any]
 
     def save_data(self, data: Any) -> Any:

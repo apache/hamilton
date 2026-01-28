@@ -21,8 +21,6 @@ Module that contains logic to load data for the offline ETL process.
 We use this to build our offline ETL featurization process.
 """
 
-from typing import List
-
 import aiohttp
 import pandas as pd
 
@@ -31,7 +29,7 @@ from hamilton.function_modifiers.expanders import extract_fields
 from hamilton.function_modifiers.metadata import tag
 
 
-class FeatureStoreHttpClient(object):
+class FeatureStoreHttpClient:
     """HTTP Client -- replace this with your own implementation if you need to."""
 
     session: aiohttp.ClientSession = None
@@ -50,7 +48,7 @@ class FeatureStoreHttpClient(object):
         assert self.session is not None
         return self.session
 
-    async def get_features(self, client_id: str, features_needed: List[str]) -> pd.DataFrame:
+    async def get_features(self, client_id: str, features_needed: list[str]) -> pd.DataFrame:
         """Makes a request to the feature store to get the data.
 
         :param client_id: id of the client to get data for.

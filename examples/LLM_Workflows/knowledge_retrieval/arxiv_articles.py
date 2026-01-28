@@ -16,7 +16,6 @@
 # under the License.
 
 import os.path
-from typing import Dict
 
 import arxiv
 import openai
@@ -48,7 +47,7 @@ def arxiv_search_result(
 
 
 @extract_fields({"title": str, "summary": str, "article_url": str, "pdf_url": str})
-def result(arxiv_search_result: arxiv.Result) -> Dict[str, str]:
+def result(arxiv_search_result: arxiv.Result) -> dict[str, str]:
     return {
         "title": arxiv_search_result.title,
         "summary": arxiv_search_result.summary,
@@ -91,7 +90,7 @@ def arxiv_processed_result(
     pdf_url: str,
     arxiv_pdf: str,
     arxiv_result_embedding: list[float],
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """creates dict with parameters as keys/values"""
     return {
         "title": title,
@@ -103,7 +102,7 @@ def arxiv_processed_result(
     }
 
 
-def arxiv_result_df(arxiv_processed_result: Collect[Dict[str, str]]) -> pd.DataFrame:
+def arxiv_result_df(arxiv_processed_result: Collect[dict[str, str]]) -> pd.DataFrame:
     """Joins the arxiv results back to a dataframe.
 
     :param arxiv_processed_result: result of all the joined arxiv result information

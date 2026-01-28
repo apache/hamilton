@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict
+from typing import Any
 
 from hamilton_sdk.tracking import data_observation
 from ibis.expr.datatypes import core
@@ -64,7 +64,7 @@ base_schema = {
 }
 
 
-def _introspect(table: relations.Table) -> Dict[str, Any]:
+def _introspect(table: relations.Table) -> dict[str, Any]:
     """Introspect a PySpark dataframe and return a dictionary of statistics.
 
     :param df: PySpark dataframe to introspect.
@@ -93,7 +93,7 @@ def _introspect(table: relations.Table) -> Dict[str, Any]:
 @data_observation.compute_schema.register
 def compute_stats_ibis_table(
     result: relations.Table, node_name: str, node_tags: dict
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     # TODO: use the schema type
     o_value = _introspect(result)
     return {

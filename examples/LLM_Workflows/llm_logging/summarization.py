@@ -17,7 +17,7 @@
 
 import os
 import tempfile
-from typing import Generator, Union
+from collections.abc import Generator
 
 import tiktoken
 from openai import OpenAI
@@ -30,7 +30,7 @@ def openai_client() -> OpenAI:
     return OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 
-def raw_text(pdf_source: Union[str, bytes, tempfile.SpooledTemporaryFile]) -> str:
+def raw_text(pdf_source: str | bytes | tempfile.SpooledTemporaryFile) -> str:
     """Takes a filepath to a PDF and returns a string of the PDF's contents
     :param pdf_source: the path, or the temporary file, to the PDF.
     :return: the text of the PDF.

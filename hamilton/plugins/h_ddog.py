@@ -17,7 +17,7 @@
 
 import logging
 from types import ModuleType
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from hamilton import graph as h_graph
 from hamilton import lifecycle, node
@@ -57,7 +57,7 @@ class _DDOGTracerImpl:
         self.node_span_cache = {}  # Cache of run_id -> [task_id, node_id] -> span. We use this to open/close general traces
 
     @staticmethod
-    def _serialize_span_dict(span_dict: Dict[str, Span]):
+    def _serialize_span_dict(span_dict: dict[str, Span]):
         """Serializes to a readable format. We're not propogating span links (see note above on causal links),
         but that's fine (for now). We have to do this as passing spans back and forth is frowned upon.
 
@@ -75,7 +75,7 @@ class _DDOGTracerImpl:
         }
 
     @staticmethod
-    def _deserialize_span_dict(serialized_repr: Dict[str, dict]) -> Dict[str, context.Context]:
+    def _deserialize_span_dict(serialized_repr: dict[str, dict]) -> dict[str, context.Context]:
         """Note that we deserialize as contexts, as passing spans is not supported
         (the child should never terminate the parent span).
 
@@ -120,7 +120,7 @@ class _DDOGTracerImpl:
         }
 
     @staticmethod
-    def _sanitize_tags(tags: Dict[str, Any]) -> Dict[str, str]:
+    def _sanitize_tags(tags: dict[str, Any]) -> dict[str, str]:
         """Sanitizes tags to be strings, just in case.
 
         :param tags: Node tags.
@@ -147,9 +147,9 @@ class _DDOGTracerImpl:
         self,
         *,
         node_name: str,
-        node_kwargs: Dict[str, Any],
-        node_tags: Dict[str, Any],
-        task_id: Optional[str],
+        node_kwargs: dict[str, Any],
+        node_tags: dict[str, Any],
+        task_id: str | None,
         run_id: str,
         **future_kwargs: Any,
     ):
@@ -191,8 +191,8 @@ class _DDOGTracerImpl:
         self,
         *,
         node_name: str,
-        error: Optional[Exception],
-        task_id: Optional[str],
+        error: Exception | None,
+        task_id: str | None,
         run_id: str,
         **future_kwargs: Any,
     ):
@@ -215,7 +215,7 @@ class _DDOGTracerImpl:
         span.__exit__(exc_type, exc_value, tb)
 
     def run_after_graph_execution(
-        self, *, error: Optional[Exception], run_id: str, **future_kwargs: Any
+        self, *, error: Exception | None, run_id: str, **future_kwargs: Any
     ):
         """Runs after graph execution. Garbage collects + finishes the root span.
 
@@ -322,9 +322,9 @@ class DDOGTracer(
         self,
         *,
         node_name: str,
-        node_kwargs: Dict[str, Any],
-        node_tags: Dict[str, Any],
-        task_id: Optional[str],
+        node_kwargs: dict[str, Any],
+        node_tags: dict[str, Any],
+        task_id: str | None,
         run_id: str,
         **future_kwargs: Any,
     ):
@@ -350,8 +350,8 @@ class DDOGTracer(
         self,
         *,
         node_name: str,
-        error: Optional[Exception],
-        task_id: Optional[str],
+        error: Exception | None,
+        task_id: str | None,
         run_id: str,
         **future_kwargs: Any,
     ):
@@ -368,7 +368,7 @@ class DDOGTracer(
         )
 
     def run_after_graph_execution(
-        self, *, error: Optional[Exception], run_id: str, **future_kwargs: Any
+        self, *, error: Exception | None, run_id: str, **future_kwargs: Any
     ):
         """Runs after graph execution. Garbage collects + finishes the root span.
 
@@ -433,7 +433,7 @@ class AsyncDDOGTracer(
         )
 
     async def post_graph_construct(
-        self, graph: h_graph.FunctionGraph, modules: List[ModuleType], config: Dict[str, Any]
+        self, graph: h_graph.FunctionGraph, modules: list[ModuleType], config: dict[str, Any]
     ) -> None:
         """Runs after graph construction. This is a no-op for this plugin.
 
@@ -447,9 +447,9 @@ class AsyncDDOGTracer(
         self,
         run_id: str,
         graph: h_graph.FunctionGraph,
-        final_vars: List[str],
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        final_vars: list[str],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
     ) -> None:
         """Runs before graph execution -- sets the state so future ones can reference it.
 
@@ -462,7 +462,7 @@ class AsyncDDOGTracer(
         self._impl.run_before_graph_execution(run_id=run_id)
 
     async def pre_node_execute(
-        self, run_id: str, node_: node.Node, kwargs: Dict[str, Any], task_id: Optional[str] = None
+        self, run_id: str, node_: node.Node, kwargs: dict[str, Any], task_id: str | None = None
     ) -> None:
         """Runs before a node's execution. Sets up/stores spans.
 
@@ -484,9 +484,9 @@ class AsyncDDOGTracer(
         run_id: str,
         node_: node.Node,
         success: bool,
-        error: Optional[Exception],
+        error: Exception | None,
         result: Any,
-        task_id: Optional[str] = None,
+        task_id: str | None = None,
         **future_kwargs: dict,
     ) -> None:
         """Runs after a node's execution -- completes the span.
@@ -508,8 +508,8 @@ class AsyncDDOGTracer(
         run_id: str,
         graph: h_graph.FunctionGraph,
         success: bool,
-        error: Optional[Exception],
-        results: Optional[Dict[str, Any]],
+        error: Exception | None,
+        results: dict[str, Any] | None,
     ) -> None:
         """Runs after graph execution. Garbage collects + finishes the root span.
 

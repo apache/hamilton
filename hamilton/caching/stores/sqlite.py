@@ -18,7 +18,6 @@
 import pathlib
 import sqlite3
 import threading
-from typing import List, Optional
 
 from hamilton.caching.cache_key import decode_key
 from hamilton.caching.stores.base import MetadataStore
@@ -28,7 +27,7 @@ class SQLiteMetadataStore(MetadataStore):
     def __init__(
         self,
         path: str,
-        connection_kwargs: Optional[dict] = None,
+        connection_kwargs: dict | None = None,
     ) -> None:
         self._directory = pathlib.Path(path).resolve()
         self._directory.mkdir(parents=True, exist_ok=True)
@@ -173,7 +172,7 @@ class SQLiteMetadataStore(MetadataStore):
 
         self.connection.commit()
 
-    def get(self, cache_key: str) -> Optional[str]:
+    def get(self, cache_key: str) -> str | None:
         cur = self.connection.cursor()
         cur.execute(
             """\
@@ -217,7 +216,7 @@ class SQLiteMetadataStore(MetadataStore):
 
         return result is not None
 
-    def get_run_ids(self) -> List[str]:
+    def get_run_ids(self) -> list[str]:
         """Return a list of run ids, sorted from oldest to newest start time."""
         cur = self.connection.cursor()
         cur.execute("SELECT run_id FROM run_ids ORDER BY id")
@@ -244,7 +243,7 @@ class SQLiteMetadataStore(MetadataStore):
         # SELECT EXISTS returns 1 for True, i.e., `run_id` is found
         return result[0] == 1
 
-    def get_run(self, run_id: str) -> List[dict]:
+    def get_run(self, run_id: str) -> list[dict]:
         """Return a list of node metadata associated with a run.
 
         :param run_id: ID of the run to retrieve

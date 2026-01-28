@@ -51,7 +51,7 @@ def test_SimplePythonGraphAdapter():
 
     class Foo(base.ResultMixin):
         @staticmethod
-        def build_result(**outputs: typing.Dict[str, typing.Any]) -> typing.Any:
+        def build_result(**outputs: dict[str, typing.Any]) -> typing.Any:
             outputs.update({"esoteric": "function"})
             return outputs
 

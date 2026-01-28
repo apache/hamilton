@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict, Tuple
 
 import numpy as np
 import numpy.typing as npt
@@ -28,7 +27,7 @@ from hamilton.function_modifiers import extract_fields, pipe_input, source, step
 def _create_species_bunch(
     species_name: str,
     data: Bunch,
-    data_grid: Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]],
+    data_grid: tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]],
 ) -> npt.NDArray[np.float64]:
     """Our wrapper around and external function to integrate it as a node in the DAG."""
     return create_species_bunch(
@@ -38,7 +37,7 @@ def _create_species_bunch(
 
 def _standardize_features(
     species_bunch: npt.NDArray[np.float64],
-) -> Tuple[
+) -> tuple[
     npt.NDArray[np.float64],
     npt.NDArray[np.float64],
     npt.NDArray[np.float64],
@@ -62,12 +61,12 @@ def _standardize_features(
     step(_standardize_features),
 )
 def species(
-    chosen_species: Tuple[
+    chosen_species: tuple[
         npt.NDArray[np.float64],
         npt.NDArray[np.float64],
         npt.NDArray[np.float64],
     ],
-) -> Dict[str, npt.NDArray[np.float64]]:
+) -> dict[str, npt.NDArray[np.float64]]:
     train_cover_std = (chosen_species[0].cov_train - chosen_species[1]) / chosen_species[2]
     return {
         "bunch": chosen_species[0],

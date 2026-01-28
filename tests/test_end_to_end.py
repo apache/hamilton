@@ -19,7 +19,8 @@ import importlib
 import json
 import math
 import sys
-from typing import Any, Callable, Dict, List, Type
+from collections.abc import Callable
+from typing import Any
 
 import pandas as pd
 import pytest
@@ -324,16 +325,16 @@ def test_end_to_end_with_dynamic_config(driver_factory):
 
 class JoinBuilder(base.ResultMixin):
     @staticmethod
-    def build_result(**outputs: Dict[str, Any]) -> Any:
+    def build_result(**outputs: dict[str, Any]) -> Any:
         out = {}
         for output in outputs.values():
             out.update(output)
         return out
 
-    def output_type(self) -> Type:
+    def output_type(self) -> type:
         return dict
 
-    def input_types(self) -> List[Type]:
+    def input_types(self) -> list[type]:
         return [dict]
 
 

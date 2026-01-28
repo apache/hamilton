@@ -27,7 +27,8 @@ try:
 except ImportError:
     # python3.10 and above
     EllipsisType = type(...)
-from typing import Any, Callable, Collection, Dict, List, Optional, Tuple, Type, Union
+from collections.abc import Callable, Collection
+from typing import Any, Union
 
 from hamilton import node, registry, settings
 
@@ -129,7 +130,7 @@ class NodeTransformLifecycle(abc.ABC):
             setattr(fn, lifecycle_name, [self])
         return fn
 
-    def required_config(self) -> Optional[List[str]]:
+    def required_config(self) -> list[str] | None:
         """Declares the required configuration keys for this decorator.
         Note that these configuration keys will be filtered and passed to the `configuration`
         parameter of the functions that this decorator uses.
@@ -141,7 +142,7 @@ class NodeTransformLifecycle(abc.ABC):
         """
         return []
 
-    def optional_config(self) -> Optional[Dict[str, Any]]:
+    def optional_config(self) -> dict[str, Any] | None:
         """Declares the optional configuration keys for this decorator.
         These are configuration keys that can be used by the decorator, but are not required.
         Along with these we have *defaults*, which we will use to pass to the config.
@@ -165,7 +166,7 @@ class NodeResolver(NodeTransformLifecycle):
     """Decorator to resolve a nodes function. Can modify anything about the function and is run at DAG creation time."""
 
     @abc.abstractmethod
-    def resolve(self, fn: Callable, config: Dict[str, Any]) -> Optional[Callable]:
+    def resolve(self, fn: Callable, config: dict[str, Any]) -> Callable | None:
         """Determines what a function resolves to. Returns None if it should not be included in the DAG.
 
         :param fn: Function to resolve
@@ -197,7 +198,7 @@ class NodeCreator(NodeTransformLifecycle, abc.ABC):
     """Abstract class for nodes that "expand" functions into other nodes."""
 
     @abc.abstractmethod
-    def generate_nodes(self, fn: Callable, config: Dict[str, Any]) -> List[node.Node]:
+    def generate_nodes(self, fn: Callable, config: dict[str, Any]) -> list[node.Node]:
         """Given a function, converts it to a series of nodes that it produces.
 
         :param config:
@@ -227,7 +228,7 @@ class NodeCreator(NodeTransformLifecycle, abc.ABC):
 class SubDAGModifier(NodeTransformLifecycle, abc.ABC):
     @abc.abstractmethod
     def transform_dag(
-        self, nodes: Collection[node.Node], config: Dict[str, Any], fn: Callable
+        self, nodes: Collection[node.Node], config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Modifies a DAG consisting of a set of nodes. Note that this is to support the following two base classes.
 
@@ -254,7 +255,7 @@ class NodeInjector(SubDAGModifier, abc.ABC):
     """
 
     @staticmethod
-    def find_injectable_params(nodes: Collection[node.Node]) -> Dict[str, Type[Type]]:
+    def find_injectable_params(nodes: Collection[node.Node]) -> dict[str, type[type]]:
         """Identifies required nodes of this subDAG (nodes produced by this function)
         that aren't satisfied by the nodes inside it. These are "injectable",
         meaning that we can add more nodes that feed into them.
@@ -274,7 +275,7 @@ class NodeInjector(SubDAGModifier, abc.ABC):
         return output_deps
 
     def transform_dag(
-        self, nodes: Collection[node.Node], config: Dict[str, Any], fn: Callable
+        self, nodes: Collection[node.Node], config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Transforms the subDAG by getting the injectable parameters (anything not
         produced by nodes inside it), then calling the inject_nodes function on it.
@@ -298,8 +299,8 @@ class NodeInjector(SubDAGModifier, abc.ABC):
 
     @abc.abstractmethod
     def inject_nodes(
-        self, params: Dict[str, Type[Type]], config: Dict[str, Any], fn: Callable
-    ) -> Tuple[List[node.Node], Dict[str, str]]:
+        self, params: dict[str, type[type]], config: dict[str, Any], fn: Callable
+    ) -> tuple[list[node.Node], dict[str, str]]:
         """Adds a set of nodes to inject into the DAG. These get injected into the specified param name,
         meaning that exactly one of the output nodes will have that name. Note that this also allows
         input renaming, meaning that the injector can rename the input to something else (to avoid
@@ -336,7 +337,7 @@ class NodeExpander(SubDAGModifier):
     EXPAND_NODES = "expand_nodes"
 
     def transform_dag(
-        self, nodes: Collection[node.Node], config: Dict[str, Any], fn: Callable
+        self, nodes: Collection[node.Node], config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         if len(nodes) != 1:
             raise ValueError(
@@ -348,7 +349,7 @@ class NodeExpander(SubDAGModifier):
 
     @abc.abstractmethod
     def expand_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Given a single node, expands into multiple nodes. Note that this node list includes:
         1. Each "output" node (think sink in a DAG)
@@ -497,7 +498,7 @@ class NodeTransformer(SubDAGModifier):
         return [node_ for node_ in all_nodes if node_ not in nodes_to_transform]
 
     def transform_targets(
-        self, targets: Collection[node.Node], config: Dict[str, Any], fn: Callable
+        self, targets: Collection[node.Node], config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Transforms a set of target nodes. Note that this is just a loop,
         but abstracting t away gives subclasses control over how this is done,
@@ -516,7 +517,7 @@ class NodeTransformer(SubDAGModifier):
         return out
 
     def transform_dag(
-        self, nodes: Collection[node.Node], config: Dict[str, Any], fn: Callable
+        self, nodes: Collection[node.Node], config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Finds the sources and sinks and runs the transformer on each sink.
         Then returns the result of the entire set of sinks. Note that each sink has to have a unique name.
@@ -534,7 +535,7 @@ class NodeTransformer(SubDAGModifier):
 
     @abc.abstractmethod
     def transform_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         pass
 
@@ -567,7 +568,7 @@ class SingleNodeNodeTransformer(NodeTransformer, ABC):
         super().__init__(target=None)
 
     def transform_targets(
-        self, targets: Collection[node.Node], config: Dict[str, Any], fn: Callable
+        self, targets: Collection[node.Node], config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Transforms the target set of nodes. Exists to validate the target set.
 
@@ -606,7 +607,7 @@ class NodeDecorator(NodeTransformer, abc.ABC):
         pass
 
     def transform_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Transforms the node. Delegates to decorate_node
 
@@ -640,7 +641,7 @@ class NodeDecorator(NodeTransformer, abc.ABC):
 
 
 class DefaultNodeCreator(NodeCreator):
-    def generate_nodes(self, fn: Callable, config: Dict[str, Any]) -> List[node.Node]:
+    def generate_nodes(self, fn: Callable, config: dict[str, Any]) -> list[node.Node]:
         return [node.Node.from_fn(fn)]
 
     def validate(self, fn: Callable):
@@ -648,7 +649,7 @@ class DefaultNodeCreator(NodeCreator):
 
 
 class DefaultNodeResolver(NodeResolver):
-    def resolve(self, fn: Callable, config: Dict[str, Any]) -> Callable:
+    def resolve(self, fn: Callable, config: dict[str, Any]) -> Callable:
         return fn
 
     def validate(self, fn):
@@ -665,10 +666,10 @@ class DefaultNodeDecorator(NodeDecorator):
 
 def resolve_config(
     name_for_error: str,
-    config: Dict[str, Any],
-    config_required: Optional[List[str]],
-    config_optional_with_defaults: Dict[str, Any],
-) -> Dict[str, Any]:
+    config: dict[str, Any],
+    config_required: list[str] | None,
+    config_optional_with_defaults: dict[str, Any],
+) -> dict[str, Any]:
     """Resolves the configuration that a decorator utilizes
 
     :param name_for_error:
@@ -716,7 +717,7 @@ class DynamicResolver(NodeTransformLifecycle):
         pass
 
 
-def filter_config(config: Dict[str, Any], decorator: NodeTransformLifecycle) -> Dict[str, Any]:
+def filter_config(config: dict[str, Any], decorator: NodeTransformLifecycle) -> dict[str, Any]:
     """Filters the config to only include the keys in config_required
     :param config: The config to filter
     :param config_required: The keys to include
@@ -729,8 +730,8 @@ def filter_config(config: Dict[str, Any], decorator: NodeTransformLifecycle) -> 
 
 
 def get_node_decorators(
-    fn: Callable, config: Dict[str, Any]
-) -> Dict[str, List[NodeTransformLifecycle]]:
+    fn: Callable, config: dict[str, Any]
+) -> dict[str, list[NodeTransformLifecycle]]:
     """Gets the decorators for a function. Contract is this will have one entry
     for every step of the decorator lifecycle that can always be run (currently everything except NodeExpander)
 
@@ -761,7 +762,7 @@ def get_node_decorators(
     return defaults
 
 
-def _add_original_function_to_nodes(fn: Callable, nodes: List[node.Node]) -> List[node.Node]:
+def _add_original_function_to_nodes(fn: Callable, nodes: list[node.Node]) -> list[node.Node]:
     """Adds the original function to the nodes. We do this so that we can have appropriate metadata
     on the function -- this is valuable to see if/how the function changes over time to manage node
     versions, etc...
@@ -792,7 +793,7 @@ def _resolve_nodes_error(fn: Callable) -> str:
     return f"Exception occurred while compiling function: {fn.__name__} to nodes"
 
 
-def resolve_nodes(fn: Callable, config: Dict[str, Any]) -> Collection[node.Node]:
+def resolve_nodes(fn: Callable, config: dict[str, Any]) -> Collection[node.Node]:
     """Gets a list of nodes from a function. This is meant to be an abstraction between the node
     and the function that it implements. This will end up coordinating with the decorators we build
     to modify nodes.

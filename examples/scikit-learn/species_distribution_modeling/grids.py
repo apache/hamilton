@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Tuple
 
 import numpy as np
 import numpy.typing as npt
@@ -25,21 +24,21 @@ from sklearn.utils._bunch import Bunch
 from hamilton.function_modifiers import pipe_input, step
 
 
-def _construct_grids(batch: Bunch) -> Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
+def _construct_grids(batch: Bunch) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
     """Our wrapper around and external function to integrate it as a node in the DAG."""
     return construct_grids(batch=batch)
 
 
 @pipe_input(step(_construct_grids))
 def data_grid_(
-    data: Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]],
-) -> Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
+    data: tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]],
+) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
     return data
 
 
 def meshgrid(
-    data_grid_: Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]],
-) -> Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
+    data_grid_: tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]],
+) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
     return np.meshgrid(data_grid_[0], data_grid_[1][::-1])
 
 

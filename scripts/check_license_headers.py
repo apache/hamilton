@@ -20,7 +20,6 @@
 
 import sys
 from pathlib import Path
-from typing import List
 
 # License header patterns to check for
 # ASF-specific header (our standard)
@@ -174,7 +173,7 @@ def has_license_header(file_path: Path, num_lines: int = 20) -> bool:
         return True  # Assume they're fine to avoid false positives
 
 
-def find_files_without_license(root_dir: Path) -> List[Path]:
+def find_files_without_license(root_dir: Path) -> list[Path]:
     """Find all files without Apache 2 license headers.
 
     Uses an exclusion-based approach: checks all files except those with

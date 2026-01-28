@@ -19,7 +19,6 @@ import os
 import pathlib
 import sqlite3
 import sys
-from typing import Union
 from unittest import mock
 
 import pandas as pd
@@ -113,7 +112,7 @@ def test_pandas_json(df: pd.DataFrame, tmp_path: pathlib.Path) -> None:
         create_engine("sqlite://"),
     ],
 )
-def test_pandas_sql(df: pd.DataFrame, conn: Union[str, sqlite3.Connection]) -> None:
+def test_pandas_sql(df: pd.DataFrame, conn: str | sqlite3.Connection) -> None:
     writer = PandasSqlWriter(table_name="bar", db_connection=conn)
     kwargs1 = writer._get_saving_kwargs()
     metadata1 = writer.save_data(df)

@@ -17,7 +17,8 @@
 
 import pathlib
 import pickle
-from typing import Any, Collection, Dict, Tuple, Type
+from collections.abc import Collection
+from typing import Any
 
 import pytest
 
@@ -139,13 +140,13 @@ class FakeParquetSaver(DataSaver):
     def __init__(self, file):
         self.file = file
 
-    def save_data(self, data: Any) -> Dict[str, Any]:
+    def save_data(self, data: Any) -> dict[str, Any]:
         with open(self.file, "w") as f:
             f.write(str(data))
         return {"meta": "data"}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         pass
 
     @classmethod
@@ -157,13 +158,13 @@ class FakeParquetLoader(DataLoader):
     def __init__(self, file):
         self.file = file
 
-    def load_data(self, type_: Type[Type]) -> Tuple[Type, Dict[str, Any]]:
+    def load_data(self, type_: type[type]) -> tuple[type, dict[str, Any]]:
         with open(self.file, "r") as f:
             data = eval(f.read())
         return data, {"meta": data}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         pass
 
     @classmethod
@@ -190,13 +191,13 @@ class BadSaver(DataSaver):
     def __init__(self, file123):
         self.file = file123
 
-    def save_data(self, data: Any) -> Dict[str, Any]:
+    def save_data(self, data: Any) -> dict[str, Any]:
         with open(self.file, "w") as f:
             f.write(str(data))
         return {"meta": "data"}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         pass
 
     @classmethod
@@ -208,13 +209,13 @@ class BadLoader(DataLoader):
     def __init__(self, file123):
         self.file = file123
 
-    def load_data(self, type_: Type[Type]) -> Tuple[Type, Dict[str, Any]]:
+    def load_data(self, type_: type[type]) -> tuple[type, dict[str, Any]]:
         with open(self.file, "r") as f:
             data = eval(f.read())
         return data, {"meta": data}
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         pass
 
     @classmethod

@@ -15,8 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from collections.abc import Callable
 from concurrent.futures import Future, ThreadPoolExecutor
-from typing import Any, Callable, Dict, List, Type
+from typing import Any
 
 from hamilton import lifecycle, node
 from hamilton.lifecycle import base
@@ -74,7 +75,7 @@ class FutureAdapter(base.BaseDoRemoteExecute, lifecycle.ResultBuilder):
         )
         self.result_builder = result_builder
 
-    def input_types(self) -> List[Type[Type]]:
+    def input_types(self) -> list[type[type]]:
         """Gives the applicable types to this result builder.
         This is optional for backwards compatibility, but is recommended.
 
@@ -84,7 +85,7 @@ class FutureAdapter(base.BaseDoRemoteExecute, lifecycle.ResultBuilder):
         # result builder doesn't make sense.
         return [Any]
 
-    def output_type(self) -> Type:
+    def output_type(self) -> type:
         """Returns the output type of this result builder
         :return: the type that this creates
         """
@@ -97,7 +98,7 @@ class FutureAdapter(base.BaseDoRemoteExecute, lifecycle.ResultBuilder):
         *,
         execute_lifecycle_for_node: Callable,
         node: node.Node,
-        **kwargs: Dict[str, Any],
+        **kwargs: dict[str, Any],
     ) -> Any:
         """Function that submits the passed in function to the ThreadPoolExecutor to be executed
         after wrapping it with the _new_fn function.

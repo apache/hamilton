@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -28,7 +28,7 @@ Notes:
 
 
 @data_observation.compute_stats.register
-def compute_stats_numpy(result: np.ndarray, node_name: str, node_tags: dict) -> Dict[str, Any]:
+def compute_stats_numpy(result: np.ndarray, node_name: str, node_tags: dict) -> dict[str, Any]:
     try:
         df = pd.DataFrame(result)  # hack - reuse pandas stuff
     except ValueError:

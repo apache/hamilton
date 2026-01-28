@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Dict
 
 import numpy as np
 from sklearn import base, linear_model, metrics, svm
@@ -52,7 +51,7 @@ def train_test_split_func(
     target: np.ndarray,
     test_size_fraction: float,
     shuffle_train_test_split: bool,
-) -> Dict[str, np.ndarray]:
+) -> dict[str, np.ndarray]:
     """Function that creates the training & test splits.
 
     It this then extracted out into constituent components and used downstream.

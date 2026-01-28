@@ -20,7 +20,6 @@ This is a module that contains our "model fitting and related" transforms.
 """
 
 import pickle
-from typing import Dict
 
 import numpy as np
 import pandas as pd
@@ -47,7 +46,7 @@ def model_classifier(random_state: int) -> base.ClassifierMixin:
 @extract_fields({"train_set": pd.DataFrame, "test_set": pd.DataFrame})
 def train_test_split(
     data_set: pd.DataFrame, target: pd.Series, test_size: float
-) -> Dict[str, pd.DataFrame]:
+) -> dict[str, pd.DataFrame]:
     """Splits the dataset into train & test.
 
     :param data_set: the dataset with all features already computed

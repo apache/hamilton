@@ -32,10 +32,14 @@ import sys
 import time
 import urllib.error
 import urllib.request
+from collections.abc import Callable
 from types import ModuleType
-from typing import Callable, Dict, List, NamedTuple, Optional, Tuple, Type, Union
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, Optional, Tuple, Type, Union
 
 from hamilton import driver, telemetry
+
+if TYPE_CHECKING:
+    import builtins
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +80,7 @@ def _track_function_call(call_fn: Callable) -> Callable:
     return track_call
 
 
-def _track_download(is_official: bool, user: Optional[str], dataflow_name: str, version: str):
+def _track_download(is_official: bool, user: str | None, dataflow_name: str, version: str):
     """Inner function to track "downloads" of a dataflow.
 
     :param is_official: is this an official dataflow? False == user.
@@ -94,7 +98,7 @@ def _track_download(is_official: bool, user: Optional[str], dataflow_name: str, 
     telemetry.send_event_json(event_json)
 
 
-def _get_request(url: str) -> Tuple[int, str]:
+def _get_request(url: str) -> tuple[int, str]:
     """Makes a GET request to the given URL and returns the status code and response data.
 
     :param url: the url to make the request to.
@@ -302,8 +306,8 @@ class InspectResult(NamedTuple):
     version: str  # git commit sha/package version
     user: str  # github user URL
     dataflow: str  # dataflow URL
-    python_dependencies: List[str]  # python dependencies
-    configurations: List[str]  # configurations for the dataflow stored as a JSON string
+    python_dependencies: list[str]  # python dependencies
+    configurations: list[str]  # configurations for the dataflow stored as a JSON string
 
 
 @_track_function_call
@@ -345,7 +349,7 @@ def inspect(dataflow: str, user: str = None, version: str = "latest") -> Inspect
             f"Dataflow {user or 'dagworks'}/{dataflow} with version {version} does not exist locally. Not inspecting."
         )
     # return dictionary of python deps, inputs, nodes, designated outputs, commit hash
-    info: Dict[str, Union[str, List[Dict], List[str]]] = {
+    info: dict[str, str | builtins.list[dict] | builtins.list[str]] = {
         "version": version,
         "user": user_url,
         "dataflow": dataflow_url,
@@ -367,11 +371,11 @@ class InspectModuleResult(NamedTuple):
     version: str  # git commit sha/package version
     user: str  # github user URL
     dataflow: str  # dataflow URL
-    python_dependencies: List[str]  # python dependencies
-    configurations: List[str]  # configurations for the dataflow stored as a JSON string
-    possible_inputs: List[Tuple[str, Type]]
-    nodes: List[Tuple[str, Type]]
-    designated_outputs: List[Tuple[str, Type]]
+    python_dependencies: list[str]  # python dependencies
+    configurations: list[str]  # configurations for the dataflow stored as a JSON string
+    possible_inputs: list[tuple[str, type]]
+    nodes: list[tuple[str, type]]
+    designated_outputs: list[tuple[str, type]]
 
 
 @_track_function_call
@@ -414,7 +418,9 @@ def inspect_module(module: ModuleType) -> InspectModuleResult:
             f"Dataflow {user or 'dagworks'}/{dataflow} with version {version} does not exist locally. Not inspecting."
         )
     # return dictionary of python deps, inputs, nodes, designated outputs, commit hash
-    info: Dict[str, Union[str, List[Dict], List[str], List[Tuple[str, Type]]]] = {
+    info: dict[
+        str, str | builtins.list[dict] | builtins.list[str] | builtins.list[tuple[str, type]]
+    ] = {
         "version": version,
         "user": user_url,
         "dataflow": dataflow_url,

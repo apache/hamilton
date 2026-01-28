@@ -20,7 +20,8 @@ import dataclasses
 import functools
 import inspect
 import typing
-from typing import Any, Callable, Collection, Dict, List, Optional, Tuple, Type, Union
+from collections.abc import Callable, Collection
+from typing import Any
 
 import typing_extensions
 import typing_inspect
@@ -119,10 +120,8 @@ class parameterize(base.NodeExpander):
 
     def __init__(
         self,
-        **parametrization: Union[
-            Dict[str, ParametrizedDependency],
-            Tuple[Dict[str, ParametrizedDependency], str],
-        ],
+        **parametrization: dict[str, ParametrizedDependency]
+        | tuple[dict[str, ParametrizedDependency], str],
     ):
         """Decorator to use to create many functions.
 
@@ -150,8 +149,8 @@ class parameterize(base.NodeExpander):
         }
 
     def split_parameterizations(
-        self, parameterizations: Dict[str, ParametrizedDependency]
-    ) -> Dict[ParametrizedDependencySource, Dict[str, ParametrizedDependency]]:
+        self, parameterizations: dict[str, ParametrizedDependency]
+    ) -> dict[ParametrizedDependencySource, dict[str, ParametrizedDependency]]:
         """Split parameterizations into two groups: those that are literal values, and those that are upstream nodes.
         Will have a key for each existing dependency type.
 
@@ -168,7 +167,7 @@ class parameterize(base.NodeExpander):
         return f"__{arg_name}_{index}"
 
     def expand_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         nodes = []
         for (
@@ -447,7 +446,7 @@ class parameterize_values(parameterize):
 
     """
 
-    def __init__(self, parameter: str, assigned_output: Dict[Tuple[str, str], Any]):
+    def __init__(self, parameter: str, assigned_output: dict[tuple[str, str], Any]):
         """Constructor for a modifier that expands a single function into n, each of which
         corresponds to a function in which the parameter value is replaced by that *specific value*.
 
@@ -455,7 +454,7 @@ class parameterize_values(parameterize):
         :param assigned_output: A map of tuple of [parameter names, documentation] to values
         """
         for node_ in assigned_output.keys():
-            if not isinstance(node_, Tuple):
+            if not isinstance(node_, tuple):
                 raise base.InvalidDecoratorException(
                     f"assigned_output key is incorrect: {node_}. The parameterized decorator needs a dict of "
                     "[name, doc string] -> value to function."
@@ -499,7 +498,7 @@ class parameterize_sources(parameterize):
 
     """
 
-    def __init__(self, **parameterization: Dict[str, str]):
+    def __init__(self, **parameterization: dict[str, str]):
         """Constructor for a modifier that expands a single function into n, each of which corresponds to replacing\
         some subset of the specified parameters with specific upstream nodes.
 
@@ -546,7 +545,7 @@ class parameterize_sources(parameterize):
     "-parameterized",
 )
 class parametrized_input(parameterize):
-    def __init__(self, parameter: str, variable_inputs: Dict[str, Tuple[str, str]]):
+    def __init__(self, parameter: str, variable_inputs: dict[str, tuple[str, str]]):
         """Constructor for a modifier that expands a single function into n, each of which
         corresponds to the specified parameter replaced by a *specific input column*.
 
@@ -563,7 +562,7 @@ class parametrized_input(parameterize):
         :param variable_inputs: A map of tuple of [parameter names, documentation] to values
         """
         for val in variable_inputs.values():
-            if not isinstance(val, Tuple):
+            if not isinstance(val, tuple):
                 raise base.InvalidDecoratorException(
                     f"assigned_output key is incorrect: {node}. The parameterized decorator needs a dict of "
                     "input column -> [name, description] to function."
@@ -588,7 +587,7 @@ class parameterized_inputs(parameterize_sources):
 
 
 class extract_columns(base.SingleNodeNodeTransformer):
-    def __init__(self, *columns: Union[Tuple[str, str], str], fill_with: Any = None):
+    def __init__(self, *columns: tuple[str, str] | str, fill_with: Any = None):
         """Constructor for a modifier that expands a single function into the following nodes:
 
         - n functions, each of which take in the original dataframe and output a specific column
@@ -635,7 +634,7 @@ class extract_columns(base.SingleNodeNodeTransformer):
         extract_columns.validate_return_type(fn)
 
     def transform_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """For each column to extract, output a node that extracts that column. Also, output the original dataframe
         generator.
@@ -676,7 +675,7 @@ class extract_columns(base.SingleNodeNodeTransformer):
         series_type = registry.get_column_type_from_df_type(output_type)
         for column in self.columns:
             doc_string = base_doc  # default doc string of base function.
-            if isinstance(column, Tuple):  # Expand tuple into constituents
+            if isinstance(column, tuple):  # Expand tuple into constituents
                 column, doc_string = column
 
             if inspect.iscoroutinefunction(fn):
@@ -717,8 +716,8 @@ class extract_columns(base.SingleNodeNodeTransformer):
 
 
 def _determine_fields_to_extract(
-    fields: Optional[Union[Dict[str, Any], List[str]]], output_type: Any
-) -> Dict[str, Any]:
+    fields: dict[str, Any] | list[str] | None, output_type: Any
+) -> dict[str, Any]:
     """Determines which fields to extract based on user requested fields and the output type of
     the return type of the function.
 
@@ -733,7 +732,7 @@ def _determine_fields_to_extract(
         f"`typing.Dict[str, int]`), not: {output_type}"
     )
 
-    if output_type == dict or output_type == Dict:
+    if output_type == dict or output_type == dict:
         # NOTE: typing_inspect.is_generic_type(typing.Dict) without type parameters returns True,
         #       so we need to address the bare dictionaries first before generics.
         if fields is None or not isinstance(fields, dict):
@@ -743,7 +742,7 @@ def _determine_fields_to_extract(
             )
     elif typing_inspect.is_generic_type(output_type):
         base_type = typing_inspect.get_origin(output_type)
-        if base_type != dict and base_type != Dict:
+        if base_type != dict and base_type != dict:
             raise base.InvalidDecoratorException(output_type_error)
         if fields is None:
             raise base.InvalidDecoratorException(
@@ -840,11 +839,11 @@ class extract_fields(base.SingleNodeNodeTransformer):
     """Extracts fields from a dictionary of output."""
 
     output_type: Any
-    resolved_fields: Dict[str, Type]
+    resolved_fields: dict[str, type]
 
     def __init__(
         self,
-        fields: Optional[Union[Dict[str, Any], List[str], Any]] = None,
+        fields: dict[str, Any] | list[str] | Any | None = None,
         *others,
         fill_with: Any = None,
     ):
@@ -878,7 +877,7 @@ class extract_fields(base.SingleNodeNodeTransformer):
         self.resolved_fields = _determine_fields_to_extract(self.fields, self.output_type)
 
     def transform_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """For each field to extract, output a node that extracts that field. Also, output the original TypedDict
         generator.
@@ -941,7 +940,7 @@ class extract_fields(base.SingleNodeNodeTransformer):
         return output_nodes
 
 
-def _determine_fields_to_unpack(fields: List[str], output_type: Any) -> List[Type]:
+def _determine_fields_to_unpack(fields: list[str], output_type: Any) -> list[type]:
     """Determines which fields to unpack based on user requested fields and the output type of
     the return type of the function.
 
@@ -951,7 +950,7 @@ def _determine_fields_to_unpack(fields: List[str], output_type: Any) -> List[Typ
     """
 
     base_type = typing_inspect.get_origin(output_type)  # Returns None when output_type is None
-    if base_type != tuple and base_type != Tuple:
+    if base_type != tuple and base_type != tuple:
         message = (
             f"For unpacking fields, the decorated function output type must be either an "
             f"explicit length tuple (e.g.`tuple[int, str]`, `typing.Tuple[int, str]`) or an "
@@ -1017,7 +1016,7 @@ class unpack_fields(base.SingleNodeNodeTransformer):
     """
 
     output_type: Any
-    field_types: List[Type]
+    field_types: list[type]
 
     def __init__(self, *fields: str):
         super().__init__()
@@ -1037,7 +1036,7 @@ class unpack_fields(base.SingleNodeNodeTransformer):
 
     @override
     def transform_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Unpacks the specified fields form the tuple output into separate nodes.
 
@@ -1102,8 +1101,8 @@ class ParameterizedExtract:
     parameter to the function.
     """
 
-    outputs: Tuple[str, ...]
-    input_mapping: Dict[str, ParametrizedDependency]
+    outputs: tuple[str, ...]
+    input_mapping: dict[str, ParametrizedDependency]
 
 
 class parameterize_extract_columns(base.NodeExpander):
@@ -1147,7 +1146,7 @@ class parameterize_extract_columns(base.NodeExpander):
         self.reassign_columns = reassign_columns
 
     def expand_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Expands a node into multiple, given the extract_config passed to
         parameterize_extract_columns. Goes through all parameterizations,

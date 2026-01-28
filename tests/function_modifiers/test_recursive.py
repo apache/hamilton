@@ -18,7 +18,6 @@
 import collections
 import inspect
 import random
-from typing import Tuple
 
 import pytest
 
@@ -304,7 +303,7 @@ def test_parameterized_subdag():
     def baz__alternate(foo: int, bar: int) -> int:
         return foo * bar
 
-    def subdag_processor(foo: int, bar: int, baz: int) -> Tuple[int, int, int]:
+    def subdag_processor(foo: int, bar: int, baz: int) -> tuple[int, int, int]:
         return foo, bar, baz
 
     fns = [bar, foo, baz__standard, baz__alternate]
@@ -345,15 +344,15 @@ def test_nested_subdag():
         foo,
         bar,
     )
-    def inner_subdag(foo: int, bar: int) -> Tuple[int, int]:
+    def inner_subdag(foo: int, bar: int) -> tuple[int, int]:
         return foo, bar
 
     @subdag(inner_subdag, inputs={"input_2": value(10)}, config={"plus_one": True})
-    def outer_subdag_1(inner_subdag: Tuple[int, int]) -> int:
+    def outer_subdag_1(inner_subdag: tuple[int, int]) -> int:
         return sum(inner_subdag)
 
     @subdag(inner_subdag, inputs={"input_2": value(3)}, config={"plus_one": False})
-    def outer_subdag_2(inner_subdag: Tuple[int, int]) -> int:
+    def outer_subdag_2(inner_subdag: tuple[int, int]) -> int:
         return sum(inner_subdag)
 
     def sum_all(outer_subdag_1: int, outer_subdag_2: int) -> int:
@@ -384,15 +383,15 @@ def test_nested_subdag_with_config():
         foo,
         bar,
     )
-    def inner_subdag(foo: int, bar: int) -> Tuple[int, int]:
+    def inner_subdag(foo: int, bar: int) -> tuple[int, int]:
         return foo, bar
 
     @subdag(inner_subdag, inputs={"input_2": value(10)})
-    def outer_subdag_1(inner_subdag: Tuple[int, int]) -> int:
+    def outer_subdag_1(inner_subdag: tuple[int, int]) -> int:
         return sum(inner_subdag)
 
     @subdag(inner_subdag, inputs={"input_2": value(3)})
-    def outer_subdag_2(inner_subdag: Tuple[int, int]) -> int:
+    def outer_subdag_2(inner_subdag: tuple[int, int]) -> int:
         return sum(inner_subdag)
 
     def sum_all(outer_subdag_1: int, outer_subdag_2: int) -> int:
@@ -425,15 +424,15 @@ def test_nested_subdag_with_config_remapping():
         foo,
         bar,
     )
-    def inner_subdag(foo: int, bar: int) -> Tuple[int, int]:
+    def inner_subdag(foo: int, bar: int) -> tuple[int, int]:
         return foo, bar
 
     @subdag(inner_subdag, inputs={"input_2": value(10)}, config={"broken": value(False)})
-    def outer_subdag_1(inner_subdag: Tuple[int, int]) -> int:
+    def outer_subdag_1(inner_subdag: tuple[int, int]) -> int:
         return sum(inner_subdag)
 
     @subdag(inner_subdag, inputs={"input_2": value(3)}, config={"broken": configuration("broken2")})
-    def outer_subdag_2(inner_subdag: Tuple[int, int]) -> int:
+    def outer_subdag_2(inner_subdag: tuple[int, int]) -> int:
         return sum(inner_subdag)
 
     def sum_all(outer_subdag_1: int, outer_subdag_2: int) -> int:
@@ -466,11 +465,11 @@ def test_nested_subdag_with_config_remapping_missing_error():
         foo,
         bar,
     )
-    def inner_subdag(foo: int, bar: int) -> Tuple[int, int]:
+    def inner_subdag(foo: int, bar: int) -> tuple[int, int]:
         return foo, bar
 
     @subdag(inner_subdag, inputs={"input_2": value(10)}, config={"broken": value(False)})
-    def outer_subdag_1(inner_subdag: Tuple[int, int]) -> int:
+    def outer_subdag_1(inner_subdag: tuple[int, int]) -> int:
         return sum(inner_subdag)
 
     @subdag(
@@ -478,7 +477,7 @@ def test_nested_subdag_with_config_remapping_missing_error():
         inputs={"input_2": value(3)},
         config={"broken": configuration("broken_missing")},
     )
-    def outer_subdag_2(inner_subdag: Tuple[int, int]) -> int:
+    def outer_subdag_2(inner_subdag: tuple[int, int]) -> int:
         return sum(inner_subdag)
 
     def sum_all(outer_subdag_1: int, outer_subdag_2: int) -> int:
@@ -590,15 +589,15 @@ def test_parameterized_subdag_with_config():
         foo,
         bar,
     )
-    def inner_subdag(foo: int, bar: int) -> Tuple[int, int]:
+    def inner_subdag(foo: int, bar: int) -> tuple[int, int]:
         return foo, bar
 
     @subdag(inner_subdag, inputs={"input_2": value(10)})
-    def outer_subdag_1(inner_subdag: Tuple[int, int]) -> int:
+    def outer_subdag_1(inner_subdag: tuple[int, int]) -> int:
         return sum(inner_subdag)
 
     @subdag(inner_subdag, inputs={"input_2": value(3)})
-    def outer_subdag_2(inner_subdag: Tuple[int, int]) -> int:
+    def outer_subdag_2(inner_subdag: tuple[int, int]) -> int:
         return sum(inner_subdag)
 
     def sum_all(outer_subdag_1: int, outer_subdag_2: int) -> int:
@@ -626,7 +625,7 @@ def test_nested_parameterized_subdag_with_config():
         return input_2 + 1
 
     @parameterized_subdag(foo, bar, inner_subdag={})
-    def inner_subdag(foo: int, bar: int) -> Tuple[int, int]:
+    def inner_subdag(foo: int, bar: int) -> tuple[int, int]:
         return foo, bar
 
     @parameterized_subdag(
@@ -634,7 +633,7 @@ def test_nested_parameterized_subdag_with_config():
         outer_subdag_1={"inputs": {"input_2": value(10)}},
         outer_subdag_2={"inputs": {"input_2": value(3)}},
     )
-    def outer_subdag_n(inner_subdag: Tuple[int, int]) -> int:
+    def outer_subdag_n(inner_subdag: tuple[int, int]) -> int:
         return sum(inner_subdag)
 
     def sum_all(outer_subdag_1: int, outer_subdag_2: int) -> int:

@@ -16,21 +16,13 @@
 # under the License.
 
 import dataclasses
+from collections.abc import Collection, Mapping, Sequence
 from io import BytesIO
 from pathlib import Path
 from typing import (
     Any,
     BinaryIO,
-    Collection,
-    Dict,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
     TextIO,
-    Tuple,
-    Type,
-    Union,
 )
 
 try:
@@ -48,7 +40,7 @@ if hasattr(pl, "type_aliases"):
 if has_alias and hasattr(pl.type_aliases, "CsvEncoding"):
     from polars.type_aliases import CsvEncoding
 else:
-    CsvEncoding = Type
+    CsvEncoding = type
 
 # import these types to make type hinting work
 from polars.datatypes import DataType, DataTypeClass  # noqa: F401
@@ -95,17 +87,17 @@ class PolarsScanCSVReader(DataLoader):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_csv.html
     """
 
-    file: Union[str, TextIO, BytesIO, Path, BinaryIO, bytes]
+    file: str | TextIO | BytesIO | Path | BinaryIO | bytes
     # kwargs:
     has_header: bool = True
-    columns: Union[Sequence[int], Sequence[str]] = None
+    columns: Sequence[int] | Sequence[str] = None
     new_columns: Sequence[str] = None
     separator: str = ","
     comment_char: str = None
     quote_char: str = '"'
     skip_rows: int = 0
-    dtypes: Union[Mapping[str, Any], Sequence[Any]] = None
-    null_values: Union[str, Sequence[str], Dict[str, str]] = None
+    dtypes: Mapping[str, Any] | Sequence[Any] = None
+    null_values: str | Sequence[str] | dict[str, str] = None
     missing_utf8_is_empty_string: bool = False
     ignore_errors: bool = False
     try_parse_dates: bool = False
@@ -113,11 +105,11 @@ class PolarsScanCSVReader(DataLoader):
     infer_schema_length: int = 100
     batch_size: int = 8192
     n_rows: int = None
-    encoding: Union[CsvEncoding, str] = "utf8"
+    encoding: CsvEncoding | str = "utf8"
     low_memory: bool = False
     rechunk: bool = True
     use_pyarrow: bool = False
-    storage_options: Dict[str, Any] = None
+    storage_options: dict[str, Any] = None
     skip_rows_after_header: int = 0
     row_count_name: str = None
     row_count_offset: int = 0
@@ -177,10 +169,10 @@ class PolarsScanCSVReader(DataLoader):
         return kwargs
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.scan_csv(self.file, **self._get_loading_kwargs())
 
         metadata = utils.get_file_and_dataframe_metadata(self.file, df)
@@ -197,13 +189,13 @@ class PolarsScanParquetReader(DataLoader):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_parquet.html
     """
 
-    file: Union[str, TextIO, BytesIO, Path, BinaryIO, bytes]
+    file: str | TextIO | BytesIO | Path | BinaryIO | bytes
     # kwargs:
-    columns: Union[List[int], List[str]] = None
+    columns: list[int] | list[str] = None
     n_rows: int = None
     use_pyarrow: bool = False
     memory_map: bool = True
-    storage_options: Dict[str, Any] = None
+    storage_options: dict[str, Any] = None
     parallel: Any = "auto"
     row_count_name: str = None
     row_count_offset: int = 0
@@ -212,7 +204,7 @@ class PolarsScanParquetReader(DataLoader):
     rechunk: bool = True
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_loading_kwargs(self):
@@ -237,7 +229,7 @@ class PolarsScanParquetReader(DataLoader):
             kwargs["rechunk"] = self.rechunk
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.scan_parquet(self.file, **self._get_loading_kwargs())
         metadata = utils.get_file_and_dataframe_metadata(self.file, df)
         return df, metadata
@@ -254,19 +246,19 @@ class PolarsScanFeatherReader(DataLoader):
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_ipc.html
     """
 
-    source: Union[str, BinaryIO, BytesIO, Path, bytes]
+    source: str | BinaryIO | BytesIO | Path | bytes
     # kwargs:
-    columns: Optional[Union[List[str], List[int]]] = None
-    n_rows: Optional[int] = None
+    columns: list[str] | list[int] | None = None
+    n_rows: int | None = None
     use_pyarrow: bool = False
     memory_map: bool = True
-    storage_options: Optional[Dict[str, Any]] = None
-    row_count_name: Optional[str] = None
+    storage_options: dict[str, Any] | None = None
+    row_count_name: str | None = None
     row_count_offset: int = 0
     rechunk: bool = True
 
     @classmethod
-    def applicable_types(cls) -> Collection[Type]:
+    def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def _get_loading_kwargs(self):
@@ -287,7 +279,7 @@ class PolarsScanFeatherReader(DataLoader):
             kwargs["rechunk"] = self.rechunk
         return kwargs
 
-    def load_data(self, type_: Type) -> Tuple[DATAFRAME_TYPE, Dict[str, Any]]:
+    def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.scan_ipc(self.source, **self._get_loading_kwargs())
         metadata = utils.get_file_metadata(self.source)
         return df, metadata

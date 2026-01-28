@@ -16,7 +16,7 @@
 # under the License.
 
 import datetime
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, create_model, model_validator
 
@@ -53,7 +53,7 @@ class RunMetadata(BaseModel):
     inputs: dict
     overrides: dict
     materialized: list[NodeMaterializer]
-    graph_version: Optional[int] = None
+    graph_version: int | None = None
 
     @model_validator(mode="before")
     def pre_root(cls, v: dict[str, Any]):

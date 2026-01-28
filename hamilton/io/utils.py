@@ -20,7 +20,7 @@ import time
 from datetime import datetime
 from os import PathLike
 from pathlib import Path
-from typing import Any, Dict, Union
+from typing import Any
 from urllib import parse
 
 import pandas as pd
@@ -30,7 +30,7 @@ SQL_METADATA = "sql_metadata"
 FILE_METADATA = "file_metadata"
 
 
-def get_file_metadata(path: Union[str, Path, PathLike]) -> Dict[str, Any]:
+def get_file_metadata(path: str | Path | PathLike) -> dict[str, Any]:
     """Gives metadata from loading a file.
 
     Note: we reserve the right to change this schema. So if you're using this come
@@ -71,7 +71,7 @@ def get_file_metadata(path: Union[str, Path, PathLike]) -> Dict[str, Any]:
     }
 
 
-def get_dataframe_metadata(df: pd.DataFrame) -> Dict[str, Any]:
+def get_dataframe_metadata(df: pd.DataFrame) -> dict[str, Any]:
     """Gives metadata from loading a dataframe.
 
     Note: we reserve the right to change this schema. So if you're using this come
@@ -106,7 +106,7 @@ def get_dataframe_metadata(df: pd.DataFrame) -> Dict[str, Any]:
     return {DATAFRAME_METADATA: metadata}
 
 
-def get_file_and_dataframe_metadata(path: str, df: pd.DataFrame) -> Dict[str, Any]:
+def get_file_and_dataframe_metadata(path: str, df: pd.DataFrame) -> dict[str, Any]:
     """Gives metadata from loading a file and a dataframe.
 
     Note: we reserve the right to change this schema. So if you're using this come
@@ -127,7 +127,7 @@ def get_file_and_dataframe_metadata(path: str, df: pd.DataFrame) -> Dict[str, An
     return {**get_file_metadata(path), **get_dataframe_metadata(df)}
 
 
-def get_sql_metadata(query_or_table: str, results: Union[int, pd.DataFrame]) -> Dict[str, Any]:
+def get_sql_metadata(query_or_table: str, results: int | pd.DataFrame) -> dict[str, Any]:
     """Gives metadata from reading a SQL table or writing to SQL db.
 
     Note: we reserve the right to change this schema. So if you're using this come

@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
 
 import numpy as np
 import pandas as pd
@@ -76,7 +75,7 @@ ALL_FEATURES = [
 ]
 
 
-def _rename_columns(columns: List[str]) -> List[str]:
+def _rename_columns(columns: list[str]) -> list[str]:
     """convert raw data column names to snakecase and make them compatible
     with Hamilton's naming convention (need to be a valid Python function name)
 

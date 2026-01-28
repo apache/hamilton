@@ -21,7 +21,8 @@ import inspect
 import logging
 import typing
 from collections import Counter, defaultdict
-from typing import Any, Callable, Collection, Dict, List, Optional, Tuple, Type, Union
+from collections.abc import Callable, Collection
+from typing import Any, Union
 
 import pandas as pd
 
@@ -103,7 +104,7 @@ class does(base.NodeCreator):
     to just allow functions that consist only of one argument, a generic \\*\\*kwargs.
     """
 
-    def __init__(self, replacing_function: Callable, **argument_mapping: Union[str, List[str]]):
+    def __init__(self, replacing_function: Callable, **argument_mapping: str | list[str]):
         """Constructor for a modifier that replaces the annotated functions functionality with something else.
         Right now this has a very strict validation requirements to make compliance with the framework easy.
 
@@ -115,7 +116,7 @@ class does(base.NodeCreator):
         self.argument_mapping = argument_mapping
 
     @staticmethod
-    def map_kwargs(kwargs: Dict[str, Any], argument_mapping: Dict[str, str]) -> Dict[str, Any]:
+    def map_kwargs(kwargs: dict[str, Any], argument_mapping: dict[str, str]) -> dict[str, Any]:
         """Maps kwargs using the argument mapping.
         This does 2 things:
         1. Replaces all kwargs in passed_in_kwargs with their mapping
@@ -137,7 +138,7 @@ class does(base.NodeCreator):
     def test_function_signatures_compatible(
         fn_signature: inspect.Signature,
         replace_with_signature: inspect.Signature,
-        argument_mapping: Dict[str, str],
+        argument_mapping: dict[str, str],
     ) -> bool:
         """Tests whether a function signature and the signature of the replacing function are compatible.
 
@@ -170,7 +171,7 @@ class does(base.NodeCreator):
     def ensure_function_signature_compatible(
         og_function: Callable,
         replacing_function: Callable,
-        argument_mapping: Dict[str, str],
+        argument_mapping: dict[str, str],
     ):
         """Ensures that a function signature is compatible with the replacing function, given the argument mapping
 
@@ -220,7 +221,7 @@ class does(base.NodeCreator):
             fn, self.replacing_function, self.argument_mapping
         )
 
-    def generate_nodes(self, fn: Callable, config) -> List[node.Node]:
+    def generate_nodes(self, fn: Callable, config) -> list[node.Node]:
         """Returns one node which has the replaced functionality
         :param fn: Function to decorate
         :param config: Configuration (not used in this)
@@ -241,7 +242,7 @@ class does(base.NodeCreator):
         return [node.Node.from_fn(fn).copy_with(callabl=wrapper_function)]
 
 
-def get_default_tags(fn: Callable) -> Dict[str, str]:
+def get_default_tags(fn: Callable) -> dict[str, str]:
     """Function that encapsulates default tags on a function.
 
     :param fn: the function we want to create default tags for.
@@ -264,7 +265,7 @@ def get_default_tags(fn: Callable) -> Dict[str, str]:
 class dynamic_transform(base.NodeCreator):
     def __init__(
         self,
-        transform_cls: Type[models.BaseModel],
+        transform_cls: type[models.BaseModel],
         config_param: str,
         **extra_transform_params,
     ):
@@ -293,7 +294,7 @@ class dynamic_transform(base.NodeCreator):
                 "Models must have no parameters -- all are passed in through the config"
             )
 
-    def generate_nodes(self, fn: Callable, config: Dict[str, Any] = None) -> List[node.Node]:
+    def generate_nodes(self, fn: Callable, config: dict[str, Any] = None) -> list[node.Node]:
         if self.config_param not in config:
             raise base.InvalidDecoratorException(
                 f"Configuration has no parameter: {self.config_param}. Did you define it? If so did you spell it right?"
@@ -313,7 +314,7 @@ class dynamic_transform(base.NodeCreator):
             )
         ]
 
-    def require_config(self) -> List[str]:
+    def require_config(self) -> list[str]:
         """Returns the configuration parameters that this model requires
 
         :return: Just the one config param used by this model
@@ -339,13 +340,13 @@ class Applicable:
 
     def __init__(
         self,
-        fn: Union[Callable, str, None],
-        args: Tuple[Union[Any, SingleDependency], ...],
-        kwargs: Dict[str, Union[Any, SingleDependency]],
-        target_fn: Union[Callable, str, None] = None,
-        _resolvers: List[ConfigResolver] = None,
-        _name: Optional[str] = None,
-        _namespace: Union[str, None, EllipsisType] = ...,
+        fn: Callable | str | None,
+        args: tuple[Any | SingleDependency, ...],
+        kwargs: dict[str, Any | SingleDependency],
+        target_fn: Callable | str | None = None,
+        _resolvers: list[ConfigResolver] = None,
+        _name: str | None = None,
+        _namespace: str | None | EllipsisType = ...,
         _target: base.TargetType = None,
     ):
         """Instantiates an Applicable.
@@ -450,7 +451,7 @@ class Applicable:
             target_fn=self.target_fn,
         )
 
-    def resolves(self, config: Dict[str, Any]) -> bool:
+    def resolves(self, config: dict[str, Any]) -> bool:
         """Returns whether the Applicable resolves with the given config
 
         :param config: Configuration to check
@@ -533,7 +534,7 @@ class Applicable:
             target_fn=self.target_fn,
         )
 
-    def get_config_elements(self) -> List[str]:
+    def get_config_elements(self) -> list[str]:
         """Returns the config elements that this Applicable uses"""
         out = []
         for resolver in self.resolvers:
@@ -607,7 +608,7 @@ class Applicable:
                 "Current workarounds are to define a wrapper function that assigns types with the proper keyword-friendly arguments."
             ) from e
 
-    def resolve_namespace(self, default_namespace: str) -> Tuple[str, ...]:
+    def resolve_namespace(self, default_namespace: str) -> tuple[str, ...]:
         """Resolves the namespace -- see rules in `named` for more details.
 
         :param default_namespace: namespace to use as a default if we do not wish to override it
@@ -622,8 +623,8 @@ class Applicable:
         )
 
     def bind_function_args(
-        self, current_param: Optional[str]
-    ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+        self, current_param: str | None
+    ) -> tuple[dict[str, Any], dict[str, Any]]:
         """Binds function arguments, given current, chained parameter
 
         :param current_param: Current, chained parameter. None, if we're not chaining.
@@ -651,9 +652,7 @@ class Applicable:
         return upstream_inputs, literal_inputs
 
 
-def step(
-    fn, *args: Union[SingleDependency, Any], **kwargs: Union[SingleDependency, Any]
-) -> Applicable:
+def step(fn, *args: SingleDependency | Any, **kwargs: SingleDependency | Any) -> Applicable:
     """Applies a function to for a node (or a subcomponent of a node).
     See documentation for `pipe` to see how this is used.
 
@@ -928,8 +927,8 @@ class pipe_input(base.NodeInjector):
             raise NotImplementedError("@flow() is not yet supported -- this is ")
 
     def _distribute_transforms_to_parameters(
-        self, params: Dict[str, Type[Type]]
-    ) -> Dict[str, List[Applicable]]:
+        self, params: dict[str, type[type]]
+    ) -> dict[str, list[Applicable]]:
         """Resolves target option on the transform level.
         Adds option that we can decide for each applicable which input parameter it will target on
         top of the global target (if it is set).
@@ -963,8 +962,8 @@ class pipe_input(base.NodeInjector):
         return selected_transforms
 
     def _create_valid_parameters_transforms_mapping(
-        self, mapping: Dict[str, List[Applicable]], fn: Callable, params: Dict[str, Type[Type]]
-    ) -> Dict[str, List[Applicable]]:
+        self, mapping: dict[str, list[Applicable]], fn: Callable, params: dict[str, type[type]]
+    ) -> dict[str, list[Applicable]]:
         """Checks for a valid distribution of transforms to parameters."""
         sig = inspect.signature(fn)
         param_names = []
@@ -1025,8 +1024,8 @@ class pipe_input(base.NodeInjector):
             return f"{self.namespace}_{param}"
 
     def inject_nodes(
-        self, params: Dict[str, Type[Type]], config: Dict[str, Any], fn: Callable
-    ) -> Tuple[List[node.Node], Dict[str, str]]:
+        self, params: dict[str, type[type]], config: dict[str, Any], fn: Callable
+    ) -> tuple[list[node.Node], dict[str, str]]:
         """Injects nodes into the graph. This creates a node for each pipe() step,
         then reassigns the inputs to pass it in."""
 
@@ -1067,7 +1066,7 @@ class pipe_input(base.NodeInjector):
             )
         # TODO -- validate that the types match on the chain (this is de-facto done later)
 
-    def optional_config(self) -> Dict[str, Any]:
+    def optional_config(self) -> dict[str, Any]:
         """Declares the optional configuration keys for this decorator.
         These are configuration keys that can be used by the decorator, but are not required.
         Along with these we have *defaults*, which we will use to pass to the config.
@@ -1221,7 +1220,7 @@ class pipe_output(base.NodeTransformer):
     """
 
     @classmethod
-    def _validate_single_target_level(cls, target: base.TargetType, transforms: Tuple[Applicable]):
+    def _validate_single_target_level(cls, target: base.TargetType, transforms: tuple[Applicable]):
         """We want to make sure that target gets applied on a single level.
         Either choose for each step individually what it targets or set it on the global level where
         all steps will target the same node(s).
@@ -1294,7 +1293,7 @@ class pipe_output(base.NodeTransformer):
         return tuple(selected_transforms)
 
     def transform_node(
-        self, node_: node.Node, config: Dict[str, Any], fn: Callable
+        self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
         """Injects nodes into the graph.
 
@@ -1356,7 +1355,7 @@ class pipe_output(base.NodeTransformer):
             )
         # TODO -- validate that the types match on the chain (this is de-facto done later)
 
-    def optional_config(self) -> Dict[str, Any]:
+    def optional_config(self) -> dict[str, Any]:
         """Declares the optional configuration keys for this decorator.
         These are configuration keys that can be used by the decorator, but are not required.
         Along with these we have *defaults*, which we will use to pass to the config.
@@ -1374,9 +1373,9 @@ class pipe_output(base.NodeTransformer):
 
 def chain_transforms(
     target_arg: str,
-    transforms: List[Applicable],
+    transforms: list[Applicable],
     namespace: str,
-    config: Dict[str, Any],
+    config: dict[str, Any],
     fn: Callable,
 ):
     """Chaining nodes together sequentially through the a specified argument.
@@ -1424,7 +1423,7 @@ def chain_transforms(
     return nodes, target_arg
 
 
-def apply_to(fn_: Union[Callable, str], **mutating_fn_kwargs: Union[SingleDependency, Any]):
+def apply_to(fn_: Callable | str, **mutating_fn_kwargs: SingleDependency | Any):
     """Creates an applicable placeholder with potential kwargs that will be applied to a node (or a subcomponent of a node).
     See documentation for ``mutate`` to see how this is used. It de facto allows a postponed ``step``.
 
@@ -1542,10 +1541,10 @@ class mutate:
 
     def __init__(
         self,
-        *target_functions: Union[Applicable, Callable],
+        *target_functions: Applicable | Callable,
         collapse: bool = False,
         _chain: bool = False,
-        **mutating_function_kwargs: Union[SingleDependency, Any],
+        **mutating_function_kwargs: SingleDependency | Any,
     ):
         """Instantiates a ``mutate`` decorator.
 

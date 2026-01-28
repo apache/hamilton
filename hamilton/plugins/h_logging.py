@@ -19,19 +19,12 @@
 
 import logging
 import sys
+from collections.abc import Mapping, MutableMapping
 from contextvars import ContextVar
 from dataclasses import dataclass
 from typing import (
     TYPE_CHECKING,
     Any,
-    Dict,
-    List,
-    Mapping,
-    MutableMapping,
-    Optional,
-    Set,
-    Tuple,
-    Union,
 )
 
 from hamilton.graph_types import HamiltonNode
@@ -65,16 +58,16 @@ else:
 class _LoggingContext:
     """Represents the current logging context."""
 
-    graph: Optional[str] = None
-    node: Optional[str] = None
-    task: Optional[str] = None
+    graph: str | None = None
+    node: str | None = None
+    task: str | None = None
 
 
 # Context variables for context-aware logging
 _local_context = ContextVar("context", default=_LoggingContext())  # noqa: B039
 
 
-def get_logger(name: Optional[str] = None) -> "ContextLogger":
+def get_logger(name: str | None = None) -> "ContextLogger":
     """Returns a context-aware logger for the specified name (created if necessary).
 
     :param name: Name of the logger, defaults to root logger if not provided.
@@ -102,7 +95,7 @@ class ContextLogger(LoggerAdapter):
     @override
     def process(
         self, msg: str, kwargs: MutableMapping[str, Any]
-    ) -> Tuple[str, MutableMapping[str, Any]]:
+    ) -> tuple[str, MutableMapping[str, Any]]:
         # Ensure that the extra fields are passed through correctly
         kwargs["extra"] = {**(self.extra or {}), **(kwargs.get("extra") or {})}
 
@@ -166,10 +159,10 @@ class LoggingAdapter(
     and the execution of each *node* as `DEBUG`.
     """
 
-    def __init__(self, logger: Union[str, logging.Logger, None] = None) -> None:
+    def __init__(self, logger: str | logging.Logger | None = None) -> None:
         # Precompute or overridden nodes
-        self._inputs_nodes: Set[str] = set()
-        self._override_nodes: Set[str] = set()
+        self._inputs_nodes: set[str] = set()
+        self._override_nodes: set[str] = set()
 
         if logger is None:
             self.logger = logging.getLogger(__name__)
@@ -187,8 +180,8 @@ class LoggingAdapter(
     def run_before_graph_execution(
         self,
         *,
-        inputs: Optional[Dict[str, Any]],
-        overrides: Optional[Dict[str, Any]],
+        inputs: dict[str, Any] | None,
+        overrides: dict[str, Any] | None,
         run_id: str,
         **future_kwargs: Any,
     ):
@@ -210,7 +203,7 @@ class LoggingAdapter(
             self.logger.info("Using overrides %s", names)
 
     @override
-    def run_after_task_grouping(self, *, run_id: str, task_ids: List[str], **future_kwargs):
+    def run_after_task_grouping(self, *, run_id: str, task_ids: list[str], **future_kwargs):
         self.logger.info("Dynamic DAG detected; task-based logging is enabled")
 
     @override
@@ -223,7 +216,7 @@ class LoggingAdapter(
         *,
         run_id: str,
         task_id: str,
-        spawning_task_id: Optional[str],
+        spawning_task_id: str | None,
         **future_kwargs,
     ):
         # Set context before logging
@@ -240,7 +233,7 @@ class LoggingAdapter(
         *,
         task_id: str,
         run_id: str,
-        nodes: List[HamiltonNode],
+        nodes: list[HamiltonNode],
         **future_kwargs,
     ):
         # Set context before logging
@@ -263,8 +256,8 @@ class LoggingAdapter(
         self,
         *,
         node_name: str,
-        node_kwargs: Dict[str, Any],
-        task_id: Optional[str],
+        node_kwargs: dict[str, Any],
+        task_id: str | None,
         run_id: str,
         **future_kwargs: Any,
     ):
@@ -286,9 +279,9 @@ class LoggingAdapter(
         self,
         *,
         node_name: str,
-        error: Optional[Exception],
+        error: Exception | None,
         success: bool,
-        task_id: Optional[str],
+        task_id: str | None,
         run_id: str,
         **future_kwargs: Any,
     ):
@@ -339,9 +332,9 @@ class LoggingAdapter(
         *,
         run_id: str,
         task_id: str,
-        nodes: List[Node],
+        nodes: list[Node],
         success: bool,
-        error: Optional[Exception],
+        error: Exception | None,
         **future_kwargs,
     ):
         # Hard reset context before logging
@@ -396,15 +389,15 @@ class AsyncLoggingAdapter(GraphExecutionHook, BasePreNodeExecute, BasePostNodeEx
     submitted. It cannot currently log the exact moment the async node begins execution.
     """
 
-    def __init__(self, logger: Union[str, logging.Logger, None] = None) -> None:
+    def __init__(self, logger: str | logging.Logger | None = None) -> None:
         self._impl = LoggingAdapter(logger)
 
     @override
     def run_before_graph_execution(
         self,
         *,
-        inputs: Dict[str, Any],
-        overrides: Dict[str, Any],
+        inputs: dict[str, Any],
+        overrides: dict[str, Any],
         run_id: str,
         **future_kwargs: Any,
     ):
@@ -412,7 +405,7 @@ class AsyncLoggingAdapter(GraphExecutionHook, BasePreNodeExecute, BasePostNodeEx
 
     @override
     def pre_node_execute(
-        self, *, run_id: str, node_: Node, kwargs: Dict[str, Any], task_id: Optional[str] = None
+        self, *, run_id: str, node_: Node, kwargs: dict[str, Any], task_id: str | None = None
     ):
         # NOTE: We call the base synchronous method here in order to approximate when the async task
         # has bee submitted. This is a workaround until further work is done on the async adapter.
@@ -436,11 +429,11 @@ class AsyncLoggingAdapter(GraphExecutionHook, BasePreNodeExecute, BasePostNodeEx
         *,
         run_id: str,
         node_: Node,
-        kwargs: Dict[str, Any],
+        kwargs: dict[str, Any],
         success: bool,
-        error: Optional[Exception],
+        error: Exception | None,
         result: Any,
-        task_id: Optional[str] = None,
+        task_id: str | None = None,
     ):
         self._impl.run_after_node_execution(
             node_name=node_.name,

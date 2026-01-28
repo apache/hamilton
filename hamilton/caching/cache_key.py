@@ -17,7 +17,7 @@
 
 import base64
 import zlib
-from typing import Dict, Mapping
+from collections.abc import Mapping
 
 
 def _compress_string(string: str) -> str:
@@ -58,7 +58,7 @@ def decode_key(cache_key: str) -> dict:
 
 
 def create_cache_key(
-    node_name: str, code_version: str, dependencies_data_versions: Dict[str, str]
+    node_name: str, code_version: str, dependencies_data_versions: dict[str, str]
 ) -> str:
     if len(dependencies_data_versions.keys()) > 0:
         dependencies_stringified = _encode_str_dict(dependencies_data_versions)

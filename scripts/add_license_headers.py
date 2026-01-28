@@ -21,7 +21,6 @@
 import json
 import sys
 from pathlib import Path
-from typing import List
 
 # Base Apache 2 license text (without comment characters)
 # This is used by all formatters below to generate file-type-specific headers
@@ -45,17 +44,17 @@ LICENSE_LINES = [
 ]
 
 
-def format_hash_comment(lines: List[str]) -> str:
+def format_hash_comment(lines: list[str]) -> str:
     """Format license as # comments (for Python, Shell, etc.)."""
     return "\n".join(f"# {line}" if line else "#" for line in lines) + "\n\n"
 
 
-def format_dash_comment(lines: List[str]) -> str:
+def format_dash_comment(lines: list[str]) -> str:
     """Format license as -- comments (for SQL)."""
     return "\n".join(f"-- {line}" if line else "--" for line in lines) + "\n\n"
 
 
-def format_c_style_comment(lines: List[str]) -> str:
+def format_c_style_comment(lines: list[str]) -> str:
     """Format license as /* */ comments (for TypeScript, JavaScript, etc.)."""
     formatted_lines = ["/*"]
     for line in lines:
@@ -64,7 +63,7 @@ def format_c_style_comment(lines: List[str]) -> str:
     return "\n".join(formatted_lines) + "\n\n"
 
 
-def format_html_comment(lines: List[str]) -> str:
+def format_html_comment(lines: list[str]) -> str:
     """Format license as HTML comments (for Markdown)."""
     formatted_lines = ["<!--"]
     formatted_lines.extend(lines)
@@ -245,7 +244,7 @@ def main():
     print(f"Using file list: {list_file.name}\n")
 
     # Parse the file list
-    files_to_update: List[Path] = []
+    files_to_update: list[Path] = []
     with open(list_file, "r") as f:
         for line in f:
             line = line.strip()
