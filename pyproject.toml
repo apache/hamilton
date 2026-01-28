@@ -91,7 +91,7 @@ visualization = ["graphviz", "networkx"]
 [dependency-groups]
 dev = [
   "prek",
-  "ruff==0.5.7", # this should match `.pre-commit-config.yaml`
+  "ruff==0.15.0", # this should match `.pre-commit-config.yaml`
 ]
 test = [
   "connectorx; python_version < '3.14'",

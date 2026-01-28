@@ -7,10 +7,10 @@ exclude: '^docs/code-comparisons/'  # skip the code comparisons directory
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.5.7
+    rev: v0.15.0
     hooks:
       # Run the linter.
-      - id: ruff
+      - id: ruff-check
         args: [ --fix ]
       # Run the formatter.
       - id: ruff-format

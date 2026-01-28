@@ -7,9 +7,9 @@
 repos:
 -   repo: https://github.com/charliermarsh/ruff-pre-commit
     # Ruff version.
-    rev: v0.0.265
+    rev: v0.15.0
     hooks:
-        - id: ruff
+        - id: ruff-check
           args: [ --fix , --exit-non-zero-on-fix ]
 -   repo: https://github.com/ambv/black
     rev: 26.1.0
