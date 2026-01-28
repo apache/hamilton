@@ -93,9 +93,9 @@ class RichProgressBar(TaskExecutionHook, TaskGroupingHook, GraphExecutionHook, N
         :param columns: Column configuration for the progress bar.  See rich docs for more info.
         :param kwargs: Additional kwargs to pass to rich.progress.Progress. See rich docs for more info.
         """
-        self._group_desc = run_desc if run_desc else "Running:"
-        self._expand_desc = collect_desc if collect_desc else "Collecting:"
-        columns = columns if columns else []
+        self._group_desc = run_desc or "Running:"
+        self._expand_desc = collect_desc or "Collecting:"
+        columns = columns or []
         self._progress = Progress(*columns, **kwargs)
         self._task_based = False
 

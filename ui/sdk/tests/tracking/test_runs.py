@@ -336,8 +336,8 @@ def create_node(name: str, type_: type) -> node.Node:
             create_node("test", np.ndarray),
             "unsupported",
             {
-                "action": "reach out to the DAGWorks team to add " "support for this type.",
-                "unsupported_type": "<class 'numpy.ndarray'> with " "dimensions (2, 2, 1)",
+                "action": "reach out to the DAGWorks team to add support for this type.",
+                "unsupported_type": "<class 'numpy.ndarray'> with dimensions (2, 2, 1)",
             },
         ),
         (

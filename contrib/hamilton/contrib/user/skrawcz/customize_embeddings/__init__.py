@@ -105,8 +105,7 @@ def snli_dataset(download_path: str = "data") -> pd.DataFrame:
     file_name = "snli_1.0.zip"
     # Write the downloaded file into "snli_1.0.zip"
     with open(file_name, "wb") as fd:
-        for chunk in response.iter_content(chunk_size=1024):
-            fd.write(chunk)
+        fd.writelines(response.iter_content(chunk_size=1024))
     # Create a ZipFile Object
     with zipfile.ZipFile(file_name) as zip_file:
         # Extract all the contents of zip file in current directory

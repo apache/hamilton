@@ -93,7 +93,7 @@ def plot_species_distribution(species=("bradypus_variegatus_0", "microryzomys_mi
     Plot the species distribution.
     """
     if len(species) > 2:
-        print("Note: when more than two species are provided," " only the first two will be used")
+        print("Note: when more than two species are provided, only the first two will be used")
 
     t0 = time()
 

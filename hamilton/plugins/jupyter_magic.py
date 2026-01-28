@@ -489,7 +489,7 @@ class HamiltonMagics(Magics):
                 continue
 
             # special case: `display` can be passed as a flag (=True), without a config
-            if name in ["display"] and value is True:
+            if name == "display" and value is True:
                 continue
 
             # main case: exit if variable is not in user namespace

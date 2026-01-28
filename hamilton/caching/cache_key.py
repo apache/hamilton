@@ -65,6 +65,6 @@ def create_cache_key(
     else:
         dependencies_stringified = "<none>"
 
-    safe_node_name = "".join(c for c in node_name if c.isalnum() or c in ("_",)).rstrip()
+    safe_node_name = "".join(c for c in node_name if c.isalnum() or c == "_").rstrip()
 
     return f"{safe_node_name}-{code_version}-{_compress_string(dependencies_stringified)}"

@@ -789,7 +789,7 @@ def _add_original_function_to_nodes(fn: Callable, nodes: List[node.Node]) -> Lis
 
 
 def _resolve_nodes_error(fn: Callable) -> str:
-    return f"Exception occurred while compiling function: {fn.__name__} " f"to nodes"
+    return f"Exception occurred while compiling function: {fn.__name__} to nodes"
 
 
 def resolve_nodes(fn: Callable, config: Dict[str, Any]) -> Collection[node.Node]:

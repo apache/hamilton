@@ -136,7 +136,7 @@ class HamiltonNode:
         dict_representation = {
             "name": self.name,
             "tags": self.tags,
-            "output_type": (get_type_as_string(self.type) if get_type_as_string(self.type) else ""),
+            "output_type": (get_type_as_string(self.type) or ""),
             "required_dependencies": sorted(self.required_dependencies),
             "optional_dependencies": sorted(self.optional_dependencies),
             "source": (

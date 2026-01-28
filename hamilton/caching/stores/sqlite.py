@@ -33,7 +33,7 @@ class SQLiteMetadataStore(MetadataStore):
         self._directory = pathlib.Path(path).resolve()
         self._directory.mkdir(parents=True, exist_ok=True)
         self._path = self._directory.joinpath("metadata_store").with_suffix(".db")
-        self.connection_kwargs: dict = connection_kwargs if connection_kwargs else {}
+        self.connection_kwargs: dict = connection_kwargs or {}
 
         self._thread_local = threading.local()
 

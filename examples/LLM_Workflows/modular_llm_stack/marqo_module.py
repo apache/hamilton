@@ -37,7 +37,7 @@ def initialize_vector_db_indices(
     indexes = [index.index_name for index in client_vector_db.get_indexes()["results"]]
     if index_name not in indexes:
         client_vector_db.create_index(index_name)
-        logging.info(f"Created index '{index_name}'")
+        logger.info(f"Created index '{index_name}'")
     return True
 
 

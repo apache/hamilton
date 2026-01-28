@@ -71,7 +71,7 @@ class _LoggingContext:
 
 
 # Context variables for context-aware logging
-_local_context = ContextVar("context", default=_LoggingContext())
+_local_context = ContextVar("context", default=_LoggingContext())  # noqa: B039
 
 
 def get_logger(name: Optional[str] = None) -> "ContextLogger":

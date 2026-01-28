@@ -345,7 +345,7 @@ PD_VERSION = version.parse(pd.__version__)
             ({"Index:::int64": ["a"]}, {}, {}),
             marks=pytest.mark.skipif(
                 PD_VERSION < version.parse("2.0.0"),
-                reason="Pandas 2.0 changed default indices but we still " "support pandas <2.0",
+                reason="Pandas 2.0 changed default indices but we still support pandas <2.0",
             ),
         ),
         pytest.param(
@@ -353,7 +353,7 @@ PD_VERSION = version.parse(pd.__version__)
             ({"Int64Index:::int64": ["a"]}, {}, {}),
             marks=pytest.mark.skipif(
                 PD_VERSION >= version.parse("2.0.0"),
-                reason="Pandas 2.0 changed default indices but we still " "support pandas <2.0",
+                reason="Pandas 2.0 changed default indices but we still support pandas <2.0",
             ),
         ),
     ],

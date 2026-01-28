@@ -45,9 +45,7 @@ def retry_stalled_init_fix_hack():
                 try:
                     return func(*args, **kwargs)
                 except concurrent.futures._base.TimeoutError:
-                    print(
-                        "\n\nRetrying timeouted test server init " "%d of %d\n" % (attempt, RETRIES)
-                    )
+                    print("\n\nRetrying timeouted test server init %d of %d\n" % (attempt, RETRIES))
                     attempt += 1
             return func(*args, **kwargs)
 

@@ -240,7 +240,7 @@ class PDBDebugger(NodeExecutionHook, NodeExecutionMethod):
             "task_id": task_id,
             "future_kwargs": future_kwargs,
         }
-        logging.warning(
+        logger.warning(
             (
                 f"Placing you in a PDB debugger for node {node_name}."
                 "\nYou can access additional node information via PDBDebugger.CONTEXT. Data is:"
@@ -253,7 +253,7 @@ class PDBDebugger(NodeExecutionHook, NodeExecutionMethod):
             )
         )
         out = pdb.runcall(node_callable, **node_kwargs)
-        logging.info(f"Finished executing node {node_name}.")
+        logger.info(f"Finished executing node {node_name}.")
         return out
 
     @staticmethod
@@ -284,7 +284,7 @@ class PDBDebugger(NodeExecutionHook, NodeExecutionMethod):
         :return: Result of the node
         """
         if should_run_node(node_name, node_tags, self.node_filter) and self.run_before:
-            logging.warning(
+            logger.warning(
                 (
                     f"Placing you in a PDB debugger prior to execution of node: {node_name}."
                     "\nYou can access additional node information via the following variables:"
@@ -323,7 +323,7 @@ class PDBDebugger(NodeExecutionHook, NodeExecutionMethod):
         :param future_kwargs: Additional keyword arguments that may be passed to the hook yet are ignored for now
         """
         if should_run_node(node_name, node_tags, self.node_filter) and self.run_after:
-            logging.warning(
+            logger.warning(
                 (
                     f"Placing you in a PDB debugger post execution of node: {node_name}."
                     "\nYou can access additional node information via the following variables:"
@@ -365,7 +365,7 @@ class CacheAdapter(NodeExecutionHook, NodeExecutionMethod, GraphExecutionHook):
         for all nodes. Default is None.
         :param cache_path: File path to the cache. The file name doesn't need an extension.
         """
-        self.cache_vars = cache_vars if cache_vars else []
+        self.cache_vars = cache_vars or []
         self.cache_path = cache_path
         self.cache = shelve.open(self.cache_path)
         self.nodes_history: Dict[str, List[str]] = self.cache.get(

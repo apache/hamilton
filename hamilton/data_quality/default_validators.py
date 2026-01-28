@@ -224,7 +224,7 @@ class MaxFractionNansValidatorPandasSeries(base.BaseDefaultValidator):
             message=f"Out of {total_length} items in the series, {total_na} of them are Nan, "
             f"representing: {MaxFractionNansValidatorPandasSeries._to_percent(fraction_na)}. "
             f"Max allowable Nans is: {MaxFractionNansValidatorPandasSeries._to_percent(self.max_fraction_nans)},"
-            f' so this {"passes" if passes else "does not pass"}.',
+            f" so this {'passes' if passes else 'does not pass'}.",
             diagnostics={
                 "total_nan": total_na,
                 "total_length": total_length,

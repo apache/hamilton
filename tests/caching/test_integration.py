@@ -71,9 +71,9 @@ def execute_dataflow(
     inputs: dict = None,
     overrides: dict = None,
 ) -> dict:
-    config = config if config else {}
-    inputs = inputs if inputs else {}
-    overrides = overrides if overrides else {}
+    config = config or {}
+    inputs = inputs or {}
+    overrides = overrides or {}
 
     dr = driver.Builder().with_modules(module).with_adapters(cache).with_config(config).build()
     results = dr.execute(final_vars, inputs=inputs, overrides=overrides)

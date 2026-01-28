@@ -75,7 +75,7 @@ class AsyncGraphAdapter(lifecycle_base.BaseDoNodeExecute, lifecycle.ResultBuilde
             if async_lifecycle_adapters is not None
             else lifecycle_base.LifecycleAdapterSet()
         )
-        self.result_builder = result_builder if result_builder else base.PandasDataFrameResult()
+        self.result_builder = result_builder or base.PandasDataFrameResult()
         self.is_initialized = False
 
     def do_node_execute(

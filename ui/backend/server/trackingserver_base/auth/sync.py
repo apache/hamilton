@@ -95,7 +95,7 @@ async def ensure_user_exists(auth_provider_user_id: str, user_email: str) -> Use
         user_model = await User.objects.aget(auth_provider_user_id=auth_provider_user_id)
     except User.DoesNotExist:
         logger.warning(
-            f"Creating new user {user_email} with auth provider ID " f"id {auth_provider_user_id}"
+            f"Creating new user {user_email} with auth provider ID id {auth_provider_user_id}"
         )
         user_model = User(
             auth_provider_user_id=auth_provider_user_id,

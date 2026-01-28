@@ -25,7 +25,7 @@ from typing import Optional
 try:
     import aiobotocore.session
 except ImportError:
-    logging.info(
+    logging.getLogger(__name__).info(
         "aiobotocore is not installed. Please install aiobotocore to use S3BlobStore -- "
         "if you're using the normal (local) blob store ignore this."
     )

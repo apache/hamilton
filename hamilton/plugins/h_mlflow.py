@@ -103,7 +103,7 @@ class MLFlowTracker(
         self.client = mlflow.client.MlflowClient(tracking_uri, registry_uri)
 
         # experiment setup
-        experiment_tags = experiment_tags if experiment_tags else {}
+        experiment_tags = experiment_tags or {}
         if experiment_description:
             # mlflow.note.content is the description field
             experiment_tags["mlflow.note.content"] = experiment_description
@@ -129,7 +129,7 @@ class MLFlowTracker(
         # TODO link HamiltonTracker and MLFlowTracker run ids
         self.mlflow_run_id = run_id
         self.run_name = run_name
-        self.run_tags = run_tags if run_tags else {}
+        self.run_tags = run_tags or {}
         if run_description:
             # mlflow.note.content is the description field
             self.run_tags["mlflow.note.content"] = run_description

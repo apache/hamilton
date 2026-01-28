@@ -22,7 +22,6 @@ import pandas as pd
 from hamilton_sdk.tracking import dataframe_stats
 from pytest import mark, param
 
-
 skip_NAN_on_numpy_v2 = mark.skipif(
     not hasattr(np, "NAN"),
     reason="NAN is not available in numpy v2",

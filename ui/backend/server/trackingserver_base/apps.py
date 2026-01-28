@@ -52,7 +52,7 @@ class TrackingServerConfig(AppConfig):
     name = "trackingserver_base"
 
     def enable_telemetry(self):
-        if is_telemetry_enabled() and settings.HAMILTON_ENV in ["local"]:
+        if is_telemetry_enabled() and settings.HAMILTON_ENV == "local":
             if not os.path.exists("/data/telemetry.txt"):
                 telemetry_key = str(uuid.uuid4())
                 with open("/data/telemetry.txt", "w") as f:

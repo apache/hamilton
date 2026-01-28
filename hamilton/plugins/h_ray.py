@@ -208,7 +208,7 @@ class RayTaskExecutor(executors.TaskExecutor):
         :param skip_init: Skips ray init if you already have Ray initialized. Default is False.
         """
         self.num_cpus = num_cpus
-        self.ray_init_config = ray_init_config if ray_init_config else {}
+        self.ray_init_config = ray_init_config or {}
         self.skip_init = skip_init
 
     def init(self):

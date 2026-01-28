@@ -228,7 +228,7 @@ extend-select = [
 #    "RUF", # Unused noqa directive
 #    "SIM", # Linting rules for simplicity
 #    "T20", # Check for Print statements in python files.
-    "TCH", # Move type-only imports to a type-checking block.
+    "TC", # Move type-only imports to a type-checking block.
     "TID", # Helps you write tidier imports.
 #    "TRY", # Prevent exception handling anti-patterns
 #    "UP",  # pyupgrade
@@ -242,8 +242,9 @@ extend-ignore = [
     "E402", # module level import not at top of file
     "E501", # line too long
     "E721", # Use `is` and `is not` for type comparisons, or `isinstance()` for isinstance checks
+    "F821", # undefined name
     "W605", # invalid escape sequence
-    "TCH001" # TYPE_CHECKING block for first-class imports -- this is a bit ugly for the hamilton codebase
+    "TC001" # TYPE_CHECKING block for first-class imports -- this is a bit ugly for the hamilton codebase
 ]
 exclude = [
     "docs/*",

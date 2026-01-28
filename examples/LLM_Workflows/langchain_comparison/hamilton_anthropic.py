@@ -33,7 +33,7 @@ def llm_client__anthropic() -> anthropic.Anthropic:
 
 
 def joke_prompt(topic: str) -> str:
-    return ("Human:\n\n" "Tell me a short joke about {topic}\n\n" "Assistant:").format(topic=topic)
+    return ("Human:\n\nTell me a short joke about {topic}\n\nAssistant:").format(topic=topic)
 
 
 @config.when(provider="openai")

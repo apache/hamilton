@@ -116,7 +116,7 @@ class Node(object):
                             for key, value in input_types.items()
                         }
                 # assume optional values passed
-                self._default_parameter_values = optional_values if optional_values else {}
+                self._default_parameter_values = optional_values or {}
             else:
                 type_hint_kwargs: dict[str, Any] = {"include_extras": True}
                 if sys.version_info >= (3, 13):
@@ -315,7 +315,7 @@ class Node(object):
         return Node(
             name,
             return_type,
-            fn.__doc__ if fn.__doc__ else "",
+            fn.__doc__ or "",
             callabl=fn,
             tags=tags,
             node_source=node_source,

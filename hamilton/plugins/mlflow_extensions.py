@@ -47,7 +47,7 @@ class MLFlowModelSaver(DataSaver):
     mlflow_kwargs: Dict[str, Any] = None
 
     def __post_init__(self):
-        self.mlflow_kwargs = self.mlflow_kwargs if self.mlflow_kwargs else {}
+        self.mlflow_kwargs = self.mlflow_kwargs or {}
 
     @classmethod
     def name(cls) -> str:
@@ -140,7 +140,7 @@ class MLFlowModelLoader(DataLoader):
     # otherwise raises `InvalidDecoratorException` because materializer factory check
     # for all params being set and `kwargs` would be unset until instantiation.
     def __post_init__(self):
-        self.mlflow_kwargs = self.mlflow_kwargs if self.mlflow_kwargs else {}
+        self.mlflow_kwargs = self.mlflow_kwargs or {}
 
         if self.model_uri:
             return

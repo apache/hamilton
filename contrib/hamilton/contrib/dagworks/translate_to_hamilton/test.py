@@ -46,9 +46,7 @@ print(result['a'])  # This will print 3, the result of addition
 This Hamilton setup assumes that `b` and `c` are provided to the framework as inputs. If `b` and `c` were to be computed by other functions within the Hamilton framework or came from some form of data loading functions, those functions would need to be defined in `functions.py` as well, with appropriate signatures.
 '''
     expected = [
-        "def a(b: float, c: float) -> float:\n"
-        '    """Adds b and c to get a."""\n'
-        "    return b + c\n",
+        'def a(b: float, c: float) -> float:\n    """Adds b and c to get a."""\n    return b + c\n',
         "from hamilton import driver\n"
         "import functions\n"
         "\n"

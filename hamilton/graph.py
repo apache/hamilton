@@ -302,7 +302,7 @@ def create_graphviz_graph(
             display_name = n.name
 
         if type_string is None:
-            type_string = get_type_as_string(n.type) if get_type_as_string(n.type) else ""
+            type_string = get_type_as_string(n.type) or ""
 
         # We need to ensure that name and type string are HTML-escaped
         # strings to avoid syntax errors. This is particularly important
@@ -329,12 +329,12 @@ def create_graphviz_graph(
             # Handle case where display_name is a list (use first element)
             if isinstance(display_name, list):
                 display_name = display_name[0] if display_name else dep.name
-            type_string = get_type_as_string(dep.type) if get_type_as_string(dep.type) else ""
+            type_string = get_type_as_string(dep.type) or ""
             # HTML escape for security
             escaped_display_name = html.escape(display_name, quote=True)
             escaped_type_string = html.escape(type_string, quote=True)
             rows.append(f"<tr><td>{escaped_display_name}</td><td>{escaped_type_string}</td></tr>")
-        return f"<<table border=\"0\">{''.join(rows)}</table>>"
+        return f'<<table border="0">{"".join(rows)}</table>>'
 
     def _get_node_type(n: node.Node) -> str:
         """Get the node type of a DAG node.

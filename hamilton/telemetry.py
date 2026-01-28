@@ -112,7 +112,7 @@ def _check_config_and_environ_for_telemetry_flag(
             telemetry_enabled = config_obj.getboolean("DEFAULT", "telemetry_enabled")
         except ValueError as e:
             logger.debug(
-                "Unable to parse value for `telemetry_enabled` from config. " f"Encountered {e}"
+                f"Unable to parse value for `telemetry_enabled` from config. Encountered {e}"
             )
     if os.environ.get("HAMILTON_TELEMETRY_ENABLED") is not None:
         env_value = os.environ.get("HAMILTON_TELEMETRY_ENABLED")
@@ -405,10 +405,10 @@ def _send_event_json(event_json: dict):
                 raise RuntimeError(res)
     except Exception as e:
         if logger.isEnabledFor(logging.DEBUG):
-            logging.debug(f"Failed to send telemetry data: {e}")
+            logger.debug(f"Failed to send telemetry data: {e}")
     else:
         if logger.isEnabledFor(logging.DEBUG):
-            logging.debug(f"Succeed in sending telemetry consisting of [{data}].")
+            logger.debug(f"Succeed in sending telemetry consisting of [{data}].")
 
 
 def send_event_json(event_json: dict):

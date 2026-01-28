@@ -638,7 +638,7 @@ def derive_dataframe_parameter(
     if requested_parameter is not None:
         if requested_parameter not in dataframe_parameters:
             raise ValueError(
-                f"Requested parameter {requested_parameter} not found in " f"{location_name}"
+                f"Requested parameter {requested_parameter} not found in {location_name}"
             )
         return requested_parameter
     if len(dataframe_parameters) == 0:

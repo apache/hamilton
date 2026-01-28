@@ -24,6 +24,7 @@ from pathlib import Path
 
 from kedro.framework.cli.utils import KedroCliError, load_entry_points
 from kedro.framework.project import configure_project
+from kedro.framework.project import run as kedro_run
 
 
 def _find_run_command(package_name):
@@ -35,13 +36,7 @@ def _find_run_command(package_name):
             raise
         plugins = load_entry_points("project")
         run = _find_run_command_in_plugins(plugins) if plugins else None
-        if run:
-            # use run command from installed plugin if it exists
-            return run
-        # use run command from the framework project
-        from kedro.framework.cli.project import run
-
-        return run
+        return run if run else kedro_run
     # fail badly if cli.py exists, but has no `cli` in it
     if not hasattr(project_cli, "cli"):
         raise KedroCliError(f"Cannot load commands from {package_name}.cli")

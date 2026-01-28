@@ -81,7 +81,7 @@ def custom_subclass_check(requested_type: Type, param_type: Type):
         has_generic = True
     # TODO -- consider moving into a graph adapter or elsewhere -- this is perhaps a little too
     #  low-level
-    if has_generic and requested_origin_type in (Parallelizable,):
+    if has_generic and requested_origin_type == Parallelizable:
         (requested_type_arg,) = _get_args(requested_type)
         return custom_subclass_check(requested_type_arg, param_type)
     if has_generic and param_origin_type == Collect:

@@ -44,20 +44,24 @@ import tests.resources.test_for_materialization
     [
         (lambda: driver.Driver({}, tests.resources.data_quality, adapter=DefaultAdapter())),
         (
-            lambda: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_modules(tests.resources.data_quality)
-            .with_remote_executor(executors.MultiThreadingExecutor(max_tasks=3))
-            .with_local_executor(executors.MultiThreadingExecutor(max_tasks=3))
-            .build()
+            lambda: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_modules(tests.resources.data_quality)
+                .with_remote_executor(executors.MultiThreadingExecutor(max_tasks=3))
+                .with_local_executor(executors.MultiThreadingExecutor(max_tasks=3))
+                .build()
+            )
         ),
         (
-            lambda: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_remote_executor(executors.SynchronousLocalTaskExecutor())
-            .with_local_executor(executors.SynchronousLocalTaskExecutor())
-            .with_modules(tests.resources.data_quality)
-            .build()
+            lambda: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_remote_executor(executors.SynchronousLocalTaskExecutor())
+                .with_local_executor(executors.SynchronousLocalTaskExecutor())
+                .with_modules(tests.resources.data_quality)
+                .build()
+            )
         ),
     ],
     ids=["basic_driver", "driver_v2_multithreading", "driver_v2_synchronous"],
@@ -82,20 +86,24 @@ def test_data_quality_workflow_passes(driver_factory: Callable[[], driver.Driver
     [
         (lambda: driver.Driver({}, tests.resources.data_quality)),
         (
-            lambda: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_modules(tests.resources.data_quality)
-            .with_remote_executor(executors.MultiThreadingExecutor(max_tasks=3))
-            .with_local_executor(executors.MultiThreadingExecutor(max_tasks=3))
-            .build()
+            lambda: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_modules(tests.resources.data_quality)
+                .with_remote_executor(executors.MultiThreadingExecutor(max_tasks=3))
+                .with_local_executor(executors.MultiThreadingExecutor(max_tasks=3))
+                .build()
+            )
         ),
         (
-            lambda: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_remote_executor(executors.SynchronousLocalTaskExecutor())
-            .with_local_executor(executors.SynchronousLocalTaskExecutor())
-            .with_modules(tests.resources.data_quality)
-            .build()
+            lambda: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_remote_executor(executors.SynchronousLocalTaskExecutor())
+                .with_local_executor(executors.SynchronousLocalTaskExecutor())
+                .with_modules(tests.resources.data_quality)
+                .build()
+            )
         ),
     ],
     ids=["basic_driver", "driver_v2_multithreading", "driver_v2_synchronous"],
@@ -125,77 +133,91 @@ def modify_and_import(module_name, package, modification_func):
     [
         (lambda modules: driver.Driver({"region": "US"}, *modules), False),
         (
-            lambda modules: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_modules(*modules)
-            .with_remote_executor(executors.MultiThreadingExecutor(max_tasks=3))
-            .with_local_executor(executors.MultiThreadingExecutor(max_tasks=3))
-            .with_config({"region": "US"})
-            .build(),
+            lambda modules: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_modules(*modules)
+                .with_remote_executor(executors.MultiThreadingExecutor(max_tasks=3))
+                .with_local_executor(executors.MultiThreadingExecutor(max_tasks=3))
+                .with_config({"region": "US"})
+                .build()
+            ),
             False,
         ),
         (
-            lambda modules: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_remote_executor(executors.SynchronousLocalTaskExecutor())
-            .with_local_executor(executors.SynchronousLocalTaskExecutor())
-            .with_config({"region": "US"})
-            .with_modules(*modules)
-            .build(),
+            lambda modules: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_remote_executor(executors.SynchronousLocalTaskExecutor())
+                .with_local_executor(executors.SynchronousLocalTaskExecutor())
+                .with_config({"region": "US"})
+                .with_modules(*modules)
+                .build()
+            ),
             False,
         ),
         (lambda modules: driver.Driver({"region": "US"}, *modules), True),
         (
-            lambda modules: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_modules(*modules)
-            .with_remote_executor(executors.MultiThreadingExecutor(max_tasks=3))
-            .with_local_executor(executors.MultiThreadingExecutor(max_tasks=3))
-            .with_config({"region": "US"})
-            .build(),
+            lambda modules: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_modules(*modules)
+                .with_remote_executor(executors.MultiThreadingExecutor(max_tasks=3))
+                .with_local_executor(executors.MultiThreadingExecutor(max_tasks=3))
+                .with_config({"region": "US"})
+                .build()
+            ),
             True,
         ),
         (
-            lambda modules: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_remote_executor(executors.SynchronousLocalTaskExecutor())
-            .with_local_executor(executors.SynchronousLocalTaskExecutor())
-            .with_config({"region": "US"})
-            .with_modules(*modules)
-            .build(),
+            lambda modules: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_remote_executor(executors.SynchronousLocalTaskExecutor())
+                .with_local_executor(executors.SynchronousLocalTaskExecutor())
+                .with_config({"region": "US"})
+                .with_modules(*modules)
+                .build()
+            ),
             True,
         ),
         (
-            lambda modules: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_remote_executor(executors.SynchronousLocalTaskExecutor())
-            .with_local_executor(executors.SynchronousLocalTaskExecutor())
-            .with_grouping_strategy(grouping.GroupNodesAllAsOne())
-            .with_config({"region": "US"})
-            .with_modules(*modules)
-            .build(),
+            lambda modules: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_remote_executor(executors.SynchronousLocalTaskExecutor())
+                .with_local_executor(executors.SynchronousLocalTaskExecutor())
+                .with_grouping_strategy(grouping.GroupNodesAllAsOne())
+                .with_config({"region": "US"})
+                .with_modules(*modules)
+                .build()
+            ),
             False,
         ),
         (
-            lambda modules: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_remote_executor(executors.SynchronousLocalTaskExecutor())
-            .with_local_executor(executors.SynchronousLocalTaskExecutor())
-            .with_grouping_strategy(grouping.GroupNodesByLevel())
-            .with_config({"region": "US"})
-            .with_modules(*modules)
-            .build(),
+            lambda modules: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_remote_executor(executors.SynchronousLocalTaskExecutor())
+                .with_local_executor(executors.SynchronousLocalTaskExecutor())
+                .with_grouping_strategy(grouping.GroupNodesByLevel())
+                .with_config({"region": "US"})
+                .with_modules(*modules)
+                .build()
+            ),
             False,
         ),
         (
-            lambda modules: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_remote_executor(executors.SynchronousLocalTaskExecutor())
-            .with_local_executor(executors.SynchronousLocalTaskExecutor())
-            .with_grouping_strategy(grouping.GroupNodesIndividually())
-            .with_config({"region": "US"})
-            .with_modules(*modules)
-            .build(),
+            lambda modules: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_remote_executor(executors.SynchronousLocalTaskExecutor())
+                .with_local_executor(executors.SynchronousLocalTaskExecutor())
+                .with_grouping_strategy(grouping.GroupNodesIndividually())
+                .with_config({"region": "US"})
+                .with_modules(*modules)
+                .build()
+            ),
             False,
         ),
     ],
@@ -265,22 +287,26 @@ _dynamic_config = {
             )
         ),
         (
-            lambda: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_modules(tests.resources.dynamic_config)
-            .with_config(_dynamic_config)
-            .with_remote_executor(executors.MultiThreadingExecutor(max_tasks=3))
-            .with_local_executor(executors.MultiThreadingExecutor(max_tasks=3))
-            .build()
+            lambda: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_modules(tests.resources.dynamic_config)
+                .with_config(_dynamic_config)
+                .with_remote_executor(executors.MultiThreadingExecutor(max_tasks=3))
+                .with_local_executor(executors.MultiThreadingExecutor(max_tasks=3))
+                .build()
+            )
         ),
         (
-            lambda: driver.Builder()
-            .enable_dynamic_execution(allow_experimental_mode=True)
-            .with_modules(tests.resources.dynamic_config)
-            .with_config(_dynamic_config)
-            .with_remote_executor(executors.SynchronousLocalTaskExecutor())
-            .with_local_executor(executors.SynchronousLocalTaskExecutor())
-            .build()
+            lambda: (
+                driver.Builder()
+                .enable_dynamic_execution(allow_experimental_mode=True)
+                .with_modules(tests.resources.dynamic_config)
+                .with_config(_dynamic_config)
+                .with_remote_executor(executors.SynchronousLocalTaskExecutor())
+                .with_local_executor(executors.SynchronousLocalTaskExecutor())
+                .build()
+            )
         ),
     ],
     ids=["basic_driver", "driver_v2_multithreading", "driver_v2_synchronous"],

@@ -896,9 +896,9 @@ class Driver:
         if tag_filter:
             valid_filter_values = all(
                 map(
-                    lambda x: isinstance(x, str)
-                    or (isinstance(x, list) and len(x) != 0)
-                    or x is None,
+                    lambda x: (
+                        isinstance(x, str) or (isinstance(x, list) and len(x) != 0) or x is None
+                    ),
                     tag_filter.values(),
                 )
             )

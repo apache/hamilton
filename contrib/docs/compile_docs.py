@@ -343,10 +343,14 @@ def _create_commit_file(df_path, single_df):
     commit_path = df_path.replace("docs", "static/commits")
     os.makedirs(commit_path, exist_ok=True)
     with open(os.path.join(commit_path, "commit.txt"), "w") as f:
-        for commit, ts in zip(
-            single_df["__init__.py"]["commit"], single_df["__init__.py"]["timestamp"], strict=False
-        ):
-            f.write(f"[commit::{commit}][ts::{ts}]\n")
+        f.writelines(
+            f"[commit::{commit}][ts::{ts}]\n"
+            for commit, ts in zip(
+                single_df["__init__.py"]["commit"],
+                single_df["__init__.py"]["timestamp"],
+                strict=False,
+            )
+        )
 
 
 @config.when(is_dagworks="True")

@@ -90,12 +90,12 @@ def load_extension(plugin_module: ExtensionName):
     extractable = getattr(mod, "COLUMN_FRIENDLY_DF_TYPE", True)
     if extractable:
         assert hasattr(mod, "register_types"), "Error extension missing function register_types()"
-        assert hasattr(
-            mod, f"get_column_{plugin_module}"
-        ), f"Error extension missing get_column_{plugin_module}"
-        assert hasattr(
-            mod, f"fill_with_scalar_{plugin_module}"
-        ), f"Error extension missing fill_with_scalar_{plugin_module}"
+        assert hasattr(mod, f"get_column_{plugin_module}"), (
+            f"Error extension missing get_column_{plugin_module}"
+        )
+        assert hasattr(mod, f"fill_with_scalar_{plugin_module}"), (
+            f"Error extension missing fill_with_scalar_{plugin_module}"
+        )
         logger.info(f"Detected {plugin_module} and successfully loaded Hamilton extensions.")
 
 

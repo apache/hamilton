@@ -96,7 +96,7 @@ class DiskCacheAdapter(
     def __init__(
         self, cache_vars: Union[List[str], None] = None, cache_path: str = ".", **cache_settings
     ):
-        self.cache_vars = cache_vars if cache_vars else []
+        self.cache_vars = cache_vars or []
         self.cache_path = cache_path
         self.cache = diskcache.Cache(directory=cache_path, **cache_settings)
         self.nodes_history: Dict[str, List[str]] = self.cache.get(

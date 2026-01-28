@@ -43,10 +43,10 @@ class NodeGroupPurpose(enum.Enum):
     EXECUTE_SINGLE = "execute_single"  # DAG that is just a single node
 
     def is_expander(self):
-        return self.value in ["expand_unordered"]
+        return self.value == "expand_unordered"
 
     def is_gatherer(self):
-        return self.value in ["gather"]
+        return self.value == "gather"
 
 
 @dataclasses.dataclass
@@ -127,8 +127,7 @@ class TaskSpec(NodeGroup):
                 if dependency.name not in self.overrides:
                     if dependency.user_defined or dependency.name not in all_node_names:
                         if node_.requires(dependency.name):
-                            if dependency.name in optional_variables:
-                                optional_variables.remove(dependency.name)
+                            optional_variables.discard(dependency.name)
                             required_variables.add(dependency.name)
                         else:
                             optional_variables.add(dependency.name)
@@ -211,7 +210,7 @@ class GroupByRepeatableBlocks(GroupingStrategy):
         """
 
         def is_expander(node_: node.Node) -> bool:
-            return node_.node_role in [NodeType.EXPAND]
+            return node_.node_role == NodeType.EXPAND
 
         return graph_functions.nodes_between(collect_node, is_expander)
 

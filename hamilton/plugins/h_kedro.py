@@ -138,7 +138,7 @@ def kedro_pipeline_to_driver(
         lifecycle_base.LifecycleAdapterSet(),
     )
 
-    builder = builder if builder else driver.Builder()
+    builder = builder or driver.Builder()
     dr = builder.build()
     # inject function graph in Driver
     dr.graph = graph.FunctionGraph(
