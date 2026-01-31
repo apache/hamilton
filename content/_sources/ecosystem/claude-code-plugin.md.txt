@@ -75,7 +75,7 @@ claude plugin install hamilton@apache/hamilton --scope user
 
 ### For Contributors
 
-If you've cloned the Hamilton repository, the skill is already available in `.claude/skills/hamilton/` and will be automatically discovered by Claude Code when you work in the repo. No installation needed!
+If you've cloned the Hamilton repository, the skill is already available in `.claude/plugins/hamilton/skills/hamilton/` and will be automatically discovered by Claude Code when you work in the repo. No installation needed!
 
 ## Usage
 
@@ -317,7 +317,7 @@ The plugin is organized as follows:
 └── README.md                 # Plugin documentation
 ```
 
-For contributors, a copy exists in `.claude/skills/hamilton/` for immediate use.
+For contributors, the skill exists in `.claude/plugins/hamilton/skills/hamilton/` for immediate use.
 
 ## Contributing
 
@@ -334,7 +334,7 @@ Please [file an issue](https://github.com/apache/hamilton/issues/new) with:
 ### Submit Pull Requests
 
 1. Fork the repository: https://github.com/apache/hamilton
-2. Make changes in `.claude/skills/hamilton/` or `.claude/plugins/hamilton/`
+2. Make changes in `.claude/plugins/hamilton/skills/hamilton/`
 3. Test thoroughly with various scenarios
 4. Submit a PR with a clear description
 
