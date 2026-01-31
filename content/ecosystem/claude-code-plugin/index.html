@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex/"><link rel="search" title="Search" href="../../search/"><link rel="next" title="Extension autoloading" href="../extensions-autoloading/"><link rel="prev" title="Scaling computation" href="../scale-up/">
-        <link rel="canonical" href="https://hamilton.staged.apache.org/how-tos/microservice/">
+<link rel="index" title="Index" href="../../genindex/"><link rel="search" title="Search" href="../../search/"><link rel="next" title="Decorators" href="../../reference/decorators/"><link rel="prev" title="Ecosystem" href="../">
+        <link rel="canonical" href="https://hamilton.staged.apache.org/ecosystem/claude-code-plugin/">
 
     <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
-        <title>Microservice - Hamilton</title>
+        <title>Claude Code Plugin for Hamilton - Hamilton</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
@@ -186,7 +186,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -205,7 +205,7 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">USER GUIDE</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../get-started/">Get Started</a><input aria-label="Toggle navigation of Get Started" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../get-started/why-hamilton/">Why use Apache Hamilton?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../get-started/install/">Install</a></li>
@@ -244,21 +244,21 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../">User Guide</a><input aria-label="Toggle navigation of User Guide" checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../use-in-jupyter-notebook/">Jupyter notebooks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../load-data/">Loading data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../caching-tutorial/">Caching</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../use-for-feature-engineering/">Feature engineering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ml-training/">Model training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../llm-workflows/">LLM workflows</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../run-data-quality-checks/">Data quality</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../scale-up/">Scaling computation</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Microservice</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../extensions-autoloading/">Extension autoloading</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../wrapping-driver/">Wrapping the Driver</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cli-reference/">Command line interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../pre-commit-hooks/">pre-commit hooks</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how-tos/">User Guide</a><input aria-label="Toggle navigation of User Guide" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-in-jupyter-notebook/">Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/load-data/">Loading data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/caching-tutorial/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/ml-training/">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/llm-workflows/">LLM workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/scale-up/">Scaling computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/microservice/">Microservice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/extensions-autoloading/">Extension autoloading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/wrapping-driver/">Wrapping the Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/cli-reference/">Command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/pre-commit-hooks/">pre-commit hooks</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../hamilton-ui/">Apache Hamilton UI</a><input aria-label="Toggle navigation of Apache Hamilton UI" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -314,10 +314,10 @@
 <li class="toctree-l1"><a class="reference external" href="https://hamilton.apache.org/_static/Hamilton.pdf">PDF</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">COMMUNITY</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../community/">Meet-ups</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../ecosystem/">Ecosystem</a><input aria-label="Toggle navigation of Ecosystem" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../ecosystem/claude-code-plugin/">Claude Code Plugin for Hamilton</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">Ecosystem</a><input aria-label="Toggle navigation of Ecosystem" checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Claude Code Plugin for Hamilton</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a></li>
@@ -475,12 +475,12 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="https://github.com/apache/hamilton/blob/main/docs/how-tos/microservice.rst?plain=true" title="View this page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/blob/main/docs/ecosystem/claude-code-plugin.md?plain=true" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
 </div><div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/how-tos/microservice.rst" rel="edit" title="Edit this page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/ecosystem/claude-code-plugin.md" rel="edit" title="Edit this page">
     <svg><use href="#svg-pencil"></use></svg>
     <span class="visually-hidden">Edit this page</span>
   </a>
@@ -492,19 +492,428 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="microservice">
-<h1>Microservice<a class="headerlink" href="#microservice" title="Link to this heading">¶</a></h1>
-<p>While we’ve mainly been discussing running Apache Hamilton in a batch environment, it can easily be used
-in a microservice/online setting. This is valuable if you want insight into exactly how your endpoints
-transform/load data, or if you want to execute the same transforms you did in batch in an online setting.</p>
-<p>The following example shows how to execute an asynchronous set of transforms in a microservice:</p>
-<p>We will be releasing feature-specific examples shortly, as well.</p>
-<p><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/async">https://github.com/apache/hamilton/tree/main/examples/async</a></p>
+          <!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<section id="claude-code-plugin-for-hamilton">
+<h1>Claude Code Plugin for Hamilton<a class="headerlink" href="#claude-code-plugin-for-hamilton" title="Link to this heading">¶</a></h1>
+<p>The Hamilton Claude Code plugin provides AI-powered assistance for developing Hamilton DAGs using <a class="reference external" href="https://code.claude.com">Claude Code</a>, Anthropic’s official CLI tool.</p>
+<section id="what-is-claude-code">
+<h2>What is Claude Code?<a class="headerlink" href="#what-is-claude-code" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://code.claude.com">Claude Code</a> is an AI-powered CLI tool that helps you build software faster by providing intelligent code assistance, debugging help, and code generation capabilities. The Hamilton plugin extends Claude Code with deep knowledge of Hamilton patterns and best practices.</p>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h2>
+<p>The Hamilton Claude Code plugin provides expert assistance for:</p>
+<ul class="simple">
+<li><p>🏗️ <strong>Creating new Hamilton modules</strong> with proper patterns and decorators</p></li>
+<li><p>🔍 <strong>Understanding existing DAGs</strong> by explaining dataflow and dependencies</p></li>
+<li><p>🎨 <strong>Applying function modifiers</strong> correctly (&#64;parameterize, &#64;config.when, &#64;check_output, etc.)</p></li>
+<li><p>🐛 <strong>Debugging issues</strong> in DAG definitions and execution</p></li>
+<li><p>🔄 <strong>Converting Python scripts</strong> to Hamilton modules</p></li>
+<li><p>⚡ <strong>Optimizing pipelines</strong> with caching, parallelization, and best practices</p></li>
+<li><p>✅ <strong>Writing tests</strong> for Hamilton functions</p></li>
+<li><p>📊 <strong>Generating visualizations</strong> of your DAGs</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h3>
+<p>First, install Claude Code:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install Claude Code CLI</span>
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://cli.claude.ai/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+</pre></div>
+</div>
+<p>For more installation options, see the <a class="reference external" href="https://code.claude.com/docs/en/install.html">Claude Code documentation</a>.</p>
+</section>
+<section id="install-the-hamilton-plugin">
+<h3>Install the Hamilton Plugin<a class="headerlink" href="#install-the-hamilton-plugin" title="Link to this heading">¶</a></h3>
+<p>Once Claude Code is installed, you can add the Hamilton plugin:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add the Hamilton plugin marketplace</span>
+/plugin<span class="w"> </span>marketplace<span class="w"> </span>add<span class="w"> </span>apache/hamilton
+
+<span class="c1"># Install the plugin (available across all projects)</span>
+/plugin<span class="w"> </span>install<span class="w"> </span>hamilton<span class="w"> </span>--scope<span class="w"> </span>user
+</pre></div>
+</div>
+<p>Or combine into a single command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>claude<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>hamilton@apache/hamilton<span class="w"> </span>--scope<span class="w"> </span>user
+</pre></div>
+</div>
+<p><strong>Installation scopes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--scope</span> <span class="pre">user</span></code> - Available in all your projects (recommended)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--scope</span> <span class="pre">project</span></code> - Only in the current project</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--scope</span> <span class="pre">local</span></code> - Testing/development only</p></li>
+</ul>
+</section>
+<section id="for-contributors">
+<h3>For Contributors<a class="headerlink" href="#for-contributors" title="Link to this heading">¶</a></h3>
+<p>If you’ve cloned the Hamilton repository, the skill is already available in <code class="docutils literal notranslate"><span class="pre">.claude/skills/hamilton/</span></code> and will be automatically discovered by Claude Code when you work in the repo. No installation needed!</p>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<section id="automatic-assistance">
+<h3>Automatic Assistance<a class="headerlink" href="#automatic-assistance" title="Link to this heading">¶</a></h3>
+<p>Claude Code will automatically use the Hamilton plugin when it detects you’re working with Hamilton code. Just ask questions or give instructions naturally:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>claude<span class="w"> </span><span class="s2">&quot;Help me create a Hamilton module for processing customer data&quot;</span>
+claude<span class="w"> </span><span class="s2">&quot;Explain what this DAG does&quot;</span>
+claude<span class="w"> </span><span class="s2">&quot;Convert this pandas script to Hamilton&quot;</span>
+claude<span class="w"> </span><span class="s2">&quot;Add caching to my expensive computation function&quot;</span>
+claude<span class="w"> </span><span class="s2">&quot;Why am I getting a circular dependency error?&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="manual-invocation">
+<h3>Manual Invocation<a class="headerlink" href="#manual-invocation" title="Link to this heading">¶</a></h3>
+<p>You can explicitly invoke the skill using the <code class="docutils literal notranslate"><span class="pre">/hamilton</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>claude<span class="w"> </span>/hamilton<span class="w"> </span>create<span class="w"> </span>a<span class="w"> </span>feature<span class="w"> </span>engineering<span class="w"> </span>module<span class="w"> </span>with<span class="w"> </span>rolling<span class="w"> </span>averages
+claude<span class="w"> </span>/hamilton<span class="w"> </span>explain<span class="w"> </span>the<span class="w"> </span>dataflow<span class="w"> </span><span class="k">in</span><span class="w"> </span>my_functions.py
+claude<span class="w"> </span>/hamilton<span class="w"> </span>optimize<span class="w"> </span>this<span class="w"> </span>DAG<span class="w"> </span><span class="k">for</span><span class="w"> </span>parallel<span class="w"> </span>execution
+</pre></div>
+</div>
+</section>
+<section id="interactive-mode">
+<h3>Interactive Mode<a class="headerlink" href="#interactive-mode" title="Link to this heading">¶</a></h3>
+<p>For ongoing assistance, start an interactive session:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start Claude Code in your Hamilton project</span>
+<span class="nb">cd</span><span class="w"> </span>/path/to/your/hamilton/project
+claude
+</pre></div>
+</div>
+<p>Then interact naturally:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">You</span><span class="p">:</span> <span class="n">I</span> <span class="n">need</span> <span class="n">to</span> <span class="n">create</span> <span class="n">a</span> <span class="n">DAG</span> <span class="n">that</span> <span class="n">processes</span> <span class="n">customer</span> <span class="n">transactions</span>
+<span class="n">Claude</span><span class="p">:</span> <span class="n">I</span><span class="s1">&#39;ll help you create a Hamilton module for processing customer transactions...</span>
+
+<span class="n">You</span><span class="p">:</span> <span class="n">Add</span> <span class="n">validation</span> <span class="n">to</span> <span class="n">ensure</span> <span class="nb">all</span> <span class="n">amounts</span> <span class="n">are</span> <span class="n">positive</span>
+<span class="n">Claude</span><span class="p">:</span> <span class="n">I</span><span class="s1">&#39;ll add a @check_output decorator with validation...</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="creating-a-new-hamilton-module">
+<h3>Creating a New Hamilton Module<a class="headerlink" href="#creating-a-new-hamilton-module" title="Link to this heading">¶</a></h3>
+<p><strong>Prompt:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Create</span> <span class="n">a</span> <span class="n">Hamilton</span> <span class="n">module</span> <span class="n">that</span> <span class="n">loads</span> <span class="n">sales</span> <span class="n">data</span> <span class="kn">from</span><span class="w"> </span><span class="nn">a</span> <span class="n">CSV</span><span class="p">,</span> <span class="n">removes</span> <span class="n">nulls</span><span class="p">,</span>
+<span class="n">calculates</span> <span class="n">a</span> <span class="mi">7</span><span class="o">-</span><span class="n">day</span> <span class="n">rolling</span> <span class="n">average</span><span class="p">,</span> <span class="ow">and</span> <span class="n">outputs</span> <span class="n">the</span> <span class="n">top</span> <span class="mi">10</span> <span class="n">days</span> <span class="n">by</span> <span class="n">sales</span><span class="o">.</span>
+</pre></div>
+</div>
+<p><strong>Claude generates:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Sales analysis DAG.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">raw_sales</span><span class="p">(</span><span class="n">csv_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load sales data from CSV.</span>
+
+<span class="sd">    :param csv_path: Path to sales CSV file</span>
+<span class="sd">    :return: Raw sales DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">cleaned_sales</span><span class="p">(</span><span class="n">raw_sales</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove null values from sales data.</span>
+
+<span class="sd">    :param raw_sales: Raw sales data</span>
+<span class="sd">    :return: Cleaned sales DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">raw_sales</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rolling_avg_7d</span><span class="p">(</span><span class="n">cleaned_sales</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate 7-day rolling average of sales.</span>
+
+<span class="sd">    :param cleaned_sales: Cleaned sales data</span>
+<span class="sd">    :return: 7-day rolling average</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cleaned_sales</span><span class="p">[</span><span class="s1">&#39;sales&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">top_10_sales_days</span><span class="p">(</span>
+    <span class="n">cleaned_sales</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">rolling_avg_7d</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get top 10 days by rolling average.</span>
+
+<span class="sd">    :param cleaned_sales: Cleaned sales data</span>
+<span class="sd">    :param rolling_avg_7d: 7-day rolling average</span>
+<span class="sd">    :return: Top 10 sales days</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">cleaned_sales</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;rolling_avg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rolling_avg_7d</span>
+    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;rolling_avg&#39;</span><span class="p">)</span>
+
+<span class="c1"># Usage:</span>
+<span class="c1"># from hamilton import driver</span>
+<span class="c1"># dr = driver.Driver({}, __name__)</span>
+<span class="c1"># results = dr.execute([&#39;top_10_sales_days&#39;], inputs={&#39;csv_path&#39;: &#39;sales.csv&#39;})</span>
+</pre></div>
+</div>
+</section>
+<section id="converting-existing-code">
+<h3>Converting Existing Code<a class="headerlink" href="#converting-existing-code" title="Link to this heading">¶</a></h3>
+<p><strong>Prompt:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Convert</span> <span class="n">this</span> <span class="n">script</span> <span class="n">to</span> <span class="n">Hamilton</span><span class="p">:</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;feature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;col_a&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;col_b&#39;</span><span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)[</span><span class="s1">&#39;feature&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Claude refactors to:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Data processing DAG.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">raw_data</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load raw data from CSV.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">feature</span><span class="p">(</span><span class="n">raw_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate feature from columns.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">raw_data</span><span class="p">[</span><span class="s1">&#39;col_a&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">raw_data</span><span class="p">[</span><span class="s1">&#39;col_b&#39;</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">data_with_feature</span><span class="p">(</span><span class="n">raw_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">feature</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add feature column to dataset.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;feature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">feature</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">result</span><span class="p">(</span><span class="n">data_with_feature</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate mean feature by category.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">data_with_feature</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)[</span><span class="s1">&#39;feature&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="applying-decorators">
+<h3>Applying Decorators<a class="headerlink" href="#applying-decorators" title="Link to this heading">¶</a></h3>
+<p><strong>Prompt:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>I need to create rolling averages for 7, 30, and 90 day windows.
+How do I do this without repeating code?
+</pre></div>
+</div>
+<p><strong>Claude suggests:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">parameterize</span>
+
+<span class="nd">@parameterize</span><span class="p">(</span>
+    <span class="n">rolling_7d</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;window&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">},</span>
+    <span class="n">rolling_30d</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;window&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
+    <span class="n">rolling_90d</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;window&#39;</span><span class="p">:</span> <span class="mi">90</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rolling_average</span><span class="p">(</span><span class="n">sales</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate rolling average for different windows.</span>
+
+<span class="sd">    Creates three nodes: rolling_7d, rolling_30d, rolling_90d</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">sales</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="debugging">
+<h3>Debugging<a class="headerlink" href="#debugging" title="Link to this heading">¶</a></h3>
+<p><strong>Prompt:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">I</span><span class="s1">&#39;m getting: &quot;Could not find parameter &#39;</span><span class="n">processed_data</span><span class="s1">&#39; in graph&quot;</span>
+</pre></div>
+</div>
+<p><strong>Claude analyzes:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="n">error</span> <span class="n">occurs</span> <span class="n">when</span> <span class="n">a</span> <span class="n">function</span> <span class="n">parameter</span> <span class="n">references</span> <span class="n">a</span> <span class="n">node</span> <span class="n">that</span> <span class="n">doesn</span><span class="s1">&#39;t exist</span>
+<span class="ow">in</span> <span class="n">your</span> <span class="n">DAG</span><span class="o">.</span> <span class="n">Common</span> <span class="n">causes</span><span class="p">:</span>
+
+<span class="mf">1.</span> <span class="n">Typo</span> <span class="ow">in</span> <span class="n">parameter</span> <span class="n">name</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="p">,</span> <span class="s1">&#39;processed_data&#39;</span> <span class="n">vs</span> <span class="s1">&#39;process_data&#39;</span><span class="p">)</span>
+<span class="mf">2.</span> <span class="n">Missing</span> <span class="n">function</span> <span class="n">definition</span> <span class="k">for</span> <span class="s1">&#39;processed_data&#39;</span>
+<span class="mf">3.</span> <span class="n">Function</span> <span class="n">excluded</span> <span class="n">via</span> <span class="nd">@hamilton_exclude</span> <span class="ow">or</span> <span class="nd">@config</span><span class="o">.</span><span class="n">when</span>
+
+<span class="n">Check</span> <span class="n">your</span> <span class="n">module</span> <span class="k">for</span> <span class="n">a</span> <span class="n">function</span> <span class="n">named</span> <span class="s1">&#39;processed_data&#39;</span><span class="o">.</span> <span class="n">If</span> <span class="n">it</span> <span class="n">doesn</span><span class="s1">&#39;t exist,</span>
+<span class="n">either</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Add</span> <span class="n">the</span> <span class="n">function</span><span class="p">,</span> <span class="ow">or</span>
+<span class="o">-</span> <span class="n">Fix</span> <span class="n">the</span> <span class="n">parameter</span> <span class="n">name</span> <span class="n">to</span> <span class="n">match</span> <span class="n">an</span> <span class="n">existing</span> <span class="n">function</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="what-the-plugin-knows">
+<h2>What the Plugin Knows<a class="headerlink" href="#what-the-plugin-knows" title="Link to this heading">¶</a></h2>
+<p>The plugin has deep knowledge of Hamilton:</p>
+<section id="core-concepts">
+<h3>Core Concepts<a class="headerlink" href="#core-concepts" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Function-based DAG definitions</p></li>
+<li><p>Driver configuration and execution</p></li>
+<li><p>Node dependencies via parameters</p></li>
+<li><p>Type hints and annotations</p></li>
+</ul>
+</section>
+<section id="function-modifiers">
+<h3>Function Modifiers<a class="headerlink" href="#function-modifiers" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Configuration</strong>: &#64;config.when, &#64;hamilton_exclude</p></li>
+<li><p><strong>Parameterization</strong>: &#64;parameterize, &#64;parameterize_sources, &#64;parameterize_values</p></li>
+<li><p><strong>Column extraction</strong>: &#64;extract_columns, &#64;extract_fields</p></li>
+<li><p><strong>Data quality</strong>: &#64;check_output, &#64;check_output_custom, &#64;schema</p></li>
+<li><p><strong>I/O</strong>: &#64;save_to, &#64;load_from, &#64;dataloader, &#64;datasaver</p></li>
+<li><p><strong>Transformation</strong>: &#64;pipe, &#64;does, &#64;mutate, &#64;step</p></li>
+<li><p><strong>Advanced</strong>: &#64;subdag, &#64;resolve, &#64;cache</p></li>
+</ul>
+</section>
+<section id="integration-patterns">
+<h3>Integration Patterns<a class="headerlink" href="#integration-patterns" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Airflow orchestration</p></li>
+<li><p>FastAPI microservices</p></li>
+<li><p>Streamlit dashboards</p></li>
+<li><p>Jupyter notebooks</p></li>
+<li><p>Ray/Dask/Spark distributed execution</p></li>
+</ul>
+</section>
+<section id="llm-workflows">
+<h3>LLM Workflows<a class="headerlink" href="#llm-workflows" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>RAG pipeline patterns</p></li>
+<li><p>Document chunking</p></li>
+<li><p>Vector database operations</p></li>
+<li><p>Embedding generation</p></li>
+</ul>
+</section>
+<section id="best-practices">
+<h3>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Testing strategies</p></li>
+<li><p>Code organization</p></li>
+<li><p>Error handling</p></li>
+<li><p>Performance optimization</p></li>
+</ul>
+</section>
+</section>
+<section id="plugin-structure">
+<h2>Plugin Structure<a class="headerlink" href="#plugin-structure" title="Link to this heading">¶</a></h2>
+<p>The plugin is organized as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.claude/plugins/hamilton/
+├── .claude-plugin/
+│   ├── plugin.json           # Plugin manifest
+│   └── marketplace.json      # Marketplace configuration
+├── skills/
+│   └── hamilton/
+│       ├── SKILL.md          # Main skill instructions
+│       ├── examples.md       # Code examples and patterns
+│       └── README.md         # Skill documentation
+└── README.md                 # Plugin documentation
+</pre></div>
+</div>
+<p>For contributors, a copy exists in <code class="docutils literal notranslate"><span class="pre">.claude/skills/hamilton/</span></code> for immediate use.</p>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">¶</a></h2>
+<p>Found a bug or want to improve the plugin? We’d love your help!</p>
+<section id="report-issues">
+<h3>Report Issues<a class="headerlink" href="#report-issues" title="Link to this heading">¶</a></h3>
+<p>Please <a class="reference external" href="https://github.com/apache/hamilton/issues/new">file an issue</a> with:</p>
+<ul class="simple">
+<li><p>Clear description of the problem</p></li>
+<li><p>Steps to reproduce</p></li>
+<li><p>Expected vs actual behavior</p></li>
+<li><p>Hamilton and Claude Code versions</p></li>
+</ul>
+</section>
+<section id="submit-pull-requests">
+<h3>Submit Pull Requests<a class="headerlink" href="#submit-pull-requests" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Fork the repository: https://github.com/apache/hamilton</p></li>
+<li><p>Make changes in <code class="docutils literal notranslate"><span class="pre">.claude/skills/hamilton/</span></code> or <code class="docutils literal notranslate"><span class="pre">.claude/plugins/hamilton/</span></code></p></li>
+<li><p>Test thoroughly with various scenarios</p></li>
+<li><p>Submit a PR with a clear description</p></li>
+</ol>
+<p><strong>Contribution ideas:</strong></p>
+<ul class="simple">
+<li><p>📚 Add new examples to <code class="docutils literal notranslate"><span class="pre">examples.md</span></code></p></li>
+<li><p>📝 Improve instructions in <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code></p></li>
+<li><p>🐛 Fix bugs or inaccuracies</p></li>
+<li><p>✨ Add support for new Hamilton features</p></li>
+<li><p>📖 Enhance documentation</p></li>
+</ul>
+<p>See <a class="reference external" href="https://github.com/apache/hamilton/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for guidelines.</p>
+</section>
+</section>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Claude Code CLI</strong> - v0.1.0 or later</p></li>
+<li><p><strong>Hamilton</strong> - v1.0.0 or later (plugin works with any version)</p></li>
+<li><p><strong>Python</strong> - 3.9 or later</p></li>
+</ul>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="plugin-not-loading">
+<h3>Plugin Not Loading<a class="headerlink" href="#plugin-not-loading" title="Link to this heading">¶</a></h3>
+<p>If the plugin isn’t recognized:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check installed plugins</span>
+claude<span class="w"> </span>plugin<span class="w"> </span>list
+
+<span class="c1"># Reinstall if needed</span>
+claude<span class="w"> </span>plugin<span class="w"> </span>uninstall<span class="w"> </span>hamilton
+claude<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>hamilton@apache/hamilton<span class="w"> </span>--scope<span class="w"> </span>user
+</pre></div>
+</div>
+</section>
+<section id="skill-not-activating">
+<h3>Skill Not Activating<a class="headerlink" href="#skill-not-activating" title="Link to this heading">¶</a></h3>
+<p>If Claude doesn’t seem to use Hamilton knowledge:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Manually invoke the skill</span>
+claude<span class="w"> </span>/hamilton<span class="w"> </span>&lt;your-question&gt;
+
+<span class="c1"># Or mention Hamilton explicitly in your prompt</span>
+claude<span class="w"> </span><span class="s2">&quot;Using Hamilton framework, create a DAG for...&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="permission-errors">
+<h3>Permission Errors<a class="headerlink" href="#permission-errors" title="Link to this heading">¶</a></h3>
+<p>The plugin requests permission to:</p>
+<ul class="simple">
+<li><p>Read files (Read, Grep, Glob)</p></li>
+<li><p>Run Python code (python, pytest)</p></li>
+<li><p>Search files (find)</p></li>
+</ul>
+<p>If prompted, approve these permissions for the best experience.</p>
+</section>
+</section>
+<section id="learn-more">
+<h2>Learn More<a class="headerlink" href="#learn-more" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Hamilton Documentation</strong>: https://hamilton.apache.org</p></li>
+<li><p><strong>Claude Code Documentation</strong>: https://code.claude.com/docs</p></li>
+<li><p><strong>Hamilton GitHub</strong>: https://github.com/apache/hamilton</p></li>
+<li><p><strong>Hamilton Examples</strong>: https://github.com/apache/hamilton/tree/main/examples</p></li>
+<li><p><strong>Community Slack</strong>: Join via Hamilton GitHub repo</p></li>
+</ul>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading">¶</a></h2>
+<p>This plugin is part of the Apache Hamilton project and is licensed under the Apache 2.0 License.</p>
+<hr class="docutils" />
+<p><strong>Enhance your Hamilton development with AI! 🚀</strong></p>
+</section>
 </section>
 
         </article>
@@ -512,23 +921,23 @@ transform/load data, or if you want to execute the same transforms you did in ba
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../extensions-autoloading/">
+          <a class="next-page" href="../../reference/decorators/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Extension autoloading</div>
+                <div class="title">Decorators</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../scale-up/">
+          <a class="prev-page" href="../">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Scaling computation</div>
+                <div class="title">Ecosystem</div>
                 
               </div>
             </a>
@@ -563,8 +972,70 @@ transform/load data, or if you want to execute the same transforms you did in ba
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Claude Code Plugin for Hamilton</a><ul>
+<li><a class="reference internal" href="#what-is-claude-code">What is Claude Code?</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#install-the-hamilton-plugin">Install the Hamilton Plugin</a></li>
+<li><a class="reference internal" href="#for-contributors">For Contributors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#automatic-assistance">Automatic Assistance</a></li>
+<li><a class="reference internal" href="#manual-invocation">Manual Invocation</a></li>
+<li><a class="reference internal" href="#interactive-mode">Interactive Mode</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#creating-a-new-hamilton-module">Creating a New Hamilton Module</a></li>
+<li><a class="reference internal" href="#converting-existing-code">Converting Existing Code</a></li>
+<li><a class="reference internal" href="#applying-decorators">Applying Decorators</a></li>
+<li><a class="reference internal" href="#debugging">Debugging</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#what-the-plugin-knows">What the Plugin Knows</a><ul>
+<li><a class="reference internal" href="#core-concepts">Core Concepts</a></li>
+<li><a class="reference internal" href="#function-modifiers">Function Modifiers</a></li>
+<li><a class="reference internal" href="#integration-patterns">Integration Patterns</a></li>
+<li><a class="reference internal" href="#llm-workflows">LLM Workflows</a></li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugin-structure">Plugin Structure</a></li>
+<li><a class="reference internal" href="#contributing">Contributing</a><ul>
+<li><a class="reference internal" href="#report-issues">Report Issues</a></li>
+<li><a class="reference internal" href="#submit-pull-requests">Submit Pull Requests</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#plugin-not-loading">Plugin Not Loading</a></li>
+<li><a class="reference internal" href="#skill-not-activating">Skill Not Activating</a></li>
+<li><a class="reference internal" href="#permission-errors">Permission Errors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#learn-more">Learn More</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

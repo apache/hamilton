@@ -35,6 +35,31 @@ available outputs for specific tag matches. E.g.
     output = dr.execute(desired_outputs)
 
 
+**Using display_name for visualization**
+
+You can use the special ``display_name`` tag to provide a human-readable name for nodes in graphviz visualizations.
+This allows you to show user-friendly names in DAG diagrams while keeping valid Python identifiers as function names.
+
+.. code-block:: python
+
+    import pandas as pd
+    from hamilton.function_modifiers import tag
+
+    @tag(display_name="Customer Lifetime Value")
+    def customer_ltv(purchases: pd.DataFrame, tenure: pd.Series) -> pd.Series:
+        """Calculate customer lifetime value."""
+        return purchases.sum() * tenure
+
+When you visualize the DAG using ``dr.display_all_functions()``, the node will display "Customer Lifetime Value"
+instead of "customer_ltv". This is useful for:
+
+- Creating presentation-ready diagrams for stakeholders
+- Adding business-friendly names for technical functions
+- Making visualizations more readable for non-technical audiences
+
+Note that ``display_name`` only affects visualization - the actual node name used in code remains the function name.
+
+
 ----
 
 **Reference Documentation**
