@@ -1,0 +1,34 @@
+{
+  "name": "hamilton",
+  "version": "2.0.0",
+  "description": "Expert AI assistant for Apache Hamilton framework development - create DAGs, apply decorators, debug dataflows, and optimize pipelines",
+  "author": {
+    "name": "Hamilton Team",
+    "email": "dev@hamilton.apache.org"
+  },
+  "homepage": "https://github.com/apache/hamilton",
+  "repository": "https://github.com/apache/hamilton",
+  "license": "Apache-2.0",
+  "keywords": [
+    "hamilton",
+    "dag",
+    "dataflow",
+    "workflow",
+    "pipeline",
+    "data-engineering",
+    "ml-ops",
+    "feature-engineering",
+    "llm",
+    "rag",
+    "async",
+    "spark",
+    "observability"
+  ],
+  "skills": [
+    "./skills/core",
+    "./skills/scale",
+    "./skills/llm",
+    "./skills/observability",
+    "./skills/integrations"
+  ]
+}

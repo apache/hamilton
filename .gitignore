@@ -155,3 +155,4 @@ examples/**/hamilton-env
 
 # hamilton default caching directory
 **/.hamilton_cache/
+.claude/settings.local.json

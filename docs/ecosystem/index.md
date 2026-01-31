@@ -118,6 +118,7 @@ Improve your development workflow:
 |------------|-------------|---------------|
 | <img src="../_static/logos/jupyter.png" width="20" height="20" style="vertical-align: middle;"> **Jupyter** | Notebook magic commands | [Examples](https://github.com/apache/hamilton/tree/main/examples/jupyter_notebook_magic) |
 | <img src="../_static/logos/vscode.png" width="20" height="20" style="vertical-align: middle;"> **VS Code** | Language server and extension | [VS Code Guide](../hamilton-vscode/index.rst) |
+| **Claude Code** | AI assistant plugin for Hamilton development | [Plugin Guide](claude-code-plugin.md) |
 | <img src="../_static/logos/tqdm.png" width="20" height="20" style="vertical-align: middle;"> **tqdm** | Progress bars | [Lifecycle Hook](../reference/lifecycle-hooks/ProgressBar.rst) |
 
 ### Cloud Providers & Infrastructure
@@ -220,3 +221,9 @@ If you've created a plugin or integration for Apache Hamilton, we'd love to incl
 - ⭐ Star us on [GitHub](https://github.com/apache/hamilton)
 - 🐦 Follow [@hamilton_os](https://twitter.com/hamilton_os) on Twitter/X
 - 📧 Join the [mailing lists](../asf/index.rst) for announcements
+
+```{toctree}
+:hidden:
+
+claude-code-plugin
+```
