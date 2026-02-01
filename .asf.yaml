@@ -56,6 +56,8 @@ github:
         dismiss_stale_reviews: false
         require_code_owner_reviews: false
         required_approving_review_count: 1
+  collaborators:
+    - Dev-iL
 
 notifications:
   commits:              commits@hamilton.apache.org
