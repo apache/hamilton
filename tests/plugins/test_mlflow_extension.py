@@ -17,9 +17,12 @@
 
 from pathlib import Path
 
-import mlflow
 import numpy as np
 import pytest
+
+# Skip entire module if mlflow is not available (e.g., Python 3.14+)
+mlflow = pytest.importorskip("mlflow")
+
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LinearRegression
 

@@ -481,17 +481,19 @@ def test_StrictIndexTypePandasDataFrameResult_build_result(outputs, expected_res
                 ),
                 "series2": pd.Series(
                     [4, 5, 6],
-                    index=pd.PeriodIndex(year=[2022, 2022, 2022], month=[1, 2, 3], freq="M"),
+                    index=pd.PeriodIndex.from_fields(
+                        year=[2022, 2022, 2022], month=[1, 2, 3], freq="M"
+                    ),
                 ),
                 "series3": pd.Series(
                     [4, 5, 6],
-                    index=pd.PeriodIndex(
+                    index=pd.PeriodIndex.from_fields(
                         year=[2022, 2022, 2022], month=[1, 1, 1], day=[3, 4, 5], freq="B"
                     ),
                 ),
                 "series4": pd.Series(
                     [4, 5, 6],
-                    index=pd.PeriodIndex(
+                    index=pd.PeriodIndex.from_fields(
                         year=[2022, 2022, 2022], month=[1, 1, 1], day=[4, 11, 18], freq="W"
                     ),
                 ),
