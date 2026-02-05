@@ -25,6 +25,7 @@
     "observability"
   ],
   "skills": [
+    "./skills/hamilton-dev-workflow",
     "./skills/core",
     "./skills/scale",
     "./skills/llm",

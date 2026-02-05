@@ -58,18 +58,18 @@ claude plugin install hamilton@apache/hamilton --scope user
 
 ### Option 2: For Apache Hamilton Contributors
 
-If you've cloned the Apache Hamilton repository, the skill is already available at `.claude/plugins/hamilton/skills/hamilton/` and will be automatically discovered by Claude Code. No installation needed!
+If you've cloned the Apache Hamilton repository, the plugin is already available at `.claude-plugin/` and will be automatically discovered by Claude Code. No installation needed!
 
-### Option 3: Manual Installation
+### Option 3: Manual Installation from Cloned Repo
 
-Copy the skill to your personal or project skills directory:
+Install the plugin from your local clone:
 
 ```bash
-# Personal (available everywhere)
-cp -r .claude/plugins/hamilton/skills/hamilton ~/.claude/skills/
+# From within the Hamilton repo directory
+claude plugin install ./.claude-plugin --scope user
 
-# Project-specific
-cp -r .claude/plugins/hamilton/skills/hamilton /path/to/your/project/.claude/skills/
+# Or copy the plugin directory
+cp -r .claude-plugin ~/.claude/plugins/hamilton
 ```
 
 ## Usage
@@ -207,7 +207,7 @@ Please [file an issue](https://github.com/apache/hamilton/issues/new) on GitHub 
 Even better - submit a pull request!
 
 1. **Fork the repository**: https://github.com/apache/hamilton
-2. **Make your changes**: Edit files in `.claude/plugins/hamilton/skills/hamilton/`
+2. **Make your changes**: Edit files in `.claude-plugin/`
 3. **Test thoroughly**: Try the skill with various Apache Hamilton scenarios
 4. **Submit a PR**: Include a clear description of your improvements
 
