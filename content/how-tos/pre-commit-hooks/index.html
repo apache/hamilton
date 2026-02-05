@@ -529,12 +529,12 @@ under the License.
 <section id="add-pre-commit-hooks-to-your-project">
 <h2>Add pre-commit hooks to your project<a class="headerlink" href="#add-pre-commit-hooks-to-your-project" title="Link to this heading">¶</a></h2>
 <p>Hooks are a mechanism of the <code class="docutils literal notranslate"><span class="pre">git</span></code> version control system. You can find your project’s hooks under the <code class="docutils literal notranslate"><span class="pre">.git/hooks</span></code> directory (it might be hidden by default). There should be many files with the <code class="docutils literal notranslate"><span class="pre">.sample</span></code> extension that serve as example scripts.</p>
-<p>The preferred way of working with pre-commit hooks is through the <a class="reference external" href="https://pre-commit.com/">pre-commit</a> Python library. This library allows you to import and configure hooks for your repository with a <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file.</p>
+<p>The preferred way of working with pre-commit hooks is through the <a class="reference external" href="https://github.com/j178/prek/">prek</a> library. This library allows you to import and configure hooks for your repository with a <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file.</p>
 <section id="steps-to-get-started">
 <h3>Steps to get started<a class="headerlink" href="#steps-to-get-started" title="Link to this heading">¶</a></h3>
 <ol class="arabic">
-<li><p>install the pre-commit library</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pre</span><span class="o">-</span><span class="n">commit</span>
+<li><p>install the prek library</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">prek</span>
 </pre></div>
 </div>
 </li>
@@ -543,7 +543,7 @@ under the License.
 <span class="nt">repos</span><span class="p">:</span>
 <span class="w">    </span><span class="c1"># repository with hook definitions</span>
 <span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/pre-commit-hooks</span>
-<span class="w">    </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v2.3.0</span><span class="w">  </span><span class="c1"># release version of the repo</span>
+<span class="w">    </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v6.0.0</span><span class="w">  </span><span class="c1"># release version of the repo</span>
 <span class="w">    </span><span class="nt">hooks</span><span class="p">:</span><span class="w">  </span><span class="c1"># list of hooks from the repo to include in this project</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">end-of-file-fixer</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">trailing-whitespace</span>
@@ -559,13 +559,13 @@ under the License.
 </div>
 </li>
 <li><p>install the hooks defined in <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code></p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pre-commit install</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">prek install</span>
 </pre></div>
 </div>
 <p>Now, hooks will automatically run on <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code></p>
 </li>
 <li><p>to manually run hooks</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pre-commit run --all-files</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">prek run --all-files</span>
 </pre></div>
 </div>
 </li>
