@@ -1,0 +1,71 @@
+name: Gateway Pattern Demo
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  # ------------------------------------------------------------------
+  # DUMMY JOB 1: A simple passing test
+  # ------------------------------------------------------------------
+  frontend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run fake frontend tests
+        run: |
+          echo "Compiling frontend..."
+          sleep 5
+          echo "Tests passed!"
+
+  # ------------------------------------------------------------------
+  # DUMMY JOB 2: A simple passing backend test
+  # ------------------------------------------------------------------
+  backend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run fake backend tests
+        run: |
+          echo "Compiling backend..."
+          sleep 5
+          echo "Tests passed!"
+
+  # ------------------------------------------------------------------
+  # DUMMY JOB 3: The "Risky" Job
+  # INSTRUCTIONS: Uncomment the 'exit 1' line below to simulate a failure
+  # and verify that 'ci-gateway' blocks the merge.
+  # ------------------------------------------------------------------
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run fake integration tests
+        run: |
+          echo "Running integration tests..."
+          sleep 5
+          # UNCOMMENT THE NEXT LINE TO TEST FAILURE BLOCKING:
+          # exit 1
+          echo "Integration passed!"
+
+  # ------------------------------------------------------------------
+  # THE GATEWAY JOB (The Solution)
+  # ------------------------------------------------------------------
+  ci-gateway:
+    runs-on: ubuntu-latest
+    if: always() # IMPORTANT: Run even if dependencies fail
+    needs:
+      - frontend-test
+      - backend-test
+      - integration-test
+    steps:
+      - name: Check status of all jobs
+        run: |
+          # Check if any of the dependencies failed or were cancelled
+          if [[ ${{ contains(needs.*.result, 'failure') }} == 'true' || ${{ contains(needs.*.result, 'cancelled') }} == 'true' ]]; then
+            echo "❌ ERROR: One or more critical jobs failed."
+            # This exit 1 is what tells GitHub "The required check failed"
+            exit 1
+          fi
+
+          echo "✅ SUCCESS: All checks passed. Ready to merge."
+          exit 0
