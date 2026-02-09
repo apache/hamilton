@@ -1,8 +1,8 @@
-# pre-commit hooks require a user to have installed `pre-commit`:
-#   $ brew install pre-commit
+# pre-commit hooks require a user to have installed `prek`:
+#   $ brew install prek
 # Then install the hooks within the repo:
 #   $ cd /PATH/TO/REPO
-#   $ pre-commit install
+#   $ prek install
 exclude: '^docs/code-comparisons/'  # skip the code comparisons directory
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
@@ -16,7 +16,7 @@ repos:
       - id: ruff-format
         # args: [ --diff ]  # Use for previewing changes
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       # ensures files are either empty or end with a blank line

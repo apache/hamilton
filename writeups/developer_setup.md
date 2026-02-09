@@ -54,10 +54,10 @@ Please be informed to use escape characters or wrap the argument in quote as sho
 pip install '.[dev,test]'
 ```
 
-Set up `pre-commit`, which will run some lightweight formatting and linting tasks on every commit.
+Set up `prek`, which will run some lightweight formatting and linting tasks on every commit.
 
 ```shell
-pre-commit install
+prek install
 ```
 
 ### Create a pull request
@@ -84,10 +84,10 @@ Make changes, commit them, and push them to your fork.
 git push origin HEAD
 ```
 
-Test your changes locally with `pre-commit`...
+Test your changes locally with `prek`...
 
 ```shell
-pre-commit run --all-files
+prek run --all-files
 ```
 
 ...and by following the steps in ["How to run unit tests"](#how-to-run-unit-tests).
@@ -113,7 +113,7 @@ The following values for `TASK` are recognized:
 * `async` = unit tests using the async driver
 * `dask` = unit tests using the `dask` adapter
 * `integrations` = tests on integrations with other frameworks
-* `pre-commit` = static analysis (i.e. linting)
+* `prek` = static analysis (i.e. linting)
 * `pyspark` = unit tests using the `spark` adapter
 * `ray` = unit tests using the `ray` adapter
 * `tests` = core unit tests with minimal requirements
