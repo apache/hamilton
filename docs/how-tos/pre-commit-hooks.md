@@ -30,12 +30,12 @@ Note that it's different from testing, which focuses on the behavior of the code
 ## Add pre-commit hooks to your project
 Hooks are a mechanism of the `git` version control system. You can find your project's hooks under the `.git/hooks` directory (it might be hidden by default). There should be many files with the `.sample` extension that serve as example scripts.
 
-The preferred way of working with pre-commit hooks is through the [pre-commit](https://pre-commit.com/) Python library. This library allows you to import and configure hooks for your repository with a `.pre-commit-config.yaml` file.
+The preferred way of working with pre-commit hooks is through the [prek](https://github.com/j178/prek/) library. This library allows you to import and configure hooks for your repository with a `.pre-commit-config.yaml` file.
 
 ### Steps to get started
-1. install the pre-commit library
+1. install the prek library
     ```python
-    pip install pre-commit
+    pip install prek
     ```
 
 2. add a `.pre-commit-config.yaml` to your repository
@@ -44,7 +44,7 @@ The preferred way of working with pre-commit hooks is through the [pre-commit](h
     repos:
         # repository with hook definitions
     -   repo: https://github.com/pre-commit/pre-commit-hooks
-        rev: v2.3.0  # release version of the repo
+        rev: v6.0.0  # release version of the repo
         hooks:  # list of hooks from the repo to include in this project
         -   id: end-of-file-fixer
         -   id: trailing-whitespace
@@ -60,13 +60,13 @@ The preferred way of working with pre-commit hooks is through the [pre-commit](h
 
 3. install the hooks defined in `.pre-commit-config.yaml`
     ```console
-    pre-commit install
+    prek install
     ```
     Now, hooks will automatically run on `git commit`
 
 4. to manually run hooks
     ```console
-    pre-commit run --all-files
+    prek run --all-files
     ```
 
 ## Custom Apache Hamilton pre-commit hooks
