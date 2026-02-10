@@ -24,6 +24,8 @@ import pytest
 from hamilton.io.utils import FILE_METADATA
 from hamilton.plugins.matplotlib_extensions import MatplotlibWriter
 
+matplotlib.use("Agg")  # "Headless" backend for testing purposes
+
 
 def figure1():
     fig = plt.figure()
