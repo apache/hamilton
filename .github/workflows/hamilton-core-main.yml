@@ -1,0 +1,48 @@
+name: Unit tests (hamilton-core)
+
+on:
+  workflow_dispatch:
+
+  pull_request:
+    branches:
+        - main
+    paths:
+        - '.github/**'
+        - 'hamilton/**'
+        - 'tests/**'
+        - 'pyproject.toml'
+
+jobs:
+  test:
+    name: "Unit Tests (hamilton-core)"
+    runs-on: ubuntu-latest
+    env:
+      UV_PRERELEASE: "allow"
+      HAMILTON_TELEMETRY_ENABLED: false
+
+    steps:
+        - name: Install Graphviz on Linux
+          if: runner.os == 'Linux'
+          run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends graphviz
+
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Install uv and set the python version
+          uses: astral-sh/setup-uv@v6
+          with:
+            python-version: "3.12"  # most popular Python version
+            enable-cache: true
+            cache-dependency-glob: "uv.lock"
+            activate-environment: true
+
+        - name: Install dependencies
+          run: |
+            uv venv
+            . .venv/bin/activate
+            uv pip install ./hamilton-core[core-tests]
+
+        # NOTE `test_caching.py` is the older caching mechanism
+        - name: Test hamilton main package
+          run: |
+            uv run pytest tests/ --ignore tests/integrations --ignore tests/plugins --ignore tests/test_caching.py
