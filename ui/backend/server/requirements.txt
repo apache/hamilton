@@ -17,7 +17,7 @@ certifi==2024.7.4
 cffi==1.16.0
 charset-normalizer==3.3.0
 colorlog==6.7.0
-cryptography==44.0.1
+cryptography==46.0.5
 ddsketch==2.0.4
 ddtrace==1.15.0
 Deprecated==1.2.14
