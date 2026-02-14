@@ -223,6 +223,8 @@ extend-select = [
 #    "PERF",# Linting rules for performance
 #    "PIE", # flake8-pie rules
 #    "PT",  # flake8-pytest-style rules
+    "PT006",
+    "PT007",
 #    "PYI", # Linting rules for type annotations.
     "Q",   # Linting rules for quites
 #    "RUF", # Unused noqa directive

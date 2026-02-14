@@ -41,7 +41,7 @@ from tests.resources.dq_dummy_examples import (
 
 
 @pytest.mark.parametrize(
-    "output_type, kwargs, importance, expected",
+    ("output_type", "kwargs", "importance", "expected"),
     [
         (int, {"equal_to": 1}, "warn", [SampleDataValidator1(importance="warn", equal_to=1)]),
         (int, {"equal_to": 5}, "fail", [SampleDataValidator1(importance="fail", equal_to=5)]),
@@ -79,7 +79,7 @@ def test_resolve_default_validators(output_type, kwargs, importance, expected):
 
 
 @pytest.mark.parametrize(
-    "output_type, kwargs, importance",
+    ("output_type", "kwargs", "importance"),
     [(str, {"dataset_length": 1}, "warn"), (pd.Series, {"equal_to": 1}, "warn")],
 )
 def test_resolve_default_validators_error(output_type, kwargs, importance):
@@ -93,7 +93,7 @@ def test_resolve_default_validators_error(output_type, kwargs, importance):
 
 
 @pytest.mark.parametrize(
-    "cls,param,data,should_pass",
+    ("cls", "param", "data", "should_pass"),
     [
         (
             default_validators.DataInRangeValidatorPandasSeries,

@@ -31,7 +31,7 @@ class Object:
 
 
 @pytest.mark.parametrize(
-    "value_to_convert, module_set, expected_value, expected_error",
+    ("value_to_convert", "module_set", "expected_value", "expected_error"),
     [
         ("a", {"amodule"}, "a", None),
         (

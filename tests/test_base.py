@@ -78,7 +78,7 @@ class _Foo:
 
 
 @pytest.mark.parametrize(
-    "outputs,expected_result",
+    ("outputs", "expected_result"),
     [
         ({"a": 1}, pd.DataFrame([{"a": 1}])),
         ({"a": pd.Series([1, 2, 3])}, pd.DataFrame({"a": pd.Series([1, 2, 3])})),
@@ -227,7 +227,7 @@ def test_PandasDataFrameResult_build_result_errors(outputs):
 
 
 @pytest.mark.parametrize(
-    "outputs,expected_result",
+    ("outputs", "expected_result"),
     [
         (
             {
@@ -301,7 +301,7 @@ PD_VERSION = version.parse(pd.__version__)
 
 
 @pytest.mark.parametrize(
-    "outputs,expected_result",
+    ("outputs", "expected_result"),
     [
         ({"a": pd.Series([1, 2, 3])}, ({"RangeIndex:::int64": ["a"]}, {}, {})),
         (
@@ -378,7 +378,7 @@ def test_PandasDataFrameResult_pandas_index_types(outputs, expected_result):
 
 
 @pytest.mark.parametrize(
-    "all_index_types,time_indexes,no_indexes,expected_result",
+    ("all_index_types", "time_indexes", "no_indexes", "expected_result"),
     [
         ({"foo": ["a", "b", "c"]}, {}, {}, True),
         ({"int-index": ["a"], "no-index": ["b"]}, {}, {"no-index": ["b"]}, True),
@@ -409,7 +409,7 @@ def test_PandasDataFrameResult_check_pandas_index_types_match(
 
 
 @pytest.mark.parametrize(
-    "outputs,expected_result",
+    ("outputs", "expected_result"),
     [
         ({"a": pd.Series([1, 2, 3])}, pd.DataFrame({"a": pd.Series([1, 2, 3])})),
         (

@@ -237,7 +237,7 @@ def create_dummy_task(task_purpose: NodeGroupPurpose):
 
 
 @pytest.mark.parametrize(
-    "purpose, check",
+    ("purpose", "check"),
     [
         (NodeGroupPurpose.EXECUTE_BLOCK, lambda x: isinstance(x, MultiProcessingExecutor)),
         (NodeGroupPurpose.EXECUTE_SINGLE, lambda x: isinstance(x, SynchronousLocalTaskExecutor)),

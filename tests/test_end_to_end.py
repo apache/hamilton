@@ -130,7 +130,7 @@ def modify_and_import(module_name, package, modification_func):
 
 
 @pytest.mark.parametrize(
-    "driver_factory,future_import_annotations",
+    ("driver_factory", "future_import_annotations"),
     [
         (lambda modules: driver.Driver({"region": "US"}, *modules), False),
         (

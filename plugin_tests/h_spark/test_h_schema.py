@@ -36,7 +36,7 @@ def spark_session():
 
 
 @pytest.mark.parametrize(
-    "spark_type,arrow_type",
+    ("spark_type", "arrow_type"),
     [
         (pt.NullType(), pa.null()),
         (pt.BooleanType(), pa.bool_()),

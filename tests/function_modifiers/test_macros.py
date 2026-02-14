@@ -107,7 +107,7 @@ def _a_b_c(a: int, b: int, c: int) -> int:
 
 
 @pytest.mark.parametrize(
-    "fn,replace_with,argument_mapping,matches",
+    ("fn", "replace_with", "argument_mapping", "matches"),
     [
         (_no_params, _empty, {}, True),
         (_no_params, _kwargs, {}, True),
@@ -259,7 +259,7 @@ def _test_apply_function(foo: int, bar: int, baz: int = 100) -> int:
 
 
 @pytest.mark.parametrize(
-    "args,kwargs,chain_first_param",
+    ("args", "kwargs", "chain_first_param"),
     [
         ([source("foo_upstream"), value(1)], {}, False),
         ([value(1)], {}, True),
@@ -279,7 +279,7 @@ def test_applicable_validates_correctly(args, kwargs, chain_first_param: bool):
 
 
 @pytest.mark.parametrize(
-    "args,kwargs,chain_first_param",
+    ("args", "kwargs", "chain_first_param"),
     [
         (
             [source("foo_upstream"), value(1)],

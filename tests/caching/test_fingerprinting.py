@@ -127,7 +127,7 @@ def test_max_recursion_depth():
 
 
 @pytest.mark.parametrize(
-    "obj,expected_hash",
+    ("obj", "expected_hash"),
     [
         ("hello-world", "IJUxIYl1PeatR9_iDL6X7A=="),
         (17.31231, "vAYX8MD8yEHK6dwnIPVUaw=="),
@@ -142,7 +142,7 @@ def test_hash_primitive(obj, expected_hash):
 
 
 @pytest.mark.parametrize(
-    "obj,expected_hash",
+    ("obj", "expected_hash"),
     [
         ([0, True, "hello-world"], "Pg9LP3Y-8yYsoWLXedPVKDwTAa7W8_fjJNTTUA=="),
         ((17.0, False, "world"), "wyuuKMuL8rp53_CdYAtyMmyetnTJ9LzmexhJrQ=="),

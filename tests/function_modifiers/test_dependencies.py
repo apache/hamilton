@@ -26,7 +26,7 @@ from hamilton.function_modifiers.dependencies import (
 
 
 @pytest.mark.parametrize(
-    "upstream_source,expected",
+    ("upstream_source", "expected"),
     [("foo", UpstreamDependency("foo")), (UpstreamDependency("bar"), UpstreamDependency("bar"))],
 )
 def test_upstream(upstream_source, expected):
@@ -34,7 +34,7 @@ def test_upstream(upstream_source, expected):
 
 
 @pytest.mark.parametrize(
-    "literal_value,expected",
+    ("literal_value", "expected"),
     [
         ("foo", LiteralDependency("foo")),
         (LiteralDependency("foo"), LiteralDependency("foo")),
@@ -46,7 +46,7 @@ def test_literal(literal_value, expected):
 
 
 @pytest.mark.parametrize(
-    "args,kwargs",
+    ("args", "kwargs"),
     [
         ([source("foo"), source("bar")], {}),
         ([source("foo"), value("bar")], {}),
@@ -62,7 +62,7 @@ def test_validate_group_happy(args, kwargs):
 
 
 @pytest.mark.parametrize(
-    "args,kwargs",
+    ("args", "kwargs"),
     [
         ([source("foo"), source("bar")], {"foo": source("foo")}),
         ([source("foo"), value("bar")], {"foo": source("foo")}),

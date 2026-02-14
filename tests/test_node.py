@@ -99,7 +99,7 @@ def test_node_handles_annotated():
 
 
 @pytest.mark.parametrize(
-    "tags, query, expected",
+    ("tags", "query", "expected"),
     [
         ({}, {"module": "tests.resources.tagging"}, False),
         ({"module": "tests.resources.tagging"}, {}, True),

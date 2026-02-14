@@ -254,7 +254,7 @@ def test_logging_async_nodes(caplog):
 
 
 @pytest.mark.parametrize(
-    ["executor_type", "executor_args", "check_context"],
+    ("executor_type", "executor_args", "check_context"),
     [
         (executors.SynchronousLocalTaskExecutor, {}, True),
         (executors.MultiProcessingExecutor, {"max_tasks": 1}, False),

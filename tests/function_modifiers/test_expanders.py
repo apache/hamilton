@@ -365,7 +365,7 @@ class MyDictInheritanceBadCase(TypedDict):
 
 
 @pytest.mark.parametrize(
-    "return_type_str,fields",
+    ("return_type_str", "fields"),
     [
         ("MyDict", ()),
         ("MyDict", {"test2": str}),
@@ -389,7 +389,7 @@ def test_extract_fields_valid_annotations_for_inferred_types(return_type_str, fi
 
 
 @pytest.mark.parametrize(
-    "return_type_str,fields",
+    ("return_type_str", "fields"),
     [
         ("int", {"A": int}),
         ("list", {"A": int}),
@@ -765,7 +765,7 @@ def test_unpack_fields_transform_on_indeterminate_tuple():
 
 
 @pytest.mark.parametrize(
-    "return_type_str,fields",
+    ("return_type_str", "fields"),
     [
         ("tuple[int, int]", ("A", "B")),
         ("tuple[int, int, str]", ("A", "B", "C")),
@@ -783,7 +783,7 @@ def test_unpack_fields_valid_type_annotations(return_type_str, fields):
 
 
 @pytest.mark.parametrize(
-    "return_type_str,fields",
+    ("return_type_str", "fields"),
     [
         ("int", ("A",)),
         ("list", ("A",)),
@@ -1037,7 +1037,7 @@ def test_inject_multiple_things():
 
 
 @pytest.mark.parametrize(
-    "annotated_type,cls,expected",
+    ("annotated_type", "cls", "expected"),
     [
         (list[int], GroupedListDependency, int),
         (list[list[int]], GroupedListDependency, list[int]),
@@ -1056,7 +1056,7 @@ def test_resolve_dependency_type_happy(
 
 
 @pytest.mark.parametrize(
-    "annotated_type,cls",
+    ("annotated_type", "cls"),
     [
         (int, GroupedDictDependency),
         (int, GroupedListDependency),

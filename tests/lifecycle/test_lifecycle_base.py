@@ -66,7 +66,7 @@ def _valid_function_self_kwargs(self, *, a: int, b: int) -> int:
 
 
 @pytest.mark.parametrize(
-    "fn,returns_value,specified_return_value",
+    ("fn", "returns_value", "specified_return_value"),
     [
         (_valid_function_empty, False, None),
         (_valid_function_returns_value, True, None),
@@ -104,7 +104,7 @@ def _function_with_return_annotation() -> int:
 
 
 @pytest.mark.parametrize(
-    "fn, returns_value",
+    ("fn", "returns_value"),
     [
         (_valid_function_empty, True),
         (_valid_function_returns_value, False),

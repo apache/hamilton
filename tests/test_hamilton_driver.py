@@ -154,7 +154,7 @@ def test_driver_variables_exposes_tags():
 
 
 @pytest.mark.parametrize(
-    "filter,expected",
+    ("filter", "expected"),
     [
         (None, {"a", "b_c", "b", "c", "d"}),  # no filter
         ({}, {"a", "b_c", "b", "c", "d"}),  # empty filter

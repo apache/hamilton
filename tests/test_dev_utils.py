@@ -23,7 +23,7 @@ from hamilton.dev_utils.deprecation import DeprecationError, Version, deprecated
 
 
 @pytest.mark.parametrize(
-    "version_1, version_2, op",
+    ("version_1", "version_2", "op"),
     [
         (Version(0, 1, 2), Version(0, 1, 2), operator.eq),
         (Version(0, 1, 2), Version(0, 1, 3), operator.lt),
@@ -37,7 +37,8 @@ def test_version_compare(version_1, version_2, op):
 
 
 @pytest.mark.parametrize(
-    "version_tuple,version", [((0, 1, 2), Version(0, 1, 2)), ((0, 1, 2, "rc1"), Version(0, 1, 2))]
+    ("version_tuple", "version"),
+    [((0, 1, 2), Version(0, 1, 2)), ((0, 1, 2, "rc1"), Version(0, 1, 2))],
 )
 def test_from_version_tuple(version_tuple, version):
     assert Version.from_version_tuple(version_tuple) == version

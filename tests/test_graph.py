@@ -780,7 +780,7 @@ def test_function_graph_display_content(tmp_path: pathlib.Path):
 
 
 @pytest.mark.parametrize(
-    "filename, keep_dot", [("dag", False), ("dag.png", False), ("dag", True), ("dag.png", True)]
+    ("filename", "keep_dot"), [("dag", False), ("dag.png", False), ("dag", True), ("dag.png", True)]
 )
 def test_function_graph_display_output_filename(
     tmp_path: pathlib.Path, filename: str, keep_dot: bool
@@ -915,7 +915,7 @@ def test_function_graph_display_orient(orient: str):
     assert f"rankdir={orient}" in dot.source
 
 
-@pytest.mark.parametrize("hide_inputs", [(True,), (False,)])
+@pytest.mark.parametrize("hide_inputs", [True, False])
 def test_function_graph_display_inputs(hide_inputs: bool):
     config = {"b": 1, "c": 2}
     fg = graph.FunctionGraph.from_modules(tests.resources.dummy_functions, config=config)
@@ -949,7 +949,7 @@ def test_function_graph_display_without_saving():
     assert isinstance(digraph, graphviz.Digraph)
 
 
-@pytest.mark.parametrize("display_fields", [(True,), (False,)])
+@pytest.mark.parametrize("display_fields", [True, False])
 def test_function_graph_display_fields(display_fields: bool):
     @schema.output(("foo", "int"), ("bar", "float"), ("baz", "str"))
     def df_with_schema() -> pd.DataFrame:
@@ -1172,7 +1172,7 @@ def test_end_to_end_with_generics():
 
 
 @pytest.mark.parametrize(
-    "config,inputs,overrides",
+    ("config", "inputs", "overrides"),
     [
         # testing with no provided inputs
         ({}, {}, {}),

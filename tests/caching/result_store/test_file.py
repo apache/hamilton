@@ -109,7 +109,7 @@ def test_delete_all(file_store):
 
 
 @pytest.mark.parametrize(
-    "format,value",
+    ("format", "value"),
     [
         ("json", {"key1": "value1", "key2": 2}),
         ("pickle", ("value1", "value2", "value3")),

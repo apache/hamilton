@@ -319,7 +319,7 @@ def test_smoke_screen_udf_graph_adapter(spark_session):
 
 # Test cases for python_to_spark_type function
 @pytest.mark.parametrize(
-    "python_type,expected_spark_type",
+    ("python_type", "expected_spark_type"),
     [
         (int, types.IntegerType()),
         (float, types.FloatType()),
@@ -341,7 +341,7 @@ def test_python_to_spark_type_invalid(invalid_python_type):
 # Test cases for get_spark_type function
 # 1. Basic Python types
 @pytest.mark.parametrize(
-    "return_type,expected_spark_type",
+    ("return_type", "expected_spark_type"),
     [
         (int, types.IntegerType()),
         (float, types.FloatType()),
@@ -356,7 +356,7 @@ def test_get_spark_type_basic_types(return_type, expected_spark_type):
 
 # 2. Lists of basic Python types
 @pytest.mark.parametrize(
-    "return_type,expected_spark_type",
+    ("return_type", "expected_spark_type"),
     [
         (int, types.ArrayType(types.IntegerType())),
         (float, types.ArrayType(types.FloatType())),
@@ -372,7 +372,7 @@ def test_get_spark_type_list_types(return_type, expected_spark_type):
 
 # 3. Numpy types (assuming you have a numpy_to_spark_type function that handles these)
 @pytest.mark.parametrize(
-    "return_type,expected_spark_type",
+    ("return_type", "expected_spark_type"),
     [
         (np.int64, types.IntegerType()),
         (np.float64, types.FloatType()),
@@ -548,7 +548,7 @@ def _two_pyspark_dataframe_parameters(foo: DataFrame, bar: int, baz: DataFrame) 
 
 
 @pytest.mark.parametrize(
-    "fn,requested_parameter,expected",
+    ("fn", "requested_parameter", "expected"),
     [
         (_only_pyspark_dataframe_parameter, "foo", "foo"),
         (_one_pyspark_dataframe_parameter, "foo", "foo"),
@@ -564,7 +564,7 @@ def test_derive_dataframe_parameter_succeeds(fn, requested_parameter, expected):
 
 
 @pytest.mark.parametrize(
-    "fn,requested_parameter",
+    ("fn", "requested_parameter"),
     [
         (_no_pyspark_dataframe_parameter, "foo"),
         (_no_pyspark_dataframe_parameter, None),
@@ -871,7 +871,7 @@ def not_pyspark_fn(foo: DataFrame, bar: DataFrame) -> DataFrame:
 
 
 @pytest.mark.parametrize(
-    "fn,expected", [(pyspark_fn_1, True), (pyspark_fn_2, True), (not_pyspark_fn, False)]
+    ("fn", "expected"), [(pyspark_fn_1, True), (pyspark_fn_2, True), (not_pyspark_fn, False)]
 )
 def test_is_default_pyspark_node(fn, expected):
     node_ = node.Node.from_fn(fn)

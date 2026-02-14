@@ -34,7 +34,7 @@ TEST_DATA_FOR_YAML = [
 ]
 
 
-@pytest.mark.parametrize("data, file_name", TEST_DATA_FOR_YAML)
+@pytest.mark.parametrize(("data", "file_name"), TEST_DATA_FOR_YAML)
 def test_yaml_loader(tmp_path: pathlib.Path, data, file_name):
     path = tmp_path / pathlib.Path(file_name)
     with path.open(mode="w") as f:
@@ -45,7 +45,7 @@ def test_yaml_loader(tmp_path: pathlib.Path, data, file_name):
     assert loaded_data[0] == data
 
 
-@pytest.mark.parametrize("data, file_name", TEST_DATA_FOR_YAML)
+@pytest.mark.parametrize(("data", "file_name"), TEST_DATA_FOR_YAML)
 def test_yaml_saver(tmp_path: pathlib.Path, data, file_name):
     path = tmp_path / pathlib.Path(file_name)
     saver = YAMLDataSaver(path)
@@ -56,7 +56,7 @@ def test_yaml_saver(tmp_path: pathlib.Path, data, file_name):
     assert data == loaded_data
 
 
-@pytest.mark.parametrize("data, file_name", TEST_DATA_FOR_YAML)
+@pytest.mark.parametrize(("data", "file_name"), TEST_DATA_FOR_YAML)
 def test_yaml_loader_and_saver(tmp_path: pathlib.Path, data, file_name):
     path = tmp_path / pathlib.Path(file_name)
     saver = YAMLDataSaver(path)
@@ -68,7 +68,7 @@ def test_yaml_loader_and_saver(tmp_path: pathlib.Path, data, file_name):
 
 
 @pytest.mark.parametrize(
-    "type_,classes,correct_class",
+    ("type_", "classes", "correct_class"),
     [(t, [YAMLDataLoader], YAMLDataLoader) for t in PrimitiveTypes],
 )
 def test_resolve_correct_loader_class(
@@ -78,7 +78,7 @@ def test_resolve_correct_loader_class(
 
 
 @pytest.mark.parametrize(
-    "type_,classes,correct_class",
+    ("type_", "classes", "correct_class"),
     [(t, [YAMLDataSaver], YAMLDataSaver) for t in PrimitiveTypes],
 )
 def test_resolve_correct_saver_class(

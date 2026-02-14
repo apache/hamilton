@@ -171,7 +171,7 @@ class CustomResultBuilder(base.ResultMixin):
 
 
 @pytest.mark.parametrize(
-    "adapter, expected",
+    ("adapter", "expected"),
     [
         (
             base.SimplePythonDataFrameGraphAdapter(),
@@ -195,7 +195,7 @@ def test_get_adapter_name(adapter, expected):
 
 
 @pytest.mark.parametrize(
-    "adapter, expected",
+    ("adapter", "expected"),
     [
         (base.SimplePythonDataFrameGraphAdapter(), "hamilton.base.PandasDataFrameResult"),
         (base.DefaultAdapter(), "hamilton.base.DictResult"),

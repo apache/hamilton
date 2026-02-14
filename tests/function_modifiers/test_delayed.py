@@ -38,7 +38,7 @@ CONFIG_WITH_POWER_MODE_DISABLED = {
 
 
 @pytest.mark.parametrize(
-    "fn,required,optional",
+    ("fn", "required", "optional"),
     [
         (lambda: 1, [], {}),
         (lambda a, b: 1, ["a", "b"], {}),

@@ -330,7 +330,7 @@ def test_validate_selects_correct_type():
 # Note that this tests an internal API, but we would like to test this to ensure
 # class selection is correct
 @pytest.mark.parametrize(
-    "type_,classes,correct_class",
+    ("type_", "classes", "correct_class"),
     [
         (str, [StringDataLoader, IntDataLoader, IntDataLoader2], StringDataLoader),
         (int, [StringDataLoader, IntDataLoader, IntDataLoader2], IntDataLoader2),

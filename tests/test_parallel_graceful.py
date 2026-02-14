@@ -56,7 +56,7 @@ def _make_driver(
 
 
 @pytest.mark.parametrize(
-    "test_state, try_parallel, fail_first, expected_value",
+    ("test_state", "try_parallel", "fail_first", "expected_value"),
     [
         ("early", True, False, [None]),
         ("middle", True, False, [0.0, 6.0, 12.0, 18.0, 24.0, None]),

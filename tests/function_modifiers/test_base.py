@@ -32,7 +32,7 @@ power_mode_k = settings.ENABLE_POWER_USER_MODE
 
 
 @pytest.mark.parametrize(
-    "config,config_required,config_optional_with_defaults,expected",
+    ("config", "config_required", "config_optional_with_defaults", "expected"),
     [
         ({"foo": 1}, ["foo"], None, {"foo": 1, power_mode_k: False}),
         ({"foo": 1}, ["foo"], {}, {"foo": 1, power_mode_k: False}),
@@ -69,7 +69,7 @@ def test_merge_config_happy(config, config_required, config_optional_with_defaul
 
 
 @pytest.mark.parametrize(
-    "config,config_required,config_optional_with_defaults",
+    ("config", "config_required", "config_optional_with_defaults"),
     [
         ({"foo": 1}, ["bar"], {}),
         ({"bar": 2}, ["foo"], {"baz": 3}),
@@ -97,7 +97,7 @@ def _create_node_set(names_to_deps: dict[str, list[str]]) -> list[Node]:
 
 
 @pytest.mark.parametrize(
-    "target,nodes,expected",
+    ("target", "nodes", "expected"),
     [
         # Testing None -- E.G. final nodes
         (None, {}, []),
@@ -145,7 +145,7 @@ def test_select_nodes_happy(
 
 
 @pytest.mark.parametrize(
-    "target,nodes",
+    ("target", "nodes"),
     [
         ("d", _create_node_set({"a": []})),
         (["d", "a"], _create_node_set({"a": []})),

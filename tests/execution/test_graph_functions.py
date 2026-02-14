@@ -60,7 +60,7 @@ def _assert_topologically_sorted(nodes, sorted_nodes):
 
 
 @pytest.mark.parametrize(
-    "dag_input, expected_sorted_nodes",
+    ("dag_input", "expected_sorted_nodes"),
     [
         ({"a": [], "b": ["a"], "c": ["a"], "d": ["b", "c"], "e": ["d"]}, ["a", "b", "c", "d", "e"]),
         ({}, []),
@@ -109,7 +109,7 @@ def _is(name: str) -> Callable[[node.Node], bool]:
 
 
 @pytest.mark.parametrize(
-    "dag_repr, expected_nodes_in_between, start_node, end_node",
+    ("dag_repr", "expected_nodes_in_between", "start_node", "end_node"),
     [
         (
             {"a": [], "b": ["a"], "c": ["b"]},

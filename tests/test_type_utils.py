@@ -38,7 +38,7 @@ custom_type = typing.TypeVar("FOOBAR")
 
 
 @pytest.mark.parametrize(
-    "param_type,requested_type,expected",
+    ("param_type", "requested_type", "expected"),
     [
         (custom_type, custom_type, True),
         (custom_type, typing.TypeVar("FOO"), False),
@@ -93,7 +93,7 @@ def test_custom_subclass_check(param_type, requested_type, expected):
 
 
 @pytest.mark.parametrize(
-    "param_type,required_type,expected",
+    ("param_type", "required_type", "expected"),
     [
         (typing.TypeVar("FOO"), typing.TypeVar("BAR"), False),
         (custom_type, custom_type, True),
@@ -147,7 +147,7 @@ def test_validate_types_sad(type_):
 
 
 @pytest.mark.parametrize(
-    "candidate,type_,expected",
+    ("candidate", "type_", "expected"),
     [
         (int, int, True),  # a class is always a subclass of itself.
         (int, float, False),
@@ -211,7 +211,7 @@ def test_type_as_string_with_annotated_type():
 
 
 @pytest.mark.parametrize(
-    "node_type,input_value",
+    ("node_type", "input_value"),
     [
         (pd.DataFrame, pd.Series([1, 2, 3])),
         (list, {}),
@@ -249,7 +249,7 @@ T = typing.TypeVar("T")
 
 
 @pytest.mark.parametrize(
-    "node_type,input_value",
+    ("node_type", "input_value"),
     [
         (typing.Any, None),
         (pd.Series, pd.Series([1, 2, 3])),

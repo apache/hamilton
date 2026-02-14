@@ -491,7 +491,7 @@ def test_nested_subdag_with_config_remapping_missing_error():
 
 
 @pytest.mark.parametrize(
-    "configuration,fields,expected",
+    ("configuration", "fields", "expected"),
     [
         ({"a": 1, "b": 2}, {}, {"a": 1, "b": 2}),
         ({"a": 1, "b": 2}, {"c": value(3)}, {"a": 1, "b": 2, "c": 3}),
@@ -653,7 +653,7 @@ def test_nested_parameterized_subdag_with_config():
 
 
 @pytest.mark.parametrize(
-    "config, inputs",
+    ("config", "inputs"),
     [
         ({"foo": "bar"}, {}),
         ({"foo": "bar"}, {"input": source("foo")}),
@@ -665,7 +665,7 @@ def test_recursive_validate_config_inputs_happy(config, inputs):
 
 
 @pytest.mark.parametrize(
-    "config, inputs",
+    ("config", "inputs"),
     [
         ({"foo": "bar"}, {"foo": source("baz")}),
         ({"foo": "bar"}, {"input": "baz"}),
