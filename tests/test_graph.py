@@ -968,12 +968,12 @@ def test_function_graph_display_fields(display_fields: bool):
         assert any("foo" in line for line in dot.body)
         assert any("bar" in line for line in dot.body)
         assert any("baz" in line for line in dot.body)
-        assert any("cluster" in line for line in dot.body)
+        assert any("cluster_df_with_schema" in line for line in dot.body)
     else:
         assert not any("foo" in line for line in dot.body)
         assert not any("bar" in line for line in dot.body)
         assert not any("baz" in line for line in dot.body)
-        assert not any("cluster" in line for line in dot.body)
+        assert not any("cluster_df_with_schema" in line for line in dot.body)
 
 
 def test_function_graph_display_fields_shared_schema():

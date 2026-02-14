@@ -18,6 +18,7 @@
 import datetime
 
 import polars as pl
+from polars.exceptions import InvalidOperationError
 from hamilton_sdk.tracking import dataframe_stats as dfs
 
 
@@ -34,7 +35,7 @@ def missing(col: pl.Series) -> int:
     try:
         # only for floats does is_nan() work.
         nan_count = col.is_nan().sum()
-    except pl.InvalidOperationError:
+    except InvalidOperationError:
         nan_count = 0
     return col.is_null().sum() + nan_count
 
@@ -80,7 +81,7 @@ def quantiles(col: pl.Series, quantile_cuts: list[float]) -> dict[float, float]:
     try:
         for q in quantile_cuts:
             result[q] = col.quantile(q)
-    except pl.InvalidOperationError:
+    except InvalidOperationError:
         return {}
     return result
 
@@ -91,7 +92,7 @@ def histogram(col: pl.Series, num_hist_bins: int = 10) -> dict[str, int]:
         return {}
     try:
         hist_dict = col.drop_nulls().hist(bin_count=num_hist_bins).to_dict(as_series=False)
-    except pl.InvalidOperationError:
+    except InvalidOperationError:
         # happens for Date data types. TODO: convert them to numeric so we can get a histogram.
         return {}
     # Sort by category to ensure consistent ordering across Python versions

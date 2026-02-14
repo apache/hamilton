@@ -200,13 +200,13 @@ class PandasCSVReader(DataLoader):
             kwargs["keep_default_na"] = self.keep_default_na
         if self.na_filter is not None:
             kwargs["na_filter"] = self.na_filter
-        if self.verbose is not None:
+        if pd.__version__ < "3.0" and self.verbose is not None:
             kwargs["verbose"] = self.verbose
         if self.skip_blank_lines is not None:
             kwargs["skip_blank_lines"] = self.skip_blank_lines
         if self.parse_dates is not None:
             kwargs["parse_dates"] = self.parse_dates
-        if self.keep_date_col is not None:
+        if pd.__version__ < "3.0" and self.keep_date_col is not None:
             kwargs["keep_date_col"] = self.keep_date_col
         if self.date_format is not None:
             kwargs["date_format"] = self.date_format
@@ -242,7 +242,7 @@ class PandasCSVReader(DataLoader):
             kwargs["dialect"] = self.dialect
         if self.on_bad_lines is not None:
             kwargs["on_bad_lines"] = self.on_bad_lines
-        if self.delim_whitespace is not None:
+        if pd.__version__ < "3.0" and self.delim_whitespace is not None:
             kwargs["delim_whitespace"] = self.delim_whitespace
         if self.low_memory is not None:
             kwargs["low_memory"] = self.low_memory

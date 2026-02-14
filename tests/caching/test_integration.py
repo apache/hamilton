@@ -545,7 +545,9 @@ EXECUTORS_AND_STORES_CONFIGURATIONS += IN_MEMORY_CONFIGURATIONS
 
 
 @pytest.mark.parametrize(
-    ("executor", "metadata_store", "result_store"), EXECUTORS_AND_STORES_CONFIGURATIONS, indirect=True
+    ("executor", "metadata_store", "result_store"),
+    EXECUTORS_AND_STORES_CONFIGURATIONS,
+    indirect=True,
 )
 def test_parallel_synchronous_step_by_step(executor, metadata_store, result_store):  # noqa: F811
     dr = (

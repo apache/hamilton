@@ -210,8 +210,8 @@ async def test_user_has_visibility_when_granted_individual_access(role: str, db)
     await ProjectUserMembership.objects.acreate(project=project, user=user, role=role)
     assert (await user_project_visibility(authenticated_request, project=project)) == role
 
+
 @pytest.mark.asyncio
-@pytest.mark.parametrize("role", ["read", "write"])
 @pytest.mark.parametrize("role", ["read", "write"])
 async def test_user_does_not_have_visibility_when_not_granted_individual_access(role: str, db):
     authenticated_request = await _get_authenticated_request(
@@ -330,7 +330,7 @@ async def test_users_can_always_get_projects(db):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize(("role","allowed"), [("read", False), ("write", True)])
+@pytest.mark.parametrize(("role", "allowed"), [("read", False), ("write", True)])
 async def test_user_can_edit_project_by_id_visibility_role(role: str, allowed: bool, db):
     authenticated_request = await _get_authenticated_request("user_1_team_1@team1.com")
     user, teams = authenticated_request.auth
@@ -429,10 +429,13 @@ async def test_user_cannot_get_dag_template_with_no_access(db):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("role", [
-    "read",
-    "write",
-])
+@pytest.mark.parametrize(
+    "role",
+    [
+        "read",
+        "write",
+    ],
+)
 async def test_user_can_get_dag_templates_with_access(db, role):
     (
         dag_template,
@@ -459,7 +462,7 @@ async def test_user_cannot_get_dag_templates_with_no_access(db):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize(("role","allowed"), [("read", False), ("write", True)])
+@pytest.mark.parametrize(("role", "allowed"), [("read", False), ("write", True)])
 async def test_user_can_write_to_dag_template_with_access(db, role, allowed):
     (
         dag_template,

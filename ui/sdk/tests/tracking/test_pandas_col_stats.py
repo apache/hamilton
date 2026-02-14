@@ -99,7 +99,8 @@ def example_df_string():
             "c": ["k", "l", "m", "n", "o"],
             "d": ["p", "q", "r", "s", "t"],
             "e": ["u", "v", "w", "x", "y"],
-        }
+        },
+        dtype="object",
     )
 
 

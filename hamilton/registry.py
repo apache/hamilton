@@ -109,11 +109,7 @@ def initialize():
 
         try:
             load_extension(extension_name)
-        except NotImplementedError as e:
-            logger.debug(f"Did not load {extension_name} extension because {str(e)}.")
-        except ModuleNotFoundError as e:
-            logger.debug(f"Did not load {extension_name} extension because {e.msg}.")
-        except ImportError as e:
+        except (NotImplementedError, ImportError, Warning) as e:
             logger.debug(f"Did not load {extension_name} extension because {str(e)}.")
 
     global INITIALIZED

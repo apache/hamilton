@@ -23,7 +23,7 @@ def test_compute_stats_df():
     df = pd.DataFrame(
         {
             "a": [1, 2, 3, 4, 5],
-            "b": ["a", "b", "c", "d", "e"],
+            "b": pd.Series(["a", "b", "c", "d", "e"], dtype="object"),
             "c": [True, False, True, False, True],
             "d": [1.0, 2.0, 3.0, 4.0, 5.0],
             "e": pd.Categorical(["a", "b", "c", "d", "e"]),
@@ -33,7 +33,9 @@ def test_compute_stats_df():
                 ["20221231", None, "20221231", "20221231", "20221231"], dtype="datetime64[ns]"
             ),
             "i": pd.Series([None, None, None, None, None], name="a", dtype=float),
-            "j": pd.Series(name="a", data=pd.date_range("20230101", "20230105")),
+            "j": pd.Series(
+                name="a", data=pd.date_range("20230101", "20230105"), dtype="datetime64[ns]"
+            ),
         }
     )
     actual = ps.compute_stats_df(df, "test", {})

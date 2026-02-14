@@ -108,6 +108,7 @@ jobs:
             uv run pytest plugin_tests/h_dask
 
         - name: Test ray
+          if: ${{ matrix.python-version != '3.14' }}
           env:
             RAY_ENABLE_UV_RUN_RUNTIME_ENV: 0 # https://github.com/ray-project/ray/issues/53848
           run: |

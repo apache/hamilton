@@ -63,7 +63,7 @@ def test_adapters():
 def test_parallel_ray():
     """Tests ray works without sampling.
     Doesn't actually check the client - go do that in the UI."""
-    import ray
+    ray = pytest.importorskip("ray")
 
     from hamilton.plugins import h_ray
 
@@ -96,7 +96,7 @@ def test_parallel_ray():
 def test_parallel_ray_sample():
     """Tests ray works with sampling.
     Doesn't actually check the client - go do that in the UI."""
-    import ray
+    ray = pytest.importorskip("ray")
 
     from hamilton.plugins import h_ray
 
@@ -133,7 +133,7 @@ def test_parallel_ray_sample():
 def test_parallel_ray_sample_error():
     """Tests error returning a sample.
     Doesn't actually check the client - go do that in the UI."""
-    import ray
+    ray = pytest.importorskip("ray")
 
     from hamilton.plugins import h_ray
 

@@ -1,10 +1,10 @@
 ibis-framework
 langchain_core
-numpy<2  # SPARK-48710
+numpy
 polars
 pyarrow
 pyarrow_hotfix  # required for ibis tests
 pydantic
 pyspark
 pytest
-ray
+ray; python_version < "3.14"
