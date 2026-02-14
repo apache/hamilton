@@ -16,7 +16,6 @@
 # under the License.
 
 import inspect
-import sys
 from typing import Any, Literal, TypeVar
 
 import numpy as np
@@ -76,7 +75,7 @@ def test_node_handles_annotated():
 
     node = Node.from_fn(annotated_func)
     assert node.name == "annotated_func"
-    if major == 2 and minor > 1 and sys.version_info > (3, 9):  # greater that 2.1
+    if major == 2 and 2 <= minor <= 3:  # numpy 2.2-2.3
         expected = {
             "first": (
                 Annotated[np.ndarray[tuple[int, ...], np.dtype[np.float64]], Literal["N"]],
@@ -85,6 +84,15 @@ def test_node_handles_annotated():
             "other": (float, DependencyType.OPTIONAL),
         }
         expected_type = Annotated[np.ndarray[tuple[int, ...], np.dtype[np.float64]], Literal["N"]]
+    elif (major, minor) >= (2, 4):  # numpy 2.4+
+        expected = {
+            "first": (
+                Annotated[np.ndarray[tuple[Any, ...], np.dtype[np.float64]], Literal["N"]],
+                DependencyType.REQUIRED,
+            ),
+            "other": (float, DependencyType.OPTIONAL),
+        }
+        expected_type = Annotated[np.ndarray[tuple[Any, ...], np.dtype[np.float64]], Literal["N"]]
     else:
         expected = {
             "first": (

@@ -72,7 +72,7 @@ pandera = ["pandera"]
 pydantic = ["pydantic>=2.0"]
 pyspark = [
   # we have to run these dependencies because Spark does not check to ensure the right target was called
-  "pyspark[pandas_on_spark,sql]",
+  "pyspark[pandas_on_spark,sql] >= 4.0.0",
 ]
 ray = ["ray>=2.0.0; python_version < '3.14'", "pyarrow"]
 rich = ["rich"]
@@ -149,13 +149,13 @@ docs = [
   "mock==1.0.1", # read the docs pins
   "myst-nb",
   "narwhals",
-  "numpy < 2.0.0",
+  "numpy",
   "packaging",
   "pandera",
   "pillow",
   "polars",
   "pyarrow >= 1.0.0",
-  "pydantic >=2.0",
+  "pydantic >= 2.0",
   "pyspark",
   "openlineage-python",
   "PyYAML",

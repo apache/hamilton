@@ -43,12 +43,10 @@ class NumpyNpyWriter(DataSaver):
     fix_imports: bool | None = None
 
     def save_data(self, data: np.ndarray) -> dict[str, Any]:
-        np.save(
-            file=self.path,
-            arr=data,
-            allow_pickle=self.allow_pickle,
-            fix_imports=self.fix_imports,
-        )
+        kwargs = dict(file=self.path, arr=data, allow_pickle=self.allow_pickle)
+        if np.__version__ < "2.4" and self.fix_imports is not None:
+            kwargs["fix_imports"] = self.fix_imports
+        np.save(**kwargs)
         return utils.get_file_metadata(self.path)
 
     @classmethod
@@ -77,13 +75,15 @@ class NumpyNpyReader(DataLoader):
         return [np.ndarray]
 
     def load_data(self, type_: type) -> tuple[np.ndarray, dict[str, Any]]:
-        array = np.load(
+        kwargs = dict(
             file=self.path,
             mmap_mode=self.mmap_mode,
             allow_pickle=self.allow_pickle,
-            fix_imports=self.fix_imports,
             encoding=self.encoding,
         )
+        if np.__version__ < "2.4" and self.fix_imports is not None:
+            kwargs["fix_imports"] = self.fix_imports
+        array = np.load(**kwargs)
         metadata = utils.get_file_metadata(self.path)
         return array, metadata
 
