@@ -15,7 +15,20 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import sys
+
 from hamilton import telemetry
 
 # disable telemetry for all tests!
 telemetry.disable_telemetry()
+
+# Skip tests that require packages not yet available on Python 3.14
+collect_ignore = []
+if sys.version_info >= (3, 14):
+    collect_ignore.extend(
+        [
+            # ray - no Python 3.14 support yet
+            "test_h_ray.py",
+            "test_parse_ray_remote_options_from_tags.py",
+        ]
+    )

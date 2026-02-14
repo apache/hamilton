@@ -1,6 +1,6 @@
 line-length = 100
 
 
-[lint.per-file-ignores]
+[per-file-ignores]
 # skip line length for API client files.
 "src/dagworks/api/*" = ["E501"]
