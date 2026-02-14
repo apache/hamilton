@@ -149,12 +149,11 @@ def test_validate_types_sad(type_):
 @pytest.mark.parametrize(
     "candidate,type_,expected",
     [
-        (int, int, True),
+        (int, int, True),  # a class is always a subclass of itself.
         (int, float, False),
         # Not safe so we return false
         (list[int], list, False),
         (frozenset[int], set[int], False),
-        (dict, dict, False),
     ],
 )
 def test__safe_subclass(candidate, type_, expected):

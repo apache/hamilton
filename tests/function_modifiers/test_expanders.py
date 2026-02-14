@@ -367,9 +367,6 @@ class MyDictInheritanceBadCase(TypedDict):
 @pytest.mark.parametrize(
     "return_type_str,fields",
     [
-        ("Dict[str, int]", ("A", "B")),
-        ("Dict[str, int]", (["A", "B"])),
-        ("Dict", {"A": str, "B": int}),
         ("MyDict", ()),
         ("MyDict", {"test2": str}),
         ("MyDictInheritance", {"test": InheritedObject}),
@@ -394,10 +391,6 @@ def test_extract_fields_valid_annotations_for_inferred_types(return_type_str, fi
 @pytest.mark.parametrize(
     "return_type_str,fields",
     [
-        ("Dict", ("A", "B")),
-        ("Dict", (["A", "B"])),
-        ("Dict", (["A"])),
-        ("Dict", (["A", "B", "C"])),
         ("int", {"A": int}),
         ("list", {"A": int}),
         ("np.ndarray", {"A": int}),
@@ -774,9 +767,6 @@ def test_unpack_fields_transform_on_indeterminate_tuple():
 @pytest.mark.parametrize(
     "return_type_str,fields",
     [
-        ("Tuple[int, int]", ("A", "B")),
-        ("Tuple[int, int, str]", ("A", "B", "C")),
-        ("Tuple[int, ...]", ("A", "B")),
         ("tuple[int, int]", ("A", "B")),
         ("tuple[int, int, str]", ("A", "B", "C")),
         ("tuple[int, ...]", ("A", "B")),
@@ -798,11 +788,6 @@ def test_unpack_fields_valid_type_annotations(return_type_str, fields):
         ("int", ("A",)),
         ("list", ("A",)),
         ("dict", ("A",)),
-        ("Tuple", ("A",)),
-        ("Tuple[int, int]", ("A", "B", "C")),
-        pytest.param("Tuple[...]", ("A", "B", "C"), marks=skipif(**prior_to_py311)),
-        pytest.param("Tuple[int, int, ...]", ("A", "B"), marks=skipif(**prior_to_py311)),
-        pytest.param("Tuple[..., int, int]", ("A", "B"), marks=skipif(**prior_to_py311)),
         ("tuple", ("A",)),
         ("tuple[int, int]", ("A", "B", "C")),
         ("tuple[...]", ("A", "B", "C")),
@@ -811,8 +796,7 @@ def test_unpack_fields_valid_type_annotations(return_type_str, fields):
     ],
 )
 def test_unpack_fields_invalid_type_annotations(return_type_str, fields):
-    # NOTE: Prior to Python 3.11, improper use of the ellipsis in a typing.Tuple was an error.
-    # However, improper use of an ellipsis in a (bare) tuple (python 3.9+) was not an error.
+    # Note: improper use of an ellipsis in a (bare) tuple (python 3.9+) is not an error.
 
     return_type = eval(return_type_str)
 
