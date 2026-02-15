@@ -321,12 +321,15 @@ def _inspect_kwargs(kwargs: dict[str, Any]) -> tuple[DataFrame, dict[str, Any]]:
 def _format_pandas_udf(func_name: str, ordered_params: list[str]) -> str:
     formatting_params = {
         "name": func_name,
-        "return_type": "pd.Series",
-        "params": ", ".join([f"{param}: pd.Series" for param in ordered_params]),
+        "params": ", ".join(ordered_params),
         "param_call": ", ".join([f"{param}={param}" for param in ordered_params]),
     }
+    # NOTE: we intentionally omit type annotations here. The return type is passed
+    # explicitly to pyspark's pandas_udf(), and parameter annotations are not needed.
+    # On Python 3.14+, annotations in dynamically compiled code create __annotate__
+    # functions (PEP 749) that break PySpark's UDF serialization.
     func_string = """
-def {name}({params}) -> {return_type}:
+def {name}({params}):
     return partial_fn({param_call})
 """.format(**formatting_params)
     return func_string
@@ -380,7 +383,11 @@ def _fabricate_spark_function(
     else:
         func_string = _format_udf(func_name, ordered_params)
     module_code = compile(func_string, "<string>", "exec")
-    func_code = [c for c in module_code.co_consts if isinstance(c, CodeType)][0]
+    # Filter by name to avoid picking up __annotate__ or other helper code objects
+    # that Python 3.14+ may generate alongside the function (PEP 749).
+    func_code = [
+        c for c in module_code.co_consts if isinstance(c, CodeType) and c.co_name == func_name
+    ][0]
     return FunctionType(func_code, {**globals(), **{"partial_fn": partial_fn}}, func_name)
 
 

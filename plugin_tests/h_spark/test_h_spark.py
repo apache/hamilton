@@ -735,8 +735,7 @@ def test_with_columns_generate_nodes_specify_namespace():
 
 def test__format_pandas_udf():
     assert (
-        h_spark._format_pandas_udf("foo", ["a", "b"]).strip()
-        == "def foo(a: pd.Series, b: pd.Series) -> pd.Series:\n"
+        h_spark._format_pandas_udf("foo", ["a", "b"]).strip() == "def foo(a, b):\n"
         "    return partial_fn(a=a, b=b)"
     )
 
