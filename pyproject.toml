@@ -166,6 +166,7 @@ docs = [
   "slack-sdk",
   "sphinx", # unpinned because myst-parser doesn't break anymore
   "sphinx-autobuild",
+  "sphinx-llms-txt",
   "sphinx-rtd-theme", # read the docs pins
   "sphinx-simplepdf",
   "sphinx-sitemap",

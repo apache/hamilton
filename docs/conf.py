@@ -73,9 +73,17 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "myst_nb",
+    "sphinx_llms_txt",
     "sphinx_sitemap",
     "docs.data_adapters_extension",
 ]
+
+# sphinx-llms-txt configuration
+llms_txt_title = "Apache Hamilton"
+llms_txt_summary = (
+    "Apache Hamilton is a lightweight Python framework for creating "
+    "DAGs of data transformations using declarative function definitions."
+)
 
 nb_execution_mode = "off"
 
