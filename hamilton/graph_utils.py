@@ -21,7 +21,9 @@ from types import ModuleType
 
 
 def is_submodule(child: ModuleType, parent: ModuleType):
-    return parent.__name__ in child.__name__
+    if child is None:
+        return False
+    return child.__name__ == parent.__name__ or child.__name__.startswith(parent.__name__ + ".")
 
 
 def find_functions(function_module: ModuleType) -> list[tuple[str, Callable]]:
