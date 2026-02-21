@@ -16,6 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+```{figure} _static/hamilton-incubator-logo.svg
+:align: center
+:width: 240px
+
+Apache Hamilton (Incubator Podling) logo
 
 ```{include} main.md
 
@@ -32,6 +37,13 @@ hamilton-ui/index
 hamilton-vscode/index
 integrations/index
 code-comparisons/index
+```
+
+```{toctree}
+:hidden: True
+:caption: DOWNLOADS
+
+asf/downloads
 ```
 
 ```{toctree}
@@ -11236,6 +11248,145 @@ in sequence. The entire pipeline is defined in a module called `example_dag.py`,
 
 
 
+================
+Downloads
+================
+
+Official Apache Hamilton releases are available at the Apache Software Foundation distribution site.
+
+Release Downloads
+-----------------
+
+All releases can be found at: `https://downloads.apache.org/incubator/hamilton/ <https://downloads.apache.org/incubator/hamilton/>`_
+
+Each release includes:
+
+- Source distributions (.tar.gz, .zip)
+- Checksums (SHA512)
+- Digital signatures (.asc)
+
+Verifying Releases
+------------------
+
+To verify the integrity of downloaded files, you can:
+
+1. Verify the checksum matches the published SHA512 sum
+2. Verify the GPG signature using the KEYS file available at the downloads site
+
+Release History
+---------------
+
+Visit the `downloads directory <https://downloads.apache.org/incubator/hamilton/>`_ to see all available releases.
+
+Installation
+------------
+
+After downloading and verifying a release, you can install it using pip:
+
+.. code-block:: bash
+
+   pip install apache-hamilton-<version>.tar.gz
+
+Or install directly from PyPI:
+
+.. code-block:: bash
+
+   pip install apache-hamilton
+
+For more information about installation options, see the :doc:`Get Started guide </get-started/index>`.
+
+Official Releases
+-----------------
+
+The following are the official Apache Hamilton releases:
+
+- **1.89.0** (2025-10-11) - First Apache Hamilton release
+
+  - `Source (tar.gz) <https://downloads.apache.org/incubator/hamilton/1.89.0/apache-hamilton-1.89.0-incubating.tar.gz>`_
+  - `Checksums <https://downloads.apache.org/incubator/hamilton/1.89.0/apache-hamilton-1.89.0-incubating.tar.gz.sha512>`_
+  - `Signature <https://downloads.apache.org/incubator/hamilton/1.89.0/apache-hamilton-1.89.0-incubating.tar.gz.asc>`_
+
+
+================
+ASF
+================
+
+Apache Software Foundation links.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: ASF Links
+   :glob:
+   :hidden:
+
+   downloads
+   Apache Software Foundation <https://www.apache.org/>
+   License <https://www.apache.org/licenses/>
+   Events <https://www.apache.org/events/current-event.html>
+   Privacy <https://privacy.apache.org/policies/privacy-policy-public.html>
+   Security <https://www.apache.org/security/>
+   Sponsorship <https://www.apache.org/foundation/sponsorship.html>
+   Thanks <https://www.apache.org/foundation/thanks.html>
+   Code of Conduct <https://www.apache.org/foundation/policies/conduct.html>
+
+- :doc:`Downloads <downloads>`
+- `Foundation <https://www.apache.org/>`_
+- `License <https://www.apache.org/licenses/>`_
+- `Events <https://www.apache.org/events/current-event.html>`_
+- `Privacy <https://privacy.apache.org/policies/privacy-policy-public.html>`_
+- `Security <https://www.apache.org/security/>`_
+- `Sponsorship <https://www.apache.org/foundation/sponsorship.html>`_
+- `Thanks <https://www.apache.org/foundation/thanks.html>`_
+- `Code of Conduct <https://www.apache.org/foundation/policies/conduct.html>`_
+
+Mailing Lists
+=============
+
+Apache Hamilton uses mailing lists for project discussions, announcements, and community engagement.
+
+Users Mailing List
+------------------
+
+For general questions, discussions, and user support.
+
+**How to Subscribe**
+
+Send an empty email to users-subscribe@hamilton.apache.org. Use a subject line like "subscribe" to avoid spam filters. You will receive a confirmation message with instructions to complete the subscription process.
+
+**How to Unsubscribe**
+
+Send an empty message to users-unsubscribe@hamilton.apache.org from the same email address used to subscribe.
+
+**How to Post**
+
+Once subscribed, send messages to users@hamilton.apache.org
+
+**Archives**
+
+`View users list archives <https://lists.apache.org/list.html?users@hamilton.apache.org>`_
+
+Dev Mailing List
+----------------
+
+For development discussions, design proposals, and contributing to Apache Hamilton.
+
+**How to Subscribe**
+
+Send an empty email to dev-subscribe@hamilton.apache.org. Use a subject line like "subscribe" to avoid spam filters. You will receive a confirmation message with instructions to complete the subscription process.
+
+**How to Unsubscribe**
+
+Send an empty message to dev-unsubscribe@hamilton.apache.org from the same email address used to subscribe.
+
+**How to Post**
+
+Once subscribed, send messages to dev@hamilton.apache.org
+
+**Archives**
+
+`View dev list archives <https://lists.apache.org/list.html?dev@hamilton.apache.org>`_
+
+
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -13398,84 +13549,6 @@ If you do not wish to participate in telemetry capture, one can opt-out with one
    ```bash
    HAMILTON_TELEMETRY_ENABLED=false python NAME_OF_MY_DRIVER.py
    ```
-
-
-================
-ASF
-================
-
-Apache Software Foundation links.
-
-.. toctree::
-   :maxdepth: 1
-   :caption: ASF Links
-   :glob:
-   :hidden:
-
-   Apache Software Foundation <https://www.apache.org/>
-   License <https://www.apache.org/licenses/>
-   Events <https://www.apache.org/events/current-event.html>
-   Privacy <https://privacy.apache.org/policies/privacy-policy-public.html>
-   Security <https://www.apache.org/security/>
-   Sponsorship <https://www.apache.org/foundation/sponsorship.html>
-   Thanks <https://www.apache.org/foundation/thanks.html>
-   Code of Conduct <https://www.apache.org/foundation/policies/conduct.html>
-
-- `Foundation <https://www.apache.org/>`_
-- `License <https://www.apache.org/licenses/>`_
-- `Events <https://www.apache.org/events/current-event.html>`_
-- `Privacy <https://privacy.apache.org/policies/privacy-policy-public.html>`_
-- `Security <https://www.apache.org/security/>`_
-- `Sponsorship <https://www.apache.org/foundation/sponsorship.html>`_
-- `Thanks <https://www.apache.org/foundation/thanks.html>`_
-- `Code of Conduct <https://www.apache.org/foundation/policies/conduct.html>`_
-
-Mailing Lists
-=============
-
-Apache Hamilton uses mailing lists for project discussions, announcements, and community engagement.
-
-Users Mailing List
-------------------
-
-For general questions, discussions, and user support.
-
-**How to Subscribe**
-
-Send an empty email to users-subscribe@hamilton.apache.org. Use a subject line like "subscribe" to avoid spam filters. You will receive a confirmation message with instructions to complete the subscription process.
-
-**How to Unsubscribe**
-
-Send an empty message to users-unsubscribe@hamilton.apache.org from the same email address used to subscribe.
-
-**How to Post**
-
-Once subscribed, send messages to users@hamilton.apache.org
-
-**Archives**
-
-`View users list archives <https://lists.apache.org/list.html?users@hamilton.apache.org>`_
-
-Dev Mailing List
-----------------
-
-For development discussions, design proposals, and contributing to Apache Hamilton.
-
-**How to Subscribe**
-
-Send an empty email to dev-subscribe@hamilton.apache.org. Use a subject line like "subscribe" to avoid spam filters. You will receive a confirmation message with instructions to complete the subscription process.
-
-**How to Unsubscribe**
-
-Send an empty message to dev-unsubscribe@hamilton.apache.org from the same email address used to subscribe.
-
-**How to Post**
-
-Once subscribed, send messages to dev@hamilton.apache.org
-
-**Archives**
-
-`View dev list archives <https://lists.apache.org/list.html?dev@hamilton.apache.org>`_
 
 
 <!--

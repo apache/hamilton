@@ -309,6 +309,10 @@
 </ul>
 </li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">DOWNLOADS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="asf/downloads/">Downloads</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">PDF</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference external" href="https://hamilton.apache.org/_static/Hamilton.pdf">PDF</a></li>
@@ -442,6 +446,7 @@
 <p class="caption" role="heading"><span class="caption-text">ASF</span></p>
 <ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="asf/">ASF</a><input aria-label="Toggle navigation of ASF" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="asf/downloads/">Downloads</a></li>
 <li class="toctree-l2"><a class="reference external" href="https://www.apache.org/">Apache Software Foundation</a></li>
 <li class="toctree-l2"><a class="reference external" href="https://www.apache.org/licenses/">License</a></li>
 <li class="toctree-l2"><a class="reference external" href="https://www.apache.org/events/current-event.html">Events</a></li>
@@ -512,6 +517,12 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="_images/hamilton-incubator-logo.svg"><img alt="_images/hamilton-incubator-logo.svg" src="_images/hamilton-incubator-logo.svg" style="width: 240px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Apache Hamilton (Incubator Podling) logo</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+<div class="legend">
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -530,8 +541,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<section id="welcome-to-apache-hamilton">
-<h1>Welcome to Apache Hamilton<a class="headerlink" href="#welcome-to-apache-hamilton" title="Link to this heading">¶</a></h1>
+<p class="rubric" id="welcome-to-apache-hamilton">Welcome to Apache Hamilton</p>
 <div align="left">
     <a href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g" target="_blank"><img src="./_static/hamilton_slack.png" alt="Apache Hamilton Slack"/></a>
     <a href="https://twitter.com/hamilton_os" target="_blank"><img src="./_static/hamilton_os_follow.png" alt="Twitter"/></a>
@@ -540,16 +550,14 @@ under the License.
 </div>
 <p>Apache Hamilton (incubating) is a general-purpose framework to write dataflows using regular Python functions. At the core, each function defines a transformation and its parameters indicates its dependencies. Apache Hamilton automatically connects individual functions into a <a class="reference external" href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">Directed Acyclic Graph</a> (DAG) that can be executed, visualized, optimized, and reported on.
 Apache Hamilton also comes with a <a class="reference internal" href="hamilton-ui/"><span class="std std-doc">UI</span></a> to visualize, catalog, and monitor your dataflows.</p>
-<figure class="align-center" id="id1">
+<figure class="align-center" id="id2">
 <a class="reference internal image-reference" href="_images/abc.png"><img alt="_images/abc.png" height="352" src="_images/abc.png" width="565" />
 </a>
 <figcaption>
-<p><span class="caption-text">The ABC of Apache Hamilton</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+<p><span class="caption-text">The ABC of Apache Hamilton</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
-</section>
-<section id="why-should-you-use-apache-hamilton-incubating">
-<h1>Why should you use Apache Hamilton (incubating)?<a class="headerlink" href="#why-should-you-use-apache-hamilton-incubating" title="Link to this heading">¶</a></h1>
+<p class="rubric" id="why-should-you-use-apache-hamilton-incubating">Why should you use Apache Hamilton (incubating)?</p>
 <p><strong>Facilitate collaboration</strong>. By focusing on functions, Apache Hamilton avoids sprawling code hierarchy and generates flat dataflows. Well-scoped functions make it easier to add features, complete code reviews, debug pipeline failures, and hand-off projects. Visualizations can be generated directly from your code to better understand and document it.
 Integration with the <a class="reference internal" href="hamilton-ui/"><span class="std std-doc">Apache Hamilton UI</span></a> allows you to track lineage, catalog code &amp; artifacts, and monitor your dataflows.</p>
 <p><strong>Reduce development time</strong>. Apache Hamilton dataflows are reusable across projects and context (e.g., pipeline vs. web service). The benefits of developing robust and well-tested solutions are multiplied by reusability. Explore community-contributed dataflows in the <a class="reference internal" href="ecosystem/"><span class="std std-doc">ecosystem</span></a>.</p>
@@ -634,18 +642,14 @@ Integration with the <a class="reference internal" href="hamilton-ui/"><span cla
 </tbody>
 </table>
 </div>
-</section>
-<section id="architecture-overview">
-<h1>Architecture Overview<a class="headerlink" href="#architecture-overview" title="Link to this heading">¶</a></h1>
+<p class="rubric" id="architecture-overview">Architecture Overview</p>
 <p>The following diagram gives a simplified overview of the main components of Apache Hamilton.</p>
 <p><img alt="" src="_images/architecture_overview.png" /></p>
 <p><strong>Functions &amp; Module</strong>. Transformations are regular Python functions organized into modules. Functions must be type-annotated, but hold no dependency with Apache Hamilton and can be reused outside of it.</p>
 <p><strong>Driver &amp; FunctionGraph</strong>. The <code class="docutils literal notranslate"><span class="pre">Driver</span></code> will automatically assemble the <code class="docutils literal notranslate"><span class="pre">FunctionGraph</span></code> from the modules given. The <code class="docutils literal notranslate"><span class="pre">Driver</span></code> can be configured to modify and extend the execution behavior (e.g., remote execution, monitoring, webhooks, caching).</p>
 <p><strong>Visualization</strong>. The <code class="docutils literal notranslate"><span class="pre">FunctionGraph</span></code> can be visualized without executing code. This coupling ensures visualizations always match the code from modules.</p>
 <p><strong>Execution</strong>. When requesting variables, the <code class="docutils literal notranslate"><span class="pre">Driver</span></code> establishes an execution plan to only compute the required functions. Then, results are gathered and returned to the user.</p>
-</section>
-<section id="who-is-using-apache-hamilton">
-<h1>Who is using Apache Hamilton?<a class="headerlink" href="#who-is-using-apache-hamilton" title="Link to this heading">¶</a></h1>
+<p class="rubric" id="who-is-using-apache-hamilton">Who is using Apache Hamilton?</p>
 <p><img alt="" src="_images/hamilton_users.jpg" /></p>
 <p>Multiple companies are doing cool stuff with Apache Hamilton! Come chat with members of the community and the development team on <a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a>:</p>
 <ul class="simple">
@@ -673,9 +677,7 @@ Integration with the <a class="reference internal" href="hamilton-ui/"><span cla
 <li><p><strong>Best Egg</strong> - Feature engineering</p></li>
 <li><p><strong>RTV Euro AGD</strong> - General feature engineering &amp; machine learning</p></li>
 </ul>
-</section>
-<section id="testimonials">
-<h1>Testimonials<a class="headerlink" href="#testimonials" title="Link to this heading">¶</a></h1>
+<p class="rubric" id="testimonials">Testimonials</p>
 <link rel="stylesheet" type="text/css" href="_static/testimonials.css">
 <div class="testimonial-container">
         <div class="testimonial-card">
@@ -714,6 +716,9 @@ Integration with the <a class="reference internal" href="hamilton-ui/"><span cla
             </div>
         </div>
 </div>
+</div>
+</figcaption>
+</figure>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -724,7 +729,8 @@ Integration with the <a class="reference internal" href="hamilton-ui/"><span cla
 </div>
 <div class="toctree-wrapper compound">
 </div>
-</section>
+<div class="toctree-wrapper compound">
+</div>
 
         </article>
       </div>
