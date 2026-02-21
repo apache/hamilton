@@ -29,7 +29,7 @@ To run the hamilton UI in local mode, you can do the following:
 
 .. code-block:: bash
 
-    pip install "sf-hamilton[ui,sdk]"
+    pip install "apache-hamilton[ui,sdk]"
     hamilton ui
     # python -m hamilton.cli.__main__ ui # on windows
 
@@ -148,7 +148,7 @@ First, install the SDK:
 
 .. code-block:: bash
 
-    pip install "sf-hamilton[sdk]"
+    pip install "apache-hamilton[sdk]"
 
 Then, navigate to the project page (dashboard/projects), in the running UI, and click the green ``+ New DAG`` button.
 

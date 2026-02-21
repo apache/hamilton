@@ -46,7 +46,7 @@ can do this with:
 
 ```bash
 # install the package & cli into your favorite python environment.
-pip install "sf-hamilton[sdk]"
+pip install "apache-hamilton[sdk]"
 
 # And validate -- this should not error.
 python -c "from hamilton_sdk import adapters"

@@ -81,7 +81,7 @@ if __name__ == "__main__":
         "absenteeism_time_in_hours",
         "index_col",
     ]
-    # To visualize do `pip install "sf-hamilton[visualization]"` if you want these to work
+    # To visualize do `pip install "apache-hamilton[visualization]"` if you want these to work
     # dr.visualize_execution(output_columns, './run_spark', {"format": "png"})
     # dr.display_all_functions('./my_full_dag.dot')
 

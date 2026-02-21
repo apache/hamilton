@@ -1,4 +1,4 @@
 aiohttp
+apache-hamilton
 fastapi
-sf-hamilton
 uvicorn

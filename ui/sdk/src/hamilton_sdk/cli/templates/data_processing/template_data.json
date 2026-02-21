@@ -4,7 +4,7 @@
   "return_df": true,
   "inputs" :  {"orders_path": "data/orders_old.csv",
     "order_details_path": "data/order_details.csv"},
-  "requirements" : ["pandas", "sf-hamilton", "pandera"],
+  "requirements" : ["pandas", "apache-hamilton", "pandera"],
   "use_tags_for_output" : null,
   "final_vars" : [
      "orders_by_order_aggregates"

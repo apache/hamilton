@@ -45,6 +45,6 @@ df = df.collect()
 # And print the table.
 print(df)
 
-# To visualize do `pip install "sf-hamilton[visualization]"` if you want these to work
+# To visualize do `pip install "apache-hamilton[visualization]"` if you want these to work
 # dr.visualize_execution(output_columns, './polars', {"format": "png"})
 # dr.display_all_functions('./my_full_dag.dot')

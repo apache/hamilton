@@ -1,7 +1,7 @@
+apache-hamilton[experiments,visualization]
 fastparquet
 matplotlib
 numpy
 pandas
 pyarrow
 scikit-learn
-sf-hamilton[experiments,visualization]

@@ -35,9 +35,9 @@ check_jq_installed() {
     fi
 }
 
-# fetches the latest version of sf-hamilton-ui from PyPI
+# fetches the latest version of apache-hamilton-ui from PyPI
 get_latest_version() {
-    response=$(curl -s https://pypi.org/pypi/sf-hamilton-ui/json)
+    response=$(curl -s https://pypi.org/pypi/apache-hamilton-ui/json)
 
     # check if curl succeeded and the response is not empty
     if [ $? -ne 0 ] || [ -z "$response" ]; then
@@ -61,7 +61,7 @@ check_jq_installed
 
 VERSION=$(get_latest_version)
 
-echo "Using sf-hamilton-ui version: $VERSION"
+echo "Using apache-hamilton-ui version: $VERSION"
 
 # check if Buildx is already enabled; create a builder instance if not
 docker buildx inspect hamilton-builder > /dev/null 2>&1 || \

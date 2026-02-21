@@ -6,7 +6,7 @@
     "signups_path" : "data/signups.csv",
     "spend_path" : "data/spend.csv"
   },
-  "requirements" : ["pandas", "sf-hamilton"],
+  "requirements" : ["pandas", "apache-hamilton"],
   "use_tags_for_output" : null,
   "final_vars" : [
     "spend",

@@ -53,7 +53,7 @@ if __name__ == "__main__":
         use_delayed=False,
         compute_at_end=False,
     )
-    # will output Dask's execution graph  -- requires sf-hamilton[visualization] to be installed.
+    # will output Dask's execution graph  -- requires apache-hamilton[visualization] to be installed.
 
     initial_config_and_data = {
         "spend_location": "some file path",
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     ]
     dask_df = dr.execute(output_columns)  # it's dask dataframe -- it hasn't been evaluated yet.
     df = dask_df.compute()
-    # To visualize do `pip install "sf-hamilton[visualization]"` if you want these to work
+    # To visualize do `pip install "apache-hamilton[visualization]"` if you want these to work
     # dr.visualize_execution(output_columns, './hello_world_dask', {"format": "png"})
     dr.display_all_functions("./my_full_dag.dot")
     logger.info(df.to_string())

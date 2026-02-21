@@ -55,7 +55,7 @@ def load_requirements():
 
 
 setup(
-    name="sf-hamilton-contrib",  # there's already a hamilton in pypi, so keeping sf- prefix
+    name="apache-hamilton-contrib",  # there's already a hamilton in pypi, so keeping sf- prefix
     version=VERSION,
     description="Hamilton's user contributed shared dataflow library.",
     long_description=readme,
@@ -86,7 +86,7 @@ setup(
     python_requires=">=3.10, <4",
     # adding this to slim the package down, since these dependencies are only used in certain contexts.
     extras_require={
-        "visualization": ["sf-hamilton[visualization]"],
+        "visualization": ["apache-hamilton[visualization]"],
         "contribute": ["click>8.0.0", "gitpython"],
     },
     # Relevant project URLs

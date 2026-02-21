@@ -1,2 +1,2 @@
+apache-hamilton
 scikit-learn
-sf-hamilton

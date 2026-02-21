@@ -1,3 +1,4 @@
+apache-hamilton[visualization]
 dagster
 dagster-webserver
 dagster_duckdb
@@ -6,4 +7,3 @@ Faker==18.4.0
 matplotlib
 pandas
 requests
-sf-hamilton[visualization]

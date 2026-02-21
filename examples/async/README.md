@@ -66,7 +66,7 @@ curl -X 'POST' \
 Recall, to get the server running, you'll have to run the following:
 
 ```bash
-pip install sf-hamilton[ui]
+pip install apache-hamilton[ui]
 hamilton ui
 ```
 

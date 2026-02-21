@@ -1,7 +1,7 @@
+apache-hamilton[visualization]
 langchain
 langchain-core
 pyspark
-sf-hamilton[visualization]
 # optionally install Ray, or Dask, or both
-# sf-hamilton[ray]
-# sf-hamilton[dask]
+# apache-hamilton[ray]
+# apache-hamilton[dask]

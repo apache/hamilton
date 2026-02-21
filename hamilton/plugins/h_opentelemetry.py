@@ -30,7 +30,7 @@ try:
 except ImportError as e:
     raise ImportError(
         "Failed to import `opentelemetry` "
-        "Use `pip install sf-hamilton[opentelemetry]` to install "
+        "Use `pip install apache-hamilton[opentelemetry]` to install "
         "dependencies for the `h_opentelemetry` plugin."
     ) from e
 

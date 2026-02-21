@@ -31,8 +31,8 @@ try:
 except ImportError as e:
     logger.error("ImportError: %s", e)
     logger.error(
-        "To use the h_ddog plugin, please install sf-hamilton[datadog] using "
-        "`pip install sf-hamilton[datadog]` (or use your favorite package manager)."
+        "To use the h_ddog plugin, please install apache-hamilton[datadog] using "
+        "`pip install apache-hamilton[datadog]` (or use your favorite package manager)."
         "Remember to use quotes around the package name if using zsh!"
     )
     raise
@@ -293,7 +293,7 @@ class DDOGTracer(
     This tracer bypasses context management so we can more accurately track relationships between nodes/tags. Also, we plan to
     get this working with OpenTelemetry, and use that for datadog integration.
 
-    To use this, you'll want to run `pip install sf-hamilton[ddog]` (or `pip install "sf-hamilton[ddog]"` if using zsh)
+    To use this, you'll want to run `pip install apache-hamilton[ddog]` (or `pip install "apache-hamilton[ddog]"` if using zsh)
     """
 
     def __init__(self, root_name: str, include_causal_links: bool = False, service: str = None):

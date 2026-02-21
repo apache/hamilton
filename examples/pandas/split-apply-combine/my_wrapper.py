@@ -51,5 +51,5 @@ class TaxCalculator:
 
     @staticmethod
     def visualize(output_path="./my_full_dag.png"):
-        # To visualize do `pip install "sf-hamilton[visualization]"` if you want these to work
+        # To visualize do `pip install "apache-hamilton[visualization]"` if you want these to work
         driver.display_all_functions(output_path)

@@ -515,7 +515,7 @@ def _append_pandera_to_default_validators():
         import pandera  # noqa: F401
     except ModuleNotFoundError:
         logger.info(
-            "Cannot import pandera from pandera_validators. Run pip install sf-hamilton[pandera] if needed."
+            "Cannot import pandera from pandera_validators. Run pip install apache-hamilton[pandera] if needed."
         )
         return
     from hamilton.data_quality import pandera_validators

@@ -50,7 +50,7 @@ if __name__ == "__main__":
         use_delayed=True,
         compute_at_end=True,
     )
-    # will output Dask's execution graph run_with_delayed.png -- requires sf-hamilton[visualization] to be installed.
+    # will output Dask's execution graph run_with_delayed.png -- requires apache-hamilton[visualization] to be installed.
 
     initial_config_and_data = {
         "signups": pd.Series([1, 10, 50, 100, 200, 400]),
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     ]
     pandas_df = dr.execute(output_columns)
     logger.info(pandas_df.to_string())
-    # To visualize do `pip install "sf-hamilton[visualization]"` if you want these to work
+    # To visualize do `pip install "apache-hamilton[visualization]"` if you want these to work
     # dr.visualize_execution(output_columns, './hello_world_dask', {"format": "png"})
     # dr.display_all_functions('./my_full_dag.dot')
     client.shutdown()

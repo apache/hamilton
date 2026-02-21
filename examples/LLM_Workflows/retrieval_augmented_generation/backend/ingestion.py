@@ -69,7 +69,7 @@ def local_pdfs(
     """List of local PDF files, either string paths or in-memory files (on the FastAPI server)
     NOTE. This function is overriden by the driver to use arbitrary local PDFs and
     don't need to query arxiv. It is necessary because Parallelizable and Collect nodes
-    cannot be overriden safely at the moment (sf-hamilton==1.26.0)
+    cannot be overriden safely at the moment (apache-hamilton==1.26.0)
     """
     return arxiv_pdf_path_collection
 

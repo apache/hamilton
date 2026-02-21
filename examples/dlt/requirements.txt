@@ -1,7 +1,7 @@
+apache-hamilton[visualization]
 dlt[duckdb]>=0.3.12
 ibis-framework[duckdb]
 openai
 pandas
 polars
-sf-hamilton[visualization]
 streamlit

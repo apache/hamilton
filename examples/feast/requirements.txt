@@ -1,4 +1,4 @@
+apache-hamilton[visualization]
 feast
 jupyter
 pandas
-sf-hamilton[visualization]

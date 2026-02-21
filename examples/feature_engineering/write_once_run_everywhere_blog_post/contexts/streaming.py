@@ -49,7 +49,7 @@ dr = driver.Driver(
     model,
     adapter=base.DefaultAdapter(),
 )
-# pip install "sf-hamilton[visualization]" for this next line to work
+# pip install "apache-hamilton[visualization]" for this next line to work
 # dr.display_all_functions("streaming", {"format": "png"})
 
 

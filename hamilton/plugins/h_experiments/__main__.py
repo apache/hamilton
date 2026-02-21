@@ -30,7 +30,7 @@ def main():
         import uvicorn
     except ModuleNotFoundError as e:
         raise ModuleNotFoundError(
-            "Some dependencies are missing. Make sure to `pip install sf-hamilton[experiments]`"
+            "Some dependencies are missing. Make sure to `pip install apache-hamilton[experiments]`"
         ) from e
     if telemetry.is_telemetry_enabled():
         telemetry.create_and_send_expt_server_event("startup")

@@ -49,7 +49,7 @@ def model(dbt, session):
     results = titanic_dag.execute(
         final_vars=["model_predict"], inputs={"raw_passengers_df": raw_passengers_df}
     )
-    # pip install "sf-hamilton[visualization]" to get this to work
+    # pip install "apache-hamilton[visualization]" to get this to work
     # titanic_dag.visualize_execution(["model_predict"], './titanic_dbt', {"format": "png"},
     #                                 inputs={"raw_passengers_df": raw_passengers_df})
     # Take the "predictions" result, which is an np array

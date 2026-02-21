@@ -1,1 +1,1 @@
-sf-hamilton[diskcache]
+apache-hamilton[diskcache]

@@ -36,6 +36,6 @@ ETL Recipe
 
 #. Write Hamilton functions & `“driver”` code.
 #. Publish your Hamilton functions in a package, or import via other means (e.g. checkout a repository & include in python path).
-#. Include `sf-hamilton` as a python dependency
+#. Include `apache-hamilton` as a python dependency
 #. Have your ETL system execute your “driver” code.
 #. Profit.

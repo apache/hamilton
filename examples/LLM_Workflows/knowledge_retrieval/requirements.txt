@@ -1,10 +1,10 @@
+apache-hamilton[visualization]
 arxiv
 openai==0.28.0
 pandas
 PyPDF2
 requests
 scipy
-sf-hamilton[visualization]
 tenacity
 termcolor
 tiktoken==0.3.3

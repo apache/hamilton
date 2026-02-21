@@ -24,7 +24,7 @@ easily run them as pyspark UDFs.
 
 ## Dependencies
 
-`pip install "sf-hamilton[pyspark, visualization]"` for the right dependencies to run this example.
+`pip install "apache-hamilton[pyspark, visualization]"` for the right dependencies to run this example.
 
 ## File organization:
 

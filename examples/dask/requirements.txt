@@ -1,1 +1,1 @@
-sf-hamilton[dask]
+apache-hamilton[dask]

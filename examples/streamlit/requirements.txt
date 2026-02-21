@@ -1,4 +1,4 @@
+apache-hamilton
 pandas
 plotly
-sf-hamilton
 streamlit

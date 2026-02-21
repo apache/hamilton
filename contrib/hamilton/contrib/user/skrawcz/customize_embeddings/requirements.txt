@@ -1,3 +1,4 @@
+apache-hamilton
 numpy
 openai
 pandas
@@ -5,6 +6,5 @@ pandera
 plotly
 requests
 scikit-learn
-sf-hamilton
 tenacity
 torch

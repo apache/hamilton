@@ -1,6 +1,6 @@
+apache-hamilton[visualization]
 langchain
 langchain-core
 openai
 pandas
 requests
-sf-hamilton[visualization]

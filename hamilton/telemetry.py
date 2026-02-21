@@ -316,7 +316,7 @@ def create_dataflow_download_event_json(
     :param category: the category of the dataflow. DAGWORKS or USER.
     :param user: the user's github handle, if applicable.
     :param dataflow_name: the name of the dataflow.
-    :param version: the git commit version of the dataflow, OR the sf-hamilton-contrib package version, or __unknown__.
+    :param version: the git commit version of the dataflow, OR the apache-hamilton-contrib package version, or __unknown__.
     :return: dictionary representing the event.
     """
     event = {
@@ -347,7 +347,7 @@ def create_and_send_contrib_use(module_name: str, version: str):
     if module_name == "__main__" or module_name == "__init__":
         return
     try:
-        # we need to handle the case that sf-hamilton-contrib is not installed.
+        # we need to handle the case that apache-hamilton-contrib is not installed.
         # if that's the case the file location will be the module name.
         if ".py" in module_name:
             contrib_index = module_name.rfind("/contrib/")

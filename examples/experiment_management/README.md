@@ -31,7 +31,7 @@ Add a hook to your Apache Hamilton Driver to log runs and visualize artifacts an
 - 📡 Launch a local server to view and explore your experiments
 
 ## Installation
-Use `pip install sf-hamilton[experiments]` to install both the hook and the server with their dependencies
+Use `pip install apache-hamilton[experiments]` to install both the hook and the server with their dependencies
 
 ## How to use the ExperimentTracker hook
 The `ExperimentTracker` hook can be added to your Apache Hamilton Driver definition to automatically log metadata about the run and materialized results.

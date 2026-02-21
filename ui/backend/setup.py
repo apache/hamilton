@@ -35,7 +35,7 @@ def load_requirements():
 
 
 setup(
-    name="sf-hamilton-ui",  # there's already a hamilton in pypi
+    name="apache-hamilton-ui",  # there's already a hamilton in pypi
     version="0.0.17",
     description="Hamilton, the micro-framework for creating dataframes.",
     long_description="""Hamilton tracking server, see [the docs for more](https://github.com/apache/hamilton/tree/main/ui/)""",

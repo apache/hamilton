@@ -61,7 +61,7 @@ class SparkKoalasGraphAdapter(base.HamiltonGraphAdapter, base.ResultMixin):
     using the \
     `Pandas API on Spark <https://spark.apache.org/docs/latest/api/python/user_guide/pandas_on_spark/index.html>`__
 
-    Use `pip install sf-hamilton[spark]` to get the dependencies required to run this.
+    Use `pip install apache-hamilton[spark]` to get the dependencies required to run this.
 
     Currently, this class assumes you're running SPARK 3.2+. You'd generally use this if you have an existing spark \
     cluster running in your workplace, and you want to scale to very large data set sizes.

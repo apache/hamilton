@@ -3,7 +3,7 @@ requires = ["setuptools >= 61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sf-hamilton-sdk"
+name = "apache-hamilton-sdk"
 description = "Hamilton SDK for reading and writing to the Hamilton backend APIs that support the UI."
 authors = [
     {name = "Stefan Krawczyk", email = "stefank@cs.stanford.edu"},

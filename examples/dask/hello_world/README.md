@@ -26,7 +26,7 @@ in a distributed setting via dask.
 Note: please read this [dask best practices post](https://docs.dask.org/en/stable/dataframe-best-practices.html);
 don't scale if you don't need to.
 
-`pip install sf-hamilton[dask-complete]`  or `pip install sf-hamilton dask[complete]` to for the right dependencies to run this example.
+`pip install apache-hamilton[dask-complete]`  or `pip install apache-hamilton dask[complete]` to for the right dependencies to run this example.
 
 File organization:
 

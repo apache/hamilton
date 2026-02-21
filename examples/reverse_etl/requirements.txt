@@ -1,5 +1,5 @@
+apache-hamilton[visualization]
 google-api-python-client
 google-auth
 pandas
-sf-hamilton[visualization]
 timew-report

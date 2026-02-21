@@ -20,12 +20,12 @@ CONDA_HOME=$HOME/anaconda3
 # This is a script to create and build hamilton for conda.
 # Be sure you have conda activated and have logged into anaconda
 # conda activate && anaconda login
-pkg='sf-hamilton'
+pkg='apache-hamilton'
 # adjust the Python versions you would like to build
 array=(3.10 3.11 3.12 3.13)
 echo "Building conda package ..."
 cd ~
-# this will create a ~/sf-hamilton directory with metadata to build the package.
+# this will create a ~/apache-hamilton directory with metadata to build the package.
 # will error if it already exists.
 conda skeleton pypi $pkg
 
