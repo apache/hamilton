@@ -20,11 +20,27 @@ requires = ["flit_core >=3.11,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "sf-hamilton"
+name = "apache-hamilton"
 version = "1.89.0"  # NOTE: keep this in sync with hamilton/version.py
 # TODO: flip back to dynamic once hamilton version is a string. Flit doesn't handle tuples.
 # dynamic = ["version"]
-description = "Hamilton, the micro-framework for creating dataframes."
+description = """Apache Hamilton (incubating) is a lightweight Python library for directed acyclic graphs (DAGs)
+of transformations. Your DAG is **portable**; it runs anywhere Python runs, whether it's a script,
+notebook, Airflow pipeline, FastAPI server, etc. Your DAG is **expressive**; Apache Hamilton has extensive
+features to define and modify the execution of a DAG (e.g., data validation, experiment tracking, remote
+execution).
+
+Apache Hamilton (incubating) is an effort undergoing incubation at the Apache
+Software Foundation (ASF), sponsored by the Apache Incubator PMC.
+
+Incubation is required of all newly accepted projects until a further review
+indicates that the infrastructure, communications, and decision making process
+have stabilized in a manner consistent with other successful ASF projects.
+
+While incubation status is not necessarily a reflection of the completeness
+or stability of the code, it does indicate that the project has yet to be
+fully endorsed by the ASF.
+"""
 readme = "README.md"
 requires-python = ">=3.10.1, <4"
 license = {text = "Apache-2.0"}

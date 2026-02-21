@@ -22,6 +22,9 @@ import os
 import shutil
 import subprocess
 import sys
+import tarfile
+import tempfile
+import zipfile
 
 # --- Configuration ---
 # You need to fill these in for your project.
@@ -138,10 +141,96 @@ def sign_artifacts(archive_name: str) -> list[str] | None:
     return files
 
 
+def _modify_wheel_for_apache_release(original_wheel: str, new_wheel_path: str):
+    """Helper to modify the wheel for apache release.
+
+    # Flit somehow builds something incorrectly.
+    # 1. change PKG-INFO's first line to be `Metadata-Version: 2.4`
+    # 2. make sure the second line is `Name: apache-hamilton`
+    # 3. remove the `Import-Name: hamilton` line from PKG-INFO.
+
+    :param original_wheel: Path to the original wheel.
+    :param new_wheel_path: Path to the new wheel to create.
+    """
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Unzip the wheel
+        with zipfile.ZipFile(original_wheel, "r") as zip_ref:
+            zip_ref.extractall(tmpdir)
+
+        # Find the .dist-info directory
+        dist_info_dirs = glob.glob(os.path.join(tmpdir, "*.dist-info"))
+        if not dist_info_dirs:
+            raise ValueError(f"Could not find .dist-info directory in {original_wheel}")
+        dist_info_dir = dist_info_dirs[0]
+        pkg_info = os.path.join(dist_info_dir, "PKG-INFO")
+
+        _modify_pkg_info_file(pkg_info)
+
+        # Create the new wheel
+        with zipfile.ZipFile(new_wheel_path, "w", zipfile.ZIP_DEFLATED) as zip_ref:
+            for root, _, files in os.walk(tmpdir):
+                for file in files:
+                    zip_ref.write(
+                        os.path.join(root, file), os.path.relpath(os.path.join(root, file), tmpdir)
+                    )
+
+
+def _modify_pkg_info_file(pkg_info_path: str):
+    """
+    Flit somehow builds something incorrectly.
+    1. change PKG-INFO's first line to be `Metadata-Version: 2.4`
+    2. make sure the second line is `Name: apache-hamilton`
+    3. remove the `Import-Name: hamilton` line from PKG-INFO.
+    """
+    with open(pkg_info_path, "r") as f:
+        lines = f.readlines()
+
+    new_lines = []
+    for i, line in enumerate(lines):
+        if i == 0:
+            new_lines.append("Metadata-Version: 2.4\n")
+        elif i == 1:
+            new_lines.append("Name: apache-hamilton\n")
+        elif line.strip() == "Import-Name: hamilton":
+            continue  # Skip this line
+        else:
+            new_lines.append(line)
+
+    with open(pkg_info_path, "w") as f:
+        f.writelines(new_lines)
+
+
+def _modify_tarball_for_apache_release(original_tarball: str, new_tarball_path: str):
+    """Helper to modify the tarball for apache release.
+
+    # Flit somehow builds something incorrectly.
+    # 1. change PKG-INFO's first line to be `Metadata-Version: 2.4`
+    # 2. make sure the second line is `Name: apache-hamilton`
+    # 3. remove the `Import-Name: hamilton` line from PKG-INFO.
+
+    :param original_tarball: Path to the original tarball.
+    :param new_tarball_path: Path to the new tarball to create.
+    """
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Extract the tarball
+        with tarfile.open(original_tarball, "r:gz") as tar:
+            tar.extractall(path=tmpdir)
+
+        # Modify the PKG-INFO file
+        # The extracted tarball has a single directory inside.
+        extracted_dir = os.path.join(tmpdir, os.listdir(tmpdir)[0])
+        pkg_info_path = os.path.join(extracted_dir, "PKG-INFO")
+
+        _modify_pkg_info_file(pkg_info_path)
+
+        # Create the new tarball
+        with tarfile.open(new_tarball_path, "w:gz") as tar:
+            tar.add(extracted_dir, arcname=os.path.basename(extracted_dir))
+
+
 def create_release_artifacts(version) -> list[str]:
     """Creates the source tarball, GPG signature, and checksums using `python -m build`."""
-    print("Creating release artifacts with 'python -m build'...")
-    files_to_upload = []
+    print("Creating release artifacts with 'flit build'...")
     # Clean the dist directory before building.
     if os.path.exists("dist"):
         shutil.rmtree("dist")
@@ -161,8 +250,7 @@ def create_release_artifacts(version) -> list[str]:
         return None
 
     # Find the created tarball in the dist directory.
-    expected_tar_ball = f"dist/sf_hamilton-{version.lower()}.tar.gz"
-    files_to_upload.append(expected_tar_ball)
+    expected_tar_ball = f"dist/apache-hamilton-{version.lower()}.tar.gz"
     tarball_path = glob.glob(expected_tar_ball)
 
     if not tarball_path:
@@ -179,29 +267,23 @@ def create_release_artifacts(version) -> list[str]:
 
     # copy the tarball to be apache-hamilton-{version.lower()}-incubating.tar.gz
     new_tar_ball = f"dist/apache-hamilton-{version.lower()}-incubating.tar.gz"
-    shutil.copy(tarball_path[0], new_tar_ball)
+    # shutil.copy(tarball_path[0], new_tar_ball)
+    _modify_tarball_for_apache_release(tarball_path[0], new_tar_ball)
     archive_name = new_tar_ball
     print(f"Found source tarball: {archive_name}")
-    main_signed_files = sign_artifacts(archive_name)
-    if main_signed_files is None:
+    new_tar_ball_singed = sign_artifacts(archive_name)
+    if new_tar_ball_singed is None:
         raise ValueError("Could not sign the main release artifacts.")
-    # create sf-hamilton release artifacts
-    sf_hamilton_signed_files = sign_artifacts(expected_tar_ball)
     # create wheel release artifacts
-    expected_wheel = f"dist/sf_hamilton-{version.lower()}-py3-none-any.whl"
+    expected_wheel = f"dist/apache-hamilton-{version.lower()}-py3-none-any.whl"
     wheel_path = glob.glob(expected_wheel)
-    wheel_signed_files = sign_artifacts(wheel_path[0])
     # create incubator wheel release artifacts
     expected_incubator_wheel = f"dist/apache-hamilton-{version.lower()}-incubating-py3-none-any.whl"
     shutil.copy(wheel_path[0], expected_incubator_wheel)
     incubator_wheel_signed_files = sign_artifacts(expected_incubator_wheel)
     files_to_upload = (
         [new_tar_ball]
-        + main_signed_files
-        + [expected_tar_ball]
-        + sf_hamilton_signed_files
-        + [expected_wheel]
-        + wheel_signed_files
+        + new_tar_ball_singed
         + [expected_incubator_wheel]
         + incubator_wheel_signed_files
     )
