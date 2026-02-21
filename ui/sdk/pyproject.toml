@@ -1,21 +1,41 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
 [build-system]
-requires = ["setuptools >= 61.0.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["flit_core >=3.11,<4"]
+build-backend = "flit_core.buildapi"
 
 [project]
-name = "sf-hamilton-sdk"
-description = "Hamilton SDK for reading and writing to the Hamilton backend APIs that support the UI."
+name = "apache-hamilton-sdk"
+version = "0.8.0"
+description = "Apache Hamilton SDK for reading and writing to the Apache Hamilton backend APIs that support the UI."
+readme = "README.md"
+requires-python = ">=3.10, <4"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE", "DISCLAIMER"]
+keywords = ["hamilton", "dagworks", "observability"]
 authors = [
     {name = "Stefan Krawczyk", email = "stefank@cs.stanford.edu"},
     {name = "Elijah ben Izzy", email = "elijah@dagworks.io"}
 ]
-readme = "README.md"
-keywords = ["hamilton", "dagworks", "observability"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Natural Language :: English",
-    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -23,40 +43,60 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14"
 ]
-requires-python = ">=3.10, <4"
-dynamic = ["dependencies", "optional-dependencies", "version"]
+dependencies = [
+    "aiohttp",
+    "click",
+    "gitpython",
+    "jinja2",
+    "loguru",
+    "posthog",
+    "requests",
+    "apache-hamilton>=1.43.0",
+    "sqlglot",
+]
+
+[project.optional-dependencies]
+test = [
+    "ibis-framework",
+    "langchain_core",
+    "numpy",
+    "polars",
+    "pyarrow",
+    "pyarrow_hotfix",
+    "pydantic",
+    "pyspark",
+    "pytest",
+    "ray; python_version < '3.14'",
+]
 
 [project.urls]
-"Homepage" = "https://github.com/apache/hamilton/"
-"Bug Reports" = "https://github.com/apache/hamilton/issues"
-"Source" = "https://github.com/apache/hamilton/ui/sdk"
-"Documentation" = "https://hamilton.apache.org/"
+homepage = "https://www.tryhamilton.dev/"
+documentation = "https://hamilton.apache.org/"
+issues = "https://github.com/apache/hamilton/issues"
+source = "https://github.com/apache/hamilton"
 
 [project.scripts]
 hamilton-sdk = "hamilton_sdk.cli.cli:cli"
 
-# [project.optional-dependencies]
-# Add optional dependencies here, one per line
+[tool.flit.module]
+name = "hamilton_sdk"
 
-[options]
-packages = { find = { exclude = ["tests"] } }
-include_package_data = true
-install_requires = [
+[tool.flit.sdist]
+include = [
+    "LICENSE",
+    "NOTICE",
+    "DISCLAIMER",
+    "requirements.txt",
+    "requirements-test.txt",
 ]
-zip_safe = false
-
-[tool.setuptools.package-data]
-# If there are data files included in your packages that need to be
-# installed, specify them here.
-"hamilton_sdk.cli.templates" = [
-    "common/*",
-    "*/template_data.json",
-    "*/data/*",
-    "common/.env.jinja2",
-    "*/config/*"]
-
-
-[tool.setuptools.dynamic]
-dependencies = { file = ["requirements.txt"]}
-optional-dependencies.test = { file = ["requirements-test.txt"]}
-version = { attr = "hamilton_sdk.__version__" }
+exclude = [
+    "tests/**",
+    ".git/**",
+    ".github/**",
+    "**/__pycache__/**",
+    "**/*.pyc",
+    "dist/**",
+    "build/**",
+    ".pytest_cache/**",
+    ".venv/**",
+]
