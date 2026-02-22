@@ -202,12 +202,12 @@
 
 -------------------------------
 
-contrib/hamilton/contrib/user/skrawcz/customize_embeddings/__init__.py is copied
-from https://github.com/openai/openai-cookbook and is licensed under the MIT License.
+hamilton/experimental/databackend.py is copied from https://github.com/machow/databackend
+and is licensed under the MIT License.
 
 MIT License
 
-Copyright (c) 2025 OpenAI
+Copyright (c) 2024 databackend contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
