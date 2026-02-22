@@ -302,13 +302,15 @@ def create_release_artifacts(package_config: dict, version) -> list[str]:
 
         # Use flit build to create the source distribution.
         try:
+            env = os.environ.copy()
+            env["FLIT_USE_VCS"] = "0"
             subprocess.run(
                 [
                     "flit",
                     "build",
-                    "--no-use-vcs",
                 ],
                 check=True,
+                env=env,
             )
             print("Source distribution created successfully.")
         except subprocess.CalledProcessError as e:
