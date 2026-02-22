@@ -79,6 +79,7 @@ rich = ["rich"]
 sdk = ["sf-hamilton-sdk"]
 slack = ["slack-sdk"]
 
+mcp = ["fastmcp>=3.0.0,<4"]
 tqdm = ["tqdm"]
 ui = ["sf-hamilton-ui"]
 
@@ -179,6 +180,7 @@ h_experiments = "hamilton.plugins.h_experiments.__main__:main"
 hamilton = "hamilton.cli.__main__:cli"
 hamilton-admin-build-ui = "ui.admin:build_ui"
 hamilton-admin-build-and-publish = "ui.admin:build_and_publish"
+hamilton-mcp = "hamilton.plugins.h_mcp.__main__:main"
 hamilton-disable-autoload-extensions = "hamilton.registry:config_disable_autoload"
 hamilton-enable-autoload-extensions = "hamilton.registry:config_enable_autoload"
 
