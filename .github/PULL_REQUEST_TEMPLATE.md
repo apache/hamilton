@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+
 --- PR TEMPLATE INSTRUCTIONS (1) ---
 
 Looking to submit a Apache Hamilton Dataflow to the sf-hamilton-contrib module? If so go the the `Preview` tab and select the appropriate sub-template:

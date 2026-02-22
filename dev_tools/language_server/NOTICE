@@ -3,3 +3,12 @@ Copyright 2025-2026 The Apache Software Foundation
 
 This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
+
+This product includes test code vendored from pygls
+(https://github.com/openlawlibrary/pygls):
+  Copyright (c) Open Law Library. All rights reserved.
+  Licensed under the Apache License, Version 2.0.
+
+  Original work in conftest.py:
+  Copyright 2017 Palantir Technologies, Inc.
+  Licensed under the MIT License.

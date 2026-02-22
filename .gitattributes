@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+
+# Files below use a short SPDX license identifier instead of the full
+# Apache 2.0 header because they are NOT included in official releases
+# (sdist / wheel).  The `export-ignore` attribute ensures `git archive`
+# (and tools that rely on it) will exclude them automatically.
+
+.github export-ignore
