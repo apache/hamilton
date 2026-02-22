@@ -333,8 +333,9 @@ def create_release_artifacts(package_config: dict, version) -> list[str]:
                 print("'dist' directory not found.")
             raise ValueError("Could not find the generated source tarball in the 'dist' directory.")
 
-        # Copy the tarball to be {package-name}-{version}-incubating.tar.gz
-        new_tar_ball = f"dist/{package_name}-{version.lower()}-incubating.tar.gz"
+        # Copy the tarball to be {package-name}-{version}-incubating-src.tar.gz
+        # Use -src suffix to distinguish source distribution from wheel (convenience package)
+        new_tar_ball = f"dist/{package_name}-{version.lower()}-incubating-src.tar.gz"
         _modify_tarball_for_apache_release(tarball_path[0], new_tar_ball, package_name)
         archive_name = new_tar_ball
         print(f"Found source tarball: {archive_name}")
@@ -346,7 +347,7 @@ def create_release_artifacts(package_config: dict, version) -> list[str]:
         expected_wheel = f"dist/{package_file_name}-{version.lower()}-py3-none-any.whl"
         wheel_path = glob.glob(expected_wheel)
 
-        # Create incubator wheel release artifacts
+        # Create incubator wheel release artifacts with -incubating suffix
         expected_incubator_wheel = (
             f"dist/{package_name}-{version.lower()}-incubating-py3-none-any.whl"
         )
