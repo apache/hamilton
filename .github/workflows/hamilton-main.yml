@@ -85,6 +85,11 @@ jobs:
             uv pip install -r tests/integrations/pandera/requirements.txt
             uv run pytest tests/integrations
 
+        - name: Test MCP
+          run: |
+            uv sync --group test --extra mcp
+            uv run pytest tests/plugins/test_h_mcp.py
+
         - name: Test pandas
           run: |
             uv sync --group test

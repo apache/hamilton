@@ -25,6 +25,11 @@ from __future__ import annotations
 import sys
 import textwrap
 
+import pytest
+
+# Skip entire module if fastmcp is not available (optional dependency)
+pytest.importorskip("fastmcp")
+
 from hamilton.plugins.h_mcp import server as mcp_server
 from hamilton.plugins.h_mcp._helpers import (
     build_driver_from_code,

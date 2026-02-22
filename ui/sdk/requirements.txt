@@ -1,9 +1,9 @@
 aiohttp
+# apache-hamilton>=1.89.0
 click
 gitpython
 jinja2 # for SDK, todo -- move out
 loguru # for init, todo -- move out
 posthog
 requests
-# sf-hamilton>=1.43.0
 sqlglot
