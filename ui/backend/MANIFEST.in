@@ -1,4 +1,0 @@
-include hamilton_ui/requirements-mini.txt
-recursive-include hamilton_ui/build *
-include ../../LICENSE
-include *.md

@@ -71,6 +71,7 @@ include = [
     "LICENSE",
     "NOTICE",
     "DISCLAIMER",
+    "hamilton_ui/build/**",
 ]
 exclude = [
     "tests/**",

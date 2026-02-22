@@ -79,23 +79,61 @@ def cli():
     pass
 
 
-def _build_ui():
-    # building the UI
+def _build_ui(skip_install: bool = False):
+    """
+    Build the UI from source following Burr's pattern.
+
+    Steps (matching burr/cli/__main__.py:135-156):
+    1. npm install (unless --skip-install)
+    2. npm run build
+    3. rm -rf backend/server/build
+    4. mkdir -p backend/server/build
+    5. cp -a frontend/build/. backend/server/build/
+    6. Verify critical files exist
+    """
+    # Step 1: Install dependencies (like Burr does)
+    if not skip_install:
+        logger.info("Installing npm dependencies...")
+        cmd = "npm install --prefix ui/frontend"
+        _command(cmd, capture_output=False)
+
+    # Step 2: Build frontend
+    logger.info("Building frontend...")
     cmd = "npm run build --prefix ui/frontend"
     _command(cmd, capture_output=False)
-    # wiping the old build if it exists
+
+    # Step 3: Clear old build
+    logger.info("Clearing old build directory...")
     cmd = "rm -rf ui/backend/server/build"
     _command(cmd, capture_output=False)
-    cmd = "cp -R ui/frontend/build ui/backend/server/build"
+
+    # Step 4: Ensure directory exists
+    cmd = "mkdir -p ui/backend/server/build"
     _command(cmd, capture_output=False)
+
+    # Step 5: Copy with archive mode (like Burr: cp -a)
+    logger.info("Copying built assets to backend...")
+    cmd = "cp -a ui/frontend/build/. ui/backend/server/build/"
+    _command(cmd, capture_output=False)
+
+    # Step 6: Verify build succeeded
+    git_root = _get_git_root()
+    build_dir = os.path.join(git_root, "ui/backend/server/build")
+    if not os.path.exists(os.path.join(build_dir, "index.html")):
+        raise RuntimeError("Build failed: index.html not found in build directory")
+    if not os.path.exists(os.path.join(build_dir, "static")):
+        raise RuntimeError("Build failed: static/ directory not found in build directory")
+
+    logger.info(f"✓ Build verified: {build_dir}")
 
 
 @cli.command()
-def build_ui():
+@click.option("--skip-install", is_flag=True, help="Skip npm install for faster builds")
+def build_ui(skip_install: bool):
     logger.info("Building UI -- this may take a bit...")
     git_root = _get_git_root()
     with cd(git_root):
-        _build_ui()
+        _build_ui(skip_install=skip_install)
     logger.info("Built UI!")
 
 
