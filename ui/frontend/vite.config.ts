@@ -42,12 +42,17 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
+    port: parseInt(process.env.PORT || '3000'),
+    host: '0.0.0.0', // Allow external connections in Docker
     proxy: {
       '/api': {
-        target: 'http://localhost:8241',
+        target: process.env.REACT_APP_API_URL || 'http://localhost:8241',
         changeOrigin: true,
       },
     },
+  },
+  preview: {
+    port: parseInt(process.env.PORT || '8242'),
+    host: '0.0.0.0',
   },
 })

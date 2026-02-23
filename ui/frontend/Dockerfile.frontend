@@ -46,4 +46,5 @@ EXPOSE 8242
 
 ENV PORT=8242
 
-CMD ["npm", "run", "start"]
+# Use vite preview to serve the built static files in production
+CMD ["npm", "run", "preview"]

@@ -17,5 +17,6 @@
 
 set -e
 
-python manage.py migrate  # Apply database migrations
-python manage.py runserver 0.0.0.0:8241  # Start the server
+# Use uv run to execute Python commands with the virtual environment
+uv run python manage.py migrate  # Apply database migrations
+uv run python manage.py runserver 0.0.0.0:8241  # Start the server

@@ -15,23 +15,31 @@
 # specific language governing permissions and limitations
 # under the License.
 
-FROM python:3.8-slim
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy
 
 WORKDIR /code
 
-# Install system dependencies
+# Install system dependencies for psycopg2-binary and other compiled packages
 RUN apt-get update && apt-get install -y \
     gcc \
     libc-dev \
     libffi-dev \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY . /code/
-COPY server/requirements.txt /code/
+# Copy uv files for dependency installation
+COPY pyproject.toml uv.lock /code/
 
-RUN pip install -r /code/requirements.txt
+# Install dependencies using uv with the lock file
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev --no-install-project
+
+# Add the virtual environment to PATH
+ENV PATH="/code/.venv/bin:$PATH"
 
 COPY . /code/
