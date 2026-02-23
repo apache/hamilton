@@ -55,6 +55,7 @@ import {
   getBezierPath,
   useEdgesState,
   useNodesState,
+  useReactFlow,
   useStore,
 } from "reactflow";
 
@@ -730,21 +731,25 @@ export const CodeView: React.FC<{
           const styleToRender = {
             ...style,
             backgroundColor: "transparent",
-            "word-break": "break-all",
-            "white-space": "pre-wrap",
+            wordBreak: "break-all",
+            whiteSpace: "pre-wrap",
           };
           className += "";
           return (
             <pre className={className} style={styleToRender}>
-              {tokens.map((line, i) => (
-                // eslint-disable-next-line react/jsx-key
-                <div {...getLineProps({ line, key: i })}>
-                  {line.map((token, key) => (
-                    // eslint-disable-next-line react/jsx-key
-                    <span hidden={false} {...getTokenProps({ token, key })} />
-                  ))}
-                </div>
-              ))}
+              {tokens.map((line, i) => {
+                const { key: _lineKey, ...lineProps } = getLineProps({ line, key: i });
+                return (
+                  <div key={i} {...lineProps}>
+                    {line.map((token, key) => {
+                      const { key: _tokenKey, ...tokenProps } = getTokenProps({ token, key });
+                      return (
+                        <span key={key} hidden={false} {...tokenProps} />
+                      );
+                    })}
+                  </div>
+                );
+              })}
             </pre>
           );
         }}
@@ -1122,34 +1127,55 @@ const NodeDimensionsSetter = (props: {
   const nodesWithData = useStore((state) => {
     return Array.from(state.nodeInternals.values());
   });
-  useLayoutEffect(() => {
-    let anyChanges = false;
-    const newNodeDimensions = new Map<
-      string,
-      { height: number; width: number }
-    >();
-    nodesWithData.forEach((node) => {
-      // if (node.type === "group") {
-      //   return;
-      // }
-      const oldDimensions = props.nodeDimensions.get(node.id);
-      if (
-        oldDimensions?.height !== node.height ||
-        oldDimensions?.width !== node.width
-      ) {
-        anyChanges = true;
-      }
 
-      newNodeDimensions.set(node.id, {
-        height: node.height || 0,
-        width: node.width || 0,
-      });
-    });
-    if (anyChanges) {
-      props.setNodeDimensions(newNodeDimensions);
+  const lastUpdateRef = useRef(0);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useLayoutEffect(() => {
+    // Throttle updates to at most once every 500ms to prevent infinite loops
+    const now = Date.now();
+    if (now - lastUpdateRef.current < 500) {
+      return;
     }
+
+    // Debounce to avoid multiple rapid updates
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      let anyChanges = false;
+      const newNodeDimensions = new Map<string, { height: number; width: number }>();
+
+      nodesWithData.forEach((node) => {
+        const oldDimensions = props.nodeDimensions.get(node.id);
+        if (
+          oldDimensions?.height !== node.height ||
+          oldDimensions?.width !== node.width
+        ) {
+          anyChanges = true;
+        }
+
+        newNodeDimensions.set(node.id, {
+          height: node.height || 0,
+          width: node.width || 0,
+        });
+      });
+
+      if (anyChanges) {
+        lastUpdateRef.current = Date.now();
+        props.setNodeDimensions(newNodeDimensions);
+      }
+    }, 100); // 100ms debounce
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.nodeDimensions]);
+  }, [nodesWithData]);
+
   return <></>;
 };
 
@@ -1279,11 +1305,10 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
 
   const setCurrentFocusGroup = (focusGroup: string | undefined) => {
     if (focusGroup) {
-      searchParams.set("focus", JSON.stringify({ group: focusGroup }));
+      setSearchParams({ focus: JSON.stringify({ group: focusGroup }) });
     } else {
-      searchParams.delete("focus");
+      setSearchParams({});
     }
-    setSearchParams(searchParams);
   };
 
   const currentFocusNodesRef = useRef<Map<string, DAGNode>>(new Map());
@@ -1496,10 +1521,7 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
                   nodesDraggable={false}
                   nodes={nodes}
                   edges={edges}
-                  onNodesChange={(changes: NodeChange[]) => {
-                    onNodesChange(changes);
-                    triggerRerender();
-                  }}
+                  onNodesChange={onNodesChange}
                   onEdgesChange={onEdgesChange}
                   fitView
                   fitViewOptions={{
@@ -1515,14 +1537,33 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
                   elementsSelectable={false}
                   proOptions={{ hideAttribution: true }}
                   onNodeClick={(event, node) => {
-                    props.nodeInteractions?.onNodeGroupClick?.(node.data.nodes);
+                    if (props.nodeInteractions?.onNodeGroupClick) {
+                      props.nodeInteractions.onNodeGroupClick(node.data.nodes);
+                    } else if (props.enableVizConsole) {
+                      // Default behavior: toggle console visibility and set focus
+                      const focusedNode = node.data.nodes[0];
+                      if (focusedNode) {
+                        const currentFocus = currentFocusParamsRaw ? JSON.parse(currentFocusParamsRaw) : {};
+                        const isAlreadyFocused = currentFocus.node === focusedNode.name;
+
+                        if (isAlreadyFocused) {
+                          // Toggle off: clear focus and hide console
+                          setSearchParams({});
+                          setVizConsoleVisible(false);
+                        } else {
+                          // Toggle on: set focus and show console
+                          setSearchParams({ focus: JSON.stringify({ node: focusedNode.name }) });
+                          setVizConsoleVisible(true);
+                        }
+                      }
+                    }
                     event.preventDefault();
                   }}
                   onNodeMouseEnter={(event, node) => {
                     props.nodeInteractions?.onNodeGroupEnter?.(node.data.nodes);
                   }}
                   onNodeMouseLeave={(event, node) => {
-                    props.nodeInteractions?.onNodeGroupEnter?.(node.data.nodes);
+                    props.nodeInteractions?.onNodeGroupLeave?.(node.data.nodes);
                   }}
                 >
                   <Panel position={"bottom-left"}>

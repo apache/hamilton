@@ -68,12 +68,12 @@ export const NodeVizConsole = (props: NodeVizConsoleProps) => {
             >
               <Dialog.Panel className="pointer-events-auto max-w-6xl w-full">
                 <div className="flex h-full flex-col overflow-y-scroll bg-gray-800/80 py-6 shadow-xl z-5w-full">
-                  {Array.from(uniqueCodeMap.entries()).map(([, items]) => {
+                  {Array.from(uniqueCodeMap.entries()).map(([codeArtifactName, items]) => {
                     const dagIndices = new Set(
                       items.map((node) => node.dagIndex)
                     );
                     return (
-                      <>
+                      <Fragment key={codeArtifactName}>
                         <div className="px-4 sm:px-6">
                           <div className="flex flex-row gap-2">
                             <div className="text-base font-semibold leading-6 text-white break-words w-full flex-row flex-wrap gap-2">
@@ -126,8 +126,8 @@ export const NodeVizConsole = (props: NodeVizConsoleProps) => {
                               const styleToRender = {
                                 ...style,
                                 backgroundColor: "transparent",
-                                "word-break": "break-all",
-                                "white-space": "pre-wrap",
+                                wordBreak: "break-all",
+                                whiteSpace: "pre-wrap",
                               };
                               className += "";
                               return (
@@ -135,18 +135,23 @@ export const NodeVizConsole = (props: NodeVizConsoleProps) => {
                                   className={className}
                                   style={styleToRender}
                                 >
-                                  {tokens.map((line, i) => (
-                                    // eslint-disable-next-line react/jsx-key
-                                    <div {...getLineProps({ line, key: i })}>
-                                      {line.map((token, key) => (
-                                        // eslint-disable-next-line react/jsx-key
-                                        <span
-                                          hidden={false}
-                                          {...getTokenProps({ token, key })}
-                                        />
-                                      ))}
-                                    </div>
-                                  ))}
+                                  {tokens.map((line, i) => {
+                                    const { key: _lineKey, ...lineProps } = getLineProps({ line, key: i });
+                                    return (
+                                      <div key={i} {...lineProps}>
+                                        {line.map((token, key) => {
+                                          const { key: _tokenKey, ...tokenProps } = getTokenProps({ token, key });
+                                          return (
+                                            <span
+                                              key={key}
+                                              hidden={false}
+                                              {...tokenProps}
+                                            />
+                                          );
+                                        })}
+                                      </div>
+                                    );
+                                  })}
                                 </pre>
                               );
                             }}
@@ -158,7 +163,7 @@ export const NodeVizConsole = (props: NodeVizConsoleProps) => {
                             <div className="w-full border-t border-gray-300" />
                           </div>
                         </div>
-                      </>
+                      </Fragment>
                     );
                   })}
                 </div>

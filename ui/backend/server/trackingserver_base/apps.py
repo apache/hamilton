@@ -53,12 +53,13 @@ class TrackingServerConfig(AppConfig):
 
     def enable_telemetry(self):
         if is_telemetry_enabled() and settings.HAMILTON_ENV == "local":
-            if not os.path.exists("/data/telemetry.txt"):
+            telemetry_file = "/tmp/hamilton-telemetry.txt"
+            if not os.path.exists(telemetry_file):
                 telemetry_key = str(uuid.uuid4())
-                with open("/data/telemetry.txt", "w") as f:
+                with open(telemetry_file, "w") as f:
                     f.write(telemetry_key)
             else:
-                with open("/data/telemetry.txt", "r") as f:
+                with open(telemetry_file, "r") as f:
                     telemetry_key = f.read().strip()
             send_event_json(create_server_event_json(telemetry_key))
 
