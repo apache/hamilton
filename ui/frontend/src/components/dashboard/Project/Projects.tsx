@@ -41,7 +41,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ErrorPage } from "../../common/Error";
 import { GenericTable } from "../../common/GenericTable";
 import { NothingToSee, ProjectLogInstructions } from "./ProjectLogInstructions";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { skipToken } from "@reduxjs/toolkit/query";
 import { BiNetworkChart, BiHelpCircle, BiListPlus } from "react-icons/bi";
 import { ProjectDocumentation } from "./ProjectDocumentation";
 import { PlusIcon } from "@heroicons/react/24/outline";

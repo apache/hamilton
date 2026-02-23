@@ -34,7 +34,7 @@ import { Tabs } from "../../../common/GenericTabbedView";
 import { DashboardItem, MetricDisplay } from "../Dashboarding";
 import { Link } from "react-router-dom";
 import { DagRunOutWithData } from "../../../../state/api/backendApiRaw";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { skipToken } from "@reduxjs/toolkit/query";
 import { useURLParams } from "../../../../state/urlState";
 import { RunLink } from "../../../common/CommonLinks";
 import { DAGRunView } from "./DAGRunView";
@@ -745,7 +745,7 @@ const Run = () => {
   if (runs.data === undefined) {
     return (
       <div>
-        Run not found/not parseable. Please reach out to the DAGWorks team...
+        Run not found/not parseable. Please reach out to the Apache Hamilton github/mailing lists...
       </div>
     );
   }

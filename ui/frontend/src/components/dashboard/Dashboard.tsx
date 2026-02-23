@@ -54,7 +54,7 @@ import {
 } from "../../state/api/friendlyApi";
 import { useURLParams } from "../../state/urlState";
 import { NavBreadCrumb } from "./NavBreadCrumb";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { skipToken } from "@reduxjs/toolkit/query";
 import { SearchBar } from "./Search/search";
 import { ErrorPage } from "../common/Error";
 import { IconType } from "react-icons";
@@ -62,7 +62,7 @@ import { localMode } from "../../App";
 import { localLogout } from "../../auth/Login";
 
 const useProcessAwareLogout = () => {
-  if (process.env.REACT_APP_AUTH_MODE === "local") {
+  if (import.meta.env.VITE_AUTH_MODE === "local") {
     return (redirectOnLogin: boolean) => {
       return new Promise<void>(() => {
         localLogout(redirectOnLogin);

@@ -147,9 +147,13 @@ STATIC_URL = "static/"
 if HAMILTON_ENV == "mini":
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
     STATIC_URL = "/static/"
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "build/static/"),
-    ]
+    # Support both Vite (assets/) and CRA (static/) build outputs
+    staticfiles_dirs = []
+    if os.path.exists(os.path.join(BASE_DIR, "build/assets/")):
+        staticfiles_dirs.append(os.path.join(BASE_DIR, "build/assets/"))
+    if os.path.exists(os.path.join(BASE_DIR, "build/static/")):
+        staticfiles_dirs.append(os.path.join(BASE_DIR, "build/static/"))
+    STATICFILES_DIRS = staticfiles_dirs
     MEDIA_URL = "/media/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "build/")
 

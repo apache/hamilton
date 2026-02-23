@@ -78,28 +78,48 @@ class TestBuildDirectory:
         assert "<html" in content.lower(), "index.html does not appear to be valid HTML"
 
     def test_static_directory_exists(self):
-        """Verify that the static directory exists with JS/CSS assets."""
-        static_dir = get_build_dir() / "static"
-        assert static_dir.exists(), (
-            f"static/ directory not found at {static_dir}. The frontend build may have failed."
-        )
-        assert static_dir.is_dir(), f"static/ exists but is not a directory: {static_dir}"
+        """Verify that the assets directory exists with JS/CSS assets."""
+        build_dir = get_build_dir()
 
-        # Check for JS directory
-        js_dir = static_dir / "js"
-        assert js_dir.exists(), f"static/js/ directory not found at {js_dir}"
+        # Vite outputs to assets/, CRA outputs to static/
+        assets_dir = build_dir / "assets"
+        static_dir = build_dir / "static"
 
-        # Check for at least one JS file
-        js_files = list(js_dir.glob("*.js"))
-        assert len(js_files) > 0, f"No JavaScript files found in {js_dir}"
+        if assets_dir.exists():
+            # Vite build
+            assert assets_dir.is_dir(), f"assets/ exists but is not a directory: {assets_dir}"
 
-        # Check for CSS directory
-        css_dir = static_dir / "css"
-        assert css_dir.exists(), f"static/css/ directory not found at {css_dir}"
+            # Check for at least one JS file
+            js_files = list(assets_dir.glob("*.js"))
+            assert len(js_files) > 0, f"No JavaScript files found in {assets_dir}"
 
-        # Check for at least one CSS file
-        css_files = list(css_dir.glob("*.css"))
-        assert len(css_files) > 0, f"No CSS files found in {css_dir}"
+            # Check for at least one CSS file
+            css_files = list(assets_dir.glob("*.css"))
+            assert len(css_files) > 0, f"No CSS files found in {assets_dir}"
+        elif static_dir.exists():
+            # CRA build
+            assert static_dir.is_dir(), f"static/ exists but is not a directory: {static_dir}"
+
+            # Check for JS directory
+            js_dir = static_dir / "js"
+            assert js_dir.exists(), f"static/js/ directory not found at {js_dir}"
+
+            # Check for at least one JS file
+            js_files = list(js_dir.glob("*.js"))
+            assert len(js_files) > 0, f"No JavaScript files found in {js_dir}"
+
+            # Check for CSS directory
+            css_dir = static_dir / "css"
+            assert css_dir.exists(), f"static/css/ directory not found at {css_dir}"
+
+            # Check for at least one CSS file
+            css_files = list(css_dir.glob("*.css"))
+            assert len(css_files) > 0, f"No CSS files found in {css_dir}"
+        else:
+            raise AssertionError(
+                f"Neither assets/ nor static/ directory found at {build_dir}. "
+                "The frontend build may have failed."
+            )
 
     def test_public_assets_exist(self):
         """Verify that public assets (favicon, logo, etc.) are copied."""
@@ -130,9 +150,9 @@ class TestDjangoConfiguration:
             "Django settings missing mini mode configuration"
         )
 
-        # Check for STATICFILES_DIRS pointing to build/static/
-        assert "build/static/" in settings_content, (
-            "Django settings missing build/static/ in STATICFILES_DIRS"
+        # Check for STATICFILES_DIRS pointing to build/static/ or build/assets/
+        assert "build/static/" in settings_content or "build/assets/" in settings_content, (
+            "Django settings missing build/static/ or build/assets/ in STATICFILES_DIRS"
         )
 
         # Check for MEDIA_ROOT pointing to build/

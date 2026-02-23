@@ -35,7 +35,7 @@ import en from "javascript-time-ago/locale/en.json";
 import { LocalLoginProvider } from "./auth/Login";
 
 const posthogOptions = {
-  api_host: process.env.REACT_APP_PUBLIC_POSTHOG_HOST,
+  api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
 };
 
 const root = ReactDOM.createRoot(
@@ -49,12 +49,12 @@ const NoopTelemetryProvider = ({ children }: { children: React.ReactNode }) => {
 TimeAgo.addDefaultLocale(en);
 
 const AuthProvider =
-  process.env.REACT_APP_AUTH_MODE === "local"
+  import.meta.env.VITE_AUTH_MODE === "local"
     ? LocalLoginProvider
     : RequiredAuthProvider;
 
 const TelemetryProvider =
-  process.env.REACT_APP_USE_POSTHOG === "true"
+  import.meta.env.VITE_USE_POSTHOG === "true"
     ? PostHogProvider
     : NoopTelemetryProvider;
 
@@ -63,12 +63,12 @@ root.render(
   <Provider store={store}>
     <PersistGate loading={<Loading />} persistor={persistor}>
       <AuthProvider
-        authUrl={process.env.REACT_APP_AUTH_URL as string}
+        authUrl={import.meta.env.VITE_AUTH_URL as string}
         displayWhileLoading={<Loading />}
         displayIfLoggedOut={<RedirectToLogin />}
       >
         <TelemetryProvider
-          apiKey={process.env.REACT_APP_PUBLIC_POSTHOG_KEY}
+          apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
           options={posthogOptions}
         >
           <App />

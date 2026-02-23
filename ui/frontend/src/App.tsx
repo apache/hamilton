@@ -46,8 +46,8 @@ import Settings from "./components/dashboard/Settings/Settings";
 import { UserContext } from "./auth/Login";
 import { LocalAccount } from "./auth/LocalAccount";
 
-export const localMode = process.env.REACT_APP_AUTH_MODE === "local";
-export const subPath = process.env.REACT_APP_HAMILTON_SUB_PATH || ""
+export const localMode = import.meta.env.VITE_AUTH_MODE === "local";
+export const subPath = import.meta.env.VITE_HAMILTON_SUB_PATH || ""
 
 const useAuthInfoBasedOnProcEnv = () => {
   if (localMode) {

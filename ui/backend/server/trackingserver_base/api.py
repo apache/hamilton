@@ -90,6 +90,7 @@ async def get_node_metadata_types(
     "/v1/health",
     tags=["health"],
     response=bool,
+    auth=None,  # Public endpoint - no authentication required
 )
 def health_check(request):
     return True

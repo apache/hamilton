@@ -121,8 +121,14 @@ def _build_ui(skip_install: bool = False):
     build_dir = os.path.join(git_root, "ui/backend/server/build")
     if not os.path.exists(os.path.join(build_dir, "index.html")):
         raise RuntimeError("Build failed: index.html not found in build directory")
-    if not os.path.exists(os.path.join(build_dir, "static")):
-        raise RuntimeError("Build failed: static/ directory not found in build directory")
+    # Vite outputs to assets/, CRA outputs to static/
+    if not (
+        os.path.exists(os.path.join(build_dir, "assets"))
+        or os.path.exists(os.path.join(build_dir, "static"))
+    ):
+        raise RuntimeError(
+            "Build failed: assets/ or static/ directory not found in build directory"
+        )
 
     logger.info(f"✓ Build verified: {build_dir}")
 

@@ -32,7 +32,7 @@ export const Account = () => {
     return (
       <ErrorPage
         message="Unable to retrieve account information from the backend,
-      please reach out to the DAGWorks team for support. Please, however, try to refresh first."
+      please reach out to the Apache Hamilton github/mailing lists for support. Please, however, try to refresh first."
       />
     );
   }

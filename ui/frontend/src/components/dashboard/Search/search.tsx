@@ -63,7 +63,7 @@ import {
 } from "../../../state/api/friendlyApi";
 import { CatalogResponse } from "../../../state/api/backendApiRaw";
 import { useURLParams } from "../../../state/urlState";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -317,9 +317,8 @@ export const SearchBarWithData: React.FC<SearchBarProps> = (props) => {
                     Type {""}
                     {searchableCategories.map((category, index) => {
                       return (
-                        <>
+                        <Fragment key={index}>
                           <kbd
-                            key={index}
                             className={classNames(
                               "mx-0.5 flex h-5 w-5 items-center justify-center rounded border bg-white font-semibold",
                               rawQuery.startsWith(category.shortcut)
@@ -329,11 +328,11 @@ export const SearchBarWithData: React.FC<SearchBarProps> = (props) => {
                           >
                             {category.shortcut}
                           </kbd>
-                          <span className="inline" key={`${index}-span`}>
+                          <span className="inline">
                             for {category.name}
                             {", "}
                           </span>
-                        </>
+                        </Fragment>
                       );
                     })}
                     <kbd

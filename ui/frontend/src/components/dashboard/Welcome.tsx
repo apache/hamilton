@@ -40,7 +40,7 @@ import { ErrorPage } from "../common/Error";
 import { ProjectDocumentation } from "./Project/ProjectDocumentation";
 import { FiExternalLink } from "react-icons/fi";
 import { PostHog, usePostHog } from "posthog-js/react";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 const WelcomeCard = (props: {
   id: string;

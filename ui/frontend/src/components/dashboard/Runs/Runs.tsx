@@ -25,7 +25,7 @@ import {
 } from "../../../state/api/friendlyApi";
 import { Loading } from "../../common/Loading";
 import { RunSummary } from "./RunSummary";
-import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export const MAX_RUNS_QUERIED = 100;
 

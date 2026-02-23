@@ -31,7 +31,7 @@ def test_compute_stats_namedtuple():
         "observability_type": "unsupported",
         "observability_value": {
             "unsupported_type": str(type(result)),
-            "action": "reach out to the DAGWorks team to add support for this type.",
+            "action": "reach out to the Apache Hamilton github/mailing lists to add support for this type.",
         },
         "observability_schema_version": "0.0.1",
     }

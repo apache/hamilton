@@ -55,7 +55,7 @@ def compute_stats(result, node_name: str, node_tags: dict) -> Optional[Observati
         "observability_type": "unsupported",
         "observability_value": {
             "unsupported_type": str(type(result)),
-            "action": "reach out to the DAGWorks team to add support for this type.",
+            "action": "reach out to the Apache Hamilton github/mailing lists to add support for this type.",
         },
         "observability_schema_version": "0.0.1",
     }
@@ -191,7 +191,7 @@ def compute_stats_tuple(result: tuple, node_name: str, node_tags: dict) -> Obser
         "observability_type": "unsupported",
         "observability_value": {
             "unsupported_type": str(type(result)),
-            "action": "reach out to the DAGWorks team to add support for this type.",
+            "action": "reach out to the Apache Hamilton github/mailing lists to add support for this type.",
         },
         "observability_schema_version": "0.0.1",
     }

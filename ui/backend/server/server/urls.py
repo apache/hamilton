@@ -32,7 +32,6 @@ Including another URLconf
 """
 
 from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic import TemplateView
@@ -44,12 +43,50 @@ from . import api, default_views
 if settings.HAMILTON_ENV == "mini":
     # mini-mode
     # TODO -- do meda assets correctly -- this just hardcodes logo.png for now
+    import os
+
     urlpatterns = [
         path("api/", api.api.urls),
         path("admin/", admin.site.urls),
-        re_path(r"^logo\.png$", serve, {"document_root": settings.MEDIA_ROOT, "path": "logo.png"}),
-        re_path(".*", TemplateView.as_view(template_name="index.html")),
-    ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    ]
+
+    # Serve root-level assets from build/ directory
+    build_dir = os.path.join(settings.BASE_DIR, "build/")
+    root_assets = [
+        "manifest.json",
+        "robots.txt",
+        "favicon.png",
+        "favicon.ico",
+        "logo.png",
+        "logo_with_text.svg",
+    ]
+    for asset in root_assets:
+        if os.path.exists(os.path.join(build_dir, asset)):
+            urlpatterns.append(
+                re_path(rf"^{asset}$", serve, {"document_root": build_dir, "path": asset})
+            )
+
+    # Serve static assets from build/assets/ (Vite) or build/static/ (CRA)
+    # This MUST come before the catch-all route
+    if os.path.exists(os.path.join(settings.BASE_DIR, "build/assets/")):
+        urlpatterns.append(
+            re_path(
+                r"^assets/(?P<path>.*)$",
+                serve,
+                {"document_root": os.path.join(settings.BASE_DIR, "build/assets/")},
+            )
+        )
+    if os.path.exists(os.path.join(settings.BASE_DIR, "build/static/")):
+        urlpatterns.append(
+            re_path(
+                r"^static/(?P<path>.*)$",
+                serve,
+                {"document_root": os.path.join(settings.BASE_DIR, "build/static/")},
+            )
+        )
+
+    # Catch-all route for SPA routing - this MUST be last
+    urlpatterns.append(re_path(".*", TemplateView.as_view(template_name="index.html")))
 else:
     urlpatterns = [
         path("api/", api.api.urls),

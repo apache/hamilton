@@ -46,7 +46,7 @@ const baseQuery = fetchBaseQuery({
     const token = authData?.accessToken;
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
-    } else if (process.env.REACT_APP_AUTH_MODE === "local") {
+    } else if (import.meta.env.VITE_AUTH_MODE === "local") {
       headers.set("x-api-user", getStateTyped().auth.localUserName || "");
       headers.set("x-api-key", getStateTyped().auth.localAPIKey || "");
       console.log(headers)

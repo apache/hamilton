@@ -363,60 +363,66 @@ export const TaskView = (props: {
         </select>
       </div>
       <div className="hidden sm:block">
-        <nav className="flex space-x-4 items-center" aria-label="Tabs">
-          <Link
-            className={classNames(
-              "text-gray-500 hover:text-gray-700",
-              "py-2 font-medium text-md rounded-md"
-            )}
-            to={path.split("/task/")[0]}
-          >
-            <BiChevronLeft className="inline-block text-2xl" />
-          </Link>
-          {tabs.map((tab) => (
-            <a
-              onClick={() => {
-                setWhichTab(tab.name);
-              }}
-              key={tab.name}
-              href={tab.href}
+        <nav className="flex flex-wrap gap-2 items-center" aria-label="Tabs">
+          <div className="flex items-center gap-2">
+            <Link
               className={classNames(
-                tab.name == whichTab
-                  ? "bg-dwdarkblue/20 text-dwdarkblue"
-                  : "text-gray-500 hover:text-gray-700",
-                "px-3 py-2 font-medium text-md rounded-md"
+                "text-gray-500 hover:text-gray-700",
+                "py-2 font-medium text-md rounded-md"
               )}
-              aria-current={tab.name == whichTab ? "page" : undefined}
+              to={path.split("/task/")[0]}
             >
-              {tab.name}
-            </a>
-          ))}
-          <NodeLinkMenu
-            name="Upstream"
-            nodeLinks={upstreamNodes}
-            projectId={props.projectId}
-          />
-          <NodeLinkMenu
-            name="Downstream"
-            nodeLinks={downstreamNodes}
-            projectId={props.projectId}
-          />
-          <SelectRunsToCompare
-            allRunIds={props.knownRunIds}
-            selectedRunIds={
-              props.nodeRunData
-                .map((i) => i?.dag_run)
-                .filter((i) => i !== undefined) as number[]
-            }
-            setRuns={props.setRuns}
-          ></SelectRunsToCompare>
+              <BiChevronLeft className="inline-block text-2xl" />
+            </Link>
+            {tabs.map((tab) => (
+              <a
+                onClick={() => {
+                  setWhichTab(tab.name);
+                }}
+                key={tab.name}
+                href={tab.href}
+                className={classNames(
+                  tab.name == whichTab
+                    ? "bg-dwdarkblue/20 text-dwdarkblue"
+                    : "text-gray-500 hover:text-gray-700",
+                  "px-3 py-2 font-medium text-md rounded-md whitespace-nowrap"
+                )}
+                aria-current={tab.name == whichTab ? "page" : undefined}
+              >
+                {tab.name}
+              </a>
+            ))}
+          </div>
+          <div className="flex items-center gap-2">
+            <NodeLinkMenu
+              name="Upstream"
+              nodeLinks={upstreamNodes}
+              projectId={props.projectId}
+            />
+            <NodeLinkMenu
+              name="Downstream"
+              nodeLinks={downstreamNodes}
+              projectId={props.projectId}
+            />
+            <div className="min-w-[150px]">
+              <SelectRunsToCompare
+                allRunIds={props.knownRunIds}
+                selectedRunIds={
+                  props.nodeRunData
+                    .map((i) => i?.dag_run)
+                    .filter((i) => i !== undefined) as number[]
+                }
+                setRuns={props.setRuns}
+              ></SelectRunsToCompare>
+            </div>
+          </div>
         </nav>
       </div>
       {/* <NodeLinkSection
         upstreamNodes={upstreamNodes}
         downstreamNodes={downstreamNodes}
       /> */}
-      <h2 className="text-gray-800 text-xl pb-2 font-semibold">{taskName}</h2>
+      <h2 className="text-gray-800 text-xl pb-2 pt-2 font-semibold">{taskName}</h2>
 
       {whichTab === "Errors" ? (
         <div className="pt-4">
