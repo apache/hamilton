@@ -32,6 +32,7 @@ Usage:
     # Then run this script (optionally with a user name for API calls):
     python ui/test_tracking_simple.py
     python ui/test_tracking_simple.py --user my-username
+    python ui/test_tracking_simple.py --dag dataframe   # DataFrame-based DAG
 """
 
 import argparse
@@ -49,6 +50,12 @@ def _parse_args():
         "--user",
         default="test-user",
         help="User name to use for API calls (x-api-user and tracker username)",
+    )
+    parser.add_argument(
+        "--dag",
+        choices=["simple", "dataframe"],
+        default="simple",
+        help="DAG to run: 'simple' (default) or 'dataframe' (DataFrame-based)",
     )
     return parser.parse_args()
 
@@ -133,8 +140,15 @@ except Exception as e:
 
 print()
 
-# Step 3: Create and run a simple Hamilton DAG
-print("🚀 Creating Hamilton DAG...")
+# Step 3: Create and run a Hamilton DAG
+if args.dag == "dataframe":
+    DAG_OUTPUTS = ["average", "sum_all", "x_squared", "y_doubled"]
+    DAG_NAME = "test_tracking_dag"
+else:
+    DAG_OUTPUTS = ["average_squared", "sum_squared"]
+    DAG_NAME = "simple_test_dag"
+
+print("🚀 Creating Hamilton DAG (" + args.dag + ")...")
 
 
 # Define simple Hamilton functions inline
@@ -158,21 +172,60 @@ def average_squared(sum_squared: float, input_numbers: pd.Series) -> float:
     return sum_squared / len(input_numbers)
 
 
+# DataFrame-based DAG (--dag dataframe)
+def input_data() -> pd.DataFrame:
+    """Create sample input data."""
+    return pd.DataFrame({"x": [1, 2, 3, 4, 5], "y": [2, 4, 6, 8, 10]})
+
+
+def x_squared(input_data: pd.DataFrame) -> pd.Series:
+    """Square the x column."""
+    return input_data["x"] ** 2
+
+
+def y_doubled(input_data: pd.DataFrame) -> pd.Series:
+    """Double the y column."""
+    return input_data["y"] * 2
+
+
+def sum_all(x_squared: pd.Series, y_doubled: pd.Series) -> float:
+    """Sum all values."""
+    return x_squared.sum() + y_doubled.sum()
+
+
+def average(sum_all: float, input_data: pd.DataFrame) -> float:
+    """Calculate average."""
+    total_elements = len(input_data) * 2  # x and y columns
+    return sum_all / total_elements
+
+
 # Build driver WITHOUT tracking first (to test basic functionality)
 print("   Building DAG...")
 dr = driver.Builder().with_modules(sys.modules[__name__]).build()
 
 print("   DAG created successfully!")
+if args.dag == "dataframe":
+    print()
+    print("📈 DAG structure:")
+    dr.display_all_functions()
 print()
 
 # Step 4: Execute without tracking
 print("▶️  Executing DAG (without tracking)...")
-result = dr.execute(["average_squared", "sum_squared"])
+result = dr.execute(DAG_OUTPUTS)
 
 print()
 print("Results:")
-print(f"  - sum_squared: {result['sum_squared']}")
-print(f"  - average_squared: {result['average_squared']}")
+if args.dag == "dataframe":
+    for key, value in result.items():
+        if isinstance(value, pd.Series):
+            print(f"  {key}:")
+            print(value.to_string())
+        else:
+            print(f"  {key}: {value}")
+else:
+    print(f"  - sum_squared: {result['sum_squared']}")
+    print(f"  - average_squared: {result['average_squared']}")
 print()
 
 # Step 5: Now execute WITH tracking
@@ -183,7 +236,7 @@ try:
     tracker = adapters.HamiltonTracker(
         project_id=project_id,
         username=USER_NAME,
-        dag_name="simple_test_dag",
+        dag_name=DAG_NAME,
         tags={"test": "true", "environment": "local"},
         hamilton_api_url="http://localhost:8241",
         hamilton_ui_url="http://localhost:8241",
@@ -194,7 +247,7 @@ try:
     dr_tracked = driver.Builder().with_modules(sys.modules[__name__]).with_adapters(tracker).build()
 
     # Execute
-    result_tracked = dr_tracked.execute(["average_squared", "sum_squared"])
+    result_tracked = dr_tracked.execute(DAG_OUTPUTS)
 
     print("✅ Execution tracked successfully!")
     print()
