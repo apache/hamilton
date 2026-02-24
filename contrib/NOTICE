@@ -3,3 +3,33 @@ Copyright 2025-2026 The Apache Software Foundation
 
 This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
+
+================================================================================
+
+This product includes code adapted from the OpenAI Cookbook
+(https://github.com/openai/openai-cookbook), which is licensed under the MIT License.
+Specifically, the hamilton.contrib.user.skrawcz.customize_embeddings module is based on:
+https://github.com/openai/openai-cookbook/blob/6d89e11fed344237f07910a98ba98303ece7dd18/examples/Customizing_embeddings.ipynb
+
+  MIT License
+  Copyright (c) 2025 OpenAI
+
+================================================================================
+
+This product includes code adapted from NumPy Tutorials
+(https://github.com/numpy/numpy-tutorials), which is licensed under the BSD 3-Clause License.
+Specifically, the hamilton.contrib.user.skrawcz.air_quality_analysis module is based on:
+https://github.com/numpy/numpy-tutorials/blob/main/content/tutorial-air-quality-analysis.md
+
+  BSD 3-Clause License
+  Copyright (c) 2005-2025, NumPy Developers
+
+================================================================================
+
+This product references code patterns from Optuna Examples
+(https://github.com/optuna/optuna-examples), which is licensed under the MIT License.
+Specifically, the hamilton.contrib.user.zilto.xgboost_optuna module references:
+https://github.com/optuna/optuna-examples/blob/main/xgboost/xgboost_integration.py
+
+  MIT License
+  Copyright (c) 2018 Preferred Networks, Inc.
