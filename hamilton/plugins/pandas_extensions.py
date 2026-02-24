@@ -24,6 +24,8 @@ from io import BufferedReader, BytesIO, StringIO
 from pathlib import Path
 from typing import Any, TypeAlias
 
+from packaging.version import Version
+
 try:
     import pandas as pd
 except ImportError as e:
@@ -127,10 +129,10 @@ class PandasCSVReader(DataLoader):
     na_values: Hashable | Iterable | Mapping | None = None
     keep_default_na: bool = True
     na_filter: bool = True
-    verbose: bool = False
+    verbose: bool | None = None
     skip_blank_lines: bool = True
     parse_dates: bool | Sequence | None | None = False
-    keep_date_col: bool = False
+    keep_date_col: bool | None = None
     date_format: str | None = None
     dayfirst: bool = False
     cache_dates: bool = True
@@ -153,7 +155,7 @@ class PandasCSVReader(DataLoader):
     ) = "strict"
     dialect: str | csv.Dialect | None = None
     on_bad_lines: Literal["error", "warn", "skip"] | Callable = "error"
-    delim_whitespace: bool = False
+    delim_whitespace: bool | None = None
     low_memory: bool = True
     memory_map: bool = False
     float_precision: Literal["high", "legacy", "round_trip"] | None = None
@@ -200,13 +202,13 @@ class PandasCSVReader(DataLoader):
             kwargs["keep_default_na"] = self.keep_default_na
         if self.na_filter is not None:
             kwargs["na_filter"] = self.na_filter
-        if pd.__version__ < "3.0" and self.verbose is not None:
+        if Version(pd.__version__) < Version("2.2") and self.verbose is not None:
             kwargs["verbose"] = self.verbose
         if self.skip_blank_lines is not None:
             kwargs["skip_blank_lines"] = self.skip_blank_lines
         if self.parse_dates is not None:
             kwargs["parse_dates"] = self.parse_dates
-        if pd.__version__ < "3.0" and self.keep_date_col is not None:
+        if Version(pd.__version__) < Version("2.2") and self.keep_date_col is not None:
             kwargs["keep_date_col"] = self.keep_date_col
         if self.date_format is not None:
             kwargs["date_format"] = self.date_format
@@ -242,7 +244,7 @@ class PandasCSVReader(DataLoader):
             kwargs["dialect"] = self.dialect
         if self.on_bad_lines is not None:
             kwargs["on_bad_lines"] = self.on_bad_lines
-        if pd.__version__ < "3.0" and self.delim_whitespace is not None:
+        if Version(pd.__version__) < Version("2.2") and self.delim_whitespace is not None:
             kwargs["delim_whitespace"] = self.delim_whitespace
         if self.low_memory is not None:
             kwargs["low_memory"] = self.low_memory
@@ -252,7 +254,7 @@ class PandasCSVReader(DataLoader):
             kwargs["float_precision"] = self.float_precision
         if self.storage_options is not None:
             kwargs["storage_options"] = self.storage_options
-        if pd.__version__ >= "2.0" and self.dtype_backend is not None:
+        if Version(pd.__version__) >= Version("2.0") and self.dtype_backend is not None:
             kwargs["dtype_backend"] = self.dtype_backend
 
         return kwargs
@@ -385,9 +387,9 @@ class PandasParquetReader(DataLoader):
             kwargs["columns"] = self.columns
         if self.storage_options is not None:
             kwargs["storage_options"] = self.storage_options
-        if pd.__version__ < "2.0" and self.use_nullable_dtypes is not None:
+        if Version(pd.__version__) < Version("2.0") and self.use_nullable_dtypes is not None:
             kwargs["use_nullable_dtypes"] = self.use_nullable_dtypes
-        if pd.__version__ >= "2.0" and self.dtype_backend is not None:
+        if Version(pd.__version__) >= Version("2.0") and self.dtype_backend is not None:
             kwargs["dtype_backend"] = self.dtype_backend
         if self.filesystem is not None:
             kwargs["filesystem"] = self.filesystem
@@ -592,7 +594,7 @@ class PandasJsonReader(DataLoader):
             kwargs["date_unit"] = self.date_unit
         if self.dtype is not None:
             kwargs["dtype"] = self.dtype
-        if pd.__version__ >= "2.0" and self.dtype_backend is not None:
+        if Version(pd.__version__) >= Version("2.0") and self.dtype_backend is not None:
             kwargs["dtype_backend"] = self.dtype_backend
         if self.encoding is not None:
             kwargs["encoding"] = self.encoding
@@ -731,7 +733,7 @@ class PandasSqlReader(DataLoader):
             kwargs["columns"] = self.columns
         if self.dtype is not None:
             kwargs["dtype"] = self.dtype
-        if pd.__version__ >= "2.0" and self.dtype_backend is not None:
+        if Version(pd.__version__) >= Version("2.0") and self.dtype_backend is not None:
             kwargs["dtype_backend"] = self.dtype_backend
         if self.index_col is not None:
             kwargs["index_col"] = self.index_col
@@ -872,7 +874,7 @@ class PandasXmlReader(DataLoader):
             kwargs["compression"] = self.compression
         if self.storage_options is not None:
             kwargs["storage_options"] = self.storage_options
-        if pd.__version__ >= "2.0" and self.dtype_backend is not None:
+        if Version(pd.__version__) >= Version("2.0") and self.dtype_backend is not None:
             kwargs["dtype_backend"] = self.dtype_backend
         return kwargs
 
@@ -1022,7 +1024,7 @@ class PandasHtmlReader(DataLoader):
             kwargs["displayed_only"] = self.displayed_only
         if self.extract_links is not None:
             kwargs["extract_links"] = self.extract_links
-        if pd.__version__ >= "2.0" and self.dtype_backend is not None:
+        if Version(pd.__version__) >= Version("2.0") and self.dtype_backend is not None:
             kwargs["dtype_backend"] = self.dtype_backend
         if self.storage_options is not None:
             kwargs["storage_options"] = self.storage_options
@@ -1284,7 +1286,7 @@ class PandasFeatherReader(DataLoader):
             kwargs["use_threads"] = self.use_threads
         if self.storage_options is not None:
             kwargs["storage_options"] = self.storage_options
-        if pd.__version__ >= "2.0" and self.dtype_backend is not None:
+        if Version(pd.__version__) >= Version("2.0") and self.dtype_backend is not None:
             kwargs["dtype_backend"] = self.dtype_backend
 
         return kwargs
@@ -1447,7 +1449,7 @@ class PandasExcelReader(DataLoader):
     na_values = None  # in pandas.read_excel there are not type hints for na_values
     keep_default_na: bool = True
     na_filter: bool = True
-    verbose: bool = False
+    verbose: bool | None = None
     parse_dates: list[int | str] | dict[str, list[int | str]] | bool = False
     # date_parser: Optional[Callable]  # date_parser is deprecated since pandas=2.0.0
     date_format: dict[Hashable, str] | str | None = None
@@ -1595,11 +1597,11 @@ class PandasTableReader(DataLoader):
     na_values: Hashable | Iterable | dict[Hashable, Iterable] | None = None
     keep_default_na: bool = True
     na_filter: bool = True
-    verbose: bool = False
+    verbose: bool | None = None
     skip_blank_lines: bool = True
     parse_dates: list[int | str] | dict[str, list[int | str]] | bool = False
     infer_datetime_format: bool = False
-    keep_date_col: bool = False
+    keep_date_col: bool | None = None
     date_parser: Callable | None = None
     date_format: str | str | None = None
     dayfirst: bool = False
@@ -1619,7 +1621,7 @@ class PandasTableReader(DataLoader):
     encoding_errors: str | None = "strict"
     dialect: str | None = None
     on_bad_lines: Literal["error", "warn", "skip"] | Callable = "error"
-    delim_whitespace: bool = False
+    delim_whitespace: bool | None = None
     low_memory: bool = True
     memory_map: bool = False
     float_precision: Literal["high", "legacy", "round_trip"] | None = None
