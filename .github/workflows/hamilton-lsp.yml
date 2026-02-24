@@ -33,6 +33,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip pytest
+        pip install -e ${{ github.workspace }}
         pip install -e .
     - name: Run unit tests
       run: |
