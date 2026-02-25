@@ -23,7 +23,10 @@ import { HashLink } from "react-router-hash-link";
 import { FaRegFileCode } from "react-icons/fa";
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 import { TaskProperty } from "./Run";
-import { adjustStatusForDuration, parsePythonType } from "../../../../utils";
+import {
+  adjustStatusForDuration,
+  parsePythonType,
+} from "../../../../utils";
 import { TbDelta } from "react-icons/tb";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import VisibilitySensor from "react-visibility-sensor";
@@ -205,7 +208,10 @@ const cols = (hasAnyGroupingTask: boolean) => {
                     "NodeMetadataPythonType1"
                   )
                 : undefined;
-              if (nodeType === undefined || seenTypes.has(nodeType.type_name)) {
+              if (
+                nodeType === undefined ||
+                seenTypes.has(nodeType.type_name)
+              ) {
                 return <></>;
               }
               seenTypes.add(nodeType.type_name);
@@ -214,7 +220,10 @@ const cols = (hasAnyGroupingTask: boolean) => {
                 return <></>;
               }
               return (
-                <code className="break-words whitespace-pre-wrap" key={i}>
+                <code
+                  className="break-words whitespace-pre-wrap"
+                  key={i}
+                >
                   {type}
                 </code>
               );
@@ -250,9 +259,15 @@ const cols = (hasAnyGroupingTask: boolean) => {
       displayName: "Properties",
       render: (props: RenderProps) => {
         const types = new Set<"input" | "output">();
-        const inputNodeValues = props.inputNodeValues.filter((n) => n);
+        const inputNodeValues = props.inputNodeValues.filter(
+          (n) => n
+        );
         // const outputNodes = props.isOutputNodes.filter((n) => n);
-        if (props.isExpanded && props.summaryRow && props.code.length > 1) {
+        if (
+          props.isExpanded &&
+          props.summaryRow &&
+          props.code.length > 1
+        ) {
           return <></>;
         }
         props.isOutputNodes.forEach((isOutputNode, i) => {
@@ -417,10 +432,10 @@ const GroupedTableRow: React.FC<{
         anyFailed && !props.isHighlighted
           ? "bg-dwred/20"
           : anyFailed && props.isHighlighted
-          ? "bg-dwred/30"
-          : props.isHighlighted
-          ? "bg-slate-100"
-          : ""
+            ? "bg-dwred/30"
+            : props.isHighlighted
+              ? "bg-slate-100"
+              : ""
       } h-12`}
       onMouseEnter={() => props.setHighlighted(true)}
       onMouseLeave={() => props.setHighlighted(false)}
@@ -436,15 +451,21 @@ const GroupedTableRow: React.FC<{
             {
               <ToRender
                 toggleExpanded={
-                  expandable ? () => setExpanded(!expanded) : undefined
+                  expandable
+                    ? () => setExpanded(!expanded)
+                    : undefined
                 }
                 code={props.codeArtifacts}
                 projectId={props.projectId}
                 runIds={props.runIds}
                 taskRuns={props.nodeRuns}
-                statuses={props.nodeRuns.map((nodeRun) => nodeRun.status)}
+                statuses={props.nodeRuns.map(
+                  (nodeRun) => nodeRun.status
+                )}
                 nodeName={props.node}
-                summaryRow={props.isSummaryRow && props.nodeRuns.length > 1}
+                summaryRow={
+                  props.isSummaryRow && props.nodeRuns.length > 1
+                }
                 isExpanded={expanded}
                 projectVersionIds={props.projectVersionIds}
                 navigate={navigate}
@@ -584,9 +605,15 @@ export const TaskTable: FC<{
       }
       codeArtifactsByID.set(codeArtifact.id, codeArtifact);
     });
-    const nodeTemplatesByTemplateName = new Map<string, NodeTemplate>();
+    const nodeTemplatesByTemplateName = new Map<
+      string,
+      NodeTemplate
+    >();
     projectVersion.nodes.forEach((nodeTemplate) => {
-      nodeTemplatesByTemplateName.set(nodeTemplate.name, nodeTemplate);
+      nodeTemplatesByTemplateName.set(
+        nodeTemplate.name,
+        nodeTemplate
+      );
     });
 
     props.runs[i].node_runs.forEach((task) => {
@@ -594,7 +621,8 @@ export const TaskTable: FC<{
         tasksGroupedByNodeName.set(task.node_name, []);
       }
       const nodeTemplate =
-        nodeTemplatesByTemplateName.get(task.node_template_name) || undefined;
+        nodeTemplatesByTemplateName.get(task.node_template_name) ||
+        undefined;
       // TODO -- handle multiple code artifacts
       const codeArtifactId = nodeTemplate?.code_artifacts?.[0];
       const codeArtifact = codeArtifactId
@@ -615,35 +643,38 @@ export const TaskTable: FC<{
     runsById.set(run.id as number, run);
   });
 
-  const taskRowData = Array.from(tasksGroupedByNodeName.entries()).map(
-    ([nodeName, tasks]) => {
-      return {
-        node: nodeName,
-        tasks: tasks.map((task) => task.task),
-        runIds: tasks.map((task) => task.runId),
-        projectVersionIds: tasks.map((task) => task.projectVersionId),
-        isOutputNodes: tasks.map(
-          (task) =>
-            runsById.get(task.runId)?.outputs.indexOf(task.task.node_name) !==
-            -1
-        ),
-        // input nodes have values as well
-        inputNodeValues: tasks.map(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (task) => (runsById.get(task.runId)?.inputs as any)[nodeName]
-        ),
-        codeArtifacts: tasks.map((task) => task.codeArtifact),
-        nodeTemplates: tasks.map((task) => task.nodeTemplate),
-      };
+  const taskRowData = Array.from(
+    tasksGroupedByNodeName.entries()
+  ).map(([nodeName, tasks]) => {
+    return {
+      node: nodeName,
+      tasks: tasks.map((task) => task.task),
+      runIds: tasks.map((task) => task.runId),
+      projectVersionIds: tasks.map((task) => task.projectVersionId),
+      isOutputNodes: tasks.map(
+        (task) =>
+          runsById
+            .get(task.runId)
+            ?.outputs.indexOf(task.task.node_name) !== -1
+      ),
+      // input nodes have values as well
+      inputNodeValues: tasks.map(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (task) => (runsById.get(task.runId)?.inputs as any)[nodeName]
+      ),
+      codeArtifacts: tasks.map((task) => task.codeArtifact),
+      nodeTemplates: tasks.map((task) => task.nodeTemplate),
+    };
+  });
+  const hasAnyGroupingTask = props.runs[0].node_runs.some(
+    (nodeRun) => {
+      const taskName = parseNode(
+        nodeRun.node_template_name,
+        nodeRun.node_name
+      )[0];
+      return taskName !== undefined;
     }
   );
-  const hasAnyGroupingTask = props.runs[0].node_runs.some((nodeRun) => {
-    const taskName = parseNode(
-      nodeRun.node_template_name,
-      nodeRun.node_name
-    )[0];
-    return taskName !== undefined;
-  });
 
   return (
     <div className="">
@@ -663,7 +694,9 @@ export const TaskTable: FC<{
                     >
                       <Icon
                         className="hover:scale-125 hover:cursor-pointer text-2xl text-gray-400 mr-1"
-                        onClick={() => props.setIsMinimized(!props.isMinimized)}
+                        onClick={() =>
+                          props.setIsMinimized(!props.isMinimized)
+                        }
                       />
                     </div>
                   </th>
@@ -710,7 +743,9 @@ export const TaskTable: FC<{
                                 key={index}
                                 isHighlighted={
                                   props.highlightedTasks !== null &&
-                                  props.highlightedTasks?.indexOf(node) !== -1
+                                  props.highlightedTasks?.indexOf(
+                                    node
+                                  ) !== -1
                                 }
                                 setHighlighted={(highlighted) => {
                                   props.setHighlightedTasks(
@@ -727,7 +762,9 @@ export const TaskTable: FC<{
                                 inputNodeValues={inputNodeValues}
                                 isOutputNodes={isOutputNodes}
                                 highlightedRun={props.highlightedRun}
-                                setHighlightedRun={props.setHighlightedRun}
+                                setHighlightedRun={
+                                  props.setHighlightedRun
+                                }
                                 isSubrow={false}
                                 node={node}
                                 hasAnyTask={hasAnyGroupingTask}

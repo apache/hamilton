@@ -31,7 +31,7 @@ export const useLocalStorage = (
   defaultValue: string | undefined
 ): [
   string | undefined,
-  React.Dispatch<React.SetStateAction<string | undefined>>
+  React.Dispatch<React.SetStateAction<string | undefined>>,
 ] => {
   const [value, setValue] = useState(() => {
     return getStorageValue(key, defaultValue);

@@ -60,9 +60,7 @@ export const getColorFromStatus = (status: RunStatusType) => {
 export const RunStatus = ({ status }: { status: RunStatusType }) => {
   return (
     <div
-      className={`rounded-md text-white px-1 py-1 w-min ${
-        getColorFromStatus(status).background
-      }`}
+      className={`rounded-md text-white px-1 py-1 w-min ${getColorFromStatus(status).background}`}
     >
       {status.toLowerCase()}
     </div>

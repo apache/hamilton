@@ -18,7 +18,11 @@
  */
 
 import { Switch } from "@headlessui/react";
-import { DAGNode, NodeGroupingState, TerminalVizNodeType } from "./types";
+import {
+  DAGNode,
+  NodeGroupingState,
+  TerminalVizNodeType,
+} from "./types";
 import { classNames } from "../../../utils";
 
 export const GROUPING_FUNCTION_OPTIONS = [
@@ -32,7 +36,10 @@ export const GROUPING_FUNCTION_OPTIONS = [
         return undefined;
       }
       // TODO -- make this work for more than just function
-      return node.codeArtifact?.name.split(".").slice(0, -1).join(".");
+      return node.codeArtifact?.name
+        .split(".")
+        .slice(0, -1)
+        .join(".");
     },
   },
   {
@@ -110,24 +117,35 @@ export const ToggleSwitch = (props: {
 
 type NodeHierarchyManagerProps = {
   nodeGroupingState: NodeGroupingState[];
-  setNodeGroupingState: (nodeGroupingState: NodeGroupingState[]) => void;
+  setNodeGroupingState: (
+    nodeGroupingState: NodeGroupingState[]
+  ) => void;
 };
 
-export const NodeHierarchyManager = (props: NodeHierarchyManagerProps) => {
+export const NodeHierarchyManager = (
+  props: NodeHierarchyManagerProps
+) => {
   return (
     <div className="bg-white/90">
-      <h1 className="font-semibold p-1 text-gray-800 ">Node grouping</h1>
+      <h1 className="font-semibold p-1 text-gray-800 ">
+        Node grouping
+      </h1>
       <div className="space-y-5 p-1 rounded-md">
         {props.nodeGroupingState.map(
           ({ displayName, displayGroup, displaySubgroups }, i) => {
             return (
-              <div className="flex flex-row items-center gap-2 text-xs" key={i}>
+              <div
+                className="flex flex-row items-center gap-2 text-xs"
+                key={i}
+              >
                 <span className="text-gray-500">{"group"}</span>
                 <ToggleSwitch
                   checked={displayGroup}
                   setChecked={(checked) => {
                     const newNodeGroupingState = [
-                      ...props.nodeGroupingState.map((i) => ({ ...i })),
+                      ...props.nodeGroupingState.map((i) => ({
+                        ...i,
+                      })),
                     ];
                     newNodeGroupingState[i].displayGroup = checked;
                     // We can't collapse subgroups if we can't display group
@@ -142,9 +160,12 @@ export const NodeHierarchyManager = (props: NodeHierarchyManagerProps) => {
                   checked={!displaySubgroups}
                   setChecked={(checked) => {
                     const newNodeGroupingState = [
-                      ...props.nodeGroupingState.map((i) => ({ ...i })),
+                      ...props.nodeGroupingState.map((i) => ({
+                        ...i,
+                      })),
                     ];
-                    newNodeGroupingState[i].displaySubgroups = !checked;
+                    newNodeGroupingState[i].displaySubgroups =
+                      !checked;
                     if (checked) {
                       newNodeGroupingState[i].displayGroup = true;
                     }
@@ -154,7 +175,8 @@ export const NodeHierarchyManager = (props: NodeHierarchyManagerProps) => {
 
                 <span className="text-gray-700 font-semibold">
                   {" "}
-                  <span className="font-normal">by</span> {displayName}
+                  <span className="font-normal">by</span>{" "}
+                  {displayName}
                 </span>
               </div>
             );

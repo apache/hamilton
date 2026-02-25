@@ -65,9 +65,12 @@ import {
  * Account information
  */
 export const useUserInformation = useTrackingserverAuthApiWhoamiQuery;
-export const useDeleteAPIKey = useTrackingserverAuthApiDeleteApiKeyMutation;
-export const useAPIKeysFromUser = useTrackingserverAuthApiGetApiKeysQuery;
-export const useCreateAPIKey = useTrackingserverAuthApiCreateApiKeyMutation;
+export const useDeleteAPIKey =
+  useTrackingserverAuthApiDeleteApiKeyMutation;
+export const useAPIKeysFromUser =
+  useTrackingserverAuthApiGetApiKeysQuery;
+export const useCreateAPIKey =
+  useTrackingserverAuthApiCreateApiKeyMutation;
 
 export type APIKey = ApiKeyOut;
 export type UserInformation = WhoAmIResult;
@@ -76,14 +79,16 @@ export type UserInformation = WhoAmIResult;
  * Project/version/template information
  */
 
-export const useProjectByID = useTrackingserverProjectsApiGetProjectByIdQuery;
+export const useProjectByID =
+  useTrackingserverProjectsApiGetProjectByIdQuery;
 export const useDAGTemplatesByID =
   useTrackingserverTemplateApiGetFullDagTemplatesQuery;
 export const useLatestDAGTemplates =
   useTrackingserverTemplateApiGetLatestDagTemplatesQuery;
 export const useUpdateProject =
   useTrackingserverProjectsApiUpdateProjectMutation;
-export const useAllProjects = useTrackingserverProjectsApiGetProjectsQuery;
+export const useAllProjects =
+  useTrackingserverProjectsApiGetProjectsQuery;
 export const useCreateProject =
   useTrackingserverProjectsApiCreateProjectMutation;
 export const useUpdateDAGTemplate =
@@ -113,7 +118,8 @@ export function getNodeOutputType<T>(
   return nodeTemplate.output as T;
 }
 
-export type NodeMetadataPythonType1 = AllNodeMetadataTypes["python_type__1"];
+export type NodeMetadataPythonType1 =
+  AllNodeMetadataTypes["python_type__1"];
 
 // export type CodeVersionGit1 = AllCodeVersionTypes["git__1"];
 
@@ -160,7 +166,8 @@ export type CodeVersionGit1 = AllCodeVersionTypes["git__1"];
 export const useLatestDAGRuns =
   useTrackingserverRunTrackingApiGetLatestDagRunsQuery;
 
-export const useDAGRunsByIds = useTrackingserverRunTrackingApiGetDagRunsQuery;
+export const useDAGRunsByIds =
+  useTrackingserverRunTrackingApiGetDagRunsQuery;
 
 export const useNodeRunsByTemplateAndProject =
   useTrackingserverRunTrackingApiGetLatestTemplateRunsQuery;
@@ -168,7 +175,10 @@ export const useNodeRunsByTemplateAndProject =
 export const useIndividualNodeRunData =
   useTrackingserverRunTrackingApiGetNodeRunForDagsQuery;
 
-export type RunStatusType = DagRunUpdate["run_status"] | "NOT_RUN" | "TIMEOUT";
+export type RunStatusType =
+  | DagRunUpdate["run_status"]
+  | "NOT_RUN"
+  | "TIMEOUT";
 export const RUN_SUCCESS_STATUS = "SUCCESS";
 export const RUN_FAILURE_STATUS = "FAILURE";
 
@@ -183,7 +193,10 @@ export type CatalogNodeRun = NodeRunOutWithExtraData;
  */
 
 const projectAttributeTypeMap = {
-  AttributeDocumentationLoom1: { version: 1, type: "documentation_loom" },
+  AttributeDocumentationLoom1: {
+    version: 1,
+    type: "documentation_loom",
+  },
 };
 
 export type AttributeDocumentationLoom1 =
@@ -195,7 +208,9 @@ export function getProjectAttributes<T>(
 ): { name: string; value: T }[] {
   const { version, type } = projectAttributeTypeMap[cls];
   return allAttributes
-    .filter((attr) => attr.schema_version === version && attr.type === type)
+    .filter(
+      (attr) => attr.schema_version === version && attr.type === type
+    )
     .map((item) => {
       return {
         name: item.name,
@@ -206,9 +221,11 @@ export function getProjectAttributes<T>(
 
 export type AttributePrimitive1 = AllAttributeTypes["primitive__1"];
 
-export type AttributeUnsupported1 = AllAttributeTypes["unsupported__1"];
+export type AttributeUnsupported1 =
+  AllAttributeTypes["unsupported__1"];
 
-export type AttributePandasDescribe1 = AllAttributeTypes["pandas_describe__1"];
+export type AttributePandasDescribe1 =
+  AllAttributeTypes["pandas_describe__1"];
 
 export type AttributeError1 = AllAttributeTypes["error__1"];
 
@@ -230,9 +247,12 @@ export const nodeAttributeTypeMap = {
   AttributeError1: { version: 1, type: "error" },
   AttributeDict1: { version: 1, type: "dict" },
   AttributeDict2: { version: 2, type: "dict" },
-  AttributeDagworksDescribe3: { version: 3, type: "dagworks_describe" },
-  AttributeHTML1: {version: 1, type: "html"},
-  AttributeSchema1: {version: 1, type: "schema"},
+  AttributeDagworksDescribe3: {
+    version: 3,
+    type: "dagworks_describe",
+  },
+  AttributeHTML1: { version: 1, type: "html" },
+  AttributeSchema1: { version: 1, type: "schema" },
 };
 
 export type DAGWorksDescribeColumn =
@@ -254,7 +274,9 @@ export function getNodeRunAttributes<T>(
         runId: dagRunIds[i],
       };
     })
-    .filter((attr) => attr.schema_version === version && attr.type === type);
+    .filter(
+      (attr) => attr.schema_version === version && attr.type === type
+    );
 }
 
 export const usePhoneHome = useTrackingserverAuthApiPhoneHomeQuery;

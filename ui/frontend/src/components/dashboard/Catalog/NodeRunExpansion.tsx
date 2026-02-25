@@ -36,7 +36,10 @@ import { GenericTable } from "../../common/GenericTable";
 import { RunLink, VersionLink } from "../../common/CommonLinks";
 import { RunStatus } from "../Runs/Status";
 import ReactTimeAgo from "react-time-ago";
-import { adjustStatusForDuration, parsePythonType } from "../../../utils";
+import {
+  adjustStatusForDuration,
+  parsePythonType,
+} from "../../../utils";
 import { FunctionDisplay, RowToDisplay } from "./SearchTable";
 import { ErrorPage } from "../../common/Error";
 import { Loading } from "../../common/Loading";
@@ -149,7 +152,10 @@ export const columns = [
     displayName: "",
     Render: (nodeRun: CatalogNodeRun) => {
       // TODO -- ensure that this is the right type
-      if (nodeRun.start_time === undefined || nodeRun.start_time === null) {
+      if (
+        nodeRun.start_time === undefined ||
+        nodeRun.start_time === null
+      ) {
         return <span className="font-semibold">-</span>;
       }
       return <ReactTimeAgo date={new Date(nodeRun.start_time)} />;
@@ -169,7 +175,9 @@ export const NodeRunsTable = (props: {
     const dagTemplate = nodeTemplate.dag_template as number;
     nodeTemplatesByDAGTemplate.set(dagTemplate, nodeTemplate); // One per each DAG run? AT least they'll be the same...
   });
-  const [selectedRunIds, setSelectedRunIds] = useState<Set<number>>(new Set());
+  const [selectedRunIds, setSelectedRunIds] = useState<Set<number>>(
+    new Set()
+  );
 
   const codeArtifactsById = new Map<number, CodeArtifact>();
   props.codeArtifacts.forEach((codeArtifact) => {
@@ -180,7 +188,8 @@ export const NodeRunsTable = (props: {
     const nodeTemplate = nodeTemplatesByDAGTemplate.get(
       nodeRun.dag_template_id as number
     );
-    const hasCodeArtifact = (nodeTemplate?.code_artifacts || []).length > 0;
+    const hasCodeArtifact =
+      (nodeTemplate?.code_artifacts || []).length > 0;
     return [
       nodeRun.dag_run?.toString() || "",
       {
@@ -189,7 +198,9 @@ export const NodeRunsTable = (props: {
         ...{ projectId: props.projectId },
         ...{
           codeArtifact: hasCodeArtifact
-            ? codeArtifactsById.get(nodeTemplate?.code_artifacts[0] as number) // TODO -- use multiple code artifacts to link out to multiple...
+            ? codeArtifactsById.get(
+                nodeTemplate?.code_artifacts[0] as number
+              ) // TODO -- use multiple code artifacts to link out to multiple...
             : undefined,
         },
       },
@@ -218,28 +229,35 @@ export const NodeRunsTable = (props: {
           {selectedRunIds.size >= 2
             ? "Compare"
             : selectedRunIds.size == 1
-            ? "View"
-            : "Select..."}
+              ? "View"
+              : "Select..."}
         </button>
       </div>
       <GenericTable
         data={data}
         columns={columns}
         dataTypeName={"Version"}
-        dataTypeDisplay={(label: string, nodeRun: NodeRunAndTemplate) => (
+        dataTypeDisplay={(
+          label: string,
+          nodeRun: NodeRunAndTemplate
+        ) => (
           <div className="flex flex-row gap-2 items-center">
             <input
               id="comments"
               aria-describedby="comments-description"
               name="comments"
               type="checkbox"
-              checked={selectedRunIds.has(nodeRun.dag_run_id as number)}
+              checked={selectedRunIds.has(
+                nodeRun.dag_run_id as number
+              )}
               onChange={(e) => {
                 const newSelectedRunIds = new Set(selectedRunIds);
                 if (e.target.checked) {
                   newSelectedRunIds.add(nodeRun.dag_run_id as number);
                 } else {
-                  newSelectedRunIds.delete(nodeRun.dag_run_id as number);
+                  newSelectedRunIds.delete(
+                    nodeRun.dag_run_id as number
+                  );
                 }
                 setSelectedRunIds(newSelectedRunIds);
               }}
@@ -344,5 +362,7 @@ export const NodeRunsView = (props: {
           1000,
     };
   });
-  return <RunDurationChart runInfo={runInfo} w="w-[full]" h="h-[500px]" />;
+  return (
+    <RunDurationChart runInfo={runInfo} w="w-[full]" h="h-[500px]" />
+  );
 };

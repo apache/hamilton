@@ -15,7 +15,10 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  createApi,
+  fetchBaseQuery,
+} from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
 
 /**
@@ -47,9 +50,15 @@ const baseQuery = fetchBaseQuery({
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     } else if (import.meta.env.VITE_AUTH_MODE === "local") {
-      headers.set("x-api-user", getStateTyped().auth.localUserName || "");
-      headers.set("x-api-key", getStateTyped().auth.localAPIKey || "");
-      console.log(headers)
+      headers.set(
+        "x-api-user",
+        getStateTyped().auth.localUserName || ""
+      );
+      headers.set(
+        "x-api-key",
+        getStateTyped().auth.localAPIKey || ""
+      );
+      console.log(headers);
     }
     return headers;
   },

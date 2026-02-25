@@ -19,7 +19,9 @@
 
 import { AiFillQuestionCircle } from "react-icons/ai";
 
-export const HelpTooltip: React.FC<{ description: string }> = (props) => {
+export const HelpTooltip: React.FC<{ description: string }> = (
+  props
+) => {
   return (
     <div className="group flex relative">
       <span className="text-gray-400 hover:text-gray-500">

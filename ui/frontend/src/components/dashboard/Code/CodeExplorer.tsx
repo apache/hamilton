@@ -132,7 +132,10 @@ const generateFunctionGroupingLevelViews = (
   return retval;
 };
 
-const generateTopLevelView = (dag: DAGTemplateWithData, project: Project) => {
+const generateTopLevelView = (
+  dag: DAGTemplateWithData,
+  project: Project
+) => {
   /**
    * Generates top level recursive view with project node
    * And a subtree below
@@ -167,7 +170,10 @@ const RecursiveExplorer = ({ view }: { view: RecursiveNodeView }) => {
         style={{ paddingLeft: `${view.level + 0.1}rem` }}
       >
         {view.children.length > 0 && (
-          <ToggleIcon className="hover:scale-125" onClick={toggleOpen} />
+          <ToggleIcon
+            className="hover:scale-125"
+            onClick={toggleOpen}
+          />
         )}
         <Icon className="text-lg" onClick={toggleOpen} />
         {view.link ? (
@@ -191,7 +197,10 @@ const RecursiveExplorer = ({ view }: { view: RecursiveNodeView }) => {
     </>
   );
 };
-const CodeExplorer: FC<CodeExplorerProps> = ({ dagTemplate, project }) => {
+const CodeExplorer: FC<CodeExplorerProps> = ({
+  dagTemplate,
+  project,
+}) => {
   const topLevelView = generateTopLevelView(dagTemplate, project);
   return (
     <div className="text-md rounded-md overflow-clip py-1 sticky top-[4.0rem] max-h-[90vh] ">

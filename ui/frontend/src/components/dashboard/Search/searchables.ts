@@ -17,7 +17,10 @@
 
 import { IconType } from "react-icons";
 import { FaProjectDiagram } from "react-icons/fa";
-import { AiOutlineFunction, AiOutlineNodeIndex } from "react-icons/ai";
+import {
+  AiOutlineFunction,
+  AiOutlineNodeIndex,
+} from "react-icons/ai";
 import { resolveNav } from "../nav";
 import {
   CodeArtifact,
@@ -73,7 +76,9 @@ const SEARCHABLE_CATEGORIES = {
   },
 };
 
-const extractProjectSearchables = (projects: Project[]): SearchableItem[] => {
+const extractProjectSearchables = (
+  projects: Project[]
+): SearchableItem[] => {
   return projects.map((project) => {
     return {
       name: project.name,
@@ -216,7 +221,8 @@ export const extractSearchables = (
   });
 
   const allCodeArtifacts = [
-    ...(currentProjectVersions?.flatMap((i) => i.code_artifacts) || []),
+    ...(currentProjectVersions?.flatMap((i) => i.code_artifacts) ||
+      []),
     ...(catalogData?.code_artifacts.filter(
       (item) => !codeArtifactsInProjectVersions.has(item.name)
     ) || []),

@@ -69,7 +69,9 @@ const DiffView = (props: { oldValue: string; newValue: string }) => {
             />
           </Switch>
           <Label as="span" className="ml-3 text-sm">
-            <span className="font-medium text-gray-500">Split view</span>{" "}
+            <span className="font-medium text-gray-500">
+              Split view
+            </span>{" "}
           </Label>
         </Field>
       </div>
@@ -116,7 +118,9 @@ const Primitive1View = (props: {
             ) => {
               const uniqueTypes = Array.from(
                 new Set(
-                  items.map((item) => parsePythonType({ type_name: item.type }))
+                  items.map((item) =>
+                    parsePythonType({ type_name: item.type })
+                  )
                 )
               );
               return isSummaryRow && isExpanded ? (
@@ -158,7 +162,9 @@ const Primitive1View = (props: {
                         e.stopPropagation();
                       }}
                       className={`w- ${
-                        expanded ? "break-word whitespace-pre-wrap" : "truncate"
+                        expanded
+                          ? "break-word whitespace-pre-wrap"
+                          : "truncate"
                       }  text-gray-500 cursor-cell`}
                     >
                       {items[0].value.toString()}
@@ -210,8 +216,9 @@ const Unsupported1View = (props: {
       <span className="text-lg text-gray-800">
         We currently do not capture data summaries for run(s){" "}
         <code>[{props.runIds.join(", ")}]</code>
-        for <code>{props.taskName}</code>. We are working on adding support for
-        everything -- reach out if you need it and we can prioritize!
+        for <code>{props.taskName}</code>. We are working on adding
+        support for everything -- reach out if you need it and we can
+        prioritize!
       </span>
       <div className="m-8">
         <GenericTable
@@ -224,7 +231,9 @@ const Unsupported1View = (props: {
               Render: (item: AttributeUnsupported1) => {
                 return (
                   <div className="flex flex-col">
-                    <code className="text-sm">{item.unsupported_type}</code>
+                    <code className="text-sm">
+                      {item.unsupported_type}
+                    </code>
                   </div>
                 );
               },
@@ -260,7 +269,9 @@ export const MultiResultSummaryView = (props: {
   projectId: number;
   runIds: number[];
 }) => {
-  const [minimizedAttributes, setMinimizedAttributes] = useState<string[]>([]);
+  const [minimizedAttributes, setMinimizedAttributes] = useState<
+    string[]
+  >([]);
   const toggleExpanded = (attributeName: string) => {
     if (minimizedAttributes.includes(attributeName)) {
       setMinimizedAttributes(
@@ -270,15 +281,20 @@ export const MultiResultSummaryView = (props: {
       setMinimizedAttributes([...minimizedAttributes, attributeName]);
     }
   };
-  const attributes = props.nodeRunData.flatMap((i) => i?.attributes || []);
-  const attributesGroupedByName = attributes.reduce((acc, item) => {
-    if (acc[item.name]) {
-      acc[item.name].push(item);
-    } else {
-      acc[item.name] = [item];
-    }
-    return acc;
-  }, {} as { [key: string]: NodeRunAttribute[] });
+  const attributes = props.nodeRunData.flatMap(
+    (i) => i?.attributes || []
+  );
+  const attributesGroupedByName = attributes.reduce(
+    (acc, item) => {
+      if (acc[item.name]) {
+        acc[item.name].push(item);
+      } else {
+        acc[item.name] = [item];
+      }
+      return acc;
+    },
+    {} as { [key: string]: NodeRunAttribute[] }
+  );
   return (
     <div className="flex flex-col gap-2">
       {Object.entries(attributesGroupedByName).map(([key, value]) => {
@@ -423,11 +439,12 @@ export const ResultsSummaryView = (props: {
     );
   }
 
-  const pandasDescribe1View = getNodeRunAttributes<AttributePandasDescribe1>(
-    props.runAttributes,
-    props.runIds,
-    "AttributePandasDescribe1"
-  );
+  const pandasDescribe1View =
+    getNodeRunAttributes<AttributePandasDescribe1>(
+      props.runAttributes,
+      props.runIds,
+      "AttributePandasDescribe1"
+    );
 
   if (pandasDescribe1View.length > 0) {
     allViews.push(
@@ -456,11 +473,12 @@ export const ResultsSummaryView = (props: {
     );
   }
 
-  const unsupportedViews = getNodeRunAttributes<AttributeUnsupported1>(
-    props.runAttributes,
-    props.runIds,
-    "AttributeUnsupported1"
-  );
+  const unsupportedViews =
+    getNodeRunAttributes<AttributeUnsupported1>(
+      props.runAttributes,
+      props.runIds,
+      "AttributeUnsupported1"
+    );
 
   if (unsupportedViews.length > 0) {
     allViews.push(

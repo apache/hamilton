@@ -42,7 +42,9 @@ export const ProjectVersionSelector = (props: {
           <button
             onClick={() => {
               setCurrentProjectVersionIndex(i);
-              setCompareToProjectVersionIndex(currentProjectVersionIndex);
+              setCompareToProjectVersionIndex(
+                currentProjectVersionIndex
+              );
             }}
             key={dagTemplates.id}
             // href={tab.href}
@@ -50,8 +52,8 @@ export const ProjectVersionSelector = (props: {
               currentProjectVersionIndex === i
                 ? "bg-gray-200 text-gray-700"
                 : compareToProjectVersionIndex === i
-                ? "bg-gray-100"
-                : "text-gray-500 hover:text-gray-700",
+                  ? "bg-gray-100"
+                  : "text-gray-500 hover:text-gray-700",
               "rounded-md px-3 py-2 text-sm font-medium"
             )}
           >
@@ -66,7 +68,9 @@ export const ProjectVersionSelector = (props: {
 export const MultiProjectVersionSelector = (props: {
   dagTemplates: DAGTemplateWithoutData[];
   projectVersionsIndices: Set<number>;
-  setProjectVersionsIndices: (projectVersionIndices: Set<number>) => void;
+  setProjectVersionsIndices: (
+    projectVersionIndices: Set<number>
+  ) => void;
 }) => {
   return (
     <div className="z-50">
@@ -82,7 +86,9 @@ export const MultiProjectVersionSelector = (props: {
               } else {
                 newProjectVersionIndices.add(i);
               }
-              props.setProjectVersionsIndices(newProjectVersionIndices);
+              props.setProjectVersionsIndices(
+                newProjectVersionIndices
+              );
             }}
             key={dagTemplate.id}
             // href={tab.href}

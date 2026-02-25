@@ -87,7 +87,9 @@ export const Schema1View: React.FC<Schema1ViewProps> = ({
         isSummaryRow: boolean,
         isExpanded: boolean
       ) => {
-        const toDisplay = Array.from(new Set(value.map((item) => item.type)));
+        const toDisplay = Array.from(
+          new Set(value.map((item) => item.type))
+        );
         console.log(value);
         return !isSummaryRow || !isExpanded ? (
           <div className="flex flex-wrap gap-2">

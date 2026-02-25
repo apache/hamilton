@@ -186,7 +186,9 @@ export const NodeControlContext = createContext<{
  * @param groupSpec
  * @returns
  */
-const convertGroupSpecsToKey = (groupSpec: GroupSpec[]): string | undefined => {
+const convertGroupSpecsToKey = (
+  groupSpec: GroupSpec[]
+): string | undefined => {
   const out = groupSpec
     .filter((spec) => spec.groupName !== undefined)
     .map((spec) => {
@@ -238,7 +240,11 @@ const assignGroupsToNodes = (
         groupName = undefined;
       }
 
-      if (f.displayGroup && !f.displaySubgroups && !(groupName === undefined)) {
+      if (
+        f.displayGroup &&
+        !f.displaySubgroups &&
+        !(groupName === undefined)
+      ) {
         hitTerminal = true;
       }
       return {
@@ -287,12 +293,17 @@ const convertToVizNodesAndEdges = (
   vertical: boolean
 ): [VizNode[], VizEdge[]] => {
   const vizNodesGroupedByKey = new Map<string, VizNode>();
-  const nodeGroupIndex = new Map<string, { node: DAGNode; key: string }[]>();
+  const nodeGroupIndex = new Map<
+    string,
+    { node: DAGNode; key: string }[]
+  >();
   groupClasses.forEach((groupClass, index) => {
     nodesWithGroups.forEach(([node, groups]) => {
       // We want a unique key for each group
       // This is the group up until that point
-      const groupKey = convertGroupSpecsToKey(groups.slice(0, index + 1));
+      const groupKey = convertGroupSpecsToKey(
+        groups.slice(0, index + 1)
+      );
       if (groupKey === undefined) {
         return;
       }
@@ -350,7 +361,8 @@ const convertToVizNodesAndEdges = (
             groupName: groupKey,
             collapsed,
           },
-          parentNode: parentGroupKey === node.name ? undefined : parentGroupKey,
+          parentNode:
+            parentGroupKey === node.name ? undefined : parentGroupKey,
           // TODO -- I don't think we use this well in the rest of the file
           // Ensure this cascades down, or get rid of it
           targetPosition: vertical ? Position.Top : Position.Left,
@@ -400,9 +412,11 @@ const convertToVizNodesAndEdges = (
               },
               type: "custom",
               data: {
-                sourceNodes: vizNodesGroupedByKey.get(dep)?.data.nodes || [],
+                sourceNodes:
+                  vizNodesGroupedByKey.get(dep)?.data.nodes || [],
                 targetNodes:
-                  vizNodesGroupedByKey.get(groupKey)?.data.nodes || [],
+                  vizNodesGroupedByKey.get(groupKey)?.data.nodes ||
+                  [],
               },
             };
           }
@@ -439,7 +453,8 @@ export const sortVizNodesAndAddLevels = (nodes: VizNode[]) => {
           return;
         }
         vizNode.data.level =
-          (allNodes.get(vizNode.parentNode) as VizNode).data.level + 1;
+          (allNodes.get(vizNode.parentNode) as VizNode).data.level +
+          1;
         sortedNodes.push(vizNode);
         nodeSet.delete(name);
       }
@@ -466,7 +481,9 @@ export const filterOutGroupsOfOne = (nodes: VizNode[]) => {
         vizNode.parentNode !== undefined &&
         groupsOfOne.has(vizNode.parentNode)
       ) {
-        vizNode.parentNode = groupsOfOne.get(vizNode.parentNode)?.parentNode;
+        vizNode.parentNode = groupsOfOne.get(
+          vizNode.parentNode
+        )?.parentNode;
       }
       return vizNode;
     });
@@ -551,10 +568,14 @@ const calcClasses = (
     };
   }
 
-  return applicableClasses.map((className) => out?.[className]).join(" ");
+  return applicableClasses
+    .map((className) => out?.[className])
+    .join(" ");
 };
 
-export const extractArtifactTypes = (nodes: DAGNode[]): Set<string> => {
+export const extractArtifactTypes = (
+  nodes: DAGNode[]
+): Set<string> => {
   const nodesWithArtifacts = nodes.filter(
     (n) =>
       n.nodeTemplate.classifications.includes("data_loader") ||
@@ -583,7 +604,9 @@ const BaseNodeComponent = (props: {
       : [iconForGroupSpecName(props.data.groupSpec.groupSpecName)];
 
   const isInput = props.data.nodes
-    .map((item) => item.nodeTemplate.classifications.includes("input"))
+    .map((item) =>
+      item.nodeTemplate.classifications.includes("input")
+    )
     .some((i) => i);
   const isExternalToSubdag = props.data.nodes
     .map((item) =>
@@ -608,8 +631,10 @@ const BaseNodeComponent = (props: {
   );
 
   let colorClasses = isInput
-    ? calcClasses(highlightedContext, ["textColorPrimary", "borderColor"]) +
-      " border border-2 bg-white"
+    ? calcClasses(highlightedContext, [
+        "textColorPrimary",
+        "borderColor",
+      ]) + " border border-2 bg-white"
     : calcClasses(highlightedContext, [
         "backgroundColor",
         "textColor",
@@ -620,9 +645,13 @@ const BaseNodeComponent = (props: {
     colorClasses = `${colorClasses} opacity-50`;
   }
 
-  const outlineColorClasses = calcClasses(highlightedContext, ["borderColor"]);
+  const outlineColorClasses = calcClasses(highlightedContext, [
+    "borderColor",
+  ]);
 
-  const iconClasses = calcClasses(highlightedContext, ["textColorPrimary"]);
+  const iconClasses = calcClasses(highlightedContext, [
+    "textColorPrimary",
+  ]);
 
   const artifactTypes = extractArtifactTypes(props.data.nodes);
 
@@ -717,9 +746,7 @@ export const CodeView: React.FC<{
 }> = (props) => {
   return (
     <div
-      className={`${
-        props.inDAGView ? "text-2xs max-w-2xl" : ""
-      } bg-white/80 p-2`}
+      className={`${props.inDAGView ? "text-2xs max-w-2xl" : ""} bg-white/80 p-2`}
     >
       <Highlight
         {...defaultProps}
@@ -727,7 +754,13 @@ export const CodeView: React.FC<{
         code={props.fnContents}
         language="python"
       >
-        {({ className, style, tokens, getLineProps, getTokenProps }) => {
+        {({
+          className,
+          style,
+          tokens,
+          getLineProps,
+          getTokenProps,
+        }) => {
           const styleToRender = {
             ...style,
             backgroundColor: "transparent",
@@ -738,13 +771,21 @@ export const CodeView: React.FC<{
           return (
             <pre className={className} style={styleToRender}>
               {tokens.map((line, i) => {
-                const { key: _lineKey, ...lineProps } = getLineProps({ line, key: i });
+                const { key: _lineKey, ...lineProps } = getLineProps({
+                  line,
+                  key: i,
+                });
                 return (
                   <div key={i} {...lineProps}>
                     {line.map((token, key) => {
-                      const { key: _tokenKey, ...tokenProps } = getTokenProps({ token, key });
+                      const { key: _tokenKey, ...tokenProps } =
+                        getTokenProps({ token, key });
                       return (
-                        <span key={key} hidden={false} {...tokenProps} />
+                        <span
+                          key={key}
+                          hidden={false}
+                          {...tokenProps}
+                        />
                       );
                     })}
                   </div>
@@ -776,7 +817,9 @@ const FunctionNodeComponent = (props: {
       : [iconForGroupSpecName(props.data.groupSpec.groupSpecName)];
 
   const isInput = props.data.nodes
-    .map((item) => item.nodeTemplate.classifications.includes("input"))
+    .map((item) =>
+      item.nodeTemplate.classifications.includes("input")
+    )
     .some((i) => i);
   const hidden = props.data.collapsed;
   const {
@@ -796,17 +839,23 @@ const FunctionNodeComponent = (props: {
   );
 
   const colorClasses = isInput
-    ? calcClasses(highlightedContext, ["textColorPrimary", "borderColor"]) +
-      " border border-2 bg-white"
+    ? calcClasses(highlightedContext, [
+        "textColorPrimary",
+        "borderColor",
+      ]) + " border border-2 bg-white"
     : calcClasses(highlightedContext, [
         "backgroundColor",
         "textColor",
         "borderColor",
       ]) + " border border-2";
 
-  const outlineColorClasses = calcClasses(highlightedContext, ["borderColor"]);
+  const outlineColorClasses = calcClasses(highlightedContext, [
+    "borderColor",
+  ]);
 
-  const iconClasses = calcClasses(highlightedContext, ["textColorPrimary"]);
+  const iconClasses = calcClasses(highlightedContext, [
+    "textColorPrimary",
+  ]);
 
   const artifactTypes = extractArtifactTypes(props.data.nodes);
 
@@ -860,9 +909,7 @@ const FunctionNodeComponent = (props: {
               {NodeIcons.map((NodeIcon, i) => (
                 <NodeIcon
                   key={i}
-                  className={`font-extrabold ${
-                    isInput ? "hover:scale-110" : ""
-                  }`}
+                  className={`font-extrabold ${isInput ? "hover:scale-110" : ""}`}
                   onClick={
                     isInput
                       ? undefined
@@ -882,7 +929,9 @@ const FunctionNodeComponent = (props: {
             </div>
           </div>
           <div>
-            <CodeView fnContents={props.data.nodes[0].codeContents || ""} />
+            <CodeView
+              fnContents={props.data.nodes[0].codeContents || ""}
+            />
           </div>
           {/* <pre className="text-2xs max-w-lg bg-white text-black whitespace-pre-wrap p-2" >{fn?.contents}</pre> */}
         </div>
@@ -945,14 +994,10 @@ const GroupedNodeComponent = (props: {
 
   return (
     <div
-      className={`${
-        displayAnything ? "" : "invisible"
-      } border-4 border-solid ${calcClasses(highlightedContext, [
-        "borderColorMuted",
-        "backgroundColorMutedHover",
-      ])} cursor-cell rounded-lg flex gap-2 ${
-        isCollapsedGroup ? "bg-gray-300" : ""
-      }
+      className={`${displayAnything ? "" : "invisible"} border-4 border-solid ${calcClasses(
+        highlightedContext,
+        ["borderColorMuted", "backgroundColorMutedHover"]
+      )} cursor-cell rounded-lg flex gap-2 ${isCollapsedGroup ? "bg-gray-300" : ""}
         ${shouldBeHidden ? " hidden " : ""}
 
         `}
@@ -1054,7 +1099,9 @@ export default function CustomEdgeComponent({
     data?.targetNodes
       .map((n) => downstreamNodes.has(nodeKey(n)))
       .some((i) => i) ||
-    data?.targetNodes.map((n) => selectedNodes.has(nodeKey(n))).some((i) => i);
+    data?.targetNodes
+      .map((n) => selectedNodes.has(nodeKey(n)))
+      .some((i) => i);
 
   const upstreamInDAG = data?.sourceNodes
     .map((n) => selectedDAGIndices.has(n.dagIndex))
@@ -1072,7 +1119,9 @@ export default function CustomEdgeComponent({
 
   const edgeInDAG = downstreamInDAG && upstreamInDAG;
   const isFocused = upstreamHighlighted && downstreamHighlighted;
-  const strokeColor = isFocused ? "rgb(55, 65, 81)" : "rgb(209, 213, 219)"; // Haven't gotten the tailwind classes to work with the stroke colors
+  const strokeColor = isFocused
+    ? "rgb(55, 65, 81)"
+    : "rgb(209, 213, 219)"; // Haven't gotten the tailwind classes to work with the stroke colors
   const strokeOpacityClass = edgeInDAG ? "opacity-80" : "opacity-40";
 
   const [edgePath] = getBezierPath({
@@ -1145,7 +1194,10 @@ const NodeDimensionsSetter = (props: {
 
     timeoutRef.current = setTimeout(() => {
       let anyChanges = false;
-      const newNodeDimensions = new Map<string, { height: number; width: number }>();
+      const newNodeDimensions = new Map<
+        string,
+        { height: number; width: number }
+      >();
 
       nodesWithData.forEach((node) => {
         const oldDimensions = props.nodeDimensions.get(node.id);
@@ -1186,7 +1238,10 @@ const createNodes = (
 ): DAGNode[] => {
   const codeArtifacts = dagTemplate.code_artifacts;
 
-  const allCodeContents = extractAllCodeContents(codeArtifacts, dagTemplate);
+  const allCodeContents = extractAllCodeContents(
+    codeArtifacts,
+    dagTemplate
+  );
   const codeArtifactsById = new Map(
     codeArtifacts.map((ca) => [ca.id as number, ca])
   );
@@ -1255,7 +1310,9 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
   let allNodes = props.templates.flatMap((dagTemplate, i) => {
     return createNodes(dagTemplate, props.runs, i);
   });
-  allNodes = props.nodeFilter ? allNodes.filter(props.nodeFilter) : allNodes;
+  allNodes = props.nodeFilter
+    ? allNodes.filter(props.nodeFilter)
+    : allNodes;
   const [projectVersionIndices, setProjectVersionIndices] = useState<
     Set<number>
   >(new Set(props.templates?.map((i, index) => index) || []));
@@ -1269,7 +1326,9 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
           props.defaultGroupedTypes || {},
           option.groupSpecName
         )
-          ? (props.defaultGroupedTypes?.[option.groupSpecName] as boolean)
+          ? (props.defaultGroupedTypes?.[
+              option.groupSpecName
+            ] as boolean)
           : option.defaultGroupby || false,
       };
     })
@@ -1305,13 +1364,17 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
 
   const setCurrentFocusGroup = (focusGroup: string | undefined) => {
     if (focusGroup) {
-      setSearchParams({ focus: JSON.stringify({ group: focusGroup }) });
+      setSearchParams({
+        focus: JSON.stringify({ group: focusGroup }),
+      });
     } else {
       setSearchParams({});
     }
   };
 
-  const currentFocusNodesRef = useRef<Map<string, DAGNode>>(new Map());
+  const currentFocusNodesRef = useRef<Map<string, DAGNode>>(
+    new Map()
+  );
 
   // const [currentFocusNodes, setCurrentFocusNodes] = useState<
   //   Map<string, AugmentedHamiltonNode>
@@ -1340,7 +1403,9 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
   }));
 
   const parseCurrentFocusParams = (initNodes: VizNode[]) => {
-    const currentFocusParams = JSON.parse(currentFocusParamsRaw || "{}");
+    const currentFocusParams = JSON.parse(
+      currentFocusParamsRaw || "{}"
+    );
     const currentFocusGroup = currentFocusParams.group;
     if (currentFocusGroup !== undefined) {
       return new Map(
@@ -1356,9 +1421,14 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
           (vizNode) =>
             vizNode.data.nodes
               .map((n) =>
-                n.name === currentFocusNode ? [nodeKey(n), n] : undefined
+                n.name === currentFocusNode
+                  ? [nodeKey(n), n]
+                  : undefined
               )
-              .filter((item) => item !== undefined) as [string, DAGNode][]
+              .filter((item) => item !== undefined) as [
+              string,
+              DAGNode,
+            ][]
         )
       );
     }
@@ -1373,7 +1443,10 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
                   ? [nodeKey(n), n]
                   : undefined
               )
-              .filter((item) => item !== undefined) as [string, DAGNode][]
+              .filter((item) => item !== undefined) as [
+              string,
+              DAGNode,
+            ][]
         )
       );
     }
@@ -1381,7 +1454,10 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
   };
 
   useMemo(() => {
-    const nodesWithGroups = assignGroupsToNodes(allNodes, groupClasses);
+    const nodesWithGroups = assignGroupsToNodes(
+      allNodes,
+      groupClasses
+    );
     const initNodes = convertToVizNodesAndEdges(
       groupClasses,
       nodesWithGroups,
@@ -1437,7 +1513,10 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
       };
 
   useMemo(() => {
-    const nodesWithGroups = assignGroupsToNodes(allNodes, groupClasses);
+    const nodesWithGroups = assignGroupsToNodes(
+      allNodes,
+      groupClasses
+    );
     const [initNodes, initEdges] = convertToVizNodesAndEdges(
       groupClasses,
       nodesWithGroups,
@@ -1446,25 +1525,34 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
     );
     const filteredNodes = filterOutGroupsOfOne(initNodes);
     const sortedNodes = sortVizNodesAndAddLevels(filteredNodes);
-    getLayoutedElements(sortedNodes, initEdges, nodeDimensions, vertical).then(
-      (elements) => {
-        const layoutedNodes = elements?.nodes;
-        const layoutedEdges = elements?.edges;
-        if (layoutedNodes === undefined || layoutedEdges === undefined) {
-          return;
-        }
-        setNodes(layoutedNodes);
-        setEdges(layoutedEdges);
+    getLayoutedElements(
+      sortedNodes,
+      initEdges,
+      nodeDimensions,
+      vertical
+    ).then((elements) => {
+      const layoutedNodes = elements?.nodes;
+      const layoutedEdges = elements?.edges;
+      if (
+        layoutedNodes === undefined ||
+        layoutedEdges === undefined
+      ) {
+        return;
       }
-    );
+      setNodes(layoutedNodes);
+      setEdges(layoutedEdges);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodeDimensions, nodeGroupingState]);
 
-  const height = props.height === undefined ? "h-[90vh]" : props.height;
+  const height =
+    props.height === undefined ? "h-[90vh]" : props.height;
   const shouldRender = renderingDelayState === "complete";
 
   const nodeTypesToUse =
-    props.vizType == VizType.DAGRun ? executionNodeTypes : defaultNodeTypes;
+    props.vizType == VizType.DAGRun
+      ? executionNodeTypes
+      : defaultNodeTypes;
 
   return (
     <>
@@ -1480,16 +1568,16 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
       )}
       <div
         //eslint-disable-next-line
-        className={`${height} relative top-0 ${
-          shouldRender ? "" : "invisible"
-        }`}
+        className={`${height} relative top-0 ${shouldRender ? "" : "invisible"}`}
       >
         <ReactFlowProvider>
           <NodeDimensionsSetter
             setNodeDimensions={setNodesWithDimensions}
             nodeDimensions={nodeDimensions}
           />
-          <SelectedNodesContext.Provider value={selectedNodeContextValue}>
+          <SelectedNodesContext.Provider
+            value={selectedNodeContextValue}
+          >
             <NodeControlContext.Provider
               value={{
                 expandGroup: (groupName: string) => {
@@ -1538,13 +1626,18 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
                   proOptions={{ hideAttribution: true }}
                   onNodeClick={(event, node) => {
                     if (props.nodeInteractions?.onNodeGroupClick) {
-                      props.nodeInteractions.onNodeGroupClick(node.data.nodes);
+                      props.nodeInteractions.onNodeGroupClick(
+                        node.data.nodes
+                      );
                     } else if (props.enableVizConsole) {
                       // Default behavior: toggle console visibility and set focus
                       const focusedNode = node.data.nodes[0];
                       if (focusedNode) {
-                        const currentFocus = currentFocusParamsRaw ? JSON.parse(currentFocusParamsRaw) : {};
-                        const isAlreadyFocused = currentFocus.node === focusedNode.name;
+                        const currentFocus = currentFocusParamsRaw
+                          ? JSON.parse(currentFocusParamsRaw)
+                          : {};
+                        const isAlreadyFocused =
+                          currentFocus.node === focusedNode.name;
 
                         if (isAlreadyFocused) {
                           // Toggle off: clear focus and hide console
@@ -1552,7 +1645,11 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
                           setVizConsoleVisible(false);
                         } else {
                           // Toggle on: set focus and show console
-                          setSearchParams({ focus: JSON.stringify({ node: focusedNode.name }) });
+                          setSearchParams({
+                            focus: JSON.stringify({
+                              node: focusedNode.name,
+                            }),
+                          });
                           setVizConsoleVisible(true);
                         }
                       }
@@ -1560,10 +1657,14 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
                     event.preventDefault();
                   }}
                   onNodeMouseEnter={(event, node) => {
-                    props.nodeInteractions?.onNodeGroupEnter?.(node.data.nodes);
+                    props.nodeInteractions?.onNodeGroupEnter?.(
+                      node.data.nodes
+                    );
                   }}
                   onNodeMouseLeave={(event, node) => {
-                    props.nodeInteractions?.onNodeGroupLeave?.(node.data.nodes);
+                    props.nodeInteractions?.onNodeGroupLeave?.(
+                      node.data.nodes
+                    );
                   }}
                 >
                   <Panel position={"bottom-left"}>
@@ -1581,7 +1682,9 @@ export const VisualizeDAG: React.FC<DAGVisualizeProps> = (props) => {
                       {props.templates.length > 1 ? (
                         <div className="py-2">
                           <MultiProjectVersionSelector
-                            projectVersionsIndices={projectVersionIndices}
+                            projectVersionsIndices={
+                              projectVersionIndices
+                            }
                             setProjectVersionsIndices={(s) =>
                               setProjectVersionIndices(s)
                             }

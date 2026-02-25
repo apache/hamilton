@@ -40,12 +40,12 @@ export const UsingHamiltonAlready = (props: {
 from ${props.useHamiltonSDK ? "hamilton_sdk" : "dagworks"} import adapters
 from hamilton import driver
 ...
-tracker = adapters.${props.useHamiltonSDK ? "HamiltonTracker": "DAGWorksTracker"}(
+tracker = adapters.${props.useHamiltonSDK ? "HamiltonTracker" : "DAGWorksTracker"}(
    project_id=${props.projectId},  # modify this as needed
    username="${props.username}",
    dag_name="my_version_of_the_dag",
    tags={"environment": "DEV", "team": "MY_TEAM", "version": "X"},
-${props.useHamiltonSDK ? "":   '   api_key="your_api_key"'}
+${props.useHamiltonSDK ? "" : '   api_key="your_api_key"'}
 )
 dr = (
   driver.Builder()
@@ -62,7 +62,8 @@ dr = (
         <div className="flex flex-row gap-2 pt-2">
           <CheckBox />
           <p className="text-sm text-gray-500">
-            Modify your regular Hamilton driver to log to the Hamilton UI:
+            Modify your regular Hamilton driver to log to the Hamilton
+            UI:
           </p>
         </div>
         <SyntaxHighlighter language="python" style={vscDarkPlus}>
@@ -74,10 +75,10 @@ dr = (
           <CheckBox />
 
           <p className="text-sm text-gray-500">
-            Run your DAG. A new version will show up! Note that the versions are
-            keyed on the &quot;dag_name&quot; as well as the code in the
-            modules. you pass. No new version will be logged if neither of those
-            change.
+            Run your DAG. A new version will show up! Note that the
+            versions are keyed on the &quot;dag_name&quot; as well as
+            the code in the modules. you pass. No new version will be
+            logged if neither of those change.
           </p>
         </div>
       </li>
@@ -91,15 +92,18 @@ export const NotUsingHamiltonYet = (props: {
   useHamiltonSDK: boolean;
 }) => {
   const initCode = props.useHamiltonSDK
-      ? `git clone https://github.com/apache/hamilton.git
+    ? `git clone https://github.com/apache/hamilton.git
 cd hamilton/examples/hamilton_ui
 # provide the project ID and username for run.py.
-`    : `git clone https://github.com/apache/dagworks-examples.git
+`
+    : `git clone https://github.com/apache/dagworks-examples.git
 cd dagworks-examples/hello_world/
 # modify run.py -- change the username and project_id to your own
 `;
   const pipCode = `pip install -r requirements.txt`;
-  const runCode = props.useHamiltonSDK ? `python run.py` : `python run.py --api-key YOUR_API_KEY`;
+  const runCode = props.useHamiltonSDK
+    ? `python run.py`
+    : `python run.py --api-key YOUR_API_KEY`;
 
   return (
     <>
@@ -107,7 +111,8 @@ cd dagworks-examples/hello_world/
         <div className="flex flex-row gap-2 pt-2 items-center">
           <CheckBox />
           <p className="text-sm text-gray-500">
-            Initialize the project from one of our demo project templates:
+            Initialize the project from one of our demo project
+            templates:
           </p>
         </div>
         <SyntaxHighlighter language="bash" style={vscDarkPlus}>
@@ -162,7 +167,8 @@ export const ProjectLogInstructions = (props: {
 }) => {
   const NOT_USING_HAMILTON = "Not Using Hamilton (yet)";
   const USING_HAMILTON = "Using Hamilton";
-  const urlContainsDagworks = window.location.href.includes('app.dagworks.io');
+  const urlContainsDagworks =
+    window.location.href.includes("app.dagworks.io");
 
   const tabs = [NOT_USING_HAMILTON, USING_HAMILTON];
   const [currentTab, setCurrentTab] = useState(tabs[1]);
@@ -227,7 +233,10 @@ export const ProjectLogInstructions = (props: {
           </div>
           <div className="hidden sm:block">
             <div className="border-b border-gray-200">
-              <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+              <nav
+                className="-mb-px flex space-x-8"
+                aria-label="Tabs"
+              >
                 {tabs.map((tab) => (
                   <a
                     key={tab}
@@ -238,7 +247,9 @@ export const ProjectLogInstructions = (props: {
                         : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 cursor-pointer",
                       "whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
                     )}
-                    aria-current={tab === currentTab ? "page" : undefined}
+                    aria-current={
+                      tab === currentTab ? "page" : undefined
+                    }
                   >
                     {tab}
                   </a>

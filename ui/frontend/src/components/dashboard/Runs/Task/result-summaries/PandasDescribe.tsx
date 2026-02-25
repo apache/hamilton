@@ -73,11 +73,17 @@ export const splitColumnsByObjectType = (
 ) => {
   const numericColumns: [
     string,
-    { runId: number; projectId: number } & PandasDescribeNumericColumn
+    {
+      runId: number;
+      projectId: number;
+    } & PandasDescribeNumericColumn,
   ][] = [];
   const categoricalColumns: [
     string,
-    { runId: number; projectId: number } & PandasDescribeCategoricalColumn
+    {
+      runId: number;
+      projectId: number;
+    } & PandasDescribeCategoricalColumn,
   ][] = [];
 
   results.forEach((result, i) => {
@@ -109,40 +115,64 @@ export const splitColumnsByObjectType = (
 const numericColumnRows = [
   {
     displayName: "count",
-    Render: (value: PandasDescribeNumericColumn[], isSummaryRow: boolean) => {
+    Render: (
+      value: PandasDescribeNumericColumn[],
+      isSummaryRow: boolean
+    ) => {
       const numericValues = value.map((item) => item.count);
       if (!isSummaryRow) {
         return <div>{numericValues[0].toFixed(2)}</div>;
       }
       const meanStdDev = getMeanStdDev(numericValues);
-      return <div>{formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev)}</div>;
+      return (
+        <div>
+          {formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev)}
+        </div>
+      );
     },
   },
   {
     displayName: "mean",
-    Render: (value: PandasDescribeNumericColumn[], isSummaryRow: boolean) => {
+    Render: (
+      value: PandasDescribeNumericColumn[],
+      isSummaryRow: boolean
+    ) => {
       const numericValues = value.map((item) => item.mean);
       if (!isSummaryRow) {
         return <div>{numericValues[0].toFixed(2)}</div>;
       }
       const meanStdDev = getMeanStdDev(numericValues);
-      return <div>{formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev)}</div>;
+      return (
+        <div>
+          {formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev)}
+        </div>
+      );
     },
   },
   {
     displayName: "std",
-    Render: (value: PandasDescribeNumericColumn[], isSummaryRow: boolean) => {
+    Render: (
+      value: PandasDescribeNumericColumn[],
+      isSummaryRow: boolean
+    ) => {
       const numericValues = value.map((item) => item.std);
       if (!isSummaryRow) {
         return <div>{numericValues[0].toFixed(2)}</div>;
       }
       const meanStdDev = getMeanStdDev(numericValues);
-      return <div>{formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev)}</div>;
+      return (
+        <div>
+          {formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev)}
+        </div>
+      );
     },
   },
   {
     displayName: "quantiles",
-    Render: (value: PandasDescribeNumericColumn[], isSummaryRow: boolean) => {
+    Render: (
+      value: PandasDescribeNumericColumn[],
+      isSummaryRow: boolean
+    ) => {
       if (isSummaryRow) {
         return <></>;
       }
@@ -224,7 +254,11 @@ const categoricalColumnRows = [
         return <div>{numericValues[0].toFixed(2)}</div>;
       }
       const meanStdDev = getMeanStdDev(numericValues);
-      return <div>{formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev)}</div>;
+      return (
+        <div>
+          {formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev)}
+        </div>
+      );
     },
   },
   {
@@ -250,7 +284,10 @@ const categoricalColumnRows = [
           <div>
             {value[0].count === undefined || value[0].count === null
               ? ""
-              : (((value[0].freq || 0) * 100) / value[0].count).toFixed(2)}
+              : (
+                  ((value[0].freq || 0) * 100) /
+                  value[0].count
+                ).toFixed(2)}
             %
           </div>
         );
@@ -259,8 +296,10 @@ const categoricalColumnRows = [
   },
   {
     displayName: "unique",
-    Render: (value: PandasDescribeCategoricalColumn[], isSummaryRow: boolean) =>
-      isSummaryRow ? <></> : <div>{value[0].unique}</div>,
+    Render: (
+      value: PandasDescribeCategoricalColumn[],
+      isSummaryRow: boolean
+    ) => (isSummaryRow ? <></> : <div>{value[0].unique}</div>),
   },
   {
     displayName: "Runs",
@@ -328,7 +367,8 @@ export const PandasDescribe1View = (props: {
     props.runIds,
     props.projectId
   );
-  const { numericColumns, categoricalColumns } = resultsSplitByObjectType;
+  const { numericColumns, categoricalColumns } =
+    resultsSplitByObjectType;
   return (
     <div>
       {numericColumns.length > 0 ? (

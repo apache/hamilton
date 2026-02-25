@@ -27,7 +27,11 @@ import { GiPlatform } from "react-icons/gi";
 import { LoomHelpVideo } from "../tutorial/HelpVideo";
 import { Link } from "react-router-dom";
 import { CheckBox } from "../common/Checkbox";
-import { BiChevronDown, BiChevronUp, BiNetworkChart } from "react-icons/bi";
+import {
+  BiChevronDown,
+  BiChevronUp,
+  BiNetworkChart,
+} from "react-icons/bi";
 import { useState } from "react";
 import { classNames } from "../../utils";
 import {
@@ -78,7 +82,9 @@ const WelcomeCard = (props: {
       >
         <div className="flex flex-row gap-2 items-center">
           <props.Icon className="text-3xl  hover:scale-110" />
-          <span className={`${props.expanded ? "underline" : ""} text-xl`}>
+          <span
+            className={`${props.expanded ? "underline" : ""} text-xl`}
+          >
             {props.title}
           </span>
           {props.expectedTime ? (
@@ -161,7 +167,8 @@ export const DemoProjectSelector = (props: {
           name="tabs"
           className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
           defaultValue={
-            props.projects.find((project, i) => currentTab === i)?.name
+            props.projects.find((project, i) => currentTab === i)
+              ?.name
           }
         >
           {props.projects.map((project) => (
@@ -250,32 +257,34 @@ export const Welcome = () => {
         <div className="flex flex-col gap-2">
           <ul className="pt-2">
             <li className="leading-8">
-              Getting data and ML/AI pipelines to production is easy when you’re
-              small, but when your team and codebase start to grow, maintaining
-              these pipelines becomes challenging:
+              Getting data and ML/AI pipelines to production is easy
+              when you’re small, but when your team and codebase start
+              to grow, maintaining these pipelines becomes
+              challenging:
               <ul className="list-disc list-inside pl-4">
                 <li>😕 understanding code you didn’t write</li>
                 <li>🐛 debugging production issues</li>
                 <li>🏗️ migrating to new infrastructure</li>
                 <li>🥼 handling personnel changes</li>
               </ul>
-              Here we present a series of quick videos that demonstrate how
-              DAGWorks can help you overcome these challenges by using Hamilton
-              dataflows together with the DAGWorks platform.
+              Here we present a series of quick videos that
+              demonstrate how DAGWorks can help you overcome these
+              challenges by using Hamilton dataflows together with the
+              DAGWorks platform.
               <br />
-              Each video uses one of several demo projects to demonstrate
-              capabilities such as: code &amp; data observability, lineage, and
-              cataloging; which we invite you to explore in more detail after
-              watching the videos.
+              Each video uses one of several demo projects to
+              demonstrate capabilities such as: code &amp; data
+              observability, lineage, and cataloging; which we invite
+              you to explore in more detail after watching the videos.
             </li>
             <li className="flex flex-wrap items-center gap-2 pt-2">
-              <CheckBox /> Watch the three minute &apos;Hello World Platform
-              Overview&apos; video (first video 👇).
+              <CheckBox /> Watch the three minute &apos;Hello World
+              Platform Overview&apos; video (first video 👇).
             </li>
             <li className="flex flex-wrap items-center gap-2">
               <CheckBox />
-              Watch the demo project videos most relevant to your day to day (or
-              watch them all!){" "}
+              Watch the demo project videos most relevant to your day
+              to day (or watch them all!){" "}
             </li>
             <li className="flex flex-wrap items-center gap-2">
               <CheckBox />
@@ -353,15 +362,16 @@ export const Welcome = () => {
             <span className="mr-1 mb-1">
               <CheckBox />{" "}
             </span>
-            Follow the instructions to integrate with your existing Hamilton
-            code, or get started with one of our demo templates.
+            Follow the instructions to integrate with your existing
+            Hamilton code, or get started with one of our demo
+            templates.
           </li>
           <li className="flex flex-wrap items-center gap-1">
             <span className="mr-1 mb-1">
               <CheckBox />{" "}
             </span>
-            Execute your Hamilton code connecting the DAGWorks Tracking Adapter
-            with the Hamilton Driver.
+            Execute your Hamilton code connecting the DAGWorks
+            Tracking Adapter with the Hamilton Driver.
           </li>
           <li className="flex flex-wrap items-center gap-1">
             <span className="mr-1 mb-1">
@@ -404,8 +414,9 @@ export const Welcome = () => {
       contents: (
         <>
           <span className="py-2">
-            To reap the benefits of the DAGWorks Platform you need to be using
-            Hamilton. Here&apos;s a few ways to get up to speed:
+            To reap the benefits of the DAGWorks Platform you need to
+            be using Hamilton. Here&apos;s a few ways to get up to
+            speed:
           </span>
           <li className="flex flex-wrap items-center gap-1">
             <span className="mr-1 mb-1">
@@ -475,12 +486,12 @@ export const Welcome = () => {
       expectedTime: "2 minutes",
       contents: (
         <span>
-          We&apos;re really excited about Hamilton and what we&apos;re building
-          at DAGWorks. <br />
+          We&apos;re really excited about Hamilton and what we&apos;re
+          building at DAGWorks. <br />
           <br />
-          If you want help making the most of the DAGWorks Platform, or have
-          feedback on what we could improve or add to make it better for you,
-          you can:{" "}
+          If you want help making the most of the DAGWorks Platform,
+          or have feedback on what we could improve or add to make it
+          better for you, you can:{" "}
           <ul className="list-disc pl-4">
             <li className="pt-3 pb-3">
               ✉️{" "}

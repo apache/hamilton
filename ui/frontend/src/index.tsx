@@ -27,7 +27,10 @@ import { Provider } from "react-redux";
 // This is a weird bug: https://github.com/rt2zz/redux-persist/issues/1166
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { PersistGate } from "redux-persist/integration/react";
-import { RequiredAuthProvider, RedirectToLogin } from "@propelauth/react";
+import {
+  RequiredAuthProvider,
+  RedirectToLogin,
+} from "@propelauth/react";
 import { Loading } from "./components/common/Loading";
 import { PostHogProvider } from "posthog-js/react";
 import TimeAgo from "javascript-time-ago";
@@ -42,7 +45,11 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
-const NoopTelemetryProvider = ({ children }: { children: React.ReactNode }) => {
+const NoopTelemetryProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   return <>{children}</>;
 };
 

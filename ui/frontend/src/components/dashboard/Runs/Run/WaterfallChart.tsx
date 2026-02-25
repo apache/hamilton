@@ -54,22 +54,35 @@ ChartJS.register(
  * @param node Node to get the color for
  * @returns A tailwind bg-class reprseenting the color as well as its highlighted version
  */
-const getColor = (node: NodeRunWithAttributes): [string, string, string] => {
+const getColor = (
+  node: NodeRunWithAttributes
+): [string, string, string] => {
   switch (node.status) {
     case "SUCCESS":
-      return ["bg-green-500/50", "bg-green-500", "rgb(34, 197, 94, 0.5)"];
+      return [
+        "bg-green-500/50",
+        "bg-green-500",
+        "rgb(34, 197, 94, 0.5)",
+      ];
     case "FAILURE":
       return ["bg-dwred/50", "bg-dwred", "rgb(234, 85, 86, 0.5)"];
     case "UNINITIALIZED":
       return ["bg-gray-500/50", "bg-gray-500", "gray"];
     case "RUNNING":
-      return ["bg-dwlightblue/50", "bg-dwlightblue", "rgb(66,157,188, 0.5)"];
+      return [
+        "bg-dwlightblue/50",
+        "bg-dwlightblue",
+        "rgb(66,157,188, 0.5)",
+      ];
     default:
       return ["bg-gray-500/50", "bg-gray-500", "gray"];
   }
 };
 
-export const getMinWidth = (minStartTime: number, maxEndTime: number) => {
+export const getMinWidth = (
+  minStartTime: number,
+  maxEndTime: number
+) => {
   const timeRange = maxEndTime - minStartTime;
   const minWidth = timeRange / 200;
   return minWidth;
@@ -136,7 +149,8 @@ const options = {
       callbacks: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         label: function (ctx: any) {
-          const [startTime, endTime] = ctx.dataset.data[ctx.dataIndex];
+          const [startTime, endTime] =
+            ctx.dataset.data[ctx.dataIndex];
           let difference =
             endTime - startTime - getMinWidth(startTime, endTime);
           if (Math.abs(difference) < 0.001) {
@@ -193,11 +207,15 @@ export const WaterfallChart: React.FC<{
     ...timeRangesAsSeconds.map((range) => range[0])
   );
 
-  const maxEndTime = Math.max(...timeRangesAsSeconds.map((range) => range[1]));
+  const maxEndTime = Math.max(
+    ...timeRangesAsSeconds.map((range) => range[1])
+  );
 
   const minWidth = getMinWidth(minStartTime, maxEndTime);
   const data = {
-    labels: nodesWithValidStartAndEndTimes.map((node) => node.node_name),
+    labels: nodesWithValidStartAndEndTimes.map(
+      (node) => node.node_name
+    ),
     datasets: [
       {
         barPercentage: 0.99,
@@ -215,13 +233,15 @@ export const WaterfallChart: React.FC<{
 
           return [start, end];
         }),
-        backgroundColor: nodesWithValidStartAndEndTimes.map((node) => {
-          const out = getColor(node)[2];
-          if (props.highlightedTasks?.includes(node.node_name)) {
-            return out.replace("0.5", "1");
+        backgroundColor: nodesWithValidStartAndEndTimes.map(
+          (node) => {
+            const out = getColor(node)[2];
+            if (props.highlightedTasks?.includes(node.node_name)) {
+              return out.replace("0.5", "1");
+            }
+            return out;
           }
-          return out;
-        }),
+        ),
         backgroundOpacity: 0.5,
       },
     ],
@@ -229,11 +249,14 @@ export const WaterfallChart: React.FC<{
 
   return (
     <div
-      className={`relative w-full h-500 ${
-        props.isHighlighted ? "bg-dwdarkblue/20" : ""
-      }`}
+      className={`relative w-full h-500 ${props.isHighlighted ? "bg-dwdarkblue/20" : ""}`}
     >
-      <Bar options={options} ref={chartRef} data={data} height={500} />
+      <Bar
+        options={options}
+        ref={chartRef}
+        data={data}
+        height={500}
+      />
       <button
         className="absolute top-2.5 right-2.5 bg-dwlightblue/80 text-white px-4 py-.5 border rounded"
         onClick={handleResetZoom}

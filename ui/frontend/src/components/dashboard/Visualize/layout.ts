@@ -31,7 +31,7 @@ const convertGraphFromElk = (
     const node = queue.shift() as ElkNode;
     const vizNode = nodeNameMap.get(node.id);
     if (vizNode !== undefined) {
-      (vizNode.position = {
+      ((vizNode.position = {
         x: node.x as number, // + PARENT_PADDING.left,
         y: node.y as number, // + PARENT_PADDING.top,
       }),
@@ -40,7 +40,7 @@ const convertGraphFromElk = (
           height: node.height as number,
           // PARENT_PADDING.bottom +
           // PARENT_PADDING.top,
-        });
+        }));
       output.push(vizNode);
     }
     queue.push(...(node.children || []));
@@ -115,7 +115,9 @@ export const getLayoutedElements = (
   };
 
   const nodeNameMap = new Map(nodes.map((node) => [node.id, node]));
-  const vizEdgeNameMap = new Map(edges.map((edge) => [edge.id, edge]));
+  const vizEdgeNameMap = new Map(
+    edges.map((edge) => [edge.id, edge])
+  );
 
   const subGraph = (nodesByParent.get("root") || []).map((node) =>
     buildGraph(node)

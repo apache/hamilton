@@ -54,17 +54,22 @@ export const Code: FC<CodeProps> = (props) => {
   );
 
   const compareToDAGFunctionsByIdentifier =
-    compareToDagTemplate.code_artifacts.reduce((acc, artifact) => {
-      acc[artifact.name] = artifact;
-      return acc;
-    }, {} as Record<string, CodeArtifact>);
+    compareToDagTemplate.code_artifacts.reduce(
+      (acc, artifact) => {
+        acc[artifact.name] = artifact;
+        return acc;
+      },
+      {} as Record<string, CodeArtifact>
+    );
 
   // A convenience function to toggle the expanded state of an individual function
   const toggleExpanded = (index: number, all: boolean) => {
     // const currentState = whichExpanded[index]
     let newWhichExpanded = [...whichExpanded];
     if (all) {
-      newWhichExpanded = whichExpanded.map(() => !whichExpanded[index]);
+      newWhichExpanded = whichExpanded.map(
+        () => !whichExpanded[index]
+      );
     } else {
       newWhichExpanded[index] = !newWhichExpanded[index];
     }
@@ -86,7 +91,10 @@ export const Code: FC<CodeProps> = (props) => {
           <></>
         )}
         <div className="hidden lg:block max-w-sm">
-          <CodeExplorer project={props.project} dagTemplate={dagTemplate} />
+          <CodeExplorer
+            project={props.project}
+            dagTemplate={dagTemplate}
+          />
         </div>
       </div>
 
@@ -95,10 +103,8 @@ export const Code: FC<CodeProps> = (props) => {
           {dagTemplate.code_artifacts.map((codeArtifact, index) => {
             // TODO -- get the implied nodes by looking at the code artifact identifier
             // const { sinks, intermediate, upstream } = dag.getImpliedNodes(fn);
-            const nodesProducedByFunction = getNodesProducedByFunction(
-              dagTemplate,
-              codeArtifact
-            );
+            const nodesProducedByFunction =
+              getNodesProducedByFunction(dagTemplate, codeArtifact);
             const upstreamNodes = getDirectlyUpstreamNodes(
               dagTemplate,
               codeArtifact
@@ -111,7 +117,9 @@ export const Code: FC<CodeProps> = (props) => {
               compareToIndex !== currentIndex &&
               compareToDAGFunctionsByIdentifier[codeArtifact.name]
                 ? extractCodeContents(
-                    compareToDAGFunctionsByIdentifier[codeArtifact.name],
+                    compareToDAGFunctionsByIdentifier[
+                      codeArtifact.name
+                    ],
                     compareToDagTemplate
                   )
                 : undefined;
@@ -133,9 +141,13 @@ export const Code: FC<CodeProps> = (props) => {
                   nodesProducedByFunction={nodesProducedByFunction}
                   upstreamNodes={upstreamNodes}
                   expanded={whichExpanded[index]}
-                  toggleExpanded={(all: boolean) => toggleExpanded(index, all)}
+                  toggleExpanded={(all: boolean) =>
+                    toggleExpanded(index, all)
+                  }
                   compareCodeArtifact={
-                    compareToDAGFunctionsByIdentifier[codeArtifact.name]
+                    compareToDAGFunctionsByIdentifier[
+                      codeArtifact.name
+                    ]
                   }
                   isHighlighted={isCurrent}
                   dagTemplate={dagTemplate}

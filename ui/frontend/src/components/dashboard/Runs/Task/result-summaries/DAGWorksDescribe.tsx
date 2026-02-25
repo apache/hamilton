@@ -46,7 +46,6 @@ import {
 } from "../../../../../state/api/backendApiRaw";
 import { RunLink } from "../../../../common/CommonLinks";
 
-
 ChartJS.register(
   BarElement,
   LinearScale,
@@ -57,7 +56,6 @@ ChartJS.register(
   Filler,
   Legend
 );
-
 
 type DAGWorksDescribe3Base = {
   name: string;
@@ -77,7 +75,10 @@ export const Histogram = (props: {
   datatype?: "number" | "datetime";
 }) => {
   const datatype = props.datatype || "number";
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [dimensions, setDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
   const targetRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (targetRef.current) {
@@ -89,7 +90,9 @@ export const Histogram = (props: {
   }, [targetRef]);
 
   const parser =
-    datatype === "datetime" ? (d: string) => new Date(d).getTime() : parseFloat;
+    datatype === "datetime"
+      ? (d: string) => new Date(d).getTime()
+      : parseFloat;
 
   const data = props.histograms.map((histogram, i) => {
     let histogramData = Array.from(Object.entries(histogram)).map(
@@ -120,14 +123,20 @@ export const Histogram = (props: {
         };
       }
     );
-    histogramData = histogramData.sort((a, b) => a.rangeStart - b.rangeStart);
+    histogramData = histogramData.sort(
+      (a, b) => a.rangeStart - b.rangeStart
+    );
 
     // If index is undefined, then we are not in a grouped row
     const index = props.index === undefined ? i : props.index;
 
     return {
-      rangeStart: Math.min(...histogramData.map((item) => item.rangeStart)),
-      rangeEnd: Math.max(...histogramData.map((item) => item.rangeEnd)),
+      rangeStart: Math.min(
+        ...histogramData.map((item) => item.rangeStart)
+      ),
+      rangeEnd: Math.max(
+        ...histogramData.map((item) => item.rangeEnd)
+      ),
       rawData: histogramData,
       datasets: [
         {
@@ -135,7 +144,8 @@ export const Histogram = (props: {
           label: props.runIds[i].toString(),
           labels: histogramData.map((item) => item.rangeStart),
           data: histogramData.map((item) => item.count),
-          borderColor: index % 2 === 1 ? "rgb(234, 85, 86)" : "rgb(43,49,82)",
+          borderColor:
+            index % 2 === 1 ? "rgb(234, 85, 86)" : "rgb(43,49,82)",
           backgroundColor:
             index % 2 === 1 ? "rgb(234, 85, 86)" : "rgb(43,49,82)",
           barPercentage: 1.0,
@@ -189,11 +199,9 @@ export const Histogram = (props: {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             title: (context: any) => {
               const index: number = context[0].dataIndex - 1;
-              const { labelProcessed, count } = data[i].rawData[index];
-              return `${labelProcessed}: ${truncateAndRemoveTrailingZeroes(
-                count,
-                3
-              )}`;
+              const { labelProcessed, count } =
+                data[i].rawData[index];
+              return `${labelProcessed}: ${truncateAndRemoveTrailingZeroes(count, 3)}`;
             },
           },
         },
@@ -252,7 +260,9 @@ export const Quantiles = (props: {
         };
       }
     );
-    quantileData = quantileData.sort((a, b) => a.percentile - b.percentile);
+    quantileData = quantileData.sort(
+      (a, b) => a.percentile - b.percentile
+    );
 
     // If index is undefined, then we are not in a grouped row
     const index = props.index === undefined ? i : props.index;
@@ -296,7 +306,8 @@ export const Quantiles = (props: {
               ? new Date(item.value).getTime()
               : item.value;
           }),
-          borderColor: index % 2 === 1 ? "rgb(234, 85, 86)" : "rgb(43,49,82)",
+          borderColor:
+            index % 2 === 1 ? "rgb(234, 85, 86)" : "rgb(43,49,82)",
           backgroundColor:
             index % 2 === 1 ? "rgb(234, 85, 86)" : "rgb(43,49,82)",
           barPercentage: 1.0,
@@ -327,7 +338,9 @@ export const Quantiles = (props: {
         y: {
           min: Math.min(
             // TODO -- fix typing here
-            ...data[i].dataExpanded.map((item) => toNumber(item.value))
+            ...data[i].dataExpanded.map((item) =>
+              toNumber(item.value)
+            )
           ),
           stacked: true,
           display: false,
@@ -365,13 +378,17 @@ export const Quantiles = (props: {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             title: (context: any) => {
               const index: number = context[0].dataIndex - 1;
-              const percentile = data[i].rawData[index].originalPercentile;
+              const percentile =
+                data[i].rawData[index].originalPercentile;
               const value = data[i].rawData[index].value;
               const valueRepresentation =
                 // Typing here is a bit of a mess
                 datatype === "datetime"
                   ? new Date(value).toISOString().split(".")[0]
-                  : truncateAndRemoveTrailingZeroes(value as number, 3);
+                  : truncateAndRemoveTrailingZeroes(
+                      value as number,
+                      3
+                    );
               return `${(percentile || 0) * 100}%: ${valueRepresentation}`;
             },
           },
@@ -415,7 +432,7 @@ export const splitColumnsByObjectType = (
       {
         runId: number;
         projectId: number;
-      }
+      },
     ][];
   } = {
     numeric: [],
@@ -519,7 +536,12 @@ export const DAGWorksDescribe3View = (props: {
         const meanStdDev = getMeanStdDev(numericValues);
         return (
           <div>
-            {formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev, 0, 0)}
+            {formatMeanStdDev(
+              meanStdDev.mean,
+              meanStdDev.stdDev,
+              0,
+              0
+            )}
           </div>
         );
       },
@@ -548,7 +570,9 @@ export const DAGWorksDescribe3View = (props: {
           return <div className="text-gray-400"> - </div>;
         }
         return (
-          <div>{formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev)}</div>
+          <div>
+            {formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev)}
+          </div>
         );
       },
     },
@@ -559,7 +583,9 @@ export const DAGWorksDescribe3View = (props: {
     {
       displayName: <code>true</code>,
       Render: (
-        value: (DwDescribeV003BooleanColumnStatistics & { runId: number })[],
+        value: (DwDescribeV003BooleanColumnStatistics & {
+          runId: number;
+        })[],
         isSummaryRow: boolean,
         isExpanded: boolean
       ) => {
@@ -578,7 +604,12 @@ export const DAGWorksDescribe3View = (props: {
         }
         return (
           <div>
-            {formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev, 0, 0)}
+            {formatMeanStdDev(
+              meanStdDev.mean,
+              meanStdDev.stdDev,
+              0,
+              0
+            )}
           </div>
         );
       },
@@ -586,7 +617,9 @@ export const DAGWorksDescribe3View = (props: {
     {
       displayName: <code>false</code>,
       Render: (
-        value: (DwDescribeV003BooleanColumnStatistics & { runId: number })[],
+        value: (DwDescribeV003BooleanColumnStatistics & {
+          runId: number;
+        })[],
         isSummaryRow: boolean,
         isExpanded: boolean
       ) => {
@@ -606,7 +639,12 @@ export const DAGWorksDescribe3View = (props: {
         }
         return (
           <div>
-            {formatMeanStdDev(meanStdDev.mean, meanStdDev.stdDev, 0, 0)}
+            {formatMeanStdDev(
+              meanStdDev.mean,
+              meanStdDev.stdDev,
+              0,
+              0
+            )}
           </div>
         );
       },
@@ -658,7 +696,9 @@ export const DAGWorksDescribe3View = (props: {
     {
       displayName: "mean ± std",
       Render: (
-        value: (DwDescribeV003NumericColumnStatistics & { runId: number })[]
+        value: (DwDescribeV003NumericColumnStatistics & {
+          runId: number;
+        })[]
       ) => {
         if (value.length > 1) {
           return <></>;
@@ -680,7 +720,9 @@ export const DAGWorksDescribe3View = (props: {
     {
       displayName: "range",
       Render: (
-        value: (DwDescribeV003NumericColumnStatistics & { runId: number })[],
+        value: (DwDescribeV003NumericColumnStatistics & {
+          runId: number;
+        })[],
         isSummaryRow: boolean,
         isExpanded: boolean
       ) => {
@@ -700,7 +742,9 @@ export const DAGWorksDescribe3View = (props: {
     {
       displayName: <code>histogram</code>,
       Render: (
-        value: (DwDescribeV003NumericColumnStatistics & { runId: number })[],
+        value: (DwDescribeV003NumericColumnStatistics & {
+          runId: number;
+        })[],
         isSummaryRow: boolean,
         isExpanded: boolean,
         index: number | undefined
@@ -723,7 +767,9 @@ export const DAGWorksDescribe3View = (props: {
     {
       displayName: <code>quantiles</code>,
       Render: (
-        value: (DwDescribeV003NumericColumnStatistics & { runId: number })[],
+        value: (DwDescribeV003NumericColumnStatistics & {
+          runId: number;
+        })[],
         isSummaryRow: boolean,
         isExpanded: boolean,
         index: number | undefined
@@ -749,7 +795,9 @@ export const DAGWorksDescribe3View = (props: {
     {
       displayName: "range",
       Render: (
-        value: (DwDescribeV003NumericColumnStatistics & { runId: number })[],
+        value: (DwDescribeV003NumericColumnStatistics & {
+          runId: number;
+        })[],
         isSummaryRow: boolean,
         isExpanded: boolean
       ) => {
@@ -772,7 +820,9 @@ export const DAGWorksDescribe3View = (props: {
     {
       displayName: <code>histogram</code>,
       Render: (
-        value: (DwDescribeV003NumericColumnStatistics & { runId: number })[],
+        value: (DwDescribeV003NumericColumnStatistics & {
+          runId: number;
+        })[],
         isSummaryRow: boolean,
         isExpanded: boolean,
         index: number | undefined
@@ -796,7 +846,9 @@ export const DAGWorksDescribe3View = (props: {
     {
       displayName: <code>quantiles</code>,
       Render: (
-        value: (DwDescribeV003NumericColumnStatistics & { runId: number })[],
+        value: (DwDescribeV003NumericColumnStatistics & {
+          runId: number;
+        })[],
         isSummaryRow: boolean,
         isExpanded: boolean,
         index: number | undefined
@@ -880,7 +932,7 @@ export const DAGWorksDescribe3View = (props: {
                 {
                   runId: number;
                   projectId: number;
-                } & DwDescribeV003NumericColumnStatistics
+                } & DwDescribeV003NumericColumnStatistics,
               ][]
             }
             name="Numeric Columns"
@@ -901,7 +953,7 @@ export const DAGWorksDescribe3View = (props: {
                 {
                   runId: number;
                   projectId: number;
-                } & DwDescribeV003CategoryColumnStatistics
+                } & DwDescribeV003CategoryColumnStatistics,
               ][]
             }
             name="Categorical Columns"
@@ -923,7 +975,7 @@ export const DAGWorksDescribe3View = (props: {
                 {
                   runId: number;
                   projectId: number;
-                } & DwDescribeV003BooleanColumnStatistics
+                } & DwDescribeV003BooleanColumnStatistics,
               ][]
             }
             name="Boolean Columns"
@@ -947,7 +999,7 @@ export const DAGWorksDescribe3View = (props: {
                 {
                   runId: number;
                   projectId: number;
-                } & DwDescribeV003NumericColumnStatistics
+                } & DwDescribeV003NumericColumnStatistics,
               ][]
             }
             columns={datetimeColumns}
@@ -967,7 +1019,7 @@ export const DAGWorksDescribe3View = (props: {
                 {
                   runId: number;
                   projectId: number;
-                } & DwDescribeV003StringColumnStatistics
+                } & DwDescribeV003StringColumnStatistics,
               ][]
             }
             name="String Columns"
@@ -989,7 +1041,7 @@ export const DAGWorksDescribe3View = (props: {
                 {
                   runId: number;
                   projectId: number;
-                } & DwDescribeV003NumericColumnStatistics
+                } & DwDescribeV003NumericColumnStatistics,
               ][]
             }
             name="Untyped Columns"

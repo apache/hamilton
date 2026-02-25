@@ -54,8 +54,7 @@ export const TagSelectorWithValues = (props: {
   }[];
 
   return (
-    <div className="flex-1"
-    >
+    <div className="flex-1">
       <ReactSelect
         onChange={(selected) => {
           const selectedTags = new Map<string, Set<string>>();
@@ -76,25 +75,37 @@ export const TagSelectorWithValues = (props: {
             ? props.placeholder
             : "Select tags to view..."
         }
-        value={Array.from(props.selectedTags).flatMap(([tag, values]) => {
-          return Array.from(values).map((value) => {
-            return { value: [tag, value], label: `${tag}=${value}` };
-          });
-        })}
+        value={Array.from(props.selectedTags).flatMap(
+          ([tag, values]) => {
+            return Array.from(values).map((value) => {
+              return {
+                value: [tag, value],
+                label: `${tag}=${value}`,
+              };
+            });
+          }
+        )}
       />
     </div>
   );
 };
 
-export const selectedTagsToObj = (map: Map<string, Set<string>>): object => {
+export const selectedTagsToObj = (
+  map: Map<string, Set<string>>
+): object => {
   const obj = Object.fromEntries(
     Array.from(map).map(([key, value]) => [key, Array.from(value)])
   );
   return obj;
 };
 
-export const objToSelectedTags = (obj: object): Map<string, Set<string>> => {
+export const objToSelectedTags = (
+  obj: object
+): Map<string, Set<string>> => {
   return new Map(
-    Object.entries(obj).map(([key, value]) => [key, new Set(value as string[])])
+    Object.entries(obj).map(([key, value]) => [
+      key,
+      new Set(value as string[]),
+    ])
   );
 };

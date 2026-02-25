@@ -18,7 +18,9 @@
  */
 
 import React, { FC, useState } from "react";
-import ReactDiffViewer, { DiffMethod } from "react-diff-viewer-continued";
+import ReactDiffViewer, {
+  DiffMethod,
+} from "react-diff-viewer-continued";
 
 import Highlight, { defaultProps } from "prism-react-renderer";
 import { MdOutlineExpand } from "react-icons/md";
@@ -72,18 +74,21 @@ const getCodeArtifactLink = (
     "CodeVersionGit1"
   );
 
-  if (gitVersion === undefined || gitVersion.git_repo.startsWith("Error:")) {
+  if (
+    gitVersion === undefined ||
+    gitVersion.git_repo.startsWith("Error:")
+  ) {
     return undefined; // TODO -- add more support
   }
-  const out = `https://${
-    gitVersion?.git_repo
-      .replace("https://", "")
-      .replace("git@", "")
-      .replace(":", "/")
-      .replace(".git", "") // TODO -- re-parse this correctly
-  }/blob/${gitVersion?.git_hash}/${functionPath}#L${codeArtifact.start}-L${
-    codeArtifact.end - 1
-  }`;
+  const out = `https://${gitVersion?.git_repo
+    .replace("https://", "")
+    .replace("git@", "")
+    .replace(":", "/")
+    .replace(
+      ".git",
+      ""
+    ) // TODO -- re-parse this correctly
+  }/blob/${gitVersion?.git_hash}/${functionPath}#L${codeArtifact.start}-L${codeArtifact.end - 1}`;
   return out;
 };
 
@@ -110,7 +115,13 @@ export const CodeView: React.FC<{
           code={props.fnContents}
           language="python"
         >
-          {({ className, style, tokens, getLineProps, getTokenProps }) => {
+          {({
+            className,
+            style,
+            tokens,
+            getLineProps,
+            getTokenProps,
+          }) => {
             const styleToRender = {
               ...style,
               backgroundColor: "transparent",
@@ -125,7 +136,10 @@ export const CodeView: React.FC<{
                   <div {...getLineProps({ line, key: i })}>
                     {line.map((token, key) => (
                       // eslint-disable-next-line react/jsx-key
-                      <span hidden={false} {...getTokenProps({ token, key })} />
+                      <span
+                        hidden={false}
+                        {...getTokenProps({ token, key })}
+                      />
                     ))}
                   </div>
                 ))}
@@ -160,7 +174,11 @@ const NodeListView: React.FC<{
   return (
     <>
       {nodes.map((node, index) => (
-        <NodeView key={index} node={node} type={represents}></NodeView>
+        <NodeView
+          key={index}
+          node={node}
+          type={represents}
+        ></NodeView>
       ))}
     </>
   );
@@ -217,8 +235,10 @@ const FunctionView: FC<FunctionProps> = ({
   };
   type ViewState = "graph" | "nodes" | "hidden";
   type DisplayMode = "code" | "diff";
-  const [displayMode, setDisplayMode] = React.useState<DisplayMode>("code");
-  const [miniGraphView, setMiniGraphView] = React.useState<ViewState>("nodes");
+  const [displayMode, setDisplayMode] =
+    React.useState<DisplayMode>("code");
+  const [miniGraphView, setMiniGraphView] =
+    React.useState<ViewState>("nodes");
   const toggleMiniGraphView = () => {
     const views: ViewState[] = ["nodes", "graph", "hidden"];
     const indexView = views.indexOf(miniGraphView);
@@ -300,9 +320,7 @@ const FunctionView: FC<FunctionProps> = ({
       )}
 
       <div
-        className={`w-full ${
-          miniGraphView != "hidden" && "border-t"
-        } border-gray-200`}
+        className={`w-full ${miniGraphView != "hidden" && "border-t"} border-gray-200`}
       >
         {miniGraphView === "graph" && (
           <FunctionGraphView

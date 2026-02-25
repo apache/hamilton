@@ -16,7 +16,12 @@
 // under the License.
 
 import { AiFillCode } from "react-icons/ai";
-import { IoGitNetworkSharp, IoExtensionPuzzle, IoFileTrayFull, IoGitMerge} from "react-icons/io5";
+import {
+  IoGitNetworkSharp,
+  IoExtensionPuzzle,
+  IoFileTrayFull,
+  IoGitMerge,
+} from "react-icons/io5";
 import { DAGTemplateWithData } from "../../state/api/friendlyApi";
 export const navKeys = [];
 
@@ -26,7 +31,10 @@ const pathNav = (pathEnd: string) => {
     projectVersion: string | undefined,
     requires: string[]
   ) => {
-    if (projectVersion === undefined || !requires.includes("projectVersion")) {
+    if (
+      projectVersion === undefined ||
+      !requires.includes("projectVersion")
+    ) {
       return `/dashboard/project/${project}/${pathEnd}`;
     }
     return `/dashboard/project/${project}/version/${projectVersion}/${pathEnd}`;
@@ -91,7 +99,9 @@ export const resolveNav = (
   }
   return navigation
     .filter((navItem) =>
-      navItem.requires.map((item) => available.includes(item)).every((i) => i)
+      navItem.requires
+        .map((item) => available.includes(item))
+        .every((i) => i)
     )
 
     .map((navItem) => {

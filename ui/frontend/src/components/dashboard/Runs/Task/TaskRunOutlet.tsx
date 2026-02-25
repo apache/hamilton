@@ -67,9 +67,7 @@ export const TaskRunOutlet = () => {
    */
   const setRuns = (runIds: number[]) => {
     nav(
-      `/dashboard/project/${projectId}/runs/${runIds.join(
-        ","
-      )}/task/${taskName}`
+      `/dashboard/project/${projectId}/runs/${runIds.join(",")}/task/${taskName}`
     );
   };
   return (
@@ -79,7 +77,9 @@ export const TaskRunOutlet = () => {
       projectVersions={projectVersions}
       // TODO -- we should be able to filter this out when we have more info
       // But for now it might just be too much
-      knownRunIds={availableRuns.data?.map((i) => i.id as number) || []}
+      knownRunIds={
+        availableRuns.data?.map((i) => i.id as number) || []
+      }
       nodeRunData={nodeRunData.data || []}
       setRuns={setRuns}
       fullRuns={runs} // we don't really need the data -- we should just compute the node links here...

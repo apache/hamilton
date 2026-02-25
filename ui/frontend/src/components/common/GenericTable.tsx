@@ -36,7 +36,10 @@ type GenericTableProps<T> = {
   };
   dataTypeName: string;
   comparison?: (a: [string, T], b: [string, T]) => number;
-  dataTypeDisplay?: (label: string, data: T) => React.ReactNode | undefined;
+  dataTypeDisplay?: (
+    label: string,
+    data: T
+  ) => React.ReactNode | undefined;
 };
 
 const TableRow = <T extends object>(props: {
@@ -50,7 +53,10 @@ const TableRow = <T extends object>(props: {
     shouldRender: (value: T) => boolean;
   };
   name: string;
-  dataTypeDisplay?: (label: string, value: T) => React.ReactNode | undefined;
+  dataTypeDisplay?: (
+    label: string,
+    value: T
+  ) => React.ReactNode | undefined;
 }) => {
   const [highlighted, setHighlighted] = React.useState(false);
   const labelData = (
@@ -90,7 +96,9 @@ const TableRow = <T extends object>(props: {
       </tr>
       {Render !== undefined ? (
         <tr>
-          <td colSpan={1000}>{<Render value={props.data}></Render>}</td>
+          <td colSpan={1000}>
+            {<Render value={props.data}></Render>}
+          </td>
           {/* <td colSpan={1000}>{props.extraRowData.Render(props.data)}</td> */}
         </tr>
       ) : (
@@ -99,7 +107,9 @@ const TableRow = <T extends object>(props: {
     </>
   );
 };
-export const GenericTable = <T extends object>(props: GenericTableProps<T>) => {
+export const GenericTable = <T extends object>(
+  props: GenericTableProps<T>
+) => {
   const sortedData = props.comparison
     ? props.data.sort(props.comparison)
     : props.data;
@@ -210,7 +220,10 @@ const GroupedTableRow = <T extends object>(props: {
   const expandable = props.data.length > 1 && props.isSummaryRow;
   const Label = props.label;
   const labelData = (
-    <td key={props.name} className="px-3 text-sm font-semibold text-gray-500">
+    <td
+      key={props.name}
+      className="px-3 text-sm font-semibold text-gray-500"
+    >
       {props.isSummaryRow ? (
         Label !== undefined ? (
           <Label value={props.data[0]} />
@@ -409,7 +422,5 @@ export const formatMeanStdDev = (
   if (stdDev === 0) {
     return `${mean.toFixed(meanDecimalPoints)}`;
   }
-  return `${mean.toFixed(meanDecimalPoints)} ± ${stdDev.toFixed(
-    stdDevDecimalPoints
-  )}`;
+  return `${mean.toFixed(meanDecimalPoints)} ± ${stdDev.toFixed(stdDevDecimalPoints)}`;
 };

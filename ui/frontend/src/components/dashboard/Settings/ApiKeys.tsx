@@ -39,8 +39,8 @@ import {
   useDeleteAPIKey,
 } from "../../../state/api/friendlyApi";
 
-
-const DEFAULT_API_KEY_NAME = (user: string) => `DAGWorks API Key: ${user}`;
+const DEFAULT_API_KEY_NAME = (user: string) =>
+  `DAGWorks API Key: ${user}`;
 
 const DeleteAPIKey = (props: {
   open: boolean;
@@ -111,8 +111,8 @@ const DeleteAPIKey = (props: {
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Deleting your API key can&apos;t be undone -- make sure
-                        that you update anything using this!
+                        Deleting your API key can&apos;t be undone --
+                        make sure that you update anything using this!
                       </p>
                     </div>
                   </div>
@@ -202,7 +202,8 @@ const CreatedAPIKeyDialogue = (props: { apiKey: string }) => {
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Save this! You will not be able to see it again.
+                        Save this! You will not be able to see it
+                        again.
                       </p>
                       <p className="break-all">
                         <code>{props.apiKey}</code>
@@ -265,7 +266,8 @@ export const ApiKeys = () => {
       displayName: "Name",
       Render: (value: ApiKeyOut) => (
         <div>
-          {value.key_name || (userName && DEFAULT_API_KEY_NAME(userName))}
+          {value.key_name ||
+            (userName && DEFAULT_API_KEY_NAME(userName))}
         </div>
       ),
     },
@@ -324,7 +326,10 @@ export const ApiKeys = () => {
             hover:bg-green-400 focus-visible:outline focus-visible:outline-2
             focus-visible:outline-offset-2 focus-visible:outline-green-500"
           >
-            <PlusIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+            <PlusIcon
+              className="-ml-0.5 h-5 w-5"
+              aria-hidden="true"
+            />
             New API key
           </button>
         </div>
@@ -335,7 +340,10 @@ export const ApiKeys = () => {
           ])}
           dataTypeName={"ID"}
           columns={columns}
-          comparison={(a: [string, ApiKeyOut], b: [string, ApiKeyOut]) => {
+          comparison={(
+            a: [string, ApiKeyOut],
+            b: [string, ApiKeyOut]
+          ) => {
             return a[1].created_at > b[1].created_at ? -1 : 1;
           }}
         />

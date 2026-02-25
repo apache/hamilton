@@ -17,8 +17,14 @@
  * under the License.
  */
 
-import { ChevronRightIcon, HomeIcon } from "@heroicons/react/20/solid";
-import { DAGTemplateWithoutData, Project } from "../../state/api/friendlyApi";
+import {
+  ChevronRightIcon,
+  HomeIcon,
+} from "@heroicons/react/20/solid";
+import {
+  DAGTemplateWithoutData,
+  Project,
+} from "../../state/api/friendlyApi";
 import { Link } from "react-router-dom";
 
 export const NavBreadCrumb = (props: {
@@ -26,7 +32,9 @@ export const NavBreadCrumb = (props: {
   dagTemplates: DAGTemplateWithoutData[];
 }) => {
   const getElements = () => {
-    const pathNameRelativeToDashboard = location.pathname.split("/").slice(2);
+    const pathNameRelativeToDashboard = location.pathname
+      .split("/")
+      .slice(2);
     return [
       // ...elements,
       ...pathNameRelativeToDashboard.map((pathName, index) => {
@@ -36,8 +44,8 @@ export const NavBreadCrumb = (props: {
           index == 1
             ? props.project.name
             : index == 3
-            ? props.dagTemplates[0]?.name
-            : pathName;
+              ? props.dagTemplates[0]?.name
+              : pathName;
         let linkPath =
           "/dashboard/" +
           pathNameRelativeToDashboard.slice(0, index + 1).join("/");
@@ -52,7 +60,9 @@ export const NavBreadCrumb = (props: {
           <Link
             to={
               "/dashboard/" +
-              pathNameRelativeToDashboard.slice(0, index + 1).join("/")
+              pathNameRelativeToDashboard
+                .slice(0, index + 1)
+                .join("/")
             }
             key={linkName}
             className="ml-4 font-medium hover:text-gray-800 cursor-pointer hover:scale-105"
@@ -73,11 +83,17 @@ export const NavBreadCrumb = (props: {
       className="flex max-w-full bg-transparent z-50"
       aria-label="Breadcrumb"
     >
-      <ol role="list" className="flex items-center space-x-4 flex-wrap">
+      <ol
+        role="list"
+        className="flex items-center space-x-4 flex-wrap"
+      >
         <li>
           <div>
             <a href="#" className=" hover:text-gray-800">
-              <HomeIcon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+              <HomeIcon
+                className="h-5 w-5 flex-shrink-0"
+                aria-hidden="true"
+              />
               <span className="sr-only">Home</span>
             </a>
           </div>

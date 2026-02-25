@@ -60,7 +60,9 @@ const displayTagValue = (value: any) => {
   }
   return JSON.stringify(value);
 };
-const TagDisplay: React.FC<{ tags: object; expanded: boolean }> = (props) => {
+const TagDisplay: React.FC<{ tags: object; expanded: boolean }> = (
+  props
+) => {
   const tagsToMap = props.expanded
     ? Object.entries(props.tags)
     : Object.entries(props.tags).slice(0, 1);
@@ -68,7 +70,10 @@ const TagDisplay: React.FC<{ tags: object; expanded: boolean }> = (props) => {
     <div className={`flex flex-col break-all overflow-clip`}>
       {tagsToMap.map(([key, value]) => {
         return (
-          <div key={key} className="flex flex-row gap-1 items-baseline">
+          <div
+            key={key}
+            className="flex flex-row gap-1 items-baseline"
+          >
             <span className="font-semibold min-w-max">{key}</span>
             {displayTagValue(value)}
           </div>
@@ -117,8 +122,8 @@ const getNodeTypeAndColor = (node: NodeTemplate) => {
     nodeType === "data_loader" || nodeType === "data_saver"
       ? "bg-dwdarkblue"
       : nodeType === "input"
-      ? "bg-yellow-500"
-      : "bg-green-500";
+        ? "bg-yellow-500"
+        : "bg-green-500";
   const nodeTypeName = nodeType.replace("_", " ");
   return [nodeTypeName, bgColor];
 };
@@ -318,9 +323,13 @@ export const CatalogView: FC<{
   project: Project;
 }> = (props) => {
   const projectId = props.project.id as number;
-  const catalogData = useCatalogView({ projectId: projectId, limit: 10000 });
+  const catalogData = useCatalogView({
+    projectId: projectId,
+    limit: 10000,
+  });
 
-  const [{ searchTerm, selectedTags }, setQueryParams] = useQueryState();
+  const [{ searchTerm, selectedTags }, setQueryParams] =
+    useQueryState();
   const [expandedRowsByKey, setExpandedRowsByKey] = useState<
     Map<string, "runtime-chart" | "table">
   >(new Map());
@@ -354,7 +363,9 @@ export const CatalogView: FC<{
     return <Loading />;
   } else if (catalogData.isError) {
     return (
-      <ErrorPage message={`Failed to load data for project=${projectId}`} />
+      <ErrorPage
+        message={`Failed to load data for project=${projectId}`}
+      />
     );
   }
 
@@ -387,7 +398,12 @@ export const CatalogView: FC<{
     {
       displayName: "Tags",
       Render: (value: RowToDisplay) => {
-        return <TagDisplay expanded={false} tags={value.node.tags as object} />;
+        return (
+          <TagDisplay
+            expanded={false}
+            tags={value.node.tags as object}
+          />
+        );
       },
     },
     {
@@ -444,7 +460,9 @@ export const CatalogView: FC<{
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const tags = node.tags as any;
     if (selectedTags.size > 0) {
-      for (const [tag, values] of Array.from(selectedTags.entries())) {
+      for (const [tag, values] of Array.from(
+        selectedTags.entries()
+      )) {
         if (!values.has(tags[tag])) {
           disp = false;
           break;
@@ -467,7 +485,8 @@ export const CatalogView: FC<{
     return fuse.search(term);
   };
 
-  const searchResults = getSearchResult(searchTerm).filter(shouldDisplay);
+  const searchResults =
+    getSearchResult(searchTerm).filter(shouldDisplay);
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center sticky top-0 bg-white z-50 px-5">

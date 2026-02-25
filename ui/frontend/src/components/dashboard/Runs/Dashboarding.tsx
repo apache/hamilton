@@ -39,10 +39,14 @@ export const MetricDisplay = (props: {
     : props.number;
   return (
     <div className={`flex flex-col items-center p-3 max-w-xl`}>
-      <div className={`text-5xl font-semibold ${props.textColorClass}`}>
+      <div
+        className={`text-5xl font-semibold ${props.textColorClass}`}
+      >
         {`${numberDisplay}${props.isSubset ? "+" : ""}`}
       </div>
-      <div className={`${props.textColorClass} font-light`}>{props.label}</div>
+      <div className={`${props.textColorClass} font-light`}>
+        {props.label}
+      </div>
     </div>
   );
 };

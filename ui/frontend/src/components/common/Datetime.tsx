@@ -26,7 +26,9 @@ interface DateTimeDisplayProps {
   datetime: string;
 }
 
-export const DateTimeDisplay: FC<DateTimeDisplayProps> = ({ datetime }) => {
+export const DateTimeDisplay: FC<DateTimeDisplayProps> = ({
+  datetime,
+}) => {
   // Format the datetime prop using dayjs
   const formattedDate = dayjs(datetime).format("MMMM D, YYYY");
   const formattedTime = dayjs(datetime).format("h:mma");
@@ -66,25 +68,36 @@ export const DurationDisplay = (props: {
     return ""; // default to standrd
   };
   const highlightHours = formattedHours !== "00";
-  const highlightMinutes = formattedMinutes !== "00" || highlightHours;
+  const highlightMinutes =
+    formattedMinutes !== "00" || highlightHours;
   const highlightSeconds = true;
   const highlightMilliseconds = true;
   return (
     <div className="font-semibold flex gap-0">
-      <span className={getTextColor(highlightHours)}>{formattedHours}</span>
-      <span className={getTextColor(highlightHours && highlightMinutes)}>
+      <span className={getTextColor(highlightHours)}>
+        {formattedHours}
+      </span>
+      <span
+        className={getTextColor(highlightHours && highlightMinutes)}
+      >
         :
       </span>
       <span className={`${getTextColor(highlightMinutes)}`}>
         {formattedMinutes}
       </span>
-      <span className={getTextColor(highlightMinutes && highlightSeconds)}>
+      <span
+        className={getTextColor(highlightMinutes && highlightSeconds)}
+      >
         :
       </span>
       <span className={`${getTextColor(highlightSeconds)}`}>
         {formattedSeconds}
       </span>
-      <span className={getTextColor(highlightSeconds && highlightMilliseconds)}>
+      <span
+        className={getTextColor(
+          highlightSeconds && highlightMilliseconds
+        )}
+      >
         .
       </span>
       <span

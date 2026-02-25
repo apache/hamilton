@@ -39,7 +39,10 @@ import { Loading } from "../common/Loading";
 
 import { useAuthData } from "../../state/authSlice";
 import { useLogoutFunction } from "@propelauth/react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/20/solid";
 import { IoKeyOutline } from "react-icons/io5";
 import { HelpVideos } from "../tutorial/HelpVideo";
 import { WithHelpIcon } from "../common/WithHelpIcon";
@@ -93,7 +96,12 @@ export const FeedbackButton = (props: { userName: string }) => {
 const SubMenu = (props: {
   name: string;
   navigate: (href: string) => void;
-  items: { href: string; name: string; current: boolean; icon: IconType }[];
+  items: {
+    href: string;
+    name: string;
+    current: boolean;
+    icon: IconType;
+  }[];
   disable: boolean;
 }) => {
   const { name, items, navigate } = props;
@@ -105,16 +113,16 @@ const SubMenu = (props: {
       <div
         onClick={() => setExpanded(!isExpanded)}
         className={classNames(
-          `${
-            props.disable
-              ? "text-gray-400"
-              : "text-gray-300 hover:bg-gray-700 hover:text-white"
-          }`,
+          `${props.disable ? "text-gray-400" : "text-gray-300 hover:bg-gray-700 hover:text-white"}`,
           "group flex justify-between items-center px-2 py-2 text-base font-medium rounded-md"
         )}
       >
         {name}
-        {props.disable ? <></> : <ExpandIcon className="cursor-pointer" />}
+        {props.disable ? (
+          <></>
+        ) : (
+          <ExpandIcon className="cursor-pointer" />
+        )}
       </div>
       {isExpanded &&
         items.map((item) => {
@@ -147,7 +155,9 @@ const SubMenu = (props: {
   return (
     <WithHelpIcon
       whichIcon={
-        NAV_HELP[name as keyof typeof NAV_HELP] as keyof typeof HelpVideos
+        NAV_HELP[
+          name as keyof typeof NAV_HELP
+        ] as keyof typeof HelpVideos
       }
       translate="-translate-x-2 translate-y-3"
     >
@@ -158,7 +168,12 @@ const SubMenu = (props: {
 
 const TopLevelMenu = (props: {
   navigate: (href: string) => void;
-  item: { href: string; name: string; current: boolean; icon: IconType };
+  item: {
+    href: string;
+    name: string;
+    current: boolean;
+    icon: IconType;
+  };
   disable: boolean;
 }) => {
   const { navigate } = props;
@@ -289,7 +304,11 @@ const MiniSideBar = (props: {
             />
           </Link>
         </div>
-        <div onClick={() => (props.logout ? props.logout : () => void 0)(true)}>
+        <div
+          onClick={() =>
+            (props.logout ? props.logout : () => void 0)(true)
+          }
+        >
           {
             <ArrowRightOnRectangleIcon
               className={classNames(
@@ -311,7 +330,8 @@ const MinimizeButton = (props: {
   color: "white" | "grey";
   kind: "open" | "close";
 }) => {
-  const Icon = props.kind === "close" ? ChevronLeftIcon : ChevronRightIcon;
+  const Icon =
+    props.kind === "close" ? ChevronLeftIcon : ChevronRightIcon;
   return (
     <button
       type="button"
@@ -325,9 +345,7 @@ const MinimizeButton = (props: {
     >
       <span className="sr-only">Close sidebar</span>
       <Icon
-        className={`h-6 w-6 ${
-          props.color == "white" ? "text-white" : "text-dwdarkblue/40"
-        }`}
+        className={`h-6 w-6 ${props.color == "white" ? "text-white" : "text-dwdarkblue/40"}`}
         aria-hidden="true"
       />
     </button>
@@ -474,7 +492,8 @@ const SideBar = (props: {
         });
       }
     : null;
-  const [displayProjectSidebar, setDisplayProjectSidebar] = useState(true);
+  const [displayProjectSidebar, setDisplayProjectSidebar] =
+    useState(true);
   return (
     <>
       {allowMinimization && (
@@ -578,7 +597,9 @@ const Dashboard = () => {
   const latestProjectVersionFull = useDAGTemplatesByID(
     latestProjectVersion?.data !== undefined
       ? {
-          dagTemplateIds: latestProjectVersion?.data.map((i) => i.id).join(","),
+          dagTemplateIds: latestProjectVersion?.data
+            .map((i) => i.id)
+            .join(","),
         }
       : skipToken
   );
@@ -615,8 +636,9 @@ const Dashboard = () => {
   };
 
   // Quick way to tell where we are/whether we should display the full sidebar or just the mini one
-  const canDisplayFullSidebar = // TODO: break the app into three levels.
-    whereAmI.pathname.startsWith("/dashboard/project/");
+  const canDisplayFullSidebar = whereAmI.pathname.startsWith(
+    "/dashboard/project/"
+  ); // TODO: break the app into three levels.
   const { userName, userOrg } =
     authData == null || authData.loading
       ? { userName: "", userOrg: "" }

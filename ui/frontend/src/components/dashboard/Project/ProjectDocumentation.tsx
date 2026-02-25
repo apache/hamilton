@@ -27,7 +27,10 @@ const Loom_001View = (props: { documentation: object }) => {
   };
 
   const targetRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [dimensions, setDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
 
   useLayoutEffect(() => {
     if (targetRef.current) {
@@ -39,7 +42,10 @@ const Loom_001View = (props: { documentation: object }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetRef.current]);
   return (
-    <div ref={targetRef} className="flex justify-center w-full h-full">
+    <div
+      ref={targetRef}
+      className="flex justify-center w-full h-full"
+    >
       <iframe
         width={`${dimensions.width}px`}
         height={`${dimensions.height}px`}
@@ -78,7 +84,9 @@ export const ProjectDocumentation = (props: {
                 id="tabs"
                 name="tabs"
                 className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-dwdarkblue focus:outline-none focus:ring-dwdarkblue sm:text-sm cursor-pointer"
-                defaultValue={tabs.find((tab, i) => currentTabIndex === i)}
+                defaultValue={tabs.find(
+                  (tab, i) => currentTabIndex === i
+                )}
               >
                 {tabs.map((tab) => (
                   <option key={tab}>{tab}</option>
@@ -90,7 +98,10 @@ export const ProjectDocumentation = (props: {
           {props.loomDocs.length > 1 && (
             <div className="hidden sm:block">
               <div className="border-b border-gray-200">
-                <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+                <nav
+                  className="-mb-px flex space-x-8"
+                  aria-label="Tabs"
+                >
                   {tabs.map((tab, i) => (
                     <a
                       key={tab}
@@ -101,7 +112,9 @@ export const ProjectDocumentation = (props: {
                           : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 cursor-pointer",
                         "whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
                       )}
-                      aria-current={tab === currentTab ? "page" : undefined}
+                      aria-current={
+                        tab === currentTab ? "page" : undefined
+                      }
                     >
                       {tab}
                     </a>

@@ -54,17 +54,27 @@ export const ExecutionNodeComponent = (props: {
       : [iconForGroupSpecName(props.data.groupSpec.groupSpecName)];
 
   const isInput = props.data.nodes
-    .map((item) => item.nodeTemplate.classifications.includes("input"))
+    .map((item) =>
+      item.nodeTemplate.classifications.includes("input")
+    )
     .some((i) => i);
   const hidden = props.data.collapsed;
 
   const { vertical } = useContext(NodeControlContext);
 
   // console.log(selectedNodes)
-  const nodeRuns = props.data.nodes.flatMap((node) => node.nodeRuns || []);
-  const containsFailedNode = nodeRuns.some((n) => n.status === "FAILURE");
-  const containsRunningNode = nodeRuns.some((n) => n.status === "RUNNING");
-  const containsSucceededNode = nodeRuns.some((n) => n.status === "SUCCESS");
+  const nodeRuns = props.data.nodes.flatMap(
+    (node) => node.nodeRuns || []
+  );
+  const containsFailedNode = nodeRuns.some(
+    (n) => n.status === "FAILURE"
+  );
+  const containsRunningNode = nodeRuns.some(
+    (n) => n.status === "RUNNING"
+  );
+  const containsSucceededNode = nodeRuns.some(
+    (n) => n.status === "SUCCESS"
+  );
 
   const isSelected = props.data.nodes
     .map((i) => i.name)

@@ -46,11 +46,15 @@ export const Account = () => {
         </h2>
       </div>
       <div className="flex flex-row pl-6 text-gray-600 gap-2">
-        <span className="text-gray-900 font-semibold">Username: </span>
+        <span className="text-gray-900 font-semibold">
+          Username:{" "}
+        </span>
         <span className="font-normal">{user}</span>
       </div>
       <div className="flex flex-row pl-6 text-gray-600 gap-2">
-        <span className="text-gray-900 font-semibold">Workspaces: </span>
+        <span className="text-gray-900 font-semibold">
+          Workspaces:{" "}
+        </span>
         {orgs.length > 0 ? (
           orgs.map((org) => {
             return (

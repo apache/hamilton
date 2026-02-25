@@ -23,7 +23,10 @@ import {
   PiDotsThreeCircleBold,
 } from "react-icons/pi";
 import { VscCircleFilled } from "react-icons/vsc";
-import { extractTagFromNode, getPythonTypeIconFromNode } from "../../../utils";
+import {
+  extractTagFromNode,
+  getPythonTypeIconFromNode,
+} from "../../../utils";
 import { DAGNode, TerminalVizNodeType } from "./types";
 import { NodeTemplate } from "../../../state/api/friendlyApi";
 
@@ -48,7 +51,9 @@ export const iconsForNodes = (nodes: DAGNode[]) => {
   return Array.from(icons);
 };
 
-export const iconForGroupSpecName = (groupSpecName: TerminalVizNodeType) => {
+export const iconForGroupSpecName = (
+  groupSpecName: TerminalVizNodeType
+) => {
   if (groupSpecName === "module") {
     return BsFileEarmarkBreak;
   } else if (groupSpecName === "subdag") {
@@ -73,8 +78,14 @@ export const getArtifactTypes = (nodes: DAGNode[]): Set<string> => {
   const artifactTypes = nodes
     .map(
       (n) =>
-        extractTagFromNode(n.nodeTemplate, "hamilton.data_saver.sink") ||
-        extractTagFromNode(n.nodeTemplate, "hamilton.data_loader.source")
+        extractTagFromNode(
+          n.nodeTemplate,
+          "hamilton.data_saver.sink"
+        ) ||
+        extractTagFromNode(
+          n.nodeTemplate,
+          "hamilton.data_loader.source"
+        )
     )
     .filter((n) => n !== undefined) as string[];
 

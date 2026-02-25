@@ -54,7 +54,9 @@ const Runs: React.FC<{ project: Project }> = ({ project }) => {
   ) {
     return <Loading />;
   } else if (runs.isUninitialized || runs.data === undefined) {
-    return <span>uninitialized, figure out why this is happening...</span>;
+    return (
+      <span>uninitialized, figure out why this is happening...</span>
+    );
   }
   return (
     <RunSummary

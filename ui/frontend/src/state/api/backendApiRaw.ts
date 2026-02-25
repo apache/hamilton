@@ -411,12 +411,13 @@ export type TrackingserverRunTrackingApiGetNodeRunForDagsApiArg = {
 };
 export type TrackingserverRunTrackingApiGetLatestTemplateRunsApiResponse =
   /** status 200 OK */ CatalogZoomResponse;
-export type TrackingserverRunTrackingApiGetLatestTemplateRunsApiArg = {
-  nodeTemplateName: string;
-  projectId: number;
-  limit?: number;
-  offset?: number;
-};
+export type TrackingserverRunTrackingApiGetLatestTemplateRunsApiArg =
+  {
+    nodeTemplateName: string;
+    projectId: number;
+    limit?: number;
+    offset?: number;
+  };
 export type AttributeDocumentationLoom1 = {
   id: string;
 };
@@ -446,7 +447,9 @@ export type PandasDescribeCategoricalColumn = {
   freq: number | null;
 };
 export type AttributePandasDescribe1 = {
-  [key: string]: PandasDescribeNumericColumn | PandasDescribeCategoricalColumn;
+  [key: string]:
+    | PandasDescribeNumericColumn
+    | PandasDescribeCategoricalColumn;
 };
 export type AttributeError1 = {
   stack_trace: string[];

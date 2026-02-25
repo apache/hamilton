@@ -47,9 +47,12 @@ export const ErrorView = (props: {
         data[0] !== null && props.nodeRunData[i]?.status === "FAILURE"
     ) as [NodeRunWithAttributes[], number][];
 
-  const currentRunSeedIndex = failedRuns.length > 0 ? failedRuns[0][1] : 0;
+  const currentRunSeedIndex =
+    failedRuns.length > 0 ? failedRuns[0][1] : 0;
 
-  const [currentRunIndex, setCurrentRunIndex] = useState(currentRunSeedIndex);
+  const [currentRunIndex, setCurrentRunIndex] = useState(
+    currentRunSeedIndex
+  );
 
   const errorAttributes = getNodeRunAttributes<AttributeError1>(
     props.nodeRunData.flatMap((i) => i?.attributes || []),
@@ -79,7 +82,9 @@ export const ErrorView = (props: {
             defaultValue={currentTask?.dag_run || undefined}
           >
             {props.nodeRunData.map((nodeRun) => (
-              <option key={nodeRun?.dag_run}>{nodeRun?.dag_run}</option>
+              <option key={nodeRun?.dag_run}>
+                {nodeRun?.dag_run}
+              </option>
             ))}
           </select>
         </div>
@@ -96,8 +101,8 @@ export const ErrorView = (props: {
                   nodeRunData?.dag_run === currentTask?.dag_run
                     ? "bg-gray-200 text-gray-700"
                     : nodeRunData?.dag_run === priorTask?.dag_run
-                    ? "bg-gray-100"
-                    : "text-gray-500 hover:text-gray-700",
+                      ? "bg-gray-100"
+                      : "text-gray-500 hover:text-gray-700",
                   "rounded-md px-3 py-2 text-sm font-medium"
                 )}
               >
@@ -114,7 +119,8 @@ export const ErrorView = (props: {
           ) : (
             <div className="text-gray-600">
               {" "}
-              <code>{currentTask?.node_name}</code> produced no errors!{" "}
+              <code>{currentTask?.node_name}</code> produced no
+              errors!{" "}
             </div>
           )}
         </div>

@@ -46,16 +46,23 @@ export const authSlice = createSlice({
     logout: (state: AuthState) => {
       state.authData = null;
     },
-    setLocalUserName: (state: AuthState, action: PayloadAction<string>) => {
+    setLocalUserName: (
+      state: AuthState,
+      action: PayloadAction<string>
+    ) => {
       state.localUserName = action.payload;
     },
-    setLocalAPIKey: (state: AuthState, action: PayloadAction<string>) => {
+    setLocalAPIKey: (
+      state: AuthState,
+      action: PayloadAction<string>
+    ) => {
       state.localAPIKey = action.payload;
-    }
+    },
   },
 });
 
 export default authSlice.reducer;
 
-export const { logout, setAuth, setLocalUserName, setLocalAPIKey } = authSlice.actions;
+export const { logout, setAuth, setLocalUserName, setLocalAPIKey } =
+  authSlice.actions;
 export const useAuthData = (state: RootState) => state.auth.authData;

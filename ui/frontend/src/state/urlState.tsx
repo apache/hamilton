@@ -34,7 +34,9 @@ export const useURLParams = () => {
   } = useParams();
   return {
     projectId: projectIdsRaw ? parseInt(projectIdsRaw) : undefined,
-    versionIds: versionIdsRaw ? parseListOfInts(versionIdsRaw) : undefined,
+    versionIds: versionIdsRaw
+      ? parseListOfInts(versionIdsRaw)
+      : undefined,
     runIds: runIdRaw ? parseListOfInts(runIdRaw) : undefined,
     taskName: taskNameRaw ? taskNameRaw : undefined,
   };

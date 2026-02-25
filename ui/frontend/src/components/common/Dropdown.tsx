@@ -18,7 +18,10 @@
  */
 
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import {
+  CheckIcon,
+  ChevronUpDownIcon,
+} from "@heroicons/react/20/solid";
 import React, { Fragment } from "react";
 import { IconType } from "react-icons/lib";
 import { classNames } from "../../utils";
@@ -39,7 +42,10 @@ export const DropdownSelector: React.FC<{
   description?: string;
 }> = (props) => {
   return (
-    <Listbox value={props.currentChoice} onChange={props.setCurrentChoice}>
+    <Listbox
+      value={props.currentChoice}
+      onChange={props.setCurrentChoice}
+    >
       {({ open }) => (
         <>
           <Listbox.Label className="text-sm font-medium text-gray-700 flex flex-row items-center gap-2">
@@ -54,11 +60,11 @@ export const DropdownSelector: React.FC<{
             <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-dwdarkblue focus:outline-none focus:ring-1 focus:ring-dwdarkblue sm:text-sm">
               {/* Hack to make the padding look good */}
               <span
-                className={`block truncate ${
-                  props.currentChoice?.name ? "" : "opacity-0"
-                }`}
+                className={`block truncate ${props.currentChoice?.name ? "" : "opacity-0"}`}
               >
-                {props.currentChoice?.name ? props.currentChoice.name : "..."}
+                {props.currentChoice?.name
+                  ? props.currentChoice.name
+                  : "..."}
               </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon
@@ -81,7 +87,9 @@ export const DropdownSelector: React.FC<{
                     key={index}
                     className={({ active }) =>
                       classNames(
-                        active ? "text-white bg-dwlightblue" : "text-gray-900",
+                        active
+                          ? "text-white bg-dwlightblue"
+                          : "text-gray-900",
                         "relative cursor-default select-none py-2 pl-3 pr-9"
                       )
                     }
@@ -91,7 +99,9 @@ export const DropdownSelector: React.FC<{
                       <>
                         <span
                           className={classNames(
-                            selected ? "font-semibold" : "font-normal",
+                            selected
+                              ? "font-semibold"
+                              : "font-normal",
                             "block truncate"
                           )}
                         >
@@ -101,11 +111,16 @@ export const DropdownSelector: React.FC<{
                         {selected ? (
                           <span
                             className={classNames(
-                              active ? "text-white" : "text-dwlightblue",
+                              active
+                                ? "text-white"
+                                : "text-dwlightblue",
                               "absolute inset-y-0 right-0 flex items-center pr-4"
                             )}
                           >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                            <CheckIcon
+                              className="h-5 w-5"
+                              aria-hidden="true"
+                            />
                           </span>
                         ) : null}
                       </>

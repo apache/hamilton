@@ -15,7 +15,11 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  ThunkAction,
+  Action,
+} from "@reduxjs/toolkit";
 import {
   persistStore,
   persistReducer,
@@ -53,7 +57,14 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        ignoredActions: [
+          FLUSH,
+          REHYDRATE,
+          PAUSE,
+          PERSIST,
+          PURGE,
+          REGISTER,
+        ],
         ignoreActions: true, // TODO -- don't ignore these
         ignoreState: true, // Instead, we should just be storing the state we need...
       },

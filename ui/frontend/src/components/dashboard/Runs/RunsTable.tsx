@@ -48,7 +48,10 @@ const TableRow: React.FC<{
 }> = (props) => {
   return (
     <tr className="hover:bg-slate-100 h-12">
-      <td key={"checkbox"} className="py-2 px-3 text-sm max-w-sm text-gray-500">
+      <td
+        key={"checkbox"}
+        className="py-2 px-3 text-sm max-w-sm text-gray-500"
+      >
         <div className="flex h-6 items-center">
           <input
             id="comments"
@@ -66,7 +69,10 @@ const TableRow: React.FC<{
       {props.cols.map((col, index) => {
         const ToRender = col.render;
         return (
-          <td key={index} className="py-2 px-3 text-sm max-w-sm text-gray-500">
+          <td
+            key={index}
+            className="py-2 px-3 text-sm max-w-sm text-gray-500"
+          >
             {
               <ToRender
                 projectId={props.projectId}
@@ -99,7 +105,9 @@ export const RunsTable: FC<{
   const { projectId } = props;
   const navigate = useNavigate();
   // const [selectedTags, setSelectedTags] = useState([] as string[]);
-  const [tagFilters, setTagFilters] = useState(new Map<string, string[]>());
+  const [tagFilters, setTagFilters] = useState(
+    new Map<string, string[]>()
+  );
   const [runsToCompare, setRunsToCompare] = useState([] as number[]);
 
   const selectedTags = props.selectedTags;
@@ -124,8 +132,8 @@ export const RunsTable: FC<{
           {runsToCompare.length >= 2
             ? "Compare"
             : runsToCompare.length == 1
-            ? "View"
-            : "Select..."}
+              ? "View"
+              : "Select..."}
         </button>
       ),
       render: (props: RenderProps) => (
@@ -248,7 +256,9 @@ export const RunsTable: FC<{
         if (!props.run.run_start_time) {
           return <></>;
         }
-        return <ReactTimeAgo date={new Date(props.run.run_start_time)} />;
+        return (
+          <ReactTimeAgo date={new Date(props.run.run_start_time)} />
+        );
       },
     },
     {
@@ -279,10 +289,14 @@ export const RunsTable: FC<{
     if (runsToCompare.indexOf(run.id as number) !== -1) {
       return true;
     }
-    const tagMatches = Array.from(tagFilters.entries()).every(([tag, vals]) => {
-      const tagKey = tag as keyof typeof run.tags;
-      return vals.length === 0 || vals.includes(run.tags?.[tagKey] || ""); // VAlue length is zero if no filter is selected
-    });
+    const tagMatches = Array.from(tagFilters.entries()).every(
+      ([tag, vals]) => {
+        const tagKey = tag as keyof typeof run.tags;
+        return (
+          vals.length === 0 || vals.includes(run.tags?.[tagKey] || "")
+        ); // VAlue length is zero if no filter is selected
+      }
+    );
     return tagMatches;
   });
 
@@ -303,9 +317,11 @@ export const RunsTable: FC<{
           className={"w-48"}
           placeholder={tag}
           isMulti
-          options={Array.from(possibleTagValues.get(tag) || []).map((tag) => {
-            return { label: tag, value: tag };
-          })}
+          options={Array.from(possibleTagValues.get(tag) || []).map(
+            (tag) => {
+              return { label: tag, value: tag };
+            }
+          )}
         />
       ),
       render: (props: RenderProps) => {
@@ -374,39 +390,51 @@ export const RunsTable: FC<{
                     const runID = run.id as number;
                     return (
                       <VisibilitySensor
-                          key={index}
-                          offset={{ top: -1000, bottom: -1000 }}
-                          partialVisibility={true}
-                        >
-                      <TableRow
-                        projectId={projectId as number}
-                        run={run}
                         key={index}
-                        version={projectVersionMap.get(
-                          run.dag_template_id as number
-                        )}
-                        cols={allCols}
-                        setVersion={(version: number) => {
-                          navigate(
-                            `/dashboard/project/${projectId}/version/${version}`
-                          );
-                        }}
-                        includedInCompare={runsToCompare.indexOf(runID) > -1}
-                        toggleIncludeVersionInCompare={(include) => {
-                          if (include) {
-                            runsToCompare.push(runID);
-                            if (runsToCompare.length > MAX_COMPARE_RUNS) {
-                              runsToCompare.shift();
-                            }
-                          } else {
-                            const index = runsToCompare.indexOf(runID, 0);
-                            if (index > -1) {
-                              runsToCompare.splice(index, 1);
-                            }
+                        offset={{ top: -1000, bottom: -1000 }}
+                        partialVisibility={true}
+                      >
+                        <TableRow
+                          projectId={projectId as number}
+                          run={run}
+                          key={index}
+                          version={projectVersionMap.get(
+                            run.dag_template_id as number
+                          )}
+                          cols={allCols}
+                          setVersion={(version: number) => {
+                            navigate(
+                              `/dashboard/project/${projectId}/version/${version}`
+                            );
+                          }}
+                          includedInCompare={
+                            runsToCompare.indexOf(runID) > -1
                           }
-                          setRunsToCompare(Array.from(runsToCompare));
-                        }}
-                      />
+                          toggleIncludeVersionInCompare={(
+                            include
+                          ) => {
+                            if (include) {
+                              runsToCompare.push(runID);
+                              if (
+                                runsToCompare.length >
+                                MAX_COMPARE_RUNS
+                              ) {
+                                runsToCompare.shift();
+                              }
+                            } else {
+                              const index = runsToCompare.indexOf(
+                                runID,
+                                0
+                              );
+                              if (index > -1) {
+                                runsToCompare.splice(index, 1);
+                              }
+                            }
+                            setRunsToCompare(
+                              Array.from(runsToCompare)
+                            );
+                          }}
+                        />
                       </VisibilitySensor>
                     );
                   })}

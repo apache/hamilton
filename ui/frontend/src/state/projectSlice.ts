@@ -38,7 +38,10 @@ export const projectSlice = createSlice({
   initialState,
   name: "project",
   reducers: {
-    setProjectID: (state: ProjectState, action: PayloadAction<number>) => {
+    setProjectID: (
+      state: ProjectState,
+      action: PayloadAction<number>
+    ) => {
       state.currentProjectID = action.payload;
       state.hasSelectedProject = true;
     },
@@ -56,5 +59,6 @@ export const { setProjectID } = projectSlice.actions;
 export const selectProjectID = (state: RootState) =>
   state.project.currentProjectID;
 
-export const selectUserHasChosenProject = (state: RootState): boolean =>
-  state.project.hasSelectedProject;
+export const selectUserHasChosenProject = (
+  state: RootState
+): boolean => state.project.hasSelectedProject;

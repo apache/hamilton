@@ -18,7 +18,11 @@
  */
 
 import { useEffect, useState } from "react";
-import { Outlet, useLocation, useOutletContext } from "react-router-dom";
+import {
+  Outlet,
+  useLocation,
+  useOutletContext,
+} from "react-router-dom";
 import {
   useDAGRunsByIds,
   useDAGTemplatesByID,
@@ -62,7 +66,9 @@ export const TaskProperty = (props: {
   const displayName = props.displayName ?? props.type;
   const color = props.focus ? "bg-yellow-500" : "bg-yellow-500/60";
   return (
-    <span className={`${color} text-white text-sm px-1 py-1 rounded-md`}>
+    <span
+      className={`${color} text-white text-sm px-1 py-1 rounded-md`}
+    >
       {displayName}
     </span>
   );
@@ -168,9 +174,15 @@ const VariableTable = (props: {
                       {values.map((value, i) => {
                         let json_string = "";
                         if (value) {
-                          json_string = JSON.stringify(value, null, 2);
+                          json_string = JSON.stringify(
+                            value,
+                            null,
+                            2
+                          );
                           if (json_string.length > 10000) {
-                            json_string = json_string.substring(0, 10000) + " (truncated)";
+                            json_string =
+                              json_string.substring(0, 10000) +
+                              " (truncated)";
                           }
                         }
                         return (
@@ -190,13 +202,15 @@ const VariableTable = (props: {
                                 : "text-gray-500"
                             } ${
                               hasDiff &&
-                              props.highlightedRun === props.runs[i].id
+                              props.highlightedRun ===
+                                props.runs[i].id
                                 ? "bg-yellow-400/50"
                                 : hasDiff
-                                ? "bg-yellow-400"
-                                : props.highlightedRun === props.runs[i].id
-                                ? "bg-dwdarkblue/5"
-                                : ""
+                                  ? "bg-yellow-400"
+                                  : props.highlightedRun ===
+                                      props.runs[i].id
+                                    ? "bg-dwdarkblue/5"
+                                    : ""
                             }`}
                           >
                             <div className="max-w-64 max-h-48 overflow-scroll scrollbar-hide">
@@ -270,9 +284,15 @@ const ConfigDisplay = (props: {
   // const allRunInputsArray = Array.from(allRunInputs).sort();
   props.projectVersions.forEach((projectVersion) => {
     allRunConfigs.forEach((config) => {
-      const runInputs = projectVersion.config as Record<string, string>;
+      const runInputs = projectVersion.config as Record<
+        string,
+        string
+      >;
       const value = runInputs[config];
-      variables.set(config, [...(variables.get(config) ?? []), value]);
+      variables.set(config, [
+        ...(variables.get(config) ?? []),
+        value,
+      ]);
     });
   });
   return (
@@ -353,10 +373,13 @@ const OutputsDisplay = (props: {
     <div
       className={`flex flex-wrap align-middle items-center text-dwdarkblue gap-3 justify-center h-full p-3 w-full`}
     >
-      <div className={`text-2xl font-semibold text-dwdarkblue`}>Outputs</div>
+      <div className={`text-2xl font-semibold text-dwdarkblue`}>
+        Outputs
+      </div>
       <div className="flex flex-row items-center gap-2 text-sm">
         {props.runs.flatMap((item, i) => {
-          const numOutputs = outputsByRun.get(item.id as number)?.size ?? 0;
+          const numOutputs =
+            outputsByRun.get(item.id as number)?.size ?? 0;
           return [
             <RunLink
               key={i}
@@ -367,11 +390,7 @@ const OutputsDisplay = (props: {
             />,
             <div
               key={i + "_numOutputs"}
-              className={`${
-                props.highlightedRun === item.id
-                  ? "text-gray-600"
-                  : "text-gray-400"
-              } `}
+              className={`${props.highlightedRun === item.id ? "text-gray-600" : "text-gray-400"} `}
             >
               {`(${numOutputs})`}
             </div>,
@@ -392,8 +411,13 @@ const OutputsDisplay = (props: {
               }}
               className="cursor-pointer"
               onClick={() => {
-                const node = document.getElementById(`#${outputName}`);
-                node?.scrollIntoView({ behavior: "smooth", block: "center" });
+                const node = document.getElementById(
+                  `#${outputName}`
+                );
+                node?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "center",
+                });
               }}
             >
               <TaskProperty
@@ -401,9 +425,12 @@ const OutputsDisplay = (props: {
                 key={i}
                 displayName={outputName}
                 focus={
-                  (props.highlightedTasks?.indexOf(outputName) || -1) > -1 ||
+                  (props.highlightedTasks?.indexOf(outputName) ||
+                    -1) > -1 ||
                   (props.highlightedRun &&
-                    outputsByRun.get(props.highlightedRun)?.has(outputName)) ||
+                    outputsByRun
+                      .get(props.highlightedRun)
+                      ?.has(outputName)) ||
                   false
                 }
               />
@@ -433,7 +460,9 @@ const NumTasksDisplay = (props: {
                 : ""
             } cursor-default p-2`}
             key={run.id}
-            onMouseEnter={() => props.setHighlightedRun(run.id as number)}
+            onMouseEnter={() =>
+              props.setHighlightedRun(run.id as number)
+            }
             onMouseLeave={() => props.setHighlightedRun(null)}
           >
             <MetricDisplay
@@ -491,7 +520,9 @@ const RuntimeDurationDisplay = (props: {
                 : ""
             } cursor-default p-2`}
             key={run.id}
-            onMouseEnter={() => props.setHighlightedRun(run.id as number)}
+            onMouseEnter={() =>
+              props.setHighlightedRun(run.id as number)
+            }
             onMouseLeave={() => props.setHighlightedRun(null)}
           >
             <MetricDisplay
@@ -653,7 +684,9 @@ const AutoRefreshButton = (props: {
   refetch: () => void;
   shouldRefreshByDefault: boolean;
 }) => {
-  const [enabled, setEnabled] = useState(props.shouldRefreshByDefault);
+  const [enabled, setEnabled] = useState(
+    props.shouldRefreshByDefault
+  );
   const [elapsedTime, setElapsedTime] = useState(0);
   const { refetch } = props;
 
@@ -699,8 +732,13 @@ const AutoRefreshButton = (props: {
         />
       </Switch>
       <Switch.Label as="span" className="ml-3 text-sm">
-        <span className="font-medium text-gray-500"> Auto refresh</span>{" "}
-        <span className="text-gray-400">(Every {REFRESH_SECONDS} seconds)</span>
+        <span className="font-medium text-gray-500">
+          {" "}
+          Auto refresh
+        </span>{" "}
+        <span className="text-gray-400">
+          (Every {REFRESH_SECONDS} seconds)
+        </span>
       </Switch.Label>
     </Switch.Group>
   );
@@ -708,14 +746,16 @@ const AutoRefreshButton = (props: {
 
 const Run = () => {
   const location = useLocation();
-  const [highlightedTasks, setHighlightedTasks] = useState<string[] | null>(
-    null
-  );
+  const [highlightedTasks, setHighlightedTasks] = useState<
+    string[] | null
+  >(null);
   // TODO -- fix this up. We really should be using contexts all the way down *or* URL params...
   // const run = useRun({ runId: parseInt(location.pathname.split("/")[3]) });
   const { runIds: runIdsRaw, projectId } = useURLParams();
   // const run = useRun({ runId: parseInt(runId as string) });
-  const runs = useDAGRunsByIds({ dagRunIds: runIdsRaw?.join(",") || "" });
+  const runs = useDAGRunsByIds({
+    dagRunIds: runIdsRaw?.join(",") || "",
+  });
 
   // Currently we just assume the project versions are all the same...
   const projectVersionIds =
@@ -726,13 +766,17 @@ const Run = () => {
       : skipToken
   );
 
-  const [highlightedRun, setHighlightedRun] = useState<number | null>(null);
+  const [highlightedRun, setHighlightedRun] = useState<number | null>(
+    null
+  );
   const [whichView, setWhichView] = useState<string>("waterfall");
   const [dagViewHidden, setDagViewHidden] = useState<boolean>(false);
-  const [tableViewHidden, setTableViewHidden] = useState<boolean>(false);
+  const [tableViewHidden, setTableViewHidden] =
+    useState<boolean>(false);
   const [dashboardViewHidden, setDashboardViewHidden] =
     useState<boolean>(false);
-  const [whichDashboardView, setWhichDashboardView] = useState<string>("info");
+  const [whichDashboardView, setWhichDashboardView] =
+    useState<string>("info");
 
   if (
     runs.isLoading ||
@@ -745,7 +789,8 @@ const Run = () => {
   if (runs.data === undefined) {
     return (
       <div>
-        Run not found/not parseable. Please reach out to the Apache Hamilton github/mailing lists...
+        Run not found/not parseable. Please reach out to the Apache
+        Hamilton github/mailing lists...
       </div>
     );
   }
@@ -770,7 +815,8 @@ const Run = () => {
 
   const shouldRefreshByDefault =
     runs.data?.some(
-      (run) => run.run_status === "RUNNING" && getRuntime(run) < RUN_TOO_OLD
+      (run) =>
+        run.run_status === "RUNNING" && getRuntime(run) < RUN_TOO_OLD
     ) || false;
 
   const displayTagData =
@@ -813,7 +859,9 @@ const Run = () => {
       {!dashboardViewHidden && whichDashboardView === "info" && (
         <InfoDashboard
           runs={runs.data as DAGRunWithData[]}
-          projectVersions={projectVersions.data as DAGTemplateWithData[]}
+          projectVersions={
+            projectVersions.data as DAGTemplateWithData[]
+          }
           highlightedRun={highlightedRun}
           setHighlightedRun={setHighlightedRun}
           projectId={projectId as number}
@@ -823,21 +871,24 @@ const Run = () => {
           highlightedTasks={highlightedTasks}
         />
       )}
-      {!dashboardViewHidden && whichDashboardView === "parameters" && (
-        <ParametersDashboard
-          runs={runs.data as DAGRunWithData[]}
-          projectVersions={projectVersions.data as DAGTemplateWithData[]}
-          highlightedRun={highlightedRun}
-          setHighlightedRun={setHighlightedRun}
-          setHighlightedTasks={setHighlightedTasks}
-          highlightedTasks={highlightedTasks}
-          projectId={projectId as number}
-          displayInputData={displayInputData}
-          displayConfigData={displayConfigData}
-          displayOutputData={displayOutputData}
-          displayTagData={displayTagData}
-        />
-      )}
+      {!dashboardViewHidden &&
+        whichDashboardView === "parameters" && (
+          <ParametersDashboard
+            runs={runs.data as DAGRunWithData[]}
+            projectVersions={
+              projectVersions.data as DAGTemplateWithData[]
+            }
+            highlightedRun={highlightedRun}
+            setHighlightedRun={setHighlightedRun}
+            setHighlightedTasks={setHighlightedTasks}
+            highlightedTasks={highlightedTasks}
+            projectId={projectId as number}
+            displayInputData={displayInputData}
+            displayConfigData={displayConfigData}
+            displayOutputData={displayOutputData}
+            displayTagData={displayTagData}
+          />
+        )}
 
       <div className="sticky bg-white top-0 z-50">
         <Tabs
@@ -864,9 +915,10 @@ const Run = () => {
                   >
                     <DAGRunView
                       dagTemplate={
-                        ((projectVersions.data || []) as DAGTemplateWithData[])[
-                          i
-                        ]
+                        (
+                          (projectVersions.data ||
+                            []) as DAGTemplateWithData[]
+                        )[i]
                       }
                       run={run}
                       highlightedTasks={highlightedTasks}
@@ -887,7 +939,9 @@ const Run = () => {
               {runs.data.map((run, i) => (
                 <div
                   key={i}
-                  style={{ width: `${100 / (runs.data?.length || 0)}%` }}
+                  style={{
+                    width: `${100 / (runs.data?.length || 0)}%`,
+                  }}
                 >
                   <WaterfallChart
                     key={i}
@@ -913,7 +967,9 @@ const Run = () => {
           isMinimized={tableViewHidden}
           setIsMinimized={setTableViewHidden}
           runs={runs.data as DAGRunWithData[]}
-          projectVersions={projectVersions.data as DAGTemplateWithData[]}
+          projectVersions={
+            projectVersions.data as DAGTemplateWithData[]
+          }
           highlightedTasks={highlightedTasks}
           setHighlightedTasks={setHighlightedTasks}
           highlightedRun={highlightedRun}

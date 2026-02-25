@@ -62,13 +62,18 @@ export const getDirectlyUpstreamNodes = (
   dag: DAGTemplateWithData,
   codeArtifact: CodeArtifact
 ): NodeTemplate[] => {
-  const nodesProducedByFunction = getNodesProducedByFunction(dag, codeArtifact);
+  const nodesProducedByFunction = getNodesProducedByFunction(
+    dag,
+    codeArtifact
+  );
   const upstream = nodesProducedByFunction.flatMap((node) => {
     return dag.nodes.filter((otherNode) => {
       const dependencies = node.dependencies as string[];
       return (
-        nodesProducedByFunction.map((i) => i.name).indexOf(otherNode.name) ==
-          -1 && dependencies.includes(otherNode.name)
+        nodesProducedByFunction
+          .map((i) => i.name)
+          .indexOf(otherNode.name) == -1 &&
+        dependencies.includes(otherNode.name)
       );
     });
   });
@@ -103,7 +108,8 @@ export const getAllUpstreamNodes = (
   const queue = [...startNodes];
   while (queue.length > 0) {
     const currentNode = queue.pop() as DAGNode;
-    for (const dependency of currentNode.nodeTemplate.dependencies || []) {
+    for (const dependency of currentNode.nodeTemplate.dependencies ||
+      []) {
       if (!upstream.has(dependency)) {
         const possibleUpstreamNodes =
           allNodeImplementations.get(dependency) ?? [];
@@ -116,13 +122,16 @@ export const getAllUpstreamNodes = (
   }
   const filterFunc = includeSelf
     ? () => true
-    : (n: string) => !startNodes.map((node) => node.name === n).some((i) => i);
+    : (n: string) =>
+        !startNodes.map((node) => node.name === n).some((i) => i);
   return (
     Array.from(upstream)
       .filter(filterFunc)
       // Get all possible implementations of the node
       // If its not here (probably shouldn't happen) we just append an empty list
-      .flatMap((nodeName) => allNodeImplementations.get(nodeName) ?? [])
+      .flatMap(
+        (nodeName) => allNodeImplementations.get(nodeName) ?? []
+      )
   );
 };
 
@@ -147,7 +156,8 @@ export const getAllDownstreamNodes = (
     if (currentNode === undefined) {
       throw Error("this shouldn't happen");
     }
-    const dependencies = reverseMap.get(currentNode.name) || new Set<string>();
+    const dependencies =
+      reverseMap.get(currentNode.name) || new Set<string>();
     for (const dependency of Array.from(dependencies)) {
       if (!downstream.has(dependency)) {
         downstream.add(dependency);
@@ -161,7 +171,8 @@ export const getAllDownstreamNodes = (
   }
   const filterFunc = includeSelf
     ? () => true
-    : (n: string) => !startNodes.map((node) => node.name === n).some((i) => i);
+    : (n: string) =>
+        !startNodes.map((node) => node.name === n).some((i) => i);
 
   return Array.from(downstream.values())
     .filter(filterFunc)

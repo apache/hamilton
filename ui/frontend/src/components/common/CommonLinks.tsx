@@ -26,7 +26,9 @@ const constructUrl = (
   nodeName: string | undefined
 ): string => {
   const focus = nodeName
-    ? encodeURIComponent(JSON.stringify({ group: "node=" + nodeName }))
+    ? encodeURIComponent(
+        JSON.stringify({ group: "node=" + nodeName })
+      )
     : undefined;
   const out = `/dashboard/project/${projectId}/version/${versionId}/visualize?`;
   return focus ? out + "focus=" + focus : out;

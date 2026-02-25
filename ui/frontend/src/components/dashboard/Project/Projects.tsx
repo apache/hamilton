@@ -40,9 +40,16 @@ import CreatableSelect from "react-select/creatable";
 import { Dialog, Transition } from "@headlessui/react";
 import { ErrorPage } from "../../common/Error";
 import { GenericTable } from "../../common/GenericTable";
-import { NothingToSee, ProjectLogInstructions } from "./ProjectLogInstructions";
+import {
+  NothingToSee,
+  ProjectLogInstructions,
+} from "./ProjectLogInstructions";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { BiNetworkChart, BiHelpCircle, BiListPlus } from "react-icons/bi";
+import {
+  BiNetworkChart,
+  BiHelpCircle,
+  BiListPlus,
+} from "react-icons/bi";
 import { ProjectDocumentation } from "./ProjectDocumentation";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { setProjectID } from "../../../state/projectSlice";
@@ -62,10 +69,11 @@ type ProjectCreateFormProps = {
 const CreatedProjectModal = () => {
   return <div>Success!!</div>;
 };
-export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
-  const [currentProjectName, setCurrentProjectName] = useState<string>(
-    props.currentProject?.name || ""
-  );
+export const ProjectCreateOrEditForm = (
+  props: ProjectCreateFormProps
+) => {
+  const [currentProjectName, setCurrentProjectName] =
+    useState<string>(props.currentProject?.name || "");
   const [currentProjectDescription, setCurrentProjectDescription] =
     useState<string>(props.currentProject?.description || "");
   const [createProject, createdProject] = useCreateProject();
@@ -84,44 +92,52 @@ export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
     props.currentProject === null
       ? []
       : [
-          ...props.currentProject.visibility.teams_visible.map((org) => {
-            return {
-              label: org.name,
-              kind: "org",
-              value: `org-${org.id}`,
-              id: org.id as number,
-            };
-          }),
-          ...props.currentProject.visibility.users_visible.map((user) => {
-            return {
-              label: user.email,
-              kind: "user",
-              value: `user-${user.id}`,
-              id: user.id as number,
-            };
-          }),
+          ...props.currentProject.visibility.teams_visible.map(
+            (org) => {
+              return {
+                label: org.name,
+                kind: "org",
+                value: `org-${org.id}`,
+                id: org.id as number,
+              };
+            }
+          ),
+          ...props.currentProject.visibility.users_visible.map(
+            (user) => {
+              return {
+                label: user.email,
+                kind: "user",
+                value: `user-${user.id}`,
+                id: user.id as number,
+              };
+            }
+          ),
         ];
 
   const defaultWriteSharingEntities =
     props.currentProject === null
       ? [userOption]
       : [
-          ...props.currentProject.visibility.teams_writable.map((org) => {
-            return {
-              label: org.name,
-              kind: "org",
-              value: `org-${org.id}`,
-              id: org.id as number,
-            };
-          }),
-          ...props.currentProject.visibility.users_writable.map((user) => {
-            return {
-              label: user.email,
-              kind: "user",
-              value: `user-${user.id}`,
-              id: user.id as number,
-            };
-          }),
+          ...props.currentProject.visibility.teams_writable.map(
+            (org) => {
+              return {
+                label: org.name,
+                kind: "org",
+                value: `org-${org.id}`,
+                id: org.id as number,
+              };
+            }
+          ),
+          ...props.currentProject.visibility.users_writable.map(
+            (user) => {
+              return {
+                label: user.email,
+                kind: "user",
+                value: `user-${user.id}`,
+                id: user.id as number,
+              };
+            }
+          ),
         ];
 
   type PermissionOption = {
@@ -131,14 +147,20 @@ export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
     id: string | number | undefined;
   };
 
-  const [selectedWriteSharingEntities, setSelectedWriteSharingEntities] =
-    useState<PermissionOption[]>(defaultWriteSharingEntities);
+  const [
+    selectedWriteSharingEntities,
+    setSelectedWriteSharingEntities,
+  ] = useState<PermissionOption[]>(defaultWriteSharingEntities);
 
-  const [selectedReadSharingEntities, setSelectedReadSharingEntities] =
-    useState<PermissionOption[]>(defaultVisibleSharingEntities);
+  const [
+    selectedReadSharingEntities,
+    setSelectedReadSharingEntities,
+  ] = useState<PermissionOption[]>(defaultVisibleSharingEntities);
 
   const errors = [
-    currentProjectName === "" ? "Project name is required" : undefined,
+    currentProjectName === ""
+      ? "Project name is required"
+      : undefined,
     currentProjectDescription === ""
       ? "Project description is required"
       : undefined,
@@ -157,7 +179,9 @@ export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
   const options = [
     userOption,
     ...teams
-      .filter((team) => team.name != "Public" || allowPublicVisibility)
+      .filter(
+        (team) => team.name != "Public" || allowPublicVisibility
+      )
       .map((team) => ({
         label: team.name,
         kind: "team",
@@ -232,7 +256,10 @@ export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
     }
   };
 
-  if (!createdProject.isUninitialized || !updatedProject.isUninitialized) {
+  if (
+    !createdProject.isUninitialized ||
+    !updatedProject.isUninitialized
+  ) {
     if (createdProject.isLoading || updatedProject.isLoading) {
       return <Loading />;
     }
@@ -254,8 +281,8 @@ export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
       <div className="space-y-12 w-144  pb-12">
         <div className="border-b border-gray-900/10">
           <p className="mt-1 text-sm leading-6 text-gray-600 w-full">
-            Track execution of DAGs, visualize your pipelines, and understand
-            how they change over time!
+            Track execution of DAGs, visualize your pipelines, and
+            understand how they change over time!
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -273,7 +300,9 @@ export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400
                     focus:ring-0 sm:text-sm sm:leading-6"
                     value={currentProjectName || ""}
-                    onChange={(e) => setCurrentProjectName(e.target.value)}
+                    onChange={(e) =>
+                      setCurrentProjectName(e.target.value)
+                    }
                     placeholder="Your project name"
                   />
                 </div>
@@ -293,7 +322,9 @@ export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
                   name="about"
                   rows={3}
                   value={currentProjectDescription || ""}
-                  onChange={(e) => setCurrentProjectDescription(e.target.value)}
+                  onChange={(e) =>
+                    setCurrentProjectDescription(e.target.value)
+                  }
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-dwdarkblue sm:text-sm sm:leading-6"
                   placeholder={"Project description in markdown..."}
                 />
@@ -308,7 +339,10 @@ export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
               </label>
               <p className="mt-1 text-sm leading-6 text-gray-600 w-full">
                 Enter emails
-                {localMode ? " (reach out if you want team/organization-level ACLs)" : " or select teams you are part of."}.
+                {localMode
+                  ? " (reach out if you want team/organization-level ACLs)"
+                  : " or select teams you are part of."}
+                .
               </p>
               <div className="mt-2">
                 <CreatableSelect
@@ -316,7 +350,9 @@ export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
                   options={options}
                   value={selectedReadSharingEntities}
                   onChange={(selected) => {
-                    setSelectedReadSharingEntities(Array.from(selected));
+                    setSelectedReadSharingEntities(
+                      Array.from(selected)
+                    );
                     // BE doesn't like having it in both, for now just move it from one to the other
                     setSelectedWriteSharingEntities(
                       selectedWriteSharingEntities.filter(
@@ -358,7 +394,10 @@ export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
               </label>
               <p className="mt-1 text-sm leading-6 text-gray-600 w-full">
                 Enter emails
-                {localMode ? " (reach out if you want team/organization-level ACLs)" : " or select teams you are part of."}.
+                {localMode
+                  ? " (reach out if you want team/organization-level ACLs)"
+                  : " or select teams you are part of."}
+                .
               </p>
               <div className="mt-2">
                 <CreatableSelect
@@ -366,7 +405,9 @@ export const ProjectCreateOrEditForm = (props: ProjectCreateFormProps) => {
                   options={options}
                   value={selectedWriteSharingEntities}
                   onChange={(selected) => {
-                    setSelectedWriteSharingEntities(Array.from(selected));
+                    setSelectedWriteSharingEntities(
+                      Array.from(selected)
+                    );
                     setSelectedReadSharingEntities(
                       selectedReadSharingEntities.filter(
                         (item) =>
@@ -540,11 +581,13 @@ export const ProjectsView = () => {
 
   const [currentlyEditing, setCurrentlyEditing] =
     useState<ProjectWithData | null>(null);
-  const [expandedProject, setExpandedProject] = useState<number | undefined>(
-    undefined
-  );
+  const [expandedProject, setExpandedProject] = useState<
+    number | undefined
+  >(undefined);
 
-  const [expandedView, setExpandedView] = useState<"dag" | "write" | "docs">();
+  const [expandedView, setExpandedView] = useState<
+    "dag" | "write" | "docs"
+  >();
   const toggleExpandedView = (
     view: "dag" | "write" | "docs",
     projectId: number
@@ -720,9 +763,7 @@ export const ProjectsView = () => {
         const canWrite = project.role === "write";
         return (
           <ExpandIcon
-            className={`text-xl ${
-              canWrite ? "hover:scale-125 cursor-pointer" : "text-gray-300"
-            }`}
+            className={`text-xl ${canWrite ? "hover:scale-125 cursor-pointer" : "text-gray-300"}`}
             title="Quick start instructions."
             onClick={() => {
               if (!canWrite) {
@@ -738,10 +779,11 @@ export const ProjectsView = () => {
       displayName: "",
       Render: (project: ProjectWithData) => {
         const ExpandIcon = BiHelpCircle;
-        const documentation = getProjectAttributes<AttributeDocumentationLoom1>(
-          project.attributes,
-          "AttributeDocumentationLoom1"
-        );
+        const documentation =
+          getProjectAttributes<AttributeDocumentationLoom1>(
+            project.attributes,
+            "AttributeDocumentationLoom1"
+          );
         return (
           <ExpandIcon
             className={
@@ -764,8 +806,9 @@ export const ProjectsView = () => {
     // Quick hack to put demo projects at the bottom for everyone except dagworks members
     // or whom they go wherever
     if (
-      (whoAmIInfo.data?.teams || []).filter((team) => team.name === "dagworks")
-        .length === 0
+      (whoAmIInfo.data?.teams || []).filter(
+        (team) => team.name === "dagworks"
+      ).length === 0
     ) {
       if (aIsDemo && !bIsDemo) {
         return 1;
@@ -813,7 +856,9 @@ export const ProjectsView = () => {
           setExpandedProject(projectId);
         }}
         closeModal={() => {
-          const promise = new Promise((resolve) => setTimeout(resolve, 200));
+          const promise = new Promise((resolve) =>
+            setTimeout(resolve, 200)
+          );
           // Get the current URL
           const currentURL = new URL(window.location.href);
 
@@ -858,7 +903,9 @@ export const ProjectsView = () => {
                 project.attributes,
                 "AttributeDocumentationLoom1"
               );
-            const docView = <ProjectDocumentation loomDocs={documentation} />;
+            const docView = (
+              <ProjectDocumentation loomDocs={documentation} />
+            );
             if (expandedView === "write") {
               return writeView;
             }

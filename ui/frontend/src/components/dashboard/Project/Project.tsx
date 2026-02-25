@@ -39,7 +39,9 @@ export const ProjectView = () => {
   const { projectId } = useURLParams();
   const whoAmI = useUserInformation();
   const latestProjectVersion = useLatestDAGTemplates(
-    projectId !== undefined ? { projectId: projectId, limit: 1 } : skipToken
+    projectId !== undefined
+      ? { projectId: projectId, limit: 1 }
+      : skipToken
   );
   const project = useProjectByID(
     projectId !== undefined
@@ -67,7 +69,10 @@ export const ProjectView = () => {
     project.data !== null
   ) {
     const out: JSX.Element[] = [
-      <h1 className="text-xl font-semibold text-gray-700 px-5" key={"header"}>
+      <h1
+        className="text-xl font-semibold text-gray-700 px-5"
+        key={"header"}
+      >
         {project.data.name || ""}
       </h1>,
       <p className="text-lg text-gray-700 px-5" key={"description"}>
@@ -79,10 +84,11 @@ export const ProjectView = () => {
 
     const projectData = project.data as ProjectWithData;
     const canWrite = projectData.role === "write";
-    const loomDocs = getProjectAttributes<AttributeDocumentationLoom1>(
-      projectData.attributes,
-      "AttributeDocumentationLoom1"
-    );
+    const loomDocs =
+      getProjectAttributes<AttributeDocumentationLoom1>(
+        projectData.attributes,
+        "AttributeDocumentationLoom1"
+      );
     if (loomDocs.length > 0) {
       out.push(<ProjectDocumentation loomDocs={loomDocs} />);
     }

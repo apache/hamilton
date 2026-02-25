@@ -32,21 +32,32 @@ export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
 
-export const LocalLoginProvider = (props: { children: React.ReactNode }) => {
+export const LocalLoginProvider = (props: {
+  children: React.ReactNode;
+}) => {
   const [localUsername, setLocalUsername] = useState<string>("");
-  const [localAPIKey, setLocalAPIKey] = useState<string | undefined>("");
+  const [localAPIKey, setLocalAPIKey] = useState<string | undefined>(
+    ""
+  );
   const [keyInputExpanded, setKeyInputExpanded] = useState(false);
 
   const [username, setUsername] = useLocalStorage(
     "hamilton-username",
     undefined
   );
-  const [apiKey, setApiKey] = useLocalStorage("hamilton-api-key", undefined);
+  const [apiKey, setApiKey] = useLocalStorage(
+    "hamilton-api-key",
+    undefined
+  );
   const [authed, setAuthed] = useLocalStorage("authed", "false");
   if (authed === "true") {
     return (
       <UserContext.Provider
-        value={{ username: username || "", setUsername, userAPIKey: apiKey }}
+        value={{
+          username: username || "",
+          setUsername,
+          userAPIKey: apiKey,
+        }}
       >
         {props.children}
       </UserContext.Provider>
@@ -79,7 +90,9 @@ export const LocalLoginProvider = (props: { children: React.ReactNode }) => {
     }
   };
 
-  const KeyInputExpandIcon = keyInputExpanded ? HiChevronUp : HiChevronDown;
+  const KeyInputExpandIcon = keyInputExpanded
+    ? HiChevronUp
+    : HiChevronDown;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 gap-2">
@@ -96,7 +109,9 @@ export const LocalLoginProvider = (props: { children: React.ReactNode }) => {
               autoComplete="username"
               name="username"
               value={localUsername}
-              onChange={(event) => setLocalUsername(event.target.value)}
+              onChange={(event) =>
+                setLocalUsername(event.target.value)
+              }
               placeholder="Username"
               required
               className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-dwdarkblue focus:border-dwdarkblue focus:z-10 sm:text-sm"
@@ -126,7 +141,7 @@ export const LocalLoginProvider = (props: { children: React.ReactNode }) => {
               <KeyInputExpandIcon
                 onClick={(e) => {
                   e.stopPropagation();
-                  e.preventDefault()
+                  e.preventDefault();
                   setKeyInputExpanded(!keyInputExpanded);
                 }}
                 className="h-6 w-6 text-white hover:scale-105"

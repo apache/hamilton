@@ -55,11 +55,16 @@ export const Tabs = (props: {
                 <div className="pt-4 pl-3 pr-5 text-2xl text-gray-500">
                   <Icon
                     className="hover:scale-125 hover:cursor-pointer"
-                    onClick={() => props.setIsMinimized(!props.isMinimized)}
+                    onClick={() =>
+                      props.setIsMinimized(!props.isMinimized)
+                    }
                   />
                 </div>
               )}
-              <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+              <nav
+                className="-mb-px flex space-x-8"
+                aria-label="Tabs"
+              >
                 {props.allTabs.map((tab) => (
                   <div
                     onClick={() => {
@@ -74,7 +79,9 @@ export const Tabs = (props: {
                       "whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium cursor-pointer"
                     )}
                     aria-current={
-                      tab.name === props.currentTab ? "page" : undefined
+                      tab.name === props.currentTab
+                        ? "page"
+                        : undefined
                     }
                   >
                     {tab.displayName}

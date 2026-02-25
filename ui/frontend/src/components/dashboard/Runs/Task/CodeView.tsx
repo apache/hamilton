@@ -17,7 +17,9 @@
  * under the License.
  */
 
-import ReactDiffViewer, { DiffMethod } from "react-diff-viewer-continued";
+import ReactDiffViewer, {
+  DiffMethod,
+} from "react-diff-viewer-continued";
 import { useState } from "react";
 import { NodeRunWithAttributes } from "../../../../state/api/friendlyApi";
 import { CodeView } from "../../Visualize/DAGViz";
@@ -60,7 +62,8 @@ export const CodeSummaryView = (props: {
   const priorRun =
     priorRunIndex !== null ? props.nodeRunData[priorRunIndex] : null;
   const currentCode = props.codes[currentRunIndex];
-  const priorCode = priorRunIndex !== null ? props.codes[priorRunIndex] : null;
+  const priorCode =
+    priorRunIndex !== null ? props.codes[priorRunIndex] : null;
 
   return (
     <div className="pt-4">
@@ -94,8 +97,8 @@ export const CodeSummaryView = (props: {
                   nodeRun?.dag_run === currentRun?.dag_run
                     ? "bg-gray-200 text-gray-700"
                     : currentRun?.dag_run === priorRun?.dag_run
-                    ? "bg-gray-100"
-                    : "text-gray-500 hover:text-gray-700",
+                      ? "bg-gray-100"
+                      : "text-gray-500 hover:text-gray-700",
                   "rounded-md px-3 py-2 text-sm font-medium"
                 )}
               >
@@ -104,7 +107,9 @@ export const CodeSummaryView = (props: {
             ))}
           </nav>
         </div>
-        {priorCode === null || priorRun === null || priorRun === currentRun ? (
+        {priorCode === null ||
+        priorRun === null ||
+        priorRun === currentRun ? (
           <CodeView fnContents={currentCode} />
         ) : (
           <DiffCompareView

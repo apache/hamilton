@@ -98,9 +98,11 @@ export const StatusSelector = (props: {
   statuses: Set<string>;
   setStatuses: (statuses: Set<string>) => void;
 }) => {
-  const selectOptions = Array.from(props.possibleStatuses).map((status) => {
-    return { value: status, label: status };
-  });
+  const selectOptions = Array.from(props.possibleStatuses).map(
+    (status) => {
+      return { value: status, label: status };
+    }
+  );
   return (
     <div className="flex-1">
       <ReactSelect
@@ -153,7 +155,9 @@ export const RunCountChart = (props: { runs: DAGRun[] }) => {
     { [RUN_FAILURE_STATUS]: number; [RUN_SUCCESS_STATUS]: number }
   >();
   props.runs.forEach((run) => {
-    const date = run.run_start_time ? new Date(run.run_start_time) : new Date();
+    const date = run.run_start_time
+      ? new Date(run.run_start_time)
+      : new Date();
     date.setHours(0, 0, 0, 0);
     if (!countByDate.has(date.getTime())) {
       countByDate.set(date.getTime(), {
@@ -162,14 +166,18 @@ export const RunCountChart = (props: { runs: DAGRun[] }) => {
       });
     }
     if (run.run_status === RUN_SUCCESS_STATUS) {
-      (countByDate.get(date.getTime()) as { [RUN_SUCCESS_STATUS]: number })[
-        RUN_SUCCESS_STATUS
-      ] += 1;
+      (
+        countByDate.get(date.getTime()) as {
+          [RUN_SUCCESS_STATUS]: number;
+        }
+      )[RUN_SUCCESS_STATUS] += 1;
     }
     if (run.run_status === RUN_FAILURE_STATUS) {
-      (countByDate.get(date.getTime()) as { [RUN_FAILURE_STATUS]: number })[
-        RUN_FAILURE_STATUS
-      ] += 1;
+      (
+        countByDate.get(date.getTime()) as {
+          [RUN_FAILURE_STATUS]: number;
+        }
+      )[RUN_FAILURE_STATUS] += 1;
     }
   });
   const labels = Array.from(countByDate.keys()).sort((a, b) => {
@@ -203,7 +211,8 @@ export const RunCountChart = (props: { runs: DAGRun[] }) => {
   return (
     // <div className="relative w-[99%] p-2">
     <>
-      <div className="w-1 h-1"></div> <Bar options={options} data={data} />
+      <div className="w-1 h-1"></div>{" "}
+      <Bar options={options} data={data} />
     </>
     // </div>
   );
@@ -231,7 +240,10 @@ function serialize(query: Query): URLSearchParams {
     params.set("endDate", query.dateRange.endDate.toISOString());
   }
   if (query.statuses.size > 0) {
-    params.set("statuses", JSON.stringify(Array.from(query.statuses)));
+    params.set(
+      "statuses",
+      JSON.stringify(Array.from(query.statuses))
+    );
   }
   return params;
 }
@@ -274,7 +286,10 @@ const RunQueryFilters = (props: {
         <TagSelectorWithValues
           selectedTags={props.query.selectedTags}
           setSelectedTags={(selectedTags) => {
-            props.setQuery({ ...props.query, selectedTags: selectedTags });
+            props.setQuery({
+              ...props.query,
+              selectedTags: selectedTags,
+            });
           }}
           allTags={props.allTagOptions}
         />
@@ -289,8 +304,10 @@ const RunQueryFilters = (props: {
               props.setQuery({
                 ...props.query,
                 dateRange: {
-                  startDate: startDate === null ? null : new Date(startDate),
-                  endDate: endDate === null ? null : new Date(endDate),
+                  startDate:
+                    startDate === null ? null : new Date(startDate),
+                  endDate:
+                    endDate === null ? null : new Date(endDate),
                 },
               });
             }
@@ -339,10 +356,16 @@ export const filterOnQuery = (runs: DAGRun[], query: Query) => {
       startDate: Date;
       endDate: Date;
     };
-    if (startDate !== null && createdDate.getTime() < startDate.getTime()) {
+    if (
+      startDate !== null &&
+      createdDate.getTime() < startDate.getTime()
+    ) {
       return false;
     }
-    if (endDate !== null && createdDate.getTime() > endDate.getTime()) {
+    if (
+      endDate !== null &&
+      createdDate.getTime() > endDate.getTime()
+    ) {
       return false;
     }
     const runTags = run.tags as { [key: string]: string } | undefined;
@@ -410,8 +433,12 @@ export const NumRunsMetric = (props: { runs: DAGRun[] }) => {
 
 export const splitToSuccessesAndFailures = (runs: DAGRun[]) => {
   return {
-    successes: runs.filter((run) => run.run_status === RUN_SUCCESS_STATUS),
-    failures: runs.filter((run) => run.run_status === RUN_FAILURE_STATUS),
+    successes: runs.filter(
+      (run) => run.run_status === RUN_SUCCESS_STATUS
+    ),
+    failures: runs.filter(
+      (run) => run.run_status === RUN_FAILURE_STATUS
+    ),
   };
 };
 export const RunDurationScatter = (props: { runs: DAGRun[] }) => {
@@ -425,11 +452,15 @@ export const RunDurationScatter = (props: { runs: DAGRun[] }) => {
             ? new Date(item.run_start_time).getTime()
             : new Date().getTime())) /
         1000,
-      x: item.run_start_time ? new Date(item.run_start_time) : new Date(),
+      x: item.run_start_time
+        ? new Date(item.run_start_time)
+        : new Date(),
       label: "hello",
     }));
   };
-  const { successes, failures } = splitToSuccessesAndFailures(props.runs);
+  const { successes, failures } = splitToSuccessesAndFailures(
+    props.runs
+  );
   const data = {
     datasets: [
       {
@@ -491,7 +522,8 @@ export const RunDurationScatter = (props: { runs: DAGRun[] }) => {
   // The weird extra div is to make the chart responsive
   return (
     <>
-      <div className="w-1 h-1"></div> <Scatter data={data} options={options} />
+      <div className="w-1 h-1"></div>{" "}
+      <Scatter data={data} options={options} />
     </>
   );
 };
@@ -593,17 +625,22 @@ export const DAGVersionTable = (props: {
     .slice(0, props.numVersionsToDisplay);
 
   const tableData = topNVersions.map(
-    ([projectVersionName, runs]): [string, DAGVersionTableRenderProps] => {
+    ([projectVersionName, runs]): [
+      string,
+      DAGVersionTableRenderProps,
+    ] => {
       return [
         projectVersionName,
         {
           numSuccesses: runs.filter(
             (run) =>
-              run.run_status === "SUCCESS" && run.run_end_time !== undefined
+              run.run_status === "SUCCESS" &&
+              run.run_end_time !== undefined
           ).length,
           numFailures: runs.filter(
             (run) =>
-              run.run_status === "FAILURE" && run.run_start_time !== undefined
+              run.run_status === "FAILURE" &&
+              run.run_start_time !== undefined
           ).length,
           meanDuration:
             runs
@@ -612,7 +649,9 @@ export const DAGVersionTable = (props: {
                 (acc, run) =>
                   acc +
                   (new Date(run.run_end_time as string).getTime() -
-                    new Date(run.run_start_time as string).getTime()) /
+                    new Date(
+                      run.run_start_time as string
+                    ).getTime()) /
                     1000,
                 0
               ) / runs.length,
@@ -668,7 +707,9 @@ export const RunSummary = (props: {
 }) => {
   const runsSortedByStartDate = props.runs
     .map((run) =>
-      run.run_start_time ? new Date(run.run_start_time) : new Date(Date.now())
+      run.run_start_time
+        ? new Date(run.run_start_time)
+        : new Date(Date.now())
     )
     .sort((a, b) => a.getTime() - b.getTime());
   const minDate =
@@ -677,7 +718,9 @@ export const RunSummary = (props: {
       : null;
   const maxDate =
     runsSortedByStartDate.length > 0
-      ? new Date(runsSortedByStartDate[runsSortedByStartDate.length - 1])
+      ? new Date(
+          runsSortedByStartDate[runsSortedByStartDate.length - 1]
+        )
       : null;
 
   // Quick buffer to ensure no runs are missed

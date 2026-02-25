@@ -24,14 +24,16 @@ import { ProjectLogInstructions } from "../components/dashboard/Project/ProjectL
 export const LocalAccount = () => {
   const localAccount = useContext(UserContext)?.username;
   return (
-      <div className="mt-20">
-        <h1 className="text-3xl font-bold text-gray-700 pl-5 pb-4">Username: {localAccount}</h1>
-        <ProjectLogInstructions
-          projectId={undefined}
-          username={localAccount || ""}
-          canWrite={true}
-          hideAPIKey
-        ></ProjectLogInstructions>
-      </div>
+    <div className="mt-20">
+      <h1 className="text-3xl font-bold text-gray-700 pl-5 pb-4">
+        Username: {localAccount}
+      </h1>
+      <ProjectLogInstructions
+        projectId={undefined}
+        username={localAccount || ""}
+        canWrite={true}
+        hideAPIKey
+      ></ProjectLogInstructions>
+    </div>
   );
 };

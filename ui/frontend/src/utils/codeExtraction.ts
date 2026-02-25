@@ -15,7 +15,10 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import { CodeArtifact, DAGTemplateWithData } from "../state/api/friendlyApi";
+import {
+  CodeArtifact,
+  DAGTemplateWithData,
+} from "../state/api/friendlyApi";
 
 /**
  * Simple function to extract contents from code.
@@ -35,7 +38,8 @@ export const extractCodeContents = (
     return undefined;
   }
   const availableFiles =
-    dagTemplate.code?.files.filter((file) => file.path === path) || [];
+    dagTemplate.code?.files.filter((file) => file.path === path) ||
+    [];
   if (availableFiles.length === 0) {
     return undefined;
   }

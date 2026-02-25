@@ -81,7 +81,9 @@ type SearchBarProps = BaseSearchBarProps & {
   catalogData: CatalogResponse | undefined;
 };
 
-export const SearchBarWithData: React.FC<SearchBarProps> = (props) => {
+export const SearchBarWithData: React.FC<SearchBarProps> = (
+  props
+) => {
   const [rawQuery, setRawQuery] = useState("");
   // initSearchableState();
   // const projects = useProjects({});
@@ -124,7 +126,9 @@ export const SearchBarWithData: React.FC<SearchBarProps> = (props) => {
 
   let query = rawQuery;
   searchableCategories.forEach(({ shortcut }) => {
-    query = query.startsWith(shortcut) ? query.slice(1, query.length) : query;
+    query = query.startsWith(shortcut)
+      ? query.slice(1, query.length)
+      : query;
   });
   query = query.trim();
   //   const query = rawQuery.replace(/^[#>]/, "");
@@ -135,9 +139,10 @@ export const SearchBarWithData: React.FC<SearchBarProps> = (props) => {
     (item) => item.shortcut == rawQuery[0]
   );
   const filteredCategories = new Set(
-    (matchedCategories ? [matchedCategories] : searchableCategories).map(
-      (item) => item.name
-    )
+    (matchedCategories
+      ? [matchedCategories]
+      : searchableCategories
+    ).map((item) => item.name)
   );
   let searchResults = fuse.search(query);
 
@@ -148,7 +153,7 @@ export const SearchBarWithData: React.FC<SearchBarProps> = (props) => {
           item,
           refIndex: 0,
           score: 0,
-        } as Fuse.FuseResult<SearchableItem>)
+        }) as Fuse.FuseResult<SearchableItem>
     );
   }
 
@@ -173,7 +178,11 @@ export const SearchBarWithData: React.FC<SearchBarProps> = (props) => {
       afterLeave={() => setRawQuery("")}
       appear
     >
-      <Dialog as="div" className="relative z-50" onClose={props.setOpen}>
+      <Dialog
+        as="div"
+        className="relative z-50"
+        onClose={props.setOpen}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -211,7 +220,9 @@ export const SearchBarWithData: React.FC<SearchBarProps> = (props) => {
                   <Combobox.Input
                     className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-800 placeholder-gray-400 focus:ring-0 sm:text-sm"
                     placeholder="Search..."
-                    onChange={(event) => setRawQuery(event.target.value)}
+                    onChange={(event) =>
+                      setRawQuery(event.target.value)
+                    }
                   />
                 </div>
 
@@ -232,7 +243,9 @@ export const SearchBarWithData: React.FC<SearchBarProps> = (props) => {
                                 {items.map((item, index) => (
                                   <Link to={item.href} key={index}>
                                     <Combobox.Option
-                                      onKeyUp={(event: React.KeyboardEvent) => {
+                                      onKeyUp={(
+                                        event: React.KeyboardEvent
+                                      ) => {
                                         if (event.key === "Enter") {
                                           navigate(item.href);
                                           event.preventDefault();
@@ -290,8 +303,8 @@ export const SearchBarWithData: React.FC<SearchBarProps> = (props) => {
                       Help with searching
                     </p>
                     <p className="mt-2 text-gray-500">
-                      Search across your projects, nodes, functions, and
-                      DAGWorks offerings.
+                      Search across your projects, nodes, functions,
+                      and DAGWorks offerings.
                     </p>
                   </div>
                 )}
@@ -306,8 +319,8 @@ export const SearchBarWithData: React.FC<SearchBarProps> = (props) => {
                       No results found
                     </p>
                     <p className="mt-2 text-gray-500">
-                      We couldn’t find anything with that term. Please try
-                      again.
+                      We couldn’t find anything with that term. Please
+                      try again.
                     </p>
                   </div>
                 )}
@@ -388,7 +401,9 @@ export const SearchBar: React.FC<BaseSearchBarProps> = (props) => {
 
   // Parameters for caching
   const catalogData = useCatalogView(
-    projectId !== undefined ? { projectId: projectId, limit: 10000 } : skipToken
+    projectId !== undefined
+      ? { projectId: projectId, limit: 10000 }
+      : skipToken
   );
 
   return (

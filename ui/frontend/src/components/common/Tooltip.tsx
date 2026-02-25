@@ -19,9 +19,10 @@
 
 import { ReactNode } from "react";
 
-export const ToolTip: React.FC<{ children: ReactNode; tooltip?: string }> = (
-  props
-) => {
+export const ToolTip: React.FC<{
+  children: ReactNode;
+  tooltip?: string;
+}> = (props) => {
   return (
     <div className="group relative inline-block">
       {props.children}

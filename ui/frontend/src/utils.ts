@@ -29,7 +29,11 @@ import {
 import { GrConfigure } from "react-icons/gr";
 
 import { BiBracket } from "react-icons/bi";
-import { BsBraces, BsCardChecklist, BsFillXDiamondFill } from "react-icons/bs";
+import {
+  BsBraces,
+  BsCardChecklist,
+  BsFillXDiamondFill,
+} from "react-icons/bs";
 import { FaChartLine, FaFeather, FaPython } from "react-icons/fa";
 // import { SiScikitlearn } from "react-icons/si";
 import { RiParenthesesFill } from "react-icons/ri";
@@ -50,8 +54,12 @@ import { VscQuote } from "react-icons/vsc";
 
 //TODO -- replace this all
 
-export const parsePythonType = (pythonType: NodeMetadataPythonType1) => {
-  return pythonType.type_name.replace("<class '", "").replace("'>", "");
+export const parsePythonType = (
+  pythonType: NodeMetadataPythonType1
+) => {
+  return pythonType.type_name
+    .replace("<class '", "")
+    .replace("'>", "");
 };
 
 export const getPythonTypeNameForDisplay = (
@@ -65,7 +73,9 @@ export const getPythonTypeNameForDisplay = (
   return `${parsed.slice(dotIndex + 1)} (${parsed.slice(0, dotIndex)})`;
 };
 
-export const getAdapterIcon = (adapterType: string | undefined): IconType => {
+export const getAdapterIcon = (
+  adapterType: string | undefined
+): IconType => {
   if (adapterType === "csv") {
     return BsFiletypeCsv;
   } else if (adapterType === "json") {
@@ -117,7 +127,9 @@ export const getPythonTypeIcon = (
     parsedTypeName.startsWith("numpy.int")
   ) {
     return AiOutlineNumber;
-  } else if (parsedTypeName === "hamilton.data_quality.base.ValidationResult") {
+  } else if (
+    parsedTypeName === "hamilton.data_quality.base.ValidationResult"
+  ) {
     return BsCardChecklist;
   } else if (parsedTypeName === "str") {
     return VscQuote;
@@ -154,9 +166,13 @@ export const getPythonTypeIcon = (
     return AiOutlineQuestion;
   }
 };
-export const getPythonTypeIconFromNode = (node: NodeTemplate): IconType => {
-  const isSource = extractTagFromNode(node, "hamilton.data_loader") === true;
-  const isSink = extractTagFromNode(node, "hamilton.data_saver") === true;
+export const getPythonTypeIconFromNode = (
+  node: NodeTemplate
+): IconType => {
+  const isSource =
+    extractTagFromNode(node, "hamilton.data_loader") === true;
+  const isSink =
+    extractTagFromNode(node, "hamilton.data_saver") === true;
   if (isSource || isSink) {
     const adapterType =
       extractTagFromNode(node, "hamilton.data_loader.source") ||
@@ -201,7 +217,10 @@ export const arraysOverlap = <T>(l1: T[], l2: T[]) => {
   return intersectArrays(l1, l2).length > 0;
 };
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const extractTagFromNode = (node: NodeTemplate, tag: string): any => {
+export const extractTagFromNode = (
+  node: NodeTemplate,
+  tag: string
+): any => {
   if (!Object.prototype.hasOwnProperty.call(node.tags, tag)) {
     return undefined;
   }
@@ -216,7 +235,10 @@ export const truncateAndRemoveTrailingZeroes = (
   // https://stackoverflow.com/questions/26299160/using-regex-how-do-i-remove-the-trailing-zeros-from-a-decimal-number
   return num
     .toFixed(digits)
-    .replace(/^([\d,]+)$|^([\d,]+)\.0*$|^([\d,]+\.[0-9]*?)0*$/, "$1$2$3");
+    .replace(
+      /^([\d,]+)$|^([\d,]+)\.0*$|^([\d,]+\.[0-9]*?)0*$/,
+      "$1$2$3"
+    );
 };
 
 export const durationFormat = (
@@ -240,7 +262,9 @@ export const durationFormat = (
   const formattedHours = hours.toString().padStart(2, "0");
   const formattedMinutes = minutes.toString().padStart(2, "0");
   const formattedSeconds = seconds.toString().padStart(2, "0");
-  const formattedMilliseconds = milliseconds.toString().padStart(2, "0");
+  const formattedMilliseconds = milliseconds
+    .toString()
+    .padStart(2, "0");
 
   // Display the duration without days and including milliseconds
   return {

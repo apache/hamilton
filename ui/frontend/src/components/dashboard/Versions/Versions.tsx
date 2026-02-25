@@ -101,11 +101,16 @@ const TableRow = (props: {
   );
 };
 const Versions = (props: VersionsProps) => {
-  const [updateDAGTemplate, updateDAGTemplateResult] = useUpdateDAGTemplate();
+  const [updateDAGTemplate, updateDAGTemplateResult] =
+    useUpdateDAGTemplate();
   const [selectedTags, setSelectedTags] = useState([] as string[]);
   const [selectedNames, setSelectedNames] = useState([] as string[]);
-  const [tagFilters, setTagFilters] = useState(new Map<string, string[]>());
-  const [versionsToCompare, setVersionsToCompare] = useState([] as number[]);
+  const [tagFilters, setTagFilters] = useState(
+    new Map<string, string[]>()
+  );
+  const [versionsToCompare, setVersionsToCompare] = useState(
+    [] as number[]
+  );
   const navigate = useNavigate();
 
   // Currently this just fetches the latest DAG templates
@@ -130,7 +135,9 @@ const Versions = (props: VersionsProps) => {
   } else if (projectVersions.isError) {
     return <ErrorPage message="Failed to load project versions" />;
   } else if (updateDAGTemplateResult.isError) {
-    return <ErrorPage message="Failed to set active on DAG template" />;
+    return (
+      <ErrorPage message="Failed to set active on DAG template" />
+    );
   }
 
   const versions = projectVersions.data;
@@ -216,7 +223,9 @@ const Versions = (props: VersionsProps) => {
     {
       display: "Created",
       render: (props: RenderProps) => (
-        <DateTimeDisplay datetime={props.version.created_at}></DateTimeDisplay>
+        <DateTimeDisplay
+          datetime={props.version.created_at}
+        ></DateTimeDisplay>
       ),
     },
     {
@@ -344,9 +353,11 @@ const Versions = (props: VersionsProps) => {
           // className={"w-48"}
           placeholder={tag}
           isMulti
-          options={Array.from(possibleTagValues.get(tag) || []).map((tag) => {
-            return { label: tag, value: tag };
-          })}
+          options={Array.from(possibleTagValues.get(tag) || []).map(
+            (tag) => {
+              return { label: tag, value: tag };
+            }
+          )}
         />
       ),
       render: (props: RenderProps) => {
@@ -364,13 +375,19 @@ const Versions = (props: VersionsProps) => {
     return { value: tag, label: tag };
   });
   const filteredVersions = versions.filter((version) => {
-    const tagMatches = Array.from(tagFilters.entries()).every(([tag, vals]) => {
-      const tagKey = tag as keyof typeof version.tags;
-      return vals.length === 0 || vals.includes(version.tags?.[tagKey] || ""); // VAlue length is zero if no filter is selected
-    });
+    const tagMatches = Array.from(tagFilters.entries()).every(
+      ([tag, vals]) => {
+        const tagKey = tag as keyof typeof version.tags;
+        return (
+          vals.length === 0 ||
+          vals.includes(version.tags?.[tagKey] || "")
+        ); // VAlue length is zero if no filter is selected
+      }
+    );
     return (
       tagMatches &&
-      (selectedNames.length === 0 || selectedNames.includes(version.name))
+      (selectedNames.length === 0 ||
+        selectedNames.includes(version.name))
     );
   });
 
@@ -389,9 +406,7 @@ const Versions = (props: VersionsProps) => {
         <button
           onClick={() => {
             navigate(
-              `/dashboard/project/${
-                props.project.id
-              }/version/${versionsToCompare.join(",")}`
+              `/dashboard/project/${props.project.id}/version/${versionsToCompare.join(",")}`
             );
           }}
           type="button"
@@ -405,8 +420,8 @@ const Versions = (props: VersionsProps) => {
           {versionsToCompare.length === 0
             ? `Select...`
             : versionsToCompare.length === 1
-            ? `View`
-            : `Compare ${versionsToCompare.length} versions`}
+              ? `View`
+              : `Compare ${versionsToCompare.length} versions`}
         </button>
       </div>
       <div className="mt-8 flex flex-col">
@@ -438,13 +453,20 @@ const Versions = (props: VersionsProps) => {
                     version={version}
                     colsToDisplay={allCols}
                     includedInCompare={
-                      versionsToCompare.indexOf(version.id as number) > -1
+                      versionsToCompare.indexOf(
+                        version.id as number
+                      ) > -1
                     }
-                    canEditProject={props.project.role === "write" || false}
+                    canEditProject={
+                      props.project.role === "write" || false
+                    }
                     toggleVersionToCompare={(include: boolean) => {
                       if (include) {
                         versionsToCompare.push(version.id as number);
-                        if (versionsToCompare.length > MAX_COMPARE_VERSIONS) {
+                        if (
+                          versionsToCompare.length >
+                          MAX_COMPARE_VERSIONS
+                        ) {
                           versionsToCompare.shift();
                         }
                       } else {

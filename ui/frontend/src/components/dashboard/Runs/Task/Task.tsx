@@ -17,14 +17,23 @@
  * under the License.
  */
 
-import { Link, createSearchParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  createSearchParams,
+  useSearchParams,
+} from "react-router-dom";
 
 import { classNames, getPythonTypeIcon } from "../../../../utils";
 import { ErrorView } from "./ErrorView";
 import { CodeSummaryView } from "./CodeView";
 import { BiChevronLeft } from "react-icons/bi";
 import { Fragment } from "react";
-import { Menu, MenuItem, MenuItems, Transition } from "@headlessui/react";
+import {
+  Menu,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import ReactSelect from "react-select";
 import {
@@ -100,26 +109,36 @@ const computeUpstreamDownstreamNodes = (
       (projectVersion) => projectVersion.id === run?.dag_template
     );
     // Then let's get all the dependencies, we'll map them to types later
-    const upstreamDependencies = (task.realized_dependencies || []) as string[];
+    const upstreamDependencies = (task.realized_dependencies ||
+      []) as string[];
     // Then let's get all the dowstream dependencies
     const downstreamDependencies =
       run?.node_runs.flatMap((nodeRun) => {
-        if (nodeRun.realized_dependencies?.indexOf(task.node_name) !== -1) {
+        if (
+          nodeRun.realized_dependencies?.indexOf(task.node_name) !==
+          -1
+        ) {
           return [nodeRun.node_name];
         }
         return [];
       }) || [];
     // Then let's gett the mapping of node name -> node template name for that run
 
-    const nodeTemplatesByTemplateName = new Map<string, NodeTemplate>();
+    const nodeTemplatesByTemplateName = new Map<
+      string,
+      NodeTemplate
+    >();
     projectVersion?.nodes.forEach((node) => {
       nodeTemplatesByTemplateName.set(node.name, node);
     });
 
-    const nodeRunsByName = (run?.node_runs || []).reduce((acc, nodeRun) => {
-      acc.set(nodeRun.node_name, nodeRun);
-      return acc;
-    }, new Map<string, NodeRunWithAttributes>());
+    const nodeRunsByName = (run?.node_runs || []).reduce(
+      (acc, nodeRun) => {
+        acc.set(nodeRun.node_name, nodeRun);
+        return acc;
+      },
+      new Map<string, NodeRunWithAttributes>()
+    );
     upstreamDependencies.forEach((dependency) => {
       if (upstreamNodes.has(dependency)) {
         const nodeLink = upstreamNodes.get(dependency) as NodeLink;
@@ -232,10 +251,11 @@ export const NodeLinkMenu = (props: {
           <div className="py-1">
             {props.nodeLinks.map((nodeLink, i) => {
               const disabled = !nodeLink.hasData;
-              const pythonType = getNodeOutputType<NodeMetadataPythonType1>(
-                nodeLink.nodeTemplate,
-                "NodeMetadataPythonType1"
-              );
+              const pythonType =
+                getNodeOutputType<NodeMetadataPythonType1>(
+                  nodeLink.nodeTemplate,
+                  "NodeMetadataPythonType1"
+                );
               const Icon = getPythonTypeIcon(pythonType);
               const multipleRuns = nodeLink.runIds.length > 1;
               return (
@@ -246,9 +266,7 @@ export const NodeLinkMenu = (props: {
                         nodeLink.hasData
                           ? `/dashboard/project/${
                               props.projectId
-                            }/runs/${nodeLink.runIds.join(",")}/task/${
-                              nodeLink.name
-                            }`
+                            }/runs/${nodeLink.runIds.join(",")}/task/${nodeLink.name}`
                           : "#"
                       }
                       className={classNames(
@@ -258,9 +276,7 @@ export const NodeLinkMenu = (props: {
                       )}
                     >
                       <div
-                        className={`flex flex-row gap-2 ${
-                          multipleRuns ? "justify-between" : ""
-                        }`}
+                        className={`flex flex-row gap-2 ${multipleRuns ? "justify-between" : ""}`}
                       >
                         <div className="flex flex-row items-center gap-1">
                           <Icon></Icon>
@@ -318,18 +334,25 @@ export const TaskView = (props: {
   fullRuns: DAGRunWithData[];
 }) => {
   const { nodeRunData, projectVersions, taskName, fullRuns } = props;
-  const correspondingCode = projectVersions.map((projectVersion, i) => {
-    //TODO -- figure out if this can be/why this would be undefined
-    const templateName = nodeRunData[i]?.node_template_name || taskName;
-    const out = getCodeFromDAGTemplate(templateName, projectVersion);
-    return out || "";
-  });
-
-  const [upstreamNodes, downstreamNodes] = computeUpstreamDownstreamNodes(
-    props.nodeRunData,
-    projectVersions,
-    fullRuns
+  const correspondingCode = projectVersions.map(
+    (projectVersion, i) => {
+      //TODO -- figure out if this can be/why this would be undefined
+      const templateName =
+        nodeRunData[i]?.node_template_name || taskName;
+      const out = getCodeFromDAGTemplate(
+        templateName,
+        projectVersion
+      );
+      return out || "";
+    }
   );
+
+  const [upstreamNodes, downstreamNodes] =
+    computeUpstreamDownstreamNodes(
+      props.nodeRunData,
+      projectVersions,
+      fullRuns
+    );
   const [searchParams, setSearchParams] = useSearchParams(
     createSearchParams({ tab: "Output" })
   );
@@ -363,7 +386,10 @@ export const TaskView = (props: {
         </select>
       </div>
       <div className="hidden sm:block">
-        <nav className="flex flex-wrap gap-2 items-center" aria-label="Tabs">
+        <nav
+          className="flex flex-wrap gap-2 items-center"
+          aria-label="Tabs"
+        >
           <div className="flex items-center gap-2">
             <Link
               className={classNames(
@@ -387,7 +413,9 @@ export const TaskView = (props: {
                     : "text-gray-500 hover:text-gray-700",
                   "px-3 py-2 font-medium text-md rounded-md whitespace-nowrap"
                 )}
-                aria-current={tab.name == whichTab ? "page" : undefined}
+                aria-current={
+                  tab.name == whichTab ? "page" : undefined
+                }
               >
                 {tab.name}
               </a>
@@ -422,7 +450,9 @@ export const TaskView = (props: {
         upstreamNodes={upstreamNodes}
         downstreamNodes={downstreamNodes}
       /> */}
-      <h2 className="text-gray-800 text-xl pb-2 pt-2 font-semibold">{taskName}</h2>
+      <h2 className="text-gray-800 text-xl pb-2 pt-2 font-semibold">
+        {taskName}
+      </h2>
 
       {whichTab === "Errors" ? (
         <div className="pt-4">
@@ -439,7 +469,10 @@ export const TaskView = (props: {
           runIds={fullRuns.map((i) => i.id as number)}
         />
       ) : whichTab === "Code" ? (
-        <CodeSummaryView nodeRunData={nodeRunData} codes={correspondingCode} />
+        <CodeSummaryView
+          nodeRunData={nodeRunData}
+          codes={correspondingCode}
+        />
       ) : (
         <></>
       )}

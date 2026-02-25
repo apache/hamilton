@@ -17,11 +17,20 @@
  * under the License.
  */
 
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { useAuthInfo } from "@propelauth/react";
 import { useAppDispatch } from "./state/hooks";
-import { setAuth, setLocalAPIKey, setLocalUserName } from "./state/authSlice";
+import {
+  setAuth,
+  setLocalAPIKey,
+  setLocalUserName,
+} from "./state/authSlice";
 // import Run from "./components/dashboard/Runs/Run/Run";
 import Dashboard from "./components/dashboard/Dashboard";
 import {
@@ -47,7 +56,7 @@ import { UserContext } from "./auth/Login";
 import { LocalAccount } from "./auth/LocalAccount";
 
 export const localMode = import.meta.env.VITE_AUTH_MODE === "local";
-export const subPath = import.meta.env.VITE_HAMILTON_SUB_PATH || ""
+export const subPath = import.meta.env.VITE_HAMILTON_SUB_PATH || "";
 
 const useAuthInfoBasedOnProcEnv = () => {
   if (localMode) {
@@ -70,7 +79,9 @@ export const App = () => {
   }, [authInfo, dispatch]);
   const [isTutorialVideoOpen, setTutorialVideoOpen] = useState(false);
   let userName =
-    authInfo == null || authInfo.loading ? undefined : authInfo.user?.email;
+    authInfo == null || authInfo.loading
+      ? undefined
+      : authInfo.user?.email;
   let localAPIKey: string | null = null;
 
   if (userName === undefined) {
@@ -86,7 +97,9 @@ export const App = () => {
   useEffect(() => {
     if (localMode && userName) {
       dispatch(setLocalUserName(userName));
-      dispatch(setLocalAPIKey(localAPIKey === null ? "" : localAPIKey));
+      dispatch(
+        setLocalAPIKey(localAPIKey === null ? "" : localAPIKey)
+      );
     }
   }, [userName, dispatch, localAPIKey]);
   const [currentLoomVideo, setCurrentLoomVideo] = useState<
@@ -122,13 +135,21 @@ export const App = () => {
         <BrowserRouter basename={subPath}>
           <Routes>
             {localMode && (
-              <Route path="/" element={<Navigate to="/dashboard/account" />} />
+              <Route
+                path="/"
+                element={<Navigate to="/dashboard/account" />}
+              />
             )}
             {!localMode && (
-              <Route path="/" element={<Navigate to="/dashboard/welcome" />} />
+              <Route
+                path="/"
+                element={<Navigate to="/dashboard/welcome" />}
+              />
             )}
             <Route path="/dashboard" element={<Dashboard />}>
-              {!localMode && <Route path="welcome" element={<Welcome />} />}
+              {!localMode && (
+                <Route path="welcome" element={<Welcome />} />
+              )}
               {!localMode && (
                 <Route path="" element={<Navigate to="welcome" />} />
               )}
@@ -174,18 +195,39 @@ export const App = () => {
                 path="project/:projectId/version"
                 element={<Navigate to={"../"} />}
               />
-              <Route path="project/:projectId/runs" element={<RunsOutlet />} />
-              <Route path="project/:projectId/alerts" element={<Alerts />} />
+              <Route
+                path="project/:projectId/runs"
+                element={<RunsOutlet />}
+              />
+              <Route
+                path="project/:projectId/alerts"
+                element={<Alerts />}
+              />
               {/* Nested as it has to share state */}
-              <Route path="project/:projectId/runs/:runId" element={<Run />}>
-                <Route path="task/:taskName" element={<TaskRunOutlet />} />
+              <Route
+                path="project/:projectId/runs/:runId"
+                element={<Run />}
+              >
+                <Route
+                  path="task/:taskName"
+                  element={<TaskRunOutlet />}
+                />
               </Route>
-              <Route path="/dashboard/settings" element={<Settings />} />
+              <Route
+                path="/dashboard/settings"
+                element={<Settings />}
+              />
               {authInfo && (
-                <Route path="/dashboard/account" element={<Account />} />
+                <Route
+                  path="/dashboard/account"
+                  element={<Account />}
+                />
               )}
               {localMode && (
-                <Route path="/dashboard/account" element={<LocalAccount />} />
+                <Route
+                  path="/dashboard/account"
+                  element={<LocalAccount />}
+                />
               )}
             </Route>
             <Route path="*" element={<Navigate to="/dashboard" />} />
