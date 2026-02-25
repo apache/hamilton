@@ -29,8 +29,12 @@ echo ""
 echo "This script will:"
 echo "  1. Export your Hamilton data using Django"
 echo "  2. Stop containers and remove PostgreSQL 12 volume"
-echo "  3. Start PostgreSQL 18 containers"
+echo "  3. Start PostgreSQL 18 containers (with new volume structure)"
 echo "  4. Restore your Hamilton data"
+echo ""
+echo "Note: PostgreSQL 18 uses a new data directory structure."
+echo "The old volume at /var/lib/postgresql/data is incompatible."
+echo "This script will create a new volume at /var/lib/postgresql."
 echo ""
 
 # Check if docker compose or docker-compose is available

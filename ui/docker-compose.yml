@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:18
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres

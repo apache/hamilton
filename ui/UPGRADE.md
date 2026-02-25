@@ -29,6 +29,10 @@ This guide covers backward compatibility concerns and migration steps when upgra
 
 Hamilton UI Docker setup now uses **PostgreSQL 18** instead of PostgreSQL 12 to support Django 6.0.2+, which requires PostgreSQL 13 or later.
 
+**Important:** PostgreSQL 18 Docker images use a new data directory structure. The volume mount point has changed from `/var/lib/postgresql/data` to `/var/lib/postgresql`. This allows PostgreSQL to store data in version-specific subdirectories (e.g., `/var/lib/postgresql/18/data`) and enables easier future upgrades using `pg_upgrade --link`.
+
+**Why this matters:** You cannot simply change the image tag from `postgres:12` to `postgres:18` without migrating your data. The old volume will be incompatible with the new structure.
+
 ### Do I Need to Migrate?
 
 **You need to migrate if ALL of the following are true:**
@@ -141,6 +145,23 @@ docker compose exec backend ls /code/blobs
 # If using local storage, copy blobs directory
 cp -r old_blobs_directory new_blobs_directory
 ```
+
+**Issue:** PostgreSQL 18 fails with "Error: in 18+, these Docker images are configured to store database data in a format which is compatible with pg_ctlcluster"
+
+This error means you have old PostgreSQL data (from version 12 or 16) that's incompatible with PostgreSQL 18's new directory structure. The PostgreSQL 18 Docker image expects data in `/var/lib/postgresql` (not `/var/lib/postgresql/data`).
+
+**Solution:** You must migrate your data using the migration scripts provided. Do not try to reuse the old volume:
+
+```bash
+# Remove the old volume (after backing up your data!)
+docker compose down
+docker volume rm ui_postgres_data
+
+# Follow the migration guide above to export and import your data
+./migrate_postgres_simple.sh
+```
+
+If you're upgrading from PostgreSQL 16 to 18 and encounter this error, the volume mount point has changed. You still need to follow the migration process even though both versions are modern.
 
 #### Option 3: Use pg_upgrade (Advanced)
 
