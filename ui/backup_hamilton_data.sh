@@ -90,13 +90,13 @@ if [ ! -s "$BACKUP_FILE" ]; then
 fi
 
 # Check if it's valid JSON
-if ! python3 -m json.tool "$BACKUP_FILE" > /dev/null 2>&1; then
+if ! uv run python -m json.tool "$BACKUP_FILE" > /dev/null 2>&1; then
     echo "Error: Backup file contains invalid JSON"
     exit 1
 fi
 
 # Count records
-RECORD_COUNT=$(python3 -c "import json; print(len(json.load(open('$BACKUP_FILE'))))")
+RECORD_COUNT=$(uv run python -c "import json; print(len(json.load(open('$BACKUP_FILE'))))")
 FILE_SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
 
 echo "✓ Backup complete"
@@ -108,7 +108,7 @@ echo ""
 
 # Show breakdown by model
 echo "Records by model:"
-python3 -c "
+uv run python -c "
 import json
 from collections import Counter
 

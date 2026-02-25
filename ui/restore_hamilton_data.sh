@@ -44,12 +44,12 @@ echo ""
 
 # Validate JSON
 echo "Validating backup file..."
-if ! python3 -m json.tool "$BACKUP_FILE" > /dev/null 2>&1; then
+if ! uv run python -m json.tool "$BACKUP_FILE" > /dev/null 2>&1; then
     echo "Error: Backup file contains invalid JSON"
     exit 1
 fi
 
-RECORD_COUNT=$(python3 -c "import json; print(len(json.load(open('$BACKUP_FILE'))))")
+RECORD_COUNT=$(uv run python -c "import json; print(len(json.load(open('$BACKUP_FILE'))))")
 echo "✓ Found $RECORD_COUNT records"
 echo ""
 
@@ -165,7 +165,7 @@ echo "  Templates: $ADDED_TEMPLATES (total: $POST_TEMPLATES)"
 echo ""
 
 # Sanity check - if we expected to add data but nothing changed
-EXPECTED_RECORDS=$(python3 -c "
+EXPECTED_RECORDS=$(uv run python -c "
 import json
 data = json.load(open('$BACKUP_FILE'))
 models = [item['model'] for item in data]

@@ -93,7 +93,7 @@ if [ ! -s "$BACKUP_FILE" ]; then
     exit 1
 fi
 
-RECORD_COUNT=$(python3 -c "import json; print(len(json.load(open('$BACKUP_FILE'))))")
+RECORD_COUNT=$(uv run python -c "import json; print(len(json.load(open('$BACKUP_FILE'))))")
 if [ "$RECORD_COUNT" -eq 0 ]; then
     echo "Warning: Backup contains 0 records"
     echo "This is OK if you have no data yet, but unexpected if you've been using Hamilton UI"

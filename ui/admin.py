@@ -156,9 +156,11 @@ def build_and_publish(prod: bool, no_wipe_dist: bool):
         if not no_wipe_dist:
             logger.info("Wiping dist/ directory for a clean publish.")
             shutil.rmtree("dist", ignore_errors=True)
-        _command("python3 -m build", capture_output=False)
+        _command("uv run python -m build", capture_output=False)
         repository = "pypi" if prod else "testpypi"
-        _command(f"python3 -m twine upload --repository {repository} dist/*", capture_output=False)
+        _command(
+            f"uv run python -m twine upload --repository {repository} dist/*", capture_output=False
+        )
         logger.info(f"Published to {repository}! 🎉")
 
 
