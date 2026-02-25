@@ -17,6 +17,8 @@ services:
 
   backend:
     container_name: ui-backend
+    # TODO: Change to apache/hamilton-ui-backend:latest once Apache images are pushed to Docker Hub
+    # See ui/buildx_and_push.sh for Apache-compliant image build script
     image: dagworks/ui-backend:latest
     build:
         context: backend
@@ -44,6 +46,8 @@ services:
 
   frontend:
     container_name: ui-frontend
+    # TODO: Change to apache/hamilton-ui-frontend:latest once Apache images are pushed to Docker Hub
+    # See ui/buildx_and_push.sh for Apache-compliant image build script
     image: dagworks/ui-frontend:latest
     build:
       context: frontend
