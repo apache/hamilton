@@ -150,13 +150,13 @@ if HAMILTON_ENV == "mini":
     STATIC_URL = "/static/"
     # Support both Vite (assets/) and CRA (static/) build outputs
     staticfiles_dirs = []
-    if os.path.exists(os.path.join(BASE_DIR, "build/assets/")):
-        staticfiles_dirs.append(os.path.join(BASE_DIR, "build/assets/"))
-    if os.path.exists(os.path.join(BASE_DIR, "build/static/")):
-        staticfiles_dirs.append(os.path.join(BASE_DIR, "build/static/"))
+    if (BASE_DIR / "build/assets/").exists():
+        staticfiles_dirs.append(str(BASE_DIR / "build/assets/"))
+    if (BASE_DIR / "build/static/").exists():
+        staticfiles_dirs.append(str(BASE_DIR / "build/static/"))
     STATICFILES_DIRS = staticfiles_dirs
     MEDIA_URL = "/media/"
-    MEDIA_ROOT = os.path.join(BASE_DIR, "build/")
+    MEDIA_ROOT = str(BASE_DIR / "build/")
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

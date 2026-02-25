@@ -43,15 +43,13 @@ from . import api, default_views
 if settings.HAMILTON_ENV == "mini":
     # mini-mode
     # TODO -- do meda assets correctly -- this just hardcodes logo.png for now
-    import os
-
     urlpatterns = [
         path("api/", api.api.urls),
         path("admin/", admin.site.urls),
     ]
 
     # Serve root-level assets from build/ directory
-    build_dir = os.path.join(settings.BASE_DIR, "build/")
+    build_dir = settings.BASE_DIR / "build/"
     root_assets = [
         "manifest.json",
         "robots.txt",
@@ -61,27 +59,27 @@ if settings.HAMILTON_ENV == "mini":
         "logo_with_text.svg",
     ]
     for asset in root_assets:
-        if os.path.exists(os.path.join(build_dir, asset)):
+        if (build_dir / asset).exists():
             urlpatterns.append(
-                re_path(rf"^{asset}$", serve, {"document_root": build_dir, "path": asset})
+                re_path(rf"^{asset}$", serve, {"document_root": str(build_dir), "path": asset})
             )
 
     # Serve static assets from build/assets/ (Vite) or build/static/ (CRA)
     # This MUST come before the catch-all route
-    if os.path.exists(os.path.join(settings.BASE_DIR, "build/assets/")):
+    if (settings.BASE_DIR / "build/assets/").exists():
         urlpatterns.append(
             re_path(
                 r"^assets/(?P<path>.*)$",
                 serve,
-                {"document_root": os.path.join(settings.BASE_DIR, "build/assets/")},
+                {"document_root": str(settings.BASE_DIR / "build/assets/")},
             )
         )
-    if os.path.exists(os.path.join(settings.BASE_DIR, "build/static/")):
+    if (settings.BASE_DIR / "build/static/").exists():
         urlpatterns.append(
             re_path(
                 r"^static/(?P<path>.*)$",
                 serve,
-                {"document_root": os.path.join(settings.BASE_DIR, "build/static/")},
+                {"document_root": str(settings.BASE_DIR / "build/static/")},
             )
         )
 
