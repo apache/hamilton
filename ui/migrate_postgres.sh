@@ -55,7 +55,7 @@ if ! $DOCKER_COMPOSE ps | grep -q "db"; then
 fi
 
 # Check PostgreSQL version
-PG_VERSION=$($DOCKER_COMPOSE exec -T db psql -U hamilton -d hamilton -c "SHOW server_version;" -t | tr -d ' ')
+PG_VERSION=$($DOCKER_COMPOSE exec -T db psql -U postgres -d hamilton -c "SHOW server_version;" -t | tr -d ' ')
 if [[ $PG_VERSION == 18* ]]; then
     echo "You are already running PostgreSQL 18. No migration needed."
     exit 0
@@ -67,7 +67,7 @@ echo ""
 
 # Backup
 echo "Step 1: Backing up PostgreSQL data..."
-$DOCKER_COMPOSE exec -T db pg_dump -U hamilton hamilton > "$BACKUP_FILE"
+$DOCKER_COMPOSE exec -T db pg_dump -U postgres postgres > "$BACKUP_FILE"
 echo "✓ Backup saved to: $BACKUP_FILE ($(du -h "$BACKUP_FILE" | cut -f1))"
 echo ""
 
@@ -93,7 +93,7 @@ sleep 20
 
 MAX_RETRIES=30
 RETRY_COUNT=0
-until $DOCKER_COMPOSE exec -T db pg_isready -U hamilton > /dev/null 2>&1; do
+until $DOCKER_COMPOSE exec -T db pg_isready -U postgres > /dev/null 2>&1; do
     RETRY_COUNT=$((RETRY_COUNT + 1))
     if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
         echo "Error: Database failed to start after $MAX_RETRIES attempts"
@@ -110,7 +110,7 @@ echo ""
 # Restore
 echo "Step 4: Restoring data to PostgreSQL 18..."
 echo "   (Ignoring 'already exists' errors - this is normal)"
-$DOCKER_COMPOSE exec -T db psql -U hamilton hamilton < "$BACKUP_FILE" 2>&1 | \
+$DOCKER_COMPOSE exec -T db psql -U postgres postgres < "$BACKUP_FILE" 2>&1 | \
     grep -v "ERROR:.*already exists" | \
     grep -v "^$" || true
 echo "✓ Data restored"
@@ -118,14 +118,14 @@ echo ""
 
 # Fix permissions
 echo "Step 5: Fixing permissions..."
-$DOCKER_COMPOSE exec -T db psql -U hamilton hamilton -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO hamilton;" > /dev/null
-$DOCKER_COMPOSE exec -T db psql -U hamilton hamilton -c "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO hamilton;" > /dev/null
+$DOCKER_COMPOSE exec -T db psql -U postgres postgres -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres;" > /dev/null
+$DOCKER_COMPOSE exec -T db psql -U postgres postgres -c "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO postgres;" > /dev/null
 echo "✓ Permissions fixed"
 echo ""
 
 # Verify
 echo "Step 6: Verifying migration..."
-TABLE_COUNT=$($DOCKER_COMPOSE exec -T db psql -U hamilton hamilton -c "\dt" | grep -c "public" || echo "0")
+TABLE_COUNT=$($DOCKER_COMPOSE exec -T db psql -U postgres postgres -c "\dt" | grep -c "public" || echo "0")
 echo "✓ Found $TABLE_COUNT tables"
 echo ""
 

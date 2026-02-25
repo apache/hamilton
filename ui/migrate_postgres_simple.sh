@@ -56,7 +56,7 @@ fi
 
 # Check PostgreSQL version
 echo "Checking current PostgreSQL version..."
-PG_VERSION=$($DOCKER_COMPOSE exec -T db psql -U hamilton -d hamilton -At -c "SHOW server_version;" | cut -d. -f1)
+PG_VERSION=$($DOCKER_COMPOSE exec -T db psql -U postgres -d postgres -At -c "SHOW server_version;" | cut -d. -f1)
 
 if [ "$PG_VERSION" -ge 18 ]; then
     echo "Already on PostgreSQL $PG_VERSION. No migration needed."
@@ -189,7 +189,7 @@ done
 echo "✓ Backend ready"
 
 # Check new PostgreSQL version
-NEW_PG_VERSION=$($DOCKER_COMPOSE exec -T db psql -U hamilton -d hamilton -At -c "SHOW server_version;" | cut -d. -f1)
+NEW_PG_VERSION=$($DOCKER_COMPOSE exec -T db psql -U postgres -d postgres -At -c "SHOW server_version;" | cut -d. -f1)
 echo "✓ PostgreSQL $NEW_PG_VERSION running"
 
 echo ""

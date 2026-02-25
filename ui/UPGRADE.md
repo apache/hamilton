@@ -81,7 +81,7 @@ cd hamilton/ui
 docker compose up -d
 
 # Export data
-docker compose exec db pg_dump -U hamilton hamilton > hamilton_backup.sql
+docker compose exec db pg_dump -U postgres postgres > hamilton_backup.sql
 
 # Stop containers
 docker compose down
@@ -107,10 +107,10 @@ git pull  # or checkout the latest version
 sleep 10
 
 # Import data
-docker compose exec -T db psql -U hamilton hamilton < hamilton_backup.sql
+docker compose exec -T db psql -U postgres postgres < hamilton_backup.sql
 
 # Verify data
-docker compose exec db psql -U hamilton hamilton -c "\dt"
+docker compose exec db psql -U postgres postgres -c "\dt"
 ```
 
 ##### Step 4: Verify Migration
@@ -130,8 +130,8 @@ The Hamilton UI automatically runs migrations on startup, which creates empty ta
 
 ```bash
 # Grant permissions to hamilton user
-docker compose exec db psql -U hamilton hamilton -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO hamilton;"
-docker compose exec db psql -U hamilton hamilton -c "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO hamilton;"
+docker compose exec db psql -U postgres postgres -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres;"
+docker compose exec db psql -U postgres postgres -c "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO postgres;"
 ```
 
 **Issue:** Blob/artifact files missing
@@ -211,7 +211,7 @@ fi
 
 # Backup
 echo "Step 1: Backing up PostgreSQL 12 data..."
-docker compose exec -T db pg_dump -U hamilton hamilton > "$BACKUP_FILE"
+docker compose exec -T db pg_dump -U postgres postgres > "$BACKUP_FILE"
 echo "✓ Backup saved to: $BACKUP_FILE"
 echo ""
 
@@ -231,14 +231,14 @@ echo ""
 
 # Restore
 echo "Step 4: Restoring data..."
-docker compose exec -T db psql -U hamilton hamilton < "$BACKUP_FILE" 2>&1 | grep -v "ERROR:.*already exists" || true
+docker compose exec -T db psql -U postgres postgres < "$BACKUP_FILE" 2>&1 | grep -v "ERROR:.*already exists" || true
 echo "✓ Data restored"
 echo ""
 
 # Fix permissions
 echo "Step 5: Fixing permissions..."
-docker compose exec -T db psql -U hamilton hamilton -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO hamilton;" > /dev/null
-docker compose exec -T db psql -U hamilton hamilton -c "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO hamilton;" > /dev/null
+docker compose exec -T db psql -U postgres postgres -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres;" > /dev/null
+docker compose exec -T db psql -U postgres postgres -c "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO postgres;" > /dev/null
 echo "✓ Permissions fixed"
 echo ""
 
@@ -288,7 +288,7 @@ docker volume rm ui_postgres_data
 ./run.sh --build
 
 # Restore from backup (if needed)
-docker compose exec -T db psql -U hamilton hamilton < hamilton_backup.sql
+docker compose exec -T db psql -U postgres postgres < hamilton_backup.sql
 ```
 
 **Q: Do I need to update my Hamilton SDK client code?**
