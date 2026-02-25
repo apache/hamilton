@@ -18,16 +18,17 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const {themes} = require('prism-react-renderer');
+const lightCodeTheme = themes.github;
+const darkCodeTheme = themes.dracula;
 
 const organizationName = "dagworks-inc";
 const projectName = "hamilton";  // fixed due to GitHub pages deployment
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Hamilton Dataflow Hub',
-  tagline: 'Your place to find Hamilton dataflows',
+  title: 'Apache Hamilton Dataflow Hub',
+  tagline: 'Your place to find Apache Hamilton dataflows',
   favicon: 'img/hamilton_logo_transparent_bkgrd.ico',
 
   // Set the production url of your site here
@@ -41,8 +42,7 @@ const config = {
   organizationName: organizationName, // Usually your GitHub org/user name.
   projectName: projectName  , // Usually your repo name.
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: 'warn',
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -50,6 +50,12 @@ const config = {
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
+  },
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
   },
 
   presets: [
@@ -66,6 +72,7 @@ const config = {
         },
         blog: {
           showReadingTime: true,
+          onUntruncatedBlogPosts: 'ignore',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           // editUrl:
@@ -95,7 +102,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/hamilton-social-card.png',
       navbar: {
-        title: 'Hamilton Dataflow Hub',
+        title: 'Apache Hamilton Dataflow Hub',
         logo: {
           alt: 'Hamilton',
           src: 'img/hamilton_logo.png',
@@ -113,7 +120,7 @@ const config = {
             type: 'search',
             position: 'left',
           },
-          {to: '/leaderboard', label: 'Leaderboard', position: 'left'},
+          // {to: '/leaderboard', label: 'Leaderboard', position: 'left'},
           {href: 'https://blog.dagworks.io', label: 'DAGWorks Blog', position: 'right'},
           {
             href: 'https://github.com/apache/hamilton',

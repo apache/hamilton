@@ -262,6 +262,58 @@ import requirements from '!!raw-loader!./requirements.txt';
 # TODO: edit/adjust links to docs, etc.
 
 
+def extract_and_move_frontmatter(content: str, default_title: str) -> str:
+    """Extract frontmatter from content and move it to the top.
+
+    If frontmatter exists, move it to the beginning.
+    If not, add default frontmatter with the provided title.
+    """
+    import re
+
+    # Check if frontmatter exists (pattern: --- ... ---)
+    frontmatter_pattern = r"^---\s*\n(.*?)\n---\s*\n"
+    match = re.search(frontmatter_pattern, content, re.DOTALL | re.MULTILINE)
+
+    if match:
+        # Extract the frontmatter and remove it from content
+        frontmatter = match.group(0)
+        content_without_frontmatter = content[: match.start()] + content[match.end() :]
+        # Move frontmatter to the top
+        return frontmatter + "\n" + content_without_frontmatter
+    else:
+        # No frontmatter found, add default
+        return f"---\ntitle: {default_title}\n---\n\n{content}"
+
+
+def escape_mdx_curly_braces(text: str) -> str:
+    """Escape curly braces for MDX 3 compatibility.
+
+    MDX 3 requires curly braces to be escaped when they're not part of JSX expressions.
+    This function wraps curly braces in backticks to treat them as inline code.
+    """
+    import re
+
+    # Don't escape braces that are already in code blocks or inline code
+    # Split by code blocks (```) and inline code (`)
+    parts = []
+    in_code_block = False
+    lines = text.split("\n")
+
+    for line in lines:
+        if line.strip().startswith("```"):
+            in_code_block = not in_code_block
+            parts.append(line)
+        elif in_code_block:
+            parts.append(line)
+        else:
+            # Escape curly braces in regular text by wrapping with backticks
+            # Match { or } that are not already in backticks
+            line = re.sub(r"(?<!`)(\{[^}]*\})(?!`)", r"`\1`", line)
+            parts.append(line)
+
+    return "\n".join(parts)
+
+
 @config.when(is_dagworks="False")
 def user_dataflows__user(dataflows_with_everything: Collect[list[dict]]) -> dict[str, list[dict]]:
     """Big function that creates the docs for a user."""
@@ -272,8 +324,19 @@ def user_dataflows__user(dataflows_with_everything: Collect[list[dict]]) -> dict
         # make the folder
         user_path = os.path.join("docs", "Users", _user_name)
         os.makedirs(user_path, exist_ok=True)
-        # copy the author.md file
-        shutil.copyfile(_user_dataflows[0]["author_path"], os.path.join(user_path, "index.mdx"))
+        # copy the author.md file and ensure frontmatter is at the top
+        with open(_user_dataflows[0]["author_path"], "r") as f:
+            author_content = f.read()
+        author_content_with_frontmatter = extract_and_move_frontmatter(author_content, _user_name)
+        with open(os.path.join(user_path, "index.mdx"), "w") as f:
+            f.write(author_content_with_frontmatter)
+        # create _category_.json for the user directory
+        with open(os.path.join(user_path, "_category_.json"), "w") as f:
+            json.dump(
+                {"label": _user_name, "link": {"type": "doc", "id": f"Users/{_user_name}/index"}},
+                f,
+                indent=2,
+            )
         # make all dataflow folders
         for single_df in _user_dataflows:
             # make the folder
@@ -324,6 +387,9 @@ def user_dataflows__user(dataflows_with_everything: Collect[list[dict]]) -> dict
             for line in readme_lines:
                 readme_string += line.replace("#", "##", 1)
 
+            # Escape curly braces for MDX 3 compatibility
+            readme_string = escape_mdx_curly_braces(readme_string)
+
             with open(os.path.join(df_path, "README.mdx"), "w") as f:
                 f.write(
                     mdx_template.format(
@@ -367,10 +433,23 @@ def user_dataflows__dagworks(
         # make the folder
         dagworks_path = os.path.join("docs", "DAGWorks")
         os.makedirs(dagworks_path, exist_ok=True)
-        # copy the author.md file
-        shutil.copyfile(
-            _dagworks_dataflows[0]["author_path"], os.path.join(dagworks_path, "index.mdx")
-        )
+        # copy the author.md file and ensure frontmatter is at the top
+        with open(_dagworks_dataflows[0]["author_path"], "r") as f:
+            author_content = f.read()
+        author_content_with_frontmatter = extract_and_move_frontmatter(author_content, "DAGWorks")
+        with open(os.path.join(dagworks_path, "index.mdx"), "w") as f:
+            f.write(author_content_with_frontmatter)
+        # create _category_.json for the DAGWorks directory
+        with open(os.path.join(dagworks_path, "_category_.json"), "w") as f:
+            json.dump(
+                {
+                    "label": "1st Party",
+                    "position": 3,
+                    "link": {"type": "doc", "id": "DAGWorks/index"},
+                },
+                f,
+                indent=2,
+            )
         # make all dataflow folders
         for single_df in _dagworks_dataflows:
             # make the folder
@@ -417,6 +496,9 @@ def user_dataflows__dagworks(
             readme_string = ""
             for line in readme_lines:
                 readme_string += line.replace("#", "##", 1)
+
+            # Escape curly braces for MDX 3 compatibility
+            readme_string = escape_mdx_curly_braces(readme_string)
 
             with open(os.path.join(df_path, "README.mdx"), "w") as f:
                 f.write(

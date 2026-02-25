@@ -1,6 +1,6 @@
 {
-  "label": "Users",
-  "position": 3,
+  "label": "3rd Party",
+  "position": 2,
   "link": {
     "type": "generated-index",
     "description": "Find user contributed dataflows here."

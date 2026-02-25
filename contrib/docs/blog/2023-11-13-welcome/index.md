@@ -1,3 +1,10 @@
+---
+slug: hub-launch-welcome
+title: 🚀 Welcome to the Apache Hamilton Hub
+authors: [skrawcz]
+tags: [hamilton, how-to, dataflows]
+---
+
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -16,13 +23,6 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-
----
-slug: hub-launch-welcome
-title: 🚀 Welcome to the Apache Hamilton Hub
-authors: [skrawcz]
-tags: [hamilton, how-to, dataflows]
----
 
 Welcome to the Apache Hamilton Dataflow Hub!
 
