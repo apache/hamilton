@@ -33,7 +33,7 @@ if ! docker ps --format '{{.Names}}' | grep -q "^hamilton-ui-db$"; then
         -e POSTGRES_USER=hamilton \
         -e POSTGRES_PASSWORD=hamilton \
         -p 5433:5432 \
-        postgres:12
+        postgres:18
 
     echo "⏳ Waiting for PostgreSQL to be ready..."
     sleep 5
@@ -73,7 +73,7 @@ mkdir -p "$HAMILTON_LOCAL_BLOB_DIR"
 
 echo "🔧 Running database migrations..."
 cd ui/backend/server
-python manage.py migrate
+uv run python manage.py migrate
 
 echo ""
 echo "✨ Starting Hamilton UI server..."
@@ -85,4 +85,4 @@ echo "Press Ctrl+C to stop the server"
 echo ""
 
 # Start the server
-python manage.py runserver 0.0.0.0:8241
+uv run python manage.py runserver 0.0.0.0:8241
