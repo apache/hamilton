@@ -34,6 +34,14 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /code
 
 # Install system dependencies for psycopg2-binary and other compiled packages
+# Note: psycopg2-binary includes precompiled PostgreSQL adapter, so libpq-dev
+# is technically optional. However, we include it for:
+# - Compatibility if switching to psycopg2 (non-binary) in the future
+# - Development dependencies that might need PostgreSQL client libraries
+# - Better error messages if PostgreSQL connection issues occur
+#
+# For psycopg v3 (modern replacement), this would still be needed for compilation.
+# Current dependencies use psycopg2-binary for Django PostgreSQL support.
 RUN apt-get update && apt-get install -y \
     gcc \
     libc-dev \

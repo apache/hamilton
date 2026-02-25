@@ -55,20 +55,6 @@ dependencies = [
     "sqlglot",
 ]
 
-[project.optional-dependencies]
-test = [
-    "ibis-framework",
-    "langchain_core",
-    "numpy",
-    "polars",
-    "pyarrow",
-    "pyarrow_hotfix",
-    "pydantic",
-    "pyspark",
-    "pytest",
-    "ray; python_version < '3.14'",
-]
-
 [project.urls]
 homepage = "https://www.tryhamilton.dev/"
 documentation = "https://hamilton.apache.org/"
@@ -99,4 +85,18 @@ exclude = [
     "build/**",
     ".pytest_cache/**",
     ".venv/**",
+]
+
+[dependency-groups]
+test = [
+    "ibis-framework",
+    "langchain_core",
+    "numpy",
+    "polars",
+    "pyarrow",
+    "pyarrow_hotfix",
+    "pydantic",
+    "pyspark",
+    "pytest",
+    "ray; python_version < '3.14'",
 ]

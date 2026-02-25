@@ -56,9 +56,14 @@ dependencies = [
     "psycopg2-binary",
     "pydantic>=2.0.0",
     "requests>=2.32.0",
-    "sf-hamilton>=1.58.0",
+    "apache-hamilton>=1.58.0",
     "typer",
 ]
+
+[project.scripts]
+# Django management commands for cleaner CLI usage with uv
+# Usage: uv run hamilton-ui
+hamilton-ui = "hamilton_ui.server.manage:main"
 
 [project.urls]
 homepage = "https://www.tryhamilton.dev/"
