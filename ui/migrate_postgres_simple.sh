@@ -16,20 +16,20 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# migrate_postgres_simple.sh - Migrate Hamilton UI from PostgreSQL 12 to 16
+# migrate_postgres_simple.sh - Migrate Hamilton UI from PostgreSQL 12 to 18
 # Uses Django's dumpdata/loaddata for safe, validated migration
 
 set -euo pipefail
 
 BACKUP_FILE="hamilton_migration_$(date +%Y%m%d_%H%M%S).json"
 
-echo "Hamilton UI PostgreSQL 12 → 16 Migration"
+echo "Hamilton UI PostgreSQL 12 → 18 Migration"
 echo "========================================="
 echo ""
 echo "This script will:"
 echo "  1. Export your Hamilton data using Django"
 echo "  2. Stop containers and remove PostgreSQL 12 volume"
-echo "  3. Start PostgreSQL 16 containers"
+echo "  3. Start PostgreSQL 18 containers"
 echo "  4. Restore your Hamilton data"
 echo ""
 
@@ -54,14 +54,14 @@ fi
 echo "Checking current PostgreSQL version..."
 PG_VERSION=$($DOCKER_COMPOSE exec -T db psql -U hamilton -d hamilton -At -c "SHOW server_version;" | cut -d. -f1)
 
-if [ "$PG_VERSION" -ge 16 ]; then
+if [ "$PG_VERSION" -ge 18 ]; then
     echo "Already on PostgreSQL $PG_VERSION. No migration needed."
     exit 0
 fi
 
 if [ "$PG_VERSION" -lt 12 ]; then
     echo "Error: PostgreSQL $PG_VERSION detected"
-    echo "This script handles PostgreSQL 12+ → 16"
+    echo "This script handles PostgreSQL 12+ → 18"
     echo "Manual upgrade required for older versions"
     exit 1
 fi
@@ -135,7 +135,7 @@ fi
 
 echo ""
 echo "================================================================"
-echo "Step 3: Starting PostgreSQL 16"
+echo "Step 3: Starting PostgreSQL 18"
 echo "================================================================"
 echo ""
 

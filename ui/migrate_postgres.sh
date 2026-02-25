@@ -16,20 +16,20 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# migrate_postgres.sh - Migrate Hamilton UI from PostgreSQL 12 to 16
+# migrate_postgres.sh - Migrate Hamilton UI from PostgreSQL 12 to 18
 
 set -e
 
 BACKUP_FILE="hamilton_backup_$(date +%Y%m%d_%H%M%S).sql"
 
-echo "Hamilton UI PostgreSQL 12 → 16 Migration"
+echo "Hamilton UI PostgreSQL 12 → 18 Migration"
 echo "========================================"
 echo ""
 echo "This script will:"
 echo "  1. Backup your PostgreSQL 12 data"
 echo "  2. Stop containers and remove old data volume"
-echo "  3. Start PostgreSQL 16 containers"
-echo "  4. Restore your data to PostgreSQL 16"
+echo "  3. Start PostgreSQL 18 containers"
+echo "  4. Restore your data to PostgreSQL 18"
 echo ""
 read -p "Continue? (yes/no): " CONFIRM
 
@@ -56,8 +56,8 @@ fi
 
 # Check PostgreSQL version
 PG_VERSION=$($DOCKER_COMPOSE exec -T db psql -U hamilton -d hamilton -c "SHOW server_version;" -t | tr -d ' ')
-if [[ $PG_VERSION == 16* ]]; then
-    echo "You are already running PostgreSQL 16. No migration needed."
+if [[ $PG_VERSION == 18* ]]; then
+    echo "You are already running PostgreSQL 18. No migration needed."
     exit 0
 fi
 
@@ -79,7 +79,7 @@ echo "✓ Old data removed"
 echo ""
 
 # Start new
-echo "Step 3: Starting PostgreSQL 16 containers..."
+echo "Step 3: Starting PostgreSQL 18 containers..."
 echo "   This may take a few minutes on first run..."
 ./run.sh --build > /tmp/hamilton_build.log 2>&1 &
 BUILD_PID=$!
@@ -104,11 +104,11 @@ until $DOCKER_COMPOSE exec -T db pg_isready -U hamilton > /dev/null 2>&1; do
     sleep 2
 done
 
-echo "✓ PostgreSQL 16 ready"
+echo "✓ PostgreSQL 18 ready"
 echo ""
 
 # Restore
-echo "Step 4: Restoring data to PostgreSQL 16..."
+echo "Step 4: Restoring data to PostgreSQL 18..."
 echo "   (Ignoring 'already exists' errors - this is normal)"
 $DOCKER_COMPOSE exec -T db psql -U hamilton hamilton < "$BACKUP_FILE" 2>&1 | \
     grep -v "ERROR:.*already exists" | \

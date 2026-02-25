@@ -21,13 +21,13 @@ under the License.
 
 This guide covers backward compatibility concerns and migration steps when upgrading Hamilton UI.
 
-## Upgrading from PostgreSQL 12 to PostgreSQL 16
+## Upgrading from PostgreSQL 12 to PostgreSQL 18
 
 **Affected versions:** Upgrading to versions after commit `0da07178` (February 2026)
 
 ### What Changed
 
-Hamilton UI Docker setup now uses **PostgreSQL 16** instead of PostgreSQL 12 to support Django 6.0.2+, which requires PostgreSQL 14 or later.
+Hamilton UI Docker setup now uses **PostgreSQL 18** instead of PostgreSQL 12 to support Django 6.0.2+, which requires PostgreSQL 13 or later.
 
 ### Do I Need to Migrate?
 
@@ -56,7 +56,7 @@ cd hamilton/ui
 # Remove old PostgreSQL 12 data
 docker volume rm ui_postgres_data
 
-# Start with PostgreSQL 16
+# Start with PostgreSQL 18
 ./run.sh --build
 ```
 
@@ -83,20 +83,20 @@ docker compose exec db pg_dump -U hamilton hamilton > hamilton_backup.sql
 docker compose down
 ```
 
-##### Step 2: Upgrade to PostgreSQL 16
+##### Step 2: Upgrade to PostgreSQL 18
 
 ```bash
 # Remove old PostgreSQL 12 volume
 docker volume rm ui_postgres_data
 
-# Pull latest code with PostgreSQL 16
+# Pull latest code with PostgreSQL 18
 git pull  # or checkout the latest version
 
 # Start new containers
 ./run.sh --build
 ```
 
-##### Step 3: Import data into PostgreSQL 16
+##### Step 3: Import data into PostgreSQL 18
 
 ```bash
 # Wait for database to be ready
@@ -164,7 +164,7 @@ The Docker backend now uses **uv** instead of pip for dependency management. Thi
 
 ### Django 6.0+ Requirements
 
-Django 6.0.2+ requires PostgreSQL 14 or later, which is why we upgraded to PostgreSQL 16.
+Django 6.0.2+ requires PostgreSQL 13 or later, which is why we upgraded to PostgreSQL 18.
 
 ## Migration Script
 
@@ -172,13 +172,13 @@ For automated migration, you can use this script:
 
 ```bash
 #!/bin/bash
-# migrate_postgres.sh - Migrate Hamilton UI from PostgreSQL 12 to 16
+# migrate_postgres.sh - Migrate Hamilton UI from PostgreSQL 12 to 18
 
 set -e
 
 BACKUP_FILE="hamilton_backup_$(date +%Y%m%d_%H%M%S).sql"
 
-echo "Hamilton UI PostgreSQL 12 → 16 Migration"
+echo "Hamilton UI PostgreSQL 12 → 18 Migration"
 echo "========================================"
 echo ""
 
@@ -202,10 +202,10 @@ echo "✓ Old data removed"
 echo ""
 
 # Start new
-echo "Step 3: Starting PostgreSQL 16..."
+echo "Step 3: Starting PostgreSQL 18..."
 ./run.sh --build
 sleep 15  # Wait for initialization
-echo "✓ PostgreSQL 16 ready"
+echo "✓ PostgreSQL 18 ready"
 echo ""
 
 # Restore
@@ -240,13 +240,13 @@ If you encounter issues during migration:
 | Hamilton UI Version | PostgreSQL Version | Python Version | Django Version |
 |--------------------|--------------------|----------------|----------------|
 | < 0.0.17 (2026-02) | 12 | 3.8 | 4.2 |
-| ≥ 0.0.17 (2026-02) | 16 | 3.12 | 6.0.2 |
+| ≥ 0.0.17 (2026-02) | 18 | 3.12 | 6.0.2 |
 
 ## FAQ
 
 **Q: Can I continue using PostgreSQL 12?**
 
-No. Django 6.0.2+ explicitly requires PostgreSQL 14 or later. You must upgrade to at least PostgreSQL 14 (we recommend 16).
+No. Django 6.0.2+ explicitly requires PostgreSQL 13 or later. You must upgrade to at least PostgreSQL 13 (we recommend 18 for the latest features and long-term support).
 
 **Q: Will my PyPI installation be affected?**
 
