@@ -16,8 +16,8 @@
 # under the License.
 
 import logging
-from collections import deque
 import pprint
+from collections import deque
 from collections.abc import Collection
 from functools import partial
 from typing import Any
