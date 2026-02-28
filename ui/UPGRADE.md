@@ -158,7 +158,7 @@ docker compose down
 docker volume rm ui_postgres_data
 
 # Follow the migration guide above to export and import your data
-./migrate_postgres_simple.sh
+./upgrade_postgres_simple.sh
 ```
 
 If you're upgrading from PostgreSQL 16 to 18 and encounter this error, the volume mount point has changed. You still need to follow the migration process even though both versions are modern.
@@ -193,7 +193,7 @@ For automated migration, you can use this script:
 
 ```bash
 #!/bin/bash
-# migrate_postgres.sh - Migrate Hamilton UI from PostgreSQL 12 to 18
+# upgrade_postgres.sh - Upgrade Hamilton UI from PostgreSQL 12 to 18
 
 set -e
 
@@ -246,7 +246,7 @@ echo "Migration complete!"
 echo "Navigate to http://localhost:8242 to verify your data."
 ```
 
-Save as `migrate_postgres.sh`, make executable with `chmod +x migrate_postgres.sh`, and run with `./migrate_postgres.sh`.
+Save as `upgrade_postgres.sh`, make executable with `chmod +x upgrade_postgres.sh`, and run with `./upgrade_postgres.sh`.
 
 ## Getting Help
 

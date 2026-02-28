@@ -16,7 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# migrate_postgres.sh - Migrate Hamilton UI from PostgreSQL 12 to 18
+# upgrade_postgres.sh - Upgrade Hamilton UI from PostgreSQL 12 to 18
 
 set -e
 
