@@ -124,9 +124,7 @@ ROOT_URLCONF = "server.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": (
-            [os.path.join(BASE_DIR, "build")] if HAMILTON_ENV == "mini" else []
-        ),  # TODO -- unify
+        "DIRS": ([BASE_DIR / "build"] if HAMILTON_ENV == "mini" else []),  # TODO -- unify
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -146,17 +144,17 @@ STATIC_URL = "static/"
 
 # TODO -- unify this/fix with the mini settings
 if HAMILTON_ENV == "mini":
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    STATIC_ROOT = BASE_DIR / "staticfiles"
     STATIC_URL = "/static/"
     # Support both Vite (assets/) and CRA (static/) build outputs
     staticfiles_dirs = []
-    if (BASE_DIR / "build/assets/").exists():
-        staticfiles_dirs.append(str(BASE_DIR / "build/assets/"))
-    if (BASE_DIR / "build/static/").exists():
-        staticfiles_dirs.append(str(BASE_DIR / "build/static/"))
+    if (BASE_DIR / "build" / "assets").exists():
+        staticfiles_dirs.append(BASE_DIR / "build/assets")
+    if (BASE_DIR / "build/static").exists():
+        staticfiles_dirs.append(BASE_DIR / "build/static")
     STATICFILES_DIRS = staticfiles_dirs
     MEDIA_URL = "/media/"
-    MEDIA_ROOT = str(BASE_DIR / "build/")
+    MEDIA_ROOT = (BASE_DIR / "build").as_posix()
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

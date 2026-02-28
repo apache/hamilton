@@ -49,7 +49,7 @@ if settings.HAMILTON_ENV == "mini":
     ]
 
     # Serve root-level assets from build/ directory
-    build_dir = settings.BASE_DIR / "build/"
+    build_dir = settings.BASE_DIR / "build"
     root_assets = [
         "manifest.json",
         "robots.txt",
@@ -61,25 +61,25 @@ if settings.HAMILTON_ENV == "mini":
     for asset in root_assets:
         if (build_dir / asset).exists():
             urlpatterns.append(
-                re_path(rf"^{asset}$", serve, {"document_root": str(build_dir), "path": asset})
+                re_path(rf"^{asset}$", serve, {"document_root": build_dir, "path": asset})
             )
 
     # Serve static assets from build/assets/ (Vite) or build/static/ (CRA)
     # This MUST come before the catch-all route
-    if (settings.BASE_DIR / "build/assets/").exists():
+    if (settings.BASE_DIR / "build" / "assets").exists():
         urlpatterns.append(
             re_path(
                 r"^assets/(?P<path>.*)$",
                 serve,
-                {"document_root": str(settings.BASE_DIR / "build/assets/")},
+                {"document_root": settings.BASE_DIR / "build" / "assets"},
             )
         )
-    if (settings.BASE_DIR / "build/static/").exists():
+    if (settings.BASE_DIR / "build" / "static").exists():
         urlpatterns.append(
             re_path(
                 r"^static/(?P<path>.*)$",
                 serve,
-                {"document_root": str(settings.BASE_DIR / "build/static/")},
+                {"document_root": settings.BASE_DIR / "build" / "static"},
             )
         )
 
