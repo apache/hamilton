@@ -161,7 +161,8 @@ The next snippet checks if the returned Series is of type ``np.int32``, which is
 
 
 - To see all available validators, go to the file ``hamilton/data_quality/default_validators.py`` and view the variable ``AVAILABLE_DEFAULT_VALIDATORS``.
-- The function modifier ``@check_output_custom`` allows you to define your own validator. Validators inherit the ``base.BaseDefaultValidator`` class and are essentially standardized Hamilton node definitions (instead of functions). See ``hamilton/data_quality/default_validators.py`` or reach out on `Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_ for help!
+- The function modifier ``@check_output_custom`` allows you to define your own validator. Validators inherit the ``base.DataValidator`` class (or ``base.BaseDefaultValidator`` for use with ``@check_output``) and are essentially standardized Hamilton node definitions (instead of functions). See ``hamilton/data_quality/default_validators.py`` or reach out on `Slack <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_ for help!
+- For async validation logic (e.g., async database or API calls), inherit from ``base.AsyncDataValidator`` or ``base.AsyncBaseDefaultValidator`` instead. These define ``async def validate()`` and work with ``AsyncDriver``. You can mix sync and async validators in a single ``@check_output_custom`` call.
 - Note: ``@check_output_custom`` decorators cannot be stacked, but they instead can take multiple validators.
 
 .. note::

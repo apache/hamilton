@@ -16,6 +16,7 @@
 # under the License.
 
 import abc
+import asyncio
 from collections import defaultdict
 from collections.abc import Callable, Collection
 from typing import Any
@@ -59,10 +60,28 @@ class BaseDataValidationDecorator(base.NodeTransformer):
         validator_name_map = {}
         validator_name_count = defaultdict(int)
         for validator in validators:
+            if dq_base.is_async_validator(validator):
 
-            def validation_function(validator_to_call: dq_base.DataValidator = validator, **kwargs):
-                result = list(kwargs.values())[0]  # This should just have one kwarg
-                return validator_to_call.validate(result)
+                async def validation_function(
+                    validator_to_call: dq_base.DataValidator = validator, **kwargs
+                ):
+                    result = list(kwargs.values())[0]  # This should just have one kwarg
+                    return await validator_to_call.validate(result)
+
+            else:
+
+                def validation_function(
+                    validator_to_call: dq_base.DataValidator = validator, **kwargs
+                ):
+                    result = list(kwargs.values())[0]  # This should just have one kwarg
+                    validation_result = validator_to_call.validate(result)
+                    if asyncio.iscoroutine(validation_result):
+                        validation_result.close()
+                        raise TypeError(
+                            f"Validator '{validator_to_call.name()}' returned a coroutine. "
+                            f"Use AsyncDriver for async validators."
+                        )
+                    return validation_result
 
             validator_node_name = node_.name + "_" + validator.name()
             validator_name_count[validator_node_name] = (

@@ -135,6 +135,85 @@ def prime_number_generator(number_of_primes_to_generate: int) -> pd.Series:
     pass
 ```
 
+## Async Validators
+
+If your validation logic requires async operations (e.g., async database queries, async API calls),
+you can use `AsyncDataValidator` or `AsyncBaseDefaultValidator` as base classes. These work with
+the `AsyncDriver` and allow `async def validate()` methods.
+
+### Using AsyncDataValidator
+
+```python
+from hamilton.data_quality.base import AsyncDataValidator, ValidationResult
+
+class AsyncDBValidator(AsyncDataValidator):
+    def __init__(self, importance: str):
+        super().__init__(importance=importance)
+
+    def applies_to(self, datatype: type[type]) -> bool:
+        return datatype == dict
+
+    def description(self) -> str:
+        return "Validates data against async database lookup"
+
+    @classmethod
+    def name(cls) -> str:
+        return "async_db_validator"
+
+    async def validate(self, dataset: dict) -> ValidationResult:
+        # Perform async validation (e.g., async DB query)
+        result = await async_db_check(dataset)
+        return ValidationResult(passes=result, message="DB check")
+```
+
+### Using AsyncBaseDefaultValidator
+
+For validators that follow the single-argument pattern used by `@check_output`, inherit from
+`AsyncBaseDefaultValidator`:
+
+```python
+from hamilton.data_quality.base import AsyncBaseDefaultValidator, ValidationResult
+
+class AsyncRangeValidator(AsyncBaseDefaultValidator):
+    def __init__(self, range: tuple, importance: str):
+        super().__init__(importance=importance)
+        self.range = range
+
+    @classmethod
+    def applies_to(cls, datatype: type[type]) -> bool:
+        return datatype == float
+
+    def description(self) -> str:
+        return f"Async check that value is in range {self.range}"
+
+    async def validate(self, data: float) -> ValidationResult:
+        passes = self.range[0] <= data <= self.range[1]
+        return ValidationResult(passes=passes, message=f"Value {data} in range {self.range}: {passes}")
+
+    @classmethod
+    def arg(cls) -> str:
+        return "async_range"
+```
+
+### Applying async validators
+
+Use `@check_output_custom` with async validators, just like sync validators. The validation
+wrapper will automatically be created as an `async def` when an async validator is detected:
+
+```python
+from hamilton.function_modifiers import check_output_custom
+
+@check_output_custom(AsyncDBValidator(importance="fail"))
+async def fetch_data(query: str) -> dict:
+    return await async_fetch(query)
+```
+
+You can mix sync and async validators in a single `@check_output_custom` call. Each validator
+gets the appropriate wrapper type (sync or async).
+
+**Important:** Async validators must be used with `AsyncDriver`. Using them with the synchronous
+`Driver` will raise a `TypeError` at runtime.
+
 ## Urgency Levels
 
 Currently there are two available urgency level:

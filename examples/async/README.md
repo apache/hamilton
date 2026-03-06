@@ -87,6 +87,16 @@ Here is the execution visualized:
 
 ![pipeline](pipeline.dot.png)
 
+## Data Quality with Async
+
+Data quality validators (`@check_output`, `@check_output_custom`) work with `AsyncDriver`. You can use:
+
+- **Sync validators** on async functions — they work as-is.
+- **Async validators** (`AsyncDataValidator`, `AsyncBaseDefaultValidator`) for validation logic that requires `await` (e.g., async database lookups, async API calls). These define `async def validate()` and are automatically detected and awaited by the async execution engine.
+- **Mixed** sync and async validators in a single `@check_output_custom` call.
+
+See `hamilton/data_quality/base.py` for the async base classes.
+
 ## Caveats
 
 1. This will break in certain cases when decorating an async function (E.G. with `extract_outputs`).

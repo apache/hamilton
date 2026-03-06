@@ -18,7 +18,13 @@
 
 import pandas as pd
 
-from hamilton.data_quality.base import BaseDefaultValidator, DataValidator, ValidationResult
+from hamilton.data_quality.base import (
+    AsyncBaseDefaultValidator,
+    AsyncDataValidator,
+    BaseDefaultValidator,
+    DataValidator,
+    ValidationResult,
+)
 
 
 class SampleDataValidator1(BaseDefaultValidator):
@@ -120,3 +126,54 @@ class SampleDataValidator3(DataValidator):
 
 
 DUMMY_VALIDATORS_FOR_TESTING = [SampleDataValidator1, SampleDataValidator2, SampleDataValidator3]
+
+
+class AsyncSampleDataValidator(AsyncDataValidator):
+    """Async validator that checks int equality."""
+
+    def __init__(self, equal_to: int, importance: str):
+        super().__init__(importance=importance)
+        self.equal_to = equal_to
+
+    def applies_to(self, datatype: type[type]) -> bool:
+        return datatype == int
+
+    def description(self) -> str:
+        return f"Data must be equal to {self.equal_to} to be valid (async)"
+
+    @classmethod
+    def name(cls) -> str:
+        return "async_dummy_data_validator"
+
+    async def validate(self, dataset: int) -> ValidationResult:
+        passes = dataset == self.equal_to
+        return ValidationResult(
+            passes=passes,
+            message=f"Data value: {dataset} {'does' if passes else 'does not'} equal {self.equal_to}",
+        )
+
+
+class AsyncSampleDefaultValidator(AsyncBaseDefaultValidator):
+    """Async default validator that checks int equality."""
+
+    def __init__(self, equal_to: int, importance: str):
+        super().__init__(importance=importance)
+        self.equal_to = equal_to
+
+    @classmethod
+    def applies_to(cls, datatype: type[type]) -> bool:
+        return datatype == int
+
+    def description(self) -> str:
+        return f"Data must be equal to {self.equal_to} to be valid (async default)"
+
+    async def validate(self, data: int) -> ValidationResult:
+        passes = data == self.equal_to
+        return ValidationResult(
+            passes=passes,
+            message=f"Data value: {data} {'does' if passes else 'does not'} equal {self.equal_to}",
+        )
+
+    @classmethod
+    def arg(cls) -> str:
+        return "async_equal_to"

@@ -35,7 +35,7 @@ from hamilton.lifecycle.base import (
     BasePreNodeExecuteAsync,
 )
 
-from .resources import simple_async_module
+from .resources import async_dq_module, simple_async_module
 
 
 async def async_identity(n: int) -> int:
@@ -379,3 +379,27 @@ async def test_async_builder_allow_module_overrides():
         .build_without_init()
     )
     assert (await dr.execute(final_vars=["foo"])) == {"foo": 2}
+
+
+@pytest.mark.asyncio
+async def test_async_driver_with_async_validator():
+    """End-to-end: async validator with AsyncDriver should execute correctly."""
+    dr = async_driver.AsyncDriver({}, async_dq_module, result_builder=base.DictResult())
+    result = await dr.raw_execute(final_vars=["async_validated"], inputs={})
+    assert result["async_validated"] == 20  # input_value=10, *2=20
+
+
+@pytest.mark.asyncio
+async def test_async_driver_with_sync_validator():
+    """End-to-end: sync validator on async function with AsyncDriver should still work."""
+    dr = async_driver.AsyncDriver({}, async_dq_module, result_builder=base.DictResult())
+    result = await dr.raw_execute(final_vars=["sync_validated"], inputs={})
+    assert result["sync_validated"] == 12  # input_value=10, +2=12
+
+
+@pytest.mark.asyncio
+async def test_async_driver_with_mixed_validators():
+    """End-to-end: mixed sync+async validators on the same node with AsyncDriver."""
+    dr = async_driver.AsyncDriver({}, async_dq_module, result_builder=base.DictResult())
+    result = await dr.raw_execute(final_vars=["mixed_validated"], inputs={})
+    assert result["mixed_validated"] == 20  # input_value=10, +10=20

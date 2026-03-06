@@ -18,6 +18,7 @@
 import abc
 import dataclasses
 import enum
+import inspect
 import logging
 from typing import Any
 
@@ -83,6 +84,29 @@ class DataValidator(abc.ABC):
         :return: The result of validation
         """
         pass
+
+
+class AsyncDataValidator(DataValidator, abc.ABC):
+    """Base class for an async data quality operator. Use this when validation requires async operations
+    (e.g. async database queries, async API calls). Must be used with AsyncDriver."""
+
+    @abc.abstractmethod
+    async def validate(self, dataset: Any) -> ValidationResult:
+        """Asynchronously performs the validation.
+
+        :param dataset: dataset to validate
+        :return: The result of validation
+        """
+        pass
+
+
+def is_async_validator(validator: DataValidator) -> bool:
+    """Checks whether a validator's validate method is a coroutine function.
+
+    :param validator: The validator to check
+    :return: True if the validator's validate method is async
+    """
+    return inspect.iscoroutinefunction(validator.validate)
 
 
 def act_warn(node_name: str, validation_result: ValidationResult, validator: DataValidator):
@@ -161,3 +185,14 @@ class BaseDefaultValidator(DataValidator, abc.ABC):
     @classmethod
     def name(cls) -> str:
         return f"{cls.arg()}_validator"
+
+
+class AsyncBaseDefaultValidator(BaseDefaultValidator, abc.ABC):
+    """Base class for an async default validator.
+    Async variant of BaseDefaultValidator for validators that require async operations.
+    Must be used with AsyncDriver.
+    """
+
+    @abc.abstractmethod
+    async def validate(self, data: Any) -> ValidationResult:
+        pass
