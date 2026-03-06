@@ -21,6 +21,7 @@
 #   $ cd /PATH/TO/REPO
 #   $ prek install
 exclude: '^docs/code-comparisons/'  # skip the code comparisons directory
+default_stages: [pre-commit, pre-merge-commit]
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.

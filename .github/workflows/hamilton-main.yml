@@ -14,6 +14,28 @@ on:
         - 'pyproject.toml'
 
 jobs:
+  static-checks:
+    name: "Static Checks"
+    runs-on: ubuntu-latest
+    env:
+      UV_PRERELEASE: "allow"
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Install uv and set the python version
+          uses: astral-sh/setup-uv@v6
+          with:
+            python-version: '3.10'
+            enable-cache: true
+            cache-dependency-glob: "uv.lock"
+            activate-environment: true
+
+        - name: Check linting with prek
+          run: |
+            uv sync --dev
+            uv run prek run --all-files --hook-stage pre-merge-commit
+
   test:
     name: "Unit Tests"
     runs-on: ${{ matrix.os }}
@@ -58,14 +80,6 @@ jobs:
             enable-cache: true
             cache-dependency-glob: "uv.lock"
             activate-environment: true
-
-        # It's enough to do it on single OS
-        - name: Check linting with prek
-          if: ${{ runner.os == 'Linux' }}
-          run: |
-            uv sync --dev
-            uv run prek install
-            uv run prek run --all-files
 
         - name: Test hamilton main package
           run: |
