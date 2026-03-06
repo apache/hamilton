@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: "doc-pages"
+  group: "doc-pages-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
@@ -76,7 +76,10 @@ jobs:
         retention-days: 5
 
     - name: Deploy documentation
+      if: github.event_name != 'pull_request'
       working-directory: ./docs
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
         # Set target branch based on current branch
         if [ "${{ github.ref }}" = "refs/heads/main" ]; then
@@ -145,7 +148,7 @@ jobs:
         # Check if there are changes to commit (including untracked files)
         if [ -n "$(git status --porcelain)" ]; then
           git commit -m "Deploy documentation from ${{ github.sha }}"
-          git push https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git $TARGET_BRANCH
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git $TARGET_BRANCH
           echo "Changes pushed to $TARGET_BRANCH branch"
         else
           echo "No changes to deploy"
