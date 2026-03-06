@@ -179,7 +179,7 @@
     "@types/ws": "^8.5.4",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.53.0",
-    "@vscode/test-electron": "^2.2.3",
+    "@vscode/test-electron": "^2.5.2",
     "chai": "4.3.7",
     "cytoscape": "^3.24.0",
     "cytoscape-dagre": "^2.5.0",
