@@ -75,6 +75,7 @@ extensions = [
     "myst_nb",
     "sphinx_llms_txt",
     "sphinx_sitemap",
+    "sphinxcontrib.mermaid",
     "docs.data_adapters_extension",
 ]
 

@@ -171,6 +171,7 @@ docs = [
   "sphinx-rtd-theme",
   "sphinx-simplepdf",
   "sphinx-sitemap",
+  "sphinxcontrib-mermaid",
   "tqdm",
   "xgboost",
 ]
