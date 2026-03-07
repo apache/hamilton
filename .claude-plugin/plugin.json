@@ -30,6 +30,7 @@
     "./skills/scale",
     "./skills/llm",
     "./skills/observability",
-    "./skills/integrations"
+    "./skills/integrations",
+    "./skills/mcp"
   ]
 }
