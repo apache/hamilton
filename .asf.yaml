@@ -40,6 +40,9 @@ github:
     # Enable github discussions
     discussions: true
 
+  pull_requests:
+    allow_update_branch: true
+
   enabled_merge_buttons:
     squash:  true
     merge:   false
