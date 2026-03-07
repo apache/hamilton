@@ -1094,15 +1094,15 @@ class FunctionGraph:
         def dfs_traverse_iterative(start_node: node.Node):
             """Iterative DFS to avoid recursion depth limits with large DAGs."""
             stack = [start_node]
+            nodes.add(start_node)
             while stack:
                 n = stack.pop()
-                if n in nodes:
-                    continue
-                nodes.add(n)
                 if n.user_defined:
                     user_nodes.add(n)
-                for next_n in next_nodes_fn(n):
+                # reversed() preserves the same traversal order as the recursive version
+                for next_n in reversed(next_nodes_fn(n)):
                     if next_n not in nodes:
+                        nodes.add(next_n)
                         stack.append(next_n)
 
         missing_vars = []

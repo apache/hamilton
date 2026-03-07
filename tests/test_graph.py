@@ -27,6 +27,7 @@ import pytest
 import hamilton.graph_utils
 import hamilton.htypes
 from hamilton import ad_hoc_utils, base, graph, node
+from hamilton import function_modifiers as fm
 from hamilton.execution import graph_functions
 from hamilton.function_modifiers import schema
 from hamilton.lifecycle import base as lifecycle_base
@@ -537,6 +538,118 @@ def test_get_downstream_nodes():
     fg = graph.FunctionGraph.from_modules(tests.resources.dummy_functions, config={})
     actual_nodes = fg.get_downstream_nodes(var_changes)
     assert actual_nodes == expected_nodes
+
+
+def test_get_upstream_nodes_large_chain_no_recursion_error():
+    """Regression test: get_upstream_nodes with only final_node on a large chain DAG.
+
+    A recursive DFS would exceed Python's recursion limit (~1000) when traversing
+    a long dependency chain from a single final node. This test verifies that
+    the iterative DFS in directional_dfs_traverse handles large DAGs correctly.
+
+    Chain size is chosen to exceed recursion limit: 1200 nodes > 1000.
+    """
+
+    def step(prev: float) -> float:
+        """Single step in a linear chain."""
+        return prev + 1.0
+
+    # Build a linear chain: node_0 -> node_1 -> ... -> node_N
+    chain_size = sys.getrecursionlimit() + 200  # Exceeds recursion limit
+    config = {}
+    for i in range(chain_size):
+        prev = f"node_{i - 1}" if i > 0 else 0.0
+        config[f"node_{i}"] = {
+            "prev": fm.source(prev) if i > 0 else fm.value(0.0),
+        }
+    decorated = fm.parameterize(**config)(step)
+    module = ad_hoc_utils.create_temporary_module(decorated, module_name="large_chain")
+
+    fg = graph.FunctionGraph.from_modules(module, config={})
+    final_node = f"node_{chain_size - 1}"
+
+    # This would raise RecursionError with recursive DFS
+    nodes, user_nodes = fg.get_upstream_nodes([final_node])
+
+    assert len(nodes) == chain_size
+    assert len(user_nodes) == 0
+    assert all(fg.nodes[f"node_{i}"] in nodes for i in range(chain_size))
+
+
+def test_get_upstream_nodes_diamond_dag():
+    """Tests that diamond-shaped DAGs don't produce duplicate visits.
+
+    DAG shape:
+        x, y (inputs)
+          |
+        left   right    (both depend on x and y)
+           \\   /
+           bottom        (depends on left and right)
+
+    The shared inputs x and y are reachable via both left and right.
+    With a naive iterative DFS (mark-on-pop), x and y could be pushed
+    onto the stack multiple times. This verifies they appear exactly once.
+    """
+
+    def left(x: int, y: int) -> int:
+        return x + y
+
+    def right(x: int, y: int) -> int:
+        return x * y
+
+    def bottom(left: int, right: int) -> int:
+        return left + right
+
+    module = ad_hoc_utils.create_temporary_module(left, right, bottom)
+    fg = graph.FunctionGraph.from_modules(module, config={})
+    nodes, user_nodes = fg.get_upstream_nodes(["bottom"])
+
+    assert len(nodes) == 5  # x, y, left, right, bottom
+    assert {n.name for n in nodes} == {"x", "y", "left", "right", "bottom"}
+    # x and y are external inputs
+    assert {n.name for n in user_nodes} == {"x", "y"}
+
+
+def test_get_upstream_nodes_single_node():
+    """Tests traversal of a single node with no dependencies."""
+
+    def solo() -> int:
+        return 42
+
+    module = ad_hoc_utils.create_temporary_module(solo)
+    fg = graph.FunctionGraph.from_modules(module, config={})
+    nodes, user_nodes = fg.get_upstream_nodes(["solo"])
+
+    assert len(nodes) == 1
+    assert {n.name for n in nodes} == {"solo"}
+    assert len(user_nodes) == 0
+
+
+def test_get_upstream_nodes_overlapping_starting_nodes():
+    """Tests that overlapping subgraphs from multiple starting nodes are handled correctly.
+
+    DAG shape:
+        shared (input)
+          / \\
+        a     b    (both depend on shared)
+
+    Requesting both a and b as starting nodes means 'shared' is reachable
+    from both traversals. It should still appear exactly once in the result.
+    """
+
+    def a(shared: int) -> int:
+        return shared + 1
+
+    def b(shared: int) -> int:
+        return shared + 2
+
+    module = ad_hoc_utils.create_temporary_module(a, b)
+    fg = graph.FunctionGraph.from_modules(module, config={})
+    nodes, user_nodes = fg.get_upstream_nodes(["a", "b"])
+
+    assert len(nodes) == 3  # shared, a, b
+    assert {n.name for n in nodes} == {"shared", "a", "b"}
+    assert {n.name for n in user_nodes} == {"shared"}
 
 
 def test_function_graph_from_multiple_sources():
@@ -1479,41 +1592,3 @@ def test_display_name_list_value_uses_first_element():
     assert "First Name" in dot_string
     # The function name should NOT appear since display_name is set
     assert "<b>node_with_list_display_name</b>" not in dot_string
-
-
-def test_get_upstream_nodes_large_chain_no_recursion_error():
-    """Regression test: get_upstream_nodes with only final_node on a large chain DAG.
-
-    A recursive DFS would exceed Python's recursion limit (~1000) when traversing
-    a long dependency chain from a single final node. This test verifies that
-    the iterative DFS in directional_dfs_traverse handles large DAGs correctly.
-
-    Chain size is chosen to exceed recursion limit: 1200 nodes > 1000.
-    """
-    from hamilton import ad_hoc_utils
-    from hamilton import function_modifiers as fm
-
-    def step(prev: float) -> float:
-        """Single step in a linear chain."""
-        return prev + 1.0
-
-    # Build a linear chain: node_0 -> node_1 -> ... -> node_N
-    chain_size = sys.getrecursionlimit() + 200  # Exceeds recursion limit
-    config = {}
-    for i in range(chain_size):
-        prev = f"node_{i - 1}" if i > 0 else 0.0
-        config[f"node_{i}"] = {
-            "prev": fm.source(prev) if i > 0 else fm.value(0.0),
-        }
-    decorated = fm.parameterize(**config)(step)
-    module = ad_hoc_utils.create_temporary_module(decorated, module_name="large_chain")
-
-    fg = graph.FunctionGraph.from_modules(module, config={})
-    final_node = f"node_{chain_size - 1}"
-
-    # This would raise RecursionError with recursive DFS
-    nodes, user_nodes = fg.get_upstream_nodes([final_node])
-
-    assert len(nodes) == chain_size
-    assert len(user_nodes) == 0
-    assert all(fg.nodes[f"node_{i}"] in nodes for i in range(chain_size))
