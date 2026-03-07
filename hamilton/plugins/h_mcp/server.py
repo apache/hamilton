@@ -30,13 +30,16 @@ from hamilton.plugins.h_mcp._helpers import (
     format_exception_chain,
     serialize_results,
 )
+from hamilton.plugins.h_mcp._templates import get_available_templates, get_capabilities
 
 mcp = FastMCP(
     name="Hamilton",
     instructions=(
         "Hamilton is a Python micro-framework where functions define DAG nodes. "
+        "Ask the user which data libraries they use (e.g., pandas, numpy, polars) "
+        "then call hamilton_capabilities with their preferred_libraries. "
         "Use hamilton_validate_dag to check code before execution. "
-        "Workflow: scaffold -> validate -> visualize -> correct -> execute."
+        "Workflow: ask user -> capabilities -> scaffold -> validate -> visualize -> correct -> execute."
     ),
 )
 
@@ -291,276 +294,35 @@ def hamilton_get_docs(topic: str) -> str:
 
 
 @mcp.tool()
-def hamilton_scaffold(pattern: str) -> str:
+def hamilton_capabilities(preferred_libraries: list[str] | None = None) -> dict:
+    """Report which optional libraries are installed and which features are available.
+
+    Call this first to discover the environment before generating code.
+    If the user specifies which libraries they use, pass them as
+    ``preferred_libraries`` (e.g., ``["pandas", "numpy"]``) to filter
+    scaffold patterns accordingly.
+    """
+    prefs = set(preferred_libraries) if preferred_libraries is not None else None
+    return get_capabilities(prefs)
+
+
+@mcp.tool()
+def hamilton_scaffold(
+    pattern: str,
+    preferred_libraries: list[str] | None = None,
+) -> str:
     """Generate a starter Hamilton module for a given pattern.
 
-    Supported patterns: ``basic``, ``parameterized``, ``config_based``,
-    ``data_pipeline``, ``ml_pipeline``, ``data_quality``.
-
-    Returns Python source code that is a valid Hamilton module, plus a
-    driver script example.
+    Available patterns depend on installed or preferred libraries.
+    Pass ``preferred_libraries`` to filter to patterns matching the
+    user's environment (e.g., ``["pandas"]``).
     """
-    templates = {
-        "basic": textwrap.dedent('''\
-            """Basic Hamilton module example."""
-            import pandas as pd
-
-
-            def raw_data(raw_data_input: pd.DataFrame) -> pd.DataFrame:
-                """Pass-through for raw input data."""
-                return raw_data_input
-
-
-            def cleaned(raw_data: pd.DataFrame) -> pd.DataFrame:
-                """Drop rows with missing values."""
-                return raw_data.dropna()
-
-
-            def row_count(cleaned: pd.DataFrame) -> int:
-                """Count rows after cleaning."""
-                return len(cleaned)
-
-
-            # --- Driver script ---
-            # from hamilton import driver
-            # import my_module
-            #
-            # dr = driver.Builder().with_modules(my_module).build()
-            # result = dr.execute(
-            #     ["row_count", "cleaned"],
-            #     inputs={"raw_data_input": pd.DataFrame({"a": [1, 2, None], "b": [4, None, 6]})},
-            # )
-            # print(result)
-        '''),
-        "parameterized": textwrap.dedent('''\
-            """Hamilton module using @parameterize to create multiple nodes."""
-            import pandas as pd
-
-            from hamilton.function_modifiers import parameterize, value
-
-
-            @parameterize(
-                weekly_mean={"window": value(7)},
-                monthly_mean={"window": value(30)},
-            )
-            def rolling_mean(time_series: pd.Series, window: int) -> pd.Series:
-                """Compute a rolling mean with a given window size."""
-                return time_series.rolling(window).mean()
-
-
-            def time_series(time_series_input: pd.Series) -> pd.Series:
-                """Pass-through for time series input."""
-                return time_series_input
-
-
-            # --- Driver script ---
-            # from hamilton import driver
-            # import my_module
-            #
-            # dr = driver.Builder().with_modules(my_module).build()
-            # result = dr.execute(
-            #     ["weekly_mean", "monthly_mean"],
-            #     inputs={"time_series_input": pd.Series(range(60))},
-            # )
-        '''),
-        "config_based": textwrap.dedent('''\
-            """Hamilton module using @config.when for conditional logic."""
-            import pandas as pd
-
-            from hamilton.function_modifiers import config
-
-
-            @config.when(env="production")
-            def data_source__prod(db_connection_string: str) -> pd.DataFrame:
-                """Load data from production database."""
-                # In real code: pd.read_sql("SELECT * FROM table", db_connection_string)
-                return pd.DataFrame({"value": [1, 2, 3]})
-
-
-            @config.when(env="development")
-            def data_source__dev() -> pd.DataFrame:
-                """Return sample data for development."""
-                return pd.DataFrame({"value": [10, 20, 30]})
-
-
-            def processed(data_source: pd.DataFrame) -> pd.DataFrame:
-                """Process the data source."""
-                return data_source.assign(doubled=data_source["value"] * 2)
-
-
-            # --- Driver script ---
-            # from hamilton import driver
-            # import my_module
-            #
-            # dr = (
-            #     driver.Builder()
-            #     .with_modules(my_module)
-            #     .with_config({"env": "development"})
-            #     .build()
-            # )
-            # result = dr.execute(["processed"])
-        '''),
-        "data_pipeline": textwrap.dedent('''\
-            """Hamilton data pipeline: ingest -> clean -> transform -> aggregate."""
-            import pandas as pd
-
-
-            def raw_data(raw_data_input: pd.DataFrame) -> pd.DataFrame:
-                """Ingest raw data."""
-                return raw_data_input
-
-
-            def cleaned_data(raw_data: pd.DataFrame) -> pd.DataFrame:
-                """Remove nulls and duplicates."""
-                return raw_data.dropna().drop_duplicates()
-
-
-            def spend(cleaned_data: pd.DataFrame) -> pd.Series:
-                """Extract the spend column."""
-                return cleaned_data["spend"].abs()
-
-
-            def avg_spend(spend: pd.Series) -> float:
-                """Average spend across all records."""
-                return spend.mean()
-
-
-            def total_spend(spend: pd.Series) -> float:
-                """Total spend across all records."""
-                return spend.sum()
-
-
-            # --- Driver script ---
-            # from hamilton import driver
-            # import my_module
-            #
-            # dr = driver.Builder().with_modules(my_module).build()
-            # result = dr.execute(
-            #     ["avg_spend", "total_spend"],
-            #     inputs={"raw_data_input": pd.DataFrame({"spend": [-10, 20, -30]})},
-            # )
-        '''),
-        "ml_pipeline": textwrap.dedent('''\
-            """Hamilton ML pipeline: features -> train/test split -> model -> metrics."""
-            import pandas as pd
-            import numpy as np
-
-
-            def feature_matrix(feature_matrix_input: pd.DataFrame) -> pd.DataFrame:
-                """Input feature matrix."""
-                return feature_matrix_input
-
-
-            def target(target_input: pd.Series) -> pd.Series:
-                """Input target variable."""
-                return target_input
-
-
-            def train_fraction() -> float:
-                """Fraction of data for training."""
-                return 0.8
-
-
-            def train_indices(
-                feature_matrix: pd.DataFrame, train_fraction: float
-            ) -> np.ndarray:
-                """Random train indices."""
-                n = len(feature_matrix)
-                idx = np.arange(n)
-                np.random.shuffle(idx)
-                return idx[: int(n * train_fraction)]
-
-
-            def test_indices(
-                feature_matrix: pd.DataFrame, train_indices: np.ndarray
-            ) -> np.ndarray:
-                """Test indices (complement of train)."""
-                all_idx = set(range(len(feature_matrix)))
-                return np.array(sorted(all_idx - set(train_indices)))
-
-
-            def train_X(feature_matrix: pd.DataFrame, train_indices: np.ndarray) -> pd.DataFrame:
-                """Training features."""
-                return feature_matrix.iloc[train_indices]
-
-
-            def test_X(feature_matrix: pd.DataFrame, test_indices: np.ndarray) -> pd.DataFrame:
-                """Test features."""
-                return feature_matrix.iloc[test_indices]
-
-
-            def train_y(target: pd.Series, train_indices: np.ndarray) -> pd.Series:
-                """Training target."""
-                return target.iloc[train_indices]
-
-
-            def test_y(target: pd.Series, test_indices: np.ndarray) -> pd.Series:
-                """Test target."""
-                return target.iloc[test_indices]
-
-
-            # --- Driver script ---
-            # from hamilton import driver
-            # import my_module
-            #
-            # dr = driver.Builder().with_modules(my_module).build()
-            # result = dr.execute(
-            #     ["train_X", "test_X", "train_y", "test_y"],
-            #     inputs={
-            #         "feature_matrix_input": pd.DataFrame({"a": range(100), "b": range(100)}),
-            #         "target_input": pd.Series(range(100)),
-            #     },
-            # )
-        '''),
-        "data_quality": textwrap.dedent('''\
-            """Hamilton module with data quality checks using @check_output."""
-            import pandas as pd
-            import numpy as np
-
-            from hamilton.function_modifiers import check_output
-
-
-            @check_output(
-                data_type=np.float64,
-                range=(0, None),
-            )
-            def spend(spend_raw: pd.Series) -> pd.Series:
-                """Clean spend: ensure non-negative floats."""
-                return spend_raw.abs().astype(float)
-
-
-            @check_output(
-                data_type=np.float64,
-            )
-            def revenue(revenue_raw: pd.Series) -> pd.Series:
-                """Clean revenue data."""
-                return revenue_raw.astype(float)
-
-
-            def profit(revenue: pd.Series, spend: pd.Series) -> pd.Series:
-                """Profit = revenue - spend."""
-                return revenue - spend
-
-
-            # --- Driver script ---
-            # from hamilton import driver
-            # import my_module
-            #
-            # dr = driver.Builder().with_modules(my_module).build()
-            # result = dr.execute(
-            #     ["profit"],
-            #     inputs={
-            #         "spend_raw": pd.Series([10, 20, 30]),
-            #         "revenue_raw": pd.Series([100, 200, 300]),
-            #     },
-            # )
-        '''),
-    }
-
+    prefs = set(preferred_libraries) if preferred_libraries is not None else None
+    templates = get_available_templates(prefs)
     pattern = pattern.strip().lower()
     template = templates.get(pattern)
     if template is None:
         available = ", ".join(sorted(templates.keys()))
         return f"Unknown pattern '{pattern}'. Available patterns: {available}"
 
-    return template
+    return template.code

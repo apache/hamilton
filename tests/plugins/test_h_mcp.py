@@ -37,6 +37,12 @@ from hamilton.plugins.h_mcp._helpers import (
     format_validation_errors,
     serialize_results,
 )
+from hamilton.plugins.h_mcp._templates import (
+    HAS_NUMPY,
+    HAS_PANDAS,
+    get_available_templates,
+    get_capabilities,
+)
 
 # In FastMCP v3, @mcp.tool() returns the original function unchanged,
 # so we can call the tool functions directly.
@@ -44,17 +50,16 @@ hamilton_validate_dag = mcp_server.hamilton_validate_dag
 hamilton_list_nodes = mcp_server.hamilton_list_nodes
 hamilton_get_docs = mcp_server.hamilton_get_docs
 hamilton_scaffold = mcp_server.hamilton_scaffold
+hamilton_capabilities = mcp_server.hamilton_capabilities
 
 VALID_CODE = textwrap.dedent("""\
-    import pandas as pd
-
-    def spend(spend_raw: pd.Series) -> pd.Series:
+    def spend(spend_raw: float) -> float:
         \"\"\"Clean spend data.\"\"\"
-        return spend_raw.abs()
+        return abs(spend_raw)
 
-    def avg_spend(spend: pd.Series) -> pd.Series:
-        \"\"\"Rolling average.\"\"\"
-        return spend.rolling(3).mean()
+    def avg_spend(spend: float) -> float:
+        \"\"\"Compute average.\"\"\"
+        return spend / 2
 """)
 
 INVALID_CODE_SYNTAX = "def foo( -> int: return 1"
@@ -65,6 +70,18 @@ SIMPLE_CODE = textwrap.dedent("""\
 
     def b(a: int) -> int:
         return a * 2
+""")
+
+PANDAS_CODE = textwrap.dedent("""\
+    import pandas as pd
+
+    def spend(spend_raw: pd.Series) -> pd.Series:
+        \"\"\"Clean spend data.\"\"\"
+        return spend_raw.abs()
+
+    def avg_spend(spend: pd.Series) -> pd.Series:
+        \"\"\"Rolling average.\"\"\"
+        return spend.rolling(3).mean()
 """)
 
 
@@ -91,6 +108,13 @@ class TestValidateDag:
         assert "a" in result["nodes"]
         assert "b" in result["nodes"]
         assert "a_input" in result["inputs"]
+
+    @pytest.mark.skipif(not HAS_PANDAS, reason="pandas not installed")
+    def test_valid_pandas_code(self):
+        result = hamilton_validate_dag(PANDAS_CODE)
+        assert result["valid"] is True
+        assert "spend" in result["nodes"]
+        assert "avg_spend" in result["nodes"]
 
 
 class TestListNodes:
@@ -141,36 +165,152 @@ class TestGetDocs:
         assert "Unknown topic" in result
 
 
+class TestCapabilities:
+    def test_returns_libraries(self):
+        result = hamilton_capabilities()
+        assert "libraries" in result
+        libs = result["libraries"]
+        assert isinstance(libs, dict)
+        for key, val in libs.items():
+            assert isinstance(key, str)
+            assert isinstance(val, bool)
+
+    def test_returns_available_scaffolds(self):
+        result = hamilton_capabilities()
+        assert "available_scaffolds" in result
+        scaffolds = result["available_scaffolds"]
+        assert isinstance(scaffolds, list)
+        assert "basic_pure_python" in scaffolds
+
+    def test_libraries_match_detection(self):
+        result = hamilton_capabilities()
+        assert result["libraries"]["pandas"] == HAS_PANDAS
+        assert result["libraries"]["numpy"] == HAS_NUMPY
+
+
+class TestTemplateAvailability:
+    def test_pure_python_always_available(self):
+        templates = get_available_templates()
+        assert "basic_pure_python" in templates
+
+    @pytest.mark.skipif(not HAS_PANDAS, reason="pandas not installed")
+    def test_pandas_templates_when_installed(self):
+        templates = get_available_templates()
+        assert "basic" in templates
+        assert "data_pipeline" in templates
+        assert "parameterized" in templates
+        assert "config_based" in templates
+
+    @pytest.mark.skipif(not (HAS_PANDAS and HAS_NUMPY), reason="pandas and numpy not installed")
+    def test_numpy_pandas_templates_when_installed(self):
+        templates = get_available_templates()
+        assert "ml_pipeline" in templates
+        assert "data_quality" in templates
+
+    def test_monkeypatch_has_pandas_false(self, monkeypatch):
+        from hamilton.plugins.h_mcp import _templates
+
+        monkeypatch.setitem(_templates.AVAILABLE_LIBS, "pandas", False)
+        templates = get_available_templates()
+        for name, t in templates.items():
+            assert "pandas" not in t.requires, (
+                f"Template '{name}' requires pandas but shouldn't be available"
+            )
+
+    def test_monkeypatch_capabilities_reflects_change(self, monkeypatch):
+        from hamilton.plugins.h_mcp import _templates
+
+        monkeypatch.setitem(_templates.AVAILABLE_LIBS, "pandas", False)
+        caps = get_capabilities()
+        assert caps["libraries"]["pandas"] is False
+        assert "basic" not in caps["available_scaffolds"]
+        assert "basic_pure_python" in caps["available_scaffolds"]
+
+
+class TestPreferredLibraries:
+    def test_capabilities_with_preferred_libraries(self):
+        result = hamilton_capabilities(preferred_libraries=["pandas"])
+        scaffolds = result["available_scaffolds"]
+        assert "basic_pure_python" in scaffolds
+        assert "basic" in scaffolds
+        assert "data_pipeline" in scaffolds
+        # ml_pipeline requires pandas AND numpy, so should NOT appear
+        assert "ml_pipeline" not in scaffolds
+
+    def test_capabilities_preferred_empty_list(self):
+        result = hamilton_capabilities(preferred_libraries=[])
+        scaffolds = result["available_scaffolds"]
+        assert scaffolds == ["basic_pure_python"]
+
+    def test_capabilities_no_preference_uses_detection(self):
+        """Passing None falls back to auto-detection (backward compatible)."""
+        result_none = hamilton_capabilities(preferred_libraries=None)
+        result_default = hamilton_capabilities()
+        assert result_none["available_scaffolds"] == result_default["available_scaffolds"]
+
+    def test_scaffold_with_preferred_libraries(self):
+        code = hamilton_scaffold("basic", preferred_libraries=["pandas"])
+        assert "def raw_data" in code
+
+    def test_scaffold_preference_filters_correctly(self):
+        """ml_pipeline requires pandas+numpy; passing only pandas should reject it."""
+        result = hamilton_scaffold("ml_pipeline", preferred_libraries=["pandas"])
+        assert "Unknown pattern" in result
+
+    def test_get_available_templates_with_preferences(self):
+        templates = get_available_templates(preferred_libraries={"pandas", "numpy"})
+        assert "basic_pure_python" in templates
+        assert "basic" in templates
+        assert "ml_pipeline" in templates
+        assert "data_quality" in templates
+
+    def test_get_available_templates_empty_preferences(self):
+        templates = get_available_templates(preferred_libraries=set())
+        assert list(templates.keys()) == ["basic_pure_python"]
+
+
 class TestScaffold:
+    def test_pure_python_pattern(self):
+        code = hamilton_scaffold("basic_pure_python")
+        assert "def raw_value" in code
+        assert "def doubled" in code
+        result = hamilton_validate_dag(code)
+        assert result["valid"] is True
+
+    @pytest.mark.skipif(not HAS_PANDAS, reason="pandas not installed")
     def test_basic_pattern(self):
         code = hamilton_scaffold("basic")
         assert "def raw_data" in code
         assert "def cleaned" in code
-        # Validate the scaffold code compiles as a valid DAG
         result = hamilton_validate_dag(code)
         assert result["valid"] is True
 
+    @pytest.mark.skipif(not HAS_PANDAS, reason="pandas not installed")
     def test_parameterized_pattern(self):
         code = hamilton_scaffold("parameterized")
         assert "parameterize" in code
         assert "rolling_mean" in code
 
+    @pytest.mark.skipif(not HAS_PANDAS, reason="pandas not installed")
     def test_config_based_pattern(self):
         code = hamilton_scaffold("config_based")
         assert "config.when" in code
 
+    @pytest.mark.skipif(not HAS_PANDAS, reason="pandas not installed")
     def test_data_pipeline_pattern(self):
         code = hamilton_scaffold("data_pipeline")
         assert "def raw_data" in code
         result = hamilton_validate_dag(code)
         assert result["valid"] is True
 
+    @pytest.mark.skipif(not (HAS_PANDAS and HAS_NUMPY), reason="pandas and numpy not installed")
     def test_ml_pipeline_pattern(self):
         code = hamilton_scaffold("ml_pipeline")
         assert "feature_matrix" in code
         result = hamilton_validate_dag(code)
         assert result["valid"] is True
 
+    @pytest.mark.skipif(not (HAS_PANDAS and HAS_NUMPY), reason="pandas and numpy not installed")
     def test_data_quality_pattern(self):
         code = hamilton_scaffold("data_quality")
         assert "check_output" in code
@@ -179,12 +319,12 @@ class TestScaffold:
         result = hamilton_scaffold("nonexistent")
         assert "Unknown pattern" in result
 
-    def test_all_patterns_valid(self):
-        """Every scaffold pattern should produce code that validates."""
-        for pattern in ["basic", "data_pipeline", "ml_pipeline"]:
-            code = hamilton_scaffold(pattern)
+    def test_all_available_patterns_valid(self):
+        """Every available scaffold pattern should produce code that validates."""
+        for name in get_available_templates():
+            code = hamilton_scaffold(name)
             result = hamilton_validate_dag(code)
-            assert result["valid"] is True, f"Pattern '{pattern}' did not validate: {result}"
+            assert result["valid"] is True, f"Pattern '{name}' did not validate: {result}"
 
 
 class TestHelpers:
@@ -215,6 +355,7 @@ class TestHelpers:
         assert serialized["count"] == "42"
         assert serialized["name"] == "test"
 
+    @pytest.mark.skipif(not HAS_PANDAS, reason="pandas not installed")
     def test_serialize_results_pandas(self):
         import pandas as pd
 

@@ -114,5 +114,16 @@ def serialize_results(results: dict) -> dict[str, str]:
                 continue
         except ImportError:
             pass
+        try:
+            import polars as pl
+
+            if isinstance(val, pl.DataFrame):
+                serialized[key] = val.to_dicts()
+                continue
+            if isinstance(val, pl.Series):
+                serialized[key] = val.to_list()
+                continue
+        except ImportError:
+            pass
         serialized[key] = str(val)
     return serialized
