@@ -522,6 +522,10 @@
 tell it to add the default validator to the list. The above thus creates two validators, one that checks the datatype
 of the series, and one that checks whether the data is in a certain range.</p>
 <p>Note that you can also specify custom decorators using the <code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> decorator.</p>
+<p>For async validation (e.g., async database or API calls), use <code class="docutils literal notranslate"><span class="pre">AsyncDataValidator</span></code> or <code class="docutils literal notranslate"><span class="pre">AsyncBaseDefaultValidator</span></code>
+from <code class="docutils literal notranslate"><span class="pre">hamilton.data_quality.base</span></code> as your base class instead of the sync variants. These define
+<code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">def</span> <span class="pre">validate()</span></code> and work with <code class="docutils literal notranslate"><span class="pre">AsyncDriver</span></code>. You can mix sync and async validators in a single
+<code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> call — each gets the appropriate wrapper type automatically.</p>
 <p>See <a class="reference external" href="https://github.com/apache/hamilton/blob/main/data_quality.md">data_quality</a> for more information on
 available validators and how to build custom ones.</p>
 <p>Note we also have a plugins that allow for validation with the pandera and pydantic libraries. There are two ways to access these:</p>
@@ -609,6 +613,121 @@ TODO – enable construction of custom validators using check_output.custom(*val
 <p>Note: you cannot stack <cite>&#64;check_output_custom</cite> decorators. If you want to use multiple custom validators,             you should pass them all in as arguments to a single <cite>&#64;check_output_custom</cite> decorator.</p>
 </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hamilton.data_quality.base.AsyncDataValidator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.data_quality.base.</span></span><span class="sig-name descname"><span class="pre">AsyncDataValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">importance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.data_quality.base.AsyncDataValidator" title="Link to this definition">¶</a></dt>
+<dd><p>Base class for an async data quality operator. Use this when validation requires async operations
+(e.g. async database queries, async API calls). Must be used with AsyncDriver.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hamilton.data_quality.base.AsyncDataValidator.applies_to">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">applies_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datatype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span><span class="p"><span class="pre">[</span></span><span class="pre">type</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.data_quality.base.AsyncDataValidator.applies_to" title="Link to this definition">¶</a></dt>
+<dd><p>Whether or not this data validator can apply to the specified dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>datatype</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if it can be run on the specified type, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hamilton.data_quality.base.AsyncDataValidator.description">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hamilton.data_quality.base.AsyncDataValidator.description" title="Link to this definition">¶</a></dt>
+<dd><p>Gives a description of this validator. E.G.
+<cite>Checks whether the entire dataset lies between 0 and 1.</cite>
+Note it should be able to access internal state (E.G. constructor arguments).
+:return: The description of the validator as a string</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hamilton.data_quality.base.AsyncDataValidator.name">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hamilton.data_quality.base.AsyncDataValidator.name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the name for this validator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hamilton.data_quality.base.AsyncDataValidator.validate">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ValidationResult</span></span></span><a class="headerlink" href="#hamilton.data_quality.base.AsyncDataValidator.validate" title="Link to this definition">¶</a></dt>
+<dd><p>Asynchronously performs the validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataset</strong> – dataset to validate</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of validation</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hamilton.data_quality.base.AsyncBaseDefaultValidator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.data_quality.base.</span></span><span class="sig-name descname"><span class="pre">AsyncBaseDefaultValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">importance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator" title="Link to this definition">¶</a></dt>
+<dd><p>Base class for an async default validator.
+Async variant of BaseDefaultValidator for validators that require async operations.
+Must be used with AsyncDriver.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hamilton.data_quality.base.AsyncBaseDefaultValidator.applies_to">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">applies_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datatype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span><span class="p"><span class="pre">[</span></span><span class="pre">type</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator.applies_to" title="Link to this definition">¶</a></dt>
+<dd><p>Whether or not this data validator can apply to the specified dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>datatype</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if it can be run on the specified type, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hamilton.data_quality.base.AsyncBaseDefaultValidator.arg">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">arg</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator.arg" title="Link to this definition">¶</a></dt>
+<dd><p>Yields a string that represents this validator’s argument.
+&#64;check_output() will be passed a series of kwargs, each one of which will correspond to
+one of these default validators. Note that we have the limitation of allowing just a single
+argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The argument that this needs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hamilton.data_quality.base.AsyncBaseDefaultValidator.description">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator.description" title="Link to this definition">¶</a></dt>
+<dd><p>Gives a description of this validator. E.G.
+<cite>Checks whether the entire dataset lies between 0 and 1.</cite>
+Note it should be able to access internal state (E.G. constructor arguments).
+:return: The description of the validator as a string</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hamilton.data_quality.base.AsyncBaseDefaultValidator.name">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator.name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the name for this validator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hamilton.data_quality.base.AsyncBaseDefaultValidator.validate">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ValidationResult</span></span></span><a class="headerlink" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator.validate" title="Link to this definition">¶</a></dt>
+<dd><p>Actually performs the validation. Note when you</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataset</strong> – dataset to validate</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of validation</p>
 </dd>
 </dl>
 </dd></dl>
@@ -831,6 +950,21 @@ following function will <em>fail</em> validation:</p>
 </li>
 <li><a class="reference internal" href="#hamilton.function_modifiers.check_output_custom"><code class="docutils literal notranslate"><span class="pre">check_output_custom</span></code></a><ul>
 <li><a class="reference internal" href="#hamilton.function_modifiers.check_output_custom.__init__"><code class="docutils literal notranslate"><span class="pre">check_output_custom.__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hamilton.data_quality.base.AsyncDataValidator"><code class="docutils literal notranslate"><span class="pre">AsyncDataValidator</span></code></a><ul>
+<li><a class="reference internal" href="#hamilton.data_quality.base.AsyncDataValidator.applies_to"><code class="docutils literal notranslate"><span class="pre">AsyncDataValidator.applies_to()</span></code></a></li>
+<li><a class="reference internal" href="#hamilton.data_quality.base.AsyncDataValidator.description"><code class="docutils literal notranslate"><span class="pre">AsyncDataValidator.description()</span></code></a></li>
+<li><a class="reference internal" href="#hamilton.data_quality.base.AsyncDataValidator.name"><code class="docutils literal notranslate"><span class="pre">AsyncDataValidator.name()</span></code></a></li>
+<li><a class="reference internal" href="#hamilton.data_quality.base.AsyncDataValidator.validate"><code class="docutils literal notranslate"><span class="pre">AsyncDataValidator.validate()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator"><code class="docutils literal notranslate"><span class="pre">AsyncBaseDefaultValidator</span></code></a><ul>
+<li><a class="reference internal" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator.applies_to"><code class="docutils literal notranslate"><span class="pre">AsyncBaseDefaultValidator.applies_to()</span></code></a></li>
+<li><a class="reference internal" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator.arg"><code class="docutils literal notranslate"><span class="pre">AsyncBaseDefaultValidator.arg()</span></code></a></li>
+<li><a class="reference internal" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator.description"><code class="docutils literal notranslate"><span class="pre">AsyncBaseDefaultValidator.description()</span></code></a></li>
+<li><a class="reference internal" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator.name"><code class="docutils literal notranslate"><span class="pre">AsyncBaseDefaultValidator.name()</span></code></a></li>
+<li><a class="reference internal" href="#hamilton.data_quality.base.AsyncBaseDefaultValidator.validate"><code class="docutils literal notranslate"><span class="pre">AsyncBaseDefaultValidator.validate()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#hamilton.plugins.h_pandera.check_output"><code class="docutils literal notranslate"><span class="pre">check_output</span></code></a><ul>
