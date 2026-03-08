@@ -226,3 +226,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+-------------------------------
+
+dev_tools/language_server/tests/conftest.py is based on Apache Software License, Version 2.0
+code but also contains some code that was originally under the MIT License.
+
+Original work Copyright 2017 Palantir Technologies, Inc.
+Original work licensed under the MIT License.
+All modifications Copyright (c) Open Law Library. All rights reserved.
