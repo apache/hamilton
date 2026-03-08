@@ -17,11 +17,6 @@
 
 import sys
 
-from hamilton import telemetry
-
-# disable telemetry for all tests!
-telemetry.disable_telemetry()
-
 # Skip tests that require packages not yet available on Python 3.14
 collect_ignore = []
 if sys.version_info >= (3, 14):

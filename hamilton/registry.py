@@ -53,8 +53,6 @@ ExtensionName = Literal[
 ]
 HAMILTON_EXTENSIONS: tuple[ExtensionName, ...] = get_args(ExtensionName)
 HAMILTON_AUTOLOAD_ENV = "HAMILTON_AUTOLOAD_EXTENSIONS"
-# NOTE the variable DEFAULT_CONFIG_LOCAITON is redundant with `hamilton.telemetry`
-# but this `registry` module must avoid circular imports
 DEFAULT_CONFIG_LOCATION = pathlib.Path("~/.hamilton.conf").expanduser()
 
 # This is a dictionary of extension name -> dict with dataframe and column types.

@@ -18,15 +18,12 @@
 import asyncio
 import inspect
 import logging
-import sys
-import time
 import typing
 import uuid
-from types import ModuleType
 from typing import Any
 
 import hamilton.lifecycle.base as lifecycle_base
-from hamilton import base, driver, graph, lifecycle, node, telemetry
+from hamilton import base, driver, graph, lifecycle, node
 from hamilton.execution.graph_functions import create_error_message
 from hamilton.io.materialization import ExtractorFactory, MaterializerFactory
 
@@ -375,9 +372,6 @@ class AsyncDriver(driver.Driver):
                 "display_graph=True is not supported for the async graph adapter. "
                 "Instead you should be using visualize_execution."
             )
-        start_time = time.time()
-        run_successful = True
-        error = None
         _final_vars = self._create_final_vars(final_vars)
         try:
             outputs = await self.raw_execute(_final_vars, overrides, display_graph, inputs=inputs)
@@ -386,67 +380,8 @@ class AsyncDriver(driver.Driver):
                 return self.adapter.call_lifecycle_method_sync("do_build_result", outputs=outputs)
             return outputs
         except Exception as e:
-            run_successful = False
             logger.error(driver.SLACK_ERROR_MESSAGE)
-            error = telemetry.sanitize_error(*sys.exc_info())
             raise e
-        finally:
-            duration = time.time() - start_time
-            # ensure we can capture telemetry in async friendly way.
-            if telemetry.is_telemetry_enabled():
-
-                async def make_coroutine():
-                    self.capture_execute_telemetry(
-                        error, final_vars, inputs, overrides, run_successful, duration
-                    )
-
-                try:
-                    # we don't have to await because we are running within the event loop.
-                    asyncio.create_task(make_coroutine())
-                except Exception as e:
-                    if logger.isEnabledFor(logging.DEBUG):
-                        logger.error(f"Encountered error submitting async telemetry:\n{e}")
-
-    def capture_constructor_telemetry(
-        self,
-        error: str | None,
-        modules: tuple[ModuleType],
-        config: dict[str, Any],
-        adapter: base.HamiltonGraphAdapter,
-    ):
-        """Ensures we capture constructor telemetry the right way in an async context.
-
-        This is a simpler wrapper around what's in the driver class.
-
-        :param error: sanitized error string, if any.
-        :param modules: tuple of modules to build DAG from.
-        :param config: config to create the driver.
-        :param adapter: adapter class object.
-        """
-        if telemetry.is_telemetry_enabled():
-            try:
-                # check whether the event loop has been started yet or not
-                loop = asyncio.get_event_loop()
-                if loop.is_running():
-                    loop.run_in_executor(
-                        None,
-                        super(AsyncDriver, self).capture_constructor_telemetry,
-                        error,
-                        modules,
-                        config,
-                        adapter,
-                    )
-                else:
-
-                    async def make_coroutine():
-                        super(AsyncDriver, self).capture_constructor_telemetry(
-                            error, modules, config, adapter
-                        )
-
-                    loop.run_until_complete(make_coroutine())
-            except Exception as e:
-                if logger.isEnabledFor(logging.DEBUG):
-                    logger.error(f"Encountered error submitting async telemetry:\n{e}")
 
 
 class Builder(driver.Builder):

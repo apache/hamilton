@@ -19,7 +19,6 @@ import argparse
 import os
 from pathlib import Path
 
-from hamilton import telemetry
 from hamilton.plugins.h_experiments.cache import JsonCache
 
 
@@ -32,8 +31,6 @@ def main():
         raise ModuleNotFoundError(
             "Some dependencies are missing. Make sure to `pip install sf-hamilton[experiments]`"
         ) from e
-    if telemetry.is_telemetry_enabled():
-        telemetry.create_and_send_expt_server_event("startup")
     parser = argparse.ArgumentParser(prog="hamilton-experiments")
     parser.description = "Hamilton Experiment Server launcher"
 
@@ -59,8 +56,6 @@ def main():
     os.environ["HAMILTON_EXPERIMENTS_PATH"] = str(Path(args.path).resolve())
 
     uvicorn.run("hamilton.plugins.h_experiments.server:app", host=args.host, port=args.port)
-    if telemetry.is_telemetry_enabled():
-        telemetry.create_and_send_expt_server_event("shutdown")
 
 
 if __name__ == "__main__":

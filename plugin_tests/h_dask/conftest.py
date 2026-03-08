@@ -15,11 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from hamilton import telemetry
-
-# disable telemetry for all tests!
-telemetry.disable_telemetry()
-
 # dask_expr got made default, except for python 3.9 and below
 import sys
 

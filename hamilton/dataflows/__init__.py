@@ -22,7 +22,6 @@ dataflows.
 TODO: expect this to have a CLI interface in the future.
 """
 
-import functools
 import importlib
 import json
 import logging
@@ -36,7 +35,7 @@ from collections.abc import Callable
 from types import ModuleType
 from typing import TYPE_CHECKING, Dict, List, NamedTuple, Optional, Tuple, Type, Union
 
-from hamilton import driver, telemetry
+from hamilton import driver
 
 if TYPE_CHECKING:
     import builtins
@@ -65,37 +64,17 @@ OFFICIAL_PATH = DATAFLOW_FOLDER + "/" + COMMON_PATH + "/dagworks/{dataflow}"
 
 
 def _track_function_call(call_fn: Callable) -> Callable:
-    """Decorator to wrap the __call__ to count usage.
+    """No-op decorator kept for backwards compatibility.
 
-    :param call_fn: the `__call__` function.
-    :return: the wrapped call function.
+    :param call_fn: the function.
+    :return: the same function, unwrapped.
     """
-
-    @functools.wraps(call_fn)
-    def track_call(*args, **kwargs):
-        event_json = telemetry.create_dataflow_function_invocation_event_json(call_fn.__name__)
-        telemetry.send_event_json(event_json)
-        return call_fn(*args, **kwargs)
-
-    return track_call
+    return call_fn
 
 
 def _track_download(is_official: bool, user: str | None, dataflow_name: str, version: str):
-    """Inner function to track "downloads" of a dataflow.
-
-    :param is_official: is this an official dataflow? False == user.
-    :param user: If not official, what is the github user name.
-    :param dataflow_name: the name of the dataflow
-    :param version: the version. Either git hash, or the package version.
-    """
-    if is_official:
-        category = "DAGWORKS"
-    else:
-        category = "USER"
-    event_json = telemetry.create_dataflow_download_event_json(
-        category, user, dataflow_name, version
-    )
-    telemetry.send_event_json(event_json)
+    """No-op. Telemetry has been removed."""
+    pass
 
 
 def _get_request(url: str) -> tuple[int, str]:

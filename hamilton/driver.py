@@ -16,7 +16,6 @@
 # under the License.
 
 import abc
-import functools
 import importlib
 import importlib.util
 import json
@@ -24,7 +23,6 @@ import logging
 import operator
 import pathlib
 import sys
-import time
 
 # required if we want to run this code stand alone.
 import typing
@@ -61,41 +59,19 @@ if __name__ == "__main__":
     import base
     import graph
     import node
-    import telemetry
 else:
-    from . import base, graph, node, telemetry
+    from . import base, graph, node
 
 logger = logging.getLogger(__name__)
 
 
 def capture_function_usage(call_fn: Callable) -> Callable:
-    """Decorator to wrap some driver functions for telemetry capture.
+    """No-op decorator kept for backwards compatibility.
 
-    We want to use this for non-constructor and non-execute functions.
-    We don't capture information about the arguments at this stage,
-    just the function name.
-
-    :param call_fn: the Driver function to capture.
-    :return: wrapped function.
+    :param call_fn: the Driver function.
+    :return: the same function, unwrapped.
     """
-
-    @functools.wraps(call_fn)
-    def wrapped_fn(*args, **kwargs):
-        try:
-            return call_fn(*args, **kwargs)
-        finally:
-            if telemetry.is_telemetry_enabled():
-                try:
-                    function_name = call_fn.__name__
-                    event_json = telemetry.create_driver_function_invocation_event(function_name)
-                    telemetry.send_event_json(event_json)
-                except Exception as e:
-                    if logger.isEnabledFor(logging.DEBUG):
-                        logger.error(
-                            f"Failed to send telemetry for function usage. Encountered: {e}\n"
-                        )
-
-    return wrapped_fn
+    return call_fn
 
 
 # This is kept in here for backwards compatibility
@@ -450,7 +426,6 @@ class Driver:
         adapter = self.normalize_adapter_input(adapter, use_legacy_adapter=_use_legacy_adapter)
         if adapter.does_hook("pre_do_anything", is_async=False):
             adapter.call_all_lifecycle_hooks_sync("pre_do_anything")
-        error = None
         self.graph_modules = modules
         try:
             self.graph = graph.FunctionGraph.from_modules(
@@ -477,12 +452,8 @@ class Driver:
             self.graph_executor = _graph_executor
             self.config = config
         except Exception as e:
-            error = telemetry.sanitize_error(*sys.exc_info())
             logger.error(SLACK_ERROR_MESSAGE)
             raise e
-        finally:
-            # TODO -- update this to use the lifecycle methods
-            self.capture_constructor_telemetry(error, modules, config, adapter)
 
     def _repr_mimebundle_(self, include=None, exclude=None, **kwargs):
         """Attribute read by notebook renderers
@@ -493,47 +464,6 @@ class Driver:
         """
         dot = self.display_all_functions()
         return dot._repr_mimebundle_(include=include, exclude=exclude, **kwargs)
-
-    def capture_constructor_telemetry(
-        self,
-        error: str | None,
-        modules: tuple[ModuleType],
-        config: dict[str, Any],
-        adapter: lifecycle_base.LifecycleAdapterSet,
-    ):
-        """Captures constructor telemetry. Notes:
-        (1) we want to do this in a way that does not break.
-        (2) we need to account for all possible states, e.g. someone passing in None, or assuming that
-        the entire constructor code ran without issue, e.g. `adapter` was assigned to `self`.
-
-        :param error: the sanitized error string to send.
-        :param modules: the list of modules, could be None.
-        :param config: the config dict passed, could be None.
-        :param adapter: the adapter passed in, might not be attached to `self` yet.
-        """
-        if telemetry.is_telemetry_enabled():
-            try:
-                # adapter_name = telemetry.get_adapter_name(adapter)
-                lifecycle_adapter_names = telemetry.get_all_adapters_names(adapter)
-                result_builder = telemetry.get_result_builder_name(adapter)
-                # being defensive here with ensuring values exist
-                payload = telemetry.create_start_event_json(
-                    len(self.graph.nodes) if hasattr(self, "graph") else 0,
-                    len(modules) if modules else 0,
-                    len(config) if config else 0,
-                    dict(self.graph.decorator_counter) if hasattr(self, "graph") else {},
-                    "deprecated -- see lifecycle_adapters_used",
-                    lifecycle_adapter_names,
-                    result_builder,
-                    self.driver_run_id,
-                    error,
-                    self.graph_executor.__class__.__name__,
-                )
-                telemetry.send_event_json(payload)
-            except Exception as e:
-                # we don't want this to fail at all!
-                if logger.isEnabledFor(logging.DEBUG):
-                    logger.debug(f"Error caught in processing telemetry: {e}")
 
     @staticmethod
     def validate_inputs(
@@ -617,11 +547,9 @@ class Driver:
                 "display_graph=True is deprecated. It will be removed in the 2.0.0 release. "
                 "Please use visualize_execution()."
             )
-        start_time = time.time()
         run_id = str(uuid.uuid4())
         run_successful = True
         error_execution = None
-        error_telemetry = None
         outputs = None
         _final_vars = self._create_final_vars(final_vars)
         if self.adapter.does_hook("pre_graph_execute", is_async=False):
@@ -647,7 +575,6 @@ class Driver:
             run_successful = False
             logger.error(SLACK_ERROR_MESSAGE)
             error_execution = e
-            error_telemetry = telemetry.sanitize_error(*sys.exc_info())
             raise e
         finally:
             if self.adapter.does_hook("post_graph_execute", is_async=False):
@@ -659,10 +586,6 @@ class Driver:
                     error=error_execution,
                     results=outputs,
                 )
-            duration = time.time() - start_time
-            self.capture_execute_telemetry(
-                error_telemetry, _final_vars, inputs, overrides, run_successful, duration
-            )
         return outputs
 
     def _create_final_vars(self, final_vars: list[str | Callable | Variable]) -> list[str]:
@@ -674,45 +597,6 @@ class Driver:
         _module_set = {_module.__name__ for _module in self.graph_modules}
         _final_vars = common.convert_output_values(final_vars, _module_set)
         return _final_vars
-
-    def capture_execute_telemetry(
-        self,
-        error: str | None,
-        final_vars: list[str],
-        inputs: dict[str, Any],
-        overrides: dict[str, Any],
-        run_successful: bool,
-        duration: float,
-    ):
-        """Captures telemetry after execute has run.
-
-        Notes:
-        (1) we want to be quite defensive in not breaking anyone's code with things we do here.
-        (2) thus we want to double-check that values exist before doing something with them.
-
-        :param error: the sanitized error string to capture, if any.
-        :param final_vars: the list of final variables to get.
-        :param inputs: the inputs to the execute function.
-        :param overrides: any overrides to the execute function.
-        :param run_successful: whether this run was successful.
-        :param duration: time it took to run execute.
-        """
-        if telemetry.is_telemetry_enabled():
-            try:
-                payload = telemetry.create_end_event_json(
-                    run_successful,
-                    duration,
-                    len(final_vars) if final_vars else 0,
-                    len(overrides) if isinstance(overrides, dict) else 0,
-                    len(inputs) if isinstance(overrides, dict) else 0,
-                    self.driver_run_id,
-                    error,
-                )
-                telemetry.send_event_json(payload)
-            except Exception as e:
-                # we don't want this to fail at all!
-                if logger.isEnabledFor(logging.DEBUG):
-                    logger.debug(f"Error caught in processing telemetry: \n{e}")
 
     @deprecation.deprecated(
         warn_starting=(1, 0, 0),
@@ -1646,10 +1530,8 @@ class Driver:
         """
         if additional_vars is None:
             additional_vars = []
-        start_time = time.time()
         run_successful = True
         error_execution = None
-        error_telemetry = None
         run_id = str(uuid.uuid4())
         outputs = (None, None)
         final_vars = self._create_final_vars(additional_vars)
@@ -1707,7 +1589,6 @@ class Driver:
         except Exception as e:
             run_successful = False
             logger.error(SLACK_ERROR_MESSAGE)
-            error_telemetry = telemetry.sanitize_error(*sys.exc_info())
             error_execution = e
             raise e
         finally:
@@ -1720,15 +1601,6 @@ class Driver:
                     error=error_execution,
                     results=outputs[1],
                 )
-            duration = time.time() - start_time
-            self.capture_execute_telemetry(
-                error_telemetry,
-                final_vars + materializer_vars,
-                inputs,
-                overrides,
-                run_successful,
-                duration,
-            )
         return outputs
 
     @capture_function_usage

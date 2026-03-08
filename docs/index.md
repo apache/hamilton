@@ -76,7 +76,6 @@ reference/lifecycle-hooks/index
 reference/result-builders/index
 reference/io/index
 reference/dataflows/index
-reference/disabling-telemetry.md
 ```
 
 ```{toctree}
