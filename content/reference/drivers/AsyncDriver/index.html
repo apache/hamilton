@@ -445,7 +445,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../dataflows/pull_module/">pull_module()</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../disabling-telemetry/">Telemetry</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">ASF</span></p>
 <ul>
@@ -544,23 +543,6 @@ See <a class="reference external" href="https://github.com/apache/hamilton/tree/
 <dd><p>Initializes the driver when using async. This only exists for backwards compatibility.
 In Hamilton 2.0, we will be using an asynchronous constructor.
 See <a class="reference external" href="https://dev.to/akarshan/asynchronous-python-magic-how-to-create-awaitable-constructors-with-asyncmixin-18j5">https://dev.to/akarshan/asynchronous-python-magic-how-to-create-awaitable-constructors-with-asyncmixin-18j5</a>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="hamilton.async_driver.AsyncDriver.capture_constructor_telemetry">
-<span class="sig-name descname"><span class="pre">capture_constructor_telemetry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ModuleType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../graph-adapters/HamiltonGraphAdapter/#hamilton.base.HamiltonGraphAdapter" title="hamilton.base.HamiltonGraphAdapter"><span class="pre">HamiltonGraphAdapter</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.async_driver.AsyncDriver.capture_constructor_telemetry" title="Link to this definition">¶</a></dt>
-<dd><p>Ensures we capture constructor telemetry the right way in an async context.</p>
-<p>This is a simpler wrapper around what’s in the driver class.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>error</strong> – sanitized error string, if any.</p></li>
-<li><p><strong>modules</strong> – tuple of modules to build DAG from.</p></li>
-<li><p><strong>config</strong> – config to create the driver.</p></li>
-<li><p><strong>adapter</strong> – adapter class object.</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -777,7 +759,6 @@ The generated nodes can be referenced by name in <cite>.execute()</cite></p>
 <li><a class="reference internal" href="#hamilton.async_driver.AsyncDriver"><code class="docutils literal notranslate"><span class="pre">AsyncDriver</span></code></a><ul>
 <li><a class="reference internal" href="#hamilton.async_driver.AsyncDriver.__init__"><code class="docutils literal notranslate"><span class="pre">AsyncDriver.__init__()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.async_driver.AsyncDriver.ainit"><code class="docutils literal notranslate"><span class="pre">AsyncDriver.ainit()</span></code></a></li>
-<li><a class="reference internal" href="#hamilton.async_driver.AsyncDriver.capture_constructor_telemetry"><code class="docutils literal notranslate"><span class="pre">AsyncDriver.capture_constructor_telemetry()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.async_driver.AsyncDriver.execute"><code class="docutils literal notranslate"><span class="pre">AsyncDriver.execute()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.async_driver.AsyncDriver.raw_execute"><code class="docutils literal notranslate"><span class="pre">AsyncDriver.raw_execute()</span></code></a></li>
 </ul>

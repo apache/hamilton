@@ -445,7 +445,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../dataflows/pull_module/">pull_module()</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../disabling-telemetry/">Telemetry</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">ASF</span></p>
 <ul>
@@ -806,46 +805,6 @@ backwards compatible. In Hamilton 2.0.0, this will be removed.</p></li>
 <dt class="sig sig-object py" id="hamilton.driver.Driver.cache">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cache</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../caching/caching-logic/#hamilton.caching.adapter.HamiltonCacheAdapter" title="hamilton.caching.adapter.HamiltonCacheAdapter"><span class="pre">HamiltonCacheAdapter</span></a></span><a class="headerlink" href="#hamilton.driver.Driver.cache" title="Link to this definition">¶</a></dt>
 <dd><p>Directly access the cache adapter</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="hamilton.driver.Driver.capture_constructor_telemetry">
-<span class="sig-name descname"><span class="pre">capture_constructor_telemetry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ModuleType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LifecycleAdapterSet</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.driver.Driver.capture_constructor_telemetry" title="Link to this definition">¶</a></dt>
-<dd><p>Captures constructor telemetry. Notes:
-(1) we want to do this in a way that does not break.
-(2) we need to account for all possible states, e.g. someone passing in None, or assuming that
-the entire constructor code ran without issue, e.g. <cite>adapter</cite> was assigned to <cite>self</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>error</strong> – the sanitized error string to send.</p></li>
-<li><p><strong>modules</strong> – the list of modules, could be None.</p></li>
-<li><p><strong>config</strong> – the config dict passed, could be None.</p></li>
-<li><p><strong>adapter</strong> – the adapter passed in, might not be attached to <cite>self</cite> yet.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="hamilton.driver.Driver.capture_execute_telemetry">
-<span class="sig-name descname"><span class="pre">capture_execute_telemetry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overrides</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_successful</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.driver.Driver.capture_execute_telemetry" title="Link to this definition">¶</a></dt>
-<dd><p>Captures telemetry after execute has run.</p>
-<p>Notes:
-(1) we want to be quite defensive in not breaking anyone’s code with things we do here.
-(2) thus we want to double-check that values exist before doing something with them.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>error</strong> – the sanitized error string to capture, if any.</p></li>
-<li><p><strong>final_vars</strong> – the list of final variables to get.</p></li>
-<li><p><strong>inputs</strong> – the inputs to the execute function.</p></li>
-<li><p><strong>overrides</strong> – any overrides to the execute function.</p></li>
-<li><p><strong>run_successful</strong> – whether this run was successful.</p></li>
-<li><p><strong>duration</strong> – time it took to run execute.</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1667,8 +1626,6 @@ well as parallel execution/dynamic spawning of nodes.</p>
 <li><a class="reference internal" href="#hamilton.driver.Driver"><code class="docutils literal notranslate"><span class="pre">Driver</span></code></a><ul>
 <li><a class="reference internal" href="#hamilton.driver.Driver.__init__"><code class="docutils literal notranslate"><span class="pre">Driver.__init__()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Driver.cache"><code class="docutils literal notranslate"><span class="pre">Driver.cache</span></code></a></li>
-<li><a class="reference internal" href="#hamilton.driver.Driver.capture_constructor_telemetry"><code class="docutils literal notranslate"><span class="pre">Driver.capture_constructor_telemetry()</span></code></a></li>
-<li><a class="reference internal" href="#hamilton.driver.Driver.capture_execute_telemetry"><code class="docutils literal notranslate"><span class="pre">Driver.capture_execute_telemetry()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Driver.display_all_functions"><code class="docutils literal notranslate"><span class="pre">Driver.display_all_functions()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Driver.display_downstream_of"><code class="docutils literal notranslate"><span class="pre">Driver.display_downstream_of()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Driver.display_upstream_of"><code class="docutils literal notranslate"><span class="pre">Driver.display_upstream_of()</span></code></a></li>

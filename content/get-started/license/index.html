@@ -186,7 +186,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -445,7 +445,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/pull_module/">pull_module()</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../reference/disabling-telemetry/">Telemetry</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">ASF</span></p>
 <ul>
@@ -498,7 +497,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
@@ -506,22 +505,6 @@
           <section id="license">
 <h1>License<a class="headerlink" href="#license" title="Link to this heading">¶</a></h1>
 <p>Apache Hamilton is released under the <a class="reference external" href="https://github.com/apache/hamilton/blob/main/LICENSE">Apache 2.0 License</a>.</p>
-<section id="usage-analytics-data-privacy">
-<h2>Usage analytics &amp; data privacy<a class="headerlink" href="#usage-analytics-data-privacy" title="Link to this heading">¶</a></h2>
-<p>By default, when using Apache Hamilton, it collects anonymous usage data to help improve Apache Hamilton and know where to apply development
-efforts.</p>
-<p>We capture three types of events: one when the <cite>Driver</cite> object is instantiated, one when the <cite>execute()</cite> call on the <cite>Driver</cite> object completes, and one for most <cite>Driver</cite> object function invocations.
-No user data or potentially sensitive information is or ever will be collected. The captured data is limited to:</p>
-<ul class="simple">
-<li><p>Operating System and Python version</p></li>
-<li><p>A persistent UUID to indentify the session, stored in ~/.hamilton.conf.</p></li>
-<li><p>Error stack trace limited to Apache Hamilton code, if one occurs.</p></li>
-<li><p>Information on what features you’re using from Apache Hamilton: decorators, adapters, result builders.</p></li>
-<li><p>How Apache Hamilton is being used: number of final nodes in DAG, number of modules, size of objects passed to <cite>execute()</cite>, the name of the Driver function being invoked.</p></li>
-</ul>
-<p>Else see <a class="reference internal" href="../../reference/disabling-telemetry/"><span class="doc">Telemetry</span></a> for how to disable telemetry.</p>
-<p>Otherwise we invite you to inspect telemetry.py for details.</p>
-</section>
 </section>
 
         </article>
@@ -580,27 +563,8 @@ No user data or potentially sensitive information is or ever will be collected. 
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">License</a><ul>
-<li><a class="reference internal" href="#usage-analytics-data-privacy">Usage analytics &amp; data privacy</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

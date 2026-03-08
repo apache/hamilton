@@ -161,5 +161,4 @@
 - [latest_commit()](https://hamilton.apache.org/_sources/reference/dataflows/latest_commit.rst.txt)
 - [list()](https://hamilton.apache.org/_sources/reference/dataflows/list.rst.txt)
 - [pull_module()](https://hamilton.apache.org/_sources/reference/dataflows/pull_module.rst.txt)
-- [Telemetry](https://hamilton.apache.org/_sources/reference/disabling-telemetry.md.txt)
 - [Welcome to Apache Hamilton](https://hamilton.apache.org/_sources/main.md.txt)
