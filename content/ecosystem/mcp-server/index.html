@@ -1,0 +1,1716 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex/"><link rel="search" title="Search" href="../../search/"><link rel="next" title="Decorators" href="../../reference/decorators/"><link rel="prev" title="Claude Code Plugin for Hamilton" href="../claude-code-plugin/">
+        <link rel="canonical" href="https://hamilton.apache.org/ecosystem/mcp-server/">
+
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>MCP Server - Hamilton</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/testimonials.css?v=bd684830" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=a33697e8" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     📢 Announcing the <a target="_blank" href="https://www.meetup.com/global-hamilton-open-source-user-group-meetup/">Hamilton Meetup Group</a>. Sign up to attend events! 📢 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../"><div class="brand">Hamilton</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../">
+  
+  <span class="sidebar-brand-text">Hamilton</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search/" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">USER GUIDE</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../get-started/">Get Started</a><input aria-label="Toggle navigation of Get Started" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/why-hamilton/">Why use Apache Hamilton?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/install/">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/your-first-dataflow/">Your First Dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/learning-resources/">Learning Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/contributing/">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../get-started/license/">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../concepts/">Concepts</a><input aria-label="Toggle navigation of Concepts" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/glossary/">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/node/">Functions, nodes &amp; dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/driver/">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/visualization/">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/materialization/">Materialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/function-modifiers/">Function modifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/builder/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/caching/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/function-modifiers-advanced/">Function modifiers (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/parallel-task/">Dynamic DAGs/Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../concepts/ui/#sdk-configuration">SDK Configuration</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../concepts/best-practices/">Best Practices</a><input aria-label="Toggle navigation of Best Practices" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/function-naming/">Function Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/migrating-to-hamilton/">Migrating to Apache Hamilton</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/code-organization/">Code Organization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/common-indices/">Common Indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/output-immutability/">Output Immutability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/using-within-your-etl-system/">Using within your ETL System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../concepts/best-practices/loading-data/">Loading Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../how-tos/">User Guide</a><input aria-label="Toggle navigation of User Guide" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-in-jupyter-notebook/">Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/load-data/">Loading data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/caching-tutorial/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/ml-training/">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/llm-workflows/">LLM workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/scale-up/">Scaling computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/microservice/">Microservice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/extensions-autoloading/">Extension autoloading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/wrapping-driver/">Wrapping the Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/cli-reference/">Command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-tos/pre-commit-hooks/">pre-commit hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../hamilton-ui/">Apache Hamilton UI</a><input aria-label="Toggle navigation of Apache Hamilton UI" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-ui/ui/#sdk-configuration">SDK Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../hamilton-vscode/">IDE extension</a><input aria-label="Toggle navigation of IDE extension" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-vscode/vscode_extension/">Apache Hamilton VSCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hamilton-vscode/language_server/">Language Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../integrations/">Integrations</a><input aria-label="Toggle navigation of Integrations" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/dlt/">dlt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/fastapi/">FastAPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/ibis/">Ibis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/streamlit/">Streamlit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/dbt/">dbt</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/mlflow">MLFlow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/airflow">Airflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/aws">Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/image_telephone">Burr</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dagster">Dagster</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dask">Dask</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/feast">Feast</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/outerbounds/hamilton-metaflow">Metaflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/data_quality/pandera">Pandera</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/plotly">Plotly</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/polars">Polars</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/prefect">Prefect</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/ray">Ray</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/slack">Slack</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/spark">Spark</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/vaex">Vaex</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/narwhals">Narwhals</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/openlineage">OpenLineage</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../code-comparisons/">Code Comparisons</a><input aria-label="Toggle navigation of Code Comparisons" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/kedro/">Kedro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/dagster/">Dagster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/langchain/">LangChain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../code-comparisons/airflow/">Airflow</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">DOWNLOADS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../asf/downloads/">Downloads</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">PDF</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://hamilton.apache.org/_static/Hamilton.pdf">PDF</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">COMMUNITY</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../community/">Meet-ups</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">Ecosystem</a><input aria-label="Toggle navigation of Ecosystem" checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../claude-code-plugin/">Claude Code Plugin for Hamilton</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">MCP Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://www.tryhamilton.dev/">tryhamilton.dev</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/decorators/">Decorators</a><input aria-label="Toggle navigation of Decorators" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/check_output/">check_output*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/config_when/">config.when*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/dataloader/">dataloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/datasaver/">datasaver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/does/">does</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/unpack_fields/">unpack_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_columns/">extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/extract_fields/">extract_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/inject/">inject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/load_from/">load_from</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize/">parameterize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_extract_columns/">parameterize_extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_frame/">parameterize_frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_sources/">parameterize_sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_subdag/">parameterized_subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/parameterize_values/">parameterize_values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/pipe/">pipe family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/resolve/">resolve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/save_to/">save_to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/subdag/">subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/schema/">schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/tag/">tag*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/decorators/with_columns/">with_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/drivers/">Drivers</a><input aria-label="Toggle navigation of Drivers" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#driver">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#defaultgraphexecutor">DefaultGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Driver/#taskbasedgraphexecutor">TaskBasedGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/AsyncDriver/">AsyncDriver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/drivers/Custom/">Custom Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/caching/">Caching</a><input aria-label="Toggle navigation of Caching" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/caching-logic/">Caching logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/data-versioning/">Data versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/caching/stores/">Stores</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/graph-adapters/">GraphAdapters</a><input aria-label="Toggle navigation of GraphAdapters" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SimplePythonDataFrameGraphAdapter/">SimplePythonDataFrameGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SimplePythonGraphAdapter/">SimplePythonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/HamiltonGraphAdapter/">HamiltonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/AsyncGraphAdapter/">h_async.AsyncGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/ThreadPoolFutureAdapter/">h_threadpool.FutureAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/CachingGraphAdapter/">CachingGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/DaskGraphAdapter/">h_dask.DaskGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/PySparkUDFGraphAdapter/">h_spark.PySparkUDFGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/RayGraphAdapter/">h_ray.RayGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/graph-adapters/SparkKoalasGraphAdapter/">h_spark.SparkKoalasGraphAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/lifecycle-hooks/">Lifecycle Adapters</a><input aria-label="Toggle navigation of Lifecycle Adapters" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/ResultBuilder/">lifecycle.ResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/LegacyResultMixin/">lifecycle.LegacyResultMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphAdapter/">lifecycle.api.GraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NodeExecutionHook/">lifecycle.NodeExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphExecutionHook/">lifecycle.api.GraphExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/EdgeConnectionHook/">lifecycle.api.EdgeConnectionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NodeExecutionMethod/">lifecycle.api.NodeExecutionMethod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/StaticValidator/">lifecycle.api.StaticValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GraphConstructionHook/">lifecycle.api.GraphConstructionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskSubmissionHook/">lifecycle.api.TaskSubmissionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskReturnHook/">lifecycle.api.TaskReturnHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskExecutionHook/">lifecycle.api.TaskExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/TaskGroupingHook/">lifecycle.api.TaskGroupingHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/PDBDebugger/">lifecycle.PDBDebugger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/PrintLn/">lifecycle.PrintLn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/ProgressBar/">plugins.h_tqdm.ProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/RichProgressBar/">plugins.h_rich.RichProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/DDOGTracer/">plugins.h_ddog.DDOGTracer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/FunctionInputOutputTypeChecker/">lifecycle.FunctionInputOutputTypeChecker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/SlackNotifierHook/">plugins.h_slack.SlackNotifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/GracefulErrorAdapter/">lifecycle.GracefulErrorAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/SparkInputValidator/">plugins.h_spark.SparkInputValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/Narwhals/">plugins.h_narhwals.NarwhalsAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/Narwhals/#plugins-h-narhwals-narwhalsdataframeresultbuilder">plugins.h_narhwals.NarwhalsDataFrameResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/MLFlowTracker/">plugins.h_mlflow.MLFlowTracker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/NoEdgeAndInputTypeChecking/">lifecycle.NoEdgeAndInputTypeChecking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/lifecycle-hooks/OpenLineageAdapter/">plugins.h_openlineage.OpenLineageAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/result-builders/">ResultBuilders</a><input aria-label="Toggle navigation of ResultBuilders" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Generic/">Generic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Numpy/">Numpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Pandas/">Pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Polars/">Polars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Dask/">Dask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/PyArrow/">plugins.h_pyarrow.PyarrowTableResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/result-builders/Custom/">Custom ResultBuilder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/io/">I/O</a><input aria-label="Toggle navigation of I/O" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/">Using Data Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/#data-loaders">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/available-data-adapters/#data-savers">Data Savers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/io/adapter-documentation/">Data Adapters</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/dataflows/">Dataflows</a><input aria-label="Toggle navigation of Dataflows" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/clear_storage/">clear_storage()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/copy/">copy()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/find/">find()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/import_module/">import_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/inspect/">inspect()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/inspect_module/">inspect_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/install_dependencies_string/">install_dependencies_string()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/latest_commit/">latest_commit()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/list/">list()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/dataflows/pull_module/">pull_module()</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/disabling-telemetry/">Telemetry</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ASF</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../asf/">ASF</a><input aria-label="Toggle navigation of ASF" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../asf/downloads/">Downloads</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/">Apache Software Foundation</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/licenses/">License</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/events/current-event.html">Events</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/security/">Security</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/thanks.html">Thanks</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/policies/conduct.html">Code of Conduct</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/blob/main/docs/ecosystem/mcp-server.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/ecosystem/mcp-server.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<section id="mcp-server">
+<h1>MCP Server<a class="headerlink" href="#mcp-server" title="Link to this heading">¶</a></h1>
+<p>The Hamilton MCP server exposes Hamilton’s DAG compilation, validation, and execution as tools for LLM clients via the <a class="reference external" href="https://modelcontextprotocol.io/">Model Context Protocol</a> (MCP). It enables LLM-driven development workflows where you write Hamilton functions, validate the DAG, visualize dependencies, and execute pipelines – all through natural language interaction with clients such as Claude Desktop, Claude Code, or Cursor.</p>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h2>
+<pre  class="mermaid">
+        graph LR
+    A[LLM Client] --&gt;|MCP stdio transport| B[Hamilton MCP Server]
+    B --&gt;|build &amp; execute| C[Hamilton Driver]
+    C --&gt;|compile DAG from| D[User Code]
+    </pre><p>The server runs as a local process using <strong>stdio transport</strong>. The LLM client launches the server, sends tool calls over stdin/stdout, and receives structured JSON responses. Internally, the server compiles user-provided Python source into a Hamilton DAG via <code class="docutils literal notranslate"><span class="pre">hamilton.driver.Builder</span></code> (with dynamic execution enabled), then performs the requested operation (validate, list nodes, visualize, or execute).</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>The recommended way to run the MCP server is via <code class="docutils literal notranslate"><span class="pre">uvx</span></code>, which handles installation automatically:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uvx<span class="w"> </span>--from<span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="w"> </span>hamilton-mcp
+</pre></div>
+</div>
+<p>This creates an ephemeral environment with Hamilton and <a class="reference external" href="https://github.com/PrefectHQ/fastmcp">FastMCP</a>, runs the server, and cleans up after. No pre-installation required.</p>
+<p>Alternatively, install into your own environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span>
+</pre></div>
+</div>
+<section id="optional-dependencies">
+<h3>Optional dependencies<a class="headerlink" href="#optional-dependencies" title="Link to this heading">¶</a></h3>
+<p>The server can compile and execute user code, so any libraries your code imports must be available in the server’s environment. When using <code class="docutils literal notranslate"><span class="pre">uvx</span></code>, pass <code class="docutils literal notranslate"><span class="pre">--with</span></code> to include them:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Library</p></th>
+<th class="head"><p>Install command</p></th>
+<th class="head"><p>What it enables</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>pandas</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pandas</span></code></p></td>
+<td><p>DataFrame-based scaffold templates and result serialization</p></td>
+</tr>
+<tr class="row-odd"><td><p>numpy</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">numpy</span></code></p></td>
+<td><p>ML pipeline scaffolds and ndarray serialization</p></td>
+</tr>
+<tr class="row-even"><td><p>polars</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">polars</span></code></p></td>
+<td><p>Polars DataFrame/Series serialization</p></td>
+</tr>
+<tr class="row-odd"><td><p>graphviz</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;apache-hamilton[visualization]&quot;</span></code></p></td>
+<td><p>DAG visualization via <code class="docutils literal notranslate"><span class="pre">hamilton_visualize</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For example, for a pandas/numpy project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uvx<span class="w"> </span>--from<span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="w"> </span>--with<span class="w"> </span>pandas<span class="w"> </span>--with<span class="w"> </span>numpy<span class="w"> </span>hamilton-mcp
+</pre></div>
+</div>
+<p>Or for a polars project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uvx<span class="w"> </span>--from<span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="w"> </span>--with<span class="w"> </span>polars<span class="w"> </span>hamilton-mcp
+</pre></div>
+</div>
+</section>
+</section>
+<section id="running-the-server">
+<h2>Running the Server<a class="headerlink" href="#running-the-server" title="Link to this heading">¶</a></h2>
+<section id="via-uvx-recommended">
+<h3>Via uvx (recommended)<a class="headerlink" href="#via-uvx-recommended" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uvx<span class="w"> </span>--from<span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="w"> </span>hamilton-mcp
+</pre></div>
+</div>
+<p>Include the libraries your code uses via <code class="docutils literal notranslate"><span class="pre">--with</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># pandas/numpy project</span>
+uvx<span class="w"> </span>--from<span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="w"> </span>--with<span class="w"> </span>pandas<span class="w"> </span>--with<span class="w"> </span>numpy<span class="w"> </span>hamilton-mcp
+
+<span class="c1"># polars project</span>
+uvx<span class="w"> </span>--from<span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="w"> </span>--with<span class="w"> </span>polars<span class="w"> </span>hamilton-mcp
+</pre></div>
+</div>
+</section>
+<section id="direct-cli">
+<h3>Direct CLI<a class="headerlink" href="#direct-cli" title="Link to this heading">¶</a></h3>
+<p>If Hamilton is already installed in your environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hamilton-mcp
+</pre></div>
+</div>
+</section>
+<section id="programmatic">
+<h3>Programmatic<a class="headerlink" href="#programmatic" title="Link to this heading">¶</a></h3>
+<p>You can also start the server from Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.plugins.h_mcp</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_mcp_server</span>
+
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">get_mcp_server</span><span class="p">()</span>
+<span class="n">mcp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_mcp_server()</span></code> function returns a <code class="docutils literal notranslate"><span class="pre">FastMCP</span></code> instance. Call <code class="docutils literal notranslate"><span class="pre">.run()</span></code> to start the stdio transport loop.</p>
+</section>
+</section>
+<section id="connecting-to-an-llm-client">
+<h2>Connecting to an LLM Client<a class="headerlink" href="#connecting-to-an-llm-client" title="Link to this heading">¶</a></h2>
+<section id="claude-desktop">
+<h3>Claude Desktop<a class="headerlink" href="#claude-desktop" title="Link to this heading">¶</a></h3>
+<p>Add the following to your Claude Desktop configuration file (<code class="docutils literal notranslate"><span class="pre">claude_desktop_config.json</span></code>). Add <code class="docutils literal notranslate"><span class="pre">&quot;--with&quot;,</span> <span class="pre">&quot;&lt;library&gt;&quot;</span></code> pairs for whichever libraries your code uses:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;hamilton&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uvx&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;--from&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;--with&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;pandas&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;--with&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;numpy&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;hamilton-mcp&quot;</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="claude-code">
+<h3>Claude Code<a class="headerlink" href="#claude-code" title="Link to this heading">¶</a></h3>
+<p>Add the server to your project configuration, including <code class="docutils literal notranslate"><span class="pre">--with</span></code> flags for your libraries:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>claude<span class="w"> </span>mcp<span class="w"> </span>add<span class="w"> </span>hamilton<span class="w"> </span>--<span class="w"> </span>uvx<span class="w"> </span>--from<span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="w"> </span>--with<span class="w"> </span>pandas<span class="w"> </span>--with<span class="w"> </span>numpy<span class="w"> </span>hamilton-mcp
+</pre></div>
+</div>
+<p>Or add it to your <code class="docutils literal notranslate"><span class="pre">.mcp.json</span></code> file:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;hamilton&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uvx&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;--from&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;--with&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;pandas&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;--with&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;numpy&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;hamilton-mcp&quot;</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>See also the <a class="reference internal" href="../claude-code-plugin/"><span class="std std-doc">Claude Code Plugin</span></a> for an accompanying skill that provides workflow guidance when using the MCP tools.</p>
+</section>
+<section id="cursor">
+<h3>Cursor<a class="headerlink" href="#cursor" title="Link to this heading">¶</a></h3>
+<p>In Cursor, open <strong>Settings &gt; MCP Servers</strong> and add (adjust <code class="docutils literal notranslate"><span class="pre">--with</span></code> flags to match your project):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;hamilton&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uvx&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;--from&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--with&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;pandas&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--with&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;numpy&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;hamilton-mcp&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="other-mcp-compatible-clients">
+<h3>Other MCP-compatible clients<a class="headerlink" href="#other-mcp-compatible-clients" title="Link to this heading">¶</a></h3>
+<p>Any client that supports the MCP stdio transport can connect by launching the server as a subprocess. The server reads JSON-RPC messages from stdin and writes responses to stdout.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uvx<span class="w"> </span>--from<span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="w"> </span>hamilton-mcp
+</pre></div>
+</div>
+<p>Add <code class="docutils literal notranslate"><span class="pre">--with</span> <span class="pre">&lt;library&gt;</span></code> for any libraries your code imports (e.g., <code class="docutils literal notranslate"><span class="pre">--with</span> <span class="pre">pandas</span> <span class="pre">--with</span> <span class="pre">numpy</span></code> or <code class="docutils literal notranslate"><span class="pre">--with</span> <span class="pre">polars</span></code>).</p>
+</section>
+</section>
+<section id="available-tools">
+<h2>Available Tools<a class="headerlink" href="#available-tools" title="Link to this heading">¶</a></h2>
+<p>The server exposes seven tools. Each tool accepts and returns JSON.</p>
+<section id="hamilton-capabilities">
+<h3><code class="docutils literal notranslate"><span class="pre">hamilton_capabilities</span></code><a class="headerlink" href="#hamilton-capabilities" title="Link to this heading">¶</a></h3>
+<p>Report which optional libraries are installed and which features are available. Call this first to discover the environment before generating code. If the user specifies which libraries they use, pass them as <code class="docutils literal notranslate"><span class="pre">preferred_libraries</span></code> to filter scaffold patterns accordingly.</p>
+<p><strong>Parameters:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">preferred_libraries</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list[str]</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Libraries the user wants to use (e.g., <code class="docutils literal notranslate"><span class="pre">[&quot;pandas&quot;,</span> <span class="pre">&quot;numpy&quot;]</span></code>). When provided, scaffolds are filtered to only those whose requirements are a subset of this list. When omitted, falls back to auto-detection.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Returns:</strong> A dict with <code class="docutils literal notranslate"><span class="pre">libraries</span></code> (library name to boolean, reflecting what is installed) and <code class="docutils literal notranslate"><span class="pre">available_scaffolds</span></code> (list of scaffold pattern names filtered by preference or auto-detection).</p>
+</section>
+<hr class="docutils" />
+<section id="hamilton-validate-dag">
+<h3><code class="docutils literal notranslate"><span class="pre">hamilton_validate_dag</span></code><a class="headerlink" href="#hamilton-validate-dag" title="Link to this heading">¶</a></h3>
+<p>Validate Hamilton DAG code by building the Driver. Compiles Python source into a Hamilton DAG and checks for missing dependencies, type mismatches, and circular references without executing the code.</p>
+<p><strong>Parameters:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">code</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Python source code defining Hamilton functions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Hamilton config dict passed to <code class="docutils literal notranslate"><span class="pre">Builder.with_config()</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Returns:</strong> <code class="docutils literal notranslate"><span class="pre">{&quot;valid&quot;:</span> <span class="pre">true,</span> <span class="pre">&quot;node_count&quot;:</span> <span class="pre">N,</span> <span class="pre">&quot;nodes&quot;:</span> <span class="pre">[...],</span> <span class="pre">&quot;inputs&quot;:</span> <span class="pre">[...],</span> <span class="pre">&quot;errors&quot;:</span> <span class="pre">[]}</span></code> on success, or <code class="docutils literal notranslate"><span class="pre">{&quot;valid&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;node_count&quot;:</span> <span class="pre">0,</span> <span class="pre">&quot;nodes&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;inputs&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;errors&quot;:</span> <span class="pre">[...]}</span></code> on failure. Each error is a dict with <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">message</span></code>, <code class="docutils literal notranslate"><span class="pre">detail</span></code> (may be <code class="docutils literal notranslate"><span class="pre">null</span></code> for non-syntax errors), and <code class="docutils literal notranslate"><span class="pre">traceback</span></code> fields.</p>
+</section>
+<hr class="docutils" />
+<section id="hamilton-list-nodes">
+<h3><code class="docutils literal notranslate"><span class="pre">hamilton_list_nodes</span></code><a class="headerlink" href="#hamilton-list-nodes" title="Link to this heading">¶</a></h3>
+<p>List all nodes in a Hamilton DAG with their types and dependencies. Returns structured info for every node including name, output type, tags, whether it is an external input, and its required/optional dependencies.</p>
+<p><strong>Parameters:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">code</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Python source code defining Hamilton functions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Hamilton config dict passed to <code class="docutils literal notranslate"><span class="pre">Builder.with_config()</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Returns:</strong> <code class="docutils literal notranslate"><span class="pre">{&quot;nodes&quot;:</span> <span class="pre">[...],</span> <span class="pre">&quot;errors&quot;:</span> <span class="pre">[]}</span></code>. Each node is a dict with <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">is_external_input</span></code>, <code class="docutils literal notranslate"><span class="pre">tags</span></code>, <code class="docutils literal notranslate"><span class="pre">required_dependencies</span></code>, <code class="docutils literal notranslate"><span class="pre">optional_dependencies</span></code>, and <code class="docutils literal notranslate"><span class="pre">documentation</span></code> fields.</p>
+</section>
+<hr class="docutils" />
+<section id="hamilton-visualize">
+<h3><code class="docutils literal notranslate"><span class="pre">hamilton_visualize</span></code><a class="headerlink" href="#hamilton-visualize" title="Link to this heading">¶</a></h3>
+<p>Visualize the Hamilton DAG as DOT graph source. Requires <code class="docutils literal notranslate"><span class="pre">graphviz</span></code> (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;apache-hamilton[visualization]&quot;</span></code>).</p>
+<p><strong>Parameters:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">code</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Python source code defining Hamilton functions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Hamilton config dict passed to <code class="docutils literal notranslate"><span class="pre">Builder.with_config()</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">output_format</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Output format (default: <code class="docutils literal notranslate"><span class="pre">&quot;dot&quot;</span></code>). Currently only <code class="docutils literal notranslate"><span class="pre">&quot;dot&quot;</span></code> is supported; other values are accepted but ignored.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Returns:</strong> A string containing the Graphviz DOT source for the dependency graph, or an error message if graphviz is not installed.</p>
+</section>
+<hr class="docutils" />
+<section id="hamilton-execute">
+<h3><code class="docutils literal notranslate"><span class="pre">hamilton_execute</span></code><a class="headerlink" href="#hamilton-execute" title="Link to this heading">¶</a></h3>
+<p>Execute a Hamilton DAG and return the requested outputs. Builds the DAG from source, then calls <code class="docutils literal notranslate"><span class="pre">driver.execute()</span></code> with the given <code class="docutils literal notranslate"><span class="pre">final_vars</span></code> and <code class="docutils literal notranslate"><span class="pre">inputs</span></code>. Results are serialized to JSON-safe values. A timeout (default 30 seconds) guards against long-running code.</p>
+<p><strong>Parameters:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">code</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Python source code defining Hamilton functions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">final_vars</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list[str]</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Node names to compute</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">inputs</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p>No</p></td>
+<td><p>External input values</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Hamilton config dict passed to <code class="docutils literal notranslate"><span class="pre">Builder.with_config()</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">timeout_seconds</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Execution timeout in seconds (default: <code class="docutils literal notranslate"><span class="pre">30</span></code>)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Returns:</strong> <code class="docutils literal notranslate"><span class="pre">{&quot;results&quot;:</span> <span class="pre">{...},</span> <span class="pre">&quot;execution_time_ms&quot;:</span> <span class="pre">N}</span></code> on success. On failure: <code class="docutils literal notranslate"><span class="pre">{&quot;error&quot;:</span> <span class="pre">&quot;...&quot;}</span></code> for build errors or timeouts, or <code class="docutils literal notranslate"><span class="pre">{&quot;error&quot;:</span> <span class="pre">&quot;...&quot;,</span> <span class="pre">&quot;execution_time_ms&quot;:</span> <span class="pre">N}</span></code> for runtime errors during execution. Results are serialized: pandas DataFrames/Series become dicts via <code class="docutils literal notranslate"><span class="pre">.to_dict()</span></code>, numpy arrays become lists via <code class="docutils literal notranslate"><span class="pre">.tolist()</span></code>, polars DataFrames become list-of-dicts via <code class="docutils literal notranslate"><span class="pre">.to_dicts()</span></code>, polars Series become lists via <code class="docutils literal notranslate"><span class="pre">.to_list()</span></code>, and all other types use <code class="docutils literal notranslate"><span class="pre">str()</span></code>.</p>
+<p><strong>Warning:</strong> This tool executes arbitrary Python code. Always validate with <code class="docutils literal notranslate"><span class="pre">hamilton_validate_dag</span></code> before executing.</p>
+</section>
+<hr class="docutils" />
+<section id="hamilton-get-docs">
+<h3><code class="docutils literal notranslate"><span class="pre">hamilton_get_docs</span></code><a class="headerlink" href="#hamilton-get-docs" title="Link to this heading">¶</a></h3>
+<p>Get Hamilton documentation for a specific topic.</p>
+<p><strong>Parameters:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">topic</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>One of: <code class="docutils literal notranslate"><span class="pre">overview</span></code>, <code class="docutils literal notranslate"><span class="pre">decorators</span></code>, <code class="docutils literal notranslate"><span class="pre">driver</span></code>, <code class="docutils literal notranslate"><span class="pre">builder</span></code>, or any decorator name (<code class="docutils literal notranslate"><span class="pre">parameterize</span></code>, <code class="docutils literal notranslate"><span class="pre">extract_columns</span></code>, <code class="docutils literal notranslate"><span class="pre">config</span></code>, <code class="docutils literal notranslate"><span class="pre">check_output</span></code>, <code class="docutils literal notranslate"><span class="pre">tag</span></code>, <code class="docutils literal notranslate"><span class="pre">pipe</span></code>, <code class="docutils literal notranslate"><span class="pre">does</span></code>, <code class="docutils literal notranslate"><span class="pre">subdag</span></code>, etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Returns:</strong> A string containing the requested documentation.</p>
+</section>
+<hr class="docutils" />
+<section id="hamilton-scaffold">
+<h3><code class="docutils literal notranslate"><span class="pre">hamilton_scaffold</span></code><a class="headerlink" href="#hamilton-scaffold" title="Link to this heading">¶</a></h3>
+<p>Generate a starter Hamilton module for a given pattern. Available patterns depend on installed or preferred libraries. Returns Python source code that is a valid Hamilton module, plus a driver script example.</p>
+<p><strong>Parameters:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pattern</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Scaffold pattern name (use <code class="docutils literal notranslate"><span class="pre">hamilton_capabilities</span></code> to discover available patterns)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">preferred_libraries</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list[str]</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p>No</p></td>
+<td><p>Libraries the user wants to use. Filters available patterns the same way as in <code class="docutils literal notranslate"><span class="pre">hamilton_capabilities</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Returns:</strong> A string containing Python source code for the requested scaffold pattern, or an error listing available patterns if the name is invalid.</p>
+<p><strong>Available scaffold patterns:</strong></p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pattern</p></th>
+<th class="head"><p>Required libraries</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">basic_pure_python</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Simple data processing pipeline using only built-in Python types</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">basic</span></code></p></td>
+<td><p>pandas</p></td>
+<td><p>DataFrame cleaning and row counting</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">parameterized</span></code></p></td>
+<td><p>pandas</p></td>
+<td><p>Using <code class="docutils literal notranslate"><span class="pre">&#64;parameterize</span></code> to create multiple nodes from one function</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config_based</span></code></p></td>
+<td><p>pandas</p></td>
+<td><p>Conditional logic with <code class="docutils literal notranslate"><span class="pre">&#64;config.when</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data_pipeline</span></code></p></td>
+<td><p>pandas</p></td>
+<td><p>ETL workflow: ingest, clean, transform, aggregate</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ml_pipeline</span></code></p></td>
+<td><p>pandas, numpy</p></td>
+<td><p>Feature engineering and train/test split</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data_quality</span></code></p></td>
+<td><p>pandas, numpy</p></td>
+<td><p>Data validation with <code class="docutils literal notranslate"><span class="pre">&#64;check_output</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="conditional-features">
+<h2>Conditional Features<a class="headerlink" href="#conditional-features" title="Link to this heading">¶</a></h2>
+<p>The MCP server adapts to the libraries installed in the current Python environment. At startup, it probes for four optional libraries:</p>
+<ul class="simple">
+<li><p><strong>pandas</strong> – Enables DataFrame-based scaffold templates and DataFrame/Series result serialization</p></li>
+<li><p><strong>numpy</strong> – Enables the ML pipeline and data quality scaffolds, plus ndarray serialization</p></li>
+<li><p><strong>polars</strong> – Enables Polars DataFrame/Series result serialization</p></li>
+<li><p><strong>graphviz</strong> – Enables DAG visualization via <code class="docutils literal notranslate"><span class="pre">hamilton_visualize</span></code></p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">hamilton_capabilities</span></code> tool reports which libraries are installed. Both <code class="docutils literal notranslate"><span class="pre">hamilton_capabilities</span></code> and <code class="docutils literal notranslate"><span class="pre">hamilton_scaffold</span></code> accept an optional <code class="docutils literal notranslate"><span class="pre">preferred_libraries</span></code> parameter: when provided, scaffolds are filtered to match the user’s stated preferences rather than relying on auto-detection. This is especially useful with <code class="docutils literal notranslate"><span class="pre">uvx</span></code>, where the server runs in an ephemeral environment that may not reflect the user’s project.</p>
+<p>When no preference is given, the tools fall back to auto-detecting installed libraries.</p>
+</section>
+<section id="usage-examples">
+<h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Link to this heading">¶</a></h2>
+<section id="example-1-ask-the-user-discover-capabilities-and-scaffold">
+<h3>Example 1: Ask the user, discover capabilities, and scaffold<a class="headerlink" href="#example-1-ask-the-user-discover-capabilities-and-scaffold" title="Link to this heading">¶</a></h3>
+<p>Start by asking which libraries the user works with, then pass their preferences:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>User: I want to build a Hamilton pipeline.
+
+LLM: Which data libraries do you use? (e.g., pandas, numpy, polars)
+
+User: I use pandas.
+
+Tool call: hamilton_capabilities(preferred_libraries=[&quot;pandas&quot;])
+Response:
+{
+  &quot;libraries&quot;: {
+    &quot;pandas&quot;: true,
+    &quot;numpy&quot;: true,
+    &quot;polars&quot;: false,
+    &quot;graphviz&quot;: true
+  },
+  &quot;available_scaffolds&quot;: [
+    &quot;basic&quot;, &quot;basic_pure_python&quot;, &quot;config_based&quot;,
+    &quot;data_pipeline&quot;, &quot;parameterized&quot;
+  ]
+}
+
+Tool call: hamilton_scaffold(pattern=&quot;data_pipeline&quot;, preferred_libraries=[&quot;pandas&quot;])
+Response:
+&quot;&quot;&quot;Hamilton data pipeline: ingest -&gt; clean -&gt; transform -&gt; aggregate.&quot;&quot;&quot;
+import pandas as pd
+
+def raw_data(raw_data_input: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Ingest raw data.&quot;&quot;&quot;
+    return raw_data_input
+
+def cleaned_data(raw_data: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Remove nulls and duplicates.&quot;&quot;&quot;
+    return raw_data.dropna().drop_duplicates()
+...
+</pre></div>
+</div>
+</section>
+<section id="example-2-validate-and-fix-then-execute">
+<h3>Example 2: Validate and fix, then execute<a class="headerlink" href="#example-2-validate-and-fix-then-execute" title="Link to this heading">¶</a></h3>
+<p>Write code, validate it, fix errors, and run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Tool</span> <span class="n">call</span><span class="p">:</span> <span class="n">hamilton_validate_dag</span><span class="p">(</span>
+  <span class="n">code</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">import pandas as pd</span>
+
+<span class="s2">def raw_data(raw_data_input: pd.DataFrame) -&gt; pd.DataFrame:</span>
+<span class="s2">    return raw_data_input</span>
+
+<span class="s2">def cleaned(raw_data: pd.DataFrame) -&gt; pd.DataFrame:</span>
+<span class="s2">    return raw_data.dropna()</span>
+
+<span class="s2">def row_count(cleaned: pd.DataFrame) -&gt; int:</span>
+<span class="s2">    return len(cleaned)</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="p">)</span>
+<span class="n">Response</span><span class="p">:</span>
+<span class="p">{</span>
+  <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+  <span class="s2">&quot;node_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+  <span class="s2">&quot;nodes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;cleaned&quot;</span><span class="p">,</span> <span class="s2">&quot;raw_data&quot;</span><span class="p">,</span> <span class="s2">&quot;row_count&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;raw_data_input&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;errors&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">}</span>
+
+<span class="n">Tool</span> <span class="n">call</span><span class="p">:</span> <span class="n">hamilton_execute</span><span class="p">(</span>
+  <span class="n">code</span><span class="o">=</span><span class="s2">&quot;...(same code)...&quot;</span><span class="p">,</span>
+  <span class="n">final_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;row_count&quot;</span><span class="p">],</span>
+  <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;raw_data_input&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">6</span><span class="p">]}}</span>
+<span class="p">)</span>
+<span class="n">Response</span><span class="p">:</span>
+<span class="p">{</span>
+  <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;row_count&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">},</span>
+  <span class="s2">&quot;execution_time_ms&quot;</span><span class="p">:</span> <span class="mf">12.3</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="example-3-explore-documentation-on-decorators">
+<h3>Example 3: Explore documentation on decorators<a class="headerlink" href="#example-3-explore-documentation-on-decorators" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Tool</span> <span class="n">call</span><span class="p">:</span> <span class="n">hamilton_get_docs</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="s2">&quot;parameterize&quot;</span><span class="p">)</span>
+<span class="n">Response</span><span class="p">:</span>
+<span class="nd">@parameterize</span>
+
+<span class="n">Creates</span> <span class="n">multiple</span> <span class="n">nodes</span> <span class="kn">from</span><span class="w"> </span><span class="nn">a</span> <span class="n">single</span> <span class="n">function</span> <span class="n">definition</span><span class="o">.</span>
+<span class="n">Each</span> <span class="n">parameterization</span> <span class="n">defines</span> <span class="n">a</span> <span class="n">new</span> <span class="n">node</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">argument</span>
+<span class="n">values</span> <span class="n">to</span> <span class="k">pass</span> <span class="n">to</span> <span class="n">the</span> <span class="n">function</span><span class="o">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="recommended-workflow">
+<h2>Recommended Workflow<a class="headerlink" href="#recommended-workflow" title="Link to this heading">¶</a></h2>
+<p>The server instructions recommend the following sequence for interactive DAG development:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ask</span> <span class="n">user</span> <span class="o">-&gt;</span> <span class="n">capabilities</span> <span class="o">-&gt;</span> <span class="n">scaffold</span> <span class="o">-&gt;</span> <span class="n">validate</span> <span class="o">-&gt;</span> <span class="n">visualize</span> <span class="o">-&gt;</span> <span class="n">correct</span> <span class="o">-&gt;</span> <span class="n">execute</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><strong>Ask the user</strong> – Ask which data libraries they use (pandas, numpy, polars, etc.), then pass the answer as <code class="docutils literal notranslate"><span class="pre">preferred_libraries</span></code> to capabilities and scaffold.</p></li>
+<li><p><strong>Capabilities</strong> – Call <code class="docutils literal notranslate"><span class="pre">hamilton_capabilities</span></code> to discover the environment.</p></li>
+<li><p><strong>Scaffold</strong> – Use <code class="docutils literal notranslate"><span class="pre">hamilton_scaffold</span></code> to generate a starting point matched to the user’s preferred libraries.</p></li>
+<li><p><strong>Validate</strong> – Call <code class="docutils literal notranslate"><span class="pre">hamilton_validate_dag</span></code> to compile the DAG without executing it.</p></li>
+<li><p><strong>Visualize</strong> – Call <code class="docutils literal notranslate"><span class="pre">hamilton_visualize</span></code> to inspect the dependency graph (requires graphviz).</p></li>
+<li><p><strong>Correct</strong> – If validation fails, read the error, fix the code, and validate again.</p></li>
+<li><p><strong>Execute</strong> – Call <code class="docutils literal notranslate"><span class="pre">hamilton_execute</span></code> after validation passes.</p></li>
+</ol>
+</section>
+<section id="accompanying-claude-code-skill">
+<h2>Accompanying Claude Code Skill<a class="headerlink" href="#accompanying-claude-code-skill" title="Link to this heading">¶</a></h2>
+<p>The Hamilton <a class="reference internal" href="../claude-code-plugin/"><span class="std std-doc">Claude Code Plugin</span></a> includes a dedicated <strong>hamilton-mcp</strong> skill that provides workflow guidance for using the MCP tools. The skill is defined in <code class="docutils literal notranslate"><span class="pre">.claude-plugin/skills/mcp/SKILL.md</span></code> and is registered in the plugin manifest.</p>
+<p>The skill provides:</p>
+<ul class="simple">
+<li><p><strong>Golden path workflow</strong> – Step-by-step instructions for the capabilities-scaffold-validate-visualize-correct-execute loop</p></li>
+<li><p><strong>Decision rules</strong> – Guidance on choosing scaffolds based on available libraries</p></li>
+<li><p><strong>Error handling strategy</strong> – Common errors, their causes, and fixes (missing modules, missing dependencies, timeouts, runtime vs. validation failures)</p></li>
+<li><p><strong>Retry policy</strong> – Retry once on error, explain to the user on second failure, never retry more than twice on the same error</p></li>
+<li><p><strong>Success criteria</strong> – A clear definition of what constitutes a successful interaction: zero validation errors, all inputs identified, results returned, and the user understands the DAG structure</p></li>
+</ul>
+<p>When Claude Code detects the Hamilton MCP server, the skill activates automatically and guides the LLM through best-practice usage of the tools.</p>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="modulenotfounderror-fastmcp-is-required">
+<h3><code class="docutils literal notranslate"><span class="pre">ModuleNotFoundError:</span> <span class="pre">FastMCP</span> <span class="pre">is</span> <span class="pre">required</span></code><a class="headerlink" href="#modulenotfounderror-fastmcp-is-required" title="Link to this heading">¶</a></h3>
+<p>The MCP extra is not installed. Use <code class="docutils literal notranslate"><span class="pre">uvx</span></code> which handles installation automatically:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uvx<span class="w"> </span>--from<span class="w"> </span><span class="s2">&quot;apache-hamilton[mcp]&quot;</span><span class="w"> </span>hamilton-mcp
+</pre></div>
+</div>
+<p>Or install manually: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;apache-hamilton[mcp]&quot;</span></code></p>
+</section>
+<section id="hamilton-mcp-command-not-found">
+<h3><code class="docutils literal notranslate"><span class="pre">hamilton-mcp:</span> <span class="pre">command</span> <span class="pre">not</span> <span class="pre">found</span></code><a class="headerlink" href="#hamilton-mcp-command-not-found" title="Link to this heading">¶</a></h3>
+<p>If running directly (without <code class="docutils literal notranslate"><span class="pre">uvx</span></code>), the CLI entrypoint may not be on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. Either use <code class="docutils literal notranslate"><span class="pre">uvx</span></code> (recommended), activate the virtual environment where Hamilton is installed, or use the full path:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/path/to/your/venv/bin/hamilton-mcp
+</pre></div>
+</div>
+</section>
+<section id="visualization-returns-an-error">
+<h3>Visualization returns an error<a class="headerlink" href="#visualization-returns-an-error" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">hamilton_visualize</span></code> tool requires the <code class="docutils literal notranslate"><span class="pre">graphviz</span></code> Python package and the Graphviz system binary. Install both:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;apache-hamilton[visualization]&quot;</span>
+
+<span class="c1"># On Ubuntu/Debian:</span>
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>graphviz
+
+<span class="c1"># On macOS:</span>
+brew<span class="w"> </span>install<span class="w"> </span>graphviz
+</pre></div>
+</div>
+</section>
+<section id="execution-times-out">
+<h3>Execution times out<a class="headerlink" href="#execution-times-out" title="Link to this heading">¶</a></h3>
+<p>The default timeout is 30 seconds. For long-running pipelines, pass a higher <code class="docutils literal notranslate"><span class="pre">timeout_seconds</span></code> value to <code class="docutils literal notranslate"><span class="pre">hamilton_execute</span></code>. Alternatively, reduce the data size or simplify the computation.</p>
+</section>
+<section id="validation-passes-but-execution-fails">
+<h3>Validation passes but execution fails<a class="headerlink" href="#validation-passes-but-execution-fails" title="Link to this heading">¶</a></h3>
+<p>Validation checks DAG structure (dependencies, types, circular references) but does not run function bodies. Common runtime failures include:</p>
+<ul class="simple">
+<li><p>Missing input values not provided in the <code class="docutils literal notranslate"><span class="pre">inputs</span></code> dict</p></li>
+<li><p>Exceptions inside function bodies (division by zero, key errors)</p></li>
+<li><p>Library-specific errors (e.g., column not found in a DataFrame)</p></li>
+</ul>
+</section>
+</section>
+<section id="learn-more">
+<h2>Learn More<a class="headerlink" href="#learn-more" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://hamilton.apache.org">Hamilton documentation</a> – Full framework reference</p></li>
+<li><p><a class="reference internal" href="../claude-code-plugin/"><span class="std std-doc">Claude Code Plugin</span></a> – AI-powered Hamilton development in Claude Code</p></li>
+<li><p><a class="reference internal" href="../../how-tos/cli-reference/"><span class="std std-doc">CLI reference</span></a> – The <code class="docutils literal notranslate"><span class="pre">hamilton</span></code> CLI for build, diff, version, and view</p></li>
+<li><p><a class="reference external" href="https://modelcontextprotocol.io/">Model Context Protocol</a> – MCP specification and ecosystem</p></li>
+</ul>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../../reference/decorators/">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Decorators</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../claude-code-plugin/">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Claude Code Plugin for Hamilton</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; The Apache Software Foundation, Licensed under the Apache License, Version 2.0.
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link " href="https://incubator.apache.org/" aria-label="Apache Stuff">
+<div class="apache-footer">
+    <img width="200" src="/_static/apache-incubator-logo.svg" alt="Apache Incubator Logo" class="apache-incubator-logo">
+    <div class="apache-notice">
+        <p>Apache Hamilton is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.</p>
+    </div>
+    <div class="apache-copyright">
+        <p>Apache, the names of Apache projects, and the feather logo are either registered trademarks or trademarks of the Apache Software Foundation in the United States and/or other countries.</p>
+    </div>
+</div>
+</a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">MCP Server</a><ul>
+<li><a class="reference internal" href="#architecture">Architecture</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#optional-dependencies">Optional dependencies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#running-the-server">Running the Server</a><ul>
+<li><a class="reference internal" href="#via-uvx-recommended">Via uvx (recommended)</a></li>
+<li><a class="reference internal" href="#direct-cli">Direct CLI</a></li>
+<li><a class="reference internal" href="#programmatic">Programmatic</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connecting-to-an-llm-client">Connecting to an LLM Client</a><ul>
+<li><a class="reference internal" href="#claude-desktop">Claude Desktop</a></li>
+<li><a class="reference internal" href="#claude-code">Claude Code</a></li>
+<li><a class="reference internal" href="#cursor">Cursor</a></li>
+<li><a class="reference internal" href="#other-mcp-compatible-clients">Other MCP-compatible clients</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#available-tools">Available Tools</a><ul>
+<li><a class="reference internal" href="#hamilton-capabilities"><code class="docutils literal notranslate"><span class="pre">hamilton_capabilities</span></code></a></li>
+<li><a class="reference internal" href="#hamilton-validate-dag"><code class="docutils literal notranslate"><span class="pre">hamilton_validate_dag</span></code></a></li>
+<li><a class="reference internal" href="#hamilton-list-nodes"><code class="docutils literal notranslate"><span class="pre">hamilton_list_nodes</span></code></a></li>
+<li><a class="reference internal" href="#hamilton-visualize"><code class="docutils literal notranslate"><span class="pre">hamilton_visualize</span></code></a></li>
+<li><a class="reference internal" href="#hamilton-execute"><code class="docutils literal notranslate"><span class="pre">hamilton_execute</span></code></a></li>
+<li><a class="reference internal" href="#hamilton-get-docs"><code class="docutils literal notranslate"><span class="pre">hamilton_get_docs</span></code></a></li>
+<li><a class="reference internal" href="#hamilton-scaffold"><code class="docutils literal notranslate"><span class="pre">hamilton_scaffold</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conditional-features">Conditional Features</a></li>
+<li><a class="reference internal" href="#usage-examples">Usage Examples</a><ul>
+<li><a class="reference internal" href="#example-1-ask-the-user-discover-capabilities-and-scaffold">Example 1: Ask the user, discover capabilities, and scaffold</a></li>
+<li><a class="reference internal" href="#example-2-validate-and-fix-then-execute">Example 2: Validate and fix, then execute</a></li>
+<li><a class="reference internal" href="#example-3-explore-documentation-on-decorators">Example 3: Explore documentation on decorators</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recommended-workflow">Recommended Workflow</a></li>
+<li><a class="reference internal" href="#accompanying-claude-code-skill">Accompanying Claude Code Skill</a></li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#modulenotfounderror-fastmcp-is-required"><code class="docutils literal notranslate"><span class="pre">ModuleNotFoundError:</span> <span class="pre">FastMCP</span> <span class="pre">is</span> <span class="pre">required</span></code></a></li>
+<li><a class="reference internal" href="#hamilton-mcp-command-not-found"><code class="docutils literal notranslate"><span class="pre">hamilton-mcp:</span> <span class="pre">command</span> <span class="pre">not</span> <span class="pre">found</span></code></a></li>
+<li><a class="reference internal" href="#visualization-returns-an-error">Visualization returns an error</a></li>
+<li><a class="reference internal" href="#execution-times-out">Execution times out</a></li>
+<li><a class="reference internal" href="#validation-passes-but-execution-fails">Validation passes but execution fails</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#learn-more">Learn More</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=187304be"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}`;
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        all_mermaids.forEach((el) => {
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+        await mermaid.run();
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+const load = async () => {
+    initStyles();
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...JSON.parse(
+                    `{"startOnLoad": false}`
+                ),
+                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...JSON.parse(
+        `{"startOnLoad": false}`
+    ),
+    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    </body>
+</html>

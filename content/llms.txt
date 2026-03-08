@@ -68,6 +68,7 @@
 - [Meet-ups](https://hamilton.apache.org/_sources/community/index.md.txt)
 - [Ecosystem](https://hamilton.apache.org/_sources/ecosystem/index.md.txt)
 - [Claude Code Plugin for Hamilton](https://hamilton.apache.org/_sources/ecosystem/claude-code-plugin.md.txt)
+- [MCP Server](https://hamilton.apache.org/_sources/ecosystem/mcp-server.md.txt)
 - [Decorators](https://hamilton.apache.org/_sources/reference/decorators/index.rst.txt)
 - [check_output*](https://hamilton.apache.org/_sources/reference/decorators/check_output.rst.txt)
 - [config.when*](https://hamilton.apache.org/_sources/reference/decorators/config_when.rst.txt)
