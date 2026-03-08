@@ -226,3 +226,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+This product includes test code derived from pygls
+(https://github.com/openlawlibrary/pygls):
+Copyright (c) Open Law Library. All rights reserved.
+Licensed under the Apache License, Version 2.0.
+See dev_tools/language_server/tests/ls_setup.py.

@@ -53,7 +53,8 @@ repos:
           (?x)
           ^\.github/|
           ^docs/|
-          ^examples/
+          ^examples/|
+          ^dev_tools/language_server/tests/ls_setup\.py$
         args:
           - --comment-style
           - "|#|"
