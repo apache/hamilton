@@ -53,7 +53,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-cli = ["typer"]
+cli = ["typer>=0.16.0"]
 dask = ["dask[complete]"]  # commonly you'll want everything.
 dask-array = ["dask[array]"]
 dask-dataframe = ["dask[dataframe]"]
@@ -125,7 +125,7 @@ test = [
   "PyYAML",
   "scikit-learn",
   "sqlalchemy[asyncio]",
-  "typer",
+  "typer>=0.16.0",
   "xgboost; python_version < '3.14'",
   "xlsx2csv", # for excel data loader
   "xlsxwriter",  # Excel export requires 'xlsxwriter'
