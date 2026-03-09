@@ -1,0 +1,46 @@
+{
+  "name": "apache-hamilton",
+  "owner": {
+    "name": "Hamilton Team",
+    "email": "dev@hamilton.apache.org"
+  },
+  "metadata": {
+    "description": "Official Apache Hamilton plugins for Claude Code - create DAGs, apply decorators, debug dataflows, and optimize pipelines",
+    "version": "2.0.0"
+  },
+  "plugins": [
+    {
+      "name": "hamilton",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/apache/hamilton.git",
+        "path": ".claude-plugin"
+      },
+      "description": "Expert AI assistant for Apache Hamilton framework development - create DAGs, apply decorators, debug dataflows, and optimize pipelines",
+      "version": "2.0.0",
+      "author": {
+        "name": "Hamilton Team",
+        "email": "dev@hamilton.apache.org"
+      },
+      "homepage": "https://github.com/apache/hamilton",
+      "repository": "https://github.com/apache/hamilton",
+      "license": "Apache-2.0",
+      "keywords": [
+        "hamilton",
+        "dag",
+        "dataflow",
+        "workflow",
+        "pipeline",
+        "data-engineering",
+        "ml-ops",
+        "feature-engineering",
+        "llm",
+        "rag",
+        "async",
+        "spark",
+        "observability"
+      ],
+      "category": "data-engineering"
+    }
+  ]
+}
