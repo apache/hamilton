@@ -21,7 +21,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "apache-hamilton-lsp"
-version = "0.1.0"
+version = "0.2.0.dev0"
 description = "Apache Hamilton Language Server powering IDE features."
 readme = "README.md"
 requires-python = ">=3.10, <4"
@@ -54,7 +54,7 @@ classifiers = [
 ]
 dependencies = [
     "pygls>=1.3.1",
-    "apache-hamilton[visualization]>=1.56",
+    "apache-hamilton[visualization]==1.90.0.dev0",
 ]
 
 [project.urls]
