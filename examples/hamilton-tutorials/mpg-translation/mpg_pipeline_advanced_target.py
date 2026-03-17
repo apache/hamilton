@@ -25,7 +25,7 @@ from hamilton.function_modifiers import extract_fields
 
 
 def mpg_df() -> pd.DataFrame:
-    url = "http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data"
+    url = "https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data"
     column_names = [
         "MPG",
         "Cylinders",
