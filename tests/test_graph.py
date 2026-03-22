@@ -20,6 +20,7 @@ import pathlib
 import sys
 import uuid
 from itertools import permutations
+from types import ModuleType
 
 import pandas as pd
 import pytest
@@ -81,8 +82,6 @@ import tests.resources.typing_vs_not_typing
 )
 def test_is_submodule(child_name, parent_name, expected):
     """Tests that is_submodule correctly checks module hierarchy using prefix matching."""
-    from types import ModuleType
-
     child = ModuleType(child_name)
     parent = ModuleType(parent_name)
     assert hamilton.graph_utils.is_submodule(child, parent) == expected
@@ -108,11 +107,6 @@ def test_find_functions_excludes_imports_with_substring_module_name():
     which caused e.g. a module named 'modifiers' to pull in functions from
     'hamilton.function_modifiers'.
     """
-    import sys
-    from types import ModuleType
-
-    from hamilton.function_modifiers import source, value
-
     # Create a fake module named "modifiers" with one real function and two imports
     mod = ModuleType("modifiers")
 
@@ -122,8 +116,8 @@ def test_find_functions_excludes_imports_with_substring_module_name():
     # Assign the function to the module so inspect.getmodule can resolve it
     my_func.__module__ = "modifiers"
     mod.my_func = my_func
-    mod.source = source
-    mod.value = value
+    mod.source = fm.source
+    mod.value = fm.value
 
     # Register in sys.modules so inspect.getmodule can find it
     sys.modules["modifiers"] = mod
