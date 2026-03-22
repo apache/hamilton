@@ -23,13 +23,13 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v4
 
-        - name: Install uv and set the python version
-          uses: astral-sh/setup-uv@v6
+        - name: Install uv
+          run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+        - name: Set up Python
+          uses: actions/setup-python@v5
           with:
             python-version: '3.10'
-            enable-cache: true
-            cache-dependency-glob: "uv.lock"
-            activate-environment: true
 
         - name: Check linting with prek
           run: |
@@ -73,13 +73,13 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v4
 
-        - name: Install uv and set the python version
-          uses: astral-sh/setup-uv@v6
+        - name: Install uv
+          run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+        - name: Set up Python
+          uses: actions/setup-python@v5
           with:
             python-version: ${{ matrix.python-version }}
-            enable-cache: true
-            cache-dependency-glob: "uv.lock"
-            activate-environment: true
 
         - name: Test hamilton main package
           run: |
