@@ -16,10 +16,12 @@
 # under the License.
 
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
 from hamilton import contrib
+from hamilton.function_modifiers import config
 
 with contrib.catch_import_errors(__name__, __file__, logger):
     import openai
@@ -75,13 +77,31 @@ def rag_prompt(context: str, question: str) -> str:
     return template.format(context=context, question=question)
 
 
-def llm_client() -> openai.OpenAI:
-    """The LLM client to use for the RAG model."""
+@config.when_not(provider="minimax")
+def llm_client__openai() -> openai.OpenAI:
+    """The OpenAI LLM client (default).
+
+    Uses the OPENAI_API_KEY environment variable for authentication.
+    """
     return openai.OpenAI()
 
 
-def rag_response(rag_prompt: str, llm_client: openai.OpenAI) -> str:
-    """Creates the RAG response from the LLM model for the given prompt.
+@config.when(provider="minimax")
+def llm_client__minimax() -> openai.OpenAI:
+    """The MiniMax LLM client via OpenAI-compatible API.
+
+    Uses the MINIMAX_API_KEY environment variable for authentication.
+    MiniMax provides an OpenAI-compatible endpoint at https://api.minimax.io/v1.
+    """
+    return openai.OpenAI(
+        base_url="https://api.minimax.io/v1",
+        api_key=os.environ.get("MINIMAX_API_KEY"),
+    )
+
+
+@config.when_not(provider="minimax")
+def rag_response__openai(rag_prompt: str, llm_client: openai.OpenAI) -> str:
+    """Creates the RAG response using OpenAI.
 
     :param rag_prompt: the prompt to send to the LLM.
     :param llm_client: the LLM client to use.
@@ -94,11 +114,29 @@ def rag_response(rag_prompt: str, llm_client: openai.OpenAI) -> str:
     return response.choices[0].message.content
 
 
+@config.when(provider="minimax")
+def rag_response__minimax(rag_prompt: str, llm_client: openai.OpenAI) -> str:
+    """Creates the RAG response using MiniMax M2.7.
+
+    MiniMax M2.7 is a high-performance model with 1M token context window.
+
+    :param rag_prompt: the prompt to send to the LLM.
+    :param llm_client: the LLM client to use.
+    :return: the response from the LLM.
+    """
+    response = llm_client.chat.completions.create(
+        model="MiniMax-M2.7",
+        messages=[{"role": "user", "content": rag_prompt}],
+    )
+    return response.choices[0].message.content
+
+
 if __name__ == "__main__":
     import __init__ as hamilton_faiss_rag
 
     from hamilton import driver, lifecycle
 
+    # Default: uses OpenAI (config={} or config={"provider": "openai"})
     dr = (
         driver.Builder()
         .with_modules(hamilton_faiss_rag)
@@ -120,3 +158,12 @@ if __name__ == "__main__":
             },
         )
     )
+
+    # To use MiniMax instead, set MINIMAX_API_KEY and use:
+    # dr = (
+    #     driver.Builder()
+    #     .with_modules(hamilton_faiss_rag)
+    #     .with_config({"provider": "minimax"})
+    #     .with_adapters(lifecycle.PrintLn(verbosity=2))
+    #     .build()
+    # )

@@ -1,6 +1,6 @@
 {
   "schema": "1.0",
-  "use_case_tags": ["LLM", "openai", "RAG", "retrieval augmented generation", "FAISS"],
+  "use_case_tags": ["LLM", "openai", "minimax", "RAG", "retrieval augmented generation", "FAISS"],
   "secondary_tags": {
     "language": "English"
   }

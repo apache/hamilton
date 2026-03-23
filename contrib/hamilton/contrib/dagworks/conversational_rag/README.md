@@ -23,7 +23,9 @@ This module shows a conversational retrieval augmented generation (RAG) example 
 Apache Hamilton. It shows you how you might structure your code with Apache Hamilton to
 create a RAG pipeline that takes into account conversation.
 
-This example uses [FAISS](https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/) + and in memory vector store and the OpenAI LLM provider.
+This example uses [FAISS](https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/) + an in memory vector store with multi-provider LLM support.
+It supports **OpenAI** (default) and **[MiniMax](https://www.minimax.io/)** as LLM providers,
+switchable via Hamilton's `@config.when` pattern.
 The implementation of the FAISS vector store uses the LangChain wrapper around it.
 That's because this was the simplest way to get this example up without requiring
 someone having to host and manage a proper vector store.
@@ -57,6 +59,7 @@ Here we just ask for the final result, but if you wanted to, you could ask for o
 you can then introspect or log for debugging/evaluation purposes. Note if you want more platform integrations,
 you can add adapters that will do this automatically for you, e.g. like we have the `PrintLn` adapter here.
 
+**Using OpenAI (default):**
 ```python
 # import the module
 from hamilton import driver
@@ -64,7 +67,7 @@ from hamilton import lifecycle
 dr = (
     driver.Builder()
     .with_modules(conversational_rag)
-    .with_config({})
+    .with_config({})  # defaults to OpenAI
     # this prints the inputs and outputs of each step.
     .with_adapters(lifecycle.PrintLn(verbosity=2))
     .build()
@@ -102,6 +105,34 @@ result = dr.execute(
 print(result)
 ```
 
+**Using MiniMax:**
+
+Set `MINIMAX_API_KEY` in your environment, then pass `{"provider": "minimax"}` in the config:
+```python
+from hamilton import driver, lifecycle
+dr = (
+    driver.Builder()
+    .with_modules(conversational_rag)
+    .with_config({"provider": "minimax"})
+    .with_adapters(lifecycle.PrintLn(verbosity=2))
+    .build()
+)
+result = dr.execute(
+    ["conversational_rag_response"],
+    inputs={
+        "input_texts": [
+            "harrison worked at kensho",
+            "stefan worked at Stitch Fix",
+        ],
+        "question": "where did stefan work?",
+        "chat_history": []
+    },
+)
+print(result)
+```
+MiniMax uses the [MiniMax-M2.7](https://www.minimax.io/) model with a 1M token context window
+via an OpenAI-compatible API endpoint.
+
 # How to extend this module
 What you'd most likely want to do is:
 
@@ -112,16 +143,21 @@ What you'd most likely want to do is:
 With (1) you can import any vector store/library that you want. You should draw out
 the process you would like, and that should then map to Apache Hamilton functions.
 With (2) you can import any LLM provider that you want, just use `@config.when` if you
-want to switch between multiple providers.
+want to switch between multiple providers. OpenAI and MiniMax are already supported.
 With (3) you can add more functions that create parts of the prompt.
 
 # Configuration Options
-There is no configuration needed for this module.
+
+| Config Key | Values | Description |
+|-----------|--------|-------------|
+| `provider` | `"minimax"` | Use MiniMax M2.7 as the LLM. Requires `MINIMAX_API_KEY` env var. |
+| *(empty)* | | Default: uses OpenAI. Requires `OPENAI_API_KEY` env var. |
 
 # Limitations
 
-You need to have the OPENAI_API_KEY in your environment.
-It should be accessible from your code by doing `os.environ["OPENAI_API_KEY"]`.
+You need to have the appropriate API key in your environment:
+- **OpenAI** (default): `OPENAI_API_KEY`
+- **MiniMax**: `MINIMAX_API_KEY`
 
 The code does not check the context length, so it may fail if the context passed is too long
 for the LLM you send it to.
