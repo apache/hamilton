@@ -42,7 +42,7 @@
     "react-router-dom": "^6.28.0",
     "react-router-hash-link": "^2.4.3",
     "react-select": "^5.8.3",
-    "react-syntax-highlighter": "^15.5.0",
+    "react-syntax-highlighter": "^16.1.1",
     "react-tailwindcss-datepicker": "^1.6.1",
     "react-time-ago": "^7.2.1",
     "react-visibility-sensor": "^5.1.1",
