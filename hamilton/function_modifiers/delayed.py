@@ -169,7 +169,10 @@ class resolve(DynamicResolver):
         for key in self._optional_config:
             if key in config:
                 kwargs[key] = config[key]
-        return self.decorate_with(**kwargs)
+        decorator = self.decorate_with(**kwargs)
+        if hasattr(decorator, "validate"):
+            decorator.validate(fn)
+        return decorator
 
 
 class resolve_from_config(resolve):

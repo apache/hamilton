@@ -24,6 +24,7 @@ from hamilton.function_modifiers import (
     ResolveAt,
     base,
     extract_columns,
+    extract_fields,
     resolve,
     resolve_from_config,
 )
@@ -86,7 +87,8 @@ def test_dynamic_resolve_with_configs():
         decorate_with=lambda cols_to_extract: extract_columns(*cols_to_extract),
     )
     decorator_resolved = decorator.resolve(
-        {"cols_to_extract": ["a", "b"], **CONFIG_WITH_POWER_MODE_ENABLED}, fn=test_dynamic_resolves
+        {"cols_to_extract": ["a", "b"], **CONFIG_WITH_POWER_MODE_ENABLED},
+        fn=test_dynamic_resolve_with_configs,
     )
     # This uses an internal component of extract_columns
     # We may want to add a little more comprehensive testing
@@ -157,3 +159,21 @@ def test_delayed_without_power_mode_fails():
             {"cols_to_extract": ["a", "b"], **CONFIG_WITH_POWER_MODE_DISABLED},
             fn=test_delayed_with_optional,
         )
+
+
+def test_dynamic_resolve_with_extract_fields():
+    """Test that @resolve with @extract_fields calls validate() correctly."""
+
+    def my_function() -> dict[str, int]:
+        return {"a": 1, "b": 2}
+
+    decorator = resolve(
+        when=ResolveAt.CONFIG_AVAILABLE,
+        decorate_with=lambda fields: extract_fields(fields),
+    )
+    decorator_resolved = decorator.resolve(
+        {"fields": {"a": int, "b": int}, **CONFIG_WITH_POWER_MODE_ENABLED},
+        fn=my_function,
+    )
+    assert hasattr(decorator_resolved, "resolved_fields")
+    assert decorator_resolved.resolved_fields == {"a": int, "b": int}
