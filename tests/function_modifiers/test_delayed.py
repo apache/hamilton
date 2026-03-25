@@ -105,7 +105,7 @@ def test_dynamic_resolve_with_configs():
     assert decorator_resolved.columns == ("a", "b")
 
 
-def test_dynamic_fails_without_power_mode_fails():
+def test_dynamic_resolve_without_power_mode_fails():
     def fn() -> pd.DataFrame:
         return pd.DataFrame()
 
