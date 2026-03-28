@@ -21,7 +21,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "apache-hamilton"
-version = "1.89.0"  # NOTE: keep this in sync with hamilton/version.py
+version = "1.90.0"  # NOTE: keep this in sync with hamilton/version.py
 # TODO: flip back to dynamic once hamilton version is a string. Flit doesn't handle tuples.
 # dynamic = ["version"]
 description = "Apache Hamilton (incubating) is a lightweight Python library for directed acyclic graphs (DAGs) of transformations. Your DAG is **portable**; it runs anywhere Python runs, whether it's a script, notebook, Airflow pipeline, FastAPI server, etc. Your DAG is **expressive**; Apache Hamilton has extensive features to define and modify the execution of a DAG (e.g., data validation, experiment tracking, remote execution)."
