@@ -24,19 +24,19 @@ Checks signatures, checksums, licenses, and archive integrity.
 
 Usage:
     # List contents of an artifact
-    python scripts/verify_apache_artifacts.py list-contents dist/apache-hamilton-0.41.0-incubating-src.tar.gz
+    uv run python scripts/verify_apache_artifacts.py list-contents dist/apache-hamilton-0.41.0-incubating-src.tar.gz
 
     # Verify signatures and checksums
-    python scripts/verify_apache_artifacts.py signatures
+    uv run python scripts/verify_apache_artifacts.py signatures
 
     # Verify licenses with Apache RAT
-    python scripts/verify_apache_artifacts.py licenses --rat-jar path/to/apache-rat.jar
+    uv run python scripts/verify_apache_artifacts.py licenses --rat-jar path/to/apache-rat.jar
 
     # Verify everything
-    python scripts/verify_apache_artifacts.py all --rat-jar path/to/apache-rat.jar
+    uv run python scripts/verify_apache_artifacts.py all --rat-jar path/to/apache-rat.jar
 
     # Specify custom artifacts directory
-    python scripts/verify_apache_artifacts.py signatures --artifacts-dir /path/to/dist
+    uv run python scripts/verify_apache_artifacts.py signatures --artifacts-dir /path/to/dist
 """
 
 import argparse
