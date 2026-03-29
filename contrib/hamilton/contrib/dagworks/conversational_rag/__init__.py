@@ -55,31 +55,16 @@ def standalone_question_prompt(chat_history: list[str], question: str) -> str:
     ).format(chat_history=chat_history_str, question=question)
 
 
-@config.when_not(provider="minimax")
-def standalone_question__openai(standalone_question_prompt: str, llm_client: openai.OpenAI) -> str:
-    """Asks OpenAI to create a standalone question from the prompt.
+def standalone_question(standalone_question_prompt: str, llm_client: openai.OpenAI, model: str) -> str:
+    """Asks the LLM to create a standalone question from the prompt.
 
     :param standalone_question_prompt: the prompt with context.
     :param llm_client: the llm client to use.
+    :param model: the model name to use.
     :return: the standalone question.
     """
     response = llm_client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": standalone_question_prompt}],
-    )
-    return response.choices[0].message.content
-
-
-@config.when(provider="minimax")
-def standalone_question__minimax(standalone_question_prompt: str, llm_client: openai.OpenAI) -> str:
-    """Asks MiniMax to create a standalone question from the prompt.
-
-    :param standalone_question_prompt: the prompt with context.
-    :param llm_client: the llm client to use.
-    :return: the standalone question.
-    """
-    response = llm_client.chat.completions.create(
-        model="MiniMax-M2.7",
+        model=model,
         messages=[{"role": "user", "content": standalone_question_prompt}],
     )
     return response.choices[0].message.content
@@ -153,32 +138,27 @@ def llm_client__minimax() -> openai.OpenAI:
 
 
 @config.when_not(provider="minimax")
-def conversational_rag_response__openai(answer_prompt: str, llm_client: openai.OpenAI) -> str:
-    """Creates the RAG response using OpenAI.
-
-    :param answer_prompt: the prompt to send to the LLM.
-    :param llm_client: the LLM client to use.
-    :return: the response from the LLM.
-    """
-    response = llm_client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": answer_prompt}],
-    )
-    return response.choices[0].message.content
+def model__openai() -> str:
+    """The model to use for OpenAI (default)."""
+    return "gpt-3.5-turbo"
 
 
 @config.when(provider="minimax")
-def conversational_rag_response__minimax(answer_prompt: str, llm_client: openai.OpenAI) -> str:
-    """Creates the RAG response using MiniMax M2.7.
+def model__minimax() -> str:
+    """The model to use for MiniMax."""
+    return "MiniMax-M2.7"
 
-    MiniMax M2.7 is a high-performance model with 1M token context window.
+
+def conversational_rag_response(answer_prompt: str, llm_client: openai.OpenAI, model: str) -> str:
+    """Creates the RAG response using the configured LLM.
 
     :param answer_prompt: the prompt to send to the LLM.
     :param llm_client: the LLM client to use.
+    :param model: the model name to use.
     :return: the response from the LLM.
     """
     response = llm_client.chat.completions.create(
-        model="MiniMax-M2.7",
+        model=model,
         messages=[{"role": "user", "content": answer_prompt}],
     )
     return response.choices[0].message.content

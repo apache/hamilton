@@ -76,6 +76,16 @@ class TestAnswerPrompt:
         assert "What is Hamilton?" in result
 
 
+class TestModelConfig:
+    """Tests for model configuration functions."""
+
+    def test_model_openai_returns_gpt35(self):
+        assert conversational_rag.model__openai() == "gpt-3.5-turbo"
+
+    def test_model_minimax_returns_m27(self):
+        assert conversational_rag.model__minimax() == "MiniMax-M2.7"
+
+
 class TestOpenAIProvider:
     """Tests for OpenAI provider configuration."""
 
@@ -84,16 +94,17 @@ class TestOpenAIProvider:
             client = conversational_rag.llm_client__openai()
             assert isinstance(client, openai.OpenAI)
 
-    def test_standalone_question_openai_calls_correct_model(self):
+    def test_standalone_question_calls_with_model(self):
         mock_client = MagicMock(spec=openai.OpenAI)
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
         mock_response.choices[0].message.content = "standalone question"
         mock_client.chat.completions.create.return_value = mock_response
 
-        result = conversational_rag.standalone_question__openai(
+        result = conversational_rag.standalone_question(
             standalone_question_prompt="test prompt",
             llm_client=mock_client,
+            model="gpt-3.5-turbo",
         )
         assert result == "standalone question"
         mock_client.chat.completions.create.assert_called_once_with(
@@ -101,16 +112,17 @@ class TestOpenAIProvider:
             messages=[{"role": "user", "content": "test prompt"}],
         )
 
-    def test_rag_response_openai_calls_correct_model(self):
+    def test_rag_response_calls_with_model(self):
         mock_client = MagicMock(spec=openai.OpenAI)
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
         mock_response.choices[0].message.content = "Stitch Fix"
         mock_client.chat.completions.create.return_value = mock_response
 
-        result = conversational_rag.conversational_rag_response__openai(
+        result = conversational_rag.conversational_rag_response(
             answer_prompt="Where did stefan work?",
             llm_client=mock_client,
+            model="gpt-3.5-turbo",
         )
         assert result == "Stitch Fix"
         mock_client.chat.completions.create.assert_called_once_with(
@@ -133,31 +145,33 @@ class TestMiniMaxProvider:
             client = conversational_rag.llm_client__minimax()
             assert client.api_key == "my-key"
 
-    def test_standalone_question_minimax_calls_correct_model(self):
+    def test_standalone_question_with_minimax_model(self):
         mock_client = MagicMock(spec=openai.OpenAI)
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
         mock_response.choices[0].message.content = "standalone question"
         mock_client.chat.completions.create.return_value = mock_response
 
-        result = conversational_rag.standalone_question__minimax(
+        result = conversational_rag.standalone_question(
             standalone_question_prompt="test prompt",
             llm_client=mock_client,
+            model="MiniMax-M2.7",
         )
         assert result == "standalone question"
         call_args = mock_client.chat.completions.create.call_args
         assert call_args.kwargs["model"] == "MiniMax-M2.7"
 
-    def test_rag_response_minimax_calls_correct_model(self):
+    def test_rag_response_with_minimax_model(self):
         mock_client = MagicMock(spec=openai.OpenAI)
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
         mock_response.choices[0].message.content = "MiniMax answer"
         mock_client.chat.completions.create.return_value = mock_response
 
-        result = conversational_rag.conversational_rag_response__minimax(
+        result = conversational_rag.conversational_rag_response(
             answer_prompt="Where did stefan work?",
             llm_client=mock_client,
+            model="MiniMax-M2.7",
         )
         assert result == "MiniMax answer"
         call_args = mock_client.chat.completions.create.call_args
@@ -193,6 +207,7 @@ class TestHamiltonDriverConfig:
         dr = driver.Builder().with_modules(conversational_rag).with_config({}).build()
         graph_nodes = {n.name for n in dr.graph.get_nodes()}
         assert "llm_client" in graph_nodes
+        assert "model" in graph_nodes
         assert "standalone_question" in graph_nodes
         assert "conversational_rag_response" in graph_nodes
 
@@ -205,6 +220,7 @@ class TestHamiltonDriverConfig:
         )
         graph_nodes = {n.name for n in dr.graph.get_nodes()}
         assert "llm_client" in graph_nodes
+        assert "model" in graph_nodes
         assert "standalone_question" in graph_nodes
         assert "conversational_rag_response" in graph_nodes
 
@@ -273,12 +289,13 @@ class TestMiniMaxIntegration:
     def test_minimax_standalone_question_real_api(self, minimax_api_key):
         with patch.dict(os.environ, {"MINIMAX_API_KEY": minimax_api_key}):
             client = conversational_rag.llm_client__minimax()
-            result = conversational_rag.standalone_question__minimax(
+            result = conversational_rag.standalone_question(
                 standalone_question_prompt="Given the following conversation:\n"
                 "Human: Who wrote this example?\nAI: Stefan\n"
                 "Follow Up Input: Where did he work?\n"
                 "Standalone question:",
                 llm_client=client,
+                model="MiniMax-M2.7",
             )
             assert isinstance(result, str)
             assert len(result) > 0
@@ -286,11 +303,12 @@ class TestMiniMaxIntegration:
     def test_minimax_conversational_rag_response_real_api(self, minimax_api_key):
         with patch.dict(os.environ, {"MINIMAX_API_KEY": minimax_api_key}):
             client = conversational_rag.llm_client__minimax()
-            result = conversational_rag.conversational_rag_response__minimax(
+            result = conversational_rag.conversational_rag_response(
                 answer_prompt="Answer the question based only on the following context:\n"
                 "Stefan worked at Stitch Fix.\n\n"
                 "Question: Where did Stefan work?",
                 llm_client=client,
+                model="MiniMax-M2.7",
             )
             assert isinstance(result, str)
             assert len(result) > 0

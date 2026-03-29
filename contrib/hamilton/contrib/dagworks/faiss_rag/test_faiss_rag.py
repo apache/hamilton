@@ -58,6 +58,16 @@ class TestRagPrompt:
         assert "q" in result
 
 
+class TestModelConfig:
+    """Tests for model configuration functions."""
+
+    def test_model_openai_returns_gpt35(self):
+        assert faiss_rag.model__openai() == "gpt-3.5-turbo"
+
+    def test_model_minimax_returns_m27(self):
+        assert faiss_rag.model__minimax() == "MiniMax-M2.7"
+
+
 class TestOpenAIProvider:
     """Tests for OpenAI provider configuration."""
 
@@ -67,17 +77,18 @@ class TestOpenAIProvider:
             client = faiss_rag.llm_client__openai()
             assert isinstance(client, openai.OpenAI)
 
-    def test_rag_response_openai_calls_chat_completions(self):
-        """Test that the OpenAI rag_response calls the correct model."""
+    def test_rag_response_calls_with_model(self):
+        """Test that rag_response calls chat completions with the given model."""
         mock_client = MagicMock(spec=openai.OpenAI)
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
         mock_response.choices[0].message.content = "Stitch Fix"
         mock_client.chat.completions.create.return_value = mock_response
 
-        result = faiss_rag.rag_response__openai(
+        result = faiss_rag.rag_response(
             rag_prompt="Where did stefan work?",
             llm_client=mock_client,
+            model="gpt-3.5-turbo",
         )
 
         assert result == "Stitch Fix"
@@ -103,17 +114,18 @@ class TestMiniMaxProvider:
             client = faiss_rag.llm_client__minimax()
             assert client.api_key == "my-secret-key"
 
-    def test_rag_response_minimax_calls_correct_model(self):
-        """Test that the MiniMax rag_response calls MiniMax-M2.7."""
+    def test_rag_response_with_minimax_model(self):
+        """Test that rag_response works with MiniMax-M2.7 model."""
         mock_client = MagicMock(spec=openai.OpenAI)
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
         mock_response.choices[0].message.content = "Stitch Fix"
         mock_client.chat.completions.create.return_value = mock_response
 
-        result = faiss_rag.rag_response__minimax(
+        result = faiss_rag.rag_response(
             rag_prompt="Where did stefan work?",
             llm_client=mock_client,
+            model="MiniMax-M2.7",
         )
 
         assert result == "Stitch Fix"
@@ -141,22 +153,24 @@ class TestHamiltonDriverConfig:
         dr = driver.Builder().with_modules(faiss_rag).with_config({"provider": "minimax"}).build()
         assert dr is not None
 
-    def test_default_config_includes_openai_functions(self):
-        """Test that default config resolves to OpenAI provider functions."""
+    def test_default_config_includes_required_nodes(self):
+        """Test that default config resolves to all required nodes."""
         dr = driver.Builder().with_modules(faiss_rag).with_config({}).build()
         graph_nodes = {n.name for n in dr.graph.get_nodes()}
         assert "llm_client" in graph_nodes
+        assert "model" in graph_nodes
         assert "rag_response" in graph_nodes
 
-    def test_minimax_config_includes_minimax_functions(self):
-        """Test that minimax config resolves to MiniMax provider functions."""
+    def test_minimax_config_includes_required_nodes(self):
+        """Test that minimax config resolves to all required nodes."""
         dr = driver.Builder().with_modules(faiss_rag).with_config({"provider": "minimax"}).build()
         graph_nodes = {n.name for n in dr.graph.get_nodes()}
         assert "llm_client" in graph_nodes
+        assert "model" in graph_nodes
         assert "rag_response" in graph_nodes
 
-    def test_default_config_executes_openai_rag(self):
-        """Test end-to-end execution with OpenAI config using mocked client."""
+    def test_default_config_executes_rag(self):
+        """Test end-to-end execution with default config using mocked client."""
         mock_client = MagicMock(spec=openai.OpenAI)
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
@@ -171,7 +185,7 @@ class TestHamiltonDriverConfig:
         )
         assert result["rag_response"] == "Stitch Fix"
 
-    def test_minimax_config_executes_minimax_rag(self):
+    def test_minimax_config_executes_rag(self):
         """Test end-to-end execution with MiniMax config using mocked client."""
         mock_client = MagicMock(spec=openai.OpenAI)
         mock_response = MagicMock()
@@ -196,19 +210,6 @@ class TestMiniMaxModelConstants:
         with patch.dict(os.environ, {"MINIMAX_API_KEY": "test-key"}):
             client = faiss_rag.llm_client__minimax()
             assert str(client.base_url).rstrip("/") == "https://api.minimax.io/v1"
-
-    def test_minimax_model_name_is_m27(self):
-        """Test that MiniMax response uses M2.7 model."""
-        mock_client = MagicMock(spec=openai.OpenAI)
-        mock_response = MagicMock()
-        mock_response.choices = [MagicMock()]
-        mock_response.choices[0].message.content = "test"
-        mock_client.chat.completions.create.return_value = mock_response
-
-        faiss_rag.rag_response__minimax(rag_prompt="test", llm_client=mock_client)
-
-        call_args = mock_client.chat.completions.create.call_args
-        assert call_args.kwargs["model"] == "MiniMax-M2.7"
 
 
 # ──────────────────────── Integration Tests ─────────────────────────
@@ -236,11 +237,12 @@ class TestMiniMaxIntegration:
         """Test a real RAG response from MiniMax API."""
         with patch.dict(os.environ, {"MINIMAX_API_KEY": minimax_api_key}):
             client = faiss_rag.llm_client__minimax()
-            result = faiss_rag.rag_response__minimax(
+            result = faiss_rag.rag_response(
                 rag_prompt="Answer the question based only on the following context:\n"
                 "Stefan worked at Stitch Fix.\n\n"
                 "Question: Where did Stefan work?",
                 llm_client=client,
+                model="MiniMax-M2.7",
             )
             assert isinstance(result, str)
             assert len(result) > 0
