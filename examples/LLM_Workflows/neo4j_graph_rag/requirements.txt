@@ -1,0 +1,10 @@
+sf-hamilton>=1.73.0
+neo4j>=5.18.0
+llama-index>=0.10.0
+llama-index-graph-stores-neo4j>=0.2.0
+llama-index-llms-openai>=0.1.0
+llama-index-embeddings-openai>=0.1.0
+openai>=1.30.0
+pandas>=2.0.0
+python-dotenv>=1.0.0
+tqdm>=4.66.0

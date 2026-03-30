@@ -1,0 +1,27 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+
+# Data files (download separately per data/README.md)
+data/*.json
+data/*.csv
+
+# DAG visualisations are committed — ignore regenerated copies at root
+ingest_dag.png
+embed_dag.png
+rag_dag.png
+
+# Neo4j
+*.dump
+
+# OS
+.DS_Store
+Thumbs.db
