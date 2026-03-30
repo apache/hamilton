@@ -341,35 +341,37 @@ def create_release_artifacts(package_config: dict, version) -> list[str]:
         expected_tar_ball = f"dist/{package_file_name}-{version.lower()}.tar.gz"
         tarball_path = glob.glob(expected_tar_ball)
 
-        if not tarball_path:
+        if len(tarball_path) != 1:
             print(
-                f"Error: Could not find {expected_tar_ball} the generated source tarball in the 'dist' directory."
+                f"Error: Expected exactly 1 tarball matching {expected_tar_ball}, "
+                f"found {len(tarball_path)}."
             )
             if os.path.exists("dist"):
                 print("Contents of 'dist' directory:")
                 for item in os.listdir("dist"):
                     print(f"- {item}")
-            else:
-                print("'dist' directory not found.")
-            raise ValueError("Could not find the generated source tarball in the 'dist' directory.")
+            raise ValueError(f"Could not find the generated source tarball: {expected_tar_ball}")
+        tarball_file = tarball_path[0]
 
         # Copy the tarball to be {package-name}-{version}-incubating-src.tar.gz
         # Use -src suffix to distinguish source distribution from wheel (convenience package)
         new_tar_ball = f"dist/{package_name}-{version.lower()}-incubating-src.tar.gz"
-        _modify_tarball_for_apache_release(tarball_path[0], new_tar_ball, package_name)
+        _modify_tarball_for_apache_release(tarball_file, new_tar_ball, package_name)
         # Remove original flit tarball (only keep the incubating copy)
-        os.remove(tarball_path[0])
+        os.remove(tarball_file)
         archive_name = new_tar_ball
         print(f"Found source tarball: {archive_name}")
-        new_tar_ball_singed = sign_artifacts(archive_name)
-        if new_tar_ball_singed is None:
+        new_tar_ball_signed = sign_artifacts(archive_name)
+        if new_tar_ball_signed is None:
             raise ValueError("Could not sign the main release artifacts.")
 
         # Wheel keeps its original PEP 427 filename (no -incubating suffix)
         expected_wheel = f"dist/{package_file_name}-{version.lower()}-py3-none-any.whl"
         wheel_path = glob.glob(expected_wheel)
-        if not wheel_path:
-            raise ValueError(f"Could not find wheel: {expected_wheel}")
+        if len(wheel_path) != 1:
+            raise ValueError(
+                f"Expected exactly 1 wheel matching {expected_wheel}, found {len(wheel_path)}."
+            )
         wheel_file = wheel_path[0]
 
         # Verify wheel with twine before signing
@@ -378,7 +380,7 @@ def create_release_artifacts(package_config: dict, version) -> list[str]:
 
         wheel_signed_files = sign_artifacts(wheel_file)
 
-        files_to_upload = [new_tar_ball] + new_tar_ball_singed + [wheel_file] + wheel_signed_files
+        files_to_upload = [new_tar_ball, *new_tar_ball_signed, wheel_file, *wheel_signed_files]
         return files_to_upload
 
     finally:

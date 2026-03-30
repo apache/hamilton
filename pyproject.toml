@@ -94,6 +94,10 @@ dev = [
   "prek",
   "ruff==0.15.0", # this should match `.pre-commit-config.yaml`
 ]
+release = [
+  "flit",
+  "twine",
+]
 test = [
   "connectorx; python_version < '3.14'",
   "dask[complete]",

@@ -653,23 +653,23 @@ def main():
         epilog="""
 Examples:
   # List contents of a specific artifact
-  python scripts/verify_apache_artifacts.py list-contents dist/apache-hamilton-0.41.0-incubating-src.tar.gz
-  python scripts/verify_apache_artifacts.py list-contents dist/apache_hamilton-0.41.0-py3-none-any.whl
+  uv run python scripts/verify_apache_artifacts.py list-contents dist/apache-hamilton-0.41.0-incubating-src.tar.gz
+  uv run python scripts/verify_apache_artifacts.py list-contents dist/apache_hamilton-0.41.0-py3-none-any.whl
 
   # Verify signatures and checksums only
-  python scripts/verify_apache_artifacts.py signatures
+  uv run python scripts/verify_apache_artifacts.py signatures
 
   # Verify licenses with Apache RAT
-  python scripts/verify_apache_artifacts.py licenses --rat-jar /path/to/apache-rat.jar
+  uv run python scripts/verify_apache_artifacts.py licenses --rat-jar /path/to/apache-rat.jar
 
   # Verify everything
-  python scripts/verify_apache_artifacts.py all --rat-jar /path/to/apache-rat.jar
+  uv run python scripts/verify_apache_artifacts.py all --rat-jar /path/to/apache-rat.jar
 
   # Report-only mode (don't fail on license issues)
-  python scripts/verify_apache_artifacts.py licenses --rat-jar /path/to/apache-rat.jar --report-only
+  uv run python scripts/verify_apache_artifacts.py licenses --rat-jar /path/to/apache-rat.jar --report-only
 
   # Custom artifacts directory
-  python scripts/verify_apache_artifacts.py all --artifacts-dir /path/to/artifacts --rat-jar /path/to/rat.jar
+  uv run python scripts/verify_apache_artifacts.py all --artifacts-dir /path/to/artifacts --rat-jar /path/to/rat.jar
         """,
     )
 
@@ -686,23 +686,31 @@ Examples:
         "signatures", help="Verify GPG signatures and SHA512 checksums"
     )
     sig_parser.add_argument(
-        "--artifacts-dir", default="dist", help="Directory containing artifacts (default: dist)"
+        "--artifacts-dir",
+        default="dist",
+        help="Directory containing artifacts (default: dist)",
     )
 
     # licenses subcommand
     lic_parser = subparsers.add_parser("licenses", help="Verify licenses with Apache RAT")
     lic_parser.add_argument(
-        "--artifacts-dir", default="dist", help="Directory containing artifacts (default: dist)"
+        "--artifacts-dir",
+        default="dist",
+        help="Directory containing artifacts (default: dist)",
     )
     lic_parser.add_argument("--rat-jar", required=True, help="Path to Apache RAT JAR file")
     lic_parser.add_argument(
-        "--report-only", action="store_true", help="Generate report but don't fail on issues"
+        "--report-only",
+        action="store_true",
+        help="Generate report but don't fail on issues",
     )
 
     # all subcommand
     all_parser = subparsers.add_parser("all", help="Verify everything (signatures + licenses)")
     all_parser.add_argument(
-        "--artifacts-dir", default="dist", help="Directory containing artifacts (default: dist)"
+        "--artifacts-dir",
+        default="dist",
+        help="Directory containing artifacts (default: dist)",
     )
     all_parser.add_argument(
         "--rat-jar", help="Path to Apache RAT JAR file (optional for signatures-only)"
@@ -716,7 +724,9 @@ Examples:
     # twine-check subcommand
     twine_parser = subparsers.add_parser("twine-check", help="Verify wheel metadata with twine")
     twine_parser.add_argument(
-        "--artifacts-dir", default="dist", help="Directory containing artifacts (default: dist)"
+        "--artifacts-dir",
+        default="dist",
+        help="Directory containing artifacts (default: dist)",
     )
 
     args = parser.parse_args()

@@ -20,7 +20,7 @@
 # Policy on source versus distribution
 
 Apache Hamilton is an apache-incubating project. As such, we intend to follow all Apache guidelines to
-both the spirit (and when applicable) the letter.
+both the spirit and (when applicable) the letter.
 
 That said, there is occasional ambiguity. Thus we aim to clarify with a reasonable and consistently maintained
 approach. The question that we found most ambiguous when determining our release process is:
@@ -70,12 +70,12 @@ We recommend using [uv](https://docs.astral.sh/uv/) for Python environment manag
 - Apache RAT jar for license checking (optional, for verification)
 
 ```bash
-# Install uv (if not already installed)
+# Install uv (unless already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Create a virtual environment with build dependencies
 uv venv --python 3.11
-uv pip install flit twine
+uv sync --group release
 
 # Verify GPG setup
 gpg --list-secret-keys
@@ -171,8 +171,8 @@ All remaining steps assume you are inside the extracted source directory
 
 ```bash
 # Create a fresh environment and install build tools
-uv venv --python 3.11
-uv pip install flit
+uv venv --python 3.11 --clean
+uv sync --group release
 
 # Build the wheel from source
 uv run flit build --no-use-vcs
@@ -184,14 +184,13 @@ uv pip install dist/apache_hamilton-${VERSION}-py3-none-any.whl
 ## Run Tests
 
 ```bash
-# Install test dependencies
-uv pip install pytest pandas numpy typing_extensions typing_inspect
+# Install test dependencies (uses the test dependency group from pyproject.toml)
+uv sync --group test
 
 # Run core unit tests
 uv run pytest tests/ -x -q
 
-# Run plugin tests (requires additional dependencies)
-uv pip install dask graphviz networkx pandera pydantic polars pyarrow scikit-learn
+# Run plugin tests
 uv run pytest plugin_tests/ -x -q
 ```
 
@@ -276,7 +275,7 @@ For local wheel building/testing without signing or the full release process:
 
 ```bash
 uv venv --python 3.11
-uv pip install flit
+uv sync --group release
 
 # Build both sdist and wheel
 uv run flit build --no-use-vcs
