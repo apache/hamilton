@@ -15,9 +15,9 @@ data/*.json
 data/*.csv
 
 # DAG visualisations are committed — ignore regenerated copies at root
-ingest_dag.png
-embed_dag.png
-rag_dag.png
+/ingest_dag.png
+/embed_dag.png
+/rag_dag.png
 
 # Neo4j
 *.dump
