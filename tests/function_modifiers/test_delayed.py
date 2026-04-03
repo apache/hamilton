@@ -189,3 +189,64 @@ def test_dynamic_resolve_with_extract_fields():
     )
     assert hasattr(decorator_resolved, "resolved_fields")
     assert decorator_resolved.resolved_fields == {"a": int, "b": int}
+
+
+def test_resolve_from_config_with_extract_fields():
+    """Test @resolve_from_config with @extract_fields calls validate() correctly."""
+
+    def fn() -> dict[str, int]:
+        return {"a": 1, "b": 2}
+
+    decorator = resolve_from_config(
+        decorate_with=lambda fields: extract_fields(fields),
+    )
+    decorator_resolved = decorator.resolve(
+        {"fields": {"a": int, "b": int}, **CONFIG_WITH_POWER_MODE_ENABLED},
+        fn=fn,
+    )
+    assert hasattr(decorator_resolved, "resolved_fields")
+    assert decorator_resolved.resolved_fields == {"a": int, "b": int}
+
+
+def test_resolve_propagates_validate_failure():
+    """Test that validate() failures are propagated through resolve."""
+
+    def fn() -> str:
+        return "not what you were expecting..."
+
+    decorator = resolve(
+        when=ResolveAt.CONFIG_AVAILABLE,
+        decorate_with=lambda fields: extract_fields(fields),
+    )
+    with pytest.raises(base.InvalidDecoratorException):
+        decorator.resolve(
+            {"fields": {"a": int, "b": int}, **CONFIG_WITH_POWER_MODE_ENABLED},
+            fn=fn,
+        )
+
+
+def test_resolve_with_arbitrary_decorator():
+    """Test behavior when decorate_with returns something that is not a NodeTransformLifecycle."""
+
+    # NOTE: do we actually want this test to pass?
+
+    # A decorator that doesn't inherit from NodeTransformLifecycle (but still uses kwargs only)
+    class ArbitraryDecorator:
+        def __init__(self, a: int, b: int) -> None:
+            pass
+
+        def __call__(self, f: Callable) -> Callable:
+            return f
+
+    def fn() -> pd.DataFrame:
+        return pd.DataFrame()
+
+    decorator = resolve(
+        when=ResolveAt.CONFIG_AVAILABLE,
+        decorate_with=lambda kwargs: ArbitraryDecorator(**kwargs),
+    )
+    decorator_resolved = decorator.resolve(
+        {"kwargs": {"a": 1, "b": 2}, **CONFIG_WITH_POWER_MODE_ENABLED},
+        fn=fn,
+    )
+    assert isinstance(decorator_resolved, ArbitraryDecorator)
