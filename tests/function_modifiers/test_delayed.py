@@ -26,6 +26,7 @@ from hamilton.function_modifiers import (
     base,
     extract_columns,
     extract_fields,
+    parameterize_sources,
     resolve,
     resolve_from_config,
 )
@@ -189,6 +190,26 @@ def test_dynamic_resolve_with_extract_fields():
     )
     assert hasattr(decorator_resolved, "resolved_fields")
     assert decorator_resolved.resolved_fields == {"a": int, "b": int}
+
+
+def test_resolve_with_parameterize_sources():
+    """Test that @resolve with @parameterize_sources calls validate() correctly."""
+
+    def fn(x: int, y: int) -> int:
+        return x + y
+
+    decorator = resolve(
+        when=ResolveAt.CONFIG_AVAILABLE,
+        decorate_with=lambda: parameterize_sources(result_1={"x": "source_x", "y": "source_y"}),
+    )
+    decorator_resolved = decorator.resolve(
+        {**CONFIG_WITH_POWER_MODE_ENABLED},
+        fn=fn,
+    )
+    assert "result_1" in decorator_resolved.parameterization
+    mapping = decorator_resolved.parameterization["result_1"]
+    assert mapping["x"].source == "source_x"
+    assert mapping["y"].source == "source_y"
 
 
 def test_resolve_from_config_with_extract_fields():
