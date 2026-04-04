@@ -249,7 +249,7 @@ def test_resolve_propagates_validate_failure():
 def test_resolve_with_arbitrary_decorator():
     """Test behavior when decorate_with returns something that is not a NodeTransformLifecycle."""
 
-    # NOTE: do we actually want this test to pass?
+    # NOTE: we want to ensure we don't interfere with other decorators on functions.
 
     # A decorator that doesn't inherit from NodeTransformLifecycle (but still uses kwargs only)
     class ArbitraryDecorator:
