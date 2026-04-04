@@ -169,7 +169,16 @@ class resolve(DynamicResolver):
         for key in self._optional_config:
             if key in config:
                 kwargs[key] = config[key]
-        return self.decorate_with(**kwargs)
+        decorator = self.decorate_with(**kwargs)
+
+        # NOTE: cases where `decorator` has no `validate` method should be caught by type checkers
+        # since `decorate_with` is typed as `Callable[..., NodeTransformLifecycle]`. The following
+        # check allows non-conforming functions to be used with `resolve` without immediately
+        # throwing an error, which may be undesirable.
+        if hasattr(decorator, "validate"):
+            decorator.validate(fn)
+
+        return decorator
 
 
 class resolve_from_config(resolve):
