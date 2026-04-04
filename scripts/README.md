@@ -132,7 +132,7 @@ uv run twine upload dist/apache_hamilton-1.90.0.tar.gz dist/apache_hamilton-1.90
 
 If you're voting on a release, follow these steps to verify the release candidate.
 
-## Complete Verification Workflow
+## Step 1: Download the Artifacts
 
 ```bash
 # Set version and RC number
@@ -140,51 +140,75 @@ export VERSION=1.90.0
 export RC=0
 export PACKAGE=apache-hamilton  # or apache-hamilton-sdk, etc.
 
-# 1. Download all artifacts from SVN
-svn export https://dist.apache.org/repos/dist/dev/incubator/hamilton/${PACKAGE}-${VERSION}-incubating-RC${RC}/ hamilton-rc${RC}
+# Derived names (dashes for tarball, underscores for wheel)
+export SRC_TAR=${PACKAGE}-${VERSION}-incubating-src.tar.gz
+export WHEEL_NAME=$(echo ${PACKAGE} | tr '-' '_')-${VERSION}-py3-none-any.whl
+export EXTRACTED_DIR=$(echo ${PACKAGE} | tr '-' '_')-${VERSION}
+
+# Download all artifacts from SVN
+svn export https://dist.apache.org/repos/dist/dev/incubator/hamilton/${PACKAGE}/${VERSION}-RC${RC}/ hamilton-rc${RC}
 cd hamilton-rc${RC}
 
-# 2. Import KEYS file and verify GPG signatures
+# Import the KEYS file
 wget https://downloads.apache.org/incubator/hamilton/KEYS
 gpg --import KEYS
-
-# Verify sdist signature
-gpg --verify ${PACKAGE}-${VERSION}-incubating.tar.gz.asc ${PACKAGE}-${VERSION}-incubating.tar.gz
-
-# Verify wheel signature (note: underscores in wheel filenames)
-WHEEL_NAME=$(echo ${PACKAGE} | tr '-' '_')-${VERSION}-py3-none-any.whl
-gpg --verify ${WHEEL_NAME}.asc ${WHEEL_NAME}
-
-# 3. Verify SHA512 checksums
-shasum -a 512 -c ${PACKAGE}-${VERSION}-incubating.tar.gz.sha512
-shasum -a 512 -c ${WHEEL_NAME}.sha512
-
-# 4. Extract the source archive and build from source
-tar -xzf ${PACKAGE}-${VERSION}-incubating.tar.gz
-cd ${PACKAGE}-${VERSION}-incubating/
 ```
 
-## Build from Source with uv
-
-All remaining steps assume you are inside the extracted source directory
-(`${PACKAGE}-${VERSION}-incubating/`) from the step above.
+## Step 2: Extract and Set Up
 
 ```bash
+# Extract the source archive
+tar -xzf ${SRC_TAR}
+cd ${EXTRACTED_DIR}/
+
 # Create a fresh environment and install build tools
 uv venv --python 3.11 --clean
 uv sync --group release
 
+# Download Apache RAT for license verification
+curl -O https://repo1.maven.org/maven2/org/apache/rat/apache-rat/0.15/apache-rat-0.15.jar
+```
+
+## Step 3: Run Automated Verification
+
+The verification script checks GPG signatures, SHA512 checksums, and Apache license headers in one command:
+
+```bash
+# Verify everything (signatures + checksums + license headers)
+uv run python scripts/verify_apache_artifacts.py all --rat-jar apache-rat-0.15.jar
+```
+
+You can also run individual checks:
+
+```bash
+# Signatures and checksums only
+uv run python scripts/verify_apache_artifacts.py signatures
+
+# License headers only
+uv run python scripts/verify_apache_artifacts.py licenses --rat-jar apache-rat-0.15.jar
+
+# Validate wheel metadata
+uv run python scripts/verify_apache_artifacts.py twine-check
+
+# Inspect artifact contents
+uv run python scripts/verify_apache_artifacts.py list-contents dist/${SRC_TAR}
+uv run python scripts/verify_apache_artifacts.py list-contents dist/${WHEEL_NAME}
+```
+
+## Step 4: Build from Source
+
+```bash
 # Build the wheel from source
 uv run flit build --no-use-vcs
 
 # Install the wheel you just built
-uv pip install dist/apache_hamilton-${VERSION}-py3-none-any.whl
+uv pip install dist/${WHEEL_NAME}
 ```
 
-## Run Tests
+## Step 5: Run Tests
 
 ```bash
-# Install test dependencies (uses the test dependency group from pyproject.toml)
+# Install test dependencies
 uv sync --group test
 
 # Run core unit tests
@@ -194,79 +218,53 @@ uv run pytest tests/ -x -q
 uv run pytest plugin_tests/ -x -q
 ```
 
-## Run Examples
+## Step 6: Run Examples
 
-The source archive includes representative examples to verify Hamilton works end-to-end. Each example may require additional dependencies.
+The source archive includes representative examples to verify Hamilton works end-to-end.
 
-### Hello World (no extra deps)
 ```bash
+# Hello World (no extra deps)
 cd examples/hello_world
 uv run python my_script.py
 cd ../..
-```
 
-### Data Quality with Pandera
-```bash
+# Data Quality with Pandera
 uv pip install pandera
 cd examples/data_quality/simple
 uv run python run.py
 cd ../../..
-```
 
-### Function Reuse
-```bash
+# Function Reuse
 cd examples/reusing_functions
 uv run python run.py
 cd ../..
-```
 
-### Schema Validation
-```bash
+# Schema Validation
 cd examples/schema
 uv run python run.py
 cd ../..
-```
 
-### Materialization (Pandas)
-```bash
+# Materialization (Pandas)
 uv pip install openpyxl xlsxwriter
 cd examples/pandas/materialization
 uv run python run.py
 cd ../../..
 ```
 
-## Verification Script
+## Manual Signature Verification (alternative to Step 3)
 
-For automated verification of signatures, checksums, and license compliance, use the verification script.
-Run these from inside the extracted source directory (`${PACKAGE}-${VERSION}-incubating/`).
-
-### Prerequisites
-
-Download Apache RAT for license verification (into the extracted source directory):
+If you prefer to verify signatures and checksums manually instead of using the verification script:
 
 ```bash
-curl -O https://repo1.maven.org/maven2/org/apache/rat/apache-rat/0.15/apache-rat-0.15.jar
-```
+# From the hamilton-rc${RC}/ directory (before extracting)
 
-### Running Verification
+# Verify GPG signatures
+gpg --verify ${SRC_TAR}.asc ${SRC_TAR}
+gpg --verify ${WHEEL_NAME}.asc ${WHEEL_NAME}
 
-```bash
-# Run from the extracted source directory (${PACKAGE}-${VERSION}-incubating/)
-# Verify GPG signatures and SHA512 checksums
-uv run python scripts/verify_apache_artifacts.py signatures
-
-# Verify license headers (requires Apache RAT)
-uv run python scripts/verify_apache_artifacts.py licenses --rat-jar apache-rat-0.15.jar
-
-# Verify everything
-uv run python scripts/verify_apache_artifacts.py all --rat-jar apache-rat-0.15.jar
-
-# Inspect artifact contents
-uv run python scripts/verify_apache_artifacts.py list-contents dist/apache-hamilton-1.90.0-incubating.tar.gz
-uv run python scripts/verify_apache_artifacts.py list-contents dist/apache_hamilton-1.90.0-py3-none-any.whl
-
-# Validate wheel metadata
-uv run python scripts/verify_apache_artifacts.py twine-check
+# Verify SHA512 checksums
+shasum -a 512 -c ${SRC_TAR}.sha512
+shasum -a 512 -c ${WHEEL_NAME}.sha512
 ```
 
 # Local Development

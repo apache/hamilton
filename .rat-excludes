@@ -15,5 +15,8 @@ SHORT_LICENSE\.md
 \.gitignore
 \.rat-excludes
 
+# Third-party vendored code with its own license (MIT)
+.*databackend\.py
+
 # PKG-INFO (generated metadata)
 PKG-INFO
