@@ -35,7 +35,7 @@ executing the pipeline.
 python run.py --mode ingest --visualise
 ```
 
-![Ingestion DAG](https://raw.githubusercontent.com/kartikeyamandhar/hamilton/examples/neo4j-graph-rag/examples/LLM_Workflows/neo4j_graph_rag/docs/images/ingest_dag.png)
+![Ingestion DAG](https://raw.githubusercontent.com/apache/hamilton/examples/neo4j-graph-rag/examples/LLM_Workflows/neo4j_graph_rag/docs/images/ingest_dag.png)
 
 Raw TMDB JSON flows through parsing nodes into batched Neo4j writes.
 Hamilton automatically parallelises the four independent branches
@@ -50,7 +50,7 @@ and `raw_credits` inputs.
 python run.py --mode embed --visualise
 ```
 
-![Embedding DAG](https://raw.githubusercontent.com/kartikeyamandhar/hamilton/examples/neo4j-graph-rag/examples/LLM_Workflows/neo4j_graph_rag/docs/images/embed_dag.png)
+![Embedding DAG](https://raw.githubusercontent.com/apache/hamilton/examples/neo4j-graph-rag/examples/LLM_Workflows/neo4j_graph_rag/docs/images/embed_dag.png)
 
 Movie texts are fetched from Neo4j, batched through the OpenAI embeddings
 API, written back to Movie nodes, and a cosine vector index is created.
@@ -63,7 +63,7 @@ API, written back to Movie nodes, and a cosine vector index is created.
 python run.py --mode query --visualise
 ```
 
-![RAG DAG](https://raw.githubusercontent.com/kartikeyamandhar/hamilton/examples/neo4j-graph-rag/examples/LLM_Workflows/neo4j_graph_rag/docs/images/rag_dag.png)
+![RAG DAG](https://raw.githubusercontent.com/apache/hamilton/examples/neo4j-graph-rag/examples/LLM_Workflows/neo4j_graph_rag/docs/images/rag_dag.png)
 
 The full 13-node RAG pipeline. Hamilton wires all dependencies from
 function signatures — no manual orchestration:
