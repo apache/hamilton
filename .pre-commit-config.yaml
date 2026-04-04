@@ -70,8 +70,7 @@ repos:
           (?x)
           ^\.github/|
           ^docs/|
-          ^examples/|
-          ^hamilton/experimental/databackend.py
+          ^examples/
         args:
           - --comment-style
           - "|#|"
