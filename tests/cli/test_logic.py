@@ -15,7 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from pathlib import Path
+import subprocess
+from unittest import mock
 
 from hamilton import driver
 from hamilton.cli import logic
@@ -24,9 +25,23 @@ from tests.cli.resources import module_v1, module_v2
 
 
 def test_git_directory_exists():
-    git_base_dir = logic.get_git_base_directory()
+    completed_process = subprocess.CompletedProcess(
+        args=["git", "rev-parse", "--show-toplevel"],
+        returncode=0,
+        stdout="/tmp/fake-repo\n",
+        stderr="",
+    )
 
-    assert Path(git_base_dir).exists()
+    with mock.patch("subprocess.run", return_value=completed_process) as run_mock:
+        git_base_dir = logic.get_git_base_directory()
+
+    assert git_base_dir == "/tmp/fake-repo"
+    run_mock.assert_called_once_with(
+        ["git", "rev-parse", "--show-toplevel"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
 
 
 def test_map_nodes_to_origins():
