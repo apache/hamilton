@@ -54,7 +54,8 @@ repos:
           ^\.github/|
           ^docs/|
           ^examples/|
-          ^dev_tools/language_server/tests/ls_setup\.py$
+          ^dev_tools/language_server/tests/ls_setup\.py$|
+          ^hamilton/experimental/databackend.py$
         args:
           - --comment-style
           - "|#|"

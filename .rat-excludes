@@ -1,0 +1,19 @@
+# Requirements/data files (not source code)
+.*\.txt
+.*\.jsonl
+
+# SPDX short license template (is itself a license reference)
+SHORT_LICENSE\.md
+
+# Data files (not source code)
+.*\.json
+.*\.csv
+.*\.fwf
+.*\.xml
+
+# Git and version control config
+\.gitignore
+\.rat-excludes
+
+# PKG-INFO (generated metadata)
+PKG-INFO

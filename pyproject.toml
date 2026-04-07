@@ -94,6 +94,10 @@ dev = [
   "prek",
   "ruff==0.15.0", # this should match `.pre-commit-config.yaml`
 ]
+release = [
+  "flit",
+  "twine",
+]
 test = [
   "connectorx; python_version < '3.14'",
   "dask[complete]",
@@ -289,6 +293,13 @@ include = [
     "NOTICE",
     "DISCLAIMER",
     "scripts/**",
+    "tests/**",
+    "plugin_tests/**",
+    "examples/hello_world/**",
+    "examples/data_quality/simple/**",
+    "examples/reusing_functions/**",
+    "examples/schema/**",
+    "examples/pandas/materialization/**",
 ]
 exclude = [
     ".git/**",

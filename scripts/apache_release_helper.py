@@ -96,7 +96,7 @@ def get_version_from_file(package_config: dict) -> str:
 def check_prerequisites():
     """Checks for necessary command-line tools and Python modules."""
     print("Checking for required tools...")
-    required_tools = ["git", "gpg", "svn"]
+    required_tools = ["git", "gpg", "svn", "twine"]
     for tool in required_tools:
         if shutil.which(tool) is None:
             print(f"Error: '{tool}' not found. Please install it and ensure it's in your PATH.")
@@ -158,6 +158,26 @@ def update_version(package_config: dict, version, rc_num):
         return False
     except Exception as e:
         print(f"An error occurred while updating the version: {e}")
+        return False
+
+
+def verify_wheel_with_twine(wheel_path: str) -> bool:
+    """Validates wheel metadata using twine check."""
+    print(f"Validating wheel with twine: {wheel_path}")
+    try:
+        result = subprocess.run(
+            ["twine", "check", wheel_path],
+            capture_output=True,
+            text=True,
+        )
+        print(result.stdout)
+        if result.returncode != 0:
+            print(f"twine check failed:\n{result.stderr}")
+            return False
+        print("Wheel passed twine validation.")
+        return True
+    except Exception as e:
+        print(f"Error running twine check: {e}")
         return False
 
 
@@ -302,15 +322,13 @@ def create_release_artifacts(package_config: dict, version) -> list[str]:
 
         # Use flit build to create the source distribution.
         try:
-            env = os.environ.copy()
-            env["FLIT_USE_VCS"] = "0"
             subprocess.run(
                 [
                     "flit",
                     "build",
+                    "--no-use-vcs",
                 ],
                 check=True,
-                env=env,
             )
             print("Source distribution created successfully.")
         except subprocess.CalledProcessError as e:
@@ -323,45 +341,46 @@ def create_release_artifacts(package_config: dict, version) -> list[str]:
         expected_tar_ball = f"dist/{package_file_name}-{version.lower()}.tar.gz"
         tarball_path = glob.glob(expected_tar_ball)
 
-        if not tarball_path:
+        if len(tarball_path) != 1:
             print(
-                f"Error: Could not find {expected_tar_ball} the generated source tarball in the 'dist' directory."
+                f"Error: Expected exactly 1 tarball matching {expected_tar_ball}, "
+                f"found {len(tarball_path)}."
             )
             if os.path.exists("dist"):
                 print("Contents of 'dist' directory:")
                 for item in os.listdir("dist"):
                     print(f"- {item}")
-            else:
-                print("'dist' directory not found.")
-            raise ValueError("Could not find the generated source tarball in the 'dist' directory.")
+            raise ValueError(f"Could not find the generated source tarball: {expected_tar_ball}")
+        tarball_file = tarball_path[0]
 
         # Copy the tarball to be {package-name}-{version}-incubating-src.tar.gz
         # Use -src suffix to distinguish source distribution from wheel (convenience package)
         new_tar_ball = f"dist/{package_name}-{version.lower()}-incubating-src.tar.gz"
-        _modify_tarball_for_apache_release(tarball_path[0], new_tar_ball, package_name)
+        _modify_tarball_for_apache_release(tarball_file, new_tar_ball, package_name)
+        # Remove original flit tarball (only keep the incubating copy)
+        os.remove(tarball_file)
         archive_name = new_tar_ball
         print(f"Found source tarball: {archive_name}")
-        new_tar_ball_singed = sign_artifacts(archive_name)
-        if new_tar_ball_singed is None:
+        new_tar_ball_signed = sign_artifacts(archive_name)
+        if new_tar_ball_signed is None:
             raise ValueError("Could not sign the main release artifacts.")
 
-        # Create wheel release artifacts
+        # Wheel keeps its original PEP 427 filename (no -incubating suffix)
         expected_wheel = f"dist/{package_file_name}-{version.lower()}-py3-none-any.whl"
         wheel_path = glob.glob(expected_wheel)
+        if len(wheel_path) != 1:
+            raise ValueError(
+                f"Expected exactly 1 wheel matching {expected_wheel}, found {len(wheel_path)}."
+            )
+        wheel_file = wheel_path[0]
 
-        # Create incubator wheel release artifacts with -incubating suffix
-        expected_incubator_wheel = (
-            f"dist/{package_name}-{version.lower()}-incubating-py3-none-any.whl"
-        )
-        shutil.copy(wheel_path[0], expected_incubator_wheel)
-        incubator_wheel_signed_files = sign_artifacts(expected_incubator_wheel)
+        # Verify wheel with twine before signing
+        if not verify_wheel_with_twine(wheel_file):
+            raise ValueError("Wheel failed twine validation.")
 
-        files_to_upload = (
-            [new_tar_ball]
-            + new_tar_ball_singed
-            + [expected_incubator_wheel]
-            + incubator_wheel_signed_files
-        )
+        wheel_signed_files = sign_artifacts(wheel_file)
+
+        files_to_upload = [new_tar_ball, *new_tar_ball_signed, wheel_file, *wheel_signed_files]
         return files_to_upload
 
     finally:
@@ -521,6 +540,11 @@ def main():
     parser.add_argument("version", help="The new release version (e.g., '1.0.0').")
     parser.add_argument("rc_num", help="The release candidate number (e.g., '0' for RC0).")
     parser.add_argument("apache_id", help="Your apache user ID.")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Build and sign artifacts but skip git tagging and SVN upload.",
+    )
     args = parser.parse_args()
 
     package_key = args.package
@@ -547,24 +571,29 @@ def main():
 
     # Create git tag (from repo root)
     tag_name = f"{package_name}-v{version}-incubating-RC{rc_num}"
-    print(f"\nChecking for git tag '{tag_name}'...")
-    try:
-        # Check if the tag already exists
-        existing_tag = subprocess.check_output(["git", "tag", "-l", tag_name]).decode().strip()
-        if existing_tag == tag_name:
-            print(f"Git tag '{tag_name}' already exists.")
-            response = input("Do you want to continue without creating a new tag? (y/n): ").lower()
-            if response != "y":
-                print("Aborting.")
-                sys.exit(1)
-        else:
-            # Tag does not exist, create it
-            print(f"Creating git tag '{tag_name}'...")
-            subprocess.run(["git", "tag", tag_name], check=True)
-            print(f"Git tag {tag_name} created.")
-    except subprocess.CalledProcessError as e:
-        print(f"Error checking or creating Git tag: {e}")
-        sys.exit(1)
+    if args.dry_run:
+        print(f"\n[dry-run] Skipping git tag creation: {tag_name}")
+    else:
+        print(f"\nChecking for git tag '{tag_name}'...")
+        try:
+            # Check if the tag already exists
+            existing_tag = subprocess.check_output(["git", "tag", "-l", tag_name]).decode().strip()
+            if existing_tag == tag_name:
+                print(f"Git tag '{tag_name}' already exists.")
+                response = input(
+                    "Do you want to continue without creating a new tag? (y/n): "
+                ).lower()
+                if response != "y":
+                    print("Aborting.")
+                    sys.exit(1)
+            else:
+                # Tag does not exist, create it
+                print(f"Creating git tag '{tag_name}'...")
+                subprocess.run(["git", "tag", tag_name], check=True)
+                print(f"Git tag {tag_name} created.")
+        except subprocess.CalledProcessError as e:
+            print(f"Error checking or creating Git tag: {e}")
+            sys.exit(1)
 
     # Create artifacts
     print(f"\n{'=' * 80}")
@@ -574,29 +603,39 @@ def main():
     if not files_to_upload:
         sys.exit(1)
 
-    # Upload artifacts
-    print(f"\n{'=' * 80}")
-    print("  Uploading to Apache SVN")
-    print(f"{'=' * 80}\n")
-    # NOTE: You MUST have your SVN client configured to use your Apache ID and have permissions.
-    svn_url = svn_upload(package_name, version, rc_num, files_to_upload, apache_id)
-    if not svn_url:
-        sys.exit(1)
+    if args.dry_run:
+        # Dry run: skip SVN upload, show summary
+        print(f"\n{'=' * 80}")
+        print("  [dry-run] Skipping SVN upload")
+        print(f"{'=' * 80}\n")
+        print("Artifacts built successfully:")
+        for f in files_to_upload:
+            print(f"  {f}")
+        print("\nTo do a real release, re-run without --dry-run.")
+    else:
+        # Upload artifacts
+        print(f"\n{'=' * 80}")
+        print("  Uploading to Apache SVN")
+        print(f"{'=' * 80}\n")
+        # NOTE: You MUST have your SVN client configured to use your Apache ID and have permissions.
+        svn_url = svn_upload(package_name, version, rc_num, files_to_upload, apache_id)
+        if not svn_url:
+            sys.exit(1)
 
-    # Generate email
-    print(f"\n{'=' * 80}")
-    print("  Vote Email Template")
-    print(f"{'=' * 80}\n")
-    generate_email_template(package_name, version, rc_num, svn_url)
+        # Generate email
+        print(f"\n{'=' * 80}")
+        print("  Vote Email Template")
+        print(f"{'=' * 80}\n")
+        generate_email_template(package_name, version, rc_num, svn_url)
 
-    print("\n" + "=" * 80)
-    print("  Process Complete!")
-    print("=" * 80)
-    print("\nNext steps:")
-    print(f"1. Push the git tag: git push origin {tag_name}")
-    print("2. Copy the email template above and send to dev@hamilton.apache.org")
-    print("3. Wait for votes (minimum 72 hours)")
-    print("\n")
+        print("\n" + "=" * 80)
+        print("  Process Complete!")
+        print("=" * 80)
+        print("\nNext steps:")
+        print(f"1. Push the git tag: git push origin {tag_name}")
+        print("2. Copy the email template above and send to dev@hamilton.apache.org")
+        print("3. Wait for votes (minimum 72 hours)")
+        print("\n")
 
 
 if __name__ == "__main__":

@@ -148,6 +148,7 @@ Persist and cache your data:
 | <img src="../_static/logos/slack.svg" width="20" height="20" style="vertical-align: middle;"> **Slack** | Notifications and integrations | [Examples](https://github.com/apache/hamilton/tree/main/examples/slack) \| [Lifecycle Hook](../reference/lifecycle-hooks/SlackNotifierHook.rst) |
 | <img src="../_static/logos/geopandas.png" width="20" height="20" style="vertical-align: middle;"> **GeoPandas** | Geospatial data analysis | [Type extension](https://github.com/apache/hamilton/blob/main/hamilton/plugins/geopandas_extensions.py) for GeoDataFrame support |
 | <img src="../_static/logos/yaml.svg" width="20" height="20" style="vertical-align: middle;"> **YAML** | Configuration management | [IO Adapters](../reference/io/available-data-adapters.rst) |
+| **Neo4j** | Knowledge graph RAG | [Examples](https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/neo4j_graph_rag) |
 
 ---
 
