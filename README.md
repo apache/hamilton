@@ -76,9 +76,10 @@ result = dr.execute(["B"])
 
 print(result)
 
-Expected output:  {'B': 2}
+# Expected output: {'B': 2}
+```
 
-## What’s happening?
+### What’s happening?
 
 Each function becomes a node in the DAG
 Dependencies are defined through function parameters
