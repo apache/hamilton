@@ -84,7 +84,7 @@ Each function becomes a node in the DAG
 Dependencies are defined through function parameters
 Hamilton automatically builds and executes the dependency graph
 
-This is the simplest possible pipeline — from here, you can scale to ML workflows, ETL pipelines, and production data systems.
+This is the simplest possible pipeline — from here, you can scale to ML workflows, ETL pipelines, LLM workflows, and production data systems.
 
 To create a DAG, write regular Python functions that specify their dependencies with their parameters. As shown below, it results in readable code that can always be visualized. Apache Hamilton loads that definition and automatically builds the DAG for you!
 
