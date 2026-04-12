@@ -71,7 +71,12 @@ def B(A: int) -> int:
 # Step 3: Execute the DAG
 from hamilton import driver
 
-dr = driver.Driver({}, __name__)
+dr = (
+    driver.Builder()
+    .with_modules(__name__)
+    .build()
+)
+
 result = dr.execute(["B"])
 
 print(result)
