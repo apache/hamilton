@@ -171,9 +171,15 @@ curl -O https://repo1.maven.org/maven2/org/apache/rat/apache-rat/0.15/apache-rat
 
 ## Step 3: Run Automated Verification
 
-The verification script checks GPG signatures, SHA512 checksums, and Apache license headers in one command:
+The verification script checks GPG signatures, SHA512 checksums, and Apache license headers in one command.
+The script looks for artifacts in a `dist/` directory by default, so first copy them there:
 
 ```bash
+# Copy artifacts into dist/ so the verification script can find them
+mkdir -p dist
+cp ../${SRC_TAR}* dist/
+cp ../${WHEEL_NAME}* dist/
+
 # Verify everything (signatures + checksums + license headers)
 uv run python scripts/verify_apache_artifacts.py all --rat-jar apache-rat-0.15.jar
 ```
@@ -215,7 +221,12 @@ uv sync --group test
 uv run pytest tests/ -x -q
 
 # Run plugin tests
-uv run pytest plugin_tests/ -x -q
+# Note: some plugin tests require optional dependencies (ray, spark, vaex).
+# Exclude any that are not installed in your environment:
+uv run pytest plugin_tests/ -x -q \
+    --ignore=plugin_tests/h_ray \
+    --ignore=plugin_tests/h_spark \
+    --ignore=plugin_tests/h_vaex
 ```
 
 ## Step 6: Run Examples
@@ -224,31 +235,21 @@ The source archive includes representative examples to verify Hamilton works end
 
 ```bash
 # Hello World (no extra deps)
-cd examples/hello_world
-uv run python my_script.py
-cd ../..
+uv run python examples/hello_world/my_script.py
 
-# Data Quality with Pandera
-uv pip install pandera
+# Data Quality with Pandera (must run from its directory for CSV data file)
 cd examples/data_quality/simple
 uv run python run.py
 cd ../../..
 
 # Function Reuse
-cd examples/reusing_functions
-uv run python run.py
-cd ../..
+uv run python examples/reusing_functions/main.py
 
 # Schema Validation
-cd examples/schema
-uv run python run.py
-cd ../..
+uv run python examples/schema/dataflow.py
 
 # Materialization (Pandas)
-uv pip install openpyxl xlsxwriter
-cd examples/pandas/materialization
-uv run python run.py
-cd ../../..
+uv run python examples/pandas/materialization/my_script.py
 ```
 
 ## Manual Signature Verification (alternative to Step 3)
@@ -263,8 +264,10 @@ gpg --verify ${SRC_TAR}.asc ${SRC_TAR}
 gpg --verify ${WHEEL_NAME}.asc ${WHEEL_NAME}
 
 # Verify SHA512 checksums
-shasum -a 512 -c ${SRC_TAR}.sha512
-shasum -a 512 -c ${WHEEL_NAME}.sha512
+# Note: the .sha512 files contain only the raw hash (no filename),
+# so `shasum -c` won't work. Compare hashes manually instead:
+echo "$(cat ${SRC_TAR}.sha512)  ${SRC_TAR}" | shasum -a 512 -c -
+echo "$(cat ${WHEEL_NAME}.sha512)  ${WHEEL_NAME}" | shasum -a 512 -c -
 ```
 
 # Local Development
