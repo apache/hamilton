@@ -59,27 +59,31 @@ Get started with Apache Hamilton in just a few lines of code:
 
 ```python
 # Step 1: Install (run in terminal)
-# pip install sf-hamilton
 
-# Step 2: Define your functions (nodes in the DAG)
+from sf_hamilton import driver
+import types
+
+# create a temporary module
+module = types.ModuleType("example")
+
 def A() -> int:
     return 1
 
 def B(A: int) -> int:
     return A + 1
 
-# Step 3: Execute the DAG
-from hamilton import driver
+# attach functions to module
+module.A = A
+module.B = B
 
+# builder pattern
 dr = (
     driver.Builder()
-    .with_modules(__name__)
+    .with_modules(module)
     .build()
 )
 
-result = dr.execute(["B"])
-
-print(result)
+print(dr.execute(["B"]))
 
 # Expected output: {'B': 2}
 ```
