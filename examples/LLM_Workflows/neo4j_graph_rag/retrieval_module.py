@@ -34,10 +34,9 @@ import json
 import logging
 
 import openai
-from neo4j import Driver
-
 from embed_module import EMBEDDING_MODEL, VECTOR_INDEX_NAME
 from graph_schema import schema_to_prompt
+from neo4j import Driver
 
 logger = logging.getLogger(__name__)
 
@@ -127,6 +126,7 @@ LIMIT 1
 # 1. Classify query intent
 # ---------------------------------------------------------------------------
 
+
 def query_intent(user_query: str, openai_api_key: str) -> str:
     """
     Classify the user query into one of four retrieval strategies:
@@ -174,6 +174,7 @@ Reply with ONLY one word: VECTOR, CYPHER, AGGREGATE, or HYBRID."""
 # ---------------------------------------------------------------------------
 # 2. Entity extraction
 # ---------------------------------------------------------------------------
+
 
 def entity_extraction(
     user_query: str,
@@ -247,6 +248,7 @@ Rules:
 # ---------------------------------------------------------------------------
 # 3. Entity resolution — look up canonical forms in Neo4j
 # ---------------------------------------------------------------------------
+
 
 def _resolve_persons(names: list[str], session) -> dict[str, str]:
     """Fuzzy-match person names against the graph, return {input: canonical}."""
@@ -404,24 +406,16 @@ def entity_resolution(
 
     with neo4j_driver.session() as session:
         if entity_extraction.get("persons"):
-            resolved["persons"] = _resolve_persons(
-                entity_extraction["persons"], session
-            )
+            resolved["persons"] = _resolve_persons(entity_extraction["persons"], session)
 
         if entity_extraction.get("movies"):
-            resolved["movies"] = _resolve_movies(
-                entity_extraction["movies"], session
-            )
+            resolved["movies"] = _resolve_movies(entity_extraction["movies"], session)
 
         if entity_extraction.get("genres"):
-            resolved["genres"] = _resolve_genres(
-                entity_extraction["genres"], session
-            )
+            resolved["genres"] = _resolve_genres(entity_extraction["genres"], session)
 
         if entity_extraction.get("companies"):
-            resolved["companies"] = _resolve_companies(
-                entity_extraction["companies"], session
-            )
+            resolved["companies"] = _resolve_companies(entity_extraction["companies"], session)
 
     # Pass through numeric/date filters unchanged
     for key in ("year_after", "year_before", "rating_above", "rating_below"):
@@ -435,6 +429,7 @@ def entity_resolution(
 # ---------------------------------------------------------------------------
 # 4. Vector path
 # ---------------------------------------------------------------------------
+
 
 def query_embedding(
     user_query: str,
@@ -499,6 +494,7 @@ def vector_results(
 # 5. Cypher generation using resolved entities
 # ---------------------------------------------------------------------------
 
+
 def _build_entity_context(resolved: dict) -> str:
     """
     Build a plain-English summary of resolved entities for the Cypher
@@ -511,32 +507,32 @@ def _build_entity_context(resolved: dict) -> str:
 
     persons = resolved.get("persons", {})
     if persons:
-        for original, canonical in persons.items():
+        for _original, canonical in persons.items():
             lines.append(f'  Person: "{canonical}"')
 
     movies = resolved.get("movies", {})
     if movies:
-        for original, canonical in movies.items():
+        for _original, canonical in movies.items():
             lines.append(f'  Movie title: "{canonical}"')
 
     genres = resolved.get("genres", {})
     if genres:
-        for original, canonical in genres.items():
+        for _original, canonical in genres.items():
             lines.append(f'  Genre: "{canonical}"')
 
     companies = resolved.get("companies", {})
     if companies:
-        for original, canonical in companies.items():
+        for _original, canonical in companies.items():
             lines.append(f'  ProductionCompany: "{canonical}"')
 
     if "year_after" in resolved:
-        lines.append(f'  Date filter: m.release_date > \'{resolved["year_after"]}-01-01\'')
+        lines.append(f"  Date filter: m.release_date > '{resolved['year_after']}-01-01'")
     if "year_before" in resolved:
-        lines.append(f'  Date filter: m.release_date < \'{resolved["year_before"]}-12-31\'')
+        lines.append(f"  Date filter: m.release_date < '{resolved['year_before']}-12-31'")
     if "rating_above" in resolved:
-        lines.append(f'  Rating filter: m.vote_average > {resolved["rating_above"]}')
+        lines.append(f"  Rating filter: m.vote_average > {resolved['rating_above']}")
     if "rating_below" in resolved:
-        lines.append(f'  Rating filter: m.vote_average < {resolved["rating_below"]}')
+        lines.append(f"  Rating filter: m.vote_average < {resolved['rating_below']}")
 
     return "\n".join(lines)
 
@@ -656,6 +652,7 @@ def cypher_results(
 # 6. Enrich vector results with graph traversal
 # ---------------------------------------------------------------------------
 
+
 def _enrich_movie(movie_id: int, driver: Driver) -> dict | None:
     """Pull directors, cast, genres, companies for a movie node."""
     cypher = """
@@ -683,6 +680,7 @@ def _enrich_movie(movie_id: int, driver: Driver) -> dict | None:
 # ---------------------------------------------------------------------------
 # 7. Merge results
 # ---------------------------------------------------------------------------
+
 
 def merged_results(
     vector_results: list[dict],
@@ -722,6 +720,7 @@ def merged_results(
 # 8. Format context
 # ---------------------------------------------------------------------------
 
+
 def retrieved_context(merged_results: list[dict], query_intent: str) -> str:
     """
     Format merged results into plain-text context for the generation DAG.
@@ -734,18 +733,18 @@ def retrieved_context(merged_results: list[dict], query_intent: str) -> str:
         return "No relevant information found in the knowledge graph for this query."
 
     FIELD_LABELS = {
-        "movie":              "Movie",
-        "director":           "Director",
-        "actor":              "Actor",
-        "genre":              "Genre",
-        "company":            "Production company",
-        "film_count":         "Films",
-        "movie_count":        "Count",
+        "movie": "Movie",
+        "director": "Director",
+        "actor": "Actor",
+        "genre": "Genre",
+        "company": "Production company",
+        "film_count": "Films",
+        "movie_count": "Count",
         "action_movie_count": "Action movies",
-        "avg_rating":         "Avg rating",
-        "average_rating":     "Avg rating",
-        "vote_average":       "Rating",
-        "release_date":       "Released",
+        "avg_rating": "Avg rating",
+        "average_rating": "Avg rating",
+        "vote_average": "Rating",
+        "release_date": "Released",
     }
 
     lines = []
@@ -753,7 +752,7 @@ def retrieved_context(merged_results: list[dict], query_intent: str) -> str:
 
     for row in merged_results:
         i += 1
-        source = row.get("_source", "unknown")
+        _source = row.get("_source", "unknown")
 
         if "directors" in row:
             # Enriched movie record from vector path
