@@ -40,15 +40,15 @@ import logging
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
-from hamilton import driver
-from neo4j import GraphDatabase
-
 import embed_module
 import generation_module
 import ingest_module
 import retrieval_module
+from dotenv import load_dotenv
 from graph_schema import CONSTRAINTS
+from neo4j import GraphDatabase
+
+from hamilton import driver
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -124,9 +124,11 @@ def run_ingest(visualise: bool = False):
     )
     s = result["ingestion_summary"]
     logger.info(
-        "Ingestion complete — movies: %d, genre edges: %d, "
-        "company edges: %d, person edges: %d",
-        s["movies"], s["genre_edges"], s["company_edges"], s["person_edges"],
+        "Ingestion complete — movies: %d, genre edges: %d, company edges: %d, person edges: %d",
+        s["movies"],
+        s["genre_edges"],
+        s["company_edges"],
+        s["person_edges"],
     )
     drv.close()
 
@@ -158,7 +160,9 @@ def run_embed(visualise: bool = False):
     s = result["embedding_summary"]
     logger.info(
         "Embedding complete — %d embeddings written, index: %s, model: %s",
-        s["embeddings_written"], s["vector_index"], s["model"],
+        s["embeddings_written"],
+        s["vector_index"],
+        s["model"],
     )
     drv.close()
 
@@ -172,11 +176,7 @@ def run_query(question: str, visualise: bool = False):
     drv = make_neo4j_driver()
     openai_api_key = get_env("OPENAI_API_KEY")
 
-    rag_driver = (
-        driver.Builder()
-        .with_modules(retrieval_module, generation_module)
-        .build()
-    )
+    rag_driver = driver.Builder().with_modules(retrieval_module, generation_module).build()
 
     if visualise:
         rag_driver.display_all_functions("rag_dag.png")
