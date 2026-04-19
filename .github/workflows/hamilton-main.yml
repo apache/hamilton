@@ -8,6 +8,7 @@ on:
         - main
     paths:
         - '.github/**'
+        - 'examples/**'
         - 'hamilton/**'
         - 'plugin_tests/**'
         - 'tests/**'
