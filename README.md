@@ -59,12 +59,9 @@ Get started with Apache Hamilton in just a few lines of code:
 
 ```python
 # Step 1: Install (run in terminal)
+# pip install sf-hamilton
 
-from sf_hamilton import driver
-import types
-
-# create a temporary module
-module = types.ModuleType("example")
+from hamilton import driver, ad_hoc_utils
 
 def A() -> int:
     return 1
@@ -72,9 +69,8 @@ def A() -> int:
 def B(A: int) -> int:
     return A + 1
 
-# attach functions to module
-module.A = A
-module.B = B
+# create a temporary module natively (ensures it works in REPL and notebooks)
+module = ad_hoc_utils.create_temporary_module(A, B)
 
 # builder pattern
 dr = (
