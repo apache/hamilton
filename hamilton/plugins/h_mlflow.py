@@ -182,6 +182,8 @@ class MLFlowTracker(
         # log config and inputs as `param` which creates columns in the UI to filter runs
         # `log_param()` accepts `value: Any` and will stringify complex objects
         for value_sets in [self.config, inputs]:
+            if value_sets is None:
+                continue
             for node_name, value in value_sets.items():
                 self.client.log_param(self.run_id, key=node_name, value=value)
 
@@ -325,11 +327,10 @@ class MLFlowTracker(
     def run_after_graph_execution(self, success: bool, *args, **kwargs):
         """End the MLFlow run"""
         # `status` is an enum value of mlflow.entities.RunStatus
-        if success:
-            self.client.set_terminated(self.run_id, status="FINISHED")
-        else:
-            self.client.set_terminated(self.run_id, status="FAILED")
-        mlflow.end_run()
+        status = "FINISHED" if success else "FAILED"
+
+        self.client.set_terminated(self.run_id, status=status)
+        mlflow.end_run(status=status)
 
     def run_before_node_execution(self, *args, **kwargs):
         """Placeholder required to subclass NodeExecutionHook"""

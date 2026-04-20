@@ -96,7 +96,7 @@ def movie_embeddings(
             model=EMBEDDING_MODEL,
             input=[item["text"] for item in batch],
         )
-        for item, emb_obj in zip(batch, response.data):
+        for item, emb_obj in zip(batch, response.data, strict=True):
             results.append({"id": item["id"], "embedding": emb_obj.embedding})
 
         logger.info("Embedded batch %d-%d of %d", i, min(i + BATCH_SIZE, total), total)
