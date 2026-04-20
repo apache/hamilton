@@ -3,6 +3,16 @@ name: Unit Tests
 on:
   workflow_dispatch:
 
+  push:
+    branches:
+        - 'release/hamilton/**'
+    paths:
+        - '.github/**'
+        - 'hamilton/**'
+        - 'plugin_tests/**'
+        - 'tests/**'
+        - 'pyproject.toml'
+
   pull_request:
     branches:
         - main

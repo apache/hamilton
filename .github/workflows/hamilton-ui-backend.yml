@@ -3,7 +3,8 @@ name: Backend Test Workflow
 on:
   push:
     branches:
-      - main  # or any specific branches you want to include
+      - main
+      - 'release/ui/**'
     paths:
       - 'ui/backend/**'
 

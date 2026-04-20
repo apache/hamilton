@@ -3,7 +3,8 @@ name: LSP Test Workflow
 on:
   push:
     branches:
-      - main  # or any specific branches you want to include
+      - main
+      - 'release/lsp/**'
     paths:
       - 'dev_tools/language_server/**'
 
