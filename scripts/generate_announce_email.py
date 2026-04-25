@@ -27,6 +27,7 @@ Usage:
 """
 
 import argparse
+import re
 import subprocess
 import sys
 
@@ -57,11 +58,49 @@ PACKAGE_PATHS = {
 }
 
 
+def linkify_prs(text: str) -> str:
+    """Replace (#1234) references with full GitHub PR links."""
+    return re.sub(
+        r"\(#(\d+)\)",
+        rf"(https://github.com/apache/{PROJECT}/pull/\1)",
+        text,
+    )
+
+
 def get_commit_hash(tag: str) -> str:
     try:
         return subprocess.check_output(["git", "rev-parse", tag]).decode().strip()
     except subprocess.CalledProcessError:
         return "[INSERT COMMIT HASH]"
+
+
+def get_new_contributors(tag: str, package_key: str) -> list[str]:
+    """Find authors who contributed to this release but have no commits before the previous tag."""
+    try:
+        all_tags = (
+            subprocess.check_output(["git", "tag", "--sort=-creatordate"]).decode().strip().split()
+        )
+        package_name = PACKAGE_DISPLAY_NAMES[package_key]
+        matching = [t for t in all_tags if t.startswith(package_name)]
+        if package_key == "hamilton":
+            matching += [t for t in all_tags if t.startswith("sf-hamilton-")]
+        if len(matching) < 2:
+            return []
+        prev_tag = matching[1]
+
+        paths = PACKAGE_PATHS.get(package_key, [])
+
+        def authors_in_range(rev_range):
+            cmd = ["git", "log", "--format=%aN", rev_range, "--"]
+            cmd.extend(paths)
+            output = subprocess.check_output(cmd).decode().strip()
+            return set(output.split("\n")) if output else set()
+
+        current_authors = authors_in_range(f"{prev_tag}..{tag}")
+        historical_authors = authors_in_range(prev_tag)
+        return sorted(current_authors - historical_authors)
+    except subprocess.CalledProcessError:
+        return []
 
 
 def get_changes_since_last_tag(tag: str, package_key: str) -> list[str]:
@@ -140,13 +179,20 @@ On behalf of the Apache Hamilton PPMC,
 """
 
 
-def generate_announce_email(package_key: str, version: str, tag: str, changes: list[str]) -> str:
+def generate_announce_email(
+    package_key: str, version: str, tag: str, changes: list[str], new_contributors: list[str]
+) -> str:
     package_name = PACKAGE_DISPLAY_NAMES[package_key]
     pypi_name = PYPI_NAMES[package_key]
     version_incubating = f"{version}-incubating"
     commit_hash = get_commit_hash(tag)
 
-    changes_str = "\n".join(f"  - {c}" for c in changes)
+    changes_str = "\n".join(f"  - {linkify_prs(c)}" for c in changes)
+    contributors_str = ""
+    if new_contributors:
+        contributors_str = "\n\nWelcome to our new contributors:\n" + "\n".join(
+            f"  - {c}" for c in new_contributors
+        )
 
     return f"""\
 Subject: [ANNOUNCE] Apache Hamilton {package_name} {version_incubating} released
@@ -178,10 +224,10 @@ The KEYS file is available at:
 https://downloads.apache.org/incubator/{PROJECT}/KEYS
 
 For documentation and getting started, see:
-  - https://hamilton.dagworks.io/
+  - https://hamilton.apache.org/
   - https://github.com/apache/{PROJECT}
 
-Thank you to everyone who contributed to this release!
+Thank you to everyone who contributed to this release!{contributors_str}
 
 On behalf of the Apache Hamilton community,
 [Your Name]
@@ -197,6 +243,31 @@ incubation status is not necessarily a reflection of the
 completeness or stability of the code, it does indicate that the
 project has yet to be fully endorsed by the ASF.
 """
+
+
+def generate_slack_message(
+    package_key: str, version: str, tag: str, changes: list[str], new_contributors: list[str]
+) -> str:
+    package_name = PACKAGE_DISPLAY_NAMES[package_key]
+    pypi_name = PYPI_NAMES[package_key]
+    version_incubating = f"{version}-incubating"
+
+    changes_str = "\n".join(f"• {linkify_prs(c)}" for c in changes)
+
+    slack_contributors = ""
+    if new_contributors:
+        slack_contributors = f"\n:wave: *Welcome new contributors:* {', '.join(new_contributors)}\n"
+
+    return f"""\
+:tada: *Apache Hamilton `{package_name}` {version_incubating} released!*
+
+{changes_str}
+
+*Install:* `pip install {pypi_name}=={version}`
+*PyPI:* https://pypi.org/project/{pypi_name}/{version}/
+*GitHub:* https://github.com/apache/{PROJECT}/releases/tag/{tag}
+*Docs:* https://hamilton.apache.org/
+{slack_contributors}"""
 
 
 def main():
@@ -245,6 +316,7 @@ def main():
         )
 
     changes = get_changes_since_last_tag(args.tag, args.package)
+    new_contributors = get_new_contributors(args.tag, args.package)
 
     separator = "=" * 80
 
@@ -260,7 +332,12 @@ def main():
     print(f"\n{separator}")
     print("  EMAIL 2: Release Announcement (send to user@hamilton.apache.org)")
     print(f"{separator}\n")
-    print(generate_announce_email(args.package, args.version, args.tag, changes))
+    print(generate_announce_email(args.package, args.version, args.tag, changes, new_contributors))
+
+    print(f"\n{separator}")
+    print("  SLACK: Release Announcement (copy-paste to Slack)")
+    print(f"{separator}\n")
+    print(generate_slack_message(args.package, args.version, args.tag, changes, new_contributors))
 
 
 if __name__ == "__main__":
