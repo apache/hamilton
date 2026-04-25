@@ -120,12 +120,77 @@ be in the `dist/` directory for inspection.
 
 ### After the Vote Passes
 
-```bash
-# Push the git tag
-git push origin apache-hamilton-v1.90.0-incubating-RC0
+Once the vote passes, follow these steps to finalize the release:
 
-# Upload to PyPI (from the package's working directory)
-uv run twine upload dist/apache_hamilton-1.90.0.tar.gz dist/apache_hamilton-1.90.0-py3-none-any.whl
+#### 1. Promote RC artifacts to the release SVN
+
+```bash
+# Dry run first to verify
+scripts/promote_rc.sh --dry-run apache-hamilton 1.90.0 0
+
+# Then promote for real
+scripts/promote_rc.sh apache-hamilton 1.90.0 0
+```
+
+#### 2. Upload to PyPI
+
+```bash
+# Upload the apache-hamilton wheel and sdist
+twine upload dist/apache_hamilton-1.90.0-py3-none-any.whl dist/apache-hamilton-1.90.0-incubating-src.tar.gz
+```
+
+#### 3. Build and upload the sf-hamilton redirect package
+
+The `sf-hamilton` package on PyPI is a thin redirect that depends on `apache-hamilton`.
+This ensures existing users who `pip install sf-hamilton` get the new release, and that
+all extras (e.g., `sf-hamilton[dask]`, `sf-hamilton[mcp]`) continue to work.
+
+```bash
+# Update the version in sf-hamilton-redirect/pyproject.toml to match the release
+# Then build
+cd sf-hamilton-redirect
+python -m build
+
+# Validate
+twine check dist/*
+
+# Upload
+twine upload dist/sf_hamilton-1.90.0*
+cd ..
+```
+
+#### 4. Sanity check the PyPI uploads
+
+```bash
+# Test apache-hamilton
+pip install apache-hamilton==1.90.0
+python -c "import hamilton; print(hamilton.version.VERSION)"
+
+# Test sf-hamilton redirect (base + an extra)
+pip install sf-hamilton[visualization]==1.90.0
+python -c "import hamilton; import graphviz; print('OK')"
+```
+
+#### 5. Send announcement emails
+
+```bash
+python scripts/generate_announce_email.py \
+    --package hamilton --version 1.90.0 --rc 0 \
+    --tag apache-hamilton-v1.90.0-incubating-RC0 \
+    --binding-votes 3 --nonbinding-votes 1
+```
+
+This generates three outputs:
+- **[RESULT][VOTE]** email for `dev@hamilton.apache.org`
+- **[ANNOUNCE]** email for `user@hamilton.apache.org`
+- **Slack message** for copy-paste
+
+#### 6. Merge the release branch back to main
+
+```bash
+git checkout main
+git merge release/hamilton/1.90.0
+git push origin main
 ```
 
 # For Voters: Verifying a Release

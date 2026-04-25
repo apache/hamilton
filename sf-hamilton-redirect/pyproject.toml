@@ -1,0 +1,58 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sf-hamilton"
+version = "1.90.0"
+description = "This package has moved to apache-hamilton. Install apache-hamilton instead."
+readme = "README.md"
+requires-python = ">=3.10.1, <4"
+license = "Apache-2.0"
+dependencies = ["apache-hamilton==1.90.0"]
+
+[project.optional-dependencies]
+cli = ["apache-hamilton[cli]==1.90.0"]
+dask = ["apache-hamilton[dask]==1.90.0"]
+dask-array = ["apache-hamilton[dask-array]==1.90.0"]
+dask-dataframe = ["apache-hamilton[dask-dataframe]==1.90.0"]
+dask-diagnostics = ["apache-hamilton[dask-diagnostics]==1.90.0"]
+dask-distributed = ["apache-hamilton[dask-distributed]==1.90.0"]
+datadog = ["apache-hamilton[datadog]==1.90.0"]
+diskcache = ["apache-hamilton[diskcache]==1.90.0"]
+experiments = ["apache-hamilton[experiments]==1.90.0"]
+lsp = ["apache-hamilton[lsp]==1.90.0"]
+mcp = ["apache-hamilton[mcp]==1.90.0"]
+openlineage = ["apache-hamilton[openlineage]==1.90.0"]
+pandera = ["apache-hamilton[pandera]==1.90.0"]
+pydantic = ["apache-hamilton[pydantic]==1.90.0"]
+pyspark = ["apache-hamilton[pyspark]==1.90.0"]
+ray = ["apache-hamilton[ray]==1.90.0"]
+rich = ["apache-hamilton[rich]==1.90.0"]
+sdk = ["apache-hamilton[sdk]==1.90.0"]
+slack = ["apache-hamilton[slack]==1.90.0"]
+tqdm = ["apache-hamilton[tqdm]==1.90.0"]
+ui = ["apache-hamilton[ui]==1.90.0"]
+vaex = ["apache-hamilton[vaex]==1.90.0"]
+visualization = ["apache-hamilton[visualization]==1.90.0"]
+
+[project.urls]
+Homepage = "https://github.com/apache/hamilton"
+Documentation = "https://hamilton.apache.org/"
