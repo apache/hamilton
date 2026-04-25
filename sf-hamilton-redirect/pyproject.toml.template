@@ -21,37 +21,37 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sf-hamilton"
-version = "1.90.0"
+version = "VERSION"
 description = "This package has moved to apache-hamilton. Install apache-hamilton instead."
 readme = "README.md"
 requires-python = ">=3.10.1, <4"
 license = "Apache-2.0"
-dependencies = ["apache-hamilton==1.90.0"]
+dependencies = ["apache-hamilton==VERSION"]
 
 [project.optional-dependencies]
-cli = ["apache-hamilton[cli]==1.90.0"]
-dask = ["apache-hamilton[dask]==1.90.0"]
-dask-array = ["apache-hamilton[dask-array]==1.90.0"]
-dask-dataframe = ["apache-hamilton[dask-dataframe]==1.90.0"]
-dask-diagnostics = ["apache-hamilton[dask-diagnostics]==1.90.0"]
-dask-distributed = ["apache-hamilton[dask-distributed]==1.90.0"]
-datadog = ["apache-hamilton[datadog]==1.90.0"]
-diskcache = ["apache-hamilton[diskcache]==1.90.0"]
-experiments = ["apache-hamilton[experiments]==1.90.0"]
-lsp = ["apache-hamilton[lsp]==1.90.0"]
-mcp = ["apache-hamilton[mcp]==1.90.0"]
-openlineage = ["apache-hamilton[openlineage]==1.90.0"]
-pandera = ["apache-hamilton[pandera]==1.90.0"]
-pydantic = ["apache-hamilton[pydantic]==1.90.0"]
-pyspark = ["apache-hamilton[pyspark]==1.90.0"]
-ray = ["apache-hamilton[ray]==1.90.0"]
-rich = ["apache-hamilton[rich]==1.90.0"]
-sdk = ["apache-hamilton[sdk]==1.90.0"]
-slack = ["apache-hamilton[slack]==1.90.0"]
-tqdm = ["apache-hamilton[tqdm]==1.90.0"]
-ui = ["apache-hamilton[ui]==1.90.0"]
-vaex = ["apache-hamilton[vaex]==1.90.0"]
-visualization = ["apache-hamilton[visualization]==1.90.0"]
+cli = ["apache-hamilton[cli]==VERSION"]
+dask = ["apache-hamilton[dask]==VERSION"]
+dask-array = ["apache-hamilton[dask-array]==VERSION"]
+dask-dataframe = ["apache-hamilton[dask-dataframe]==VERSION"]
+dask-diagnostics = ["apache-hamilton[dask-diagnostics]==VERSION"]
+dask-distributed = ["apache-hamilton[dask-distributed]==VERSION"]
+datadog = ["apache-hamilton[datadog]==VERSION"]
+diskcache = ["apache-hamilton[diskcache]==VERSION"]
+experiments = ["apache-hamilton[experiments]==VERSION"]
+lsp = ["apache-hamilton[lsp]==VERSION"]
+mcp = ["apache-hamilton[mcp]==VERSION"]
+openlineage = ["apache-hamilton[openlineage]==VERSION"]
+pandera = ["apache-hamilton[pandera]==VERSION"]
+pydantic = ["apache-hamilton[pydantic]==VERSION"]
+pyspark = ["apache-hamilton[pyspark]==VERSION"]
+ray = ["apache-hamilton[ray]==VERSION"]
+rich = ["apache-hamilton[rich]==VERSION"]
+sdk = ["apache-hamilton[sdk]==VERSION"]
+slack = ["apache-hamilton[slack]==VERSION"]
+tqdm = ["apache-hamilton[tqdm]==VERSION"]
+ui = ["apache-hamilton[ui]==VERSION"]
+vaex = ["apache-hamilton[vaex]==VERSION"]
+visualization = ["apache-hamilton[visualization]==VERSION"]
 
 [project.urls]
 Homepage = "https://github.com/apache/hamilton"

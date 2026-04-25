@@ -120,23 +120,31 @@ be in the `dist/` directory for inspection.
 
 ### After the Vote Passes
 
-Once the vote passes, follow these steps to finalize the release:
+Once the vote passes, follow these steps to finalize the release.
+Set these variables once and use them throughout:
+
+```bash
+export VERSION=1.90.0
+export RC=0
+export PACKAGE=apache-hamilton
+export TAG="${PACKAGE}-v${VERSION}-incubating-RC${RC}"
+```
 
 #### 1. Promote RC artifacts to the release SVN
 
 ```bash
 # Dry run first to verify
-scripts/promote_rc.sh --dry-run apache-hamilton 1.90.0 0
+scripts/promote_rc.sh --dry-run ${PACKAGE} ${VERSION} ${RC}
 
 # Then promote for real
-scripts/promote_rc.sh apache-hamilton 1.90.0 0
+scripts/promote_rc.sh ${PACKAGE} ${VERSION} ${RC}
 ```
 
 #### 2. Upload to PyPI
 
 ```bash
-# Upload the apache-hamilton wheel and sdist
-twine upload dist/apache_hamilton-1.90.0-py3-none-any.whl dist/apache-hamilton-1.90.0-incubating-src.tar.gz
+PACKAGE_UNDERSCORE=$(echo ${PACKAGE} | tr '-' '_')
+twine upload dist/${PACKAGE_UNDERSCORE}-${VERSION}-py3-none-any.whl dist/${PACKAGE}-${VERSION}-incubating-src.tar.gz
 ```
 
 #### 3. Build and upload the sf-hamilton redirect package
@@ -145,29 +153,25 @@ The `sf-hamilton` package on PyPI is a thin redirect that depends on `apache-ham
 This ensures existing users who `pip install sf-hamilton` get the new release, and that
 all extras (e.g., `sf-hamilton[dask]`, `sf-hamilton[mcp]`) continue to work.
 
-```bash
-# Update the version in sf-hamilton-redirect/pyproject.toml to match the release
-# Then build
-cd sf-hamilton-redirect
-python -m build
+The `sf-hamilton-redirect/` directory contains a `pyproject.toml.template` with `VERSION`
+as a placeholder. The build script stamps in the real version, builds, and validates:
 
-# Validate
-twine check dist/*
+```bash
+sf-hamilton-redirect/build.sh ${VERSION}
 
 # Upload
-twine upload dist/sf_hamilton-1.90.0*
-cd ..
+twine upload sf-hamilton-redirect/dist/sf_hamilton-${VERSION}*
 ```
 
 #### 4. Sanity check the PyPI uploads
 
 ```bash
-# Test apache-hamilton
-pip install apache-hamilton==1.90.0
+# Test apache-hamilton in a fresh env
+pip install apache-hamilton==${VERSION}
 python -c "import hamilton; print(hamilton.version.VERSION)"
 
 # Test sf-hamilton redirect (base + an extra)
-pip install sf-hamilton[visualization]==1.90.0
+pip install sf-hamilton[visualization]==${VERSION}
 python -c "import hamilton; import graphviz; print('OK')"
 ```
 
@@ -175,8 +179,8 @@ python -c "import hamilton; import graphviz; print('OK')"
 
 ```bash
 python scripts/generate_announce_email.py \
-    --package hamilton --version 1.90.0 --rc 0 \
-    --tag apache-hamilton-v1.90.0-incubating-RC0 \
+    --package hamilton --version ${VERSION} --rc ${RC} \
+    --tag ${TAG} \
     --binding-votes 3 --nonbinding-votes 1
 ```
 
@@ -185,11 +189,12 @@ This generates three outputs:
 - **[ANNOUNCE]** email for `user@hamilton.apache.org`
 - **Slack message** for copy-paste
 
-#### 6. Merge the release branch back to main
+#### 6. Squash-merge the release branch back to main
 
 ```bash
 git checkout main
-git merge release/hamilton/1.90.0
+git merge --squash release/hamilton/${VERSION}
+git commit -m "Release apache-hamilton ${VERSION}"
 git push origin main
 ```
 
