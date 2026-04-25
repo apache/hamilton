@@ -92,6 +92,9 @@ Passing ``from_`` and ``to`` Apache Hamilton objects to ``Builder().with_materia
 2. Observability ✅: Loaders and savers are part of the dataflow. You can view them with ``Driver.display_all_functions()`` and execute nodes by requesting them with ``Driver.execute()``.
 3. Flexibility ✅: The loading and saving behavior is decoupled from the dataflow and can modified easily when creating the ``Driver`` and executing code.
 
+.. note::
+
+    ``from_`` data loaders can be specified as optional with ``optional=True``. This allows specified data loaders to be skipped rather than raise an exception when not referenced by a dataflow.
 
 Dynamic materializers
 ~~~~~~~~~~~~~~~~~~~~~

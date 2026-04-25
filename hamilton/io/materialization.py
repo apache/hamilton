@@ -136,6 +136,7 @@ class ExtractorFactory:
         self,
         target: str,
         loaders: list[type[DataLoader]],
+        optional: bool = False,
         **data_loader_kwargs: Any | SingleDependency,
     ):
         """Instantiates an ExtractorFactory. Note this is not a public API -- this is
@@ -144,10 +145,14 @@ class ExtractorFactory:
 
         :param target: Parameter, into which we're loading the data
         :param loaders: A list of data loaders that are viable candidates, given the key after `from_`
+        :param optional: Whether missing targets should raise exceptions or skip being loaded.
+            Optional=True will mean that if the target does not exist in the graph, we skip injecting
+            this into the graph.
         :param data_loader_kwargs: Keyword arguments for the data loaders.
         """
         self.target = target
         self.loaders = loaders
+        self.optional = optional
         self.data_loader_kwargs = process_kwargs(data_loader_kwargs)
 
     def generate_nodes(self, fn_graph: graph.FunctionGraph) -> list[node.Node]:
@@ -163,6 +168,8 @@ class ExtractorFactory:
         # TODO -- add some nodes to the graph
         node_with_target = fn_graph.nodes.get(self.target)
         if node_with_target is None:
+            if self.optional:
+                return []
             raise ValueError(
                 f"Could not find node with name: {self.target} in function "
                 f"graph. Available nodes: {list(fn_graph.nodes.keys()) + [...] if len(fn_graph.nodes) > 10 else []}"
