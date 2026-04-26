@@ -37,6 +37,7 @@ from typing import (
 )
 
 import pandas as pd
+from typing_extensions import Self
 
 from hamilton import common, graph_types, htypes
 from hamilton.caching.adapter import HamiltonCacheAdapter
@@ -1777,7 +1778,7 @@ class Builder:
         if getattr(self, field) == unset_value:
             raise ValueError(message)
 
-    def enable_dynamic_execution(self, *, allow_experimental_mode: bool = False) -> "Builder":
+    def enable_dynamic_execution(self, *, allow_experimental_mode: bool = False) -> Self:
         """Enables the Parallelizable[] type, which in turn enables:
         1. Grouped execution into tasks
         2. Parallel execution
@@ -1791,7 +1792,7 @@ class Builder:
         self.v2_executor = True
         return self
 
-    def with_config(self, config: dict[str, Any]) -> "Builder":
+    def with_config(self, config: dict[str, Any]) -> Self:
         """Adds the specified configuration to the config.
         This can be called multilple times -- later calls will take precedence.
 
@@ -1801,7 +1802,7 @@ class Builder:
         self.config.update(config)
         return self
 
-    def with_modules(self, *modules: ModuleType) -> "Builder":
+    def with_modules(self, *modules: ModuleType) -> Self:
         """Adds the specified modules to the modules list.
         This can be called multiple times.
 
@@ -1811,7 +1812,7 @@ class Builder:
         self.modules.extend(modules)
         return self
 
-    def with_adapter(self, adapter: base.HamiltonGraphAdapter) -> "Builder":
+    def with_adapter(self, adapter: base.HamiltonGraphAdapter) -> Self:
         """Sets the adapter to use.
 
         :param adapter: Adapter to use.
@@ -1821,7 +1822,7 @@ class Builder:
         self.legacy_graph_adapter = adapter
         return self
 
-    def with_adapters(self, *adapters: lifecycle_base.LifecycleAdapter) -> "Builder":
+    def with_adapters(self, *adapters: lifecycle_base.LifecycleAdapter) -> Self:
         """Sets the adapter to use.
 
         :param adapter: Adapter to use.
@@ -1837,7 +1838,7 @@ class Builder:
 
     def with_materializers(
         self, *materializers: ExtractorFactory | MaterializerFactory
-    ) -> "Builder":
+    ) -> Self:
         """Add materializer nodes to the `Driver`
         The generated nodes can be referenced by name in `.execute()`
 
@@ -1872,7 +1873,7 @@ class Builder:
         default_loader_behavior: Literal["default", "recompute", "disable", "ignore"] = "default",
         default_saver_behavior: Literal["default", "recompute", "disable", "ignore"] = "default",
         log_to_file: bool = False,
-    ) -> "Builder":
+    ) -> Self:
         """Add the caching adapter to the `Driver`
 
         :param path: path where the cache metadata and results will be stored
@@ -1942,7 +1943,7 @@ class Builder:
                 if isinstance(adapter, HamiltonCacheAdapter):
                     return adapter
 
-    def with_execution_manager(self, execution_manager: executors.ExecutionManager) -> "Builder":
+    def with_execution_manager(self, execution_manager: executors.ExecutionManager) -> Self:
         """Sets the execution manager to use. Note that this cannot be used if local_executor
         or remote_executor are also set
 
@@ -1959,7 +1960,7 @@ class Builder:
         self.execution_manager = execution_manager
         return self
 
-    def with_remote_executor(self, remote_executor: executors.TaskExecutor) -> "Builder":
+    def with_remote_executor(self, remote_executor: executors.TaskExecutor) -> Self:
         """Sets the execution manager to use. Note that this cannot be used if local_executor
         or remote_executor are also set
 
@@ -1975,7 +1976,7 @@ class Builder:
         self.remote_executor = remote_executor
         return self
 
-    def with_local_executor(self, local_executor: executors.TaskExecutor) -> "Builder":
+    def with_local_executor(self, local_executor: executors.TaskExecutor) -> Self:
         """Sets the execution manager to use. Note that this cannot be used if local_executor
         or remote_executor are also set
 
@@ -1991,7 +1992,7 @@ class Builder:
         self.local_executor = local_executor
         return self
 
-    def with_grouping_strategy(self, grouping_strategy: grouping.GroupingStrategy) -> "Builder":
+    def with_grouping_strategy(self, grouping_strategy: grouping.GroupingStrategy) -> Self:
         """Sets a node grouper, which tells the driver how to group nodes into tasks for execution.
 
         :param node_grouper: Node grouper to use.
@@ -2002,7 +2003,7 @@ class Builder:
         self.grouping_strategy = grouping_strategy
         return self
 
-    def allow_module_overrides(self) -> "Builder":
+    def allow_module_overrides(self) -> Self:
         """Same named functions in different modules get overwritten.
         If multiple modules have same named functions, the later module overrides the previous one(s).
         The order of listing the modules is important, since later ones will overwrite the previous ones. This is a global call affecting all imported modules.
