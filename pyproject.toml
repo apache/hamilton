@@ -59,7 +59,7 @@ dask-array = ["dask[array]"]
 dask-dataframe = ["dask[dataframe]"]
 dask-diagnostics = ["dask[diagnostics]"]
 dask-distributed = ["dask[distributed]"]
-datadog = ["ddtrace<3.0"]  # Temporary pin until h_ddog.py import is fixed for >3.0 version
+datadog = ["ddtrace>=4.0,<5.0"]
 diskcache = ["diskcache"]
 experiments = [
   "fastapi",
@@ -140,7 +140,7 @@ docs = [
   "commonmark",
   "dask-expr>=1.1.14",
   "dask[distributed]",
-  "ddtrace<3.0",
+  "ddtrace>=4.0,<5",
   "diskcache",
   # required for all the plugins
   "dlt",
