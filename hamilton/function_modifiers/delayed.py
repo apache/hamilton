@@ -78,7 +78,7 @@ class resolve(DynamicResolver):
 
     .. code-block:: python
 
-        @parameterize_values(
+        @parameterize_sources(
             series_sum_1={"s1": "series_1", "s2": "series_2"},
             series_sum_2={"s1": "series_3", "s2": "series_4"},
         )
