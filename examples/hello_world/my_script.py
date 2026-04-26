@@ -52,6 +52,6 @@ initial_columns = {
 df = dr.execute(output_columns, inputs=initial_columns)
 print(df.to_string())
 
-# To visualize do `pip install "sf-hamilton[visualization]"` if you want these to work
+# To visualize do `pip install "apache-hamilton[visualization]"` if you want these to work
 # Also look up visualize_path_between and visualize_execution
 dr.display_all_functions("./my_dag.png")

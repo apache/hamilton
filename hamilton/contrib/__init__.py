@@ -15,15 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""This module exists so that people can download dataflows without the sf-hamilton-contrib package.
+"""This module exists so that people can download dataflows without the apache-hamilton-contrib package.
 
-It will get clobbered when sf-hamilton-contrib is installed, which is good.
+It will get clobbered when apache-hamilton-contrib is installed, which is good.
 """
 
 import logging
 from contextlib import contextmanager
 
-__version__ = "__unknown__"  # this will be overwritten once sf-hamilton-contrib is installed.
+__version__ = "__unknown__"  # this will be overwritten once apache-hamilton-contrib is installed.
 
 
 @contextmanager

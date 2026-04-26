@@ -1,1 +1,1 @@
-sf-hamilton[cli]
+apache-hamilton[cli]

@@ -22,10 +22,10 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Check latest version of sf-hamilton-ui
+      - name: Check latest version of apache-hamilton-ui
         id: check_version
         run: |
-          response=$(curl -s https://pypi.org/pypi/sf-hamilton-ui/json)
+          response=$(curl -s https://pypi.org/pypi/apache-hamilton-ui/json)
           version=$(echo "$response" | jq -r '.info.version')
           echo "latest_version=$version" >> $GITHUB_ENV
 

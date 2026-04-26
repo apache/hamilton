@@ -11,7 +11,7 @@ jobs:
   publish-to-pypi:
     runs-on: ubuntu-latest
     # Specifying a GitHub environment is optional, but strongly encouraged
-    environment: sf-hamilton-contrib-publishing-environment
+    environment: apache-hamilton-contrib-publishing-environment
     permissions:
       # IMPORTANT: this permission is mandatory for trusted publishing
       id-token: write

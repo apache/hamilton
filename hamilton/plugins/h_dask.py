@@ -44,7 +44,7 @@ class DaskGraphAdapter(base.HamiltonGraphAdapter):
 
     This walks the graph and translates it to run onto `Dask <https://dask.org/>`__.
 
-    Use `pip install sf-hamilton[dask]` to get the dependencies required to run this.
+    Use `pip install apache-hamilton[dask]` to get the dependencies required to run this.
 
     Try this adapter when:
 

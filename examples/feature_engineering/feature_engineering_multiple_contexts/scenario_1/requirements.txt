@@ -1,5 +1,5 @@
+apache-hamilton
 fastapi
 pandas
 pandera
-sf-hamilton
 uvicorn

@@ -24,7 +24,7 @@ The Apache Hamilton CLI allows to build `Driver` objects from the command line.
 # Installation
 Install dependencies with (it only needs `typer`)
 
-```pip install sf-hamilton[cli]```
+```pip install apache-hamilton[cli]```
 
 Test the installation with
 

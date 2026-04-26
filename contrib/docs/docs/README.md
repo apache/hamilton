@@ -47,7 +47,7 @@ There are two methods to get access to dataflows presented here.
 Assumptions:
 
 1. You are familiar with Apache Hamilton and have it installed. If not, take
-[15 minutes to learn Apache Hamilton in your browser](https://www.tryhamilton.dev/) and then `pip install sf-hamilton` to get started.
+[15 minutes to learn Apache Hamilton in your browser](https://www.tryhamilton.dev/) and then `pip install apache-hamilton` to get started.
 Come back here when you're ready to use Apache Hamilton.
 2. You have the requisite python dependencies installed on your system.
 You'll get import errors if you don't. Don't know what you need? Scroll to the bottom of a dataflow to find the requirements. We're working on convenience functions to help!
@@ -85,7 +85,7 @@ production purposes as you can version-lock your dependencies.
 To install the package, run:
 
 ```bash
-pip install sf-hamilton-contrib --upgrade
+pip install apache-hamilton-contrib --upgrade
 ```
 
 Once installed, you can import the dataflows as follows.

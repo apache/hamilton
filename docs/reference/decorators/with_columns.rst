@@ -36,7 +36,7 @@ PySpark
 
 This is part of the hamilton pyspark integration. To install, run:
 
-`pip install sf-hamilton[pyspark]`
+`pip install apache-hamilton[pyspark]`
 
 **Reference Documentation**
 

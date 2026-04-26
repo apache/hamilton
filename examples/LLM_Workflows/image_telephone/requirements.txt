@@ -1,4 +1,6 @@
 altair
+apache-hamilton
+apache-hamilton-contrib
 boto3
 burr
 openai
@@ -7,8 +9,6 @@ pandas
 pillow
 s3fs
 scikit-learn
-sf-hamilton
-sf-hamilton-contrib
 st-files-connection
 streamlit
 streamlit-super-slider

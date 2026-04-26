@@ -20,12 +20,12 @@ You can also manually install the language server in your Python environment via
 
 .. code:: shell
 
-    pip install "sf-hamilton[lsp]"
+    pip install "apache-hamilton[lsp]"
 
 
 Developers
 ----------
 
-If you want to dig in the internals of the language server and integrate it with another IDE, you can find the source code in the ``dev tools/`` section of the `Apache Hamilton GitHub repository <https://github.com/apache/hamilton/tree/main/dev_tools/lsp>`_. It is also directly available on PyPi at `sf-hamilton-lsp <https://pypi.org/project/sf-hamilton-lsp/>`_.
+If you want to dig in the internals of the language server and integrate it with another IDE, you can find the source code in the ``dev tools/`` section of the `Apache Hamilton GitHub repository <https://github.com/apache/hamilton/tree/main/dev_tools/lsp>`_. It is also directly available on PyPi at `apache-hamilton-lsp <https://pypi.org/project/apache-hamilton-lsp/>`_.
 
 Note that the package name is ``hamilton_lsp`` when used directly via Python code.

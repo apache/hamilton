@@ -45,8 +45,8 @@ cd hamilton/examples
 docker build --tag hamilton-example .
 ```
 Docker build takes around `6m16.298s` depending on the system configuration and network.
-Alternatively, you can pull the container image from https://hub.docker.com/r/skrawcz/sf-hamilton.
-`docker pull skrawcz/sf-hamilton`.
+Alternatively, you can pull the container image from https://hub.docker.com/r/skrawcz/apache-hamilton.
+`docker pull skrawcz/apache-hamilton`.
 
 3. Starting the container.
 If you built it yourself:
@@ -55,7 +55,7 @@ docker run -it --rm --name hamilton-example hamilton-example
 ```
 If you pulled it from dockerhub:
 ```bash
-docker run -it --rm --name hamilton-example skrawcz/sf-hamilton
+docker run -it --rm --name hamilton-example skrawcz/apache-hamilton
 ```
 This will start the container and put you into a bash prompt.
 

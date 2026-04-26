@@ -32,12 +32,12 @@ const checkPythonDependencies = (pythonPath: string) => {
 }
 
 function installDependenciesMessage(pythonPath: string) {
-  let installLSP = "Install sf-hamilton[lsp]"
+  let installLSP = "Install apache-hamilton[lsp]"
 
   vscode.window.showInformationMessage("Missing the Hamilton language server.", installLSP)
     .then(selection => {
       if (selection === installLSP) {
-        execSync(`${pythonPath} -m pip install 'sf-hamilton-lsp'`)
+        execSync(`${pythonPath} -m pip install 'apache-hamilton-lsp'`)
         vscode.commands.executeCommand("workbench.action.reloadWindow")
       }
     })

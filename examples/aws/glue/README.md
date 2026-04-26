@@ -114,7 +114,7 @@ First things first, AWS Glue jobs run a single python script, but you can includ
         --role GlueProcessorRole \
         --command '{"Name" :  "pythonshell", "PythonVersion": "3.9", "ScriptLocation" : "s3://<YOUR_PATH_TO_SCRIPT>/processing.py"}' \
         --max-capacity 0.0625 \
-        --default-arguments '{"--extra-py-files" : "s3://<YOUR_PATH_TO_WHL>/hamilton_functions-0.1-py3-none-any.whl", "--additional-python-modules" : "sf-hamilton"}'
+        --default-arguments '{"--extra-py-files" : "s3://<YOUR_PATH_TO_WHL>/hamilton_functions-0.1-py3-none-any.whl", "--additional-python-modules" : "apache-hamilton"}'
     ```
 
 - **Run the job:**

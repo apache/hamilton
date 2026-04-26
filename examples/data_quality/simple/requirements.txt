@@ -1,2 +1,2 @@
-sf-hamilton
-# sf-hamilton[visualization]   # if visualization is desired
+apache-hamilton
+# apache-hamilton[visualization]   # if visualization is desired

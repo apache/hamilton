@@ -1,7 +1,7 @@
+apache-hamilton[visualization]
 openai
 PyPDF2
 pyspark
-sf-hamilton[visualization]
 tenacity
 tiktoken
 tqdm

@@ -1,2 +1,2 @@
-sf-hamilton[spark]
-# sf-hamilton[visualization]   # if visualization is desired
+apache-hamilton[spark]
+# apache-hamilton[visualization]   # if visualization is desired

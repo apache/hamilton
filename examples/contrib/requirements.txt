@@ -1,7 +1,7 @@
+apache-hamilton-contrib
+apache-hamilton[visualization]
 numpy
 optuna
 pandas
-sf-hamilton-contrib
-sf-hamilton[visualization]
 sklearn
 xgboost

@@ -42,7 +42,7 @@ class RichProgressBar(TaskExecutionHook, TaskGroupingHook, GraphExecutionHook, N
     """An adapter that uses rich to show simple progress bars for the graph execution.
 
     Note: you need to have rich installed for this to work. If you don't have it installed, you can
-    install it with `pip install rich` (or `pip install sf-hamilton[rich]` -- use quotes if you're
+    install it with `pip install rich` (or `pip install apache-hamilton[rich]` -- use quotes if you're
     using zsh).
 
     .. code-block:: python

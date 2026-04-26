@@ -1,6 +1,6 @@
+apache-hamilton[visualization]
 numpy
 optuna
 pandas
 scikit-learn
-sf-hamilton[visualization]
 xgboost

@@ -5,7 +5,7 @@
     "data_path": "data/train_sample.csv"
   },
   "return_df": true,
-  "requirements" : ["pandas", "sf-hamilton"],
+  "requirements" : ["pandas", "apache-hamilton"],
   "use_tags_for_output" : ["stage", "production"],
   "final_vars" : null,
   "template_description": "This is an example showing how one might start approaching time-series feature engineering. It is based on code from https://github.com/F33AI/waffleml-examples/tree/master/kaggle_store_item_demand_forecasting. It uses a sample of data from this kaggle competition - https://www.kaggle.com/competitions/demand-forecasting-kernels-only."

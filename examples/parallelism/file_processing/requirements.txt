@@ -1,5 +1,5 @@
+apache-hamilton>=1.25.0
 dask
 jupyter
 matplotlib
 ray
-sf-hamilton>=1.25.0

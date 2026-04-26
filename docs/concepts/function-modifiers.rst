@@ -174,13 +174,13 @@ The next snippet checks if the returned Series is of type ``np.int32``, which is
 pandera support
 ~~~~~~~~~~~~~~~
 
-Apache Hamilton has a pandera plugin for data validation that you can install with ``pip install sf-hamilton[pandera]``. Then, you can pass a pandera schema (for DataFrame or Series) to ``@check_output(schema=...)``.
+Apache Hamilton has a pandera plugin for data validation that you can install with ``pip install apache-hamilton[pandera]``. Then, you can pass a pandera schema (for DataFrame or Series) to ``@check_output(schema=...)``.
 
 
 pydantic support
 ~~~~~~~~~~~~~~~~
 
-Apache Hamilton also supports data validation of pydantic models, which can be enabled with ``pip install sf-hamilton[pydantic]``. With pydantic installed, you can pass any subclass of the pydantic base model to ``@check_output(model=...)``. Pydantic validation is performed in strict mode, meaning that raw values will not be coerced to the model's types. For more information on strict mode see the `pydantic docs <https://docs.pydantic.dev/latest/concepts/strict_mode/>`_.
+Apache Hamilton also supports data validation of pydantic models, which can be enabled with ``pip install apache-hamilton[pydantic]``. With pydantic installed, you can pass any subclass of the pydantic base model to ``@check_output(model=...)``. Pydantic validation is performed in strict mode, meaning that raw values will not be coerced to the model's types. For more information on strict mode see the `pydantic docs <https://docs.pydantic.dev/latest/concepts/strict_mode/>`_.
 
 
 Split node output into *n* nodes

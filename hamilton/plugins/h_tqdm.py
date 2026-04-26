@@ -32,7 +32,7 @@ class ProgressBar(
 
     Note: you need to have tqdm installed for this to work.
     If you don't have it installed, you can install it with `pip install tqdm`
-    (or `pip install sf-hamilton[tqdm]` -- use quotes if you're using zsh).
+    (or `pip install apache-hamilton[tqdm]` -- use quotes if you're using zsh).
 
     .. code-block:: python
 

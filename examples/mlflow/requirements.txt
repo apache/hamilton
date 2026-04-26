@@ -1,5 +1,5 @@
+apache-hamilton[visualization]
 mlflow
 numpy
 pandas
 scikit-learn
-sf-hamilton[visualization]

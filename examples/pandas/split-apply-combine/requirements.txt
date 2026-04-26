@@ -1,2 +1,2 @@
+apache-hamilton[visualization]
 pandas
-sf-hamilton[visualization]

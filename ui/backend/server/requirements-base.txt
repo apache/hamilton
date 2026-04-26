@@ -2,6 +2,7 @@ aioboto3
 aiobotocore
 aiofiles
 aiohttp
+apache-hamilton
 colorlog
 ddtrace
 django
@@ -11,4 +12,3 @@ passlib
 propelauth_py
 psycopg2-binary
 pydantic
-sf-hamilton

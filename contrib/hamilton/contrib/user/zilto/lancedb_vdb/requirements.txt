@@ -1,4 +1,4 @@
+apache-hamilton[visualization]
 lancedb
 numpy
 pyarrow
-sf-hamilton[visualization]

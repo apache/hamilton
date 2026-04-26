@@ -3,7 +3,7 @@
   "configs" : [],
   "return_df": false,
   "inputs" :  {},
-  "requirements" : ["pandas", "sf-hamilton", "scikit-learn"],
+  "requirements" : ["pandas", "apache-hamilton", "scikit-learn"],
   "use_tags_for_output" : null,
   "final_vars" : [
     "best_model"

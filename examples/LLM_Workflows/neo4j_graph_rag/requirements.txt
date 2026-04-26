@@ -15,9 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
+apache-hamilton>=1.73.0
 neo4j>=5.18.0
 openai>=1.30.0
 pandas>=2.0.0
 python-dotenv>=1.0.0
-sf-hamilton>=1.73.0
 tqdm>=4.66.0

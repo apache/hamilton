@@ -77,7 +77,7 @@ if __name__ == "__main__":
         "seasons_4",
         "absenteeism_time_in_hours",
     ]
-    # To visualize do `pip install "sf-hamilton[visualization]"` if you want these to work
+    # To visualize do `pip install "apache-hamilton[visualization]"` if you want these to work
     # dr.visualize_execution(output_columns, './run_dask', {"format": "png"})
     # dr.display_all_functions('./my_full_dag.dot')
 
