@@ -835,6 +835,17 @@ def test_dataloader_future_annotations():
     assert custom_subclass_check(fg["sample_dataloader"].type, list)
 
 
+def test_datasaver_future_annotations():
+    from tests.resources import nodes_with_future_annotation
+
+    fn_to_collect = nodes_with_future_annotation.sample_datasaver
+    fg = graph.create_function_graph(
+        ad_hoc_utils.create_temporary_module(fn_to_collect),
+        config={},
+    )
+    assert "sample_datasaver" in fg
+
+
 def test_datasaver():
     annotation = datasaver()
     (node1,) = annotation.generate_nodes(correct_ds_function, {})
