@@ -640,7 +640,7 @@ Note this does not support dynamic execution or materializers (for now).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.async_driver.Builder.build">
-<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.async_driver.Builder.build" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hamilton.async_driver.AsyncDriver" title="hamilton.async_driver.AsyncDriver"><span class="pre">AsyncDriver</span></a></span></span><a class="headerlink" href="#hamilton.async_driver.Builder.build" title="Link to this definition">¶</a></dt>
 <dd><p>Builds the async driver. This also initializes it, hence the async definition.
 If you don’t want to use async, you can use <cite>build_without_init</cite> and call <cite>ainit</cite> later,
 but we recommend using this in an asynchronous lifespan management function (E.G. in fastAPI),

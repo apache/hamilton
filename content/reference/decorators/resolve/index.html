@@ -537,7 +537,7 @@ driver.</p>
 configuration time. Say, for example, we want to add two series, and we need to pass the set of
 series to add as a configuration parameter, as we’ll be changing it regularly. Without this,
 you would have to have them as part of the same dataframe. E.G.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterize_values</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterize_sources</span><span class="p">(</span>
     <span class="n">series_sum_1</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="s2">&quot;series_1&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">:</span> <span class="s2">&quot;series_2&quot;</span><span class="p">},</span>
     <span class="n">series_sum_2</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="s2">&quot;series_3&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">:</span> <span class="s2">&quot;series_4&quot;</span><span class="p">},</span>
 <span class="p">)</span>

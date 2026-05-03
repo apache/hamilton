@@ -879,6 +879,10 @@ was read and written.</p>
 <li><p>Observability ✅: Loaders and savers are part of the dataflow. You can view them with <code class="docutils literal notranslate"><span class="pre">Driver.display_all_functions()</span></code> and execute nodes by requesting them with <code class="docutils literal notranslate"><span class="pre">Driver.execute()</span></code>.</p></li>
 <li><p>Flexibility ✅: The loading and saving behavior is decoupled from the dataflow and can modified easily when creating the <code class="docutils literal notranslate"><span class="pre">Driver</span></code> and executing code.</p></li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">from_</span></code> data loaders can be specified as optional with <code class="docutils literal notranslate"><span class="pre">optional=True</span></code>. This allows specified data loaders to be skipped rather than raise an exception when not referenced by a dataflow.</p>
+</div>
 </section>
 <section id="dynamic-materializers">
 <h3>Dynamic materializers<a class="headerlink" href="#dynamic-materializers" title="Link to this heading">¶</a></h3>
