@@ -1836,9 +1836,7 @@ class Builder:
         self.adapters.extend(adapters)
         return self
 
-    def with_materializers(
-        self, *materializers: ExtractorFactory | MaterializerFactory
-    ) -> Self:
+    def with_materializers(self, *materializers: ExtractorFactory | MaterializerFactory) -> Self:
         """Add materializer nodes to the `Driver`
         The generated nodes can be referenced by name in `.execute()`
 
