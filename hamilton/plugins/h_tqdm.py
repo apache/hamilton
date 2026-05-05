@@ -111,12 +111,18 @@ class ProgressBar(
     def run_after_node_execution(self, **future_kwargs):
         self.progress_bar.update(1)
 
-    def run_after_graph_execution(self, **future_kwargs):
+    def run_after_graph_execution(self, *, success: bool = True, **future_kwargs):
         name_part = "Execution Complete!"
         if len(name_part) > self.node_name_target_width:
             padding = ""
         else:
             padding = " " * (self.node_name_target_width - len(name_part))
+        # Overrides are counted in `total` but never trigger run_after_node_execution,
+        # so on a successful run we top the bar up to 100% rather than leaving a gap.
+        if success and self.progress_bar.total is not None:
+            remaining = self.progress_bar.total - self.progress_bar.n
+            if remaining > 0:
+                self.progress_bar.update(remaining)
         self.progress_bar.set_description_str(f"{self.desc} -> {name_part + padding}")
         self.progress_bar.set_postfix({})
         self.progress_bar.close()
