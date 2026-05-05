@@ -32,12 +32,7 @@ def _build_driver(progress_bar: ProgressBar, module_name: str) -> driver.Driver:
     module = ad_hoc_utils.create_temporary_module(
         normalized, scaled, total, module_name=module_name
     )
-    return (
-        driver.Builder()
-        .with_adapters(progress_bar)
-        .with_modules(module)
-        .build()
-    )
+    return driver.Builder().with_adapters(progress_bar).with_modules(module).build()
 
 
 def test_progress_bar_reaches_total_with_overrides():
@@ -80,12 +75,7 @@ def test_progress_bar_does_not_force_completion_on_failure():
         step_one, step_two, step_three, module_name="tqdm_pipeline_failure"
     )
     progress_bar = ProgressBar()
-    dr = (
-        driver.Builder()
-        .with_adapters(progress_bar)
-        .with_modules(module)
-        .build()
-    )
+    dr = driver.Builder().with_adapters(progress_bar).with_modules(module).build()
 
     try:
         dr.execute(["step_three"], inputs={"raw_value": 1.0})
