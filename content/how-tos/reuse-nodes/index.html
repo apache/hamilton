@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex/"><link rel="search" title="Search" href="../../search/"><link rel="next" title="pre-commit hooks" href="../pre-commit-hooks/"><link rel="prev" title="Wrapping the Driver" href="../wrapping-driver/">
-        <link rel="canonical" href="https://hamilton.apache.org/how-tos/cli-reference/">
+<link rel="index" title="Index" href="../../genindex/"><link rel="search" title="Search" href="../../search/"><link rel="next" title="Model training" href="../ml-training/"><link rel="prev" title="Feature engineering" href="../use-for-feature-engineering/">
+        <link rel="canonical" href="https://hamilton.apache.org/how-tos/reuse-nodes/">
 
     <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
-        <title>Command line interface - Hamilton</title>
+        <title>Reusing functions and nodes - Hamilton</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -269,7 +269,7 @@ s=d.getElementsByTagName('script')[0];
 <li class="toctree-l2"><a class="reference internal" href="../load-data/">Loading data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../caching-tutorial/">Caching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../use-for-feature-engineering/">Feature engineering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../reuse-nodes/">Reusing functions and nodes</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Reusing functions and nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ml-training/">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../llm-workflows/">LLM workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../run-data-quality-checks/">Data quality</a></li>
@@ -278,7 +278,7 @@ s=d.getElementsByTagName('script')[0];
 <li class="toctree-l2"><a class="reference internal" href="../microservice/">Microservice</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../extensions-autoloading/">Extension autoloading</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../wrapping-driver/">Wrapping the Driver</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli-reference/">Command line interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pre-commit-hooks/">pre-commit hooks</a></li>
 </ul>
 </li>
@@ -501,12 +501,12 @@ s=d.getElementsByTagName('script')[0];
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="https://github.com/apache/hamilton/blob/main/docs/how-tos/cli-reference.md?plain=true" title="View this page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/blob/main/docs/how-tos/reuse-nodes.rst?plain=true" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
 </div><div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/how-tos/cli-reference.md" rel="edit" title="Edit this page">
+  <a class="muted-link" href="https://github.com/apache/hamilton/edit/main/docs/how-tos/reuse-nodes.rst" rel="edit" title="Edit this page">
     <svg><use href="#svg-pencil"></use></svg>
     <span class="visually-hidden">Edit this page</span>
   </a>
@@ -523,122 +523,269 @@ s=d.getElementsByTagName('script')[0];
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <!--
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
+          <section id="reusing-functions-and-nodes">
+<h1>Reusing functions and nodes<a class="headerlink" href="#reusing-functions-and-nodes" title="Link to this heading">¶</a></h1>
+<p>A common question on <a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a>:
+<em>“I want to run the same logic for several regions / datasets / model variants
+– what is the Hamilton way?”</em> Hamilton has four answers, and the right one
+depends on how the variation is shaped.</p>
+<p>This page walks through them in order from simplest to most advanced:</p>
+<ol class="arabic simple">
+<li><p><strong>Reuse a function module across multiple Drivers</strong> – the data is what
+varies, the dataflow is the same.</p></li>
+<li><p><strong>Override a module with another that has the same function names</strong> –
+one or two specific functions need to be swapped (e.g. for testing or for a
+different runtime context).</p></li>
+<li><p><strong>Use</strong> <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> – you want the <em>same</em> transformation graph evaluated
+several times <em>inside one Driver</em>, with different inputs or config.</p></li>
+<li><p><strong>Use</strong> <code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> – the variation is large enough that
+writing one <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> per case becomes tedious. (Advanced.)</p></li>
+</ol>
+<p>Every code sample below is taken from a runnable example in the
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples">examples folder</a>, so
+you can copy any of them, run them locally, and adapt them.</p>
+<section id="reuse-a-function-module-across-multiple-drivers">
+<h2>1. Reuse a function module across multiple Drivers<a class="headerlink" href="#reuse-a-function-module-across-multiple-drivers" title="Link to this heading">¶</a></h2>
+<p>If the <em>dataflow</em> is the same and only the <em>data</em> changes, you do not need
+any decorator – you just import the function module and build a Driver
+wherever you need one. This is the most common form of reuse and the one to
+reach for first.</p>
+<p>The
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/feature_engineering/feature_engineering_multiple_contexts">feature_engineering_multiple_contexts</a>
+example shows this pattern across an offline ETL and an online FastAPI
+service: <code class="docutils literal notranslate"><span class="pre">features.py</span></code> is written <strong>once</strong>, then driven from two contexts.
+The offline ETL builds a Driver and executes it on a batch of rows; the
+online server builds another Driver from the same module and executes it
+per-request.</p>
+<p>When to reach for this pattern:</p>
+<ul class="simple">
+<li><p>The same feature definitions need to run in batch <em>and</em> in a request
+handler.</p></li>
+<li><p>You want to share code between training and inference.</p></li>
+<li><p>You want different teams to consume the same canonical module with their
+own inputs.</p></li>
+</ul>
+<p>What you do <em>not</em> need: any Hamilton-specific decorator. The reuse is just
+ordinary Python imports plus building a Driver per context.</p>
+</section>
+<section id="override-a-module-to-swap-same-named-functions">
+<h2>2. Override a module to swap same-named functions<a class="headerlink" href="#override-a-module-to-swap-same-named-functions" title="Link to this heading">¶</a></h2>
+<p>Sometimes you want most of a dataflow to stay the same and only swap one
+or two functions – for example, replacing a real data loader with a mock
+one in tests, or switching between two implementations of the same business
+rule.</p>
+<p>By default Hamilton refuses to build a DAG when two modules define
+functions with the same name, because the resulting graph would be
+ambiguous. The
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/module_overrides">module_overrides</a>
+example shows how to opt in to a “later wins” rule with
+<code class="docutils literal notranslate"><span class="pre">Builder.allow_module_overrides()</span></code>:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/module_overrides/module_a.py</span></code></span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;This is module a.&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/module_overrides/module_b.py</span></code></span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;This is module b.&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/module_overrides/run.py</span></code></span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">module_a</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">module_b</span>
 
-  http://www.apache.org/licenses/LICENSE-2.0
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
--->
-<section id="command-line-interface">
-<h1>Command line interface<a class="headerlink" href="#command-line-interface" title="Link to this heading">¶</a></h1>
-<p>This page covers the Apache Hamilton CLI. It is built directly from the CLI, but note that the command <code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">--help</span></code> always provide the most accurate documentation.</p>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
-<p>The dependencies for the Apache Hamilton CLI can be installed via</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install sf-hamilton[cli]</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span>
+            <span class="n">module_a</span><span class="p">,</span>
+            <span class="n">module_b</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">allow_module_overrides</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;builder: &quot;</span><span class="p">,</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">{},</span> <span class="n">final_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">]))</span>
 </pre></div>
 </div>
-<p>You can verify the installation with</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">hamilton --help</span>
-</pre></div>
 </div>
-</section>
-<section id="hamilton-global">
-<h2><code class="docutils literal notranslate"><span class="pre">hamilton</span></code> (global)<a class="headerlink" href="#hamilton-global" title="Link to this heading">¶</a></h2>
-<p><strong>Options</strong>:</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">allow_module_overrides()</span></code> is set, the function from the
+<strong>later-imported</strong> module wins, so the example above prints
+<code class="docutils literal notranslate"><span class="pre">&quot;This</span> <span class="pre">is</span> <span class="pre">module</span> <span class="pre">b.&quot;</span></code>.</p>
+<p>When to reach for this pattern:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--verbose</span> <span class="pre">/</span> <span class="pre">--no-verbose</span></code>: [default: no-verbose]</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--json-out</span> <span class="pre">/</span> <span class="pre">--no-json-out</span></code>: [default: no-json-out]</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--install-completion</span></code>: Install completion for the current shell.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--show-completion</span></code>: Show completion for the current shell, to copy it or customize the installation.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--help</span></code>: Show this message and exit.</p></li>
+<li><p>You have a stable dataflow but want a small, well-named seam for swapping
+in a test double, a mock data source, or an environment-specific function.</p></li>
+<li><p>You want the swap to be visible in the Driver-construction code, rather
+than buried inside a function or a config flag.</p></li>
 </ul>
-<p><strong>Commands</strong>:</p>
+<p>When <em>not</em> to reach for this pattern:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">build</span></code>: Build a single Driver with MODULES</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">diff</span></code>: Diff between the current MODULES and their…</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: Version NODES and DATAFLOW from dataflow…</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">view</span></code>: Build and visualize dataflow with MODULES</p></li>
+<li><p>If many functions need to vary, prefer keeping the variations in distinct
+modules and choosing which one to import. Module overrides are best as a
+surgical tool.</p></li>
 </ul>
 </section>
-<section id="hamilton-build">
-<h2><code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">build</span></code><a class="headerlink" href="#hamilton-build" title="Link to this heading">¶</a></h2>
-<p>Build a single Driver with MODULES</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>hamilton<span class="w"> </span>build<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>MODULES...
+<section id="subdag-repeat-the-same-transform-inside-one-driver">
+<h2>3. <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> – repeat the same transform inside one Driver<a class="headerlink" href="#subdag-repeat-the-same-transform-inside-one-driver" title="Link to this heading">¶</a></h2>
+<p>Sometimes you want the <em>same</em> transformation graph evaluated several times
+<em>inside the same DAG</em>, each time with a different input or configuration –
+for example, computing unique-user counts at daily / weekly / monthly grains
+across two regions.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> decorator from <code class="docutils literal notranslate"><span class="pre">hamilton.function_modifiers</span></code> does this
+declaratively. From the source documentation:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> enables you to rerun components of your DAG with varying
+parameters. That is, it enables you to “chain” what you could express
+with a Driver into a single DAG.</p>
+</div></blockquote>
+<p>The
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/reusing_functions">reusing_functions</a>
+example computes <code class="docutils literal notranslate"><span class="pre">unique_users</span></code> for two regions and three time grains.
+The shared logic lives in <code class="docutils literal notranslate"><span class="pre">unique_users.py</span></code>:</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/reusing_functions/unique_users.py</span></code></span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">_grain_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;day&quot;</span><span class="p">:</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;week&quot;</span><span class="p">:</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;month&quot;</span><span class="p">:</span> <span class="s2">&quot;M&quot;</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_grain</span><span class="p">(</span><span class="n">grain</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">grain</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">,</span> <span class="s2">&quot;week&quot;</span><span class="p">,</span> <span class="s2">&quot;month&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">filtered_interactions</span><span class="p">(</span><span class="n">website_interactions</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">region</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">website_interactions</span><span class="p">[</span><span class="n">website_interactions</span><span class="o">.</span><span class="n">region</span> <span class="o">==</span> <span class="n">region</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">unique_users</span><span class="p">(</span><span class="n">filtered_interactions</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">grain</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gives the number of shares traded by the frequency&quot;&quot;&quot;</span>
+    <span class="n">_validate_grain</span><span class="p">(</span><span class="n">grain</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filtered_interactions</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">_grain_mapping</span><span class="p">[</span><span class="n">grain</span><span class="p">])[</span><span class="s2">&quot;user_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Arguments</strong>:</p>
+</div>
+<p>Then in <code class="docutils literal notranslate"><span class="pre">reusable_subdags.py</span></code>, each <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> declaration creates one
+named instance of that subgraph, with its own <code class="docutils literal notranslate"><span class="pre">inputs</span></code> and <code class="docutils literal notranslate"><span class="pre">config</span></code>:</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">One &#64;subdag invocation from <code class="docutils literal notranslate"><span class="pre">examples/reusing_functions/reusable_subdags.py</span></code></span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@subdag</span><span class="p">(</span>
+    <span class="n">unique_users</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;grain&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;day&quot;</span><span class="p">)},</span>
+    <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;US&quot;</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">daily_unique_users_US</span><span class="p">(</span><span class="n">unique_users</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">unique_users</span>
+</pre></div>
+</div>
+</div>
+<p>Each decorated function:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">MODULES...</span></code>: [required]</p></li>
+<li><p>Takes the <em>output</em> of its sub-DAG as its argument. Above, the sub-DAG ends
+in <code class="docutils literal notranslate"><span class="pre">unique_users</span></code>, so the wrapping function receives <code class="docutils literal notranslate"><span class="pre">unique_users:</span>
+<span class="pre">pd.Series</span></code> and returns it (perhaps after post-processing).</p></li>
+<li><p>Receives <code class="docutils literal notranslate"><span class="pre">inputs={&quot;grain&quot;:</span> <span class="pre">value(&quot;day&quot;)}</span></code> – this binds the sub-DAG
+input <code class="docutils literal notranslate"><span class="pre">grain</span></code> to the literal <code class="docutils literal notranslate"><span class="pre">&quot;day&quot;</span></code> for <em>this instance only</em>.</p></li>
+<li><p>Receives <code class="docutils literal notranslate"><span class="pre">config={&quot;region&quot;:</span> <span class="pre">&quot;US&quot;}</span></code> – this scopes Hamilton’s
+<code class="docutils literal notranslate"><span class="pre">&#64;config.when</span></code> selection to <code class="docutils literal notranslate"><span class="pre">&quot;US&quot;</span></code> for this sub-DAG.</p></li>
 </ul>
-<p><strong>Options</strong>:</p>
+<p>The same module then defines five more analogous functions (<code class="docutils literal notranslate"><span class="pre">weekly_*</span></code>,
+<code class="docutils literal notranslate"><span class="pre">monthly_*</span></code>, the <code class="docutils literal notranslate"><span class="pre">CA</span></code> variants), giving twelve nodes that all reuse the
+same underlying definitions.</p>
+<p>Two parameters worth knowing:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--help</span></code>: Show this message and exit.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">namespace</span></code> – a string prefix for the nodes that <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> materialises.
+By default Hamilton uses the wrapping function’s name, which is normally
+what you want.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">external_inputs</span></code> – declare any function parameter that comes from
+<em>outside</em> the sub-DAG (e.g. from the surrounding DAG). This makes the
+boundary between the sub-DAG and its surroundings explicit.</p></li>
+</ul>
+<p>When to reach for this pattern:</p>
+<ul class="simple">
+<li><p>You want one Driver, one visualised DAG, and one <code class="docutils literal notranslate"><span class="pre">execute</span></code> call to
+produce all the variants – rather than a Python <code class="docutils literal notranslate"><span class="pre">for</span></code> loop over many
+Drivers in your application code.</p></li>
+<li><p>You want lineage and execution metadata for every variant captured by
+Hamilton, not by a wrapper script.</p></li>
 </ul>
 </section>
-<section id="hamilton-diff">
-<h2><code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">diff</span></code><a class="headerlink" href="#hamilton-diff" title="Link to this heading">¶</a></h2>
-<p>Diff between the current MODULES and their specified GIT_REFERENCE</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>hamilton<span class="w"> </span>diff<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>MODULES...
+<section id="parameterized-subdag-many-subdags-at-once-advanced">
+<h2>4. <code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> – many subdags at once (advanced)<a class="headerlink" href="#parameterized-subdag-many-subdags-at-once-advanced" title="Link to this heading">¶</a></h2>
+<p>If you have <em>many</em> subdags that differ only along a small number of
+parameters, writing one <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> declaration per case becomes verbose.
+<code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> is syntactic sugar that produces several subdags
+from a single decorator – analogous to how <code class="docutils literal notranslate"><span class="pre">&#64;parameterize</span></code> produces
+several nodes from one function.</p>
+<p>From the
+<a class="reference external" href="https://github.com/apache/hamilton/blob/main/hamilton/function_modifiers/recursive.py">source documentation</a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterized_subdag</span><span class="p">(</span>
+    <span class="n">feature_modules</span><span class="p">,</span>
+    <span class="n">from_datasource_1</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_1.csv&quot;</span><span class="p">)}},</span>
+    <span class="n">from_datasource_2</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_2.csv&quot;</span><span class="p">)}},</span>
+    <span class="n">from_datasource_3</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_3.csv&quot;</span><span class="p">)},</span>
+        <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="s2">&quot;only_even_client_ids&quot;</span><span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">feature_engineering</span><span class="p">(</span><span class="n">feature_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">feature_df</span>
 </pre></div>
 </div>
-<p><strong>Arguments</strong>:</p>
+<p>Each entry below the decorator becomes one subdag, all built from the same
+<code class="docutils literal notranslate"><span class="pre">feature_modules</span></code> but with different inputs / config.</p>
+<p>The Hamilton source itself includes a deliberate warning on this decorator:</p>
+<blockquote>
+<div><p>Think about whether this feature is really the one you want – often
+times, verbose, static DAGs are far more readable than very concise,
+highly parameterized DAGs.</p>
+</div></blockquote>
+<p>In practice: prefer the explicit form from section 3 until the repetition
+genuinely hurts. Reach for <code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> when the parameter
+list comes from elsewhere (e.g. a config file resolved with <code class="docutils literal notranslate"><span class="pre">&#64;resolve</span></code>)
+or when you have a dozen-plus near-identical subdags.</p>
+<p>The full reference for both decorators lives at:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">MODULES...</span></code>: [required]</p></li>
-</ul>
-<p><strong>Options</strong>:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--git-reference</span> <span class="pre">TEXT</span></code>: [default: HEAD]</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--view</span> <span class="pre">/</span> <span class="pre">--no-view</span></code>: [default: no-view]</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--output-file-path</span> <span class="pre">PATH</span></code>: [default: diff.png]</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--help</span></code>: Show this message and exit.</p></li>
+<li><p><a class="reference internal" href="../../reference/decorators/subdag/"><span class="doc">subdag</span></a></p></li>
+<li><p><a class="reference internal" href="../../reference/decorators/parameterize_subdag/"><span class="doc">parameterized_subdag</span></a></p></li>
 </ul>
 </section>
-<section id="hamilton-version">
-<h2><code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">version</span></code><a class="headerlink" href="#hamilton-version" title="Link to this heading">¶</a></h2>
-<p>Version NODES and DATAFLOW from dataflow with MODULES</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>hamilton<span class="w"> </span>version<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>MODULES...
-</pre></div>
-</div>
-<p><strong>Arguments</strong>:</p>
+<section id="choosing-between-the-four-patterns">
+<h2>Choosing between the four patterns<a class="headerlink" href="#choosing-between-the-four-patterns" title="Link to this heading">¶</a></h2>
+<p>A short decision tree:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">MODULES...</span></code>: [required]</p></li>
+<li><p><strong>The data varies, the code does not</strong> → just build another Driver from
+the same module (section 1).</p></li>
+<li><p><strong>One or two named functions need to be swapped</strong> → put the swaps in
+another module and use <code class="docutils literal notranslate"><span class="pre">allow_module_overrides()</span></code> (section 2).</p></li>
+<li><p><strong>You want N copies of the same transform graph in one DAG</strong> → use
+<code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> (section 3).</p></li>
+<li><p><strong>You have many copies and the parameter list is itself data</strong> → consider
+<code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> (section 4).</p></li>
 </ul>
-<p><strong>Options</strong>:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--help</span></code>: Show this message and exit.</p></li>
-</ul>
+<p>In practice, most production Hamilton projects rely heavily on (1), use (2)
+sparingly for testing seams, reach for (3) when modeling per-segment or
+per-grain pipelines, and treat (4) as an advanced tool.</p>
 </section>
-<section id="hamilton-view">
-<h2><code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">view</span></code><a class="headerlink" href="#hamilton-view" title="Link to this heading">¶</a></h2>
-<p>Build and visualize dataflow with MODULES</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>hamilton<span class="w"> </span>view<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>MODULES...
-</pre></div>
-</div>
-<p><strong>Arguments</strong>:</p>
+<section id="where-to-go-from-here">
+<h2>Where to go from here<a class="headerlink" href="#where-to-go-from-here" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">MODULES...</span></code>: [required]</p></li>
-</ul>
-<p><strong>Options</strong>:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--output-file-path</span> <span class="pre">PATH</span></code>: [default: ./dag.png]</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--help</span></code>: Show this message and exit.</p></li>
+<li><p>Walk through the runnable examples linked above:
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/feature_engineering/feature_engineering_multiple_contexts">feature_engineering_multiple_contexts</a>,
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/module_overrides">module_overrides</a>,
+and
+<a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/reusing_functions">reusing_functions</a>.</p></li>
+<li><p>Read <a class="reference internal" href="../../concepts/best-practices/code-organization/"><span class="doc">Code Organization</span></a> for the module
+layout that makes these patterns natural.</p></li>
+<li><p>For an end-to-end deep-dive on subdags and reuse, see the
+<a class="reference external" href="https://github.com/DAGWorks-Inc/hamilton-tutorials/blob/main/2024-03-19/march-meetup.ipynb">Hamilton March 2024 Meetup tutorial notebook</a>.</p></li>
 </ul>
 </section>
 </section>
@@ -648,23 +795,23 @@ under the License.
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../pre-commit-hooks/">
+          <a class="next-page" href="../ml-training/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">pre-commit hooks</div>
+                <div class="title">Model training</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../wrapping-driver/">
+          <a class="prev-page" href="../use-for-feature-engineering/">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Wrapping the Driver</div>
+                <div class="title">Feature engineering</div>
                 
               </div>
             </a>
@@ -711,13 +858,13 @@ under the License.
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Command line interface</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#hamilton-global"><code class="docutils literal notranslate"><span class="pre">hamilton</span></code> (global)</a></li>
-<li><a class="reference internal" href="#hamilton-build"><code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">build</span></code></a></li>
-<li><a class="reference internal" href="#hamilton-diff"><code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">diff</span></code></a></li>
-<li><a class="reference internal" href="#hamilton-version"><code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">version</span></code></a></li>
-<li><a class="reference internal" href="#hamilton-view"><code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">view</span></code></a></li>
+<li><a class="reference internal" href="#">Reusing functions and nodes</a><ul>
+<li><a class="reference internal" href="#reuse-a-function-module-across-multiple-drivers">1. Reuse a function module across multiple Drivers</a></li>
+<li><a class="reference internal" href="#override-a-module-to-swap-same-named-functions">2. Override a module to swap same-named functions</a></li>
+<li><a class="reference internal" href="#subdag-repeat-the-same-transform-inside-one-driver">3. <code class="docutils literal notranslate"><span class="pre">&#64;subdag</span></code> – repeat the same transform inside one Driver</a></li>
+<li><a class="reference internal" href="#parameterized-subdag-many-subdags-at-once-advanced">4. <code class="docutils literal notranslate"><span class="pre">&#64;parameterized_subdag</span></code> – many subdags at once (advanced)</a></li>
+<li><a class="reference internal" href="#choosing-between-the-four-patterns">Choosing between the four patterns</a></li>
+<li><a class="reference internal" href="#where-to-go-from-here">Where to go from here</a></li>
 </ul>
 </li>
 </ul>

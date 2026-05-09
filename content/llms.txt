@@ -42,6 +42,7 @@
 - [Microservice](https://hamilton.apache.org/_sources/how-tos/microservice.rst.txt)
 - [Model training](https://hamilton.apache.org/_sources/how-tos/ml-training.rst.txt)
 - [pre-commit hooks](https://hamilton.apache.org/_sources/how-tos/pre-commit-hooks.md.txt)
+- [Reusing functions and nodes](https://hamilton.apache.org/_sources/how-tos/reuse-nodes.rst.txt)
 - [Data quality](https://hamilton.apache.org/_sources/how-tos/run-data-quality-checks.rst.txt)
 - [Scaling computation](https://hamilton.apache.org/_sources/how-tos/scale-up.rst.txt)
 - [Feature engineering](https://hamilton.apache.org/_sources/how-tos/use-for-feature-engineering.rst.txt)
