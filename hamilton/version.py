@@ -15,4 +15,4 @@
 # specific language governing permissions and limitations
 # under the License.
 
-VERSION = (1, 89, 0)
+VERSION = (1, 90, 0)

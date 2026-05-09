@@ -156,6 +156,45 @@ def test_extractor_factory_generates_nodes():
     assert input_data_node.type == dict  # From above
 
 
+def test_extractor_factory_exception_on_missing_targets():
+    factory = ExtractorFactory(
+        "input_data",
+        loaders=[MockDataLoader],
+        optional=False,
+    )
+
+    def test() -> dict:
+        return {"loaded_value": {}}
+
+    base_node = node.Node.from_fn(test)
+    nodes_without_dependencies = graph.update_dependencies(
+        {base_node.name: base_node}, lifecycle_base.LifecycleAdapterSet(base.DefaultAdapter())
+    )
+    fn_graph = graph.FunctionGraph(nodes_without_dependencies, {})
+    with pytest.raises(ValueError):
+        factory.generate_nodes(fn_graph)
+
+
+def test_extractor_factory_optional_flag_skips_missing_targets():
+    factory = ExtractorFactory(
+        "input_data",
+        loaders=[MockDataLoader],
+        optional=True,
+    )
+
+    def test() -> dict:
+        return {"loaded_value": {}}
+
+    base_node = node.Node.from_fn(test)
+    nodes_without_dependencies = graph.update_dependencies(
+        {base_node.name: base_node}, lifecycle_base.LifecycleAdapterSet(base.DefaultAdapter())
+    )
+    fn_graph = graph.FunctionGraph(nodes_without_dependencies, {})
+    nodes = factory.generate_nodes(fn_graph)
+    nodes_by_name = {node_.name: node_ for node_ in nodes}
+    assert "input_data" not in nodes_by_name
+
+
 def test_materializer_factory_generates_nodes_with_builder():
     factory = MaterializerFactory(
         "test_materializer",

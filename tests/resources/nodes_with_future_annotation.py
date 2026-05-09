@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from hamilton.function_modifiers import dataloader
+from hamilton.function_modifiers import dataloader, datasaver
 from hamilton.htypes import Collect, Parallelizable
 
 """Tests future annotations with common node types"""
@@ -41,3 +41,9 @@ def collected(standard: Collect[int]) -> int:
 def sample_dataloader() -> tuple[list[str], dict]:
     """Grouping here as the rest test annotations"""
     return ["a", "b", "c"], {}
+
+
+@datasaver()
+def sample_datasaver(standard: int) -> dict:
+    """Grouping here as the rest test annotations"""
+    return {"saved": standard}

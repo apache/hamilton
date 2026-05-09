@@ -453,7 +453,7 @@ class Builder(driver.Builder):
             allow_module_overrides=self._allow_module_overrides,
         )
 
-    async def build(self):
+    async def build(self) -> AsyncDriver:
         """Builds the async driver. This also initializes it, hence the async definition.
         If you don't want to use async, you can use `build_without_init` and call `ainit` later,
         but we recommend using this in an asynchronous lifespan management function (E.G. in fastAPI),

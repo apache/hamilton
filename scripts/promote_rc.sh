@@ -38,19 +38,21 @@ done
 
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 [--dry-run] <version> <rc_num>"
-    echo "Example: $0 --dry-run 1.2.3 0"
+if [ "$#" -ne 3 ]; then
+    echo "Usage: $0 [--dry-run] <package_name> <version> <rc_num>"
+    echo "Example: $0 --dry-run apache-hamilton 1.2.3 0"
+    echo "Package names: apache-hamilton, apache-hamilton-sdk, apache-hamilton-lsp, apache-hamilton-contrib, apache-hamilton-ui"
     exit 1
 fi
 
-VERSION=$1
-RC_NUM=$2
+PACKAGE_NAME=$1
+VERSION=$2
+RC_NUM=$3
 PROJECT_SHORT_NAME="hamilton"
 
 # Source and destination URLs
-SOURCE_URL="https://dist.apache.org/repos/dist/dev/incubator/${PROJECT_SHORT_NAME}/${VERSION}-RC${RC_NUM}"
-DEST_URL="https://dist.apache.org/repos/dist/release/incubator/${PROJECT_SHORT_NAME}/${VERSION}"
+SOURCE_URL="https://dist.apache.org/repos/dist/dev/incubator/${PROJECT_SHORT_NAME}/${PACKAGE_NAME}/${VERSION}-RC${RC_NUM}"
+DEST_URL="https://dist.apache.org/repos/dist/release/incubator/${PROJECT_SHORT_NAME}/${PACKAGE_NAME}/${VERSION}"
 
 if [ "$DRY_RUN" = true ]; then
     echo "Performing a dry run. No changes will be made."
@@ -79,8 +81,12 @@ fi
 # Get the list of files in the source directory
 FILES=$(svn list "${SOURCE_URL}")
 
+# Match both dash and underscore variants (e.g. apache-hamilton-*.tar.gz and apache_hamilton-*.whl)
+PACKAGE_UNDERSCORE=$(echo "$PACKAGE_NAME" | tr '-' '_')
+
 for FILE in $FILES; do
-    if [[ "$FILE" == apache-hamilton* ]]; then
+    if [[ "$FILE" == ${PACKAGE_NAME}* ]] || [[ "$FILE" == ${PACKAGE_UNDERSCORE}* ]]; then
+        DEST_FILE_NAME=$(echo "$FILE" | sed "s/-RC${RC_NUM}//")
         SOURCE_FILE_URL="${SOURCE_URL}/${FILE}"
         DEST_FILE_URL="${DEST_URL}/${DEST_FILE_NAME}"
 

@@ -53,6 +53,19 @@ Apache Hamilton consists of 5 independently versioned packages:
 
 The core `apache-hamilton` package must be released first. The other four packages depend on it but not on each other.
 
+# Scripts Reference
+
+| Script | Purpose |
+|---|---|
+| `scripts/apache_release_helper.py` | Build artifacts, sign, tag, upload RC to SVN, generate vote email |
+| `scripts/promote_rc.sh` | Move a voted RC from SVN dev to SVN release |
+| `scripts/verify_apache_artifacts.py` | Verify GPG signatures, checksums, and license headers |
+| `scripts/verification-script.sh` | End-to-end RC validation (download, verify, build, test, examples) |
+| `scripts/generate_announce_email.py` | Generate vote result, announcement email, and Slack message |
+| `scripts/qualify.sh` | Run a sampling of examples for quick qualification |
+| `scripts/setup_keys.sh` | Set up GPG keys for signing |
+| `sf-hamilton-redirect/build.sh` | Build the `sf-hamilton` redirect package for a given version |
+
 # Release Process
 
 ## Environment Setup
@@ -89,21 +102,26 @@ If you prefer, you can instead `source .venv/bin/activate` and omit the `uv run`
 
 ## Building a Release
 
-The main release script is `scripts/apache_release_helper.py`. It builds the sdist and wheel, signs
-all artifacts with GPG, generates SHA512 checksums, uploads to Apache SVN, and generates a vote email template.
+Set these variables for the release you're building:
 
 ```bash
-# Release the core package (example: version 1.90.0, RC0)
-uv run python scripts/apache_release_helper.py --package hamilton 1.90.0 0 your_apache_id
+export VERSION=1.90.0
+export RC=0
+export PACKAGE_KEY=hamilton  # one of: hamilton, sdk, lsp, contrib, ui
+export APACHE_ID=your_apache_id
+```
 
-# Release a downstream package (example: sdk version 0.9.0, RC0)
-uv run python scripts/apache_release_helper.py --package sdk 0.9.0 0 your_apache_id
+The main release script is `scripts/apache_release_helper.py`:
+
+```bash
+uv run python scripts/apache_release_helper.py \
+    --package ${PACKAGE_KEY} ${VERSION} ${RC} ${APACHE_ID}
 ```
 
 The script will:
-1. Check prerequisites (`flit`, `twine`, `gpg`)
+1. Check prerequisites (`flit`, `gpg`, `svn`)
 2. Validate the version in the source matches the version you specified
-3. Create a git tag (`apache-hamilton-v1.90.0-incubating-RC0`)
+3. Create a git tag (e.g., `apache-hamilton-v${VERSION}-incubating-RC${RC}`)
 4. Build the sdist (`.tar.gz`) and wheel (`.whl`) using `flit build --no-use-vcs`
 5. Validate the wheel with `twine check`
 6. Sign all artifacts with GPG and generate SHA512 checksums
@@ -112,161 +130,256 @@ The script will:
 
 Output lands in the `dist/` directory under the package's working directory.
 
-### Dry Run (no SVN upload)
+### Dry Run
 
-To test the build and signing without uploading, you can interrupt the script after artifacts
-are built (before the SVN upload step), or comment out the upload call. The artifacts will
-be in the `dist/` directory for inspection.
+To build and sign artifacts without uploading to SVN or creating a git tag:
+
+```bash
+uv run python scripts/apache_release_helper.py \
+    --package ${PACKAGE_KEY} ${VERSION} ${RC} ${APACHE_ID} --dry-run
+```
 
 ### After the Vote Passes
 
-```bash
-# Push the git tag
-git push origin apache-hamilton-v1.90.0-incubating-RC0
+Once the vote passes, follow these steps to finalize the release.
+If you don't have the variables from the build step, set them:
 
-# Upload to PyPI (from the package's working directory)
-uv run twine upload dist/apache_hamilton-1.90.0.tar.gz dist/apache_hamilton-1.90.0-py3-none-any.whl
+```bash
+export VERSION=1.90.0
+export RC=0
+export PACKAGE_KEY=hamilton
+export APACHE_ID=your_apache_id
+```
+
+Derived variables used below:
+
+```bash
+export PACKAGE=apache-${PACKAGE_KEY}  # e.g., apache-hamilton
+export TAG="${PACKAGE}-v${VERSION}-incubating-RC${RC}"
+```
+
+#### 1. Promote RC artifacts to the release SVN
+
+```bash
+# Dry run first to verify
+scripts/promote_rc.sh --dry-run ${PACKAGE} ${VERSION} ${RC}
+
+# Then promote for real
+scripts/promote_rc.sh ${PACKAGE} ${VERSION} ${RC}
+```
+
+#### 2. Upload to PyPI
+
+```bash
+PACKAGE_UNDERSCORE=$(echo ${PACKAGE} | tr '-' '_')
+twine upload dist/${PACKAGE_UNDERSCORE}-${VERSION}-py3-none-any.whl dist/${PACKAGE}-${VERSION}-incubating-src.tar.gz
+```
+
+#### 3. Build and upload the sf-hamilton redirect package
+
+The `sf-hamilton` package on PyPI is a thin redirect that depends on `apache-hamilton`.
+This ensures existing users who `pip install sf-hamilton` get the new release, and that
+all extras (e.g., `sf-hamilton[dask]`, `sf-hamilton[mcp]`) continue to work.
+
+The `sf-hamilton-redirect/` directory contains a `pyproject.toml.template` with `VERSION`
+as a placeholder. The build script stamps in the real version, builds, and validates:
+
+```bash
+sf-hamilton-redirect/build.sh ${VERSION}
+
+# Upload
+twine upload sf-hamilton-redirect/dist/sf_hamilton-${VERSION}*
+```
+
+#### 4. Sanity check the PyPI uploads
+
+```bash
+# Test apache-hamilton in a fresh env
+pip install apache-hamilton==${VERSION}
+python -c "import hamilton; print(hamilton.version.VERSION)"
+
+# Test sf-hamilton redirect (base + an extra)
+pip install sf-hamilton[visualization]==${VERSION}
+python -c "import hamilton; import graphviz; print('OK')"
+```
+
+#### 5. Send announcement emails
+
+```bash
+python scripts/generate_announce_email.py \
+    --package ${PACKAGE_KEY} --version ${VERSION} --rc ${RC} \
+    --tag ${TAG} \
+    --binding-votes 3 --nonbinding-votes 1
+```
+
+This generates three outputs:
+- **[RESULT][VOTE]** email for `dev@hamilton.apache.org`
+- **[ANNOUNCE]** email for `user@hamilton.apache.org`
+- **Slack message** for copy-paste
+
+#### 6. Squash-merge the release branch back to main
+
+```bash
+git checkout main
+git merge --squash release/hamilton/${VERSION}
+git commit -m "Release apache-hamilton ${VERSION}"
+git push origin main
 ```
 
 # For Voters: Verifying a Release
 
-If you're voting on a release, follow these steps to verify the release candidate.
+If you're voting on a release, you can either use the automated script or follow the
+manual steps below.
 
-## Complete Verification Workflow
+## Automated Verification
+
+The `scripts/verification-script.sh` script runs all verification steps end-to-end:
+downloads from SVN, verifies signatures/checksums, checks license headers, builds
+from source, runs tests, and exercises examples.
+
+```bash
+scripts/verification-script.sh <version> <rc>
+# e.g., scripts/verification-script.sh 1.90.0 0
+```
+
+## Manual Verification
+
+### Step 1: Download the Artifacts
 
 ```bash
 # Set version and RC number
-export VERSION=1.90.0
+export VERSION=1.90.0  # adjust to the version being voted on
 export RC=0
 export PACKAGE=apache-hamilton  # or apache-hamilton-sdk, etc.
 
-# 1. Download all artifacts from SVN
-svn export https://dist.apache.org/repos/dist/dev/incubator/hamilton/${PACKAGE}-${VERSION}-incubating-RC${RC}/ hamilton-rc${RC}
+# Derived names (dashes for tarball, underscores for wheel)
+export SRC_TAR=${PACKAGE}-${VERSION}-incubating-src.tar.gz
+export WHEEL_NAME=$(echo ${PACKAGE} | tr '-' '_')-${VERSION}-py3-none-any.whl
+export EXTRACTED_DIR=$(echo ${PACKAGE} | tr '-' '_')-${VERSION}
+
+# Download all artifacts from SVN
+svn export https://dist.apache.org/repos/dist/dev/incubator/hamilton/${PACKAGE}/${VERSION}-RC${RC}/ hamilton-rc${RC}
 cd hamilton-rc${RC}
 
-# 2. Import KEYS file and verify GPG signatures
+# Import the KEYS file
 wget https://downloads.apache.org/incubator/hamilton/KEYS
 gpg --import KEYS
-
-# Verify sdist signature
-gpg --verify ${PACKAGE}-${VERSION}-incubating.tar.gz.asc ${PACKAGE}-${VERSION}-incubating.tar.gz
-
-# Verify wheel signature (note: underscores in wheel filenames)
-WHEEL_NAME=$(echo ${PACKAGE} | tr '-' '_')-${VERSION}-py3-none-any.whl
-gpg --verify ${WHEEL_NAME}.asc ${WHEEL_NAME}
-
-# 3. Verify SHA512 checksums
-shasum -a 512 -c ${PACKAGE}-${VERSION}-incubating.tar.gz.sha512
-shasum -a 512 -c ${WHEEL_NAME}.sha512
-
-# 4. Extract the source archive and build from source
-tar -xzf ${PACKAGE}-${VERSION}-incubating.tar.gz
-cd ${PACKAGE}-${VERSION}-incubating/
 ```
 
-## Build from Source with uv
-
-All remaining steps assume you are inside the extracted source directory
-(`${PACKAGE}-${VERSION}-incubating/`) from the step above.
+### Step 2: Extract and Set Up
 
 ```bash
+# Extract the source archive
+tar -xzf ${SRC_TAR}
+cd ${EXTRACTED_DIR}/
+
 # Create a fresh environment and install build tools
 uv venv --python 3.11 --clean
 uv sync --group release
 
+# Download Apache RAT for license verification
+curl -O https://repo1.maven.org/maven2/org/apache/rat/apache-rat/0.15/apache-rat-0.15.jar
+```
+
+### Step 3: Run Automated Verification
+
+The verification script checks GPG signatures, SHA512 checksums, and Apache license headers in one command.
+The script looks for artifacts in a `dist/` directory by default, so first copy them there:
+
+```bash
+# Copy artifacts into dist/ so the verification script can find them
+mkdir -p dist
+cp ../${SRC_TAR}* dist/
+cp ../${WHEEL_NAME}* dist/
+
+# Verify everything (signatures + checksums + license headers)
+uv run python scripts/verify_apache_artifacts.py all --rat-jar apache-rat-0.15.jar
+```
+
+You can also run individual checks:
+
+```bash
+# Signatures and checksums only
+uv run python scripts/verify_apache_artifacts.py signatures
+
+# License headers only
+uv run python scripts/verify_apache_artifacts.py licenses --rat-jar apache-rat-0.15.jar
+
+# Validate wheel metadata
+uv run python scripts/verify_apache_artifacts.py twine-check
+
+# Inspect artifact contents
+uv run python scripts/verify_apache_artifacts.py list-contents dist/${SRC_TAR}
+uv run python scripts/verify_apache_artifacts.py list-contents dist/${WHEEL_NAME}
+```
+
+### Step 4: Build from Source
+
+```bash
 # Build the wheel from source
 uv run flit build --no-use-vcs
 
 # Install the wheel you just built
-uv pip install dist/apache_hamilton-${VERSION}-py3-none-any.whl
+uv pip install dist/${WHEEL_NAME}
 ```
 
-## Run Tests
+### Step 5: Run Tests
 
 ```bash
-# Install test dependencies (uses the test dependency group from pyproject.toml)
+# Install test dependencies
 uv sync --group test
 
 # Run core unit tests
 uv run pytest tests/ -x -q
 
 # Run plugin tests
-uv run pytest plugin_tests/ -x -q
+# Note: some plugin tests require optional dependencies (ray, spark, vaex).
+# Exclude any that are not installed in your environment:
+uv run pytest plugin_tests/ -x -q \
+    --ignore=plugin_tests/h_ray \
+    --ignore=plugin_tests/h_spark \
+    --ignore=plugin_tests/h_vaex
 ```
 
-## Run Examples
+### Step 6: Run Examples
 
-The source archive includes representative examples to verify Hamilton works end-to-end. Each example may require additional dependencies.
+The source archive includes representative examples to verify Hamilton works end-to-end.
 
-### Hello World (no extra deps)
 ```bash
-cd examples/hello_world
-uv run python my_script.py
-cd ../..
-```
+# Hello World (no extra deps)
+uv run python examples/hello_world/my_script.py
 
-### Data Quality with Pandera
-```bash
-uv pip install pandera
+# Data Quality with Pandera (must run from its directory for CSV data file)
 cd examples/data_quality/simple
 uv run python run.py
 cd ../../..
+
+# Function Reuse
+uv run python examples/reusing_functions/main.py
+
+# Schema Validation
+uv run python examples/schema/dataflow.py
+
+# Materialization (Pandas)
+uv run python examples/pandas/materialization/my_script.py
 ```
 
-### Function Reuse
-```bash
-cd examples/reusing_functions
-uv run python run.py
-cd ../..
-```
+### Manual Signature Verification (alternative to Step 3)
 
-### Schema Validation
-```bash
-cd examples/schema
-uv run python run.py
-cd ../..
-```
-
-### Materialization (Pandas)
-```bash
-uv pip install openpyxl xlsxwriter
-cd examples/pandas/materialization
-uv run python run.py
-cd ../../..
-```
-
-## Verification Script
-
-For automated verification of signatures, checksums, and license compliance, use the verification script.
-Run these from inside the extracted source directory (`${PACKAGE}-${VERSION}-incubating/`).
-
-### Prerequisites
-
-Download Apache RAT for license verification (into the extracted source directory):
+If you prefer to verify signatures and checksums manually instead of using the verification script:
 
 ```bash
-curl -O https://repo1.maven.org/maven2/org/apache/rat/apache-rat/0.15/apache-rat-0.15.jar
-```
+# From the hamilton-rc${RC}/ directory (before extracting)
 
-### Running Verification
+# Verify GPG signatures
+gpg --verify ${SRC_TAR}.asc ${SRC_TAR}
+gpg --verify ${WHEEL_NAME}.asc ${WHEEL_NAME}
 
-```bash
-# Run from the extracted source directory (${PACKAGE}-${VERSION}-incubating/)
-# Verify GPG signatures and SHA512 checksums
-uv run python scripts/verify_apache_artifacts.py signatures
-
-# Verify license headers (requires Apache RAT)
-uv run python scripts/verify_apache_artifacts.py licenses --rat-jar apache-rat-0.15.jar
-
-# Verify everything
-uv run python scripts/verify_apache_artifacts.py all --rat-jar apache-rat-0.15.jar
-
-# Inspect artifact contents
-uv run python scripts/verify_apache_artifacts.py list-contents dist/apache-hamilton-1.90.0-incubating.tar.gz
-uv run python scripts/verify_apache_artifacts.py list-contents dist/apache_hamilton-1.90.0-py3-none-any.whl
-
-# Validate wheel metadata
-uv run python scripts/verify_apache_artifacts.py twine-check
+# Verify SHA512 checksums
+# Note: the .sha512 files contain only the raw hash (no filename),
+# so `shasum -c` won't work. Compare hashes manually instead:
+echo "$(cat ${SRC_TAR}.sha512)  ${SRC_TAR}" | shasum -a 512 -c -
+echo "$(cat ${WHEEL_NAME}.sha512)  ${WHEEL_NAME}" | shasum -a 512 -c -
 ```
 
 # Local Development
