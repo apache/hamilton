@@ -45,6 +45,7 @@
 - [Reusing functions and nodes](https://hamilton.apache.org/_sources/how-tos/reuse-nodes.rst.txt)
 - [Data quality](https://hamilton.apache.org/_sources/how-tos/run-data-quality-checks.rst.txt)
 - [Scaling computation](https://hamilton.apache.org/_sources/how-tos/scale-up.rst.txt)
+- [Testing Apache Hamilton code](https://hamilton.apache.org/_sources/how-tos/test-hamilton-code.rst.txt)
 - [Feature engineering](https://hamilton.apache.org/_sources/how-tos/use-for-feature-engineering.rst.txt)
 - [Lineage + Apache Hamilton](https://hamilton.apache.org/_sources/how-tos/use-hamilton-for-lineage.md.txt)
 - [Wrapping the Driver](https://hamilton.apache.org/_sources/how-tos/wrapping-driver.rst.txt)

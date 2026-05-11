@@ -273,6 +273,7 @@ s=d.getElementsByTagName('script')[0];
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/ml-training/">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/llm-workflows/">LLM workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how-tos/test-hamilton-code/">Testing Apache Hamilton code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/scale-up/">Scaling computation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../how-tos/microservice/">Microservice</a></li>
@@ -589,7 +590,7 @@ the set of nodes to execute. Delegates to the interface method.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.plugins.h_tqdm.ProgressBar.run_after_graph_execution">
-<span class="sig-name descname"><span class="pre">run_after_graph_execution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">future_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.plugins.h_tqdm.ProgressBar.run_after_graph_execution" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_after_graph_execution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">future_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.plugins.h_tqdm.ProgressBar.run_after_graph_execution" title="Link to this definition">¶</a></dt>
 <dd><p>This is run after graph execution. This allows you to do anything you want after the graph executes,
 knowing the results of the execution/any errors.</p>
 <dl class="field-list simple">
