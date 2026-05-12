@@ -16,6 +16,7 @@
 # under the License.
 
 import collections
+import sys
 import typing
 from typing import Annotated, Any, Union
 
@@ -311,6 +312,40 @@ def test_check_input_types_subscripted_generics_list_Any():
     """Tests check_input_type of SimplePythonDataFrameGraphAdapter"""
     actual = htypes.check_input_type(list[typing.Any], [])
     assert actual is True
+
+
+def test_check_input_type_parameterized_tuple_match():
+    assert htypes.check_input_type(tuple[float, float, float, float], (1.0, 2.0, 3.0, 4.0))
+    assert htypes.check_input_type(tuple[int, str], (1, "a"))
+
+
+def test_check_input_type_parameterized_tuple_legacy_form():
+    assert htypes.check_input_type(tuple[float, float], (1.0, 2.0))
+
+
+def test_check_input_type_parameterized_tuple_wrong_length():
+    assert htypes.check_input_type(tuple[int, str], (1,)) is False
+    assert htypes.check_input_type(tuple[int, str], (1, "a", 2)) is False
+
+
+def test_check_input_type_parameterized_tuple_wrong_element_type():
+    assert htypes.check_input_type(tuple[int, str], (1, 2)) is False
+
+
+def test_check_input_type_variable_length_tuple():
+    assert htypes.check_input_type(tuple[int, ...], (1, 2, 3))
+    assert htypes.check_input_type(tuple[int, ...], ())
+
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 12), reason="PEP 695 `type X = ...` syntax requires Python 3.12+"
+)
+def test_check_input_type_pep695_type_alias():
+    namespace: dict = {}
+    exec("type Bbox = tuple[float, float, float, float]", namespace)
+    Bbox = namespace["Bbox"]
+    assert htypes.check_input_type(Bbox, (1.0, 2.0, 3.0, 4.0))
+    assert htypes.check_input_type(Bbox, (1, 2, 3)) is False
 
 
 def test_check_instance_with_non_generic_type():
