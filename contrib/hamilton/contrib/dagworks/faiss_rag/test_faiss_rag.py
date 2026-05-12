@@ -36,7 +36,6 @@ from hamilton import driver
 # Import the module under test
 from hamilton.contrib.dagworks import faiss_rag
 
-
 # ──────────────────────────── Unit Tests ────────────────────────────
 
 
@@ -44,7 +43,9 @@ class TestRagPrompt:
     """Tests for the rag_prompt function (provider-independent)."""
 
     def test_rag_prompt_includes_context(self):
-        result = faiss_rag.rag_prompt(context="Hamilton is a DAG framework", question="What is Hamilton?")
+        result = faiss_rag.rag_prompt(
+            context="Hamilton is a DAG framework", question="What is Hamilton?"
+        )
         assert "Hamilton is a DAG framework" in result
 
     def test_rag_prompt_includes_question(self):
@@ -250,7 +251,12 @@ class TestMiniMaxIntegration:
     def test_minimax_driver_execution(self, minimax_api_key):
         """Test Hamilton driver execution with MiniMax config."""
         with patch.dict(os.environ, {"MINIMAX_API_KEY": minimax_api_key}):
-            dr = driver.Builder().with_modules(faiss_rag).with_config({"provider": "minimax"}).build()
+            dr = (
+                driver.Builder()
+                .with_modules(faiss_rag)
+                .with_config({"provider": "minimax"})
+                .build()
+            )
 
             client = faiss_rag.llm_client__minimax()
             result = dr.execute(

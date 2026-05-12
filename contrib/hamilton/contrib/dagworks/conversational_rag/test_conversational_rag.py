@@ -31,9 +31,7 @@ sys.path.insert(
 import openai
 
 from hamilton import driver
-
 from hamilton.contrib.dagworks import conversational_rag
-
 
 # ──────────────────────────── Unit Tests ────────────────────────────
 

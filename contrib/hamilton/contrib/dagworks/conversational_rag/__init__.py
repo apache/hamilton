@@ -55,7 +55,9 @@ def standalone_question_prompt(chat_history: list[str], question: str) -> str:
     ).format(chat_history=chat_history_str, question=question)
 
 
-def standalone_question(standalone_question_prompt: str, llm_client: openai.OpenAI, model: str) -> str:
+def standalone_question(
+    standalone_question_prompt: str, llm_client: openai.OpenAI, model: str
+) -> str:
     """Asks the LLM to create a standalone question from the prompt.
 
     :param standalone_question_prompt: the prompt with context.
