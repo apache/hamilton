@@ -326,13 +326,13 @@ For help with python/pip/managing virtual environments see the [python docs](htt
 
 ## Installing with pip
 
-Apache Hamilton is published on [pypi](https://pypi.org/project/sf-hamilton/) under ``sf-hamilton``. To install, run:
+Apache Hamilton is published on [pypi](https://pypi.org/project/apache-hamilton/) under ``apache-hamilton``. To install, run:
 
-`pip install sf-hamilton`
+`pip install apache-hamilton`
 
 To use the DAG visualization functionality, instead install with
 
-`pip install sf-hamilton[visualization]`
+`pip install apache-hamilton[visualization]`
 
 *Note: for visualization you may additionally need to install graphviz externally -- see*
 [graphviz](https://graphviz.org/download/) *for instructions on the correct way for your
@@ -342,7 +342,7 @@ operating system.*
 
 Apache Hamilton is also available on conda if you prefer:
 
-`conda install -c hamilton-opensource sf-hamilton`
+`conda install -c hamilton-opensource apache-hamilton`
 
 ## Installing from source
 
@@ -628,7 +628,7 @@ To actually run the dataflow, we'll need to write :doc:`a driver <../concepts/dr
         ]
         # let's create the dataframe!
         df = dr.execute(output_columns, inputs=initial_columns)
-        # `pip install sf-hamilton[visualization]` earlier you can also do
+        # `pip install apache-hamilton[visualization]` earlier you can also do
         # dr.visualize_execution(output_columns,'./my_dag.png', {})
         print(df)
 
@@ -1088,7 +1088,7 @@ ETL Recipe
 
 #. Write Hamilton functions & `“driver”` code.
 #. Publish your Hamilton functions in a package, or import via other means (e.g. checkout a repository & include in python path).
-#. Include `sf-hamilton` as a python dependency
+#. Include `apache-hamilton` as a python dependency
 #. Have your ETL system execute your “driver” code.
 #. Profit.
 
@@ -2323,12 +2323,12 @@ The next snippet checks if the returned Series is of type ``np.int32``, which is
 pandera support
 ~~~~~~~~~~~~~~~
 
-Apache Hamilton has a pandera plugin for data validation that you can install with ``pip install sf-hamilton[pandera]``. Then, you can pass a pandera schema (for DataFrame or Series) to ``@check_output(schema=...)``.
+Apache Hamilton has a pandera plugin for data validation that you can install with ``pip install apache-hamilton[pandera]``. Then, you can pass a pandera schema (for DataFrame or Series) to ``@check_output(schema=...)``.
 
 pydantic support
 ~~~~~~~~~~~~~~~~
 
-Apache Hamilton also supports data validation of pydantic models, which can be enabled with ``pip install sf-hamilton[pydantic]``. With pydantic installed, you can pass any subclass of the pydantic base model to ``@check_output(model=...)``. Pydantic validation is performed in strict mode, meaning that raw values will not be coerced to the model's types. For more information on strict mode see the `pydantic docs <https://docs.pydantic.dev/latest/concepts/strict_mode/>`_.
+Apache Hamilton also supports data validation of pydantic models, which can be enabled with ``pip install apache-hamilton[pydantic]``. With pydantic installed, you can pass any subclass of the pydantic base model to ``@check_output(model=...)``. Pydantic validation is performed in strict mode, meaning that raw values will not be coerced to the model's types. For more information on strict mode see the `pydantic docs <https://docs.pydantic.dev/latest/concepts/strict_mode/>`_.
 
 Split node output into *n* nodes
 --------------------------------
@@ -3254,7 +3254,7 @@ To run the hamilton UI in local mode, you can do the following:
 
 .. code-block:: bash
 
-    pip install "sf-hamilton[ui,sdk]"
+    pip install "apache-hamilton[ui,sdk]"
     hamilton ui
     # python -m hamilton.cli.__main__ ui # on windows
 
@@ -3368,7 +3368,7 @@ First, install the SDK:
 
 .. code-block:: bash
 
-    pip install "sf-hamilton[sdk]"
+    pip install "apache-hamilton[sdk]"
 
 Then, navigate to the project page (dashboard/projects), in the running UI, and click the green ``+ New DAG`` button.
 
@@ -3970,7 +3970,7 @@ I assume you already have this step set up. But just in case you don’t:
 
 ```bash
 pip install jupyterlab
-pip install sf-hamilton
+pip install apache-hamilton
 ```
 
 Then to start the notebook server it should just be:
@@ -8153,7 +8153,7 @@ This page covers the Apache Hamilton CLI. It is built directly from the CLI, but
 The dependencies for the Apache Hamilton CLI can be installed via
 
 ```console
-pip install sf-hamilton[cli]
+pip install apache-hamilton[cli]
 ```
 
 You can verify the installation with
@@ -8518,7 +8518,7 @@ The preferred way of working with pre-commit hooks is through the [prek](https:/
 pre-commit hooks are great developer tools, but off-the-shelf solutions aren't aware of the Apache Hamilton framework. Hence, we developed a pre-commit hook to help you author Apache Hamilton dataflows! Under the hood, they leverage the `hamilton` CLI, so if you are unfamiliar with it, feel free to install it and view the `--help` messages.
 
 ```console
-pip install sf-hamilton[cli]
+pip install apache-hamilton[cli]
 hamilton --help
 ```
 
@@ -9301,7 +9301,7 @@ To run the hamilton UI in local mode, you can do the following:
 
 .. code-block:: bash
 
-    pip install "sf-hamilton[ui,sdk]"
+    pip install "apache-hamilton[ui,sdk]"
     hamilton ui
     # python -m hamilton.cli.__main__ ui # on windows
 
@@ -9415,7 +9415,7 @@ First, install the SDK:
 
 .. code-block:: bash
 
-    pip install "sf-hamilton[sdk]"
+    pip install "apache-hamilton[sdk]"
 
 Then, navigate to the project page (dashboard/projects), in the running UI, and click the green ``+ New DAG`` button.
 
@@ -9729,12 +9729,12 @@ You can also manually install the language server in your Python environment via
 
 .. code:: shell
 
-    pip install "sf-hamilton[lsp]"
+    pip install "apache-hamilton[lsp]"
 
 Developers
 ----------
 
-If you want to dig in the internals of the language server and integrate it with another IDE, you can find the source code in the ``dev tools/`` section of the `Apache Hamilton GitHub repository <https://github.com/apache/hamilton/tree/main/dev_tools/lsp>`_. It is also directly available on PyPi at `sf-hamilton-lsp <https://pypi.org/project/sf-hamilton-lsp/>`_.
+If you want to dig in the internals of the language server and integrate it with another IDE, you can find the source code in the ``dev tools/`` section of the `Apache Hamilton GitHub repository <https://github.com/apache/hamilton/tree/main/dev_tools/lsp>`_. It is also directly available on PyPi at `apache-hamilton-lsp <https://pypi.org/project/apache-hamilton-lsp/>`_.
 
 Note that the package name is ``hamilton_lsp`` when used directly via Python code.
 
@@ -13727,7 +13727,7 @@ PySpark
 
 This is part of the hamilton pyspark integration. To install, run:
 
-`pip install sf-hamilton[pyspark]`
+`pip install apache-hamilton[pyspark]`
 
 **Reference Documentation**
 
@@ -14368,7 +14368,7 @@ plugins.h_tqdm.ProgressBar
 
 Provides a progress bar for Apache Hamilton execution. Must have `tqdm` installed to use it:
 
-`pip install sf-hamilton[tqdm]` (use quotes if using zsh)
+`pip install apache-hamilton[tqdm]` (use quotes if using zsh)
 
 .. autoclass:: hamilton.plugins.h_tqdm.ProgressBar
    :special-members: __init__
@@ -14382,7 +14382,7 @@ plugins.h_rich.RichProgressBar
 
 Provides a progress bar for Apache Hamilton execution. Must have `rich` installed to use it:
 
-`pip install sf-hamilton[rich]` (use quotes if using zsh)
+`pip install apache-hamilton[rich]` (use quotes if using zsh)
 
 .. autoclass:: hamilton.plugins.h_rich.RichProgressBar
    :special-members: __init__
@@ -14423,7 +14423,7 @@ plugins.h_slack.SlackNotifier
 
 Provides a Slack notifier for Apache Hamilton execution. Must have `slack_sdk` installed to use it:
 
-`pip install sf-hamilton[slack]` (use quotes if using zsh)
+`pip install apache-hamilton[slack]` (use quotes if using zsh)
 
 .. autoclass:: hamilton.plugins.h_slack.SlackNotifier
    :special-members: __init__
@@ -14458,7 +14458,7 @@ plugins.h_narhwals.NarwhalsAdapter
 Provides a convenience wrapper for the `Narwhals` library; use the Narwhals decorator
 underneath. Must have `Narwhals` installed to use it:
 
-`pip install "sf-hamilton[narwhals]"`
+`pip install "apache-hamilton[narwhals]"`
 
 .. autoclass:: hamilton.plugins.h_narwhals.NarwhalsAdapter
    :special-members: __init__
@@ -14471,7 +14471,7 @@ plugins.h_narhwals.NarwhalsDataFrameResultBuilder
 
 Result builder to be used with the NarwhalsAdapter. Must have `Narwhals` installed to use it:
 
-`pip install "sf-hamilton[narwhals]"`
+`pip install "apache-hamilton[narwhals]"`
 
 .. autoclass:: hamilton.plugins.h_narwhals.NarwhalsDataFrameResultBuilder
    :special-members: __init__
@@ -14882,8 +14882,8 @@ under the License.
 <div align="left">
     <a href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g" target="_blank"><img src="./_static/hamilton_slack.png" alt="Apache Hamilton Slack"/></a>
     <a href="https://twitter.com/hamilton_os" target="_blank"><img src="./_static/hamilton_os_follow.png" alt="Twitter"/></a>
-    <a href="https://pepy.tech/project/sf-hamilton" target="_blank"><img src="./_static/1m_downloads.png" alt="Total Downloads"/></a>
-    <a href="https://pepy.tech/project/sf-hamilton" target="_blank"><img src="./_static/100k_downloads_month.png" alt="Total Monthly Downloads"/></a>
+    <a href="https://pepy.tech/project/apache-hamilton" target="_blank"><img src="./_static/1m_downloads.png" alt="Total Downloads"/></a>
+    <a href="https://pepy.tech/project/apache-hamilton" target="_blank"><img src="./_static/100k_downloads_month.png" alt="Total Monthly Downloads"/></a>
 </div>
 
 Apache Hamilton (incubating) is a general-purpose framework to write dataflows using regular Python functions. At the core, each function defines a transformation and its parameters indicates its dependencies. Apache Hamilton automatically connects individual functions into a [Directed Acyclic Graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph) (DAG) that can be executed, visualized, optimized, and reported on.

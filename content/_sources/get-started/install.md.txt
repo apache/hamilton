@@ -31,13 +31,13 @@ For help with python/pip/managing virtual environments see the [python docs](htt
 
 ## Installing with pip
 
-Apache Hamilton is published on [pypi](https://pypi.org/project/sf-hamilton/) under ``sf-hamilton``. To install, run:
+Apache Hamilton is published on [pypi](https://pypi.org/project/apache-hamilton/) under ``apache-hamilton``. To install, run:
 
-`pip install sf-hamilton`
+`pip install apache-hamilton`
 
 To use the DAG visualization functionality, instead install with
 
-`pip install sf-hamilton[visualization]`
+`pip install apache-hamilton[visualization]`
 
 *Note: for visualization you may additionally need to install graphviz externally -- see*
 [graphviz](https://graphviz.org/download/) *for instructions on the correct way for your
@@ -47,7 +47,7 @@ operating system.*
 
 Apache Hamilton is also available on conda if you prefer:
 
-`conda install -c hamilton-opensource sf-hamilton`
+`conda install -c hamilton-opensource apache-hamilton`
 
 ## Installing from source
 

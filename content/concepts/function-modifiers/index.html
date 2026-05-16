@@ -671,11 +671,11 @@ s=d.getElementsByTagName('script')[0];
 </section>
 <section id="pandera-support">
 <h3>pandera support<a class="headerlink" href="#pandera-support" title="Link to this heading">¶</a></h3>
-<p>Apache Hamilton has a pandera plugin for data validation that you can install with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">sf-hamilton[pandera]</span></code>. Then, you can pass a pandera schema (for DataFrame or Series) to <code class="docutils literal notranslate"><span class="pre">&#64;check_output(schema=...)</span></code>.</p>
+<p>Apache Hamilton has a pandera plugin for data validation that you can install with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">apache-hamilton[pandera]</span></code>. Then, you can pass a pandera schema (for DataFrame or Series) to <code class="docutils literal notranslate"><span class="pre">&#64;check_output(schema=...)</span></code>.</p>
 </section>
 <section id="pydantic-support">
 <h3>pydantic support<a class="headerlink" href="#pydantic-support" title="Link to this heading">¶</a></h3>
-<p>Apache Hamilton also supports data validation of pydantic models, which can be enabled with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">sf-hamilton[pydantic]</span></code>. With pydantic installed, you can pass any subclass of the pydantic base model to <code class="docutils literal notranslate"><span class="pre">&#64;check_output(model=...)</span></code>. Pydantic validation is performed in strict mode, meaning that raw values will not be coerced to the model’s types. For more information on strict mode see the <a class="reference external" href="https://docs.pydantic.dev/latest/concepts/strict_mode/">pydantic docs</a>.</p>
+<p>Apache Hamilton also supports data validation of pydantic models, which can be enabled with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">apache-hamilton[pydantic]</span></code>. With pydantic installed, you can pass any subclass of the pydantic base model to <code class="docutils literal notranslate"><span class="pre">&#64;check_output(model=...)</span></code>. Pydantic validation is performed in strict mode, meaning that raw values will not be coerced to the model’s types. For more information on strict mode see the <a class="reference external" href="https://docs.pydantic.dev/latest/concepts/strict_mode/">pydantic docs</a>.</p>
 </section>
 </section>
 <section id="split-node-output-into-n-nodes">

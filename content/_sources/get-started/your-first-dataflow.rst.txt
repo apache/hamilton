@@ -105,7 +105,7 @@ To actually run the dataflow, we'll need to write :doc:`a driver <../concepts/dr
         ]
         # let's create the dataframe!
         df = dr.execute(output_columns, inputs=initial_columns)
-        # `pip install sf-hamilton[visualization]` earlier you can also do
+        # `pip install apache-hamilton[visualization]` earlier you can also do
         # dr.visualize_execution(output_columns,'./my_dag.png', {})
         print(df)
 
