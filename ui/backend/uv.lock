@@ -1,6 +1,6 @@
 version = 1
 revision = 3
-requires-python = ">=3.10, <4"
+requires-python = ">=3.10.1, <4"
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
     "python_full_version >= '3.14' and sys_platform == 'emscripten'",
@@ -187,12 +187,29 @@ wheels = [
 ]
 
 [[package]]
+name = "apache-hamilton"
+version = "1.90.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "numpy", version = "2.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "pandas", version = "3.0.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "typing-extensions" },
+    { name = "typing-inspect" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fe/ec/c672e72dd66b633fb65e6011bc7c30c128e090364f8497660b7869e10123/apache_hamilton-1.90.0-py3-none-any.whl", hash = "sha256:95e356f7cb23e1a10d44fd0cf5efd3fb36a077b4ccb673950c92005bfdec2ff7", size = 475199, upload-time = "2026-04-25T18:45:17.514Z" },
+]
+
+[[package]]
 name = "apache-hamilton-ui"
 version = "0.0.17"
 source = { editable = "." }
 dependencies = [
     { name = "aiofiles" },
     { name = "aiohttp" },
+    { name = "apache-hamilton" },
     { name = "click" },
     { name = "colorlog" },
     { name = "ddtrace" },
@@ -204,7 +221,6 @@ dependencies = [
     { name = "psycopg2-binary" },
     { name = "pydantic" },
     { name = "requests" },
-    { name = "sf-hamilton" },
     { name = "typer" },
 ]
 
@@ -212,6 +228,7 @@ dependencies = [
 requires-dist = [
     { name = "aiofiles" },
     { name = "aiohttp", specifier = ">=3.13.0" },
+    { name = "apache-hamilton", specifier = ">=1.90.0" },
     { name = "click" },
     { name = "colorlog" },
     { name = "ddtrace", specifier = ">=2.21.0" },
@@ -223,7 +240,6 @@ requires-dist = [
     { name = "psycopg2-binary" },
     { name = "pydantic", specifier = ">=2.0.0" },
     { name = "requests", specifier = ">=2.32.0" },
-    { name = "sf-hamilton", specifier = ">=1.58.0" },
     { name = "typer" },
 ]
 
@@ -1510,23 +1526,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/b3/c6/f3b320c27991c46f43ee9d856302c70dc2d0fb2dba4842ff739d5f46b393/rich-14.3.3.tar.gz", hash = "sha256:b8daa0b9e4eef54dd8cf7c86c03713f53241884e814f4e2f5fb342fe520f639b", size = 230582, upload-time = "2026-02-19T17:23:12.474Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/14/25/b208c5683343959b670dc001595f2f3737e051da617f66c31f7c4fa93abc/rich-14.3.3-py3-none-any.whl", hash = "sha256:793431c1f8619afa7d3b52b2cdec859562b950ea0d4b6b505397612db8d5362d", size = 310458, upload-time = "2026-02-19T17:23:13.732Z" },
-]
-
-[[package]]
-name = "sf-hamilton"
-version = "1.89.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "numpy", version = "2.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
-    { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "pandas", version = "3.0.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
-    { name = "typing-extensions" },
-    { name = "typing-inspect" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/12/1c/5205e36ca4eebfef29a6f75398812bfb923c9aad71fd9ad3248b7703a9b9/sf_hamilton-1.89.0.tar.gz", hash = "sha256:dec10455ce5dacd9402c7c8325c2eb2959c0f96f912dfcf2c999ef556421d2d2", size = 360574, upload-time = "2025-10-11T17:43:55.68Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/66/ce/3591411d90bf0f6829fec4403f77a63280c8eee942f55715ae1ed7ff8492/sf_hamilton-1.89.0-py3-none-any.whl", hash = "sha256:25c0efeb498cd1847aec5fbde2e69b4756c4e0c2a5238bbedbe2178d559fd677", size = 468919, upload-time = "2025-10-11T17:43:53.902Z" },
 ]
 
 [[package]]

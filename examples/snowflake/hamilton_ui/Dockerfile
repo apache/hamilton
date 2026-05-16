@@ -19,7 +19,7 @@ FROM python:3.13.1-slim
 
 RUN apt update
 RUN apt upgrade sqlite3 -y
-RUN pip install "sf-hamilton[ui,sdk]"
+RUN pip install "apache-hamilton[ui,sdk]"
 RUN pip install flask
 
 ENV HAMILTON_ALLOWED_HOSTS=".snowflakecomputing.app"
