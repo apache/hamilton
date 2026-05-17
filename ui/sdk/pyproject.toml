@@ -21,7 +21,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "apache-hamilton-sdk"
-version = "0.8.0"
+version = "0.9.0"
 description = "Apache Hamilton SDK for reading and writing to the Apache Hamilton backend APIs that support the UI."
 readme = "README.md"
 requires-python = ">=3.10, <4"

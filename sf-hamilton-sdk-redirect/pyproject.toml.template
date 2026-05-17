@@ -15,4 +15,19 @@
 # specific language governing permissions and limitations
 # under the License.
 
-__version__ = "0.2.0"
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sf-hamilton-sdk"
+version = "VERSION"
+description = "This package has moved to apache-hamilton-sdk. Install apache-hamilton-sdk instead."
+readme = "README.md"
+requires-python = ">=3.10, <4"
+license = "Apache-2.0"
+dependencies = ["apache-hamilton-sdk==VERSION"]
+
+[project.urls]
+Homepage = "https://github.com/apache/hamilton"
+Documentation = "https://hamilton.apache.org/"
