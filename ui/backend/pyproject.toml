@@ -60,11 +60,6 @@ dependencies = [
     "typer",
 ]
 
-[project.scripts]
-# Django management commands for cleaner CLI usage with uv
-# Usage: uv run hamilton-ui
-hamilton-ui = "hamilton_ui.server.manage:main"
-
 [project.urls]
 homepage = "https://www.tryhamilton.dev/"
 documentation = "https://hamilton.apache.org/"

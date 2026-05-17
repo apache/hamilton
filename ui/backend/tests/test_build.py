@@ -150,9 +150,9 @@ class TestDjangoConfiguration:
             "Django settings missing mini mode configuration"
         )
 
-        # Check for STATICFILES_DIRS pointing to build/static/ or build/assets/
-        assert "build/static/" in settings_content or "build/assets/" in settings_content, (
-            "Django settings missing build/static/ or build/assets/ in STATICFILES_DIRS"
+        # Check for STATICFILES_DIRS pointing to build/static or build/assets
+        assert "build/static" in settings_content or "build/assets" in settings_content, (
+            "Django settings missing build/static or build/assets in STATICFILES_DIRS"
         )
 
         # Check for MEDIA_ROOT pointing to build/
