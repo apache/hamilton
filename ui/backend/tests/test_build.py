@@ -139,7 +139,8 @@ class TestDjangoConfiguration:
     """Tests for Django settings configuration."""
 
     def test_settings_mini_mode_configured(self):
-        """Verify that Django settings are correctly configured for mini mode."""
+        """Verify that Django settings support mini mode (static assets + media root)."""
+        # settings.py contains the conditional logic for mini mode
         settings_file = get_ui_backend_dir() / "server" / "server" / "settings.py"
         assert settings_file.exists(), f"Django settings file not found at {settings_file}"
 
@@ -150,13 +151,23 @@ class TestDjangoConfiguration:
             "Django settings missing mini mode configuration"
         )
 
-        # Check for STATICFILES_DIRS pointing to build/static/ or build/assets/
-        assert "build/static/" in settings_content or "build/assets/" in settings_content, (
-            "Django settings missing build/static/ or build/assets/ in STATICFILES_DIRS"
+        # Check for STATICFILES_DIRS pointing to build/static or build/assets
+        assert "build/static" in settings_content or "build/assets" in settings_content, (
+            "Django settings missing build/static or build/assets in STATICFILES_DIRS"
         )
 
         # Check for MEDIA_ROOT pointing to build/
         assert "MEDIA_ROOT" in settings_content, "Django settings missing MEDIA_ROOT configuration"
+
+        # settings_mini.py is the actual settings module used in mini mode
+        settings_mini_file = get_ui_backend_dir() / "server" / "server" / "settings_mini.py"
+        assert settings_mini_file.exists(), (
+            f"Django mini settings file not found at {settings_mini_file}"
+        )
+        settings_mini_content = settings_mini_file.read_text()
+        assert "build/static" in settings_mini_content or "build/assets" in settings_mini_content, (
+            "settings_mini.py missing build/static or build/assets in STATICFILES_DIRS"
+        )
 
     def test_urls_mini_mode_configured(self):
         """Verify that Django URLs are configured for mini mode SPA routing."""

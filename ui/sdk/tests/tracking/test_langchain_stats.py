@@ -15,9 +15,13 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from hamilton_sdk.tracking import langchain_stats
-from langchain_core import documents as lc_documents
-from langchain_core import messages as lc_messages
+import pytest
+
+pytest.importorskip("langchain_core")
+
+from hamilton_sdk.tracking import langchain_stats  # noqa: E402
+from langchain_core import documents as lc_documents  # noqa: E402
+from langchain_core import messages as lc_messages  # noqa: E402
 
 
 def test_compute_stats_lc_docs():

@@ -51,7 +51,7 @@ def test_mlflow_log_model_to_active_run(fitted_sklearn_model: BaseEstimator, tmp
     model_path = tmp_path / "sklearn_model"
     saver = MLFlowModelSaver(flavor="sklearn")
 
-    mlflow.set_tracking_uri(model_path.as_uri())
+    mlflow.set_tracking_uri(f"sqlite:///{model_path}/mlflow.db")
     with mlflow.start_run():
         # save model
         metadata = saver.save_data(fitted_sklearn_model)
@@ -64,7 +64,7 @@ def test_mlflow_log_model_to_active_run(fitted_sklearn_model: BaseEstimator, tmp
 def test_mlflow_log_model_to_specific_run(fitted_sklearn_model: BaseEstimator, tmp_path: Path):
     model_path = tmp_path / "sklearn_model"
     # create a "previous run"
-    mlflow.set_tracking_uri(model_path.as_uri())
+    mlflow.set_tracking_uri(f"sqlite:///{model_path}/mlflow.db")
     mlflow.start_run()
     run_id = mlflow.active_run().info.run_id
     mlflow.end_run()
@@ -83,7 +83,7 @@ def test_mlflow_log_model_active_and_specific_run_ids_are_equal(
 ):
     model_path = tmp_path / "sklearn_model"
 
-    mlflow.set_tracking_uri(model_path.as_uri())
+    mlflow.set_tracking_uri(f"sqlite:///{model_path}/mlflow.db")
     with mlflow.start_run():
         run_id = mlflow.active_run().info.run_id
         saver = MLFlowModelSaver(flavor="sklearn", run_id=run_id)
@@ -99,7 +99,7 @@ def test_mlflow_log_model_active_and_specific_run_ids_are_unequal(
     fitted_sklearn_model: BaseEstimator, tmp_path: Path
 ):
     model_path = tmp_path / "sklearn_model"
-    mlflow.set_tracking_uri(model_path.as_uri())
+    mlflow.set_tracking_uri(f"sqlite:///{model_path}/mlflow.db")
     mlflow.start_run()
     run_id = mlflow.active_run().info.run_id
     mlflow.end_run()
@@ -114,7 +114,7 @@ def test_mlflow_log_model_active_and_specific_run_ids_are_unequal(
 def test_mlflow_load_runs_model(fitted_sklearn_model: BaseEstimator, tmp_path: Path):
     mlflow_path = tmp_path / "mlflow_path"
     artifact_path = "model"
-    mlflow.set_tracking_uri(mlflow_path.as_uri())
+    mlflow.set_tracking_uri(f"sqlite:///{mlflow_path}/mlflow.db")
     with mlflow.start_run():
         run_id = mlflow.active_run().info.run_id
         mlflow.sklearn.log_model(fitted_sklearn_model, artifact_path=artifact_path)
@@ -136,7 +136,7 @@ def test_mlflow_load_registry_model(fitted_sklearn_model: BaseEstimator, tmp_pat
     model_name = "my_registered_model"
     version = 1
     # track a model
-    mlflow.set_tracking_uri(mlflow_path.as_uri())
+    mlflow.set_tracking_uri(f"sqlite:///{mlflow_path}/mlflow.db")
     with mlflow.start_run():
         run_id = mlflow.active_run().info.run_id
         mlflow.sklearn.log_model(fitted_sklearn_model, artifact_path=artifact_path)
@@ -169,7 +169,7 @@ def test_mlflow_specify_flavor_using_module(fitted_sklearn_model: BaseEstimator,
     model_path = tmp_path / "sklearn_model"
     saver = MLFlowModelSaver(flavor=mlflow.sklearn)
 
-    mlflow.set_tracking_uri(model_path.as_uri())
+    mlflow.set_tracking_uri(f"sqlite:///{model_path}/mlflow.db")
     with mlflow.start_run():
         # save model
         metadata = saver.save_data(fitted_sklearn_model)
@@ -231,7 +231,7 @@ def test_mlflow_registered_model_metadata(fitted_sklearn_model: BaseEstimator, t
     model_path = tmp_path / "sklearn_model"
     saver = MLFlowModelSaver(flavor="sklearn", register_as="my_model")
 
-    mlflow.set_tracking_uri(model_path.as_uri())
+    mlflow.set_tracking_uri(f"sqlite:///{model_path}/mlflow.db")
     with mlflow.start_run():
         metadata = saver.save_data(fitted_sklearn_model)
 

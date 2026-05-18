@@ -114,9 +114,7 @@ def roc_curve_display() -> metrics.RocCurveDisplay:
     pred = np.array([0.1, 0.4, 0.35, 0.8])
     fpr, tpr, threshold = metrics.roc_curve(y, pred)
     roc_auc = metrics.auc(fpr, tpr)
-    roccurve = metrics.RocCurveDisplay(
-        fpr=fpr, tpr=tpr, roc_auc=roc_auc, estimator_name="example estimator"
-    )
+    roccurve = metrics.RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc, name="example estimator")
     return roccurve
 
 
@@ -143,9 +141,12 @@ def decision_boundary_display() -> DecisionBoundaryDisplay:
     grid = np.vstack([feature_1.ravel(), feature_2.ravel()]).T
     tree = DecisionTreeClassifier().fit(iris.data[:, :2], iris.target)
     y_pred = np.reshape(tree.predict(grid), feature_1.shape)
-    decision_curve = inspection.DecisionBoundaryDisplay(
-        xx0=feature_1, xx1=feature_2, response=y_pred
-    )
+    kwargs = dict(xx0=feature_1, xx1=feature_2, response=y_pred)
+    # sklearn 1.8+ requires n_classes
+    sig = inspection.DecisionBoundaryDisplay.__init__
+    if "n_classes" in sig.__code__.co_varnames:
+        kwargs["n_classes"] = 3
+    decision_curve = inspection.DecisionBoundaryDisplay(**kwargs)
     return decision_curve
 
 

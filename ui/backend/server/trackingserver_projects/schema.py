@@ -212,7 +212,7 @@ class ProjectIn(ProjectBase):
 
 class ProjectOut(ProjectBase):
     id: int
-    role: str = Field(description="Role of the user in the project", default=None)
+    role: str | None = Field(description="Role of the user in the project", default=None)
     visibility: VisibilityOut = Field(description="Resolved visibility of the project")
     created_at: datetime.datetime = Field(description="When the project was created")
     updated_at: datetime.datetime = Field(description="When the project was last updated")
