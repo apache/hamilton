@@ -12,9 +12,11 @@ directory. If there's an example you want but don't see, reach out or open an is
    load-data
    caching-tutorial
    use-for-feature-engineering
+   reuse-nodes
    ml-training
    llm-workflows
    run-data-quality-checks
+   test-hamilton-code
    use-hamilton-for-lineage
    scale-up
    microservice

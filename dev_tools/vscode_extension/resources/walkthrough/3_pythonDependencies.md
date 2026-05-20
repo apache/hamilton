@@ -19,6 +19,6 @@ under the License.
 
 # Install Python dependencies
 
-Install the ``sf-hamilton`` and the visualization dependencies in your Python environment
+Install the ``apache-hamilton`` and the visualization dependencies in your Python environment
 
-``pip install sf-hamilton[lsp]``
+``pip install apache-hamilton[lsp]``

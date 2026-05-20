@@ -1,3 +1,5 @@
+apache-hamilton
+apache-hamilton[visualization]
 # comment out the vector DB packages you don't need
 click
 cohere
@@ -11,6 +13,4 @@ pandas
 pinecone-client
 qdrant-client
 sentence-transformers
-sf-hamilton
-sf-hamilton[visualization]
 weaviate-client

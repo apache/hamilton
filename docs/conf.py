@@ -113,7 +113,7 @@ exclude_patterns = [
 # check if the current commit is tagged as a release (vX.Y.Z) and set the version
 GIT_TAG_OUTPUT = subprocess.check_output(["git", "tag", "--points-at", "HEAD"])
 current_tag = GIT_TAG_OUTPUT.decode().strip()
-if re.match(r"^sf-hamilton-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$", current_tag):
+if re.match(r"^apache-hamilton-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$", current_tag):
     version = current_tag
 else:
     version = "latest"

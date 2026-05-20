@@ -73,7 +73,7 @@ The preferred way of working with pre-commit hooks is through the [prek](https:/
 pre-commit hooks are great developer tools, but off-the-shelf solutions aren't aware of the Apache Hamilton framework. Hence, we developed a pre-commit hook to help you author Apache Hamilton dataflows! Under the hood, they leverage the `hamilton` CLI, so if you are unfamiliar with it, feel free to install it and view the `--help` messages.
 
 ```console
-pip install sf-hamilton[cli]
+pip install apache-hamilton[cli]
 hamilton --help
 ```
 

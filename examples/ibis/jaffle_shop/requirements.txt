@@ -1,2 +1,2 @@
+apache-hamilton[visualization]
 ibis-framework[duckdb]
-sf-hamilton[visualization]

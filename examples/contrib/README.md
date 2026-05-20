@@ -37,7 +37,7 @@ Or run it in Google Colab:
 There are 3 main ways to use community dataflows: static installation, dynamic installation, and local copy (see [documentation](https://github.com/apache/hamilton/tree/main/contrib)). We present each of them in this example:
 
 ## 1. Static installation
-The script `run.py` uses the direct import `from hamilton.contrib.user.zilto import xgboost_optuna`. It's as simple as that! (but first `pip install sf-hamilton-contrib --upgrade`)
+The script `run.py` uses the direct import `from hamilton.contrib.user.zilto import xgboost_optuna`. It's as simple as that! (but first `pip install apache-hamilton-contrib --upgrade`)
 
 ## 2. Dynamic installation
 The first part of the notebook `notebook.ipynb` imports the same dataflow via `xgboost_optuna = hamilton.dataflows.import_module("xgboost_optuna", "zilto")`. This will download and cache the module in your local directory `{USER_PATH}/.hamilton`.

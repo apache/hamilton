@@ -29,7 +29,7 @@ class SlackNotifier(NodeExecutionHook):
 
     Note: you need to have slack_sdk installed for this to work.
     If you don't have it installed, you can install it with `pip install slack_sdk`
-    (or `pip install sf-hamilton[slack]` -- use quotes if you're using zsh).
+    (or `pip install apache-hamilton[slack]` -- use quotes if you're using zsh).
 
     .. code-block:: python
 

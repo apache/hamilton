@@ -1,4 +1,4 @@
+apache-hamilton[visualization]
 beautifulsoup4
 lxml
 requests
-sf-hamilton[visualization]

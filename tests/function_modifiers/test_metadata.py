@@ -231,6 +231,21 @@ def test_decorate_node_with_schema_output():
     )
 
 
+def test_schema_output_combined_with_tag_does_not_raise():
+    @function_modifiers.schema.output(("ticker", "str"), ("fee", "float"))
+    @function_modifiers.tag(table_type="reference")
+    def ref_table_1() -> pd.DataFrame:
+        return pd.DataFrame.from_records([{"ticker": "AAPL", "fee": 1.0}])
+
+    nodes = function_modifiers.base.resolve_nodes(ref_table_1, {})
+    node_map = {n.name: n for n in nodes}
+    node_ = node_map["ref_table_1"]
+    assert (
+        node_.tags[function_modifiers.schema.INTERNAL_SCHEMA_OUTPUT_KEY] == "ticker=str,fee=float"
+    )
+    assert node_.tags["table_type"] == "reference"
+
+
 def test_decorate_node_with_schema_output_invalid_type():
     # quick test to decorate node with schemas
     # this tests an internal implementation, so we will likely change

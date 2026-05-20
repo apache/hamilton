@@ -309,7 +309,7 @@ def ui(
     except ImportError as e:
         logger.error(
             "hamilton[ui] not installed -- you have to install this to run the UI. "
-            'Run `pip install "sf-hamilton[ui]"` to install and get started with the UI!'
+            'Run `pip install "apache-hamilton[ui]"` to install and get started with the UI!'
         )
         raise typer.Exit(code=1) from e
 

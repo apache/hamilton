@@ -37,7 +37,7 @@ First, you need to have the Apache Hamilton UI running. You can either `pip inst
 Install the Python dependencies:
 
 ```bash
-pip install "sf-hamilton[ui,sdk]"
+pip install "apache-hamilton[ui,sdk]"
 ```
 then launch the Apache Hamilton UI server:
 ```bash

@@ -27,7 +27,7 @@ under the License.
 >
 > While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
 
-Here you'll find documentation about the sf-hamilton-contrib package that curates a collection of Apache Hamilton Dataflows that are
+Here you'll find documentation about the apache-hamilton-contrib package that curates a collection of Apache Hamilton Dataflows that are
 ready to be used in your own projects. They are user-contributed and maintained, with
 the goal of making it easier for you to get started with Apache Hamilton.
 
@@ -47,7 +47,7 @@ production purposes as you can version-lock your dependencies.
 To install the package, run:
 
 ```bash
-pip install sf-hamilton-contrib --upgrade
+pip install apache-hamilton-contrib --upgrade
 ```
 
 Once installed, you can import the dataflows as follows.

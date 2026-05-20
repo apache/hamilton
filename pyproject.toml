@@ -59,14 +59,14 @@ dask-array = ["dask[array]"]
 dask-dataframe = ["dask[dataframe]"]
 dask-diagnostics = ["dask[diagnostics]"]
 dask-distributed = ["dask[distributed]"]
-datadog = ["ddtrace<3.0"]  # Temporary pin until h_ddog.py import is fixed for >3.0 version
+datadog = ["ddtrace>=4.0,<5.0"]
 diskcache = ["diskcache"]
 experiments = [
   "fastapi",
   "fastui",
   "uvicorn",
 ]
-lsp = ["sf-hamilton-lsp"]
+lsp = ["sf-hamilton-lsp"]  # TODO: switch to apache-hamilton-lsp once stable version is published
 openlineage = ["openlineage-python"]
 pandera = ["pandera"]
 pydantic = ["pydantic>=2.0"]
@@ -76,12 +76,12 @@ pyspark = [
 ]
 ray = ["ray>=2.0.0; python_version < '3.14'", "pyarrow"]
 rich = ["rich"]
-sdk = ["sf-hamilton-sdk"]
+sdk = ["sf-hamilton-sdk"]  # TODO: switch to apache-hamilton-sdk once stable version is published
 slack = ["slack-sdk"]
 
 mcp = ["fastmcp>=3.0.0,<4"]
 tqdm = ["tqdm"]
-ui = ["sf-hamilton-ui"]
+ui = ["sf-hamilton-ui"]  # TODO: switch to apache-hamilton-ui once stable version is published
 
 # vaex -- on >=py3.11 only core part available https://github.com/vaexio/vaex/pull/2331#issuecomment-2437198176
 vaex = [
@@ -140,7 +140,7 @@ docs = [
   "commonmark",
   "dask-expr>=1.1.14",
   "dask[distributed]",
-  "ddtrace<3.0",
+  "ddtrace>=4.0,<5",
   "diskcache",
   # required for all the plugins
   "dlt",
@@ -200,9 +200,8 @@ slack = "https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8
 #[tool.mypy]
 #exclude = []
 
-#[tool.pytest.ini_options]
-#pythonpath = []
-#testpaths = []
+[tool.pytest.ini_options]
+addopts = "-p no:ddtrace"
 
 [tool.ruff]
 line-length = 100

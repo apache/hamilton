@@ -24,14 +24,14 @@ try:
     import pydantic  # noqa: F401
 except ModuleNotFoundError as e:
     raise NotImplementedError(
-        "Cannot import `pydantic` from `pydantic_validators`. Run pip install 'sf-hamilton[pydantic]' if needed."
+        "Cannot import `pydantic` from `pydantic_validators`. Run pip install 'apache-hamilton[pydantic]' if needed."
     ) from e
 
 try:
     from pydantic import BaseModel, TypeAdapter, ValidationError
 except ImportError as e:
     raise NotImplementedError(
-        "`pydantic>=2.0` required to use `pydantic_validators`. Run pip install 'sf-hamilton[pydantic]' if needed."
+        "`pydantic>=2.0` required to use `pydantic_validators`. Run pip install 'apache-hamilton[pydantic]' if needed."
     ) from e
 
 

@@ -1,2 +1,2 @@
-sf-hamilton[pandera, dask]
-# sf-hamilton[visualization]   # if visualization is desired
+apache-hamilton[pandera, dask]
+# apache-hamilton[visualization]   # if visualization is desired

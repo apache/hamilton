@@ -80,7 +80,7 @@ class RayGraphAdapter(
 
     This walks the graph and translates it to run onto `Ray <https://ray.io/>`__.
 
-    Use `pip install sf-hamilton[ray]` to get the dependencies required to run this.
+    Use `pip install apache-hamilton[ray]` to get the dependencies required to run this.
 
     Use this if:
 

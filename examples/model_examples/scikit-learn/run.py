@@ -74,7 +74,7 @@ if __name__ == "__main__":
          to my_train_evaluate_logic.
     """
     dr = driver.Driver(dag_config, data_module, my_train_evaluate_logic, adapter=adapter)
-    # ensure you have done "pip install "sf-hamilton[visualization]"" for the following to work:
+    # ensure you have done "pip install "apache-hamilton[visualization]"" for the following to work:
     # dr.visualize_execution(['classification_report', 'confusion_matrix', 'fit_clf'],
     #                        f'./model_dag_{_data_set}_{_model_type}.dot', {"format": "png"})
     results = dr.execute(["classification_report", "confusion_matrix", "fit_clf"])

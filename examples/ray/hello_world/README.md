@@ -23,7 +23,7 @@ Here we have a hello world example showing how you can
 take some Apache Hamilton functions and then easily run them
 in a distributed setting via ray.
 
-`pip install sf-hamilton[ray]`  or `pip install sf-hamilton ray` to for the right dependencies to run this example.
+`pip install apache-hamilton[ray]`  or `pip install apache-hamilton ray` to for the right dependencies to run this example.
 
 File organization:
 

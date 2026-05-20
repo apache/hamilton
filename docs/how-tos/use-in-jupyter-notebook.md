@@ -136,7 +136,7 @@ I assume you already have this step set up. But just in case you don’t:
 
 ```bash
 pip install jupyterlab
-pip install sf-hamilton
+pip install apache-hamilton
 ```
 
 Then to start the notebook server it should just be:

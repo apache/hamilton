@@ -1,3 +1,3 @@
+apache-hamilton[visualization, sdk, ui]
 pandas
 scikit-learn
-sf-hamilton[visualization, sdk, ui]

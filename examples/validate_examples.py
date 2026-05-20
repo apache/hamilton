@@ -69,7 +69,7 @@ def validate_notebook(notebook_path: pathlib.Path) -> int:
 
         #%% CELL_2 (or CELL_1 if no license)
         # Execute this cell to install dependencies
-        %pip install sf-hamilton[visualization] matplotlib
+        %pip install apache-hamilton[visualization] matplotlib
 
         #%% CELL_3 (or CELL_2 if no license)
         # Title of the notebook ![Colab badge](colab_url) ![GitHub badge](github_url)
@@ -161,7 +161,7 @@ def insert_setup_cell(path: pathlib.Path):
     """
     notebook = nbformat.read(path, as_version=4)
     setup_cell = nbformat.v4.new_code_cell(
-        "# Execute this cell to install dependencies\n%pip install sf-hamilton[visualization]"
+        "# Execute this cell to install dependencies\n%pip install apache-hamilton[visualization]"
     )
 
     # Check if first cell is a license header

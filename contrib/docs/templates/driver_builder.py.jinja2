@@ -11,10 +11,10 @@ from hamilton.execution import executors
   {%- endif %}
 {%- else %}
   {%- if is_user %}
-# Make sure you've done - `pip install sf-hamilton-contrib --upgrade`
+# Make sure you've done - `pip install apache-hamilton-contrib --upgrade`
 from hamilton.contrib.user.{{USER}} import {{MODULE_NAME}}
   {%- else %}
-# Make sure you've done - `pip install sf-hamilton-contrib --upgrade`
+# Make sure you've done - `pip install apache-hamilton-contrib --upgrade`
 from hamilton.contrib.dagworks import {{MODULE_NAME}}
   {%- endif %}
 {%- endif %}
@@ -32,7 +32,7 @@ dr = (
     .with_modules({{MODULE_NAME}})
     .build()
 )
-# If you have sf-hamilton[visualization] installed, you can see the dataflow graph
+# If you have apache-hamilton[visualization] installed, you can see the dataflow graph
 # In a notebook this will show an image, else pass in arguments to save to a file
 # dr.display_all_functions()
 # Execute the dataflow, specifying what you want back. Will return a dictionary.

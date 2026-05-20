@@ -24,14 +24,14 @@ under the License.
    </a><a href="https://www.python.org/downloads/" target="_blank">
       <img src="https://img.shields.io/badge/python-3.10%20|%203.11%20|%203.12%20|%203.13%20|%203.14-blue.svg" alt="Python supported"/>
    </a>
-   <a href="https://pypi.org/project/sf-hamilton/" target="_blank">
-      <img src="https://badge.fury.io/py/sf-hamilton.svg" alt="PyPi Version"/>
+   <a href="https://pypi.org/project/apache-hamilton/" target="_blank">
+      <img src="https://badge.fury.io/py/apache-hamilton.svg" alt="PyPi Version"/>
    </a>
-   <a href="https://pepy.tech/project/sf-hamilton" target="_blank">
-      <img src="https://pepy.tech/badge/sf-hamilton" alt="Total Downloads"/>
+   <a href="https://pepy.tech/project/apache-hamilton" target="_blank">
+      <img src="https://pepy.tech/badge/apache-hamilton" alt="Total Downloads"/>
    </a>
-   <a href="https://pepy.tech/project/sf-hamilton" target="_blank">
-      <img src="https://static.pepy.tech/badge/sf-hamilton/month" alt="Total Monthly Downloads"/>
+   <a href="https://pepy.tech/project/apache-hamilton" target="_blank">
+      <img src="https://static.pepy.tech/badge/apache-hamilton/month" alt="Total Monthly Downloads"/>
    </a>
    <br/>
    <a href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g" target="_blank">

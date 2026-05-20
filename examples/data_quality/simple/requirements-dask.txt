@@ -1,2 +1,2 @@
-sf-hamilton[dask]
-# sf-hamilton[visualization]   # if visualization is desired
+apache-hamilton[dask]
+# apache-hamilton[visualization]   # if visualization is desired

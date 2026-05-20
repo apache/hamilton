@@ -1,4 +1,4 @@
+apache-hamilton
 bytewax
 fastapi
-sf-hamilton
 uvicorn

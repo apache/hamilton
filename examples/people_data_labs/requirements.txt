@@ -1,4 +1,4 @@
+apache-hamilton[visualization]
 boto3
 pandas
 pyarrow
-sf-hamilton[visualization]

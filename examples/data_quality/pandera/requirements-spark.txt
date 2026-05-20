@@ -1,2 +1,2 @@
-sf-hamilton[pandera, spark]
-# sf-hamilton[visualization]   # if visualization is desired
+apache-hamilton[pandera, spark]
+# apache-hamilton[visualization]   # if visualization is desired

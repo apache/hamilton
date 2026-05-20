@@ -1,5 +1,5 @@
+apache-hamilton
 gitpython
 numpy
 pandas
 scikit-learn
-sf-hamilton

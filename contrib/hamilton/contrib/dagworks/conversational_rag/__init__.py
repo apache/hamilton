@@ -16,10 +16,12 @@
 # under the License.
 
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
 from hamilton import contrib
+from hamilton.function_modifiers import config
 
 with contrib.catch_import_errors(__name__, __file__, logger):
     import openai
@@ -53,15 +55,18 @@ def standalone_question_prompt(chat_history: list[str], question: str) -> str:
     ).format(chat_history=chat_history_str, question=question)
 
 
-def standalone_question(standalone_question_prompt: str, llm_client: openai.OpenAI) -> str:
+def standalone_question(
+    standalone_question_prompt: str, llm_client: openai.OpenAI, model: str
+) -> str:
     """Asks the LLM to create a standalone question from the prompt.
 
     :param standalone_question_prompt: the prompt with context.
     :param llm_client: the llm client to use.
+    :param model: the model name to use.
     :return: the standalone question.
     """
     response = llm_client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model=model,
         messages=[{"role": "user", "content": standalone_question_prompt}],
     )
     return response.choices[0].message.content
@@ -112,20 +117,50 @@ def answer_prompt(context: str, standalone_question: str) -> str:
     return template.format(context=context, question=standalone_question)
 
 
-def llm_client() -> openai.OpenAI:
-    """The LLM client to use for the RAG model."""
+@config.when_not(provider="minimax")
+def llm_client__openai() -> openai.OpenAI:
+    """The OpenAI LLM client (default).
+
+    Uses the OPENAI_API_KEY environment variable for authentication.
+    """
     return openai.OpenAI()
 
 
-def conversational_rag_response(answer_prompt: str, llm_client: openai.OpenAI) -> str:
-    """Creates the RAG response from the LLM model for the given prompt.
+@config.when(provider="minimax")
+def llm_client__minimax() -> openai.OpenAI:
+    """The MiniMax LLM client via OpenAI-compatible API.
+
+    Uses the MINIMAX_API_KEY environment variable for authentication.
+    MiniMax provides an OpenAI-compatible endpoint at https://api.minimax.io/v1.
+    """
+    return openai.OpenAI(
+        base_url="https://api.minimax.io/v1",
+        api_key=os.environ.get("MINIMAX_API_KEY"),
+    )
+
+
+@config.when_not(provider="minimax")
+def model__openai() -> str:
+    """The model to use for OpenAI (default)."""
+    return "gpt-3.5-turbo"
+
+
+@config.when(provider="minimax")
+def model__minimax() -> str:
+    """The model to use for MiniMax."""
+    return "MiniMax-M2.7"
+
+
+def conversational_rag_response(answer_prompt: str, llm_client: openai.OpenAI, model: str) -> str:
+    """Creates the RAG response using the configured LLM.
 
     :param answer_prompt: the prompt to send to the LLM.
     :param llm_client: the LLM client to use.
+    :param model: the model name to use.
     :return: the response from the LLM.
     """
     response = llm_client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model=model,
         messages=[{"role": "user", "content": answer_prompt}],
     )
     return response.choices[0].message.content
@@ -136,6 +171,7 @@ if __name__ == "__main__":
 
     from hamilton import driver, lifecycle
 
+    # Default: uses OpenAI (config={} or config={"provider": "openai"})
     dr = (
         driver.Builder()
         .with_modules(conversational_rag)
@@ -176,3 +212,12 @@ if __name__ == "__main__":
             },
         )
     )
+
+    # To use MiniMax instead, set MINIMAX_API_KEY and use:
+    # dr = (
+    #     driver.Builder()
+    #     .with_modules(conversational_rag)
+    #     .with_config({"provider": "minimax"})
+    #     .with_adapters(lifecycle.PrintLn(verbosity=2))
+    #     .build()
+    # )

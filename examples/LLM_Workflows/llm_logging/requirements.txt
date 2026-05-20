@@ -1,7 +1,7 @@
+apache-hamilton[visualization]
 
 fastapi
 fastui
 openai
 pypdf
-sf-hamilton[visualization]
 tiktoken

@@ -26,7 +26,7 @@ import { classNames } from "../../../utils";
 import { CheckBox } from "../../common/Checkbox";
 
 const INSTALL_CODE = `# be sure to initialize any python environment you want to use first
-pip install "sf-hamilton[sdk]"`;
+pip install "apache-hamilton[sdk]"`;
 
 const INSTALL_CODE_DW = `# be sure to initialize any python environment you want to use first
 pip install dagworks-sdk`;

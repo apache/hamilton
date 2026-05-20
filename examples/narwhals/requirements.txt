@@ -1,4 +1,4 @@
+apache-hamilton[visualization]
 narwhals
 pandas
 polars
-sf-hamilton[visualization]

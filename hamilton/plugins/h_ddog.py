@@ -25,14 +25,13 @@ from hamilton.lifecycle import base
 
 logger = logging.getLogger(__name__)
 try:
-    # TODO: this works for ddtrace < 3.0; Span was deprecated in 3.0
-    # See https://github.com/DataDog/dd-trace-py/pull/12186
-    from ddtrace import Span, context, tracer
+    from ddtrace import tracer
+    from ddtrace.trace import Context, Span
 except ImportError as e:
     logger.error("ImportError: %s", e)
     logger.error(
-        "To use the h_ddog plugin, please install sf-hamilton[datadog] using "
-        "`pip install sf-hamilton[datadog]` (or use your favorite package manager)."
+        "To use the h_ddog plugin, please install apache-hamilton[datadog] using "
+        "`pip install apache-hamilton[datadog]` (or use your favorite package manager). "
         "Remember to use quotes around the package name if using zsh!"
     )
     raise
@@ -75,14 +74,14 @@ class _DDOGTracerImpl:
         }
 
     @staticmethod
-    def _deserialize_span_dict(serialized_repr: dict[str, dict]) -> dict[str, context.Context]:
+    def _deserialize_span_dict(serialized_repr: dict[str, dict]) -> dict[str, Context]:
         """Note that we deserialize as contexts, as passing spans is not supported
         (the child should never terminate the parent span).
 
         :param span_dict: Dict of str -> dict params for contexts
         :return: A dictionary of contexts
         """
-        return {key: context.Context(**params) for key, params in serialized_repr.items()}
+        return {key: Context(**params) for key, params in serialized_repr.items()}
 
     def __getstate__(self):
         """Gets the state for serialization"""
@@ -293,7 +292,7 @@ class DDOGTracer(
     This tracer bypasses context management so we can more accurately track relationships between nodes/tags. Also, we plan to
     get this working with OpenTelemetry, and use that for datadog integration.
 
-    To use this, you'll want to run `pip install sf-hamilton[ddog]` (or `pip install "sf-hamilton[ddog]"` if using zsh)
+    To use this, you'll want to run `pip install apache-hamilton[datadog]` (or `pip install "apache-hamilton[datadog]"` if using zsh)
     """
 
     def __init__(self, root_name: str, include_causal_links: bool = False, service: str = None):

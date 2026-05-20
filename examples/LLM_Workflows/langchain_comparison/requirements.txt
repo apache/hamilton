@@ -1,5 +1,5 @@
 anthropic
+apache-hamilton[visualization]
 lanchain_openai
 langchain
 openai
-sf-hamilton[visualization]

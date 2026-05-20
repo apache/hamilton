@@ -25,7 +25,7 @@ This page covers the Apache Hamilton CLI. It is built directly from the CLI, but
 The dependencies for the Apache Hamilton CLI can be installed via
 
 ```console
-pip install sf-hamilton[cli]
+pip install apache-hamilton[cli]
 ```
 
 You can verify the installation with

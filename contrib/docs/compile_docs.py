@@ -171,7 +171,7 @@ import example from '!!raw-loader!./example1.py';
 
 ### Use published library version
 ```bash
-pip install sf-hamilton-contrib --upgrade  # make sure you have the latest
+pip install apache-hamilton-contrib --upgrade  # make sure you have the latest
 ```
 
 import example2 from '!!raw-loader!./example2.py';
@@ -226,7 +226,7 @@ import example from '!!raw-loader!./example1.py';
 
 ### Use published library version
 ```bash
-pip install sf-hamilton-contrib --upgrade  # make sure you have the latest
+pip install apache-hamilton-contrib --upgrade  # make sure you have the latest
 ```
 
 import example2 from '!!raw-loader!./example2.py';

@@ -26,7 +26,7 @@ Hamilton UI is a web-based dashboard for:
 ### 1. Install Hamilton with UI Support
 
 ```bash
-pip install "sf-hamilton[sdk,ui]"
+pip install "apache-hamilton[sdk,ui]"
 ```
 
 ### 2. Start the Hamilton UI

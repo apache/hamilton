@@ -155,7 +155,7 @@ that are setup to run each time you push a commit to a branch in github.
 # Pushing to pypi
 These are the steps to push to pypi. This is taken from the [python packaging tutorial](https://packaging.python.org/tutorials/packaging-projects/#generating-distribution-archives).
 
-1. Have an account & be granted the ability to push to sf-hamilton on testpypi & real pypi.
+1. Have an account & be granted the ability to push to apache-hamilton on testpypi & real pypi.
 2. Setup API tokens and add them to your ~/.pypirc.
 3. Run `python3 -m pip install --upgrade build`.
 4. Run `python3 -m pip install --upgrade twine`
@@ -173,8 +173,8 @@ These are the steps to push to pypi. This is taken from the [python packaging tu
 
 Now that you've pushed to pypi, announce your release! We plan to automate this, but for now...
 
-1. Create a github release (select auto-generate release for painless text generation). Create a tag that's called `sf-hamilton-{version_string}`.
-See [1.2.0](https://github.com/apache/hamilton/releases/tag/sf-hamilton-1.2.0) for an example.
+1. Create a github release (select auto-generate release for painless text generation). Create a tag that's called `apache-hamilton-{version_string}`.
+See [1.2.0](https://github.com/apache/hamilton/releases/tag/apache-hamilton-1.2.0) for an example.
 2. Announce on the #announcements channel in slack, following the format presented there.
 3. Thanks for contributing!
 
