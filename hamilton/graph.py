@@ -29,6 +29,7 @@ import logging
 import os.path
 import pathlib
 import uuid
+import warnings
 from collections.abc import Callable, Collection
 from enum import Enum
 from types import ModuleType
@@ -989,11 +990,13 @@ class FunctionGraph:
         return dot
 
     def get_impacted_nodes(self, var_changes: list[str]) -> set[node.Node]:
-        """DEPRECATED - use `get_downstream_nodes` instead."""
-        logger.warning(
+        """Deprecated alias for `get_downstream_nodes`."""
+        warnings.warn(
             "FunctionGraph.get_impacted_nodes is deprecated. "
-            "Use `get_downstream_nodes` instead. This function will be removed"
-            "in a future release."
+            "Use `get_downstream_nodes` instead. This function will be removed "
+            "in the 2.0.0 release.",
+            DeprecationWarning,
+            stacklevel=2,
         )
         return self.get_downstream_nodes(var_changes)
 

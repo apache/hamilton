@@ -27,6 +27,7 @@ import sys
 # required if we want to run this code stand alone.
 import typing
 import uuid
+import warnings
 from collections.abc import Callable, Collection, Sequence
 from datetime import datetime
 from types import ModuleType
@@ -544,9 +545,11 @@ class Driver:
             dataframe.
         """
         if display_graph:
-            logger.warning(
+            warnings.warn(
                 "display_graph=True is deprecated. It will be removed in the 2.0.0 release. "
-                "Please use visualize_execution()."
+                "Please use visualize_execution().",
+                DeprecationWarning,
+                stacklevel=2,
             )
         run_id = str(uuid.uuid4())
         run_successful = True
@@ -634,9 +637,11 @@ class Driver:
             function_graph, self.adapter, user_nodes, inputs, nodes
         )  # TODO -- validate within the function graph itself
         if display_graph:  # deprecated flow.
-            logger.warning(
+            warnings.warn(
                 "display_graph=True is deprecated. It will be removed in the 2.0.0 release. "
-                "Please use visualize_execution()."
+                "Please use visualize_execution().",
+                DeprecationWarning,
+                stacklevel=2,
             )
             self.visualize_execution(final_vars, "test-output/execute.gv", {"view": True})
             if self.has_cycles(
@@ -708,9 +713,11 @@ class Driver:
             function_graph, self.adapter, user_nodes, inputs, nodes
         )  # TODO -- validate within the function graph itself
         if display_graph:  # deprecated flow.
-            logger.warning(
+            warnings.warn(
                 "display_graph=True is deprecated. It will be removed in the 2.0.0 release. "
-                "Please use visualize_execution()."
+                "Please use visualize_execution().",
+                DeprecationWarning,
+                stacklevel=2,
             )
             self.visualize_execution(final_vars, "test-output/execute.gv", {"view": True})
             if self.has_cycles(
