@@ -23,7 +23,9 @@ from hamilton import registry
 from hamilton.data_quality import base
 from hamilton.htypes import custom_subclass_check
 
-pandera_supported_extensions = frozenset(["pandas", "dask", "pyspark_pandas", "polars"])
+pandera_supported_extensions = frozenset(
+    ["pandas", "dask", "pyspark_pandas", "polars", "polars_lazyframe"]
+)
 
 
 class PanderaDataFrameValidator(base.BaseDefaultValidator):
