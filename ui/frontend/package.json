@@ -23,7 +23,7 @@
     "chartjs-plugin-zoom": "^2.0.1",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.9",
-    "elkjs": "^0.8.2",
+    "dagre": "^0.8.5",
     "fuse.js": "^6.6.2",
     "headlessui": "^0.0.0",
     "http-proxy-middleware": "^2.0.9",
@@ -84,6 +84,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@types/dagre": "^0.7.52",
     "@types/node": "^22.10.2",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@vitejs/plugin-react": "^4.3.4",
