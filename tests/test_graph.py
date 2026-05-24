@@ -1273,6 +1273,37 @@ def test_create_graphviz_graph():
     assert dot_set == expected_set
 
 
+def test_create_graphviz_graph_styles_async_nodes():
+    async def async_node() -> int:
+        return 1
+
+    def sync_node(async_node: int) -> int:
+        return async_node + 1
+
+    module = ad_hoc_utils.create_temporary_module(async_node, sync_node)
+    fg = graph.FunctionGraph.from_modules(module, config={})
+
+    digraph = graph.create_graphviz_graph(
+        set(fg.get_nodes()),
+        "Dependency Graph\n",
+        graphviz_kwargs={},
+        node_modifiers={},
+        strictly_display_only_nodes_passed_in=False,
+        config={},
+    )
+    dot_source = str(digraph)
+
+    assert (
+        "\tasync_node [label=<<b>async_node</b><br /><br /><i>int</i>> "
+        'fillcolor="#CDB4DB" fontname=Helvetica margin=0.15 shape=rectangle '
+        'style="rounded,filled,bold"]'
+    ) in dot_source
+    assert (
+        '\t\tasync [fillcolor="#CDB4DB" fontname=Helvetica margin=0.15 '
+        'shape=rectangle style="rounded,filled,bold"]'
+    ) in dot_source
+
+
 def test_create_networkx_graph():
     """Tests that we create a networkx graph"""
     fg = graph.FunctionGraph.from_modules(tests.resources.dummy_functions, config={})
