@@ -45,6 +45,7 @@ from hamilton.caching.adapter import HamiltonCacheAdapter
 from hamilton.caching.stores.base import MetadataStore, ResultStore
 from hamilton.dev_utils import deprecation
 from hamilton.execution import executors, graph_functions, grouping, state
+from hamilton.function_modifiers.validation import DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY
 from hamilton.graph_types import HamiltonNode
 from hamilton.io import materialization
 from hamilton.io.materialization import ExtractorFactory, MaterializerFactory
@@ -1842,6 +1843,19 @@ class Builder:
 
         self.adapters.extend(adapters)
         return self
+
+    def with_data_quality_disabled(self) -> Self:
+        """Disables all ``@check_output`` / ``@check_output_custom`` validators at graph-construction
+        time. No validator nodes are created, so there is zero runtime cost.
+
+        This is equivalent to ``.with_config({DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY: True})``.
+        Note that a subsequent ``.with_config({DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY: False})``
+        will re-enable validation, since ``with_config`` always wins on the last write.
+
+        :return: self
+        """
+
+        return self.with_config({DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY: True})
 
     def with_materializers(self, *materializers: ExtractorFactory | MaterializerFactory) -> Self:
         """Add materializer nodes to the `Driver`
