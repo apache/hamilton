@@ -806,6 +806,40 @@ class FunctionGraph:
     def get_nodes(self) -> list[node.Node]:
         return list(self.nodes.values())
 
+    def get_nodes_in_topological_order(self) -> list[node.Node]:
+        """Returns nodes in dependency-first topological order.
+
+        This preserves the graph's existing insertion order for otherwise independent nodes.
+        """
+        visited = set()
+        visiting = set()
+        ordered_nodes = []
+
+        for start_node in self.nodes.values():
+            stack = [(start_node, False)]
+            while stack:
+                node_, expanded = stack.pop()
+                node_name = node_.name
+                if node_name in visited:
+                    continue
+
+                if expanded:
+                    visiting.discard(node_name)
+                    visited.add(node_name)
+                    ordered_nodes.append(node_)
+                    continue
+
+                if node_name in visiting:
+                    continue
+
+                visiting.add(node_name)
+                stack.append((node_, True))
+                for dependency in reversed(node_.dependencies):
+                    if dependency.name in self.nodes and dependency.name not in visited:
+                        stack.append((dependency, False))
+
+        return ordered_nodes
+
     def display_all(
         self,
         output_file_path: str = "test-output/graph-all.gv",

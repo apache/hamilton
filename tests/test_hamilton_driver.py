@@ -18,7 +18,7 @@
 
 import pytest
 
-from hamilton import base, node
+from hamilton import ad_hoc_utils, base, node
 from hamilton.caching.adapter import HamiltonCacheAdapter
 from hamilton.driver import (
     Builder,
@@ -147,6 +147,19 @@ def test_driver_variables_exposes_tags():
     assert tags["b"] == {"module": "tests.resources.tagging", "test": "b_c"}
     assert tags["c"] == {"module": "tests.resources.tagging", "test": "b_c"}
     assert tags["d"] == {"module": "tests.resources.tagging", "test_list": ["us", "uk"]}
+
+
+def test_driver_variables_are_topologically_sorted():
+    def z_dependency() -> int:
+        return 1
+
+    def a_final(z_dependency: int) -> int:
+        return z_dependency + 1
+
+    module = ad_hoc_utils.create_temporary_module(z_dependency, a_final)
+    dr = Driver({}, module)
+
+    assert [var.name for var in dr.list_available_variables()] == ["z_dependency", "a_final"]
 
 
 @pytest.mark.parametrize(
