@@ -47,6 +47,7 @@ classifiers = [
 ]
 dependencies = [
     "numpy",
+    "packaging",
     "pandas",
     "typing_extensions > 4.0.0",
     "typing_inspect",
