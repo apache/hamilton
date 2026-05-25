@@ -21,7 +21,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "apache-hamilton-contrib"
-version = "0.0.8"
+version = "0.0.8"  # Keep in sync with contrib/hamilton/contrib/version.py until this becomes dynamic
 description = "Apache Hamilton's user contributed shared dataflow library."
 readme = "README.md"
 requires-python = ">=3.10, <4"
