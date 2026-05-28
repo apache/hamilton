@@ -139,6 +139,7 @@ PORT=8241
 
 uv venv "$VENV_DIR" --python 3.12 -q
 source "$VENV_DIR/bin/activate"
+cd /tmp  # prevent '' in sys.path from resolving local hamilton checkout
 
 uv pip install -q "$ARTIFACTS_DIR/$WHEEL" apache-hamilton packaging
 
