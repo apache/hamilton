@@ -1,0 +1,1923 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex/"><link rel="search" title="Search" href="../../../../search/">
+        <link rel="canonical" href="https://hamilton.apache.org/_modules/hamilton/function_modifiers/recursive/">
+
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>hamilton.function_modifiers.recursive - Hamilton</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/testimonials.css?v=bd684830" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=a33697e8" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-announcement-background: #ffba00;
+  --color-announcement-text: #091E42;
+  
+      }
+    }
+  }
+</style>
+
+<!-- Matomo -->
+<script>
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["disableCookies"]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://analytics.apache.org/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '87']);
+    var d=document, g=d.createElement('script'),
+s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     📢 Announcing the <a target="_blank" href="https://www.meetup.com/global-hamilton-open-source-user-group-meetup/">Hamilton Meetup Group</a>. Sign up to attend events! 📢 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../../"><div class="brand">Hamilton</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../">
+  
+  <span class="sidebar-brand-text">Hamilton</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../../search/" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">USER GUIDE</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../get-started/">Get Started</a><input aria-label="Toggle navigation of Get Started" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get-started/why-hamilton/">Why use Apache Hamilton?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get-started/install/">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get-started/your-first-dataflow/">Your First Dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get-started/learning-resources/">Learning Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get-started/contributing/">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../get-started/license/">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../concepts/">Concepts</a><input aria-label="Toggle navigation of Concepts" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/glossary/">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/node/">Functions, nodes &amp; dataflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/driver/">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/visualization/">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/materialization/">Materialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/function-modifiers/">Function modifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/builder/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/caching/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/function-modifiers-advanced/">Function modifiers (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/parallel-task/">Dynamic DAGs/Parallel Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../concepts/ui/#sdk-configuration">SDK Configuration</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../concepts/best-practices/">Best Practices</a><input aria-label="Toggle navigation of Best Practices" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../concepts/best-practices/function-naming/">Function Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../concepts/best-practices/migrating-to-hamilton/">Migrating to Apache Hamilton</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../concepts/best-practices/code-organization/">Code Organization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../concepts/best-practices/common-indices/">Common Indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../concepts/best-practices/output-immutability/">Output Immutability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../concepts/best-practices/using-within-your-etl-system/">Using within your ETL System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../concepts/best-practices/loading-data/">Loading Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../how-tos/">User Guide</a><input aria-label="Toggle navigation of User Guide" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/use-in-jupyter-notebook/">Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/load-data/">Loading data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/caching-tutorial/">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/use-for-feature-engineering/">Feature engineering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/reuse-nodes/">Reusing functions and nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/ml-training/">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/llm-workflows/">LLM workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/run-data-quality-checks/">Data quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/test-hamilton-code/">Testing Apache Hamilton code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/use-hamilton-for-lineage/">Lineage + Apache Hamilton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/scale-up/">Scaling computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/microservice/">Microservice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/extensions-autoloading/">Extension autoloading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/wrapping-driver/">Wrapping the Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/cli-reference/">Command line interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../how-tos/pre-commit-hooks/">pre-commit hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../hamilton-ui/">Apache Hamilton UI</a><input aria-label="Toggle navigation of Apache Hamilton UI" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../hamilton-ui/ui/">UI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../hamilton-ui/ui/#local-mode">Local Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../hamilton-ui/ui/#docker-deployed-mode">Docker/Deployed Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../hamilton-ui/ui/#get-started">Get started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../hamilton-ui/ui/#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../hamilton-ui/ui/#sdk-configuration">SDK Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../hamilton-vscode/">IDE extension</a><input aria-label="Toggle navigation of IDE extension" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../hamilton-vscode/vscode_extension/">Apache Hamilton VSCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../hamilton-vscode/language_server/">Language Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../integrations/">Integrations</a><input aria-label="Toggle navigation of Integrations" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../integrations/dlt/">dlt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../integrations/fastapi/">FastAPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../integrations/ibis/">Ibis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../integrations/streamlit/">Streamlit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../integrations/dbt/">dbt</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/mlflow">MLFlow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/airflow">Airflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/aws">Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/LLM_Workflows/image_telephone">Burr</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dagster">Dagster</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/dask">Dask</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/feast">Feast</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/outerbounds/hamilton-metaflow">Metaflow</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/data_quality/pandera">Pandera</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/plotly">Plotly</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/polars">Polars</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/prefect">Prefect</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/ray">Ray</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/slack">Slack</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/spark">Spark</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/vaex">Vaex</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/narwhals">Narwhals</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/openlineage">OpenLineage</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../code-comparisons/">Code Comparisons</a><input aria-label="Toggle navigation of Code Comparisons" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../code-comparisons/kedro/">Kedro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../code-comparisons/dagster/">Dagster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../code-comparisons/langchain/">LangChain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../code-comparisons/airflow/">Airflow</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">DOWNLOADS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../asf/downloads/">Downloads</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">PDF</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://hamilton.apache.org/_static/Hamilton.pdf">PDF</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">COMMUNITY</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community/">Meet-ups</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../ecosystem/">Ecosystem</a><input aria-label="Toggle navigation of Ecosystem" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ecosystem/claude-code-plugin/">Claude Code Plugin for Hamilton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ecosystem/mcp-server/">MCP Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g">Slack</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/apache/hamilton">GitHub</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://www.tryhamilton.dev/">tryhamilton.dev</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../reference/decorators/">Decorators</a><input aria-label="Toggle navigation of Decorators" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/check_output/">check_output*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/config_when/">config.when*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/dataloader/">dataloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/datasaver/">datasaver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/does/">does</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/unpack_fields/">unpack_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/extract_columns/">extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/extract_fields/">extract_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/inject/">inject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/load_from/">load_from</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/parameterize/">parameterize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/parameterize_extract_columns/">parameterize_extract_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/parameterize_frame/">parameterize_frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/parameterize_sources/">parameterize_sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/parameterize_subdag/">parameterized_subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/parameterize_values/">parameterize_values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/pipe/">pipe family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/resolve/">resolve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/save_to/">save_to</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/subdag/">subdag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/schema/">schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/tag/">tag*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/decorators/with_columns/">with_columns</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../reference/drivers/">Drivers</a><input aria-label="Toggle navigation of Drivers" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/drivers/Driver/">Builder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/drivers/Driver/#driver">Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/drivers/Driver/#defaultgraphexecutor">DefaultGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/drivers/Driver/#taskbasedgraphexecutor">TaskBasedGraphExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/drivers/AsyncDriver/">AsyncDriver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/drivers/Custom/">Custom Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../reference/caching/">Caching</a><input aria-label="Toggle navigation of Caching" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/caching/caching-logic/">Caching logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/caching/data-versioning/">Data versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/caching/stores/">Stores</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../reference/graph-adapters/">GraphAdapters</a><input aria-label="Toggle navigation of GraphAdapters" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/graph-adapters/SimplePythonDataFrameGraphAdapter/">SimplePythonDataFrameGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/graph-adapters/SimplePythonGraphAdapter/">SimplePythonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/graph-adapters/HamiltonGraphAdapter/">HamiltonGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/graph-adapters/AsyncGraphAdapter/">h_async.AsyncGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/graph-adapters/ThreadPoolFutureAdapter/">h_threadpool.FutureAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/graph-adapters/CachingGraphAdapter/">CachingGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/graph-adapters/DaskGraphAdapter/">h_dask.DaskGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/graph-adapters/PySparkUDFGraphAdapter/">h_spark.PySparkUDFGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/graph-adapters/RayGraphAdapter/">h_ray.RayGraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/graph-adapters/SparkKoalasGraphAdapter/">h_spark.SparkKoalasGraphAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../reference/lifecycle-hooks/">Lifecycle Adapters</a><input aria-label="Toggle navigation of Lifecycle Adapters" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/ResultBuilder/">lifecycle.ResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/LegacyResultMixin/">lifecycle.LegacyResultMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/GraphAdapter/">lifecycle.api.GraphAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/NodeExecutionHook/">lifecycle.NodeExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/GraphExecutionHook/">lifecycle.api.GraphExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/EdgeConnectionHook/">lifecycle.api.EdgeConnectionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/NodeExecutionMethod/">lifecycle.api.NodeExecutionMethod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/StaticValidator/">lifecycle.api.StaticValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/GraphConstructionHook/">lifecycle.api.GraphConstructionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/TaskSubmissionHook/">lifecycle.api.TaskSubmissionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/TaskReturnHook/">lifecycle.api.TaskReturnHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/TaskExecutionHook/">lifecycle.api.TaskExecutionHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/TaskGroupingHook/">lifecycle.api.TaskGroupingHook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/PDBDebugger/">lifecycle.PDBDebugger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/PrintLn/">lifecycle.PrintLn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/ProgressBar/">plugins.h_tqdm.ProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/RichProgressBar/">plugins.h_rich.RichProgressBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/DDOGTracer/">plugins.h_ddog.DDOGTracer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/FunctionInputOutputTypeChecker/">lifecycle.FunctionInputOutputTypeChecker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/SlackNotifierHook/">plugins.h_slack.SlackNotifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/GracefulErrorAdapter/">lifecycle.GracefulErrorAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/SparkInputValidator/">plugins.h_spark.SparkInputValidator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/Narwhals/">plugins.h_narhwals.NarwhalsAdapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/Narwhals/#plugins-h-narhwals-narwhalsdataframeresultbuilder">plugins.h_narhwals.NarwhalsDataFrameResultBuilder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/MLFlowTracker/">plugins.h_mlflow.MLFlowTracker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/NoEdgeAndInputTypeChecking/">lifecycle.NoEdgeAndInputTypeChecking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/lifecycle-hooks/OpenLineageAdapter/">plugins.h_openlineage.OpenLineageAdapter</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../reference/result-builders/">ResultBuilders</a><input aria-label="Toggle navigation of ResultBuilders" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/result-builders/Generic/">Generic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/result-builders/Numpy/">Numpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/result-builders/Pandas/">Pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/result-builders/Polars/">Polars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/result-builders/Dask/">Dask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/result-builders/PyArrow/">plugins.h_pyarrow.PyarrowTableResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/result-builders/Custom/">Custom ResultBuilder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../reference/io/">I/O</a><input aria-label="Toggle navigation of I/O" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/io/available-data-adapters/">Using Data Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/io/available-data-adapters/#data-loaders">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/io/available-data-adapters/#data-savers">Data Savers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/io/adapter-documentation/">Data Adapters</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../reference/dataflows/">Dataflows</a><input aria-label="Toggle navigation of Dataflows" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/dataflows/clear_storage/">clear_storage()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/dataflows/copy/">copy()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/dataflows/find/">find()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/dataflows/import_module/">import_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/dataflows/inspect/">inspect()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/dataflows/inspect_module/">inspect_module()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/dataflows/install_dependencies_string/">install_dependencies_string()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/dataflows/latest_commit/">latest_commit()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/dataflows/list/">list()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/dataflows/pull_module/">pull_module()</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ASF</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../asf/">ASF</a><input aria-label="Toggle navigation of ASF" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../asf/downloads/">Downloads</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/">Apache Software Foundation</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/licenses/">License</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/events/current-event.html">Events</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/security/">Security</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/thanks.html">Thanks</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.apache.org/foundation/policies/conduct.html">Code of Conduct</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for hamilton.function_modifiers.recursive</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Licensed to the Apache Software Foundation (ASF) under one</span>
+<span class="c1"># or more contributor license agreements.  See the NOTICE file</span>
+<span class="c1"># distributed with this work for additional information</span>
+<span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
+<span class="c1"># to you under the Apache License, Version 2.0 (the</span>
+<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># with the License.  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing,</span>
+<span class="c1"># software distributed under the License is distributed on an</span>
+<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># KIND, either express or implied.  See the License for the</span>
+<span class="c1"># specific language governing permissions and limitations</span>
+<span class="c1"># under the License.</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">abc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Collection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModuleType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">TypedDict</span>
+
+<span class="n">_sys_version_info</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span>
+<span class="n">_version_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="n">_sys_version_info</span><span class="o">.</span><span class="n">major</span><span class="p">,</span> <span class="n">_sys_version_info</span><span class="o">.</span><span class="n">minor</span><span class="p">,</span> <span class="n">_sys_version_info</span><span class="o">.</span><span class="n">micro</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">_version_tuple</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotRequired</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotRequired</span>
+
+<span class="c1"># Copied this over from function_graph</span>
+<span class="c1"># TODO -- determine the best place to put this code</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">graph_utils</span><span class="p">,</span> <span class="n">node</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">base</span><span class="p">,</span> <span class="n">dependencies</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">InvalidDecoratorException</span><span class="p">,</span> <span class="n">NodeTransformer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers.dependencies</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LiteralDependency</span><span class="p">,</span>
+    <span class="n">ParametrizedDependency</span><span class="p">,</span>
+    <span class="n">UpstreamDependency</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">assign_namespace</span><span class="p">(</span><span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">derive_type</span><span class="p">(</span><span class="n">dependency</span><span class="p">:</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">LiteralDependency</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Quick hack to derive the type of a static dependency.</span>
+<span class="sd">    We might want to consider the type provided by the function that needs it.</span>
+<span class="sd">    Or we can use the subclass checker/whatnot in function_graph</span>
+<span class="sd">    (althoyugh we&#39;ll want to move it out)</span>
+
+<span class="sd">    :param dependency: Dependency on which</span>
+<span class="sd">    :return: The type of the dependency</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">dependency</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_identity_node</span><span class="p">(</span>
+    <span class="n">from_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">typ</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">tags</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates an identity node -- this passes through the exact</span>
+<span class="sd">    value returned by the upstream node.</span>
+
+<span class="sd">    :param from_: Source node</span>
+<span class="sd">    :param typ: Type of the input node</span>
+<span class="sd">    :param name: Name of the final node to create</span>
+<span class="sd">    :param namespace: Namespace of the node</span>
+<span class="sd">    :return: A node that simply copies the source node</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">identity</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Maybe come up with a better way to do this</span>
+
+    <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">,</span>
+        <span class="n">doc_string</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">callabl</span><span class="o">=</span><span class="n">identity</span><span class="p">,</span>
+        <span class="n">input_types</span><span class="o">=</span><span class="p">{</span><span class="n">from_</span><span class="p">:</span> <span class="n">typ</span><span class="p">},</span>
+        <span class="n">namespace</span><span class="o">=</span><span class="n">namespace</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span>
+        <span class="c1"># TODO -- add tags?</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_all_known_types</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts all known types from a set of nodes given the dependencies.</span>
+<span class="sd">    We have to do this as we don&#39;t know the dependency types at compile-time of</span>
+<span class="sd">    upstream nodes. That said, this is only used for guessing dependency types of</span>
+<span class="sd">    identity nodes. In which case, we probably want some sort of sentinel &quot;pass-through&quot;</span>
+<span class="sd">    dependency type that handles this better. But, for now, we&#39;ll derive it from the</span>
+<span class="sd">    dependencies we&#39;ve seen.</span>
+
+<span class="sd">    :param nodes: nodes to look through for dependencies</span>
+<span class="sd">    :return: A dictionary of all known types.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">observed_types</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">dep_name</span><span class="p">,</span> <span class="p">(</span><span class="n">type_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">observed_types</span><span class="p">[</span><span class="n">dep_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">type_</span>
+    <span class="k">return</span> <span class="n">observed_types</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_static_node</span><span class="p">(</span>
+    <span class="n">typ</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">tags</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Utility function to create a static node -- this helps us bridge nodes together.</span>
+
+<span class="sd">    :param typ: Type of the node to create</span>
+<span class="sd">    :param name: Name of the node to create</span>
+<span class="sd">    :param value: Value that the node&#39;s function always returns</span>
+<span class="sd">    :param namespace: Namespace of the node</span>
+<span class="sd">    :return: The instantiated static node</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">node_fn</span><span class="p">(</span><span class="n">_value</span><span class="o">=</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_value</span>
+
+    <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">,</span> <span class="n">callabl</span><span class="o">=</span><span class="n">node_fn</span><span class="p">,</span> <span class="n">input_types</span><span class="o">=</span><span class="p">{},</span> <span class="n">namespace</span><span class="o">=</span><span class="n">namespace</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="n">tags</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_config_inputs</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validates that the inputs specified in the config are valid.</span>
+
+<span class="sd">    :param original_config: Original configuration</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO -- implement this</span>
+    <span class="n">shared_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="k">if</span> <span class="n">shared_keys</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Config keys </span><span class="si">{</span><span class="n">shared_keys</span><span class="si">}</span><span class="s2"> are shared with inputs. This is not allowed.&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Instead, please specify the inputs you need *just* as part of the config. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;That way, you only write them once! Or, if you don&#39;t need them as a config item,&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;just use them in inputs.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">inputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">UpstreamDependency</span><span class="p">,</span> <span class="n">LiteralDependency</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Input </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> must be either an UpstreamDependency or a LiteralDependency ,&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_resolve_subdag_configuration</span><span class="p">(</span>
+    <span class="n">configuration</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">function_name</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolves the configuration for a subdag.</span>
+
+<span class="sd">    :param configuration: the Hamilton configuration</span>
+<span class="sd">    :param fields: the fields passed to the subdag decorator</span>
+<span class="sd">    :return: resolved configuration to use for this subdag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sources_to_map</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">values_to_include</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">ConfigDependency</span><span class="p">):</span>
+            <span class="n">sources_to_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">source</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">LiteralDependency</span><span class="p">):</span>
+            <span class="n">values_to_include</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">dependencies</span><span class="o">.</span><span class="n">GroupedDependency</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">SingleDependency</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;`</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">` is not allowed in the config= part of the subdag decorator. &quot;</span>
+                <span class="s2">&quot;Please use `configuration()` or `value()` or literal python values.&quot;</span>
+            <span class="p">)</span>
+    <span class="n">plain_configs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sources_to_map</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values_to_include</span>
+    <span class="p">}</span>
+    <span class="n">resolved_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="o">**</span><span class="n">plain_configs</span><span class="p">,</span> <span class="o">**</span><span class="n">values_to_include</span><span class="p">)</span>
+
+    <span class="c1"># override any values from sources</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">sources_to_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">resolved_config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_config</span><span class="p">[</span><span class="n">source</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Source </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2"> was not found in the configuration. This is required for the </span><span class="si">{</span><span class="n">function_name</span><span class="si">}</span><span class="s2"> subdag.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+    <span class="k">return</span> <span class="n">resolved_config</span>
+
+
+<span class="n">NON_FINAL_TAGS</span> <span class="o">=</span> <span class="p">{</span><span class="n">NodeTransformer</span><span class="o">.</span><span class="n">NON_FINAL_TAG</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="subdag">
+<a class="viewcode-back" href="../../../../reference/decorators/subdag/#hamilton.function_modifiers.subdag">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">subdag</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeCreator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The `@subdag` decorator enables you to rerun components of your DAG with varying parameters.</span>
+<span class="sd">    That is, it enables you to &quot;chain&quot; what you could express with a driver into a single DAG.</span>
+
+<span class="sd">    That is, instead of using Hamilton within itself:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        def feature_engineering(source_path: str) -&gt; pd.DataFrame:</span>
+<span class="sd">            &#39;&#39;&#39;You could recursively use Hamilton within itself.&#39;&#39;&#39;</span>
+<span class="sd">            dr = driver.Driver({}, feature_modules)</span>
+<span class="sd">            df = dr.execute([&quot;feature_df&quot;], inputs={&quot;path&quot;: source_path})</span>
+<span class="sd">            return df</span>
+
+<span class="sd">    You instead can use the `@subdag` decorator to do the same thing, with the added benefit of visibility into the\</span>
+<span class="sd">    whole DAG:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        @subdag(</span>
+<span class="sd">            feature_modules,</span>
+<span class="sd">            inputs={&quot;path&quot;: source(&quot;source_path&quot;)},</span>
+<span class="sd">            config={}</span>
+<span class="sd">        )</span>
+<span class="sd">        def feature_engineering(feature_df: pd.DataFrame) -&gt; pd.DataFrame:</span>
+<span class="sd">            return feature_df</span>
+
+
+<span class="sd">    Note that this is immensely powerful -- if we draw analogies from Hamilton to standard procedural programming \</span>
+<span class="sd">    paradigms, we might have the following correspondence:</span>
+
+<span class="sd">    - `config.when` + friends -- `if/else` statements</span>
+<span class="sd">    - `parameterize`/`extract_columns` -- `for` loop</span>
+<span class="sd">    - `does` -- effectively macros</span>
+
+<span class="sd">    And so on. `@subdag` takes this one step further:</span>
+
+<span class="sd">    - `@subdag` -- subroutine definition</span>
+
+<span class="sd">    E.G. take a certain set of nodes, and run them with specified parameters.</span>
+
+<span class="sd">    @subdag declares parameters that are outputs of its subdags. Note that, if you want to use outputs of other</span>
+<span class="sd">    components of the DAG, you can use the `external_inputs` parameter to declare the parameters that do *not* come</span>
+<span class="sd">    from the subDAG.</span>
+
+<span class="sd">    Why might you want to use this? Let&#39;s take a look at some examples:</span>
+
+<span class="sd">    1. You have a feature engineering pipeline that you want to run on multiple datasets. If its exactly the same, \</span>
+<span class="sd">    this is perfect. If not, this works perfectly as well, you just have to utilize different functions in each or \</span>
+<span class="sd">    the `config.when` + `config` parameter to rerun it.</span>
+<span class="sd">    2. You want to train multiple models in the same DAG that share some logic (in features or training) -- this \</span>
+<span class="sd">    allows you to reuse and continually add more.</span>
+<span class="sd">    3. You want to combine multiple similar DAGs (e.g. one for each business line) into one so you can build a \</span>
+<span class="sd">    cross-business line model.</span>
+
+<span class="sd">    This basically bridges the gap between the flexibility of non-declarative pipelining frameworks with the \</span>
+<span class="sd">    readability/maintainability of declarative ones.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="subdag.__init__">
+<a class="viewcode-back" href="../../../../reference/decorators/subdag/#hamilton.function_modifiers.subdag.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">load_from</span><span class="p">:</span> <span class="n">ModuleType</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ParametrizedDependency</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">final_node_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">external_inputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a subDAG to the main DAG.</span>
+
+<span class="sd">        :param load_from: The functions that will be used to generate this subDAG.</span>
+<span class="sd">        :param inputs: Parameterized dependencies to inject into all sources of this subDAG.</span>
+<span class="sd">            This should *not* be an intermediate node in the subDAG.</span>
+<span class="sd">        :param config: A configuration dictionary for *just* this subDAG. Note that this passed in</span>
+<span class="sd">            value takes precedence over the DAG&#39;s config.</span>
+<span class="sd">        :param namespace: Namespace with which to prefix nodes. This is optional -- if not included,</span>
+<span class="sd">            this will default to the function name.</span>
+<span class="sd">        :param final_node_name: Name of the final node in the subDAG. This is optional -- if not included,</span>
+<span class="sd">            this will default to the function name.</span>
+<span class="sd">        :param external_inputs: Parameters in the function that are not produced by the functions</span>
+<span class="sd">            passed to the subdag. This is useful if you want to perform some logic with other inputs</span>
+<span class="sd">            in the subdag&#39;s processing function. Note that this is currently required to</span>
+<span class="sd">            differentiate and clarify the inputs to the subdag.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subdag_functions</span> <span class="o">=</span> <span class="n">subdag</span><span class="o">.</span><span class="n">collect_functions</span><span class="p">(</span><span class="n">load_from</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="k">if</span> <span class="n">inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">external_inputs</span> <span class="o">=</span> <span class="n">external_inputs</span> <span class="k">if</span> <span class="n">external_inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="n">_validate_config_inputs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="o">=</span> <span class="n">namespace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_node_name</span> <span class="o">=</span> <span class="n">final_node_name</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">collect_functions</span><span class="p">(</span>
+        <span class="n">load_from</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">ModuleType</span><span class="p">]</span> <span class="o">|</span> <span class="n">Collection</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Callable</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Utility function to collect functions from a list of callables/modules.</span>
+
+<span class="sd">        :param load_from: A list of callables or modules to load from</span>
+<span class="sd">        :return: a list of callables to use to create a DAG.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">load_from</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No functions were passed to </span><span class="si">{</span><span class="n">subdag</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(load_from=...)&quot;</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">load_from</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Callable</span><span class="p">):</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">function</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">function</span> <span class="ow">in</span> <span class="n">graph_utils</span><span class="o">.</span><span class="n">find_functions</span><span class="p">(</span><span class="n">function_module</span><span class="o">=</span><span class="n">item</span><span class="p">)]</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">collect_nodes</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">subdag_functions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Callable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">subdag_functions</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">base</span><span class="o">.</span><span class="n">resolve_nodes</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span> <span class="o">**</span><span class="n">NON_FINAL_TAGS</span><span class="p">}))</span>
+        <span class="k">return</span> <span class="n">nodes</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_additional_static_nodes</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+        <span class="c1"># These already have the namespace on them</span>
+        <span class="c1"># This allows us to inject values into the replayed subdag</span>
+        <span class="n">node_types</span> <span class="o">=</span> <span class="n">extract_all_known_types</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># TODO -- fix type derivation. Currently we don&#39;t use the specified type as we don&#39;t</span>
+            <span class="c1">#  really know what it should be...</span>
+            <span class="n">new_node_name</span> <span class="o">=</span> <span class="n">assign_namespace</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">get_dependency_type</span><span class="p">()</span> <span class="o">==</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">ParametrizedDependencySource</span><span class="o">.</span><span class="n">LITERAL</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">create_static_node</span><span class="p">(</span>
+                        <span class="n">typ</span><span class="o">=</span><span class="n">derive_type</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+                        <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                        <span class="n">namespace</span><span class="o">=</span><span class="p">(</span><span class="n">namespace</span><span class="p">,),</span>
+                        <span class="n">tags</span><span class="o">=</span><span class="n">NON_FINAL_TAGS</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">get_dependency_type</span><span class="p">()</span> <span class="o">==</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">ParametrizedDependencySource</span><span class="o">.</span><span class="n">UPSTREAM</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">new_node_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node_types</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">create_identity_node</span><span class="p">(</span>
+                        <span class="n">from_</span><span class="o">=</span><span class="n">value</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+                        <span class="n">typ</span><span class="o">=</span><span class="n">node_types</span><span class="p">[</span><span class="n">new_node_name</span><span class="p">],</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+                        <span class="n">namespace</span><span class="o">=</span><span class="p">(</span><span class="n">namespace</span><span class="p">,),</span>
+                        <span class="n">tags</span><span class="o">=</span><span class="n">NON_FINAL_TAGS</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">create_static_node</span><span class="p">(</span>
+                    <span class="n">typ</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+                    <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                    <span class="n">namespace</span><span class="o">=</span><span class="p">(</span><span class="n">namespace</span><span class="p">,),</span>
+                    <span class="n">tags</span><span class="o">=</span><span class="n">NON_FINAL_TAGS</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_namespace</span><span class="p">(</span>
+        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span>
+        <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Utility function to add a namespace to nodes.</span>
+
+<span class="sd">        :param nodes:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="k">if</span> <span class="n">inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">new_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_name_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># First pass we validate + collect names so we can alter dependencies</span>
+        <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="n">new_name</span> <span class="o">=</span> <span class="n">assign_namespace</span><span class="p">(</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)</span>
+            <span class="n">new_name_map</span><span class="p">[</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_name</span>
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">inputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># We create nodes for both namespace assignment and source assignment</span>
+            <span class="c1"># Why? Cause we need unique parameter names, and with source() some can share params</span>
+            <span class="n">new_name_map</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span> <span class="o">=</span> <span class="n">assign_namespace</span><span class="p">(</span><span class="n">dep</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">new_name_map</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span> <span class="o">=</span> <span class="n">assign_namespace</span><span class="p">(</span><span class="n">dep</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)</span>
+
+        <span class="c1"># Reassign sources</span>
+        <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="c1"># This is not perfect -- we might get strangeness if its dynamically generated</span>
+            <span class="c1"># that said, it should work</span>
+            <span class="n">is_async</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">iscoroutinefunction</span><span class="p">(</span><span class="n">node_</span><span class="o">.</span><span class="n">callable</span><span class="p">)</span>
+            <span class="n">new_name</span> <span class="o">=</span> <span class="n">new_name_map</span><span class="p">[</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">kwarg_mapping</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="p">(</span><span class="n">new_name_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">new_name_map</span> <span class="k">else</span> <span class="n">key</span><span class="p">):</span> <span class="n">key</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span>
+            <span class="p">}</span>
+
+            <span class="c1"># Map of argument in function to source, can&#39;t be the other way</span>
+            <span class="c1"># around as sources can potentially serve multiple destinations (with the source()) decorator</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">fn</span><span class="p">(</span>
+                <span class="n">_callabl</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">callable</span><span class="p">,</span>
+                <span class="n">_kwarg_mapping</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">kwarg_mapping</span><span class="p">),</span>  <span class="c1"># noqa: B006</span>
+                <span class="n">_new_name</span><span class="o">=</span><span class="n">new_name</span><span class="p">,</span>
+                <span class="n">_new_name_map</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">new_name_map</span><span class="p">),</span>  <span class="c1"># noqa: B006</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="n">new_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">_kwarg_mapping</span><span class="p">[</span><span class="n">kwarg</span><span class="p">]:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">kwarg</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+                <span class="k">return</span> <span class="n">_callabl</span><span class="p">(</span><span class="o">**</span><span class="n">new_kwargs</span><span class="p">)</span>
+
+            <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">async_fn</span><span class="p">(</span>
+                <span class="n">_callabl</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">callable</span><span class="p">,</span>
+                <span class="n">_kwarg_mapping</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">kwarg_mapping</span><span class="p">),</span>  <span class="c1"># noqa: B006</span>
+                <span class="n">_new_name</span><span class="o">=</span><span class="n">new_name</span><span class="p">,</span>
+                <span class="n">_new_name_map</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">new_name_map</span><span class="p">),</span>  <span class="c1"># noqa: B006</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="n">new_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">_kwarg_mapping</span><span class="p">[</span><span class="n">kwarg</span><span class="p">]:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">kwarg</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">_callabl</span><span class="p">(</span><span class="o">**</span><span class="n">new_kwargs</span><span class="p">)</span>
+
+            <span class="n">new_input_types</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">dep</span><span class="p">:</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="p">[</span><span class="n">original_dep</span><span class="p">]</span> <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">original_dep</span> <span class="ow">in</span> <span class="n">kwarg_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+            <span class="n">fn_to_use</span> <span class="o">=</span> <span class="n">async_fn</span> <span class="k">if</span> <span class="n">is_async</span> <span class="k">else</span> <span class="n">fn</span>
+
+            <span class="n">new_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">node_</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">input_types</span><span class="o">=</span><span class="n">new_input_types</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">new_name</span><span class="p">,</span> <span class="n">callabl</span><span class="o">=</span><span class="n">fn_to_use</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_nodes</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_final_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param fn:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">is_async</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">iscoroutinefunction</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>  <span class="c1"># determine if its async</span>
+        <span class="n">node_</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="o">.</span><span class="n">from_fn</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="n">namespaced_input_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">(</span><span class="n">assign_namespace</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_inputs</span> <span class="k">else</span> <span class="n">key</span><span class="p">):</span> <span class="n">key</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span>
+        <span class="p">}</span>
+
+        <span class="n">new_input_types</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">(</span><span class="n">assign_namespace</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_inputs</span> <span class="k">else</span> <span class="n">key</span><span class="p">):</span> <span class="n">value</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">new_function</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">kwargs_without_namespace</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">namespaced_input_map</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+            <span class="c1"># Have to translate it back to use the kwargs the fn is expecting</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs_without_namespace</span><span class="p">)</span>
+
+        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">async_function</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">new_function</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">fn_to_use</span> <span class="o">=</span> <span class="n">async_function</span> <span class="k">if</span> <span class="n">is_async</span> <span class="k">else</span> <span class="n">new_function</span>
+
+        <span class="k">return</span> <span class="n">node_</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">input_types</span><span class="o">=</span><span class="n">new_input_types</span><span class="p">,</span> <span class="n">callabl</span><span class="o">=</span><span class="n">fn_to_use</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_derive_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Utility function to derive a namespace from a function.</span>
+
+<span class="sd">        :param fn: Function we&#39;re decorating.</span>
+<span class="sd">        :return: The function we&#39;re outputting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_derive_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Utility function to derive a name from a function.</span>
+<span class="sd">        The user will be able to likely pass this in as an override, but</span>
+<span class="sd">        we have not exposed it yet.</span>
+
+<span class="sd">        :param fn: Function we&#39;re decorating.</span>
+<span class="sd">        :return: The function we&#39;re outputting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_node_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_node_name</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">configuration</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+        <span class="c1"># Resolve all nodes from passed in functions</span>
+        <span class="c1"># if self.config has configuration() or value() in it, we need to resolve it</span>
+        <span class="n">resolved_config</span> <span class="o">=</span> <span class="n">_resolve_subdag_configuration</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="c1"># resolved_config = dict(configuration, **self.config)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_nodes</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">resolved_config</span><span class="p">,</span> <span class="n">subdag_functions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subdag_functions</span><span class="p">)</span>
+        <span class="c1"># Derive the namespace under which all these nodes will live</span>
+        <span class="n">namespace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_derive_namespace</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="n">final_node_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_derive_name</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="c1"># Rename them all to have the right namespace</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_namespace</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="c1"># Create any static input nodes we need to translate</span>
+        <span class="n">nodes</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_additional_static_nodes</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)</span>
+        <span class="c1"># Add the final node that does the translation</span>
+        <span class="n">nodes</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">add_final_node</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">final_node_name</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">nodes</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_parameterization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">invalid_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">ParametrizedDependency</span><span class="p">):</span>
+                <span class="n">invalid_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">invalid_values</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Parameterization using the following values is not permitted -- &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;must be either source() or value(): </span><span class="si">{</span><span class="n">invalid_values</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates everything we can before we create the subdag.</span>
+
+<span class="sd">        :param fn: Function that this decorates</span>
+<span class="sd">        :raises InvalidDecoratorException: if this is not a valid decorator</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_parameterization</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">required_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Currently we do not filter for subdag as we do not *statically* know what configuration</span>
+<span class="sd">        is required. This is because we need to parse the function so that we can figure it out,</span>
+<span class="sd">        and that is not available at the time that we call required_config. We need to think about</span>
+<span class="sd">        the best way to do this, but its likely that we&#39;ll want to allow required_config to consume</span>
+<span class="sd">        the function itself, and pass it in when its called with that.</span>
+
+<span class="sd">        That said, we don&#39;t have sufficient justification to do that yet, so we&#39;re just going to</span>
+<span class="sd">        return None for now, meaning that it has access to all configuration variables.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SubdagParams</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="n">NotRequired</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ParametrizedDependency</span><span class="p">]]</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">NotRequired</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="n">external_inputs</span><span class="p">:</span> <span class="n">NotRequired</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+
+
+<div class="viewcode-block" id="parameterized_subdag">
+<a class="viewcode-back" href="../../../../reference/decorators/parameterize_subdag/#hamilton.function_modifiers.parameterized_subdag">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">parameterized_subdag</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeCreator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;parameterized subdag is when you want to create multiple subdags at one time.</span>
+<span class="sd">    Why might you want to do this?</span>
+
+<span class="sd">    1. You have multiple data sets you want to run the same feature engineering pipeline on.</span>
+<span class="sd">    2. You want to run some sort of optimization routine with a variety of results</span>
+<span class="sd">    3. You want to run some sort of pipeline over slightly different configuration (E.G. region/business line)</span>
+
+<span class="sd">    Note that this really is just syntactic sugar for creating multiple subdags, just as `@parameterize</span>
+<span class="sd">    is syntactic sugar for creating multiple nodes from a function. That said, it is common that you</span>
+<span class="sd">    won&#39;t know what you want until compile time (E.G. when you have the config available), so this</span>
+<span class="sd">    decorator along with the `@resolve` decorator is a good way to make that feasible. Note that</span>
+<span class="sd">    we are getting into *advanced* Hamilton here -- we don&#39;t recommend starting with this. In fact,</span>
+<span class="sd">    we generally recommend repeating subdags multiple times if you don&#39;t have too many. That said,</span>
+<span class="sd">    that can get cumbersome if you have a lot, so this decorator is a good way to help with that.</span>
+
+<span class="sd">    Let&#39;s take a look at an example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        @parameterized_subdag(</span>
+<span class="sd">            feature_modules,</span>
+<span class="sd">            from_datasource_1={&quot;inputs&quot; : {&quot;data&quot; : value(&quot;datasource_1.csv&quot;)}},</span>
+<span class="sd">            from_datasource_2={&quot;inputs&quot; : {&quot;data&quot; : value(&quot;datasource_2.csv&quot;)}},</span>
+<span class="sd">            from_datasource_3={</span>
+<span class="sd">                &quot;inputs&quot; : {&quot;data&quot; : value(&quot;datasource_3.csv&quot;)},</span>
+<span class="sd">                &quot;config&quot; : {&quot;filter&quot; : &quot;only_even_client_ids&quot;}</span>
+<span class="sd">            }</span>
+<span class="sd">        )</span>
+<span class="sd">        def feature_engineering(feature_df: pd.DataFrame) -&gt; pd.DataFrame:</span>
+<span class="sd">            return feature_df</span>
+
+<span class="sd">    This is (obviously) contrived, but what it does is create three subdags, each with a different</span>
+<span class="sd">    data source. The third one also applies a configuration to that subdags. Note that we can also</span>
+<span class="sd">    pass in inputs/config to the decorator itself, which will be applied to all subdags.</span>
+
+<span class="sd">    This is effectively the same as the example above.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        @parameterized_subdag(</span>
+<span class="sd">            feature_modules,</span>
+<span class="sd">            inputs={&quot;data&quot; : value(&quot;datasource_1.csv&quot;)},</span>
+<span class="sd">            from_datasource_1={},</span>
+<span class="sd">            from_datasource_2={</span>
+<span class="sd">                    &quot;inputs&quot; : {&quot;data&quot; : value(&quot;datasource_2.csv&quot;)}</span>
+<span class="sd">            },</span>
+<span class="sd">            from_datasource_3={</span>
+<span class="sd">                    &quot;inputs&quot; : {&quot;data&quot; : value(&quot;datasource_3.csv&quot;)},</span>
+<span class="sd">                    &quot;config&quot; : {&quot;filter&quot; : &quot;only_even_client_ids&quot;},</span>
+<span class="sd">            }</span>
+<span class="sd">        )</span>
+
+<span class="sd">    Again, think about whether this feature is really the one you want -- often times, verbose,</span>
+<span class="sd">    static DAGs are far more readable than very concise, highly parameterized DAGs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="parameterized_subdag.__init__">
+<a class="viewcode-back" href="../../../../reference/decorators/parameterize_subdag/#hamilton.function_modifiers.parameterized_subdag.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">load_from</span><span class="p">:</span> <span class="n">ModuleType</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span>
+            <span class="nb">str</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">ParametrizedDependency</span> <span class="o">|</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">LiteralDependency</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">external_inputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">parameterization</span><span class="p">:</span> <span class="n">SubdagParams</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a parameterized_subdag decorator.</span>
+
+<span class="sd">        :param load_from: Modules to load from</span>
+<span class="sd">        :param inputs: Inputs for each subdag generated by the decorated function</span>
+<span class="sd">        :param config: Config for each subdag generated by the decorated function</span>
+<span class="sd">        :param external_inputs: External inputs to all parameterized subdags. Note that</span>
+<span class="sd">            if you pass in any external inputs from local subdags, it overrides this (does not merge).</span>
+<span class="sd">        :param parameterization: Parameterizations for each subdag generated.</span>
+<span class="sd">            Note that this *overrides* any inputs/config passed to the decorator itself.</span>
+
+<span class="sd">            Furthermore, note the following:</span>
+
+<span class="sd">            1. The parameterizations passed to the constructor are \\*\\*kwargs, so you are not</span>
+<span class="sd">            allowed to name these `load_from`, `inputs`, or `config`. That&#39;s a good thing, as these</span>
+<span class="sd">            are not good names for variables anyway.</span>
+
+<span class="sd">            2. Any empty items (not included) will default to an empty dict (or an empty list in</span>
+<span class="sd">            the case of parameterization)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_from</span> <span class="o">=</span> <span class="n">load_from</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="k">if</span> <span class="n">inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameterization</span> <span class="o">=</span> <span class="n">parameterization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">external_inputs</span> <span class="o">=</span> <span class="n">external_inputs</span> <span class="k">if</span> <span class="n">external_inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_gather_subdag_generators</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">subdag</span><span class="p">]:</span>
+        <span class="n">subdag_generators</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">parameterization</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameterization</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">subdag_generators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">subdag</span><span class="p">(</span>
+                    <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">load_from</span><span class="p">,</span>
+                    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="o">**</span><span class="n">parameterization</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;inputs&quot;</span><span class="p">,</span> <span class="p">{})},</span>
+                    <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">parameterization</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="p">{})},</span>
+                    <span class="n">external_inputs</span><span class="o">=</span><span class="n">parameterization</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;external_inputs&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_inputs</span><span class="p">),</span>
+                    <span class="n">namespace</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+                    <span class="n">final_node_name</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">subdag_generators</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+        <span class="n">generated_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">subdag_generator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gather_subdag_generators</span><span class="p">():</span>
+            <span class="n">generated_nodes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">subdag_generator</span><span class="o">.</span><span class="n">generate_nodes</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">config</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">generated_nodes</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">subdag_generator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gather_subdag_generators</span><span class="p">():</span>
+            <span class="n">subdag_generator</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">required_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;See note for subdag.required_config -- this is the same pattern.</span>
+
+<span class="sd">        :return: Any required config items.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">prune_nodes</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="n">select</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prunes the nodes to only include those upstream from the select columns.</span>
+<span class="sd">    Conducts a depth-first search using the nodes `input_types` field.</span>
+
+<span class="sd">    If select is None, we just assume all nodes should be included.</span>
+
+<span class="sd">    :param nodes: Full set of nodes</span>
+<span class="sd">    :param select: Columns to select</span>
+<span class="sd">    :return:  Pruned set of nodes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">select</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">nodes</span>
+
+    <span class="n">node_name_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">node_</span> <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
+    <span class="n">seen_nodes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">select</span><span class="p">)</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="nb">list</span><span class="p">({</span><span class="n">node_name_map</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">select</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">node_name_map</span><span class="p">})</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">node_</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dep</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen_nodes</span> <span class="ow">and</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">node_name_map</span><span class="p">:</span>
+                <span class="n">dep_node</span> <span class="o">=</span> <span class="n">node_name_map</span><span class="p">[</span><span class="n">dep</span><span class="p">]</span>
+                <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dep_node</span><span class="p">)</span>
+                <span class="n">seen_nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dep</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">select</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">([</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">output</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;At least one of the selected nodes is not not in the DAG. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;You selected: </span><span class="si">{</span><span class="n">select</span><span class="si">}</span><span class="s2">, but we only found nodes: </span><span class="si">{</span><span class="n">nodes</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">output</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_default_inject_parameter</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">target_dataframe</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">target_dataframe</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inject_parameter</span> <span class="o">=</span> <span class="n">target_dataframe</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># If we don&#39;t have a specified dataframe we assume it&#39;s the first argument</span>
+        <span class="n">function_parameters</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">function_parameters</span><span class="p">:</span>
+            <span class="n">inject_parameter</span> <span class="o">=</span> <span class="n">function_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Function </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> has no parameters, but was &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;decorated with with_columns. with_columns requires the first &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;parameter to be a dataframe or using the on_input argument.&quot;</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">inject_parameter</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">with_columns_base</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeInjector</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Factory for with_columns operation on a dataframe. This is used when you want to extract some</span>
+<span class="sd">    columns out of the dataframe, perform operations on them and then append to the original dataframe.</span>
+
+<span class="sd">    This is an internal class that is meant to be extended by each individual dataframe library implementing</span>
+<span class="sd">    the following abstract methods:</span>
+
+<span class="sd">    - get_initial_nodes</span>
+<span class="sd">    - get_subdag_nodes</span>
+<span class="sd">    - chain_subdag_nodes</span>
+<span class="sd">    - validate</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO: if we rename the column nodes into something smarter this can be avoided and</span>
+    <span class="c1"># can also modify columns in place</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">contains_duplicates</span><span class="p">(</span><span class="n">nodes_</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensures that we don&#39;t run into name clashing of columns and group operations.</span>
+
+<span class="sd">        In the case when we extract columns for the user, because ``columns_to_pass`` was used, we want</span>
+<span class="sd">        to safeguard against nameclashing with functions that are passed into ``with_columns`` - i.e.</span>
+<span class="sd">        there are no functions that have the same name as the columns. This effectively means that</span>
+<span class="sd">        using ``columns_to_pass`` will only append new columns to the dataframe and for changing</span>
+<span class="sd">        existing columns ``pass_dataframe_as`` or ``on_input`` needs to be used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node_counter</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">nodes_</span><span class="p">:</span>
+            <span class="n">node_counter</span><span class="p">[</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">node_counter</span><span class="p">[</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_dataframe</span><span class="p">(</span>
+        <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">inject_parameter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]],</span> <span class="n">required_type</span><span class="p">:</span> <span class="nb">type</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">input_types</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inject_parameter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not have the parameter </span><span class="si">{</span><span class="n">inject_parameter</span><span class="si">}</span><span class="s2"> as a dependency. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;@with_columns requires the parameter names to match the function parameters. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;If you wish do not wish to use the first argument, please use ``pass_dataframe_as`` or ``on_input`` option. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;It might not be compatible with some other decorators.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_types</span><span class="p">[</span><span class="n">inject_parameter</span><span class="p">],</span> <span class="n">required_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
+                <span class="s2">&quot;The selected dataframe parameter is not the correct dataframe type. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;You selected a parameter of type </span><span class="si">{</span><span class="n">input_types</span><span class="p">[</span><span class="n">inject_parameter</span><span class="p">]</span><span class="si">}</span><span class="s2">, but we expect to get </span><span class="si">{</span><span class="n">required_type</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">load_from</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">|</span> <span class="n">ModuleType</span><span class="p">,</span>
+        <span class="n">columns_to_pass</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">pass_dataframe_as</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">on_input</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">select</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">config_required</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dataframe_type</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates a ``@with_columns`` decorator.</span>
+
+<span class="sd">        :param load_from: The functions or modules that will be used to generate the group of map operations.</span>
+<span class="sd">        :param columns_to_pass: The initial schema of the dataframe. This is used to determine which</span>
+<span class="sd">            upstream inputs should be taken from the dataframe, and which shouldn&#39;t. Note that, if this is</span>
+<span class="sd">            left empty (and external_inputs is as well), we will assume that all dependencies come</span>
+<span class="sd">            from the dataframe. This cannot be used in conjunction with pass_dataframe_as.</span>
+<span class="sd">        :param pass_dataframe_as: The name of the dataframe that we&#39;re modifying, as known to the subdag.</span>
+<span class="sd">            If you pass this in, you are responsible for extracting columns out. If not provided, you have</span>
+<span class="sd">            to pass columns_to_pass in, and we will extract the columns out for you.</span>
+<span class="sd">        :param on_input: the dataframe parameter that we are applying with_columns on. By default we</span>
+<span class="sd">            will assume the first parameter is the corresponding dataframe.</span>
+<span class="sd">        :param select: The end nodes that represent columns to be appended to the original dataframe</span>
+<span class="sd">            via with_columns. Existing columns will be overridden.</span>
+<span class="sd">        :param namespace: The namespace of the nodes, so they don&#39;t clash with the global namespace</span>
+<span class="sd">            and so this can be reused. If its left out, there will be no namespace (in which case you&#39;ll want</span>
+<span class="sd">            to be careful about repeating it/reusing the nodes in other parts of the DAG.)</span>
+<span class="sd">        :param config_required: the list of config keys that are required to resolve any functions. Pass in None\</span>
+<span class="sd">            if you want the functions/modules to have access to all possible config.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">subdag_functions</span> <span class="o">=</span> <span class="n">subdag</span><span class="o">.</span><span class="n">collect_functions</span><span class="p">(</span><span class="n">load_from</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="n">select</span>
+
+        <span class="c1"># This is here to restrict to using either pass_dataframe_as or on_input or columns_to_pass</span>
+        <span class="c1"># TODO: decouple columns_to_pass, pass_dataframe_as and on_input</span>
+        <span class="c1"># For spark, we always perform with_columns on first parameter and use pass_dataframe_as;</span>
+        <span class="c1"># for pandas/polars, we can select which dataframe with on_input, but columns_to_pass, will always only work on first parameter</span>
+        <span class="c1"># We can decouple it so that on_input selects the target dataframe parameter that will inject into the next node</span>
+        <span class="c1"># pass_dataframe_as selects the original dataframe we want to extract columns from</span>
+        <span class="c1"># columns_to_pass is optinal helper that can be toggled on/off so no need to raise this error.</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">pass_dataframe_as</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">columns_to_pass</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">on_input</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="o">==</span> <span class="mi">1</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;You must specify only one of ``columns_to_pass``, ``pass_dataframe_as``, and ``on_input``. &quot;</span>
+                <span class="s2">&quot;This is because specifying ``pass_dataframe_as`` or ``on_input`` injects into &quot;</span>
+                <span class="s2">&quot;the set of columns, allowing you to perform your own extraction&quot;</span>
+                <span class="s2">&quot;from the dataframe. We then execute all columns in the subdag&quot;</span>
+                <span class="s2">&quot;in order, passing in that initial dataframe. If you want&quot;</span>
+                <span class="s2">&quot;to reference columns in your code, you&#39;ll have to specify &quot;</span>
+                <span class="s2">&quot;the set of initial columns, and allow the subdag decorator &quot;</span>
+                <span class="s2">&quot;to inject the dataframe through. The initial columns tell &quot;</span>
+                <span class="s2">&quot;us which parameters to take from that dataframe, so we can&quot;</span>
+                <span class="s2">&quot;feed the right data into the right columns.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_schema</span> <span class="o">=</span> <span class="n">columns_to_pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataframe_subdag_param</span> <span class="o">=</span> <span class="n">pass_dataframe_as</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_dataframe</span> <span class="o">=</span> <span class="n">on_input</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="o">=</span> <span class="n">namespace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_required</span> <span class="o">=</span> <span class="n">config_required</span>
+
+        <span class="k">if</span> <span class="n">dataframe_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
+                <span class="s2">&quot;Please provide the dataframe type for this specific library.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataframe_type</span> <span class="o">=</span> <span class="n">dataframe_type</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">required_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_required</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_initial_nodes</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Preparation stage where columns get extracted into nodes. In case `pass_dataframe_as` or `on_input` is</span>
+<span class="sd">        used, this should return an empty list (no column nodes) since the users will extract it</span>
+<span class="sd">        themselves.</span>
+
+<span class="sd">        :param fn: the function we are decorating. By using the inspect library you can get information.</span>
+<span class="sd">            about what arguments it has / find out the dataframe argument.</span>
+<span class="sd">        :param params: Dictionary of all the type names one wants to inject.</span>
+<span class="sd">        :return: name of the dataframe parameter and list of nodes representing the extracted columns (can be empty).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_subdag_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates subdag from the passed in module / functions.</span>
+
+<span class="sd">        :param config: Configuration with which the DAG was constructed.</span>
+<span class="sd">        :return: the subdag as a list of nodes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">chain_subdag_nodes</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">inject_parameter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">generated_nodes</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Combines the origanl dataframe with selected columns. This should produce a</span>
+<span class="sd">        dataframe output that is injected into the decorated function with new columns</span>
+<span class="sd">        appended and existing columns overriden.</span>
+
+<span class="sd">        :param inject_parameter: the name of the original dataframe that.</span>
+<span class="sd">        :return: the new dataframe with the columns appended / overwritten.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">inject_nodes</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]],</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="n">namespace</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span>
+
+        <span class="n">inject_parameter</span><span class="p">,</span> <span class="n">initial_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_initial_nodes</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">subdag_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_subdag_nodes</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">generated_nodes</span> <span class="o">=</span> <span class="n">initial_nodes</span> <span class="o">+</span> <span class="n">subdag_nodes</span>
+        <span class="c1"># TODO: for now we restrict that if user wants to change columns that already exist, he needs to</span>
+        <span class="c1"># pass the dataframe and extract them himself. If we add namespace to initial nodes and rewire the</span>
+        <span class="c1"># initial node names with the ongoing ones that have a column argument, we can also allow in place</span>
+        <span class="c1"># changes when using columns_to_pass</span>
+        <span class="k">if</span> <span class="n">with_columns_base</span><span class="o">.</span><span class="n">contains_duplicates</span><span class="p">(</span><span class="n">generated_nodes</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;You can only specify columns once. You used `columns_to_pass` and we &quot;</span>
+                <span class="s2">&quot;extract the columns for you. In this case they cannot be overwritten -- only new columns get &quot;</span>
+                <span class="s2">&quot;appended. If you want to modify in-place columns pass in a dataframe and &quot;</span>
+                <span class="s2">&quot;extract + modify the columns and afterwards select them.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">pruned_nodes</span> <span class="o">=</span> <span class="n">prune_nodes</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">generated_nodes</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pruned_nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;No nodes found upstream from select columns: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="si">}</span><span class="s2"> for function: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Node combining columns and dataframe might need info about prior nodes</span>
+        <span class="n">output_nodes</span><span class="p">,</span> <span class="n">current_param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chain_subdag_nodes</span><span class="p">(</span>
+            <span class="n">fn</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span> <span class="n">inject_parameter</span><span class="o">=</span><span class="n">inject_parameter</span><span class="p">,</span> <span class="n">generated_nodes</span><span class="o">=</span><span class="n">pruned_nodes</span>
+        <span class="p">)</span>
+        <span class="n">output_nodes</span> <span class="o">=</span> <span class="n">subdag</span><span class="o">.</span><span class="n">add_namespace</span><span class="p">(</span><span class="n">output_nodes</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output_nodes</span><span class="p">,</span> <span class="p">{</span><span class="n">inject_parameter</span><span class="p">:</span> <span class="n">assign_namespace</span><span class="p">(</span><span class="n">current_param</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)}</span>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; The Apache Software Foundation, Licensed under the Apache License, Version 2.0.
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link " href="https://incubator.apache.org/" aria-label="Apache Stuff">
+<div class="apache-footer">
+    <img width="200" src="/_static/apache-incubator-logo.svg" alt="Apache Incubator Logo" class="apache-incubator-logo">
+    <div class="apache-notice">
+        <p>Apache Hamilton is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.</p>
+    </div>
+    <div class="apache-copyright">
+        <p>Apache, the names of Apache projects, and the feather logo are either registered trademarks or trademarks of the Apache Software Foundation in the United States and/or other countries.</p>
+    </div>
+</div>
+</a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../../_static/documentation_options.js?v=187304be"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}`;
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        all_mermaids.forEach((el) => {
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+        await mermaid.run();
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+const load = async () => {
+    initStyles();
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...JSON.parse(
+                    `{"startOnLoad": false}`
+                ),
+                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...JSON.parse(
+        `{"startOnLoad": false}`
+    ),
+    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    </body>
+</html>

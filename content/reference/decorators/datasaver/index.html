@@ -529,7 +529,7 @@ s=d.getElementsByTagName('script')[0];
 <p><strong>Reference Documentation</strong></p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.function_modifiers.datasaver">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.function_modifiers.</span></span><span class="sig-name descname"><span class="pre">datasaver</span></span><a class="headerlink" href="#hamilton.function_modifiers.datasaver" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.function_modifiers.</span></span><span class="sig-name descname"><span class="pre">datasaver</span></span><a class="reference internal" href="../../../_modules/hamilton/function_modifiers/adapters/#datasaver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.function_modifiers.datasaver" title="Link to this definition">¶</a></dt>
 <dd><p>Decorator for specifying a data saving function within the Hamilton framework. This decorator
 is used to annotate functions that save data, allowing them to be treated specially in the Hamilton
 DAG (Directed Acyclic Graph). The decorated function should return a dictionary containing metadata
@@ -569,7 +569,7 @@ any other purpose that requires information about the data saving process as it 
 out by the Hamilton Tracker for the Hamilton UI or other adapters.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.function_modifiers.datasaver.generate_nodes">
-<span class="sig-name descname"><span class="pre">generate_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hamilton.function_modifiers.datasaver.generate_nodes" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">generate_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/hamilton/function_modifiers/adapters/#datasaver.generate_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.function_modifiers.datasaver.generate_nodes" title="Link to this definition">¶</a></dt>
 <dd><p>Generates same node but all this does is add tags to it.
 :param fn:
 :param config:
@@ -578,7 +578,7 @@ out by the Hamilton Tracker for the Hamilton UI or other adapters.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.function_modifiers.datasaver.validate">
-<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hamilton.function_modifiers.datasaver.validate" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hamilton/function_modifiers/adapters/#datasaver.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.function_modifiers.datasaver.validate" title="Link to this definition">¶</a></dt>
 <dd><p>Validates that the function output is a dict type.</p>
 </dd></dl>
 

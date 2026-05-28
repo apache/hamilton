@@ -528,7 +528,7 @@ s=d.getElementsByTagName('script')[0];
 <h1>plugins.h_pyarrow.PyarrowTableResult<a class="headerlink" href="#plugins-h-pyarrow-pyarrowtableresult" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.plugins.h_pyarrow.PyarrowTableResult">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_pyarrow.</span></span><span class="sig-name descname"><span class="pre">PyarrowTableResult</span></span><a class="headerlink" href="#hamilton.plugins.h_pyarrow.PyarrowTableResult" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_pyarrow.</span></span><span class="sig-name descname"><span class="pre">PyarrowTableResult</span></span><a class="reference internal" href="../../../_modules/hamilton/plugins/h_pyarrow/#PyarrowTableResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.plugins.h_pyarrow.PyarrowTableResult" title="Link to this definition">¶</a></dt>
 <dd><p>Add this result builder to a materializer’s <cite>combine</cite> statement to convert your dataframe
 object to a pyarrow representation and make it compatible with pyarrow DataSavers.</p>
 <p>It implicitly support input_type == Any, but it expects dataframe objects implementing
@@ -542,7 +542,7 @@ for example:
 - duckdb results</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.plugins.h_pyarrow.PyarrowTableResult.build_result">
-<span class="sig-name descname"><span class="pre">build_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#hamilton.plugins.h_pyarrow.PyarrowTableResult.build_result" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">build_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../../_modules/hamilton/plugins/h_pyarrow/#PyarrowTableResult.build_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.plugins.h_pyarrow.PyarrowTableResult.build_result" title="Link to this definition">¶</a></dt>
 <dd><p>This function converts objects implementing the <cite>__dataframe__</cite> protocol to
 a pyarrow table. It doesn’t support receiving multiple outputs because it can’t
 handle any joining logic.</p>
@@ -571,7 +571,7 @@ This is optional for backwards compatibility, but is recommended.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.plugins.h_pyarrow.PyarrowTableResult.output_type">
-<span class="sig-name descname"><span class="pre">output_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">type</span></span></span><a class="headerlink" href="#hamilton.plugins.h_pyarrow.PyarrowTableResult.output_type" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">output_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">type</span></span></span><a class="reference internal" href="../../../_modules/hamilton/plugins/h_pyarrow/#PyarrowTableResult.output_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.plugins.h_pyarrow.PyarrowTableResult.output_type" title="Link to this definition">¶</a></dt>
 <dd><p>Returns the output type of this result builder
 :return: the type that this creates</p>
 </dd></dl>
