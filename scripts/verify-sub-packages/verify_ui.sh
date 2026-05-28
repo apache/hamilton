@@ -116,8 +116,13 @@ build_dir="/tmp/build-ui-$$"
 mkdir -p "$build_dir"
 tar xzf "$ARTIFACTS_DIR/$SRC_TAR" -C "$build_dir"
 src_dir=$(ls -d ${build_dir}/*/ | head -1)
+
+# Note: The UI source tarball does not include compiled frontend assets.
+# The release script builds the frontend (npm run build) before flit build.
+# Here we verify the backend builds correctly; the wheel from SVN includes
+# the pre-compiled frontend and is what's tested in step 6.
 if (cd "$src_dir" && flit build --no-use-vcs) 2>&1 | grep -q "Built wheel"; then
-    echo "  ✓ Built from source successfully"
+    echo "  ✓ Built from source successfully (backend only, frontend is pre-compiled in wheel)"
 else
     echo "  ✗ Build from source failed"
     rm -rf "$build_dir"
