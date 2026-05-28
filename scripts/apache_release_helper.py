@@ -15,6 +15,14 @@
 # specific language governing permissions and limitations
 # under the License.
 
+# /// script
+# dependencies = [
+#   "build",
+#   "flit",
+#   "twine",
+# ]
+# ///
+
 import argparse
 import glob
 import hashlib
