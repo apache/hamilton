@@ -122,7 +122,7 @@ src_dir=$(ls -d ${build_dir}/*/ | head -1)
 # Here we verify the backend builds correctly; the wheel from SVN includes
 # the pre-compiled frontend and is what's tested in step 6.
 if (cd "$src_dir" && uvx flit build --no-use-vcs) 2>&1 | grep -q "Built wheel"; then
-    echo "  ✓ Built from source successfully (backend only, frontend is pre-compiled in wheel)"
+    echo "  ✓ Built from source successfully (backend only)"
 else
     echo "  ✗ Build from source failed"
     rm -rf "$build_dir"
@@ -172,10 +172,23 @@ fi
 
 # Frontend check
 python -c "
-import urllib.request
-resp = urllib.request.urlopen('http://localhost:${PORT}/')
-html = resp.read().decode()
-assert '<div id=\"root\"' in html or '<html' in html.lower(), 'No HTML served'
+import importlib.util, sys, urllib.request, urllib.error
+from pathlib import Path
+
+spec = importlib.util.find_spec('hamilton_ui')
+pkg_dir = Path(spec.origin).parent
+index_html = pkg_dir / 'build' / 'index.html'
+if not index_html.exists():
+    print(f'  ✗ Frontend not bundled in wheel (missing {index_html})', file=sys.stderr)
+    sys.exit(1)
+
+try:
+    resp = urllib.request.urlopen('http://localhost:${PORT}/')
+    html = resp.read().decode()
+    assert '<div id=\"root\"' in html or '<html' in html.lower(), 'No HTML served'
+except urllib.error.HTTPError as e:
+    print(f'  ✗ GET / returned HTTP {e.code} — server error despite bundled frontend', file=sys.stderr)
+    sys.exit(1)
 "
 echo "  ✓ Frontend serves HTML"
 
