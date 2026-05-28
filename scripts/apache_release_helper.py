@@ -320,6 +320,34 @@ def create_release_artifacts(package_config: dict, version) -> list[str]:
         if os.path.exists("dist"):
             shutil.rmtree("dist")
 
+        # For the UI package, build the frontend before packaging.
+        if package_name == "apache-hamilton-ui":
+            print("Building UI frontend (npm install + npm run build)...")
+            frontend_dir = os.path.join(original_dir, "ui", "frontend")
+            build_target = os.path.join("hamilton_ui", "build")
+            try:
+                subprocess.run(
+                    ["npm", "install", "--prefix", frontend_dir],
+                    check=True,
+                )
+                subprocess.run(
+                    ["npm", "run", "build", "--prefix", frontend_dir],
+                    check=True,
+                )
+                # Copy built assets to hamilton_ui/build/
+                if os.path.exists(build_target):
+                    shutil.rmtree(build_target)
+                # Vite outputs to frontend/dist/, CRA outputs to frontend/build/
+                frontend_build = os.path.join(frontend_dir, "dist")
+                if not os.path.exists(frontend_build):
+                    frontend_build = os.path.join(frontend_dir, "build")
+                shutil.copytree(frontend_build, build_target)
+                print(f"Frontend built and copied to {build_target}")
+            except (subprocess.CalledProcessError, FileNotFoundError) as e:
+                print(f"Error building frontend: {e}")
+                print("Ensure Node.js and npm are installed.")
+                return None
+
         # Use flit build to create the source distribution.
         try:
             subprocess.run(
