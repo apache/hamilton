@@ -284,6 +284,11 @@ exclude = ["*tests*"]
 [tool.setuptools.package-data]
 hamilton = ["*.json", "*.md", "*.txt"]
 
+[tool.uv.sources]
+apache-hamilton-lsp = { path = "dev_tools/language_server", editable = true }
+apache-hamilton-sdk = { path = "ui/sdk", editable = true }
+apache-hamilton-ui = { path = "ui/backend", editable = true }
+
 [tool.flit.module]
 name = "hamilton"
 
