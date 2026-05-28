@@ -95,7 +95,7 @@ cp -r dist/ ../backend/hamilton_ui/build/
 
 # Now build the wheel
 cd ../backend
-flit build --no-use-vcs
+uvx flit build --no-use-vcs
 ```
 
 The release script (`scripts/apache_release_helper.py --package ui`) handles

@@ -121,7 +121,7 @@ src_dir=$(ls -d ${build_dir}/*/ | head -1)
 # The release script builds the frontend (npm run build) before flit build.
 # Here we verify the backend builds correctly; the wheel from SVN includes
 # the pre-compiled frontend and is what's tested in step 6.
-if (cd "$src_dir" && flit build --no-use-vcs) 2>&1 | grep -q "Built wheel"; then
+if (cd "$src_dir" && uvx flit build --no-use-vcs) 2>&1 | grep -q "Built wheel"; then
     echo "  ✓ Built from source successfully (backend only, frontend is pre-compiled in wheel)"
 else
     echo "  ✗ Build from source failed"
