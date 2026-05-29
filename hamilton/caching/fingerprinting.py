@@ -243,11 +243,33 @@ def hash_set(obj, *args, depth: int = 0, **kwargs) -> str:
     return _compact_hash(hash_object.digest())
 
 
+def _pandas_schema_repr(obj) -> str:
+    """Stringify the schema-defining metadata of a pandas DataFrame/Series/Index.
+
+    Used to ensure objects with the same row values but different column
+    names or dtypes hash differently.
+    """
+    import pandas as pd
+
+    if isinstance(obj, pd.DataFrame):
+        return "DataFrame" + repr(
+            [(str(c), str(t)) for c, t in zip(obj.columns, obj.dtypes)]
+        )
+    if isinstance(obj, pd.Series):
+        return f"Series(name={obj.name!r}, dtype={obj.dtype})"
+    return f"Index(name={getattr(obj, 'name', None)!r}, dtype={obj.dtype})"
+
+
 @hash_value.register(h_databackends.AbstractPandasDataFrame)
 @hash_value.register(h_databackends.AbstractPandasColumn)
 def hash_pandas_obj(obj, *args, depth: int = 0, **kwargs) -> str:
     """Convert a pandas dataframe, series, or index to
     a dictionary of {index: row_hash} then hash it.
+
+    The schema (column names + dtypes for a DataFrame; name + dtype for a
+    Series or Index) is included alongside the row-value hashes so that
+    objects with identical row values but different schemas produce
+    different fingerprints.
 
     Given the hashing for mappings, the physical ordering or rows doesn't matter.
     For example, if the index is a date, the hash will represent the {date: row_hash},
@@ -256,16 +278,22 @@ def hash_pandas_obj(obj, *args, depth: int = 0, **kwargs) -> str:
     from pandas.util import hash_pandas_object
 
     hash_per_row = hash_pandas_object(obj)
-    return hash_mapping(hash_per_row.to_dict(), ignore_order=False, depth=depth + 1)
+    rows_hash = hash_mapping(hash_per_row.to_dict(), ignore_order=False, depth=depth + 1)
+    return hash_sequence([_pandas_schema_repr(obj), rows_hash], depth=depth + 1)
 
 
 @hash_value.register(h_databackends.AbstractPolarsDataFrame)
 def hash_polars_dataframe(obj, *args, depth: int = 0, **kwargs) -> str:
-    """Convert a polars dataframe, series, or index to
-    a list of hashes then hash it.
+    """Convert a polars dataframe to a list of row hashes then hash it.
+
+    The schema (column names + dtypes) is included alongside the row-value
+    hashes so that DataFrames with identical row values but different
+    schemas (e.g. a renamed column, or a column whose dtype changed)
+    produce different fingerprints.
     """
     hash_per_row = obj.hash_rows()
-    return hash_sequence(hash_per_row.to_list(), depth=depth + 1)
+    schema_repr = str(obj.schema)
+    return hash_sequence([schema_repr, *hash_per_row.to_list()], depth=depth + 1)
 
 
 @hash_value.register(h_databackends.AbstractPolarsColumn)
@@ -277,11 +305,17 @@ def hash_polars_column(obj, *args, depth: int = 0, **kwargs) -> str:
 
 @hash_value.register(h_databackends.AbstractNumpyArray)
 def hash_numpy_array(obj, *args, depth: int = 0, **kwargs) -> str:
-    """Get the bytes representation of the array raw data and hash it.
+    """Hash a numpy array, including its shape and dtype alongside its bytes.
 
-    Might not be ideal because different higher-level numpy objects could have
-    the same underlying array representation (e.g., masked arrays).
-    Unsure, but it's an area to investigate.
+    The previous implementation hashed ``obj.tobytes()`` alone, which
+    discards shape and dtype. Two arrays with the same underlying byte
+    buffer but different shapes (e.g. ``(6,)`` vs ``(2, 3)`` vs ``(3, 2)``)
+    or different dtypes (e.g. an int32 array vs an int16 array whose bytes
+    happen to align) would collide. Including ``shape`` and ``dtype`` in
+    the hash prevents this.
     """
-    # use the same depth because we're simply dispatching to another implementation
-    return hash_bytes(obj.tobytes(), depth=depth)
+    hash_object = hashlib.md5()
+    hash_object.update(repr(obj.shape).encode())
+    hash_object.update(str(obj.dtype).encode())
+    hash_object.update(obj.tobytes())
+    return _compact_hash(hash_object.digest())
