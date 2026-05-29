@@ -210,6 +210,37 @@ def test_hash_pandas():
 
 def test_hash_numpy():
     array = np.array([[0, 1], [2, 3]])
-    expected_hash = "ZwjDgY0zQOxO9KPHlYecog=="
+    expected_hash = "tVIm5kJ7G0GZaaifSEtrOQ=="
     fingerprint = fingerprinting.hash_value(array)
     assert fingerprint == expected_hash
+
+
+def test_hash_numpy_different_shapes_differ():
+    """Arrays with the same raw bytes but different shapes must hash differently."""
+    a = np.array([1, 2, 3, 4, 5, 6])
+    b = np.array([[1, 2, 3], [4, 5, 6]])
+    assert fingerprinting.hash_value(a) != fingerprinting.hash_value(b)
+
+
+def test_hash_numpy_different_dtypes_differ():
+    """Arrays with the same bit pattern but different dtypes must hash differently."""
+    a = np.array([1.0], dtype=np.float32)
+    b = np.array([1065353216], dtype=np.int32)  # same 4 bytes as float32(1.0)
+    assert a.tobytes() == b.tobytes()  # confirm same raw bytes
+    assert fingerprinting.hash_value(a) != fingerprinting.hash_value(b)
+
+
+def test_hash_polars_different_columns_differ():
+    """DataFrames with identical values but different column names must hash differently."""
+    polars = pytest.importorskip("polars")
+    a = polars.DataFrame({"region": ["East", "West"], "revenue": [100, 200]})
+    b = polars.DataFrame({"student": ["East", "West"], "height_cm": [100, 200]})
+    assert fingerprinting.hash_value(a) != fingerprinting.hash_value(b)
+
+
+def test_hash_polars_same_schema_same_data_matches():
+    """Identical DataFrames must produce the same hash."""
+    polars = pytest.importorskip("polars")
+    a = polars.DataFrame({"x": [1, 2], "y": [3, 4]})
+    b = polars.DataFrame({"x": [1, 2], "y": [3, 4]})
+    assert fingerprinting.hash_value(a) == fingerprinting.hash_value(b)
