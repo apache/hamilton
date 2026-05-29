@@ -16,27 +16,52 @@
 # under the License.
 
 """This module contains base constructs for executing a hamilton graph.
-It should only import hamilton.node, numpy, pandas.
+It should keep imports light and defer pandas/numpy until result builders need them.
 It cannot import hamilton.graph, or hamilton.driver.
 """
+
+from __future__ import annotations
 
 import abc
 import collections
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-import numpy as np
-import pandas as pd
-from pandas.core.indexes import extension as pd_extension
+if TYPE_CHECKING:
+    import numpy as np
+    import pandas as pd
+
+    try:
+        from . import node
+    except ImportError:
+        import node
 
 from hamilton.lifecycle import api as lifecycle_api
 
 try:
-    from . import htypes, node
+    from . import htypes
 except ImportError:
-    import node
+    import htypes
 
 logger = logging.getLogger(__name__)
+
+
+def _get_pandas():
+    import pandas as pd
+
+    return pd
+
+
+def _get_pandas_extension():
+    from pandas.core.indexes import extension as pd_extension
+
+    return pd_extension
+
+
+def _get_numpy():
+    import numpy as np
+
+    return np
 
 
 class ResultMixin(lifecycle_api.LegacyResultMixin):
@@ -123,6 +148,8 @@ class PandasDataFrameResult(ResultMixin):
         all_index_types = collections.defaultdict(list)
         time_indexes = collections.defaultdict(list)
         no_indexes = collections.defaultdict(list)
+        pd = _get_pandas()
+        pd_extension = _get_pandas_extension()
 
         def index_key_name(pd_object: pd.DataFrame | pd.Series) -> str:
             """Creates a string helping identify the index and it's type.
@@ -221,6 +248,7 @@ class PandasDataFrameResult(ResultMixin):
         :param outputs: the outputs to build a dataframe from.
         """
         # TODO check inputs are pd.Series, arrays, or scalars -- else error
+        pd = _get_pandas()
         output_index_type_tuple = PandasDataFrameResult.pandas_index_types(outputs)
         # this next line just log warnings
         # we don't actually care about the result since this is the current default behavior.
@@ -255,6 +283,7 @@ class PandasDataFrameResult(ResultMixin):
         :param outputs: The outputs to build the dataframe from.
         :return: A dataframe with the outputs.
         """
+        pd = _get_pandas()
 
         def get_output_name(output_name: str, column_name: str) -> str:
             """Add function prefix to columns.
@@ -300,7 +329,7 @@ class PandasDataFrameResult(ResultMixin):
         return [Any]
 
     def output_type(self) -> type:
-        return pd.DataFrame
+        return _get_pandas().DataFrame
 
 
 class StrictIndexTypePandasDataFrameResult(PandasDataFrameResult):
@@ -366,6 +395,7 @@ class NumpyMatrixResult(ResultMixin):
         :return: numpy matrix
         """
         # TODO check inputs are all numpy arrays/array like things -- else error
+        np = _get_numpy()
         num_rows = -1
         columns_with_lengths = collections.OrderedDict()
         for col, val in outputs.items():  # assumption is fixed order
@@ -402,7 +432,7 @@ class NumpyMatrixResult(ResultMixin):
         return [Any]  # Typing
 
     def output_type(self) -> type:
-        return pd.DataFrame
+        return _get_pandas().DataFrame
 
 
 class HamiltonGraphAdapter(lifecycle_api.GraphAdapter, abc.ABC):
