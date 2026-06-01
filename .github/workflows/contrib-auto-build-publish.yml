@@ -3,7 +3,8 @@ name: Publish SF Hamilton Contrib Python Package
 on:
   push:
     branches:
-      - main  # or the branch of your choice
+      - main
+      - 'release/contrib/**'
     paths:
       - 'contrib/**'
 
@@ -52,7 +53,7 @@ jobs:
         python -m build
     # Use the trusted publisher set up to remove the need for tokens
     - name: Publish package distributions to PyPI
-      if: steps.check_version.outputs.version_is_greater == 'true'
+      if: steps.check_version.outputs.version_is_greater == 'true' && github.ref == 'refs/heads/main'
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         packages-dir: contrib/dist/

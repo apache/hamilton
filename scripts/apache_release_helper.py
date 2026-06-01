@@ -502,22 +502,62 @@ On behalf of the Apache {PROJECT_SHORT_NAME} PPMC,
     print("=" * 80)
 
 
+def ensure_on_main():
+    """Ensure we're on the main branch before starting a release."""
+    branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode().strip()
+    if branch != "main":
+        print(f"Error: Must be on 'main' branch to start a release, currently on '{branch}'.")
+        sys.exit(1)
+    print("Confirmed on 'main' branch.")
+
+
+def ensure_clean_working_tree():
+    """Ensure there are no uncommitted changes to tracked files."""
+    unstaged = subprocess.run(["git", "diff", "--quiet"], capture_output=True)
+    staged = subprocess.run(["git", "diff", "--cached", "--quiet"], capture_output=True)
+    if unstaged.returncode != 0 or staged.returncode != 0:
+        print("Error: Working tree has uncommitted changes to tracked files.")
+        print("Commit or stash them before creating a release.")
+        sys.exit(1)
+    print("Working tree is clean.")
+
+
+def create_release_branch(package_key, version):
+    """Create and checkout a release branch from main."""
+    branch_name = f"release/{package_key}/{version}"
+    try:
+        existing = (
+            subprocess.check_output(["git", "branch", "--list", branch_name]).decode().strip()
+        )
+        if existing:
+            print(f"Error: Release branch '{branch_name}' already exists.")
+            print("Delete it first if you want to start over: git branch -D " + branch_name)
+            sys.exit(1)
+        subprocess.run(["git", "checkout", "-b", branch_name], check=True)
+        print(f"Created and switched to release branch: {branch_name}")
+        return branch_name
+    except subprocess.CalledProcessError as e:
+        print(f"Error creating release branch: {e}")
+        sys.exit(1)
+
+
 def main():
     """
-    ### How to Use the Updated Script
+    ### How to Use the Release Script
 
     1.  **Install the `flit` module**:
         ```bash
         pip install flit
         ```
-    2.  **Configure the Script**: The script now supports multiple Hamilton packages.
+    2.  **Configure the Script**: The script supports multiple Hamilton packages.
         Available packages: hamilton, sdk, lsp, contrib, ui
     3.  **Prerequisites**:
+        * You must be on the 'main' branch with a clean working tree.
         * You must have `git`, `gpg`, `svn`, and the `flit` Python module installed.
         * Your GPG key and SVN access must be configured for your Apache ID.
     4.  **Run the Script**:
-        Open your terminal, navigate to the root of your project directory, and run the script
-        with the desired package, version, release candidate number, and Apache ID.
+        Open your terminal, navigate to the root of your project directory, and run the script.
+        The script will create a release branch `release/<package>/<version>` from main.
 
     Note: if you have multiple gpg keys, specify the default in ~/.gnupg/gpg.conf add a line with `default-key <KEYID>`.
 
@@ -543,7 +583,7 @@ def main():
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Build and sign artifacts but skip git tagging and SVN upload.",
+        help="Build and sign artifacts but skip git tagging, branch push, and SVN upload.",
     )
     args = parser.parse_args()
 
@@ -561,22 +601,28 @@ def main():
     print(f"{'=' * 80}\n")
 
     check_prerequisites()
+    ensure_on_main()
+    ensure_clean_working_tree()
+
+    # Create release branch from main
+    release_branch = create_release_branch(package_key, version)
 
     # Validate version matches what's in the version file
     current_version = get_version_from_file(package_config)
     print(f"Current version in {package_config['version_file']}: {current_version}")
     if current_version != version:
         print("Update the version in the version file to match the expected version.")
+        print(f"Switching back to main (release branch '{release_branch}' left for cleanup).")
+        subprocess.run(["git", "checkout", "main"], check=True)
         sys.exit(1)
 
-    # Create git tag (from repo root)
+    # Create git tag on the release branch
     tag_name = f"{package_name}-v{version}-incubating-RC{rc_num}"
     if args.dry_run:
         print(f"\n[dry-run] Skipping git tag creation: {tag_name}")
     else:
         print(f"\nChecking for git tag '{tag_name}'...")
         try:
-            # Check if the tag already exists
             existing_tag = subprocess.check_output(["git", "tag", "-l", tag_name]).decode().strip()
             if existing_tag == tag_name:
                 print(f"Git tag '{tag_name}' already exists.")
@@ -587,7 +633,6 @@ def main():
                     print("Aborting.")
                     sys.exit(1)
             else:
-                # Tag does not exist, create it
                 print(f"Creating git tag '{tag_name}'...")
                 subprocess.run(["git", "tag", tag_name], check=True)
                 print(f"Git tag {tag_name} created.")
@@ -604,20 +649,32 @@ def main():
         sys.exit(1)
 
     if args.dry_run:
-        # Dry run: skip SVN upload, show summary
         print(f"\n{'=' * 80}")
-        print("  [dry-run] Skipping SVN upload")
+        print("  [dry-run] Skipping branch push and SVN upload")
         print(f"{'=' * 80}\n")
         print("Artifacts built successfully:")
         for f in files_to_upload:
             print(f"  {f}")
-        print("\nTo do a real release, re-run without --dry-run.")
+        print(f"\nRelease branch: {release_branch}")
+        print("To do a real release, delete this branch and re-run without --dry-run.")
     else:
-        # Upload artifacts
+        # Push release branch and tag
+        print(f"\n{'=' * 80}")
+        print("  Pushing Release Branch and Tag")
+        print(f"{'=' * 80}\n")
+        try:
+            subprocess.run(["git", "push", "-u", "origin", release_branch], check=True)
+            print(f"Pushed release branch: {release_branch}")
+            subprocess.run(["git", "push", "origin", tag_name], check=True)
+            print(f"Pushed tag: {tag_name}")
+        except subprocess.CalledProcessError as e:
+            print(f"Error pushing to remote: {e}")
+            sys.exit(1)
+
+        # Upload artifacts to SVN
         print(f"\n{'=' * 80}")
         print("  Uploading to Apache SVN")
         print(f"{'=' * 80}\n")
-        # NOTE: You MUST have your SVN client configured to use your Apache ID and have permissions.
         svn_url = svn_upload(package_name, version, rc_num, files_to_upload, apache_id)
         if not svn_url:
             sys.exit(1)
@@ -631,10 +688,11 @@ def main():
         print("\n" + "=" * 80)
         print("  Process Complete!")
         print("=" * 80)
+        print(f"\nRelease branch: {release_branch}")
+        print(f"Tag: {tag_name}")
         print("\nNext steps:")
-        print(f"1. Push the git tag: git push origin {tag_name}")
-        print("2. Copy the email template above and send to dev@hamilton.apache.org")
-        print("3. Wait for votes (minimum 72 hours)")
+        print("1. Copy the email template above and send to dev@hamilton.apache.org")
+        print("2. Wait for votes (minimum 72 hours)")
         print("\n")
 
 
