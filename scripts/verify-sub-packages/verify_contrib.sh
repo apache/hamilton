@@ -38,6 +38,14 @@ if [ -z "$VERSION" ] || [ -z "$RC" ]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Check prerequisites
+for cmd in gpg java flit uv svn; do
+    if ! command -v "$cmd" > /dev/null 2>&1; then
+        echo "ERROR: $cmd is required but not found. Please install it."
+        exit 1
+    fi
+done
 PACKAGE="apache-hamilton-contrib"
 SRC_TAR="${PACKAGE}-${VERSION}-incubating-src.tar.gz"
 WHEEL="apache_hamilton_contrib-${VERSION}-py3-none-any.whl"
@@ -134,6 +142,9 @@ source "$VENV_DIR/bin/activate"
 cd /tmp  # prevent '' in sys.path from resolving local hamilton checkout
 
 uv pip install -q "$ARTIFACTS_DIR/$WHEEL" apache-hamilton
+
+# Run from /tmp to avoid CWD shadowing the installed hamilton package
+cd /tmp
 
 python -c "import importlib.metadata; assert importlib.metadata.version('apache-hamilton-contrib') == '${VERSION}'"
 echo "  ✓ Version correct"

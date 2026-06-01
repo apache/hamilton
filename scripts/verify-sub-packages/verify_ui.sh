@@ -38,6 +38,14 @@ if [ -z "$VERSION" ] || [ -z "$RC" ]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Check prerequisites
+for cmd in gpg java flit uv svn; do
+    if ! command -v "$cmd" > /dev/null 2>&1; then
+        echo "ERROR: $cmd is required but not found. Please install it."
+        exit 1
+    fi
+done
 PACKAGE="apache-hamilton-ui"
 SRC_TAR="${PACKAGE}-${VERSION}-incubating-src.tar.gz"
 WHEEL="apache_hamilton_ui-${VERSION}-py3-none-any.whl"
