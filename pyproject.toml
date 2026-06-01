@@ -51,6 +51,7 @@ dependencies = [
     "pandas",
     "typing_extensions > 4.0.0",
     "typing_inspect",
+    "xxhash>=0.8.0",
 ]
 
 [project.optional-dependencies]

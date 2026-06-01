@@ -36,10 +36,11 @@ implementation should pass the `depth` parameter to prevent `RecursionError`.
 import base64
 import datetime
 import functools
-import hashlib
 import logging
 import sys
 from collections.abc import Mapping, Sequence, Set
+
+import xxhash
 
 from hamilton.experimental import h_databackends
 
@@ -74,6 +75,13 @@ def _compact_hash(digest: bytes) -> str:
     passing hashes/fingerprints through web services.
     """
     return base64.urlsafe_b64encode(digest).decode()
+
+
+def _hash_bytes(data: bytes) -> str:
+    """Hash raw bytes with the non-cryptographic xxh3_128 algorithm and
+    compact-encode the digest.
+    """
+    return _compact_hash(xxhash.xxh3_128(data).digest())
 
 
 @functools.singledispatch
@@ -138,22 +146,27 @@ def hash_repr(obj, *args, **kwargs) -> str:
 @hash_value.register(float)
 @hash_value.register(bool)
 def hash_primitive(obj, *args, **kwargs) -> str:
-    """Convert the primitive to a string and hash it
+    """Convert the primitive to a string and hash it.
+
+    The hash is prefixed with the type name so that values sharing the same
+    string form but differing in type (e.g. ``1`` vs ``"1"`` vs ``1.0``) do
+    not collide.
 
     Primitive type returns a hash and doesn't have to handle depth.
     """
-    hash_object = hashlib.md5(str(obj).encode())
-    return _compact_hash(hash_object.digest())
+    return _hash_bytes(f"{type(obj).__name__}:{obj}".encode())
 
 
 @hash_value.register(bytes)
 def hash_bytes(obj, *args, **kwargs) -> str:
-    """Convert the primitive to a string and hash it
+    """Hash a bytes object.
+
+    The hash is prefixed with a ``bytes`` type tag so that ``b"1"`` and the
+    string ``"1"`` (handled by :func:`hash_primitive`) do not collide.
 
     Primitive type returns a hash and doesn't have to handle depth.
     """
-    hash_object = hashlib.md5(obj)
-    return _compact_hash(hash_object.digest())
+    return _hash_bytes(b"bytes:" + obj)
 
 
 @hash_value.register(Sequence)
@@ -162,11 +175,8 @@ def hash_sequence(obj, *args, depth: int = 0, **kwargs) -> str:
 
     Orders matters for the hash since orders matters in a sequence.
     """
-    hash_object = hashlib.sha224()
-    for elem in obj:
-        hash_object.update(hash_value(elem, depth=depth + 1).encode())
-
-    return _compact_hash(hash_object.digest())
+    buffer = b"".join(hash_value(elem, depth=depth + 1).encode() for elem in obj)
+    return _hash_bytes(buffer)
 
 
 def hash_unordered_mapping(obj, *args, depth: int = 0, **kwargs) -> str:
@@ -186,12 +196,10 @@ def hash_unordered_mapping(obj, *args, depth: int = 0, **kwargs) -> str:
     for key, value in obj.items():
         hashed_mapping[hash_value(key, depth=depth + 1)] = hash_value(value, depth=depth + 1)
 
-    hash_object = hashlib.sha224()
-    for key, value in sorted(hashed_mapping.items()):
-        hash_object.update(key.encode())
-        hash_object.update(value.encode())
-
-    return _compact_hash(hash_object.digest())
+    buffer = b"".join(
+        key.encode() + value.encode() for key, value in sorted(hashed_mapping.items())
+    )
+    return _hash_bytes(buffer)
 
 
 @hash_value.register(Mapping)
@@ -217,12 +225,11 @@ def hash_mapping(obj, *, ignore_order: bool = True, depth: int = 0, **kwargs) ->
         # use the same depth because we're simply dispatching to another implementation
         return hash_unordered_mapping(obj, depth=depth)
 
-    hash_object = hashlib.sha224()
-    for key, value in obj.items():
-        hash_object.update(hash_value(key, depth=depth + 1).encode())
-        hash_object.update(hash_value(value, depth=depth + 1).encode())
-
-    return _compact_hash(hash_object.digest())
+    buffer = b"".join(
+        hash_value(key, depth=depth + 1).encode() + hash_value(value, depth=depth + 1).encode()
+        for key, value in obj.items()
+    )
+    return _hash_bytes(buffer)
 
 
 @hash_value.register(Set)
@@ -233,43 +240,49 @@ def hash_set(obj, *args, depth: int = 0, **kwargs) -> str:
     For the same objects in the set, the hashes will be the
     same.
     """
-    hashes = [hash_value(elem, depth=depth + 1) for elem in obj]
-    sorted_hashes = sorted(hashes)
-
-    hash_object = hashlib.sha224()
-    for hash in sorted_hashes:
-        hash_object.update(hash.encode())
-
-    return _compact_hash(hash_object.digest())
+    sorted_hashes = sorted(hash_value(elem, depth=depth + 1) for elem in obj)
+    buffer = b"".join(hash.encode() for hash in sorted_hashes)
+    return _hash_bytes(buffer)
 
 
 @hash_value.register(h_databackends.AbstractPandasDataFrame)
 @hash_value.register(h_databackends.AbstractPandasColumn)
 def hash_pandas_obj(obj, *args, depth: int = 0, **kwargs) -> str:
-    """Convert a pandas dataframe, series, or index to
-    a dictionary of {index: row_hash} then hash it.
+    """Hash a pandas DataFrame, Series, or Index via vectorized row hashing.
 
-    Given the hashing for mappings, the physical ordering or rows doesn't matter.
-    For example, if the index is a date, the hash will represent the {date: row_hash},
-    and won't preserve how dates were ordered in the DataFrame.
+    ``pandas.util.hash_pandas_object`` computes a uint64 hash per row in a
+    single vectorized pass; we hash that buffer in one shot rather than
+    iterating over rows in Python. Column names and dtypes (the schema) are
+    folded in so that frames carrying identical cell values under different
+    schemas do not collide.
+
+    The hash is order-sensitive: reordering rows changes the per-row hash
+    buffer and therefore the fingerprint.
     """
     from pandas.util import hash_pandas_object
 
-    hash_per_row = hash_pandas_object(obj)
-    return hash_mapping(hash_per_row.to_dict(), ignore_order=False, depth=depth + 1)
+    row_hashes = hash_pandas_object(obj).values.tobytes()
+    if hasattr(obj, "columns"):
+        schema = f"{list(obj.columns)}:{[str(dtype) for dtype in obj.dtypes]}"
+    else:
+        schema = f"{getattr(obj, 'name', None)}:{obj.dtype}"
+    return _hash_bytes(schema.encode() + row_hashes)
 
 
 @hash_value.register(h_databackends.AbstractPolarsDataFrame)
 def hash_polars_dataframe(obj, *args, depth: int = 0, **kwargs) -> str:
-    """Convert a polars dataframe to a hash that includes column names
-    and dtypes (schema) alongside row hashes. This prevents collisions
-    between DataFrames with identical cell values but different schemas.
+    """Hash a polars DataFrame via vectorized row hashing.
+
+    ``DataFrame.hash_rows`` computes a per-row hash in a single vectorized
+    pass; we hash that buffer (``to_numpy().tobytes()``) in one shot rather
+    than iterating element-by-element in Python. Column names and dtypes
+    (the schema) are folded in so frames carrying identical cell values under
+    different schemas do not collide (preserving the guarantee from PR #1616).
     """
     schema_str = ",".join(f"{name}:{dtype}" for name, dtype in obj.schema.items())
     schema_hash = hash_bytes(schema_str.encode())
-    row_hash = hash_sequence(obj.hash_rows().to_list(), depth=depth + 1)
-    combined = hashlib.md5(schema_hash.encode() + row_hash.encode())
-    return _compact_hash(combined.digest())
+    row_hash = hash_bytes(obj.hash_rows().to_numpy().tobytes())
+    return _hash_bytes(schema_hash.encode() + row_hash.encode())
 
 
 @hash_value.register(h_databackends.AbstractPolarsColumn)

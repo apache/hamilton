@@ -129,11 +129,11 @@ def test_max_recursion_depth():
 @pytest.mark.parametrize(
     ("obj", "expected_hash"),
     [
-        ("hello-world", "IJUxIYl1PeatR9_iDL6X7A=="),
-        (17.31231, "vAYX8MD8yEHK6dwnIPVUaw=="),
-        (16474, "L_epMRRUy3Qq5foVvFT_OQ=="),
-        (True, "-CfPRi9ihI3zfF4elKTadA=="),
-        (b"\x951!\x89u=\xe6\xadG\xdf", "qK2VJ0vVTRJemfC0beO8iA=="),
+        ("hello-world", "EXXR8_e47ElS18aP2lThJA=="),
+        (17.31231, "tVUSIslYiBcW52c-7w4gvA=="),
+        (16474, "FAJ-iXM_Hwg9TCRreY8AyA=="),
+        (True, "qkJEg3-XQKmGWk5sWqmonw=="),
+        (b"\x951!\x89u=\xe6\xadG\xdf", "pPTyYkSU_x7NLB1Fp_YTyA=="),
     ],
 )
 def test_hash_primitive(obj, expected_hash):
@@ -144,8 +144,8 @@ def test_hash_primitive(obj, expected_hash):
 @pytest.mark.parametrize(
     ("obj", "expected_hash"),
     [
-        ([0, True, "hello-world"], "Pg9LP3Y-8yYsoWLXedPVKDwTAa7W8_fjJNTTUA=="),
-        ((17.0, False, "world"), "wyuuKMuL8rp53_CdYAtyMmyetnTJ9LzmexhJrQ=="),
+        ([0, True, "hello-world"], "I98OkNhfxtScJrYNTs4ZfQ=="),
+        ((17.0, False, "world"), "catgOMSnsbQj1_KELNQscw=="),
     ],
 )
 def test_hash_sequence(obj, expected_hash):
@@ -156,7 +156,7 @@ def test_hash_sequence(obj, expected_hash):
 def test_hash_equals_for_different_sequence_types():
     list_obj = [0, True, "hello-world"]
     tuple_obj = (0, True, "hello-world")
-    expected_hash = "Pg9LP3Y-8yYsoWLXedPVKDwTAa7W8_fjJNTTUA=="
+    expected_hash = "I98OkNhfxtScJrYNTs4ZfQ=="
 
     list_fingerprint = fingerprinting.hash_sequence(list_obj)
     tuple_fingerprint = fingerprinting.hash_sequence(tuple_obj)
@@ -165,7 +165,7 @@ def test_hash_equals_for_different_sequence_types():
 
 def test_hash_ordered_mapping():
     obj = {0: True, "key": "value", 17.0: None}
-    expected_hash = "1zH9TfTu0-nlWXXXYo0vigFFSQajWXov2w4AZQ=="
+    expected_hash = "zX6MzhWGAOvxateHIPxOvA=="
     fingerprint = fingerprinting.hash_mapping(obj, ignore_order=False)
     assert fingerprint == expected_hash
 
@@ -180,7 +180,7 @@ def test_hash_mapping_where_order_matters():
 
 def test_hash_unordered_mapping():
     obj = {0: True, "key": "value", 17.0: None}
-    expected_hash = "uw0dfSAEgE9nOK3bHgmJ4TR3-VFRqOAoogdRmw=="
+    expected_hash = "4cnTFA4MEEzmBN4a04k6tA=="
     fingerprint = fingerprinting.hash_mapping(obj, ignore_order=True)
     assert fingerprint == expected_hash
 
@@ -195,7 +195,7 @@ def test_hash_mapping_where_order_doesnt_matter():
 
 def test_hash_set():
     obj = {0, True, "key", "value", 17.0, None}
-    expected_hash = "dKyAE-ob4_GD-Mb5Lu2R-VJAxGctY4L8JDwc2g=="
+    expected_hash = "mswHhNBBYN5mv6i-LcEeVw=="
     fingerprint = fingerprinting.hash_set(obj)
     assert fingerprint == expected_hash
 
@@ -203,14 +203,14 @@ def test_hash_set():
 def test_hash_pandas():
     """pandas has a specialized hash function"""
     obj = pd.DataFrame({"a": [1, 2], "b": ["x", "y"]})
-    expected_hash = "LSHACWyG83JBIggxO9LGrerW3WZEy4nUOmIQoA=="
+    expected_hash = "k_COdiMCfWcbg1hxTH66sw=="
     fingerprint = fingerprinting.hash_pandas_obj(obj)
     assert fingerprint == expected_hash
 
 
 def test_hash_numpy():
     array = np.array([[0, 1], [2, 3]])
-    expected_hash = "tVIm5kJ7G0GZaaifSEtrOQ=="
+    expected_hash = "Y1uek_eQTHejo2YtRvdWPQ=="
     fingerprint = fingerprinting.hash_value(array)
     assert fingerprint == expected_hash
 
@@ -244,3 +244,55 @@ def test_hash_polars_same_schema_same_data_matches():
     a = polars.DataFrame({"x": [1, 2], "y": [3, 4]})
     b = polars.DataFrame({"x": [1, 2], "y": [3, 4]})
     assert fingerprinting.hash_value(a) == fingerprinting.hash_value(b)
+
+
+def test_hash_cross_type_primitives_differ():
+    """Values with the same string form but different types must hash differently.
+
+    Before type tagging, ``str(1) == str("1") == "1"`` collapsed int/str (and
+    likewise float/str and bytes/str) into identical fingerprints.
+    """
+    fingerprints = {
+        fingerprinting.hash_value(1),
+        fingerprinting.hash_value("1"),
+        fingerprinting.hash_value(b"1"),
+        fingerprinting.hash_value(1.0),
+        fingerprinting.hash_value("1.0"),
+    }
+    assert len(fingerprints) == 5
+
+
+def test_hash_pandas_different_columns_differ():
+    """pandas analog of test_hash_polars_different_columns_differ: identical
+    values under different column names must hash differently."""
+    a = pd.DataFrame({"region": ["East", "West"], "revenue": [100, 200]})
+    b = pd.DataFrame({"student": ["East", "West"], "height_cm": [100, 200]})
+    assert fingerprinting.hash_value(a) != fingerprinting.hash_value(b)
+
+
+def test_hash_pandas_different_dtypes_differ():
+    """pandas frames with identical values but different dtypes must hash differently."""
+    a = pd.DataFrame({"a": [1, 2], "b": [3, 4]})  # int64
+    b = pd.DataFrame({"a": [1.0, 2.0], "b": [3.0, 4.0]})  # float64
+    assert fingerprinting.hash_value(a) != fingerprinting.hash_value(b)
+
+
+def test_hash_pandas_same_data_matches():
+    """Identical pandas DataFrames must produce the same hash."""
+    a = pd.DataFrame({"x": [1, 2], "y": [3, 4]})
+    b = pd.DataFrame({"x": [1, 2], "y": [3, 4]})
+    assert fingerprinting.hash_value(a) == fingerprinting.hash_value(b)
+
+
+def test_hash_pandas_order_sensitive():
+    """Reordering rows must change the fingerprint (order-sensitivity preserved)."""
+    df = pd.DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]})
+    assert fingerprinting.hash_value(df) != fingerprinting.hash_value(df.iloc[::-1])
+
+
+def test_hash_polars_different_dtypes_differ():
+    """polars frames with identical values but different dtypes must hash differently."""
+    polars = pytest.importorskip("polars")
+    a = polars.DataFrame({"a": [1, 2]}, schema={"a": polars.Int64})
+    b = polars.DataFrame({"a": [1, 2]}, schema={"a": polars.Float64})
+    assert fingerprinting.hash_value(a) != fingerprinting.hash_value(b)
