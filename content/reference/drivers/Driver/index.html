@@ -678,6 +678,21 @@ This can be called multilple times – later calls will take precedence.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hamilton.driver.Builder.with_data_quality_disabled">
+<span class="sig-name descname"><span class="pre">with_data_quality_disabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="reference internal" href="../../../_modules/hamilton/driver/#Builder.with_data_quality_disabled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.driver.Builder.with_data_quality_disabled" title="Link to this definition">¶</a></dt>
+<dd><p>Disables all <code class="docutils literal notranslate"><span class="pre">&#64;check_output</span></code> / <code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> validators at graph-construction
+time. No validator nodes are created, so there is zero runtime cost.</p>
+<p>This is equivalent to <code class="docutils literal notranslate"><span class="pre">.with_config({DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY:</span> <span class="pre">True})</span></code>.
+Note that a subsequent <code class="docutils literal notranslate"><span class="pre">.with_config({DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY:</span> <span class="pre">False})</span></code>
+will re-enable validation, since <code class="docutils literal notranslate"><span class="pre">with_config</span></code> always wins on the last write.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hamilton.driver.Builder.with_execution_manager">
 <span class="sig-name descname"><span class="pre">with_execution_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">execution_manager</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExecutionManager</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="reference internal" href="../../../_modules/hamilton/driver/#Builder.with_execution_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.driver.Builder.with_execution_manager" title="Link to this definition">¶</a></dt>
 <dd><p>Sets the execution manager to use. Note that this cannot be used if local_executor
@@ -1634,6 +1649,7 @@ well as parallel execution/dynamic spawning of nodes.</p>
 <li><a class="reference internal" href="#hamilton.driver.Builder.with_adapters"><code class="docutils literal notranslate"><span class="pre">Builder.with_adapters()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Builder.with_cache"><code class="docutils literal notranslate"><span class="pre">Builder.with_cache()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Builder.with_config"><code class="docutils literal notranslate"><span class="pre">Builder.with_config()</span></code></a></li>
+<li><a class="reference internal" href="#hamilton.driver.Builder.with_data_quality_disabled"><code class="docutils literal notranslate"><span class="pre">Builder.with_data_quality_disabled()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Builder.with_execution_manager"><code class="docutils literal notranslate"><span class="pre">Builder.with_execution_manager()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Builder.with_grouping_strategy"><code class="docutils literal notranslate"><span class="pre">Builder.with_grouping_strategy()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Builder.with_local_executor"><code class="docutils literal notranslate"><span class="pre">Builder.with_local_executor()</span></code></a></li>

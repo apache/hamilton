@@ -546,6 +546,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="n">IS_DATA_VALIDATOR_TAG</span> <span class="o">=</span> <span class="s2">&quot;hamilton.data_quality.contains_dq_results&quot;</span>
 <span class="n">DATA_VALIDATOR_ORIGINAL_OUTPUT_TAG</span> <span class="o">=</span> <span class="s2">&quot;hamilton.data_quality.source_node&quot;</span>
+<span class="n">DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY</span> <span class="o">=</span> <span class="s2">&quot;hamilton.data_quality.disable_checks&quot;</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">BaseDataValidationDecorator</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeTransformer</span><span class="p">):</span>
@@ -558,9 +559,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">optional_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">transform_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">node_</span><span class="p">]</span>
         <span class="n">raw_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span>
             <span class="o">+</span> <span class="s2">&quot;_raw&quot;</span><span class="p">,</span>  <span class="c1"># TODO -- make this unique -- this will break with multiple validation decorators, which we *don&#39;t* want</span>

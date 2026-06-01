@@ -812,11 +812,15 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_polars_dataframe">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">h_databackends</span><span class="o">.</span><span class="n">AbstractPolarsDataFrame</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_polars_dataframe</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a polars dataframe, series, or index to</span>
-<span class="sd">    a list of hashes then hash it.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a polars dataframe to a hash that includes column names</span>
+<span class="sd">    and dtypes (schema) alongside row hashes. This prevents collisions</span>
+<span class="sd">    between DataFrames with identical cell values but different schemas.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">hash_per_row</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">hash_rows</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">hash_sequence</span><span class="p">(</span><span class="n">hash_per_row</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
+    <span class="n">schema_str</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="n">schema_hash</span> <span class="o">=</span> <span class="n">hash_bytes</span><span class="p">(</span><span class="n">schema_str</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+    <span class="n">row_hash</span> <span class="o">=</span> <span class="n">hash_sequence</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">hash_rows</span><span class="p">()</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">combined</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">schema_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">row_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">_compact_hash</span><span class="p">(</span><span class="n">combined</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span></div>
 
 
 
@@ -834,14 +838,14 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_numpy_array">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">h_databackends</span><span class="o">.</span><span class="n">AbstractNumpyArray</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_numpy_array</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the bytes representation of the array raw data and hash it.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash a numpy array including shape and dtype metadata.</span>
 
-<span class="sd">    Might not be ideal because different higher-level numpy objects could have</span>
-<span class="sd">    the same underlying array representation (e.g., masked arrays).</span>
-<span class="sd">    Unsure, but it&#39;s an area to investigate.</span>
+<span class="sd">    Without metadata, arrays with the same raw bytes but different shapes</span>
+<span class="sd">    or dtypes (e.g., shape=(6,) vs shape=(2,3), or float32 vs int32 with</span>
+<span class="sd">    identical bit patterns) would produce identical hashes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># use the same depth because we&#39;re simply dispatching to another implementation</span>
-    <span class="k">return</span> <span class="n">hash_bytes</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">tobytes</span><span class="p">(),</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span></div>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">hash_bytes</span><span class="p">(</span><span class="n">metadata</span> <span class="o">+</span> <span class="n">obj</span><span class="o">.</span><span class="n">tobytes</span><span class="p">(),</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span></div>
 
 </pre></div>
         </article>

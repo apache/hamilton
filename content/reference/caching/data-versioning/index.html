@@ -572,10 +572,10 @@ the dictionary.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hamilton.caching.fingerprinting.hash_numpy_array">
 <span class="sig-prename descclassname"><span class="pre">hamilton.caching.fingerprinting.</span></span><span class="sig-name descname"><span class="pre">hash_numpy_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/hamilton/caching/fingerprinting/#hash_numpy_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.caching.fingerprinting.hash_numpy_array" title="Link to this definition">¶</a></dt>
-<dd><p>Get the bytes representation of the array raw data and hash it.</p>
-<p>Might not be ideal because different higher-level numpy objects could have
-the same underlying array representation (e.g., masked arrays).
-Unsure, but it’s an area to investigate.</p>
+<dd><p>Hash a numpy array including shape and dtype metadata.</p>
+<p>Without metadata, arrays with the same raw bytes but different shapes
+or dtypes (e.g., shape=(6,) vs shape=(2,3), or float32 vs int32 with
+identical bit patterns) would produce identical hashes.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -597,8 +597,9 @@ and won’t preserve how dates were ordered in the DataFrame.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hamilton.caching.fingerprinting.hash_polars_dataframe">
 <span class="sig-prename descclassname"><span class="pre">hamilton.caching.fingerprinting.</span></span><span class="sig-name descname"><span class="pre">hash_polars_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/hamilton/caching/fingerprinting/#hash_polars_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.caching.fingerprinting.hash_polars_dataframe" title="Link to this definition">¶</a></dt>
-<dd><p>Convert a polars dataframe, series, or index to
-a list of hashes then hash it.</p>
+<dd><p>Convert a polars dataframe to a hash that includes column names
+and dtypes (schema) alongside row hashes. This prevents collisions
+between DataFrames with identical cell values but different schemas.</p>
 </dd></dl>
 
 <dl class="py function">

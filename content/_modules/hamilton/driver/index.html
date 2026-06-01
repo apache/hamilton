@@ -561,6 +561,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.caching.stores.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">MetadataStore</span><span class="p">,</span> <span class="n">ResultStore</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.dev_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">deprecation</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.execution</span><span class="w"> </span><span class="kn">import</span> <span class="n">executors</span><span class="p">,</span> <span class="n">graph_functions</span><span class="p">,</span> <span class="n">grouping</span><span class="p">,</span> <span class="n">state</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers.validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.graph_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">HamiltonNode</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">materialization</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.io.materialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExtractorFactory</span><span class="p">,</span> <span class="n">MaterializerFactory</span>
@@ -2464,6 +2465,22 @@ s=d.getElementsByTagName('script')[0];
 
         <span class="bp">self</span><span class="o">.</span><span class="n">adapters</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">adapters</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="Builder.with_data_quality_disabled">
+<a class="viewcode-back" href="../../../reference/drivers/Driver/#hamilton.driver.Builder.with_data_quality_disabled">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">with_data_quality_disabled</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Disables all ``@check_output`` / ``@check_output_custom`` validators at graph-construction</span>
+<span class="sd">        time. No validator nodes are created, so there is zero runtime cost.</span>
+
+<span class="sd">        This is equivalent to ``.with_config({DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY: True})``.</span>
+<span class="sd">        Note that a subsequent ``.with_config({DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY: False})``</span>
+<span class="sd">        will re-enable validation, since ``with_config`` always wins on the last write.</span>
+
+<span class="sd">        :return: self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="n">DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span></div>
 
 
 <div class="viewcode-block" id="Builder.with_materializers">

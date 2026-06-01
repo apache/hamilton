@@ -537,6 +537,41 @@ The goal of this is to show how to use runtime data quality checks in a larger, 
 <section id="async-validators">
 <h2>Async validators<a class="headerlink" href="#async-validators" title="Link to this heading">¶</a></h2>
 <p>For validation logic that requires async operations (e.g., async database queries or API calls), use <code class="docutils literal notranslate"><span class="pre">AsyncDataValidator</span></code> or <code class="docutils literal notranslate"><span class="pre">AsyncBaseDefaultValidator</span></code> from <code class="docutils literal notranslate"><span class="pre">hamilton.data_quality.base</span></code>. These define <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">def</span> <span class="pre">validate()</span></code> and work with <code class="docutils literal notranslate"><span class="pre">AsyncDriver</span></code>. You can mix sync and async validators in a single <code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> call.</p>
+</section>
+<section id="disabling-validators-at-runtime">
+<h2>Disabling validators at runtime<a class="headerlink" href="#disabling-validators-at-runtime" title="Link to this heading">¶</a></h2>
+<p>Validators are useful during development but may be unnecessary overhead in a trusted production pipeline. You can disable all <code class="docutils literal notranslate"><span class="pre">&#64;check_output</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> validators at graph-construction time, so no extra nodes are ever created:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">hamilton</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_pipeline</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_data_quality_disabled</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This is equivalent to passing <code class="docutils literal notranslate"><span class="pre">{&quot;hamilton.data_quality.disable_checks&quot;:</span> <span class="pre">True}</span></code> via <code class="docutils literal notranslate"><span class="pre">.with_config()</span></code>, which is useful when the flag is controlled dynamically (e.g., from an environment variable):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">hamilton</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_pipeline</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">&quot;hamilton.data_quality.disable_checks&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DISABLE_DQ&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Because the flag is resolved at graph-construction time, disabled drivers carry zero runtime overhead from validation — no validator nodes are created at all.</p>
+<p>A second use case is graph visualization. Each decorated function normally expands into several nodes (<code class="docutils literal notranslate"><span class="pre">{name}_raw</span></code>, one per validator, and the final <code class="docutils literal notranslate"><span class="pre">{name}</span></code> node), which can clutter a visualization when you want to communicate pipeline structure rather than validation wiring. Building a driver with <code class="docutils literal notranslate"><span class="pre">with_data_quality_disabled()</span></code> gives a clean visualization with only the business-logic nodes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr_viz</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">hamilton</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_pipeline</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_data_quality_disabled</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">dr_viz</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">&quot;pipeline.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that this requires a separate driver instance from the one used for execution if you still want validations to run.</p>
 <p>See the <a class="reference internal" href="../../reference/decorators/check_output/"><span class="doc">check_output reference</span></a> and <a class="reference external" href="https://github.com/apache/hamilton/blob/main/writeups/data_quality.md">data quality writeup</a> for details and examples.</p>
 </section>
 </section>
@@ -611,6 +646,7 @@ The goal of this is to show how to use runtime data quality checks in a larger, 
             <ul>
 <li><a class="reference internal" href="#">Data quality</a><ul>
 <li><a class="reference internal" href="#async-validators">Async validators</a></li>
+<li><a class="reference internal" href="#disabling-validators-at-runtime">Disabling validators at runtime</a></li>
 </ul>
 </li>
 </ul>

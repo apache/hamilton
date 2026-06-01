@@ -550,6 +550,21 @@ from <code class="docutils literal notranslate"><span class="pre">hamilton.data_
 <code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> call — each gets the appropriate wrapper type automatically.</p>
 <p>See <a class="reference external" href="https://github.com/apache/hamilton/blob/main/data_quality.md">data_quality</a> for more information on
 available validators and how to build custom ones.</p>
+<section id="disabling-validators">
+<h2>Disabling validators<a class="headerlink" href="#disabling-validators" title="Link to this heading">¶</a></h2>
+<p>All <code class="docutils literal notranslate"><span class="pre">&#64;check_output</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;check_output_custom</span></code> validators can be disabled at graph-construction
+time using <code class="docutils literal notranslate"><span class="pre">Builder.with_data_quality_disabled()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">hamilton</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_pipeline</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_data_quality_disabled</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This eliminates all validator nodes from the graph — no <code class="docutils literal notranslate"><span class="pre">_raw</span></code> or validator nodes are created, so
+there is zero runtime cost. It is equivalent to <code class="docutils literal notranslate"><span class="pre">.with_config({&quot;hamilton.data_quality.disable_checks&quot;:</span> <span class="pre">True})</span></code>.
+See <a class="reference internal" href="../../drivers/Driver/"><span class="doc">Builder</span></a> for full <code class="docutils literal notranslate"><span class="pre">Builder</span></code> documentation.</p>
 <p>Note we also have a plugins that allow for validation with the pandera and pydantic libraries. There are two ways to access these:</p>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&#64;check_output(schema=pandera_schema)</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;check_output(model=pydantic_model)</span></code></p></li>
@@ -896,6 +911,7 @@ following function will <em>fail</em> validation:</p>
 </dd></dl>
 
 </section>
+</section>
 
         </article>
       </div>
@@ -966,6 +982,7 @@ following function will <em>fail</em> validation:</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">check_output*</a><ul>
+<li><a class="reference internal" href="#disabling-validators">Disabling validators</a><ul>
 <li><a class="reference internal" href="#hamilton.function_modifiers.check_output"><code class="docutils literal notranslate"><span class="pre">check_output</span></code></a><ul>
 <li><a class="reference internal" href="#hamilton.function_modifiers.check_output.__init__"><code class="docutils literal notranslate"><span class="pre">check_output.__init__()</span></code></a></li>
 </ul>
@@ -995,6 +1012,8 @@ following function will <em>fail</em> validation:</p>
 </li>
 <li><a class="reference internal" href="#hamilton.plugins.h_pydantic.check_output"><code class="docutils literal notranslate"><span class="pre">check_output</span></code></a><ul>
 <li><a class="reference internal" href="#hamilton.plugins.h_pydantic.check_output.__init__"><code class="docutils literal notranslate"><span class="pre">check_output.__init__()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
