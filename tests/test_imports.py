@@ -15,13 +15,31 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import subprocess
+import sys
+import textwrap
 
-def test_driver_base_public_imports():
-    from hamilton import base, driver
-    from hamilton.driver import Driver
 
-    assert driver.Driver is Driver
-    assert base.DictResult().build_result(foo=1) == {"foo": 1}
-    assert base.DefaultAdapter().build_result(foo=1) == {"foo": 1}
-    assert base.PandasDataFrameResult is not None
-    assert base.NumpyMatrixResult is not None
+def test_driver_base_public_imports_do_not_load_heavy_dependencies():
+    code = textwrap.dedent(
+        """
+        import sys
+
+        heavy_dependencies = {"pandas", "numpy"}
+        assert heavy_dependencies.isdisjoint(sys.modules)
+
+        from hamilton import base, driver
+        from hamilton.driver import Driver
+
+        assert driver.Driver is Driver
+        assert base.DictResult().build_result(foo=1) == {"foo": 1}
+        assert base.DefaultAdapter().build_result(foo=1) == {"foo": 1}
+        assert base.PandasDataFrameResult is not None
+        assert base.NumpyMatrixResult is not None
+
+        loaded_heavy_dependencies = heavy_dependencies.intersection(sys.modules)
+        assert not loaded_heavy_dependencies, sorted(loaded_heavy_dependencies)
+        """
+    )
+
+    subprocess.run([sys.executable, "-c", code], check=True)

@@ -24,7 +24,9 @@ from __future__ import annotations
 
 import abc
 import collections
+import importlib
 import logging
+from functools import cache
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -46,22 +48,11 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-def _get_pandas():
-    import pandas as pd
-
-    return pd
-
-
-def _get_pandas_extension():
-    from pandas.core.indexes import extension as pd_extension
-
-    return pd_extension
-
-
-def _get_numpy():
-    import numpy as np
-
-    return np
+@cache
+def _lazy_import(module: str, attr: str | None = None) -> Any:
+    """Lazy import a module. Cached after 1st call."""
+    mod = importlib.import_module(module)
+    return mod if attr is None else getattr(mod, attr)
 
 
 class ResultMixin(lifecycle_api.LegacyResultMixin):
@@ -148,8 +139,8 @@ class PandasDataFrameResult(ResultMixin):
         all_index_types = collections.defaultdict(list)
         time_indexes = collections.defaultdict(list)
         no_indexes = collections.defaultdict(list)
-        pd = _get_pandas()
-        pd_extension = _get_pandas_extension()
+        pd = _lazy_import("pandas")
+        pd_extension = _lazy_import("pandas.core.indexes.extension")
 
         def index_key_name(pd_object: pd.DataFrame | pd.Series) -> str:
             """Creates a string helping identify the index and it's type.
@@ -248,7 +239,7 @@ class PandasDataFrameResult(ResultMixin):
         :param outputs: the outputs to build a dataframe from.
         """
         # TODO check inputs are pd.Series, arrays, or scalars -- else error
-        pd = _get_pandas()
+        pd = _lazy_import("pandas")
         output_index_type_tuple = PandasDataFrameResult.pandas_index_types(outputs)
         # this next line just log warnings
         # we don't actually care about the result since this is the current default behavior.
@@ -283,7 +274,7 @@ class PandasDataFrameResult(ResultMixin):
         :param outputs: The outputs to build the dataframe from.
         :return: A dataframe with the outputs.
         """
-        pd = _get_pandas()
+        pd = _lazy_import("pandas")
 
         def get_output_name(output_name: str, column_name: str) -> str:
             """Add function prefix to columns.
@@ -329,7 +320,7 @@ class PandasDataFrameResult(ResultMixin):
         return [Any]
 
     def output_type(self) -> type:
-        return _get_pandas().DataFrame
+        return _lazy_import("pandas", "DataFrame")
 
 
 class StrictIndexTypePandasDataFrameResult(PandasDataFrameResult):
@@ -395,7 +386,7 @@ class NumpyMatrixResult(ResultMixin):
         :return: numpy matrix
         """
         # TODO check inputs are all numpy arrays/array like things -- else error
-        np = _get_numpy()
+        np = _lazy_import("numpy")
         num_rows = -1
         columns_with_lengths = collections.OrderedDict()
         for col, val in outputs.items():  # assumption is fixed order
@@ -432,7 +423,7 @@ class NumpyMatrixResult(ResultMixin):
         return [Any]  # Typing
 
     def output_type(self) -> type:
-        return _get_pandas().DataFrame
+        return _lazy_import("pandas", "DataFrame")
 
 
 class HamiltonGraphAdapter(lifecycle_api.GraphAdapter, abc.ABC):
