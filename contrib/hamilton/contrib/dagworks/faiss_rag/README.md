@@ -102,7 +102,7 @@ result = dr.execute(
 )
 print(result)
 ```
-MiniMax uses the [MiniMax-M3](https://www.minimax.io/) model with a 1M token context window
+MiniMax uses the [MiniMax-M3](https://www.minimax.io/) model with a 512K context context window
 via an OpenAI-compatible API endpoint.
 
 # How to extend this module
