@@ -193,8 +193,13 @@ class TestPackageConfiguration:
         pyproject_file = get_ui_backend_dir() / "pyproject.toml"
         assert pyproject_file.exists(), f"pyproject.toml not found at {pyproject_file}"
 
-    def test_flit_sdist_includes_build_directory(self):
-        """Verify that pyproject.toml includes hamilton_ui/build/** in Flit sdist."""
+    def test_flit_sdist_excludes_build_directory(self):
+        """Verify that pyproject.toml excludes hamilton_ui/build/** from Flit sdist.
+
+        Compiled frontend assets (JS/CSS) must not be in the source tarball
+        to avoid third-party license obligations. The wheel includes them
+        via package data; the release script builds sdist before npm build.
+        """
         pyproject_file = get_ui_backend_dir() / "pyproject.toml"
 
         with open(pyproject_file, "rb") as f:
@@ -205,11 +210,11 @@ class TestPackageConfiguration:
         assert "flit" in config["tool"], "pyproject.toml missing [tool.flit] section"
         assert "sdist" in config["tool"]["flit"], "pyproject.toml missing [tool.flit.sdist] section"
 
-        # Check includes
-        includes = config["tool"]["flit"]["sdist"].get("include", [])
-        assert "hamilton_ui/build/**" in includes, (
-            "pyproject.toml [tool.flit.sdist] does not include 'hamilton_ui/build/**'. "
-            "Built assets will not be packaged in the distribution."
+        # Check excludes
+        excludes = config["tool"]["flit"]["sdist"].get("exclude", [])
+        assert "hamilton_ui/build/**" in excludes, (
+            "pyproject.toml [tool.flit.sdist] must exclude 'hamilton_ui/build/**'. "
+            "Compiled frontend assets should not be in the source tarball."
         )
 
     def test_flit_sdist_includes_tests(self):
