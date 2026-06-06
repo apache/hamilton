@@ -212,6 +212,23 @@ class TestPackageConfiguration:
             "Built assets will not be packaged in the distribution."
         )
 
+    def test_flit_sdist_includes_tests(self):
+        """Verify that pyproject.toml includes tests/** in Flit sdist.
+
+        Per Apache release policy, voters must be able to build from source
+        and run tests to validate.
+        """
+        pyproject_file = get_ui_backend_dir() / "pyproject.toml"
+
+        with open(pyproject_file, "rb") as f:
+            config = tomllib.load(f)
+
+        includes = config["tool"]["flit"]["sdist"].get("include", [])
+        assert "tests/**" in includes, (
+            "pyproject.toml [tool.flit.sdist] must include 'tests/**'. "
+            "Apache release policy requires tests in the source tarball."
+        )
+
     def test_manifest_in_does_not_exist(self):
         """Verify that MANIFEST.in does not exist (Flit uses pyproject.toml)."""
         manifest_file = get_ui_backend_dir() / "MANIFEST.in"
