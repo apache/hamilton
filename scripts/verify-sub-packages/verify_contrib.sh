@@ -40,7 +40,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Check prerequisites
-for cmd in gpg java flit uv svn; do
+for cmd in gpg java uv svn; do
     if ! command -v "$cmd" > /dev/null 2>&1; then
         echo "ERROR: $cmd is required but not found. Please install it."
         exit 1
