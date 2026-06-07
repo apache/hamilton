@@ -191,7 +191,7 @@ hamilton-disable-autoload-extensions = "hamilton.registry:config_disable_autoloa
 hamilton-enable-autoload-extensions = "hamilton.registry:config_enable_autoload"
 
 [project.urls]
-homepage = "https://www.tryhamilton.dev/"
+homepage = "https://hamilton.apache.org/"
 documentation = "https://hamilton.apache.org/en/latest/"
 changelog = "https://github.com/apache/hamilton/releases"
 issues = "https://github.com/apache/hamilton/issues"
