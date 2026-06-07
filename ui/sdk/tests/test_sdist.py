@@ -77,7 +77,8 @@ class TestSdistIncludesExamples:
         sdist = load_sdist_config()
         excludes = sdist.get("exclude", [])
         assert "examples/**" not in excludes, (
-            "pyproject.toml [tool.flit.sdist] must not exclude 'examples/**'."
+            "pyproject.toml [tool.flit.sdist] must not exclude 'examples/**'. "
+            "Examples help voters validate the package works correctly."
         )
 
 
