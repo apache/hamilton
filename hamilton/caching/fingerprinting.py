@@ -261,11 +261,15 @@ def hash_pandas_obj(obj, *args, depth: int = 0, **kwargs) -> str:
 
 @hash_value.register(h_databackends.AbstractPolarsDataFrame)
 def hash_polars_dataframe(obj, *args, depth: int = 0, **kwargs) -> str:
-    """Convert a polars dataframe, series, or index to
-    a list of hashes then hash it.
+    """Convert a polars dataframe to a hash that includes column names
+    and dtypes (schema) alongside row hashes. This prevents collisions
+    between DataFrames with identical cell values but different schemas.
     """
-    hash_per_row = obj.hash_rows()
-    return hash_sequence(hash_per_row.to_list(), depth=depth + 1)
+    schema_str = ",".join(f"{name}:{dtype}" for name, dtype in obj.schema.items())
+    schema_hash = hash_bytes(schema_str.encode())
+    row_hash = hash_sequence(obj.hash_rows().to_list(), depth=depth + 1)
+    combined = hashlib.md5(schema_hash.encode() + row_hash.encode())
+    return _compact_hash(combined.digest())
 
 
 @hash_value.register(h_databackends.AbstractPolarsColumn)
@@ -277,11 +281,11 @@ def hash_polars_column(obj, *args, depth: int = 0, **kwargs) -> str:
 
 @hash_value.register(h_databackends.AbstractNumpyArray)
 def hash_numpy_array(obj, *args, depth: int = 0, **kwargs) -> str:
-    """Get the bytes representation of the array raw data and hash it.
+    """Hash a numpy array including shape and dtype metadata.
 
-    Might not be ideal because different higher-level numpy objects could have
-    the same underlying array representation (e.g., masked arrays).
-    Unsure, but it's an area to investigate.
+    Without metadata, arrays with the same raw bytes but different shapes
+    or dtypes (e.g., shape=(6,) vs shape=(2,3), or float32 vs int32 with
+    identical bit patterns) would produce identical hashes.
     """
-    # use the same depth because we're simply dispatching to another implementation
-    return hash_bytes(obj.tobytes(), depth=depth)
+    metadata = f"{obj.shape}:{obj.dtype}".encode()
+    return hash_bytes(metadata + obj.tobytes(), depth=depth)

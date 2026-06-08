@@ -34,7 +34,6 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, re_path
-from django.views.generic import TemplateView
 from django.views.static import serve
 
 from . import api, default_views
@@ -83,8 +82,13 @@ if settings.HAMILTON_ENV == "mini":
             )
         )
 
-    # Catch-all route for SPA routing - this MUST be last
-    urlpatterns.append(re_path(".*", TemplateView.as_view(template_name="index.html")))
+    # Catch-all route for SPA routing - this MUST be last.
+    # Use serve() rather than TemplateView so the file is returned as raw bytes
+    # (avoids TemplateSyntaxError on compiled JS/HTML) and so a missing index.html
+    # produces a 404 instead of a 500.
+    urlpatterns.append(
+        re_path(".*", serve, {"document_root": str(build_dir), "path": "index.html"})
+    )
 else:
     urlpatterns = [
         path("api/", api.api.urls),
