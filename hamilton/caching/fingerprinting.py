@@ -36,10 +36,11 @@ implementation should pass the `depth` parameter to prevent `RecursionError`.
 import base64
 import datetime
 import functools
-import hashlib
 import logging
 import sys
 from collections.abc import Mapping, Sequence, Set
+
+import xxhash
 
 from hamilton.experimental import h_databackends
 
@@ -77,12 +78,16 @@ def _compact_hash(digest: bytes) -> str:
 
 
 def _hash_bytes(data: bytes) -> str:
-    """Hash raw bytes and compact-encode the digest.
+    """Hash raw bytes with the non-cryptographic xxh3_128 algorithm and
+    compact-encode the digest.
 
     All hashing in this module routes through this single helper so the
     underlying hashing algorithm can be changed in exactly one place.
+    xxh3_128 produces a 16-byte digest (24 base64url chars, the same width
+    as the md5 it replaces) while running substantially faster on
+    buffer-bound paths.
     """
-    return _compact_hash(hashlib.md5(data).digest())
+    return _compact_hash(xxhash.xxh3_128(data).digest())
 
 
 @functools.singledispatch
