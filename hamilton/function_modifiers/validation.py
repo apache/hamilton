@@ -30,6 +30,7 @@ from hamilton.function_modifiers import base
 
 IS_DATA_VALIDATOR_TAG = "hamilton.data_quality.contains_dq_results"
 DATA_VALIDATOR_ORIGINAL_OUTPUT_TAG = "hamilton.data_quality.source_node"
+DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY = "hamilton.data_quality.disable_checks"
 
 
 class BaseDataValidationDecorator(base.NodeTransformer):
@@ -42,9 +43,14 @@ class BaseDataValidationDecorator(base.NodeTransformer):
         """
         pass
 
+    def optional_config(self) -> dict[str, Any]:
+        return {DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY: False}
+
     def transform_node(
         self, node_: node.Node, config: dict[str, Any], fn: Callable
     ) -> Collection[node.Node]:
+        if config.get(DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY, False):
+            return [node_]
         raw_node = node.Node(
             name=node_.name
             + "_raw",  # TODO -- make this unique -- this will break with multiple validation decorators, which we *don't* want

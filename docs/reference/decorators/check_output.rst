@@ -32,6 +32,25 @@ from ``hamilton.data_quality.base`` as your base class instead of the sync varia
 See `data_quality <https://github.com/apache/hamilton/blob/main/data\_quality.md>`_ for more information on
 available validators and how to build custom ones.
 
+Disabling validators
+~~~~~~~~~~~~~~~~~~~~
+
+All ``@check_output`` and ``@check_output_custom`` validators can be disabled at graph-construction
+time using ``Builder.with_data_quality_disabled()``:
+
+.. code-block:: python
+
+    dr = (
+        hamilton.driver.Builder()
+        .with_modules(my_pipeline)
+        .with_data_quality_disabled()
+        .build()
+    )
+
+This eliminates all validator nodes from the graph — no ``_raw`` or validator nodes are created, so
+there is zero runtime cost. It is equivalent to ``.with_config({"hamilton.data_quality.disable_checks": True})``.
+See :doc:`../drivers/Driver` for full ``Builder`` documentation.
+
 Note we also have a plugins that allow for validation with the pandera and pydantic libraries. There are two ways to access these:
 
 1. ``@check_output(schema=pandera_schema)`` or ``@check_output(model=pydantic_model)``

@@ -65,8 +65,8 @@ class TestModelConfig:
     def test_model_openai_returns_gpt35(self):
         assert faiss_rag.model__openai() == "gpt-3.5-turbo"
 
-    def test_model_minimax_returns_m27(self):
-        assert faiss_rag.model__minimax() == "MiniMax-M2.7"
+    def test_model_minimax_returns_m3(self):
+        assert faiss_rag.model__minimax() == "MiniMax-M3"
 
 
 class TestOpenAIProvider:
@@ -116,7 +116,7 @@ class TestMiniMaxProvider:
             assert client.api_key == "my-secret-key"
 
     def test_rag_response_with_minimax_model(self):
-        """Test that rag_response works with MiniMax-M2.7 model."""
+        """Test that rag_response works with MiniMax-M3 model."""
         mock_client = MagicMock(spec=openai.OpenAI)
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
@@ -126,12 +126,12 @@ class TestMiniMaxProvider:
         result = faiss_rag.rag_response(
             rag_prompt="Where did stefan work?",
             llm_client=mock_client,
-            model="MiniMax-M2.7",
+            model="MiniMax-M3",
         )
 
         assert result == "Stitch Fix"
         mock_client.chat.completions.create.assert_called_once_with(
-            model="MiniMax-M2.7",
+            model="MiniMax-M3",
             messages=[{"role": "user", "content": "Where did stefan work?"}],
         )
 
@@ -243,7 +243,7 @@ class TestMiniMaxIntegration:
                 "Stefan worked at Stitch Fix.\n\n"
                 "Question: Where did Stefan work?",
                 llm_client=client,
-                model="MiniMax-M2.7",
+                model="MiniMax-M3",
             )
             assert isinstance(result, str)
             assert len(result) > 0
