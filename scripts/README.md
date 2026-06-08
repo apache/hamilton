@@ -136,7 +136,7 @@ To build and sign artifacts without uploading to SVN or creating a git tag:
 
 ```bash
 uv run python scripts/apache_release_helper.py \
-    --package ${PACKAGE_KEY} ${VERSION} ${RC} ${APACHE_ID} --dry-run
+    --package ${PACKAGE_KEY} ${VERSION} ${RC} ${APACHE_ID} --no-sign
 ```
 
 ### After the Vote Passes
@@ -162,7 +162,7 @@ export TAG="${PACKAGE}-v${VERSION}-incubating-RC${RC}"
 
 ```bash
 # Dry run first to verify
-scripts/promote_rc.sh --dry-run ${PACKAGE} ${VERSION} ${RC}
+scripts/promote_rc.sh --no-sign ${PACKAGE} ${VERSION} ${RC}
 
 # Then promote for real
 scripts/promote_rc.sh ${PACKAGE} ${VERSION} ${RC}

@@ -80,9 +80,9 @@ include = [
     "LICENSE",
     "NOTICE",
     "DISCLAIMER",
+    "tests/**",
 ]
 exclude = [
-    "tests/**",
     ".git/**",
     "**/__pycache__/**",
     "**/*.pyc",

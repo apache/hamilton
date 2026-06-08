@@ -609,9 +609,9 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
                     try:
                         response.raise_for_status()
                         logger.debug(f"Updated tasks for DAG run {dag_run_id}")
-                    except HTTPError:
+                    except aiohttp.ClientResponseError:
                         logger.exception(f"Failed to update tasks for DAG run {dag_run_id}")
-                        # zraise
+                        raise
 
     async def worker(self):
         """Worker thread to process the queue"""

@@ -38,6 +38,14 @@ if [ -z "$VERSION" ] || [ -z "$RC" ]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Check prerequisites
+for cmd in gpg java uv svn; do
+    if ! command -v "$cmd" > /dev/null 2>&1; then
+        echo "ERROR: $cmd is required but not found. Please install it."
+        exit 1
+    fi
+done
 PACKAGE="apache-hamilton-lsp"
 SRC_TAR="${PACKAGE}-${VERSION}-incubating-src.tar.gz"
 WHEEL="apache_hamilton_lsp-${VERSION}-py3-none-any.whl"
@@ -116,7 +124,7 @@ build_dir="/tmp/build-lsp-$$"
 mkdir -p "$build_dir"
 tar xzf "$ARTIFACTS_DIR/$SRC_TAR" -C "$build_dir"
 src_dir=$(ls -d ${build_dir}/*/ | head -1)
-if (cd "$src_dir" && flit build --no-use-vcs) 2>&1 | grep -q "Built wheel"; then
+if (cd "$src_dir" && uvx flit build --no-use-vcs) 2>&1 | grep -q "Built wheel"; then
     echo "  ✓ Built from source successfully"
 else
     echo "  ✗ Build from source failed"
@@ -131,6 +139,7 @@ echo "--- Functional verification ---"
 VENV_DIR="/tmp/verify-lsp-func-$$"
 uv venv "$VENV_DIR" --python 3.12 -q
 source "$VENV_DIR/bin/activate"
+cd /tmp  # prevent '' in sys.path from resolving local hamilton checkout
 
 uv pip install -q "$ARTIFACTS_DIR/$WHEEL" "apache-hamilton[visualization]"
 

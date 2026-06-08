@@ -148,7 +148,7 @@ def model__openai() -> str:
 @config.when(provider="minimax")
 def model__minimax() -> str:
     """The model to use for MiniMax."""
-    return "MiniMax-M2.7"
+    return "MiniMax-M3"
 
 
 def conversational_rag_response(answer_prompt: str, llm_client: openai.OpenAI, model: str) -> str:

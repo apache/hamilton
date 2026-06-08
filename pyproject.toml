@@ -67,7 +67,7 @@ experiments = [
   "fastui",
   "uvicorn",
 ]
-lsp = ["sf-hamilton-lsp"]  # TODO: switch to apache-hamilton-lsp once stable version is published
+lsp = ["apache-hamilton-lsp"]
 openlineage = ["openlineage-python"]
 pandera = ["pandera"]
 pydantic = ["pydantic>=2.0"]
@@ -77,12 +77,12 @@ pyspark = [
 ]
 ray = ["ray>=2.0.0; python_version < '3.14'", "pyarrow"]
 rich = ["rich"]
-sdk = ["sf-hamilton-sdk"]  # TODO: switch to apache-hamilton-sdk once stable version is published
+sdk = ["apache-hamilton-sdk"]
 slack = ["slack-sdk"]
 
 mcp = ["fastmcp>=3.0.0,<4"]
 tqdm = ["tqdm"]
-ui = ["sf-hamilton-ui"]  # TODO: switch to apache-hamilton-ui once stable version is published
+ui = ["apache-hamilton-ui"]
 
 # vaex -- on >=py3.11 only core part available https://github.com/vaexio/vaex/pull/2331#issuecomment-2437198176
 vaex = [
@@ -283,6 +283,11 @@ exclude = ["*tests*"]
 
 [tool.setuptools.package-data]
 hamilton = ["*.json", "*.md", "*.txt"]
+
+[tool.uv.sources]
+apache-hamilton-lsp = { path = "dev_tools/language_server", editable = true }
+apache-hamilton-sdk = { path = "ui/sdk", editable = true }
+apache-hamilton-ui = { path = "ui/backend", editable = true }
 
 [tool.flit.module]
 name = "hamilton"
