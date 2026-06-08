@@ -76,6 +76,15 @@ def _compact_hash(digest: bytes) -> str:
     return base64.urlsafe_b64encode(digest).decode()
 
 
+def _hash_bytes(data: bytes) -> str:
+    """Hash raw bytes and compact-encode the digest.
+
+    All hashing in this module routes through this single helper so the
+    underlying hashing algorithm can be changed in exactly one place.
+    """
+    return _compact_hash(hashlib.md5(data).digest())
+
+
 @functools.singledispatch
 def hash_value(obj, *args, depth=0, **kwargs) -> str:
     """Fingerprinting strategy that computes a hash of the
@@ -138,22 +147,27 @@ def hash_repr(obj, *args, **kwargs) -> str:
 @hash_value.register(float)
 @hash_value.register(bool)
 def hash_primitive(obj, *args, **kwargs) -> str:
-    """Convert the primitive to a string and hash it
+    """Convert the primitive to a string and hash it.
+
+    The hash is prefixed with the type name so that values sharing the same
+    string form but differing in type (e.g. ``1`` vs ``"1"`` vs ``1.0``) do
+    not collide.
 
     Primitive type returns a hash and doesn't have to handle depth.
     """
-    hash_object = hashlib.md5(str(obj).encode())
-    return _compact_hash(hash_object.digest())
+    return _hash_bytes(f"{type(obj).__name__}:{obj}".encode())
 
 
 @hash_value.register(bytes)
 def hash_bytes(obj, *args, **kwargs) -> str:
-    """Convert the primitive to a string and hash it
+    """Hash a bytes object.
+
+    The hash is prefixed with a ``bytes`` type tag so that ``b"1"`` and the
+    string ``"1"`` (handled by :func:`hash_primitive`) do not collide.
 
     Primitive type returns a hash and doesn't have to handle depth.
     """
-    hash_object = hashlib.md5(obj)
-    return _compact_hash(hash_object.digest())
+    return _hash_bytes(b"bytes:" + obj)
 
 
 @hash_value.register(Sequence)
@@ -162,11 +176,8 @@ def hash_sequence(obj, *args, depth: int = 0, **kwargs) -> str:
 
     Orders matters for the hash since orders matters in a sequence.
     """
-    hash_object = hashlib.sha224()
-    for elem in obj:
-        hash_object.update(hash_value(elem, depth=depth + 1).encode())
-
-    return _compact_hash(hash_object.digest())
+    buffer = b"".join(hash_value(elem, depth=depth + 1).encode() for elem in obj)
+    return _hash_bytes(buffer)
 
 
 def hash_unordered_mapping(obj, *args, depth: int = 0, **kwargs) -> str:
@@ -186,12 +197,10 @@ def hash_unordered_mapping(obj, *args, depth: int = 0, **kwargs) -> str:
     for key, value in obj.items():
         hashed_mapping[hash_value(key, depth=depth + 1)] = hash_value(value, depth=depth + 1)
 
-    hash_object = hashlib.sha224()
-    for key, value in sorted(hashed_mapping.items()):
-        hash_object.update(key.encode())
-        hash_object.update(value.encode())
-
-    return _compact_hash(hash_object.digest())
+    buffer = b"".join(
+        key.encode() + value.encode() for key, value in sorted(hashed_mapping.items())
+    )
+    return _hash_bytes(buffer)
 
 
 @hash_value.register(Mapping)
@@ -217,12 +226,11 @@ def hash_mapping(obj, *, ignore_order: bool = True, depth: int = 0, **kwargs) ->
         # use the same depth because we're simply dispatching to another implementation
         return hash_unordered_mapping(obj, depth=depth)
 
-    hash_object = hashlib.sha224()
-    for key, value in obj.items():
-        hash_object.update(hash_value(key, depth=depth + 1).encode())
-        hash_object.update(hash_value(value, depth=depth + 1).encode())
-
-    return _compact_hash(hash_object.digest())
+    buffer = b"".join(
+        hash_value(key, depth=depth + 1).encode() + hash_value(value, depth=depth + 1).encode()
+        for key, value in obj.items()
+    )
+    return _hash_bytes(buffer)
 
 
 @hash_value.register(Set)
@@ -233,14 +241,9 @@ def hash_set(obj, *args, depth: int = 0, **kwargs) -> str:
     For the same objects in the set, the hashes will be the
     same.
     """
-    hashes = [hash_value(elem, depth=depth + 1) for elem in obj]
-    sorted_hashes = sorted(hashes)
-
-    hash_object = hashlib.sha224()
-    for hash in sorted_hashes:
-        hash_object.update(hash.encode())
-
-    return _compact_hash(hash_object.digest())
+    sorted_hashes = sorted(hash_value(elem, depth=depth + 1) for elem in obj)
+    buffer = b"".join(hash.encode() for hash in sorted_hashes)
+    return _hash_bytes(buffer)
 
 
 @hash_value.register(h_databackends.AbstractPandasDataFrame)
@@ -268,8 +271,7 @@ def hash_polars_dataframe(obj, *args, depth: int = 0, **kwargs) -> str:
     schema_str = ",".join(f"{name}:{dtype}" for name, dtype in obj.schema.items())
     schema_hash = hash_bytes(schema_str.encode())
     row_hash = hash_sequence(obj.hash_rows().to_list(), depth=depth + 1)
-    combined = hashlib.md5(schema_hash.encode() + row_hash.encode())
-    return _compact_hash(combined.digest())
+    return _hash_bytes(schema_hash.encode() + row_hash.encode())
 
 
 @hash_value.register(h_databackends.AbstractPolarsColumn)
