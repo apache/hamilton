@@ -249,28 +249,40 @@ def hash_set(obj, *args, depth: int = 0, **kwargs) -> str:
 @hash_value.register(h_databackends.AbstractPandasDataFrame)
 @hash_value.register(h_databackends.AbstractPandasColumn)
 def hash_pandas_obj(obj, *args, depth: int = 0, **kwargs) -> str:
-    """Convert a pandas dataframe, series, or index to
-    a dictionary of {index: row_hash} then hash it.
+    """Hash a pandas DataFrame, Series, or Index via vectorized row hashing.
 
-    Given the hashing for mappings, the physical ordering or rows doesn't matter.
-    For example, if the index is a date, the hash will represent the {date: row_hash},
-    and won't preserve how dates were ordered in the DataFrame.
+    ``pandas.util.hash_pandas_object`` computes a uint64 hash per row in a
+    single vectorized pass; we hash that buffer in one shot rather than
+    iterating over rows in Python. Column names and dtypes (the schema) are
+    folded in so that frames carrying identical cell values under different
+    schemas do not collide.
+
+    The hash is order-sensitive: reordering rows changes the per-row hash
+    buffer and therefore the fingerprint.
     """
     from pandas.util import hash_pandas_object
 
-    hash_per_row = hash_pandas_object(obj)
-    return hash_mapping(hash_per_row.to_dict(), ignore_order=False, depth=depth + 1)
+    row_hashes = hash_pandas_object(obj).values.tobytes()
+    if hasattr(obj, "columns"):
+        schema = f"{list(obj.columns)}:{[str(dtype) for dtype in obj.dtypes]}"
+    else:
+        schema = f"{getattr(obj, 'name', None)}:{obj.dtype}"
+    return _hash_bytes(schema.encode() + row_hashes)
 
 
 @hash_value.register(h_databackends.AbstractPolarsDataFrame)
 def hash_polars_dataframe(obj, *args, depth: int = 0, **kwargs) -> str:
-    """Convert a polars dataframe to a hash that includes column names
-    and dtypes (schema) alongside row hashes. This prevents collisions
-    between DataFrames with identical cell values but different schemas.
+    """Hash a polars DataFrame via vectorized row hashing.
+
+    ``DataFrame.hash_rows`` computes a per-row hash in a single vectorized
+    pass; we hash that buffer (``to_numpy().tobytes()``) in one shot rather
+    than iterating element-by-element in Python. Column names and dtypes
+    (the schema) are folded in so frames carrying identical cell values under
+    different schemas do not collide.
     """
     schema_str = ",".join(f"{name}:{dtype}" for name, dtype in obj.schema.items())
     schema_hash = hash_bytes(schema_str.encode())
-    row_hash = hash_sequence(obj.hash_rows().to_list(), depth=depth + 1)
+    row_hash = hash_bytes(obj.hash_rows().to_numpy().tobytes())
     return _hash_bytes(schema_hash.encode() + row_hash.encode())
 
 

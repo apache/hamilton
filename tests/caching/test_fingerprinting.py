@@ -248,6 +248,27 @@ def test_hash_pandas_same_data_matches():
     assert fingerprinting.hash_value(a) == fingerprinting.hash_value(b)
 
 
+def test_hash_pandas_different_columns_differ():
+    """pandas analog of test_hash_polars_different_columns_differ: identical
+    values under different column names must hash differently."""
+    a = pd.DataFrame({"region": ["East", "West"], "revenue": [100, 200]})
+    b = pd.DataFrame({"student": ["East", "West"], "height_cm": [100, 200]})
+    assert fingerprinting.hash_value(a) != fingerprinting.hash_value(b)
+
+
+def test_hash_pandas_different_dtypes_differ():
+    """pandas frames with identical values but different dtypes must hash differently."""
+    a = pd.DataFrame({"a": [1, 2], "b": [3, 4]})  # int64
+    b = pd.DataFrame({"a": [1.0, 2.0], "b": [3.0, 4.0]})  # float64
+    assert fingerprinting.hash_value(a) != fingerprinting.hash_value(b)
+
+
+def test_hash_pandas_order_sensitive():
+    """Reordering rows must change the fingerprint (order-sensitivity preserved)."""
+    df = pd.DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]})
+    assert fingerprinting.hash_value(df) != fingerprinting.hash_value(df.iloc[::-1])
+
+
 def test_hash_polars_different_columns_differ():
     """DataFrames with identical values but different column names must hash differently."""
     polars = pytest.importorskip("polars")
@@ -262,6 +283,14 @@ def test_hash_polars_same_schema_same_data_matches():
     a = polars.DataFrame({"x": [1, 2], "y": [3, 4]})
     b = polars.DataFrame({"x": [1, 2], "y": [3, 4]})
     assert fingerprinting.hash_value(a) == fingerprinting.hash_value(b)
+
+
+def test_hash_polars_different_dtypes_differ():
+    """polars frames with identical values but different dtypes must hash differently."""
+    polars = pytest.importorskip("polars")
+    a = polars.DataFrame({"a": [1, 2]}, schema={"a": polars.Int64})
+    b = polars.DataFrame({"a": [1, 2]}, schema={"a": polars.Float64})
+    assert fingerprinting.hash_value(a) != fingerprinting.hash_value(b)
 
 
 def test_hash_cross_type_primitives_differ():
