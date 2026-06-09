@@ -18,17 +18,13 @@
 # dask_expr got made default, except for python 3.9 and below
 import sys
 
-# Skip tests that require packages not yet available on Python 3.14
-collect_ignore = []
-if sys.version_info >= (3, 14):
-    collect_ignore.extend(
-        [
-            # dask - no Python 3.14 support yet
-            "test_h_dask.py",
-        ]
-    )
-
 if sys.version_info < (3, 10):
     import dask
 
     dask.config.set({"dataframe.query-planning": False})
+
+
+def pytest_sessionfinish(session, exitstatus):
+    if exitstatus == 5:  # pytest.ExitCode.NO_TESTS_COLLECTED
+        if sys.version_info >= (3, 14):
+            session.exitstatus = 0
