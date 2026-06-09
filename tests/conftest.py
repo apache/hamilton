@@ -42,24 +42,6 @@ if sys.version_info >= (3, 14):
             # pandera - no Python 3.14 support yet
             "integrations/pandera/test_pandera_data_quality.py",
             "integrations/pandera/test_h_pandera_polars.py",
-            # dlt - no Python 3.14 support yet
-            "plugins/test_dlt_extensions.py",
-            # diskcache - no Python 3.14 support yet
-            "plugins/test_h_diskcache.py",
-            # pyarrow - no Python 3.14 support yet
-            "plugins/test_h_pyarrow.py",
-            # schema - no Python 3.14 support yet
-            "plugins/test_h_schema.py",
-            # tqdm - no Python 3.14 support yet
-            "plugins/test_h_tqdm.py",
-            # matplotlib - no Python 3.14 support yet
-            "plugins/test_matplotlib_extensions.py",
-            # pandas - no Python 3.14 support yet
-            "plugins/test_pandas_extensions.py",
-            # pydantic - no Python 3.14 support yet
-            "plugins/test_pydantic_extensions.py",
-            # sklearn - no Python 3.14 support yet
-            "plugins/test_sklearn_plot_extensions.py",
         ]
     )
 
