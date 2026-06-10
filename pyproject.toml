@@ -203,6 +203,9 @@ slack = "https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8
 
 [tool.pytest.ini_options]
 addopts = "-p no:ddtrace"
+markers = [
+    "asyncio: mark test as requiring asyncio",
+]
 
 [tool.ruff]
 line-length = 100
