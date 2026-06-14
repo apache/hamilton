@@ -30,6 +30,7 @@ from trackingserver_base.permissions.permissions import (
     user_can_get_project_by_id,
     user_can_write_to_dag_run,
     user_can_write_to_dag_template,
+    visible_project_ids_for_user,
 )
 from trackingserver_run_tracking.models import DAGRun, NodeRun, NodeRunAttribute
 from trackingserver_run_tracking.schema import (
@@ -79,9 +80,10 @@ async def get_latest_dag_runs(
     limit: int = 100,
     offset: int = 0,
 ) -> list[DAGRunOut]:
-    """Gets a list of DAG runs. This accepts one (and only one of) the following:
-        - project_id
-        - dag_template_id
+    """Gets a list of DAG runs. Accepts at most one of ``project_id`` or
+    ``dag_template_id``. When neither is supplied the result is scoped to the
+    set of projects the caller has visibility to, per the visibility contract
+    documented in ``trackingserver_base/permissions/permissions.py``.
 
     @param project_id:
     @param dag_template_id:
@@ -106,6 +108,17 @@ async def get_latest_dag_runs(
             f"Can only specify one of project_id/dag_template_id, "
             f"got: project_id={project_id}, dag_template_id={dag_template_id}",
         )
+    # When no specific identifier is provided we still need to honor the
+    # "get endpoints only return items the caller has visibility to" contract.
+    # Scope the query to projects the caller is a member of (directly or via a
+    # team, including the Public team). If the caller has no visible projects
+    # this short-circuits to an empty result.
+    if not key_kwargs:
+        visible_project_ids = await visible_project_ids_for_user(user, teams)
+        if not visible_project_ids:
+            logger.info(f"User {user.email} has no visible projects; returning no DAG runs")
+            return []
+        key_kwargs["dag_template__project_id__in"] = visible_project_ids
     dag_runs = await django_utils.amap(
         DAGRunOut.create_with_username,
         DAGRun.objects.filter(**key_kwargs, **{"dag_template__is_active": True})
