@@ -87,7 +87,7 @@
     "@types/dagre": "^0.7.52",
     "@types/node": "^22.10.2",
     "@types/react-syntax-highlighter": "^15.5.13",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "^6.0.2",
     "autoprefixer": "^10.4.24",
     "eslint": "^9.17.0",
     "eslint-plugin-react": "^7.37.2",
@@ -102,6 +102,6 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.2",
-    "vite": "^6.4.2"
+    "vite": "^8.0.16"
   }
 }
