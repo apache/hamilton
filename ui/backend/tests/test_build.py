@@ -139,7 +139,8 @@ class TestDjangoConfiguration:
     """Tests for Django settings configuration."""
 
     def test_settings_mini_mode_configured(self):
-        """Verify that Django settings are correctly configured for mini mode."""
+        """Verify that Django settings support mini mode (static assets + media root)."""
+        # settings.py contains the conditional logic for mini mode
         settings_file = get_ui_backend_dir() / "server" / "server" / "settings.py"
         assert settings_file.exists(), f"Django settings file not found at {settings_file}"
 
@@ -150,13 +151,23 @@ class TestDjangoConfiguration:
             "Django settings missing mini mode configuration"
         )
 
-        # Check for STATICFILES_DIRS pointing to build/static/ or build/assets/
-        assert "build/static/" in settings_content or "build/assets/" in settings_content, (
-            "Django settings missing build/static/ or build/assets/ in STATICFILES_DIRS"
+        # Check for STATICFILES_DIRS pointing to build/static or build/assets
+        assert "build/static" in settings_content or "build/assets" in settings_content, (
+            "Django settings missing build/static or build/assets in STATICFILES_DIRS"
         )
 
         # Check for MEDIA_ROOT pointing to build/
         assert "MEDIA_ROOT" in settings_content, "Django settings missing MEDIA_ROOT configuration"
+
+        # settings_mini.py is the actual settings module used in mini mode
+        settings_mini_file = get_ui_backend_dir() / "server" / "server" / "settings_mini.py"
+        assert settings_mini_file.exists(), (
+            f"Django mini settings file not found at {settings_mini_file}"
+        )
+        settings_mini_content = settings_mini_file.read_text()
+        assert "build/static" in settings_mini_content or "build/assets" in settings_mini_content, (
+            "settings_mini.py missing build/static or build/assets in STATICFILES_DIRS"
+        )
 
     def test_urls_mini_mode_configured(self):
         """Verify that Django URLs are configured for mini mode SPA routing."""
@@ -182,8 +193,13 @@ class TestPackageConfiguration:
         pyproject_file = get_ui_backend_dir() / "pyproject.toml"
         assert pyproject_file.exists(), f"pyproject.toml not found at {pyproject_file}"
 
-    def test_flit_sdist_includes_build_directory(self):
-        """Verify that pyproject.toml includes hamilton_ui/build/** in Flit sdist."""
+    def test_flit_sdist_excludes_build_directory(self):
+        """Verify that pyproject.toml excludes hamilton_ui/build/** from Flit sdist.
+
+        Compiled frontend assets (JS/CSS) must not be in the source tarball
+        to avoid third-party license obligations. The wheel includes them
+        via package data; the release script builds sdist before npm build.
+        """
         pyproject_file = get_ui_backend_dir() / "pyproject.toml"
 
         with open(pyproject_file, "rb") as f:
@@ -194,11 +210,28 @@ class TestPackageConfiguration:
         assert "flit" in config["tool"], "pyproject.toml missing [tool.flit] section"
         assert "sdist" in config["tool"]["flit"], "pyproject.toml missing [tool.flit.sdist] section"
 
-        # Check includes
+        # Check excludes
+        excludes = config["tool"]["flit"]["sdist"].get("exclude", [])
+        assert "hamilton_ui/build/**" in excludes, (
+            "pyproject.toml [tool.flit.sdist] must exclude 'hamilton_ui/build/**'. "
+            "Compiled frontend assets should not be in the source tarball."
+        )
+
+    def test_flit_sdist_includes_tests(self):
+        """Verify that pyproject.toml includes tests/** in Flit sdist.
+
+        Per Apache release policy, voters must be able to build from source
+        and run tests to validate.
+        """
+        pyproject_file = get_ui_backend_dir() / "pyproject.toml"
+
+        with open(pyproject_file, "rb") as f:
+            config = tomllib.load(f)
+
         includes = config["tool"]["flit"]["sdist"].get("include", [])
-        assert "hamilton_ui/build/**" in includes, (
-            "pyproject.toml [tool.flit.sdist] does not include 'hamilton_ui/build/**'. "
-            "Built assets will not be packaged in the distribution."
+        assert "tests/**" in includes, (
+            "pyproject.toml [tool.flit.sdist] must include 'tests/**'. "
+            "Apache release policy requires tests in the source tarball."
         )
 
     def test_manifest_in_does_not_exist(self):

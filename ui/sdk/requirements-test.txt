@@ -2,8 +2,8 @@ ibis-framework
 langchain_core
 numpy
 polars
-pyarrow
-pyarrow_hotfix  # required for ibis tests
+pyarrow>=14.0.1
+pyarrow_hotfix
 pydantic
 pyspark
 pytest

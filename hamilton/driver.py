@@ -27,6 +27,7 @@ import sys
 # required if we want to run this code stand alone.
 import typing
 import uuid
+import warnings
 from collections.abc import Callable, Collection, Sequence
 from datetime import datetime
 from types import ModuleType
@@ -44,6 +45,7 @@ from hamilton.caching.adapter import HamiltonCacheAdapter
 from hamilton.caching.stores.base import MetadataStore, ResultStore
 from hamilton.dev_utils import deprecation
 from hamilton.execution import executors, graph_functions, grouping, state
+from hamilton.function_modifiers.validation import DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY
 from hamilton.graph_types import HamiltonNode
 from hamilton.io import materialization
 from hamilton.io.materialization import ExtractorFactory, MaterializerFactory
@@ -544,9 +546,11 @@ class Driver:
             dataframe.
         """
         if display_graph:
-            logger.warning(
+            warnings.warn(
                 "display_graph=True is deprecated. It will be removed in the 2.0.0 release. "
-                "Please use visualize_execution()."
+                "Please use visualize_execution().",
+                DeprecationWarning,
+                stacklevel=2,
             )
         run_id = str(uuid.uuid4())
         run_successful = True
@@ -634,9 +638,11 @@ class Driver:
             function_graph, self.adapter, user_nodes, inputs, nodes
         )  # TODO -- validate within the function graph itself
         if display_graph:  # deprecated flow.
-            logger.warning(
+            warnings.warn(
                 "display_graph=True is deprecated. It will be removed in the 2.0.0 release. "
-                "Please use visualize_execution()."
+                "Please use visualize_execution().",
+                DeprecationWarning,
+                stacklevel=2,
             )
             self.visualize_execution(final_vars, "test-output/execute.gv", {"view": True})
             if self.has_cycles(
@@ -708,9 +714,11 @@ class Driver:
             function_graph, self.adapter, user_nodes, inputs, nodes
         )  # TODO -- validate within the function graph itself
         if display_graph:  # deprecated flow.
-            logger.warning(
+            warnings.warn(
                 "display_graph=True is deprecated. It will be removed in the 2.0.0 release. "
-                "Please use visualize_execution()."
+                "Please use visualize_execution().",
+                DeprecationWarning,
+                stacklevel=2,
             )
             self.visualize_execution(final_vars, "test-output/execute.gv", {"view": True})
             if self.has_cycles(
@@ -1835,6 +1843,19 @@ class Builder:
 
         self.adapters.extend(adapters)
         return self
+
+    def with_data_quality_disabled(self) -> Self:
+        """Disables all ``@check_output`` / ``@check_output_custom`` validators at graph-construction
+        time. No validator nodes are created, so there is zero runtime cost.
+
+        This is equivalent to ``.with_config({DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY: True})``.
+        Note that a subsequent ``.with_config({DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY: False})``
+        will re-enable validation, since ``with_config`` always wins on the last write.
+
+        :return: self
+        """
+
+        return self.with_config({DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY: True})
 
     def with_materializers(self, *materializers: ExtractorFactory | MaterializerFactory) -> Self:
         """Add materializer nodes to the `Driver`

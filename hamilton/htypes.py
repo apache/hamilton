@@ -21,9 +21,19 @@ import typing
 from collections.abc import Iterable
 from typing import Any, Literal, Protocol, TypeVar, Union
 
+import typing_extensions
 import typing_inspect
 
 from hamilton.registry import COLUMN_TYPE, DF_TYPE_AND_COLUMN_TYPES
+
+_TYPE_ALIAS_TYPES = tuple(
+    t
+    for t in (
+        getattr(typing, "TypeAliasType", None),
+        getattr(typing_extensions, "TypeAliasType", None),
+    )
+    if t is not None
+)
 
 BASE_ARGS_FOR_GENERICS = (typing.T,)
 
@@ -116,7 +126,12 @@ def get_type_as_string(type_: type) -> str | None:
     if _is_annotated_type(type_):
         type_string = get_type_as_string(typing.get_args(type_)[0])
     elif getattr(type_, "__name__", None):
-        type_string = type_.__name__
+        base_name = type_.__name__
+        args = typing.get_args(type_)
+        if args and all(getattr(a, "__name__", None) for a in args):
+            type_string = f"{base_name}[{', '.join(a.__name__ for a in args)}]"
+        else:
+            type_string = base_name
     elif typing_inspect.get_origin(type_):
         base_type = typing_inspect.get_origin(type_)
         type_string = get_type_as_string(base_type)
@@ -336,6 +351,8 @@ def check_input_type(node_type: type, input_value: Any) -> bool:
     :param input_value: Value to check.
     :return: True if the input value is of the correct type, False otherwise.
     """
+    if _TYPE_ALIAS_TYPES and isinstance(node_type, _TYPE_ALIAS_TYPES):
+        return check_input_type(node_type.__value__, input_value)
     if node_type == Any:
         return True
     # In the case of dict[str, Any] (or equivalent) in python 3.9 +
@@ -343,6 +360,7 @@ def check_input_type(node_type: type, input_value: Any) -> bool:
     elif (
         inspect.isclass(node_type)
         and not typing_inspect.is_generic_type(node_type)
+        and typing.get_origin(node_type) is None
         and isinstance(input_value, node_type)
     ):
         return True
@@ -362,17 +380,21 @@ def check_input_type(node_type: type, input_value: Any) -> bool:
         node_type
     ):
         return True
-    # iterable (set, dict) is super class over sequence (list, tuple)
-    elif (
-        typing_inspect.is_generic_type(node_type)
-        and typing_inspect.get_origin(node_type)
-        in (list, tuple, typing_inspect.get_origin(typing.Sequence))
-        and isinstance(input_value, (list, tuple, typing_inspect.get_origin(typing.Sequence)))
-    ):
-        if typing_inspect.get_args(node_type):
+    elif typing.get_origin(node_type) in (
+        list,
+        tuple,
+        typing_inspect.get_origin(typing.Sequence),
+    ) and isinstance(input_value, (list, tuple, typing_inspect.get_origin(typing.Sequence))):
+        args = typing.get_args(node_type)
+        if args:
+            origin = typing.get_origin(node_type)
+            if origin is tuple and not (len(args) == 2 and args[1] is Ellipsis):
+                if not isinstance(input_value, tuple) or len(input_value) != len(args):
+                    return False
+                return all(check_input_type(t, v) for t, v in zip(args, input_value, strict=True))
             # check first value in sequence -- if the type is specified.
             for i in input_value:  # this handles empty input case, e.g. [] or (), set()
-                return check_input_type(typing_inspect.get_args(node_type)[0], i)
+                return check_input_type(args[0], i)
         return True
     elif (
         typing_inspect.is_generic_type(node_type)

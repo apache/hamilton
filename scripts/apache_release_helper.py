@@ -15,6 +15,14 @@
 # specific language governing permissions and limitations
 # under the License.
 
+# /// script
+# dependencies = [
+#   "build",
+#   "flit",
+#   "twine",
+# ]
+# ///
+
 import argparse
 import glob
 import hashlib
@@ -194,6 +202,16 @@ def sign_artifacts(archive_name: str) -> list[str] | None:
         print(f"Created GPG signature: {archive_name}.asc")
     except subprocess.CalledProcessError as e:
         print(f"Error signing tarball: {e}")
+        print(
+            "Tip: if you don't have a GPG key configured, re-run with --no-sign (and optionally\n"
+            "--no-upload) to skip signing and SVN upload (useful for local testing).\n"
+            "To set up a GPG key for real releases:\n"
+            "  1. gpg --gen-key\n"
+            "  2. gpg --list-secret-keys   # note your KEYID\n"
+            "  3. gpg --armor --export <KEYID> >> KEYS\n"
+            "  4. Set default-key <KEYID> in ~/.gnupg/gpg.conf if you have multiple keys.\n"
+            "  5. Upload your key fingerprint to id.apache.org before voting."
+        )
         return None
 
     # Generate SHA512 checksum.
@@ -303,7 +321,7 @@ def _modify_tarball_for_apache_release(
             tar.add(extracted_dir, arcname=os.path.basename(extracted_dir))
 
 
-def create_release_artifacts(package_config: dict, version) -> list[str]:
+def create_release_artifacts(package_config: dict, version, no_sign: bool = False) -> list[str]:
     """Creates the source tarball, GPG signature, and checksums using flit build."""
     package_name = package_config["name"]
     working_dir = package_config["working_dir"]
@@ -320,20 +338,70 @@ def create_release_artifacts(package_config: dict, version) -> list[str]:
         if os.path.exists("dist"):
             shutil.rmtree("dist")
 
-        # Use flit build to create the source distribution.
-        try:
-            subprocess.run(
-                [
-                    "flit",
-                    "build",
-                    "--no-use-vcs",
-                ],
-                check=True,
-            )
-            print("Source distribution created successfully.")
-        except subprocess.CalledProcessError as e:
-            print(f"Error creating source distribution: {e}")
-            return None
+        # For the UI package, build sdist first (without frontend assets),
+        # then build frontend, then build wheel (with frontend assets).
+        # This keeps compiled JS/CSS out of the source tarball (avoiding
+        # third-party license obligations) while including them in the wheel.
+        if package_name == "apache-hamilton-ui":
+            # Step 1: Build sdist without frontend assets
+            try:
+                subprocess.run(
+                    ["flit", "build", "--no-use-vcs", "--format", "sdist"],
+                    check=True,
+                )
+                print("Source distribution created successfully (without frontend).")
+            except subprocess.CalledProcessError as e:
+                print(f"Error creating source distribution: {e}")
+                return None
+
+            # Step 2: Build frontend and copy to hamilton_ui/build/
+            print("Building UI frontend (npm install + npm run build)...")
+            frontend_dir = os.path.join(original_dir, "ui", "frontend")
+            build_target = os.path.join("hamilton_ui", "build")
+            try:
+                subprocess.run(
+                    ["npm", "install", "--prefix", frontend_dir],
+                    check=True,
+                )
+                subprocess.run(
+                    ["npm", "run", "build", "--prefix", frontend_dir],
+                    check=True,
+                )
+                # Copy built assets to hamilton_ui/build/
+                if os.path.exists(build_target):
+                    shutil.rmtree(build_target)
+                # Vite outputs to frontend/dist/, CRA outputs to frontend/build/
+                frontend_build = os.path.join(frontend_dir, "dist")
+                if not os.path.exists(frontend_build):
+                    frontend_build = os.path.join(frontend_dir, "build")
+                shutil.copytree(frontend_build, build_target)
+                print(f"Frontend built and copied to {build_target}")
+            except (subprocess.CalledProcessError, FileNotFoundError) as e:
+                print(f"Error building frontend: {e}")
+                print("Ensure Node.js and npm are installed.")
+                return None
+
+            # Step 3: Build wheel (includes frontend assets via package data)
+            try:
+                subprocess.run(
+                    ["flit", "build", "--no-use-vcs", "--format", "wheel"],
+                    check=True,
+                )
+                print("Wheel created successfully (with frontend assets).")
+            except subprocess.CalledProcessError as e:
+                print(f"Error creating wheel: {e}")
+                return None
+        else:
+            # Non-UI packages: build both sdist and wheel in one step
+            try:
+                subprocess.run(
+                    ["flit", "build", "--no-use-vcs"],
+                    check=True,
+                )
+                print("Source distribution created successfully.")
+            except subprocess.CalledProcessError as e:
+                print(f"Error creating source distribution: {e}")
+                return None
 
         # Find the created tarball in the dist directory.
         # Convert package name with underscores for file naming
@@ -361,9 +429,13 @@ def create_release_artifacts(package_config: dict, version) -> list[str]:
         os.remove(tarball_file)
         archive_name = new_tar_ball
         print(f"Found source tarball: {archive_name}")
-        new_tar_ball_signed = sign_artifacts(archive_name)
-        if new_tar_ball_signed is None:
-            raise ValueError("Could not sign the main release artifacts.")
+        if no_sign:
+            print("Skipping GPG signing (--no-sign).")
+            new_tar_ball_signed = []
+        else:
+            new_tar_ball_signed = sign_artifacts(archive_name)
+            if new_tar_ball_signed is None:
+                raise ValueError("Could not sign the main release artifacts.")
 
         # Wheel keeps its original PEP 427 filename (no -incubating suffix)
         expected_wheel = f"dist/{package_file_name}-{version.lower()}-py3-none-any.whl"
@@ -378,7 +450,10 @@ def create_release_artifacts(package_config: dict, version) -> list[str]:
         if not verify_wheel_with_twine(wheel_file):
             raise ValueError("Wheel failed twine validation.")
 
-        wheel_signed_files = sign_artifacts(wheel_file)
+        if no_sign:
+            wheel_signed_files = []
+        else:
+            wheel_signed_files = sign_artifacts(wheel_file)
 
         files_to_upload = [new_tar_ball, *new_tar_ball_signed, wheel_file, *wheel_signed_files]
         return files_to_upload
@@ -521,12 +596,17 @@ def main():
 
     Note: if you have multiple gpg keys, specify the default in ~/.gnupg/gpg.conf add a line with `default-key <KEYID>`.
 
+    Use --no-sign (-ns) to skip GPG signing (e.g., when a key is not available locally).
+    This implicitly sets --no-upload, since unsigned artifacts must never be published.
+    Use --no-upload (-nu) alone to build and sign without publishing (e.g., to rehearse signing).
+
     Examples:
         python apache_release_helper.py --package hamilton 1.89.0 0 your_apache_id
         python apache_release_helper.py --package sdk 0.8.0 0 your_apache_id
         python apache_release_helper.py --package lsp 0.1.0 0 your_apache_id
         python apache_release_helper.py --package contrib 0.0.8 0 your_apache_id
         python apache_release_helper.py --package ui 0.0.17 0 your_apache_id
+        python apache_release_helper.py -ns --package ui 0.0.18 0
     """
     parser = argparse.ArgumentParser(
         description="Automates parts of the Apache release process for Hamilton packages."
@@ -539,18 +619,36 @@ def main():
     )
     parser.add_argument("version", help="The new release version (e.g., '1.0.0').")
     parser.add_argument("rc_num", help="The release candidate number (e.g., '0' for RC0).")
-    parser.add_argument("apache_id", help="Your apache user ID.")
     parser.add_argument(
-        "--dry-run",
+        "apache_id",
+        nargs="?",
+        default=None,
+        help="Your Apache user ID. Required unless --no-upload is set.",
+    )
+    parser.add_argument(
+        "-ns",
+        "--no-sign",
         action="store_true",
-        help="Build and sign artifacts but skip git tagging and SVN upload.",
+        help="Skip GPG signing. Unsigned artifacts cannot be used for an official release vote.",
+    )
+    parser.add_argument(
+        "-nu",
+        "--no-upload",
+        action="store_true",
+        help="Skip git tagging and SVN upload. Useful for validating the build locally.",
     )
     args = parser.parse_args()
+
+    if args.no_sign:
+        args.no_upload = True  # never upload unsigned artifacts
 
     package_key = args.package
     version = args.version
     rc_num = args.rc_num
     apache_id = args.apache_id
+
+    if not args.no_upload and not apache_id:
+        parser.error("apache_id is required unless --no-upload (or --no-sign) is set.")
 
     # Get package configuration
     package_config = PACKAGE_CONFIGS[package_key]
@@ -571,8 +669,8 @@ def main():
 
     # Create git tag (from repo root)
     tag_name = f"{package_name}-v{version}-incubating-RC{rc_num}"
-    if args.dry_run:
-        print(f"\n[dry-run] Skipping git tag creation: {tag_name}")
+    if args.no_upload:
+        print(f"\n[--no-upload] Skipping git tag creation: {tag_name}")
     else:
         print(f"\nChecking for git tag '{tag_name}'...")
         try:
@@ -599,19 +697,19 @@ def main():
     print(f"\n{'=' * 80}")
     print("  Building Release Artifacts")
     print(f"{'=' * 80}\n")
-    files_to_upload = create_release_artifacts(package_config, version)
+    files_to_upload = create_release_artifacts(package_config, version, no_sign=args.no_sign)
     if not files_to_upload:
         sys.exit(1)
 
-    if args.dry_run:
-        # Dry run: skip SVN upload, show summary
+    if args.no_upload:
         print(f"\n{'=' * 80}")
-        print("  [dry-run] Skipping SVN upload")
+        print("  [--no-upload] Skipping SVN upload")
         print(f"{'=' * 80}\n")
         print("Artifacts built successfully:")
         for f in files_to_upload:
             print(f"  {f}")
-        print("\nTo do a real release, re-run without --dry-run.")
+        if args.no_sign:
+            print("\nNote: artifacts are unsigned and cannot be used for an official release vote.")
     else:
         # Upload artifacts
         print(f"\n{'=' * 80}")

@@ -15,9 +15,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import ibis
-import pandas as pd
-from hamilton_sdk.tracking import ibis_stats
+import pytest
+
+ibis = pytest.importorskip("ibis")
+
+import pandas as pd  # noqa: E402
+from hamilton_sdk.tracking import ibis_stats  # noqa: E402
 
 
 def test_compute_stats_ibis_table():

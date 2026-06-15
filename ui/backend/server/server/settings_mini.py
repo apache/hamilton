@@ -131,7 +131,7 @@ WSGI_APPLICATION = "server.wsgi.application"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "build/static/"),
+    os.path.join(BASE_DIR, "build/assets/"),
 ]
 
 # Add for serving the 'index.html' and other build files not in STATICFILES_DIRS

@@ -313,6 +313,44 @@ async def test_async_validator_wrapper_returns_validation_result():
     assert result_fail.passes is False
 
 
+def test_check_output_disabled_via_config_returns_original_node():
+    """With hamilton.data_quality.disable_checks=True, transform_node returns the original node unchanged."""
+    decorator = check_output_custom(
+        SampleDataValidator2(dataset_length=1, importance="warn"),
+        SampleDataValidator3(dtype=np.int64, importance="warn"),
+    )
+
+    def fn(input: pd.Series) -> pd.Series:
+        return input
+
+    node_ = node.Node.from_fn(fn)
+    subdag = decorator.transform_node(
+        node_, config={"hamilton.data_quality.disable_checks": True}, fn=fn
+    )
+    assert len(subdag) == 1
+    assert subdag[0] is node_
+
+
+def test_check_output_builtin_disabled_via_config_returns_original_node():
+    """check_output (not custom) also respects hamilton.data_quality.disable_checks."""
+    decorator = check_output(
+        importance="warn",
+        default_validator_candidates=DUMMY_VALIDATORS_FOR_TESTING,
+        dataset_length=1,
+        dtype=np.int64,
+    )
+
+    def fn(input: pd.Series) -> pd.Series:
+        return input
+
+    node_ = node.Node.from_fn(fn)
+    subdag = decorator.transform_node(
+        node_, config={"hamilton.data_quality.disable_checks": True}, fn=fn
+    )
+    assert len(subdag) == 1
+    assert subdag[0] is node_
+
+
 def test_sync_wrapper_guards_against_unawaited_coroutine():
     """Sync wrapper should raise TypeError if validator accidentally returns a coroutine."""
 

@@ -23,6 +23,7 @@ build-backend = "flit_core.buildapi"
 name = "apache-hamilton-ui"
 version = "0.0.17"
 description = "Apache Hamilton UI tracking server for dataflow visualization and monitoring."
+readme = {file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.10.1, <4"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE", "DISCLAIMER"]
@@ -60,11 +61,6 @@ dependencies = [
     "typer",
 ]
 
-[project.scripts]
-# Django management commands for cleaner CLI usage with uv
-# Usage: uv run hamilton-ui
-hamilton-ui = "hamilton_ui.server.manage:main"
-
 [project.urls]
 homepage = "https://www.tryhamilton.dev/"
 documentation = "https://hamilton.apache.org/"
@@ -79,10 +75,11 @@ include = [
     "LICENSE",
     "NOTICE",
     "DISCLAIMER",
-    "hamilton_ui/build/**",
+    "tests/**",
 ]
 exclude = [
-    "tests/**",
+    "hamilton_ui/build/**",
+    "hamilton_ui/tests/**",
     ".git/**",
     "**/__pycache__/**",
     "**/*.pyc",

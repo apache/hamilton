@@ -39,5 +39,14 @@ if sys.version_info >= (3, 14):
             "plugins/test_kedro_extensions.py",
             # lancedb - no Python 3.14 support yet
             "plugins/test_huggingface_extensions.py",
+            # pandera - no Python 3.14 support yet
+            "integrations/pandera/test_pandera_data_quality.py",
+            "integrations/pandera/test_h_pandera_polars.py",
         ]
     )
+
+
+def pytest_sessionfinish(session, exitstatus):
+    if exitstatus == 5:  # pytest.ExitCode.NO_TESTS_COLLECTED
+        if sys.version_info >= (3, 14):
+            session.exitstatus = 0

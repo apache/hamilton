@@ -17,136 +17,126 @@
 
 import { VizEdge, VizNode } from "./types";
 
-import ELK, { ElkNode } from "elkjs/lib/elk.bundled.js";
+import dagre from "dagre";
 
-const elk = new ELK();
-
-const convertGraphFromElk = (
-  root: ElkNode,
-  nodeNameMap: Map<string, VizNode>
-) => {
-  const output = [] as VizNode[];
-  const queue = [root];
-  while (queue.length > 0) {
-    const node = queue.shift() as ElkNode;
-    const vizNode = nodeNameMap.get(node.id);
-    if (vizNode !== undefined) {
-      ((vizNode.position = {
-        x: node.x as number, // + PARENT_PADDING.left,
-        y: node.y as number, // + PARENT_PADDING.top,
-      }),
-        (vizNode.data.dimensions = {
-          width: node.width as number, // + PARENT_PADDING.left + PARENT_PADDING.right,
-          height: node.height as number,
-          // PARENT_PADDING.bottom +
-          // PARENT_PADDING.top,
-        }));
-      output.push(vizNode);
-    }
-    queue.push(...(node.children || []));
-  }
-  return output;
-};
-
+/**
+ * Lay out nodes using dagre's compound graph support.
+ *
+ * dagre natively supports compound (clustered) graphs via setParent().
+ * Group nodes are added without explicit dimensions — dagre computes
+ * their size from their children. Leaf nodes get their measured dimensions.
+ * All edges are included regardless of group boundaries.
+ *
+ * Positions from dagre are center-based; we convert to top-left for ReactFlow.
+ * Child positions are made relative to their parent for ReactFlow's nested
+ * node model.
+ */
 export const getLayoutedElements = (
   nodes: VizNode[],
   edges: VizEdge[],
   nodeDimensions: Map<string, { width: number; height: number }>,
   vertical: boolean
 ) => {
-  // Organize every node by its parents
-  const nodesByParent = new Map<string, VizNode[]>([["root", []]]);
-  nodes.forEach((node) => {
-    const parent = node.parentNode || "root";
-    if (!nodesByParent.has(parent)) {
-      nodesByParent.set(parent, []);
-    }
-    nodesByParent.get(parent)?.push(node);
+  const g = new dagre.graphlib.Graph({ compound: true });
+  g.setDefaultEdgeLabel(() => ({}));
+  g.setGraph({
+    rankdir: vertical ? "TB" : "LR",
+    nodesep: 50,
+    ranksep: 80,
+    marginx: 20,
+    marginy: 20,
   });
 
-  const buildGraph = (rootNode: VizNode): ElkNode => {
-    const children = nodesByParent.get(rootNode.id) || [];
-    const subGraph = children.map((child) => buildGraph(child));
-    // let { width: minWidth, height: minHeight } = nodeDimensions.get(
-    //   rootNode.id
-    // ) || { minWidth: 0, minHeight: 0 };
-    // minWidth = minWidth || 0;
-    // minHeight = minHeight || 0;
-    const graph = {
-      id: rootNode.id,
-      children: subGraph,
-      targetPosition: "right", // TODO -- use the direction above
-      sourcePosition: "left",
-      layoutOptions: {
-        "elk.padding": "[top=40,left=25,bottom=25,right=25]",
-        // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-        // "elk.nodeSize.constraints": "MINIMUM_SIZE",
-        // "elk.nodeSize.minimum": `(${minHeight-2},${minWidth-2})`,
+  // Determine which nodes are groups (have children)
+  const childIds = new Set(
+    nodes.filter((n) => n.parentNode).map((n) => n.parentNode!)
+  );
+
+  // Add all nodes
+  nodes.forEach((node) => {
+    if (childIds.has(node.id)) {
+      // Group node: set a minimal label so dagre knows it exists,
+      // but don't set width/height — dagre will compute from children.
+      // We set clusterLabelPos to push the label to the top.
+      g.setNode(node.id, { clusterLabelPos: "top" });
+    } else {
+      // Leaf node: use measured dimensions
+      const dims = nodeDimensions.get(node.id) || { width: 150, height: 50 };
+      g.setNode(node.id, { width: dims.width, height: dims.height });
+    }
+  });
+
+  // Set parent relationships
+  nodes.forEach((node) => {
+    if (node.parentNode) {
+      g.setParent(node.id, node.parentNode);
+    }
+  });
+
+  // Add all edges (dagre handles cross-cluster edges)
+  edges.forEach((edge) => {
+    if (g.hasNode(edge.source) && g.hasNode(edge.target)) {
+      g.setEdge(edge.source, edge.target);
+    }
+  });
+
+  // Run layout
+  dagre.layout(g);
+
+  // Collect absolute center positions from dagre
+  const absoluteCenters = new Map<
+    string,
+    { x: number; y: number; width: number; height: number }
+  >();
+  nodes.forEach((node) => {
+    const dagreNode = g.node(node.id);
+    if (dagreNode) {
+      absoluteCenters.set(node.id, {
+        x: dagreNode.x,
+        y: dagreNode.y,
+        width: dagreNode.width,
+        height: dagreNode.height,
+      });
+    }
+  });
+
+  // Convert to ReactFlow positions (top-left, relative to parent)
+  const layoutedNodes = nodes.map((node) => {
+    const center = absoluteCenters.get(node.id);
+    if (!center) {
+      return {
+        ...node,
+        position: { x: 0, y: 0 },
+      };
+    }
+
+    // Convert center to top-left
+    let x = center.x - center.width / 2;
+    let y = center.y - center.height / 2;
+
+    // Make relative to parent if nested
+    if (node.parentNode) {
+      const parentCenter = absoluteCenters.get(node.parentNode);
+      if (parentCenter) {
+        const parentTopLeftX = parentCenter.x - parentCenter.width / 2;
+        const parentTopLeftY = parentCenter.y - parentCenter.height / 2;
+        x -= parentTopLeftX;
+        y -= parentTopLeftY;
+      }
+    }
+
+    return {
+      ...node,
+      position: { x, y },
+      data: {
+        ...node.data,
+        dimensions: { width: center.width, height: center.height },
       },
-      // ? isHorizontal
-      //   ? "right"
-      //   : "bottom"
-      // : "right",
-      // width: 1000,
-      // height: 100,
-      width: rootNode
-        ? nodeDimensions.get(rootNode.id)?.width || 10
-        : undefined,
-      height: rootNode
-        ? nodeDimensions.get(rootNode.id)?.height || 10
-        : undefined,
     };
-    return graph;
-  };
+  });
 
-  const elkOptions = {
-    // "nodeLabels.padding": "[top=10,left=10,bottom=10,right=10]",
-    "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-    // "elk.padding" : "[top=25,left=25,bottom=25,right=25]",
-    // "elk.spacing.individual": "true",
-    // "spacing.nodeNodeBetweenLayers": "150",
-    "elk.algorithm": "layered",
-    // "org.eclipse.elk.layered.layering.strategy": "STRETCH_WIDfasefasefsTH",
-    // "elk.spacing.nodeNode": "20",
-    // "elk.direction": direction == "LR" ? "RIGHT" : "DOWN",
-    // "elk.layered.spacing.nodeNodeBetweenLayers": "100",
-    // "elk.spacing.nodeNode": "80",
-    // // "elk.algorithm": "mrtree",
-  };
-
-  const nodeNameMap = new Map(nodes.map((node) => [node.id, node]));
-  const vizEdgeNameMap = new Map(
-    edges.map((edge) => [edge.id, edge])
-  );
-
-  const subGraph = (nodesByParent.get("root") || []).map((node) =>
-    buildGraph(node)
-  );
-  const graph = {
-    id: "root",
-    layoutOptions: elkOptions,
-    children: subGraph,
-    width: 1000,
-    height: 200,
-    edges: edges.map((edge) => ({
-      ...edge,
-      sources: [edge.source],
-      targets: [edge.target],
-    })),
-  };
-  return elk
-    .layout(graph, {
-      layoutOptions: {
-        "org.eclipse.elk.direction": vertical ? "DOWN" : "RIGHT",
-      },
-    })
-    .then((layoutedGraph) => ({
-      nodes: convertGraphFromElk(layoutedGraph, nodeNameMap),
-      edges: (layoutedGraph.edges || []).map((edge) => {
-        const edgeId = edge.id;
-        const originalEdge = vizEdgeNameMap.get(edgeId) as VizEdge;
-        return originalEdge;
-      }) as VizEdge[],
-    }))
-    .catch(console.error);
+  return Promise.resolve({
+    nodes: layoutedNodes,
+    edges: edges,
+  });
 };
