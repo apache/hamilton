@@ -88,5 +88,22 @@ Then run Apache Hamilton as normal! Each DAG run will be tracked, and you'll hav
 Apache Hamilton UI. After spinning up the Apache Hamilton UI application, visit it to see your projects & DAGs.
 
 
+# Building from source
+
+This package uses [flit](https://flit.pypa.io/) as its build backend (declared
+in `pyproject.toml`). To build the source distribution and wheel from a source
+checkout:
+
+```bash
+# from the ui/sdk directory (the package root)
+python -m pip install flit
+flit build --no-use-vcs
+# artifacts are written to dist/
+```
+
+`flit build` produces both the `.tar.gz` source distribution and the
+`.whl` wheel. `--no-use-vcs` selects files from the working tree rather than
+git, which is what you want when building from an unpacked source release.
+
 # License
 The code here is licensed under the Apache 2.0 license. See the main repository [LICENSE](../../LICENSE) for details.

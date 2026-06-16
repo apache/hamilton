@@ -30,3 +30,24 @@ under the License.
 This is an implementation of the [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) to provide a rich IDE experience when creating Apache Hamilton dataflows.
 
 It currently powers the Apache Hamilton VSCode extension and could be integrated into other IDEs.
+
+# Building from source
+
+This package uses [flit](https://flit.pypa.io/) as its build backend (declared
+in `pyproject.toml`). To build the source distribution and wheel from a source
+checkout:
+
+```bash
+# from the dev_tools/language_server directory (the package root)
+python -m pip install flit
+flit build --no-use-vcs
+# artifacts are written to dist/
+```
+
+`flit build` produces both the `.tar.gz` source distribution and the
+`.whl` wheel. `--no-use-vcs` selects files from the working tree rather than
+git, which is what you want when building from an unpacked source release.
+
+# License
+
+The code here is licensed under the Apache 2.0 license. See the main repository [LICENSE](../../LICENSE) for details.
