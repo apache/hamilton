@@ -367,6 +367,13 @@ def create_release_artifacts(package_config: dict, version, no_sign: bool = Fals
                     ["npm", "run", "build", "--prefix", frontend_dir],
                     check=True,
                 )
+                # Generate third-party license attributions for the bundled
+                # frontend dependencies (required since the wheel ships
+                # compiled JS/CSS). Writes build/THIRD-PARTY-LICENSES.txt.
+                subprocess.run(
+                    ["npm", "run", "licenses", "--prefix", frontend_dir],
+                    check=True,
+                )
                 # Copy built assets to hamilton_ui/build/
                 if os.path.exists(build_target):
                     shutil.rmtree(build_target)
