@@ -595,6 +595,15 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">return</span> <span class="n">base64</span><span class="o">.</span><span class="n">urlsafe_b64encode</span><span class="p">(</span><span class="n">digest</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_hash_bytes</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash raw bytes and compact-encode the digest.</span>
+
+<span class="sd">    All hashing in this module routes through this single helper so the</span>
+<span class="sd">    underlying hashing algorithm can be changed in exactly one place.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_compact_hash</span><span class="p">(</span><span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span>
+
+
 <div class="viewcode-block" id="hash_value">
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_value">[docs]</a>
 <span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatch</span>
@@ -668,12 +677,15 @@ s=d.getElementsByTagName('script')[0];
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_primitive</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert the primitive to a string and hash it</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert the primitive to a string and hash it.</span>
+
+<span class="sd">    The hash is prefixed with the type name so that values sharing the same</span>
+<span class="sd">    string form but differing in type (e.g. ``1`` vs ``&quot;1&quot;`` vs ``1.0``) do</span>
+<span class="sd">    not collide.</span>
 
 <span class="sd">    Primitive type returns a hash and doesn&#39;t have to handle depth.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">hash_object</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">_compact_hash</span><span class="p">(</span><span class="n">hash_object</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span></div>
+    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span></div>
 
 
 
@@ -681,12 +693,14 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_bytes">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_bytes</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert the primitive to a string and hash it</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash a bytes object.</span>
+
+<span class="sd">    The hash is prefixed with a ``bytes`` type tag so that ``b&quot;1&quot;`` and the</span>
+<span class="sd">    string ``&quot;1&quot;`` (handled by :func:`hash_primitive`) do not collide.</span>
 
 <span class="sd">    Primitive type returns a hash and doesn&#39;t have to handle depth.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">hash_object</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">_compact_hash</span><span class="p">(</span><span class="n">hash_object</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span></div>
+    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;bytes:&quot;</span> <span class="o">+</span> <span class="n">obj</span><span class="p">)</span></div>
 
 
 
@@ -698,11 +712,8 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    Orders matters for the hash since orders matters in a sequence.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">hash_object</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha224</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
-        <span class="n">hash_object</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">hash_value</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-
-    <span class="k">return</span> <span class="n">_compact_hash</span><span class="p">(</span><span class="n">hash_object</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span></div>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hash_value</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
 
 
 
@@ -725,12 +736,10 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">hashed_mapping</span><span class="p">[</span><span class="n">hash_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">hash_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">hash_object</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha224</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hashed_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-        <span class="n">hash_object</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-        <span class="n">hash_object</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-
-    <span class="k">return</span> <span class="n">_compact_hash</span><span class="p">(</span><span class="n">hash_object</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span></div>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">key</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">value</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hashed_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
 
 
 
@@ -759,12 +768,11 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1"># use the same depth because we&#39;re simply dispatching to another implementation</span>
         <span class="k">return</span> <span class="n">hash_unordered_mapping</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span>
 
-    <span class="n">hash_object</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha224</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">hash_object</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">hash_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-        <span class="n">hash_object</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">hash_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-
-    <span class="k">return</span> <span class="n">_compact_hash</span><span class="p">(</span><span class="n">hash_object</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span></div>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">hash_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">hash_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
 
 
 
@@ -778,14 +786,9 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    For the same objects in the set, the hashes will be the</span>
 <span class="sd">    same.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">hashes</span> <span class="o">=</span> <span class="p">[</span><span class="n">hash_value</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
-    <span class="n">sorted_hashes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hashes</span><span class="p">)</span>
-
-    <span class="n">hash_object</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha224</span><span class="p">()</span>
-    <span class="k">for</span> <span class="nb">hash</span> <span class="ow">in</span> <span class="n">sorted_hashes</span><span class="p">:</span>
-        <span class="n">hash_object</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">hash</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-
-    <span class="k">return</span> <span class="n">_compact_hash</span><span class="p">(</span><span class="n">hash_object</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span></div>
+    <span class="n">sorted_hashes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hash_value</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">hash</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="nb">hash</span> <span class="ow">in</span> <span class="n">sorted_hashes</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
 
 
 
@@ -794,17 +797,25 @@ s=d.getElementsByTagName('script')[0];
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">h_databackends</span><span class="o">.</span><span class="n">AbstractPandasDataFrame</span><span class="p">)</span>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">h_databackends</span><span class="o">.</span><span class="n">AbstractPandasColumn</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_pandas_obj</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a pandas dataframe, series, or index to</span>
-<span class="sd">    a dictionary of {index: row_hash} then hash it.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash a pandas DataFrame, Series, or Index via vectorized row hashing.</span>
 
-<span class="sd">    Given the hashing for mappings, the physical ordering or rows doesn&#39;t matter.</span>
-<span class="sd">    For example, if the index is a date, the hash will represent the {date: row_hash},</span>
-<span class="sd">    and won&#39;t preserve how dates were ordered in the DataFrame.</span>
+<span class="sd">    ``pandas.util.hash_pandas_object`` computes a uint64 hash per row in a</span>
+<span class="sd">    single vectorized pass; we hash that buffer in one shot rather than</span>
+<span class="sd">    iterating over rows in Python. Column names and dtypes (the schema) are</span>
+<span class="sd">    folded in so that frames carrying identical cell values under different</span>
+<span class="sd">    schemas do not collide.</span>
+
+<span class="sd">    The hash is order-sensitive: reordering rows changes the per-row hash</span>
+<span class="sd">    buffer and therefore the fingerprint.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pandas.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">hash_pandas_object</span>
 
-    <span class="n">hash_per_row</span> <span class="o">=</span> <span class="n">hash_pandas_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">hash_mapping</span><span class="p">(</span><span class="n">hash_per_row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="n">ignore_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
+    <span class="n">row_hashes</span> <span class="o">=</span> <span class="n">hash_pandas_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">):</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">dtype</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">obj</span><span class="o">.</span><span class="n">dtypes</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">None</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">schema</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">row_hashes</span><span class="p">)</span></div>
 
 
 
@@ -812,15 +823,18 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_polars_dataframe">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">h_databackends</span><span class="o">.</span><span class="n">AbstractPolarsDataFrame</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_polars_dataframe</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a polars dataframe to a hash that includes column names</span>
-<span class="sd">    and dtypes (schema) alongside row hashes. This prevents collisions</span>
-<span class="sd">    between DataFrames with identical cell values but different schemas.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash a polars DataFrame via vectorized row hashing.</span>
+
+<span class="sd">    ``DataFrame.hash_rows`` computes a per-row hash in a single vectorized</span>
+<span class="sd">    pass; we hash that buffer (``to_numpy().tobytes()``) in one shot rather</span>
+<span class="sd">    than iterating element-by-element in Python. Column names and dtypes</span>
+<span class="sd">    (the schema) are folded in so frames carrying identical cell values under</span>
+<span class="sd">    different schemas do not collide.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">schema_str</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
     <span class="n">schema_hash</span> <span class="o">=</span> <span class="n">hash_bytes</span><span class="p">(</span><span class="n">schema_str</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-    <span class="n">row_hash</span> <span class="o">=</span> <span class="n">hash_sequence</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">hash_rows</span><span class="p">()</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">combined</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">schema_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">row_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">_compact_hash</span><span class="p">(</span><span class="n">combined</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span></div>
+    <span class="n">row_hash</span> <span class="o">=</span> <span class="n">hash_bytes</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">hash_rows</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">schema_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">row_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span></div>
 
 
 

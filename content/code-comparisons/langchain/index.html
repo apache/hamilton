@@ -1585,6 +1585,17 @@ opinion it’s better to be explicit about it.</p>
 </div>
 </td>
 <td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">invoke_chain_with_fallback</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Invoke a chain with a fallback to Anthropic chain.</span>
+
+<span class="sd">    Attempts to invoke a chain using `invoke_chain` and falls back to</span>
+<span class="sd">    `invoke_anthropic_chain` if any exception is raised.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        topic: The topic to pass to the chain invocation.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The result from the successful chain invocation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">invoke_chain</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>  <span class="c1"># noqa: F821</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>

@@ -541,7 +541,9 @@ implementation should pass the <cite>depth</cite> parameter to prevent <cite>Rec
 <dl class="py function">
 <dt class="sig sig-object py" id="hamilton.caching.fingerprinting.hash_bytes">
 <span class="sig-prename descclassname"><span class="pre">hamilton.caching.fingerprinting.</span></span><span class="sig-name descname"><span class="pre">hash_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/hamilton/caching/fingerprinting/#hash_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.caching.fingerprinting.hash_bytes" title="Link to this definition">¶</a></dt>
-<dd><p>Convert the primitive to a string and hash it</p>
+<dd><p>Hash a bytes object.</p>
+<p>The hash is prefixed with a <code class="docutils literal notranslate"><span class="pre">bytes</span></code> type tag so that <code class="docutils literal notranslate"><span class="pre">b&quot;1&quot;</span></code> and the
+string <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> (handled by <a class="reference internal" href="#hamilton.caching.fingerprinting.hash_primitive" title="hamilton.caching.fingerprinting.hash_primitive"><code class="xref py py-func docutils literal notranslate"><span class="pre">hash_primitive()</span></code></a>) do not collide.</p>
 <p>Primitive type returns a hash and doesn’t have to handle depth.</p>
 </dd></dl>
 
@@ -581,11 +583,14 @@ identical bit patterns) would produce identical hashes.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hamilton.caching.fingerprinting.hash_pandas_obj">
 <span class="sig-prename descclassname"><span class="pre">hamilton.caching.fingerprinting.</span></span><span class="sig-name descname"><span class="pre">hash_pandas_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/hamilton/caching/fingerprinting/#hash_pandas_obj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.caching.fingerprinting.hash_pandas_obj" title="Link to this definition">¶</a></dt>
-<dd><p>Convert a pandas dataframe, series, or index to
-a dictionary of {index: row_hash} then hash it.</p>
-<p>Given the hashing for mappings, the physical ordering or rows doesn’t matter.
-For example, if the index is a date, the hash will represent the {date: row_hash},
-and won’t preserve how dates were ordered in the DataFrame.</p>
+<dd><p>Hash a pandas DataFrame, Series, or Index via vectorized row hashing.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pandas.util.hash_pandas_object</span></code> computes a uint64 hash per row in a
+single vectorized pass; we hash that buffer in one shot rather than
+iterating over rows in Python. Column names and dtypes (the schema) are
+folded in so that frames carrying identical cell values under different
+schemas do not collide.</p>
+<p>The hash is order-sensitive: reordering rows changes the per-row hash
+buffer and therefore the fingerprint.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -597,15 +602,21 @@ and won’t preserve how dates were ordered in the DataFrame.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hamilton.caching.fingerprinting.hash_polars_dataframe">
 <span class="sig-prename descclassname"><span class="pre">hamilton.caching.fingerprinting.</span></span><span class="sig-name descname"><span class="pre">hash_polars_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/hamilton/caching/fingerprinting/#hash_polars_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.caching.fingerprinting.hash_polars_dataframe" title="Link to this definition">¶</a></dt>
-<dd><p>Convert a polars dataframe to a hash that includes column names
-and dtypes (schema) alongside row hashes. This prevents collisions
-between DataFrames with identical cell values but different schemas.</p>
+<dd><p>Hash a polars DataFrame via vectorized row hashing.</p>
+<p><code class="docutils literal notranslate"><span class="pre">DataFrame.hash_rows</span></code> computes a per-row hash in a single vectorized
+pass; we hash that buffer (<code class="docutils literal notranslate"><span class="pre">to_numpy().tobytes()</span></code>) in one shot rather
+than iterating element-by-element in Python. Column names and dtypes
+(the schema) are folded in so frames carrying identical cell values under
+different schemas do not collide.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hamilton.caching.fingerprinting.hash_primitive">
 <span class="sig-prename descclassname"><span class="pre">hamilton.caching.fingerprinting.</span></span><span class="sig-name descname"><span class="pre">hash_primitive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/hamilton/caching/fingerprinting/#hash_primitive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.caching.fingerprinting.hash_primitive" title="Link to this definition">¶</a></dt>
-<dd><p>Convert the primitive to a string and hash it</p>
+<dd><p>Convert the primitive to a string and hash it.</p>
+<p>The hash is prefixed with the type name so that values sharing the same
+string form but differing in type (e.g. <code class="docutils literal notranslate"><span class="pre">1</span></code> vs <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> vs <code class="docutils literal notranslate"><span class="pre">1.0</span></code>) do
+not collide.</p>
 <p>Primitive type returns a hash and doesn’t have to handle depth.</p>
 </dd></dl>
 

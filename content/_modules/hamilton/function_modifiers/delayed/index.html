@@ -669,13 +669,13 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optional_config</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeTransformLifecycle</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">[</span><span class="n">settings</span><span class="o">.</span><span class="n">ENABLE_POWER_USER_MODE</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">ENABLE_POWER_USER_MODE</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="s2">&quot;Dynamic functions are only allowed in power user mode!&quot;</span>
+                <span class="s2">&quot;Dynamic functions are only allowed in power user mode. &quot;</span>
                 <span class="s2">&quot;Why? This is occasionally needed to enable highly flexible &quot;</span>
                 <span class="s2">&quot;dataflows, but it can compromise readability if you&#39;re not &quot;</span>
-                <span class="s2">&quot;careful! To enable power user mode, pass in the configuration &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;parameter </span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">ENABLE_POWER_USER_MODE</span><span class="si">}</span><span class="s2">=True to your driver.&quot;</span>
+                <span class="s2">&quot;careful! To enable power user mode, build your driver with &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;.with_config(</span><span class="se">{{</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">ENABLE_POWER_USER_MODE</span><span class="si">!r}</span><span class="s2">: True</span><span class="se">}}</span><span class="s2">).&quot;</span>
             <span class="p">)</span>
         <span class="n">missing_configs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_config</span><span class="p">():</span>
