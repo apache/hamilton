@@ -167,11 +167,30 @@ def test_delayed_without_power_mode_fails():
             extract_columns(*cols_to_extract + some_cols_you_might_want_to_extract)
         ),
     )
-    with pytest.raises(base.InvalidDecoratorException):
+    with pytest.raises(base.InvalidDecoratorException) as exc_info:
         decorator.resolve(
             {"cols_to_extract": ["a", "b"], **CONFIG_WITH_POWER_MODE_DISABLED},
             fn=fn,
         )
+    error_message = str(exc_info.value)
+    assert "power user mode" in error_message
+    assert ".with_config({'hamilton.enable_power_user_mode': True})" in error_message
+
+
+def test_delayed_without_power_mode_config_fails_with_helpful_error():
+    def fn() -> pd.DataFrame:
+        return pd.DataFrame()
+
+    decorator = resolve(
+        when=ResolveAt.CONFIG_AVAILABLE,
+        decorate_with=lambda cols_to_extract: extract_columns(*cols_to_extract),
+    )
+
+    with pytest.raises(base.InvalidDecoratorException) as exc_info:
+        decorator.resolve({"cols_to_extract": ["a", "b"]}, fn=fn)
+    error_message = str(exc_info.value)
+    assert "power user mode" in error_message
+    assert ".with_config({'hamilton.enable_power_user_mode': True})" in error_message
 
 
 def test_dynamic_resolve_with_extract_fields():

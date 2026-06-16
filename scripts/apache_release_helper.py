@@ -338,8 +338,23 @@ def create_release_artifacts(package_config: dict, version, no_sign: bool = Fals
         if os.path.exists("dist"):
             shutil.rmtree("dist")
 
-        # For the UI package, build the frontend before packaging.
+        # For the UI package, build sdist first (without frontend assets),
+        # then build frontend, then build wheel (with frontend assets).
+        # This keeps compiled JS/CSS out of the source tarball (avoiding
+        # third-party license obligations) while including them in the wheel.
         if package_name == "apache-hamilton-ui":
+            # Step 1: Build sdist without frontend assets
+            try:
+                subprocess.run(
+                    ["flit", "build", "--no-use-vcs", "--format", "sdist"],
+                    check=True,
+                )
+                print("Source distribution created successfully (without frontend).")
+            except subprocess.CalledProcessError as e:
+                print(f"Error creating source distribution: {e}")
+                return None
+
+            # Step 2: Build frontend and copy to hamilton_ui/build/
             print("Building UI frontend (npm install + npm run build)...")
             frontend_dir = os.path.join(original_dir, "ui", "frontend")
             build_target = os.path.join("hamilton_ui", "build")
@@ -366,20 +381,27 @@ def create_release_artifacts(package_config: dict, version, no_sign: bool = Fals
                 print("Ensure Node.js and npm are installed.")
                 return None
 
-        # Use flit build to create the source distribution.
-        try:
-            subprocess.run(
-                [
-                    "flit",
-                    "build",
-                    "--no-use-vcs",
-                ],
-                check=True,
-            )
-            print("Source distribution created successfully.")
-        except subprocess.CalledProcessError as e:
-            print(f"Error creating source distribution: {e}")
-            return None
+            # Step 3: Build wheel (includes frontend assets via package data)
+            try:
+                subprocess.run(
+                    ["flit", "build", "--no-use-vcs", "--format", "wheel"],
+                    check=True,
+                )
+                print("Wheel created successfully (with frontend assets).")
+            except subprocess.CalledProcessError as e:
+                print(f"Error creating wheel: {e}")
+                return None
+        else:
+            # Non-UI packages: build both sdist and wheel in one step
+            try:
+                subprocess.run(
+                    ["flit", "build", "--no-use-vcs"],
+                    check=True,
+                )
+                print("Source distribution created successfully.")
+            except subprocess.CalledProcessError as e:
+                print(f"Error creating source distribution: {e}")
+                return None
 
         # Find the created tarball in the dist directory.
         # Convert package name with underscores for file naming

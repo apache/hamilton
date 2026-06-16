@@ -21,6 +21,7 @@ from typing import Any, Literal, TypeVar
 import numpy as np
 import numpy.typing as npt
 import pytest
+from packaging.version import Version
 
 from hamilton import node
 from hamilton.node import DependencyType, Node, matches_query
@@ -60,8 +61,8 @@ def test_node_copy_with_retains_originating_functions():
     assert node_copy_copy.name == "rename_fn_again"
 
 
-np_version = np.__version__
-major, minor, _ = map(int, np_version.split("."))
+np_version = Version(np.__version__)
+major, minor = np_version.major, np_version.minor
 
 
 def test_node_handles_annotated():
@@ -84,6 +85,15 @@ def test_node_handles_annotated():
             "other": (float, DependencyType.OPTIONAL),
         }
         expected_type = Annotated[np.ndarray[tuple[int, ...], np.dtype[np.float64]], Literal["N"]]
+    elif (major, minor) >= (2, 5):
+        expected = {
+            "first": (
+                Annotated[npt.NDArray[np.float64], Literal["N"]],
+                DependencyType.REQUIRED,
+            ),
+            "other": (float, DependencyType.OPTIONAL),
+        }
+        expected_type = Annotated[npt.NDArray[np.float64], Literal["N"]]
     elif (major, minor) >= (2, 4):  # numpy 2.4+
         expected = {
             "first": (

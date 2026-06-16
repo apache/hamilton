@@ -69,10 +69,13 @@ include = [
     "NOTICE",
     "DISCLAIMER",
     "requirements.txt",
+    "examples/**",
+    "scripts/**",
 ]
 exclude = [
-    "tests/**",
     ".git/**",
     "**/__pycache__/**",
     "**/*.pyc",
+    "**/*.ipynb",
+    "**/*.png",
 ]

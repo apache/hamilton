@@ -75,10 +75,10 @@ include = [
     "LICENSE",
     "NOTICE",
     "DISCLAIMER",
-    "hamilton_ui/build/**",
     "tests/**",
 ]
 exclude = [
+    "hamilton_ui/build/**",
     "hamilton_ui/tests/**",
     ".git/**",
     "**/__pycache__/**",
