@@ -50,4 +50,4 @@ git, which is what you want when building from an unpacked source release.
 
 # License
 
-The code here is licensed under the Apache 2.0 license. See the main repository [LICENSE](../../LICENSE) for details.
+The code here is licensed under the Apache 2.0 license. See the [LICENSE](LICENSE) file included with this package for details.

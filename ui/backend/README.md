@@ -120,4 +120,16 @@ of these steps automatically.
 
 ## License
 
-Apache 2.0. See the main repository [LICENSE](../../LICENSE) for details.
+Apache 2.0. See the [LICENSE](LICENSE) file included with this package for details.
+
+This package is distributed in two forms:
+
+- The **source distribution** (sdist) contains only Apache Hamilton source code,
+  licensed under the Apache License, Version 2.0.
+- The **binary distribution** (wheel) additionally bundles a compiled frontend
+  web application (`hamilton_ui/build/`) built from the TypeScript/React sources
+  in `ui/frontend/`. That bundle includes third-party JavaScript dependencies
+  (e.g. React, Redux, Chart.js, React Flow), each under permissive licenses
+  (MIT, Apache-2.0, BSD, ISC, and similar). The full per-dependency license
+  texts and copyright notices are included in the wheel at
+  `hamilton_ui/build/THIRD-PARTY-LICENSES.txt`.

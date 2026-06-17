@@ -199,19 +199,3 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
--------------------------------
-
-This package is distributed in two forms:
-
-  * The source distribution (sdist) contains only Apache Hamilton source
-    code and is licensed under the Apache License, Version 2.0 above.
-
-  * The binary distribution (wheel) additionally bundles a compiled
-    frontend web application (hamilton_ui/build/) built from the
-    TypeScript/React sources in ui/frontend/. That bundle includes
-    third-party JavaScript dependencies (e.g. React, Redux, Chart.js,
-    React Flow), each under permissive licenses (MIT, Apache-2.0, BSD,
-    ISC, and similar). The full per-dependency license texts and
-    copyright notices are included in the wheel at
-    hamilton_ui/build/THIRD-PARTY-LICENSES.txt.
