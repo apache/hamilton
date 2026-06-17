@@ -456,7 +456,9 @@ def create_release_artifacts(package_config: dict, version, no_sign: bool = Fals
             wheel_signed_files = sign_artifacts(wheel_file)
 
         files_to_upload = [new_tar_ball, *new_tar_ball_signed, wheel_file, *wheel_signed_files]
-        return files_to_upload
+        # Return absolute paths: the caller (svn_upload) runs from the repo root,
+        # but these paths are relative to the package working_dir we chdir'd into.
+        return [os.path.abspath(f) for f in files_to_upload]
 
     finally:
         # Always return to original directory
@@ -474,10 +476,13 @@ def svn_upload(package_name: str, version, rc_num, files_to_import: list[str], a
 
     try:
         # Create a new directory for the release candidate.
+        # Tolerate an already-existing directory (e.g. re-running after a
+        # partial upload): mkdir failing because the path exists is not fatal,
+        # we still want to import the files below.
         print(
             f"Creating directory for {package_name} {version}-incubating-RC{rc_num}... at {svn_path}"
         )
-        subprocess.run(
+        mkdir_result = subprocess.run(
             [
                 "svn",
                 "mkdir",
@@ -486,8 +491,15 @@ def svn_upload(package_name: str, version, rc_num, files_to_import: list[str], a
                 f"Creating directory for {package_name} {version}-incubating-RC{rc_num}",
                 svn_path,
             ],
-            check=True,
+            capture_output=True,
+            text=True,
         )
+        if mkdir_result.returncode != 0:
+            if "already exists" in (mkdir_result.stderr or ""):
+                print(f"Directory already exists at {svn_path}, continuing to import files.")
+            else:
+                print(f"Error creating SVN directory: {mkdir_result.stderr.strip()}")
+                return None
 
         # Use svn import for the new directory.
         for file_path in files_to_import:

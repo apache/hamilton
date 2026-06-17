@@ -59,6 +59,10 @@ if [ -z "$ARTIFACTS_DIR" ]; then
     svn export -q "https://dist.apache.org/repos/dist/dev/incubator/hamilton/${PACKAGE}/${VERSION}-RC${RC}/" "$ARTIFACTS_DIR"
 fi
 
+# Resolve to an absolute path: later steps cd into /tmp, which would break
+# a relative artifacts dir.
+ARTIFACTS_DIR="$(cd "$ARTIFACTS_DIR" && pwd)"
+
 echo "Artifacts: $ARTIFACTS_DIR"
 ls "$ARTIFACTS_DIR"/*.tar.gz "$ARTIFACTS_DIR"/*.whl 2>/dev/null || { echo "ERROR: No artifacts found"; exit 1; }
 
