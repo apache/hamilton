@@ -47,7 +47,7 @@ from polars.datatypes import DataType, DataTypeClass  # noqa: F401
 
 from hamilton import registry
 from hamilton.io import utils
-from hamilton.io.data_adapters import DataLoader
+from hamilton.io.data_adapters import DataLoader, DataSaver
 
 DATAFRAME_TYPE = pl.LazyFrame
 COLUMN_TYPE = pl.Expr
@@ -288,6 +288,85 @@ class PolarsScanFeatherReader(DataLoader):
     def name(cls) -> str:
         return "feather"
 
+@dataclasses.dataclass
+class PolarsLazyFrameSinkParquet(DataSaver):
+    """Class to handle sinking a Polars LazyFrame to a Parquet file.
+    Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_parquet.html
+    """
+    path: str | Path
+
+    @classmethod
+    def applicable_types(cls) -> Collection[type]:
+        return [DATAFRAME_TYPE]
+
+    def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
+        data.sink_parquet(self.path)
+        return utils.get_file_metadata(self.path)
+
+    @classmethod
+    def name(cls) -> str:
+        return "parquet"
+
+
+@dataclasses.dataclass
+class PolarsLazyFrameSinkCSV(DataSaver):
+    """Class to handle sinking a Polars LazyFrame to a CSV file.
+    Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_csv.html
+    """
+    path: str | Path
+
+    @classmethod
+    def applicable_types(cls) -> Collection[type]:
+        return [DATAFRAME_TYPE]
+
+    def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
+        data.sink_csv(self.path)
+        return utils.get_file_metadata(self.path)
+
+    @classmethod
+    def name(cls) -> str:
+        return "csv"
+
+
+@dataclasses.dataclass
+class PolarsLazyFrameSinkIPC(DataSaver):
+    """Class to handle sinking a Polars LazyFrame to an IPC/Feather file.
+    Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_ipc.html
+    """
+    path: str | Path
+
+    @classmethod
+    def applicable_types(cls) -> Collection[type]:
+        return [DATAFRAME_TYPE]
+
+    def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
+        data.sink_ipc(self.path)
+        return utils.get_file_metadata(self.path)
+
+    @classmethod
+    def name(cls) -> str:
+        return "ipc"
+
+
+@dataclasses.dataclass
+class PolarsLazyFrameSinkNDJSON(DataSaver):
+    """Class to handle sinking a Polars LazyFrame to an NDJSON file.
+    Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_ndjson.html
+    """
+    path: str | Path
+
+    @classmethod
+    def applicable_types(cls) -> Collection[type]:
+        return [DATAFRAME_TYPE]
+
+    def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
+        data.sink_ndjson(self.path)
+        return utils.get_file_metadata(self.path)
+
+    @classmethod
+    def name(cls) -> str:
+        return "ndjson"
+
 
 def register_data_loaders():
     """Function to register the data loaders for this extension."""
@@ -295,6 +374,10 @@ def register_data_loaders():
         PolarsScanCSVReader,
         PolarsScanParquetReader,
         PolarsScanFeatherReader,
+        PolarsLazyFrameSinkParquet,
+        PolarsLazyFrameSinkCSV,
+        PolarsLazyFrameSinkIPC,
+        PolarsLazyFrameSinkNDJSON,
     ]:
         registry.register_adapter(loader)
 
