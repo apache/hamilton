@@ -74,6 +74,7 @@ reference/drivers/index
 reference/caching/index
 reference/graph-adapters/index
 reference/lifecycle-hooks/index
+reference/plugins/index
 reference/result-builders/index
 reference/io/index
 reference/dataflows/index

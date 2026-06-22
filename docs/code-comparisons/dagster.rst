@@ -73,7 +73,7 @@ TL;DR
       - `Lifecycle hooks <https://hamilton.apache.org/reference/lifecycle-hooks/>`_ (easier to extend)
       - `Op Hooks <https://docs.dagster.io/concepts/ops-jobs-graphs/op-hooks#op-hooks>`_
     * - Plugins
-      - `Spark <https://blog.dagworks.io/p/expressing-pyspark-transformations>`_, Dask, Ray, `Datadog <https://hamilton.apache.org/reference/lifecycle-hooks/DDOGTracer/>`_, polars, pandera, and more (Apache Hamilton is less restrictive and easier to extend)
+      - `Spark <https://blog.dagworks.io/p/expressing-pyspark-transformations>`_, Dask, Ray, :doc:`Datadog <../reference/plugins/DDOGTracer>`, polars, pandera, and more (Apache Hamilton is less restrictive and easier to extend)
       - `Spark, Dask, polars, pandera, Databricks, Snowflake, Great Expections, and more <https://docs.dagster.io/integrations>`_  (Dagster integrations are more involved to develop)
     * - Interactive Development
       - `Jupyter Magic <https://hamilton.apache.org/how-tos/use-in-jupyter-notebook/#use-hamilton-jupyter-magic>`_, `VSCode extension <https://marketplace.visualstudio.com/items?itemName=ThierryJean.hamilton>`_
