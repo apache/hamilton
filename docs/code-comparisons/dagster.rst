@@ -28,7 +28,7 @@ TL;DR
       - DIY or in tandem with Dagster, Airflow, Prefect, Metaflow, etc.
       - Includes: manual, schedules, sensors, conditional execution
     * - Micro orchestration (i.e., ``dbt``, ``LangChain``)
-      - Can run anywhere (locally, notebook, macro orchestrator, `FastAPI <https://hamilton.apache.org/integrations/fastapi/>`_, `Streamlit <https://hamilton.apache.org/integrations/streamlit/>`_, pyodide, etc.)
+      - Can run anywhere (locally, notebook, macro orchestrator, :doc:`FastAPI <../cookbook/fastapi>`, :doc:`Streamlit <../cookbook/streamlit>`, pyodide, etc.)
       - ❌
     * - Code structure
       - Since it's micro, there are no restrictions.
@@ -159,4 +159,3 @@ More information
 For a full side-by-side example of Dagster and Apache Hamilton, visit `this GitHub repository <https://github.com/apache/hamilton/tree/main/examples/dagster>`_
 
 For more questions, join our `Slack Channel <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_!
-    

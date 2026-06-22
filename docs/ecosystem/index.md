@@ -44,7 +44,7 @@ Apache Hamilton integrates seamlessly with popular data manipulation libraries:
 | <img src="../_static/logos/pyspark.svg" width="20" height="20" style="vertical-align: middle;"> **PySpark** | Distributed data processing with Spark | [Examples](https://github.com/apache/hamilton/tree/main/examples/spark) \| [GraphAdapter](../reference/graph-adapters/index.rst) |
 | <img src="../_static/logos/dask.svg" width="20" height="20" style="vertical-align: middle;"> **Dask** | Parallel computing and distributed arrays | [Examples](https://github.com/apache/hamilton/tree/main/examples/dask) \| [GraphAdapter](../reference/graph-adapters/DaskGraphAdapter.rst) |
 | <img src="../_static/logos/ray.svg" width="20" height="20" style="vertical-align: middle;"> **Ray** | Distributed computing framework | [Examples](https://github.com/apache/hamilton/tree/main/examples/ray) \| [GraphAdapter](../reference/graph-adapters/RayGraphAdapter.rst) |
-| <img src="../_static/logos/ibis.png" width="20" height="20" style="vertical-align: middle;"> **Ibis** | Portable DataFrame API across backends | [Integration Guide](../integrations/ibis/index.md) |
+| <img src="../_static/logos/ibis.png" width="20" height="20" style="vertical-align: middle;"> **Ibis** | Portable DataFrame API across backends | [Plugin Guide](../plugins/ibis/index.md) |
 | <img src="../_static/logos/vaex.png" width="20" height="20" style="vertical-align: middle;"> **Vaex** | Out-of-core DataFrame library | [Examples](https://github.com/apache/hamilton/tree/main/examples/vaex) |
 | <img src="../_static/logos/narwhals.png" width="20" height="20" style="vertical-align: middle;"> **Narwhals** | DataFrame-agnostic interface | [Examples](https://github.com/apache/hamilton/tree/main/examples/narwhals) \| [Lifecycle Hook](../reference/lifecycle-hooks/Narwhals.rst) |
 | <img src="../_static/logos/numpy.svg" width="20" height="20" style="vertical-align: middle;"> **NumPy** | Numerical computing arrays | [ResultBuilder](../reference/result-builders/Numpy.rst) |
@@ -75,7 +75,7 @@ Use Apache Hamilton within your existing orchestration infrastructure:
 | <img src="../_static/logos/prefect.png" width="20" height="20" style="vertical-align: middle;"> **Prefect** | Workflow orchestration | [Examples](https://github.com/apache/hamilton/tree/main/examples/prefect) |
 | <img src="../_static/logos/kedro.png" width="20" height="20" style="vertical-align: middle;"> **Kedro** | Data science pipelines | [Examples](https://github.com/apache/hamilton/tree/main/examples/kedro) |
 | <img src="../_static/logos/metaflow.png" width="20" height="20" style="vertical-align: middle;"> **Metaflow** | ML infrastructure | [Integration](https://github.com/outerbounds/hamilton-metaflow) |
-| <img src="../_static/logos/dbt.png" width="20" height="20" style="vertical-align: middle;"> **dbt** | Data transformation tool | [Integration Guide](../integrations/dbt.rst) |
+| <img src="../_static/logos/dbt.png" width="20" height="20" style="vertical-align: middle;"> **dbt** | Data transformation tool | [Plugin Guide](../plugins/dbt.rst) |
 
 ### Data Engineering & ETL
 
@@ -83,10 +83,10 @@ Tools for building robust data pipelines:
 
 | Integration | Description | Documentation |
 |------------|-------------|---------------|
-| <img src="../_static/logos/dlt.svg" width="20" height="20" style="vertical-align: middle;"> **dlt** | Data loading and transformation | [Integration Guide](../integrations/dlt/index.md) |
+| <img src="../_static/logos/dlt.svg" width="20" height="20" style="vertical-align: middle;"> **dlt** | Data loading and transformation | [Plugin Guide](../plugins/dlt/index.md) |
 | <img src="../_static/logos/feast.png" width="20" height="20" style="vertical-align: middle;"> **Feast** | Feature store | [Examples](https://github.com/apache/hamilton/tree/main/examples/feast) |
-| <img src="../_static/logos/fastapi.svg" width="20" height="20" style="vertical-align: middle;"> **FastAPI** | Web service framework | [Integration Guide](../integrations/fastapi.md) |
-| <img src="../_static/logos/streamlit.png" width="20" height="20" style="vertical-align: middle;"> **Streamlit** | Interactive web applications | [Integration Guide](../integrations/streamlit.md) |
+| <img src="../_static/logos/fastapi.svg" width="20" height="20" style="vertical-align: middle;"> **FastAPI** | Web service framework | [Cookbook](../cookbook/fastapi.md) |
+| <img src="../_static/logos/streamlit.png" width="20" height="20" style="vertical-align: middle;"> **Streamlit** | Interactive web applications | [Cookbook](../cookbook/streamlit.md) |
 
 ### Observability & Monitoring
 

@@ -35,7 +35,8 @@ concepts/index
 how-tos/index
 hamilton-ui/index
 hamilton-vscode/index
-integrations/index
+plugins/index
+cookbook/index
 code-comparisons/index
 ```
 
