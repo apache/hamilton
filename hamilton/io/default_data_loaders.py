@@ -23,7 +23,7 @@ import pathlib
 import pickle
 import warnings
 from collections.abc import Collection
-from typing import Any, Optional
+from typing import Any
 
 from hamilton.io.data_adapters import DataLoader, DataSaver
 from hamilton.io.utils import get_file_metadata
@@ -32,11 +32,11 @@ from hamilton.io.utils import get_file_metadata
 # listed `(module, qualname)` pairs may be reconstructed during unpickling.
 # Set via `set_pickle_loader_allowlist([...])` or by passing `allowlist=...`
 # to a `PickleLoader` instance directly. See `PickleLoader` for details.
-_PICKLE_LOADER_ALLOWLIST: Optional[frozenset[tuple[str, str]]] = None
+_PICKLE_LOADER_ALLOWLIST: frozenset[tuple[str, str]] | None = None
 
 
 def set_pickle_loader_allowlist(
-    allowlist: Optional[Collection[tuple[str, str]]],
+    allowlist: Collection[tuple[str, str]] | None,
 ) -> None:
     """Configure the module-level allowlist applied to every `PickleLoader`.
 
@@ -214,7 +214,7 @@ class PickleLoader(DataLoader):
     """
 
     path: str
-    allowlist: Optional[Collection[tuple[str, str]]] = None
+    allowlist: Collection[tuple[str, str]] | None = None
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
@@ -224,7 +224,7 @@ class PickleLoader(DataLoader):
     def name(cls) -> str:
         return "pickle"
 
-    def _resolve_allowlist(self) -> Optional[frozenset[tuple[str, str]]]:
+    def _resolve_allowlist(self) -> frozenset[tuple[str, str]] | None:
         if self.allowlist is not None:
             return frozenset((str(m), str(n)) for m, n in self.allowlist)
         return _PICKLE_LOADER_ALLOWLIST
