@@ -42,6 +42,7 @@ import tests.resources.display_name_functions
 import tests.resources.display_name_list_functions
 import tests.resources.dummy_functions
 import tests.resources.dummy_functions_module_override
+import tests.resources.dynamic_parallelism.parallel_collect_multiple_arguments
 import tests.resources.extract_column_nodes
 import tests.resources.extract_columns_execution_count
 import tests.resources.functions_with_generics
@@ -1196,6 +1197,32 @@ def test_function_graph_display_config_node():
 
     # lines start tab then node name; check if "b" is a node in the graphviz object
     assert any(line.startswith("\tX") for line in dot.body)
+
+
+def test_function_graph_display_collect_edges_only_style_collected_dependency():
+    config = {}
+    fg = graph.FunctionGraph.from_modules(
+        tests.resources.dynamic_parallelism.parallel_collect_multiple_arguments, config=config
+    )
+
+    assert fg.nodes["summed"].node_role == NodeType.COLLECT
+    assert fg.nodes["summed"].collect_dependency == "double"
+
+    dot = fg.display(set(fg.get_nodes()), output_file_path=None, config=config)
+
+    edge_lines = {
+        line.strip().split(" [", 1)[0]: line.strip() for line in dot.body if " -> " in line
+    }
+    assert edge_lines["double -> summed"] == "double -> summed [arrowtail=crow dir=both]"
+    assert edge_lines["not_to_repeat -> summed"] == "not_to_repeat -> summed"
+    assert (
+        edge_lines["something_else_not_to_repeat -> summed"]
+        == "something_else_not_to_repeat -> summed"
+    )
+    assert (
+        edge_lines["number_to_repeat -> double"]
+        == "number_to_repeat -> double [arrowhead=crow arrowtail=none dir=both]"
+    )
 
 
 # TODO use high-level visualization dot as fixtures for reuse across tests
