@@ -79,6 +79,28 @@ See `examples/hamilton_ui/` — the same example above.
 
 ## apache-hamilton-ui
 
+### Building from source (requires Node.js + npm)
+
+The UI package includes compiled frontend assets. When building from source,
+you must build the frontend first:
+
+```bash
+cd ui/frontend
+npm install
+npm run build
+
+# Copy built assets to the backend package
+rm -rf ../backend/hamilton_ui/build
+cp -r dist/ ../backend/hamilton_ui/build/
+
+# Now build the wheel
+cd ../backend
+uvx flit build --no-use-vcs
+```
+
+The release script (`scripts/apache_release_helper.py --package ui`) handles
+this automatically.
+
 ### Install and verify
 
 ```bash

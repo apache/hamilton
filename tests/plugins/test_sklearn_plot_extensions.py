@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import inspect
 import pathlib
 
 import numpy as np
@@ -141,12 +142,10 @@ def decision_boundary_display() -> DecisionBoundaryDisplay:
     grid = np.vstack([feature_1.ravel(), feature_2.ravel()]).T
     tree = DecisionTreeClassifier().fit(iris.data[:, :2], iris.target)
     y_pred = np.reshape(tree.predict(grid), feature_1.shape)
-    kwargs = dict(xx0=feature_1, xx1=feature_2, response=y_pred)
-    # sklearn 1.8+ requires n_classes
-    sig = inspection.DecisionBoundaryDisplay.__init__
-    if "n_classes" in sig.__code__.co_varnames:
-        kwargs["n_classes"] = 3
-    decision_curve = inspection.DecisionBoundaryDisplay(**kwargs)
+    dbd_kwargs = dict(xx0=feature_1, xx1=feature_2, response=y_pred)
+    if "n_classes" in inspect.signature(inspection.DecisionBoundaryDisplay.__init__).parameters:
+        dbd_kwargs["n_classes"] = len(np.unique(iris.target))
+    decision_curve = inspection.DecisionBoundaryDisplay(**dbd_kwargs)
     return decision_curve
 
 

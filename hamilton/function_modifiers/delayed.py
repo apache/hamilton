@@ -148,13 +148,13 @@ class resolve(DynamicResolver):
         return self._optional_config
 
     def resolve(self, config: dict[str, Any], fn: Callable) -> NodeTransformLifecycle:
-        if not config[settings.ENABLE_POWER_USER_MODE]:
+        if not config.get(settings.ENABLE_POWER_USER_MODE, False):
             raise InvalidDecoratorException(
-                "Dynamic functions are only allowed in power user mode!"
+                "Dynamic functions are only allowed in power user mode. "
                 "Why? This is occasionally needed to enable highly flexible "
                 "dataflows, but it can compromise readability if you're not "
-                "careful! To enable power user mode, pass in the configuration "
-                f"parameter {settings.ENABLE_POWER_USER_MODE}=True to your driver."
+                "careful! To enable power user mode, build your driver with "
+                f".with_config({{{settings.ENABLE_POWER_USER_MODE!r}: True}})."
             )
         missing_configs = []
         for item in self.required_config():

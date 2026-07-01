@@ -20,6 +20,14 @@ import typing
 import pandera
 from pandera import typing as pa_typing
 
+try:
+    import pandera.typing.polars as pa_typing_polars
+    from pandera.api.polars.model import DataFrameModel as _PolarsDataFrameModel
+
+    _POLARS_TYPING_AVAILABLE = True
+except ImportError:
+    _POLARS_TYPING_AVAILABLE = False
+
 from hamilton import node
 from hamilton.data_quality import base as dq_base
 from hamilton.function_modifiers import InvalidDecoratorException
@@ -102,12 +110,23 @@ class check_output(BaseDataValidationDecorator):
             if not issubclass(schema, pandera.DataFrameModel):
                 schema = None
 
+        if schema is None and _POLARS_TYPING_AVAILABLE:
+            if (
+                origin is not None
+                and len(args) == 1
+                and issubclass(origin, (pa_typing_polars.DataFrame, pa_typing_polars.LazyFrame))
+            ):
+                schema = output_type.__args__[0]
+                if not issubclass(schema, _PolarsDataFrameModel):
+                    schema = None
+
         if schema is None:
             raise InvalidDecoratorException(
                 f"Output type {output_type} is not a valid pandera schema. "
                 f"Note that we currently only support pandera dataframes annotated with "
-                f"subclasses of pandera.DataFrameModel. Please reach out/open an issue "
-                f"if you want more complete integration."
+                f"subclasses of pandera.DataFrameModel (pandas) or "
+                f"pandera.api.polars.model.DataFrameModel (polars). "
+                f"Please reach out/open an issue if you want more complete integration."
             )
 
         # We can just delegate to teh standard check_output, which has pandera associated with schema...

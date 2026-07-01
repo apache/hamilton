@@ -80,8 +80,8 @@ class TestModelConfig:
     def test_model_openai_returns_gpt35(self):
         assert conversational_rag.model__openai() == "gpt-3.5-turbo"
 
-    def test_model_minimax_returns_m27(self):
-        assert conversational_rag.model__minimax() == "MiniMax-M2.7"
+    def test_model_minimax_returns_m3(self):
+        assert conversational_rag.model__minimax() == "MiniMax-M3"
 
 
 class TestOpenAIProvider:
@@ -153,11 +153,11 @@ class TestMiniMaxProvider:
         result = conversational_rag.standalone_question(
             standalone_question_prompt="test prompt",
             llm_client=mock_client,
-            model="MiniMax-M2.7",
+            model="MiniMax-M3",
         )
         assert result == "standalone question"
         call_args = mock_client.chat.completions.create.call_args
-        assert call_args.kwargs["model"] == "MiniMax-M2.7"
+        assert call_args.kwargs["model"] == "MiniMax-M3"
 
     def test_rag_response_with_minimax_model(self):
         mock_client = MagicMock(spec=openai.OpenAI)
@@ -169,11 +169,11 @@ class TestMiniMaxProvider:
         result = conversational_rag.conversational_rag_response(
             answer_prompt="Where did stefan work?",
             llm_client=mock_client,
-            model="MiniMax-M2.7",
+            model="MiniMax-M3",
         )
         assert result == "MiniMax answer"
         call_args = mock_client.chat.completions.create.call_args
-        assert call_args.kwargs["model"] == "MiniMax-M2.7"
+        assert call_args.kwargs["model"] == "MiniMax-M3"
 
 
 class TestHamiltonDriverConfig:
@@ -293,7 +293,7 @@ class TestMiniMaxIntegration:
                 "Follow Up Input: Where did he work?\n"
                 "Standalone question:",
                 llm_client=client,
-                model="MiniMax-M2.7",
+                model="MiniMax-M3",
             )
             assert isinstance(result, str)
             assert len(result) > 0
@@ -306,7 +306,7 @@ class TestMiniMaxIntegration:
                 "Stefan worked at Stitch Fix.\n\n"
                 "Question: Where did Stefan work?",
                 llm_client=client,
-                model="MiniMax-M2.7",
+                model="MiniMax-M3",
             )
             assert isinstance(result, str)
             assert len(result) > 0
