@@ -150,16 +150,31 @@ def test_driver_variables_exposes_tags():
 
 
 def test_driver_variables_are_topologically_sorted():
-    def z_dependency() -> int:
+    def z_source() -> int:
         return 1
 
-    def a_final(z_dependency: int) -> int:
-        return z_dependency + 1
+    def y_source() -> int:
+        return 2
 
-    module = ad_hoc_utils.create_temporary_module(z_dependency, a_final)
+    def b_from_z(z_source: int) -> int:
+        return z_source + 1
+
+    def c_from_y(y_source: int) -> int:
+        return y_source + 1
+
+    def a_final(b_from_z: int, c_from_y: int) -> int:
+        return b_from_z + c_from_y
+
+    module = ad_hoc_utils.create_temporary_module(z_source, y_source, b_from_z, c_from_y, a_final)
     dr = Driver({}, module)
 
-    assert [var.name for var in dr.list_available_variables()] == ["z_dependency", "a_final"]
+    assert [var.name for var in dr.list_available_variables()] == [
+        "z_source",
+        "b_from_z",
+        "y_source",
+        "c_from_y",
+        "a_final",
+    ]
 
 
 @pytest.mark.parametrize(
