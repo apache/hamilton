@@ -72,6 +72,7 @@ html_css_files = [
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
+    "sphinx.ext.viewcode",
     "myst_nb",
     "sphinx_llms_txt",
     "sphinx_sitemap",

@@ -126,7 +126,12 @@ def get_type_as_string(type_: type) -> str | None:
     if _is_annotated_type(type_):
         type_string = get_type_as_string(typing.get_args(type_)[0])
     elif getattr(type_, "__name__", None):
-        type_string = type_.__name__
+        base_name = type_.__name__
+        args = typing.get_args(type_)
+        if args and all(getattr(a, "__name__", None) for a in args):
+            type_string = f"{base_name}[{', '.join(a.__name__ for a in args)}]"
+        else:
+            type_string = base_name
     elif typing_inspect.get_origin(type_):
         base_type = typing_inspect.get_origin(type_)
         type_string = get_type_as_string(base_type)

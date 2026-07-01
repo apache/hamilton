@@ -615,7 +615,7 @@ def cmd_twine_check(args) -> bool:
     """Verify wheel metadata with twine."""
     _print_section("Verifying Wheel Metadata with Twine")
 
-    wheel_pattern = f"{args.artifacts_dir}/apache_hamilton-*.whl"
+    wheel_pattern = f"{args.artifacts_dir}/apache_hamilton*.whl"
     wheel_files = glob.glob(wheel_pattern)
 
     if not wheel_files:

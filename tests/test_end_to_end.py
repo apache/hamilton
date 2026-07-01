@@ -600,3 +600,45 @@ def test_driver_v2_inputs_can_be_none():
     with pytest.raises(ValueError):
         # validate that None doesn't cause issues
         dr.execute(["e"], inputs=None)
+
+
+def test_builder_with_data_quality_disabled_removes_validator_nodes():
+    """with_data_quality_disabled() eliminates validator nodes from the graph entirely."""
+    dr = (
+        driver.Builder()
+        .with_modules(tests.resources.data_quality)
+        .with_data_quality_disabled()
+        .build()
+    )
+    all_vars = dr.list_available_variables()
+    dq_nodes = [
+        var for var in all_vars if var.tags.get("hamilton.data_quality.contains_dq_results", False)
+    ]
+    assert len(dq_nodes) == 0
+
+
+def test_builder_with_data_quality_disabled_still_executes_correctly():
+    """Driver built with data quality disabled returns correct output without raising."""
+    dr = (
+        driver.Builder()
+        .with_modules(tests.resources.data_quality)
+        .with_data_quality_disabled()
+        .build()
+    )
+    result = dr.execute(["data_might_be_in_range"], inputs={"data_quality_should_fail": True})
+    assert list(result["data_might_be_in_range"]) == [10.0]
+
+
+def test_disable_data_quality_checks_config_key_works_directly():
+    """hamilton.data_quality.disable_checks can also be passed via with_config directly."""
+    dr = (
+        driver.Builder()
+        .with_modules(tests.resources.data_quality)
+        .with_config({"hamilton.data_quality.disable_checks": True})
+        .build()
+    )
+    all_vars = dr.list_available_variables()
+    dq_nodes = [
+        var for var in all_vars if var.tags.get("hamilton.data_quality.contains_dq_results", False)
+    ]
+    assert len(dq_nodes) == 0
