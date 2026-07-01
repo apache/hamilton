@@ -219,9 +219,11 @@ def test_driver_variables_exposes_original_function():
 def test_driver_variable_lookup():
     dr = Driver({}, tests.resources.very_simple_dag)
 
-    assert set(dr.variables) == {"a", "b"}
-    assert dr.variables["b"].name == "b"
+    assert dr.get_variable("b").name == "b"
     assert dr.get_variable("a").is_external_input is True
+
+    with pytest.raises(KeyError):
+        dr.get_variable("missing")
 
 
 def test_driver_get_graph_returns_hamilton_graph():

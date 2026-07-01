@@ -16,7 +16,6 @@
 # under the License.
 
 import abc
-import functools
 import importlib
 import importlib.util
 import json
@@ -794,21 +793,14 @@ class Driver:
             results = [Variable.from_node(n) for n in all_nodes]
         return results
 
-    @functools.cached_property
-    def variables(self) -> dict[str, Variable]:
-        """Returns all variables in the graph keyed by name."""
-        return {
-            node_name: Variable.from_node(node_) for node_name, node_ in self.graph.nodes.items()
-        }
-
     def get_variable(self, name: str) -> Variable:
         """Returns a variable by name.
 
         :param name: Name of the variable to return.
-        :return: Matching HamiltonNode.
+        :return: Matching Variable.
         :raises KeyError: If the variable does not exist in this Driver's graph.
         """
-        return self.variables[name]
+        return Variable.from_node(self.graph.nodes[name])
 
     def get_graph(self) -> graph_types.HamiltonGraph:
         """Returns the public HamiltonGraph representation for this Driver."""
