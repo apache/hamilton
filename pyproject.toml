@@ -51,7 +51,6 @@ dependencies = [
     "pandas",
     "typing_extensions > 4.0.0",
     "typing_inspect",
-    "xxhash>=0.8.0",
 ]
 
 [project.optional-dependencies]
@@ -71,6 +70,10 @@ experiments = [
 lsp = ["apache-hamilton-lsp"]
 openlineage = ["openlineage-python"]
 pandera = ["pandera"]
+performance = [
+    # Internal performance boosters go here
+    "xxhash>=0.8.0",
+]
 pydantic = ["pydantic>=2.0"]
 pyspark = [
   # we have to run these dependencies because Spark does not check to ensure the right target was called
@@ -135,6 +138,7 @@ test = [
   "xgboost; python_version < '3.14'",
   "xlsx2csv", # for excel data loader
   "xlsxwriter",  # Excel export requires 'xlsxwriter'
+  "xxhash>=0.8.0", # exercises the high-performance fingerprinting path in tests
 ]
 docs = [
   {include-group = "dev"},
