@@ -34,7 +34,7 @@ A validator subclasses ``hamilton.data_quality.base.DataValidator`` and implemen
 
         @classmethod
         def applies_to(cls, datatype: type) -> bool:
-            return datatype == pd.Series
+            return issubclass(datatype, pd.Series)
 
         def description(self) -> str:
             return "Validates that the series contains no negative values."
