@@ -1559,6 +1559,7 @@ class Driver:
         final_vars = self._create_final_vars(additional_vars)
         # This is so the finally logging statement does not accidentally die
         materializer_vars = []
+        function_graph = self.graph
         try:
             materializer_factories, extractor_factories = self._process_materializers(materializers)
             if len(materializer_factories) == len(final_vars) == 0:

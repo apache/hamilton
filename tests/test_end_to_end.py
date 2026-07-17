@@ -25,7 +25,7 @@ from typing import Any
 import pandas as pd
 import pytest
 
-from hamilton import ad_hoc_utils, base, driver, settings
+from hamilton import ad_hoc_utils, base, driver, lifecycle, settings
 from hamilton.base import DefaultAdapter
 from hamilton.data_quality.base import DataValidationError, ValidationResult
 from hamilton.execution import executors, grouping
@@ -476,6 +476,38 @@ def test_no_materialize_failure(tmp_path_factory):
             from_.json(target="input_data", path=value(path_in)),
             inputs={"output_path": str(path_out)},
         )
+
+
+def test_no_materialize_failure_with_graph_execution_hook(tmp_path_factory):
+    """The no-output ValueError must survive a registered post_graph_execute hook.
+
+    The hook makes the `finally` block run, which references `function_graph` -- bound
+    after the raise -- so without the pre-init the real error is masked.
+    """
+
+    class TrackingHook(lifecycle.GraphExecutionHook):
+        def run_before_graph_execution(self, **kwargs):
+            pass
+
+        def run_after_graph_execution(self, **kwargs):
+            pass
+
+    def processed_data(input_data: dict) -> dict:
+        data = input_data.copy()
+        data["processed"] = True
+        return data
+
+    path_in = tmp_path_factory.mktemp("home") / "unprocessed_data.json"
+
+    with open(path_in, "w") as f:
+        json.dump({"processed": False}, f)
+
+    mod = ad_hoc_utils.create_temporary_module(processed_data)
+
+    dr = driver.Builder().with_modules(mod).with_adapters(TrackingHook()).build()
+
+    with pytest.raises(ValueError):
+        dr.materialize(from_.json(target="input_data", path=value(path_in)))
 
 
 def test_driver_validate_with_overrides():
