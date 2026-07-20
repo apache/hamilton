@@ -28,10 +28,10 @@ from hamilton.plugins.polars_lazyframe_extensions import (
     PolarsScanCSVReader,
     PolarsScanFeatherReader,
     PolarsScanParquetReader,
-    PolarsLazyFrameSinkParquet,
-    PolarsLazyFrameSinkCSV,
-    PolarsLazyFrameSinkIPC,
-    PolarsLazyFrameSinkNDJSON,
+    PolarsSinkParquetWriter,
+    PolarsSinkCSVWriter,
+    PolarsSinkFeatherWriter,
+    PolarsSinkNDJSONWriter,
 )
 from hamilton.plugins.polars_post_1_0_0_extensions import (
     PolarsAvroReader,
@@ -221,40 +221,88 @@ def test_polars_spreadsheet(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
 
 def test_polars_lazyframe_sink_parquet(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
     file = tmp_path / "test.parquet"
-    sink = PolarsLazyFrameSinkParquet(path=file)
-    metadata = sink.save_data(df)
+    sink = PolarsSinkParquetWriter(path=file)
+    kwargs = sink._get_saving_kwargs()
+    sink.save_data(df)
     df2 = pl.read_parquet(file)
-    assert PolarsLazyFrameSinkParquet.applicable_types() == [pl.LazyFrame]
+    assert PolarsSinkParquetWriter.applicable_types() == [pl.LazyFrame]
     assert file.exists()
+    assert kwargs["compression"] == "zstd"
     assert_frame_equal(df.collect(), df2)
 
 
 def test_polars_lazyframe_sink_csv(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
     file = tmp_path / "test.csv"
-    sink = PolarsLazyFrameSinkCSV(path=file)
-    metadata = sink.save_data(df)
+    sink = PolarsSinkCSVWriter(path=file)
+    kwargs = sink._get_saving_kwargs()
+    sink.save_data(df)
     df2 = pl.read_csv(file)
-    assert PolarsLazyFrameSinkCSV.applicable_types() == [pl.LazyFrame]
+    assert PolarsSinkCSVWriter.applicable_types() == [pl.LazyFrame]
     assert file.exists()
+    assert kwargs["separator"] == ","
     assert_frame_equal(df.collect(), df2)
 
 
 def test_polars_lazyframe_sink_ipc(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
     file = tmp_path / "test.ipc"
-    sink = PolarsLazyFrameSinkIPC(path=file)
-    metadata = sink.save_data(df)
+    sink = PolarsSinkFeatherWriter(path=file)
+    kwargs = sink._get_saving_kwargs()
+    sink.save_data(df)
     df2 = pl.read_ipc(file)
-    assert PolarsLazyFrameSinkIPC.applicable_types() == [pl.LazyFrame]
+    assert PolarsSinkFeatherWriter.applicable_types() == [pl.LazyFrame]
     assert file.exists()
+    assert kwargs["compression"] == "uncompressed"
     assert_frame_equal(df.collect(), df2)
 
 
 def test_polars_lazyframe_sink_ndjson(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
     file = tmp_path / "test.ndjson"
-    sink = PolarsLazyFrameSinkNDJSON(path=file)
-    metadata = sink.save_data(df)
+    sink = PolarsSinkNDJSONWriter(path=file)
+    kwargs = sink._get_saving_kwargs()
+    sink.save_data(df)
     df2 = pl.read_ndjson(file)
-    assert PolarsLazyFrameSinkNDJSON.applicable_types() == [pl.LazyFrame]
+    assert PolarsSinkNDJSONWriter.applicable_types() == [pl.LazyFrame]
     assert file.exists()
+    assert kwargs["maintain_order"] is True
     assert_frame_equal(df.collect(), df2)
+
+
+# def test_polars_lazyframe_sink_parquet(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
+#     file = tmp_path / "test.parquet"
+#     sink = PolarsLazyFrameSinkParquet(path=file)
+#     metadata = sink.save_data(df)
+#     df2 = pl.read_parquet(file)
+#     assert PolarsLazyFrameSinkParquet.applicable_types() == [pl.LazyFrame]
+#     assert file.exists()
+#     assert_frame_equal(df.collect(), df2)
+
+
+# def test_polars_lazyframe_sink_csv(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
+#     file = tmp_path / "test.csv"
+#     sink = PolarsLazyFrameSinkCSV(path=file)
+#     metadata = sink.save_data(df)
+#     df2 = pl.read_csv(file)
+#     assert PolarsLazyFrameSinkCSV.applicable_types() == [pl.LazyFrame]
+#     assert file.exists()
+#     assert_frame_equal(df.collect(), df2)
+
+
+# def test_polars_lazyframe_sink_ipc(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
+#     file = tmp_path / "test.ipc"
+#     sink = PolarsLazyFrameSinkIPC(path=file)
+#     metadata = sink.save_data(df)
+#     df2 = pl.read_ipc(file)
+#     assert PolarsLazyFrameSinkIPC.applicable_types() == [pl.LazyFrame]
+#     assert file.exists()
+#     assert_frame_equal(df.collect(), df2)
+
+
+# def test_polars_lazyframe_sink_ndjson(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
+#     file = tmp_path / "test.ndjson"
+#     sink = PolarsLazyFrameSinkNDJSON(path=file)
+#     metadata = sink.save_data(df)
+#     df2 = pl.read_ndjson(file)
+#     assert PolarsLazyFrameSinkNDJSON.applicable_types() == [pl.LazyFrame]
+#     assert file.exists()
+#     assert_frame_equal(df.collect(), df2)
 
