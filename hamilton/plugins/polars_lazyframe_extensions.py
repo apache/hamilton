@@ -287,20 +287,46 @@ class PolarsScanFeatherReader(DataLoader):
     @classmethod
     def name(cls) -> str:
         return "feather"
+    
+
+####
 
 @dataclasses.dataclass
-class PolarsLazyFrameSinkParquet(DataSaver):
+class PolarsSinkParquetWriter(DataSaver):
     """Class to handle sinking a Polars LazyFrame to a Parquet file.
     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_parquet.html
     """
     path: str | Path
+    # kwargs:
+    compression: str = "zstd"
+    compression_level: int | None = None
+    statistics: bool = True
+    row_group_size: int | None = None
+    data_page_size: int | None = None
+    maintain_order: bool = True
+
+    def _get_saving_kwargs(self):
+        kwargs = {}
+        if self.compression is not None:
+            kwargs["compression"] = self.compression
+        if self.compression_level is not None:
+            kwargs["compression_level"] = self.compression_level
+        if self.statistics is not None:
+            kwargs["statistics"] = self.statistics
+        if self.row_group_size is not None:
+            kwargs["row_group_size"] = self.row_group_size
+        if self.data_page_size is not None:
+            kwargs["data_page_size"] = self.data_page_size
+        if self.maintain_order is not None:
+            kwargs["maintain_order"] = self.maintain_order
+        return kwargs
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
-        data.sink_parquet(self.path)
+        data.sink_parquet(self.path, **self._get_saving_kwargs())
         return utils.get_file_metadata(self.path)
 
     @classmethod
@@ -309,18 +335,59 @@ class PolarsLazyFrameSinkParquet(DataSaver):
 
 
 @dataclasses.dataclass
-class PolarsLazyFrameSinkCSV(DataSaver):
+class PolarsSinkCSVWriter(DataSaver):
     """Class to handle sinking a Polars LazyFrame to a CSV file.
     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_csv.html
     """
     path: str | Path
+    # kwargs:
+    separator: str = ","
+    line_terminator: str = "\n"
+    quote_char: str = '"'
+    batch_size: int = 1024
+    datetime_format: str | None = None
+    date_format: str | None = None
+    time_format: str | None = None
+    float_scientific: bool | None = None
+    float_precision: int | None = None
+    null_value: str = ""
+    quote_style: str = "necessary"
+    maintain_order: bool = True
+
+    def _get_saving_kwargs(self):
+        kwargs = {}
+        if self.separator is not None:
+            kwargs["separator"] = self.separator
+        if self.line_terminator is not None:
+            kwargs["line_terminator"] = self.line_terminator
+        if self.quote_char is not None:
+            kwargs["quote_char"] = self.quote_char
+        if self.batch_size is not None:
+            kwargs["batch_size"] = self.batch_size
+        if self.datetime_format is not None:
+            kwargs["datetime_format"] = self.datetime_format
+        if self.date_format is not None:
+            kwargs["date_format"] = self.date_format
+        if self.time_format is not None:
+            kwargs["time_format"] = self.time_format
+        if self.float_scientific is not None:
+            kwargs["float_scientific"] = self.float_scientific
+        if self.float_precision is not None:
+            kwargs["float_precision"] = self.float_precision
+        if self.null_value is not None:
+            kwargs["null_value"] = self.null_value
+        if self.quote_style is not None:
+            kwargs["quote_style"] = self.quote_style
+        if self.maintain_order is not None:
+            kwargs["maintain_order"] = self.maintain_order
+        return kwargs
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
-        data.sink_csv(self.path)
+        data.sink_csv(self.path, **self._get_saving_kwargs())
         return utils.get_file_metadata(self.path)
 
     @classmethod
@@ -329,18 +396,29 @@ class PolarsLazyFrameSinkCSV(DataSaver):
 
 
 @dataclasses.dataclass
-class PolarsLazyFrameSinkIPC(DataSaver):
+class PolarsSinkFeatherWriter(DataSaver):
     """Class to handle sinking a Polars LazyFrame to an IPC/Feather file.
     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_ipc.html
     """
     path: str | Path
+    # kwargs:
+    compression: str = "uncompressed"
+    maintain_order: bool = True
+
+    def _get_saving_kwargs(self):
+        kwargs = {}
+        if self.compression is not None:
+            kwargs["compression"] = self.compression
+        if self.maintain_order is not None:
+            kwargs["maintain_order"] = self.maintain_order
+        return kwargs
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
-        data.sink_ipc(self.path)
+        data.sink_ipc(self.path, **self._get_saving_kwargs())
         return utils.get_file_metadata(self.path)
 
     @classmethod
@@ -349,18 +427,26 @@ class PolarsLazyFrameSinkIPC(DataSaver):
 
 
 @dataclasses.dataclass
-class PolarsLazyFrameSinkNDJSON(DataSaver):
+class PolarsSinkNDJSONWriter(DataSaver):
     """Class to handle sinking a Polars LazyFrame to an NDJSON file.
     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_ndjson.html
     """
     path: str | Path
+    # kwargs:
+    maintain_order: bool = True
+
+    def _get_saving_kwargs(self):
+        kwargs = {}
+        if self.maintain_order is not None:
+            kwargs["maintain_order"] = self.maintain_order
+        return kwargs
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
-        data.sink_ndjson(self.path)
+        data.sink_ndjson(self.path, **self._get_saving_kwargs())
         return utils.get_file_metadata(self.path)
 
     @classmethod
@@ -374,12 +460,108 @@ def register_data_loaders():
         PolarsScanCSVReader,
         PolarsScanParquetReader,
         PolarsScanFeatherReader,
-        PolarsLazyFrameSinkParquet,
-        PolarsLazyFrameSinkCSV,
-        PolarsLazyFrameSinkIPC,
-        PolarsLazyFrameSinkNDJSON,
+        PolarsSinkParquetWriter,
+        PolarsSinkCSVWriter,
+        PolarsSinkFeatherWriter,
+        PolarsSinkNDJSONWriter,
     ]:
         registry.register_adapter(loader)
 
 
 register_data_loaders()
+
+# @dataclasses.dataclass
+# class PolarsLazyFrameSinkParquet(DataSaver):
+#     """Class to handle sinking a Polars LazyFrame to a Parquet file.
+#     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_parquet.html
+#     """
+#     path: str | Path
+
+#     @classmethod
+#     def applicable_types(cls) -> Collection[type]:
+#         return [DATAFRAME_TYPE]
+
+#     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
+#         data.sink_parquet(self.path)
+#         return utils.get_file_metadata(self.path)
+
+#     @classmethod
+#     def name(cls) -> str:
+#         return "parquet"
+
+
+# @dataclasses.dataclass
+# class PolarsLazyFrameSinkCSV(DataSaver):
+#     """Class to handle sinking a Polars LazyFrame to a CSV file.
+#     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_csv.html
+#     """
+#     path: str | Path
+
+#     @classmethod
+#     def applicable_types(cls) -> Collection[type]:
+#         return [DATAFRAME_TYPE]
+
+#     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
+#         data.sink_csv(self.path)
+#         return utils.get_file_metadata(self.path)
+
+#     @classmethod
+#     def name(cls) -> str:
+#         return "csv"
+
+
+# @dataclasses.dataclass
+# class PolarsLazyFrameSinkIPC(DataSaver):
+#     """Class to handle sinking a Polars LazyFrame to an IPC/Feather file.
+#     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_ipc.html
+#     """
+#     path: str | Path
+
+#     @classmethod
+#     def applicable_types(cls) -> Collection[type]:
+#         return [DATAFRAME_TYPE]
+
+#     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
+#         data.sink_ipc(self.path)
+#         return utils.get_file_metadata(self.path)
+
+#     @classmethod
+#     def name(cls) -> str:
+#         return "ipc"
+
+
+# @dataclasses.dataclass
+# class PolarsLazyFrameSinkNDJSON(DataSaver):
+#     """Class to handle sinking a Polars LazyFrame to an NDJSON file.
+#     Should map to https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.sink_ndjson.html
+#     """
+#     path: str | Path
+
+#     @classmethod
+#     def applicable_types(cls) -> Collection[type]:
+#         return [DATAFRAME_TYPE]
+
+#     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
+#         data.sink_ndjson(self.path)
+#         return utils.get_file_metadata(self.path)
+
+#     @classmethod
+#     def name(cls) -> str:
+#         return "ndjson"
+
+
+# def register_data_loaders():
+#     """Function to register the data loaders for this extension."""
+#     for loader in [
+#         PolarsScanCSVReader,
+#         PolarsScanParquetReader,
+#         PolarsScanFeatherReader,
+#         PolarsLazyFrameSinkParquet,
+#         PolarsLazyFrameSinkCSV,
+#         PolarsLazyFrameSinkIPC,
+#         PolarsLazyFrameSinkNDJSON,
+#     ]:
+#         registry.register_adapter(loader)
+
+
+# register_data_loaders()
