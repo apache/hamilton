@@ -803,12 +803,11 @@ class with_columns_base(base.NodeInjector, abc.ABC):
         # We can decouple it so that on_input selects the target dataframe parameter that will inject into the next node
         # pass_dataframe_as selects the original dataframe we want to extract columns from
         # columns_to_pass is optinal helper that can be toggled on/off so no need to raise this error.
-        if (
-            int(pass_dataframe_as is None) + int(columns_to_pass is None) + int(on_input is None)
-            == 1
-        ):
+        n_set = sum(arg is not None for arg in (pass_dataframe_as, columns_to_pass, on_input))
+        if n_set != 1:
             raise ValueError(
-                "You must specify only one of ``columns_to_pass``, ``pass_dataframe_as``, and ``on_input``. "
+                "You must specify exactly one of ``columns_to_pass``, ``pass_dataframe_as``, "
+                "and ``on_input``. "
                 "This is because specifying ``pass_dataframe_as`` or ``on_input`` injects into "
                 "the set of columns, allowing you to perform your own extraction"
                 "from the dataframe. We then execute all columns in the subdag"

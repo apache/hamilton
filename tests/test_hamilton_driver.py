@@ -216,6 +216,24 @@ def test_driver_variables_exposes_original_function():
     assert originating_functions["a"] == (tests.resources.very_simple_dag.b,)  # a is an input
 
 
+def test_driver_variable_lookup():
+    dr = Driver({}, tests.resources.very_simple_dag)
+
+    assert dr.get_variable("b").name == "b"
+    assert dr.get_variable("a").is_external_input is True
+
+    with pytest.raises(KeyError):
+        dr.get_variable("missing")
+
+
+def test_driver_get_graph_returns_hamilton_graph():
+    dr = Driver({}, tests.resources.very_simple_dag)
+
+    hamilton_graph = dr.get_graph()
+
+    assert hamilton_graph["b"].name == "b"
+
+
 @pytest.mark.parametrize(
     "driver_factory",
     [

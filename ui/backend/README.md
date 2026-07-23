@@ -80,6 +80,56 @@ dr = (
 )
 ```
 
+## Building from source
+
+This package uses [flit](https://flit.pypa.io/) as its build backend (declared
+in `pyproject.toml`).
+
+The **source distribution** (`.tar.gz`) is backend-only and builds directly:
+
+```bash
+# from the ui/backend directory (the package root)
+python -m pip install flit
+flit build --no-use-vcs --format sdist
+# artifact is written to dist/
+```
+
+The **wheel** additionally bundles a compiled frontend, so it requires
+Node.js + npm. Build the frontend first, copy it into the package, then
+build the wheel:
+
+```bash
+# 1. build the frontend (from ui/frontend)
+cd ../frontend
+npm install
+npm run build
+npm run licenses     # generates build/THIRD-PARTY-LICENSES.txt
+
+# 2. copy the compiled assets into the backend package
+rm -rf ../backend/hamilton_ui/build
+cp -r build ../backend/hamilton_ui/build
+
+# 3. build the wheel (from ui/backend)
+cd ../backend
+flit build --no-use-vcs --format wheel
+# artifact is written to dist/
+```
+
+The release script `scripts/apache_release_helper.py --package ui` performs all
+of these steps automatically.
+
 ## License
 
-Apache 2.0. See the main repository [LICENSE](../../LICENSE) for details.
+Apache 2.0. See the [LICENSE](LICENSE) file included with this package for details.
+
+This package is distributed in two forms:
+
+- The **source distribution** (sdist) contains only Apache Hamilton source code,
+  licensed under the Apache License, Version 2.0.
+- The **binary distribution** (wheel) additionally bundles a compiled frontend
+  web application (`hamilton_ui/build/`) built from the TypeScript/React sources
+  in `ui/frontend/`. That bundle includes third-party JavaScript dependencies
+  (e.g. React, Redux, Chart.js, React Flow), each under permissive licenses
+  (MIT, Apache-2.0, BSD, ISC, and similar). The full per-dependency license
+  texts and copyright notices are included in the wheel at
+  `hamilton_ui/build/THIRD-PARTY-LICENSES.txt`.

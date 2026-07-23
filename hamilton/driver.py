@@ -793,6 +793,19 @@ class Driver:
             results = [Variable.from_node(n) for n in all_nodes]
         return results
 
+    def get_variable(self, name: str) -> Variable:
+        """Returns a variable by name.
+
+        :param name: Name of the variable to return.
+        :return: Matching Variable.
+        :raises KeyError: If the variable does not exist in this Driver's graph.
+        """
+        return Variable.from_node(self.graph.nodes[name])
+
+    def get_graph(self) -> graph_types.HamiltonGraph:
+        """Returns the public HamiltonGraph representation for this Driver."""
+        return graph_types.HamiltonGraph.from_graph(self.graph)
+
     @capture_function_usage
     def display_all_functions(
         self,

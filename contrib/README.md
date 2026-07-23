@@ -209,3 +209,20 @@ If the above apply, run the `init-dataflow` command with `-s` to specify a sanit
 
 ## Got questions?
 Join our [slack](https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g) community to chat/ask Qs/etc.
+
+## Building from source
+
+This package uses [flit](https://flit.pypa.io/) as its build backend (declared
+in `pyproject.toml`). To build the source distribution and wheel from a source
+checkout:
+
+```bash
+# from the contrib directory (the package root)
+python -m pip install flit
+flit build --no-use-vcs
+# artifacts are written to dist/
+```
+
+`flit build` produces both the `.tar.gz` source distribution and the
+`.whl` wheel. `--no-use-vcs` selects files from the working tree rather than
+git, which is what you want when building from an unpacked source release.
