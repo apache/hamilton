@@ -70,6 +70,7 @@ import {
   nodeKey,
 } from "./utils";
 import { getAdapterIcon } from "../../../utils";
+import { PiStackBold } from "react-icons/pi";
 import {
   GROUPING_FUNCTION_OPTIONS,
   NodeHierarchyManager,
@@ -608,6 +609,9 @@ const BaseNodeComponent = (props: {
       item.nodeTemplate.classifications.includes("input")
     )
     .some((i) => i);
+  const isResultBuilder = props.data.nodes.some((item) =>
+    item.nodeTemplate.classifications.includes("result_builder")
+  );
   const isExternalToSubdag = props.data.nodes
     .map((item) =>
       item.nodeTemplate.classifications.includes("external_to_subdag")
@@ -666,7 +670,7 @@ const BaseNodeComponent = (props: {
       className={`${
         highlightedContext.inSelectedDAG ? "" : "opacity-20"
       } group flex flex-col gap-3 items-center cursor-cell ${
-        hasArtifact ? "border border-dashed " : " "
+        hasArtifact || isResultBuilder ? "border border-dashed " : " "
       } rounded-lg p-1 ${
         displayAnything ? "" : "invisible"
       } ${outlineColorClasses} ${backgroundHoverClasses}`}
@@ -690,6 +694,13 @@ const BaseNodeComponent = (props: {
             );
           })}
         </div>
+      ) : (
+        <></>
+      )}
+      {isResultBuilder ? (
+        <PiStackBold
+          className={`text-5xl group-hover:text-opacity-80 ${iconClasses}`}
+        />
       ) : (
         <></>
       )}
@@ -821,6 +832,9 @@ const FunctionNodeComponent = (props: {
       item.nodeTemplate.classifications.includes("input")
     )
     .some((i) => i);
+  const isResultBuilder = props.data.nodes.some((item) =>
+    item.nodeTemplate.classifications.includes("result_builder")
+  );
   const hidden = props.data.collapsed;
   const {
     upstreamNodes,
@@ -870,7 +884,7 @@ const FunctionNodeComponent = (props: {
       className={`${
         highlightedContext.inSelectedDAG ? "" : "opacity-20"
       } group flex flex-col gap-3 items-center cursor-cell ${
-        hasArtifact ? "border border-dashed " : " "
+        hasArtifact || isResultBuilder ? "border border-dashed " : " "
       } rounded-lg p-1 ${
         displayAnything ? "" : "invisible"
       } ${outlineColorClasses} ${backgroundHoverClasses}`}
@@ -894,6 +908,13 @@ const FunctionNodeComponent = (props: {
             );
           })}
         </div>
+      ) : (
+        <></>
+      )}
+      {isResultBuilder ? (
+        <PiStackBold
+          className={`text-5xl group-hover:text-opacity-80 ${iconClasses}`}
+        />
       ) : (
         <></>
       )}

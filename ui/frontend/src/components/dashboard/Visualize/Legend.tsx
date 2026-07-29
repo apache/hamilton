@@ -28,6 +28,11 @@ export const Legend = () => {
       text: "Input",
       bgClass: "bg-white text-dwdarkblue border-2 border-dwdarkblue",
     },
+    {
+      // matches the node rendering: dashed border in the default border color
+      text: "Result Builder",
+      bgClass: "bg-dwdarkblue text-white border-2 border-dashed",
+    },
   ];
 
   return (

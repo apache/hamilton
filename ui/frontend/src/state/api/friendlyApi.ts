@@ -137,7 +137,8 @@ export type Classification =
   | "artifact"
   | "data_loader"
   | "data_saver"
-  | "input";
+  | "input"
+  | "result_builder";
 
 const codeVersionTypeMap = {
   CodeVersionGit1: { version: 1, type: "git" },

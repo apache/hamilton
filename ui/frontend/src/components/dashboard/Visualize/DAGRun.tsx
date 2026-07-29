@@ -58,6 +58,9 @@ export const ExecutionNodeComponent = (props: {
       item.nodeTemplate.classifications.includes("input")
     )
     .some((i) => i);
+  const isResultBuilder = props.data.nodes.some((item) =>
+    item.nodeTemplate.classifications.includes("result_builder")
+  );
   const hidden = props.data.collapsed;
 
   const { vertical } = useContext(NodeControlContext);
@@ -103,7 +106,9 @@ export const ExecutionNodeComponent = (props: {
     <div
       className={`group flex flex-col gap-3 items-center cursor-cell bg-opacity-0 ${text} ${
         isSelected ? "opacity-80" : ""
-      } ${hasArtifact ? "border border-dashed " : " "} rounded-lg ${background}
+      } ${
+        hasArtifact || isResultBuilder ? "border border-dashed " : " "
+      } ${isResultBuilder ? "border-2" : ""} rounded-lg ${background}
       ${isInput ? " border-2 border-dwdarkblue/50 p-0" : " text-white p-1"}`}
     >
       {artifactTypes.size > 0 ? (
