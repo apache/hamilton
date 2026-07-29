@@ -56,6 +56,64 @@ def get_node_name(node_: node.Node, task_id: Optional[str]) -> str:
 LONG_SCALE = float(0xFFFFFFFFFFFFFFF)
 
 
+def _failed_result_summary() -> dict:
+    """Returns a fresh placeholder summary for results that could not be processed.
+
+    A fresh dict each call -- callers assign it to per-run state, so a shared
+    module-level constant would alias across runs.
+
+    @return: An observability summary dict marking the result as unprocessable.
+    """
+    return {
+        "observability_type": "observability_failure",
+        "observability_schema_version": "0.0.3",
+        "observability_value": {
+            "type": str(str),
+            "value": "Failed to process result.",
+        },
+    }
+
+
+def _make_result_attributes(
+    node_name: str, result_summary: dict | None, other_results: list[dict]
+) -> list[dict]:
+    """Shapes process_result output into update_tasks attributes.
+
+    `result_summary` comes first because the order influences UI display order.
+
+    @param node_name: Name of the node the attributes belong to.
+    @param result_summary: Primary observability summary, or None if processing failed.
+    @param other_results: Additional observability dicts (schema, extra attributes).
+    @return: A list of attribute dicts for client.update_tasks.
+    """
+    if result_summary is None:
+        result_summary = _failed_result_summary()
+    attributes = [
+        dict(
+            node_name=node_name,
+            name="result_summary",
+            type=result_summary["observability_type"],
+            # 0.0.3 -> 3
+            schema_version=int(result_summary["observability_schema_version"].split(".")[-1]),
+            value=result_summary["observability_value"],
+            attribute_role="result_summary",
+        )
+    ]
+    for i, other_result in enumerate(other_results):
+        attributes.append(
+            dict(
+                node_name=node_name,
+                name=other_result.get("name", f"Attribute {i + 1}"),  # retrieve name if specified
+                type=other_result["observability_type"],
+                # 0.0.3 -> 3
+                schema_version=int(other_result["observability_schema_version"].split(".")[-1]),
+                value=other_result["observability_value"],
+                attribute_role="result_summary",
+            )
+        )
+    return attributes
+
+
 class HamiltonTracker(
     base.BasePostGraphConstruct,
     base.BasePreGraphExecute,
@@ -120,6 +178,8 @@ class HamiltonTracker(
         self.tracking_states = {}
         self.dw_run_ids = {}
         self.task_runs = {}
+        self.result_builder_nodes = {}  # fg_id -> synthetic node (or None if no builder)
+        self.run_final_vars = {}  # run_id -> final_vars, for realized_dependencies
         super().__init__()
         # set this to a float to sample blocks. 0.1 means 10% of blocks will be sampled.
         # set this to an int to sample blocks by modulo.
@@ -140,6 +200,10 @@ class HamiltonTracker(
             self.seed = random.random()
         logger.debug("post_graph_construct")
         fg_id = id(graph)
+        builder = driver._get_result_builder(graph)
+        self.result_builder_nodes[fg_id] = (
+            driver._create_result_builder_node(builder) if builder is not None else None
+        )
         if fg_id in self.dag_template_id_cache:
             logger.warning("Skipping creation of DAG template as it already exists.")
             return
@@ -147,12 +211,15 @@ class HamiltonTracker(
         vcs_info = driver._derive_version_control_info(module_hash)
         dag_hash = driver.hash_dag(graph)
         code_hash = driver.hash_dag_modules(graph, modules)
+        nodes = driver._extract_node_templates_from_function_graph(graph)
+        if self.result_builder_nodes[fg_id] is not None:
+            nodes.append(driver._extract_node_template(self.result_builder_nodes[fg_id]))
         dag_template_id = self.client.register_dag_template_if_not_exists(
             project_id=self.project_id,
             dag_hash=dag_hash,
             code_hash=code_hash,
             name=self.dag_name,
-            nodes=driver._extract_node_templates_from_function_graph(graph),
+            nodes=nodes,
             code_artifacts=driver.extract_code_artifacts_from_function_graph(
                 graph, vcs_info, vcs_info.local_repo_base_path
             ),
@@ -189,6 +256,7 @@ class HamiltonTracker(
         )
         self.dw_run_ids[run_id] = dw_run_id
         self.task_runs[run_id] = {}
+        self.run_final_vars[run_id] = list(final_vars)
         logger.warning(
             f"\nCapturing execution run. Results can be found at "
             f"{self.hamilton_ui_url}/dashboard/project/{self.project_id}/runs/{dw_run_id}\n"
@@ -287,35 +355,18 @@ class HamiltonTracker(
         tracking_state = self.tracking_states[run_id]
         task_run.end_time = datetime.datetime.now(UTC)
 
-        other_results = []
         if success:
             task_run.status = Status.SUCCESS
             task_run.result_type = type(result)
             result_summary, schema, additional_attributes = runs.process_result(result, node_)
             if result_summary is None:
-                result_summary = {
-                    "observability_type": "observability_failure",
-                    "observability_schema_version": "0.0.3",
-                    "observability_value": {
-                        "type": str(str),
-                        "value": "Failed to process result.",
-                    },
-                }
+                result_summary = _failed_result_summary()
             other_results = ([schema] if schema is not None else []) + additional_attributes
-
             task_run.result_summary = result_summary
-            task_attr = dict(
-                node_name=get_node_name(node_, task_id),
-                name="result_summary",
-                type=task_run.result_summary["observability_type"],
-                # 0.0.3 -> 3
-                schema_version=int(
-                    task_run.result_summary["observability_schema_version"].split(".")[-1]
-                ),
-                value=task_run.result_summary["observability_value"],
-                attribute_role="result_summary",
+            # `result_summary` is first because the order influences UI display order
+            attributes = _make_result_attributes(
+                get_node_name(node_, task_id), result_summary, other_results
             )
-
         else:
             task_run.status = Status.FAILURE
             task_run.is_in_sample = True  # override any sampling
@@ -323,30 +374,18 @@ class HamiltonTracker(
                 task_run.error = runs.serialize_data_quality_error(error)
             else:
                 task_run.error = traceback.format_exception(type(error), error, error.__traceback__)
-            task_attr = dict(
-                node_name=get_node_name(node_, task_id),
-                name="stack_trace",
-                type="error",
-                schema_version=1,
-                value={
-                    "stack_trace": task_run.error,
-                },
-                attribute_role="error",
-            )
-
-        # `result_summary` or "error" is first because the order influences UI display order
-        attributes = [task_attr]
-        for i, other_result in enumerate(other_results):
-            other_attr = dict(
-                node_name=get_node_name(node_, task_id),
-                name=other_result.get("name", f"Attribute {i + 1}"),  # retrieve name if specified
-                type=other_result["observability_type"],
-                # 0.0.3 -> 3
-                schema_version=int(other_result["observability_schema_version"].split(".")[-1]),
-                value=other_result["observability_value"],
-                attribute_role="result_summary",
-            )
-            attributes.append(other_attr)
+            attributes = [
+                dict(
+                    node_name=get_node_name(node_, task_id),
+                    name="stack_trace",
+                    type="error",
+                    schema_version=1,
+                    value={
+                        "stack_trace": task_run.error,
+                    },
+                    attribute_role="error",
+                )
+            ]
         tracking_state.update_task(node_.name, task_run)
         task_update = dict(
             node_template_name=node_.name,
@@ -394,6 +433,44 @@ class HamiltonTracker(
                 if task_run.end_time is None and task_run.status == Status.SUCCESS:
                     task_run.end_time = finally_block_time
 
+        builder_node = self.result_builder_nodes.get(id(graph))
+        # `execute()` fires this hook after do_build_result, so `results` is the combined
+        # built object. Deprecated raw_execute()/materialize() paths fire it with the raw
+        # node dict without ever running the builder -- the type check skips those so we
+        # don't report a builder execution that never happened.
+        if (
+            builder_node is not None
+            and success
+            and results is not None
+            and (not isinstance(builder_node.type, type) or isinstance(results, builder_node.type))
+        ):
+            try:
+                now = datetime.datetime.now(UTC)
+                result_summary, schema, additional = runs.process_result(results, builder_node)
+                attributes = _make_result_attributes(
+                    builder_node.name,
+                    result_summary,
+                    ([schema] if schema is not None else []) + additional,
+                )
+                task_update = dict(
+                    node_template_name=builder_node.name,
+                    node_name=builder_node.name,  # no task_id at the graph level
+                    realized_dependencies=self.run_final_vars.get(run_id, []),
+                    status=Status.SUCCESS,
+                    # builder duration is not observable from this hook
+                    start_time=now,
+                    end_time=now,
+                )
+                self.client.update_tasks(
+                    dw_run_id,
+                    attributes=attributes,
+                    task_updates=[task_update for _ in attributes],
+                    in_samples=[True for _ in attributes],
+                )
+            except Exception:
+                # tracking must never fail the user's run
+                logger.warning("Failed to track result builder output.", exc_info=True)
+
         self.client.log_dag_run_end(
             dag_run_id=dw_run_id,
             status=tracking_state.status.value,
@@ -439,6 +516,8 @@ class AsyncHamiltonTracker(
         self.tracking_states = {}
         self.dw_run_ids = {}
         self.task_runs = {}
+        self.result_builder_nodes = {}  # fg_id -> synthetic node (or None if no builder)
+        self.run_final_vars = {}  # run_id -> final_vars, for realized_dependencies
         self.initialized = False
         super().__init__()
 
@@ -474,6 +553,10 @@ class AsyncHamiltonTracker(
     ):
         logger.debug("post_graph_construct")
         fg_id = id(graph)
+        builder = driver._get_result_builder(graph)
+        self.result_builder_nodes[fg_id] = (
+            driver._create_result_builder_node(builder) if builder is not None else None
+        )
         if fg_id in self.dag_template_id_cache:
             logger.warning("Skipping creation of DAG template as it already exists.")
             return
@@ -481,12 +564,15 @@ class AsyncHamiltonTracker(
         vcs_info = driver._derive_version_control_info(module_hash)
         dag_hash = driver.hash_dag(graph)
         code_hash = driver.hash_dag_modules(graph, modules)
+        nodes = driver._extract_node_templates_from_function_graph(graph)
+        if self.result_builder_nodes[fg_id] is not None:
+            nodes.append(driver._extract_node_template(self.result_builder_nodes[fg_id]))
         dag_template_id = await self.client.register_dag_template_if_not_exists(
             project_id=self.project_id,
             dag_hash=dag_hash,
             code_hash=code_hash,
             name=self.dag_name,
-            nodes=driver._extract_node_templates_from_function_graph(graph),
+            nodes=nodes,
             code_artifacts=driver.extract_code_artifacts_from_function_graph(
                 graph, vcs_info, vcs_info.local_repo_base_path
             ),
@@ -523,6 +609,7 @@ class AsyncHamiltonTracker(
         )
         self.dw_run_ids[run_id] = dw_run_id
         self.task_runs[run_id] = {}
+        self.run_final_vars[run_id] = list(final_vars)
 
     async def pre_node_execute(
         self, run_id: str, node_: node.Node, kwargs: dict[str, Any], task_id: Optional[str] = None
@@ -567,7 +654,6 @@ class AsyncHamiltonTracker(
         task_run = self.task_runs[run_id][node_.name]
         tracking_state = self.tracking_states[run_id]
         task_run.end_time = datetime.datetime.now(UTC)
-        other_results = []
 
         if success:
             task_run.status = Status.SUCCESS
@@ -575,25 +661,11 @@ class AsyncHamiltonTracker(
             result_summary, schema, additional = runs.process_result(result, node_)  # add node
             other_results = ([schema] if schema is not None else []) + additional
             if result_summary is None:
-                result_summary = {
-                    "observability_type": "observability_failure",
-                    "observability_schema_version": "0.0.3",
-                    "observability_value": {
-                        "type": str(str),
-                        "value": "Failed to process result.",
-                    },
-                }
+                result_summary = _failed_result_summary()
             task_run.result_summary = result_summary
-            task_attr = dict(
-                node_name=get_node_name(node_, task_id),
-                name="result_summary",
-                type=task_run.result_summary["observability_type"],
-                # 0.0.3 -> 3
-                schema_version=int(
-                    task_run.result_summary["observability_schema_version"].split(".")[-1]
-                ),
-                value=task_run.result_summary["observability_value"],
-                attribute_role="result_summary",
+            # `result_summary` is first because the order influences UI display order
+            attributes = _make_result_attributes(
+                get_node_name(node_, task_id), result_summary, other_results
             )
         else:
             task_run.status = Status.FAILURE
@@ -601,29 +673,18 @@ class AsyncHamiltonTracker(
                 task_run.error = runs.serialize_data_quality_error(error)
             else:
                 task_run.error = traceback.format_exception(type(error), error, error.__traceback__)
-            task_attr = dict(
-                node_name=get_node_name(node_, task_id),
-                name="stack_trace",
-                type="error",
-                schema_version=1,
-                value={
-                    "stack_trace": task_run.error,
-                },
-                attribute_role="error",
-            )
-
-        attributes = [task_attr]
-        for i, other_result in enumerate(other_results):
-            other_attr = dict(
-                node_name=get_node_name(node_, task_id),
-                name=other_result.get("name", f"Attribute {i + 1}"),  # retrieve name if specified
-                type=other_result["observability_type"],
-                # 0.0.3 -> 3
-                schema_version=int(other_result["observability_schema_version"].split(".")[-1]),
-                value=other_result["observability_value"],
-                attribute_role="result_summary",
-            )
-            attributes.append(other_attr)
+            attributes = [
+                dict(
+                    node_name=get_node_name(node_, task_id),
+                    name="stack_trace",
+                    type="error",
+                    schema_version=1,
+                    value={
+                        "stack_trace": task_run.error,
+                    },
+                    attribute_role="error",
+                )
+            ]
         tracking_state.update_task(get_node_name(node_, task_id), task_run)
         task_update = dict(
             node_template_name=node_.name,
@@ -668,6 +729,32 @@ class AsyncHamiltonTracker(
                         task_run.error = ["Run was likely aborted."]
                 if task_run.end_time is None and task_run.status == Status.SUCCESS:
                     task_run.end_time = finally_block_time
+
+        builder_node = self.result_builder_nodes.get(id(graph))
+        if builder_node is not None and success:
+            # Unlike the sync driver, the async driver fires this hook *before*
+            # do_build_result (async_driver.py raw_execute finally vs execute), so
+            # `results` here is the raw dict -- emit a status-only update, no summary.
+            try:
+                now = datetime.datetime.now(UTC)
+                task_update = dict(
+                    node_template_name=builder_node.name,
+                    node_name=builder_node.name,  # no task_id at the graph level
+                    realized_dependencies=self.run_final_vars.get(run_id, []),
+                    status=Status.SUCCESS,
+                    # builder duration is not observable from this hook
+                    start_time=now,
+                    end_time=now,
+                )
+                await self.client.update_tasks(
+                    dw_run_id,
+                    attributes=[None],
+                    task_updates=[task_update],
+                    in_samples=[True],
+                )
+            except Exception:
+                # tracking must never fail the user's run
+                logger.warning("Failed to track result builder output.", exc_info=True)
 
         # TODO: only update things that have changed?
         # self.client.update_tasks(

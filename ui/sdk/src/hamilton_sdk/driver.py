@@ -507,9 +507,58 @@ def _convert_node_dependencies(node: Node) -> dict:
     }
 
 
+RESULT_BUILDER_NODE_NAME = "__result_builder"
+
+
+def _get_result_builder(fn_graph: graph.FunctionGraph) -> Any | None:
+    """Returns the result builder attached to the graph's adapter set, else None.
+
+    Handles both modern builders (which implement ``do_build_result`` directly) and
+    legacy ones wrapped in a ``SimplePythonGraphAdapter`` (unwrapped via ``.result_builder``).
+
+    @param fn_graph: Function graph whose adapter set to inspect.
+    @return: The result builder instance, or None if none is attached.
+    """
+    adapter = getattr(fn_graph, "adapter", None)
+    if adapter is None:
+        return None
+    for a in getattr(adapter, "adapters", []):
+        if hasattr(a, "do_build_result"):
+            return getattr(a, "result_builder", a)
+    return None
+
+
+def _create_result_builder_node(builder: Any) -> Node:
+    """Synthesizes a node representing the result builder's combined output.
+
+    The builder is not a real graph node (core runs it as a post-step after
+    ``raw_execute``), so we fabricate one for tracking purposes. Dependencies are
+    empty at template time -- final_vars are only known per-run, and get reported
+    via ``realized_dependencies`` on the task update.
+
+    @param builder: The result builder instance to represent.
+    @return: A synthetic Node tagged ``hamilton.result_builder``.
+    """
+    output_type = Any
+    if hasattr(builder, "output_type"):
+        try:
+            output_type = builder.output_type()
+        except Exception:
+            pass
+    return Node(
+        name=RESULT_BUILDER_NODE_NAME,
+        typ=output_type if output_type is not None else Any,
+        doc_string=f"Combined output built by {type(builder).__name__}.",
+        input_types={},  # synthetic node has no callable to introspect
+        tags={"hamilton.result_builder": type(builder).__name__},
+    )
+
+
 def _convert_classifications(node_: Node) -> list[str]:
     out = []
-    if (
+    if node_.tags.get("hamilton.result_builder"):
+        out.append("result_builder")
+    elif (
         node_.tags.get("hamilton.data_loader")
         and node_.tags.get("hamilton.data_loader.has_metadata") is not False
     ):
@@ -523,39 +572,37 @@ def _convert_classifications(node_: Node) -> list[str]:
     return out
 
 
+def _extract_node_template(node_: Node) -> dict:
+    """Converts a single node to the template dict the DAGWorks graph can understand.
+
+    @param node_: Node to convert.
+    @return: A node template dict.
+    """
+    code_artifact_pointers = (
+        []
+        if (node_.originating_functions is None or len(node_.originating_functions) == 0)
+        else [_get_fully_qualified_function_path(fn) for fn in node_.originating_functions]
+    )
+    return dict(
+        name=node_.name,
+        output={"type_name": str(node_.type)},
+        output_type="python_type",
+        output_schema_version=1,  # TODO -- merge this with _convert_node_dependencies
+        documentation=node_.documentation,
+        tags=node_.tags,  # TODO -- ensure serializable
+        classifications=_convert_classifications(node_),  # TODO -- manage classifications
+        code_artifact_pointers=code_artifact_pointers,
+        **_convert_node_dependencies(node_),
+    )
+
+
 def _extract_node_templates_from_function_graph(fn_graph: graph.FunctionGraph) -> list[dict]:
     """Converts a function graph to a list of nodes that the DAGWorks graph can understand.
 
     @param fn: Function graph to convert
     @return: A list of node objects
     """
-    node_templates = []
-    for node_ in fn_graph.nodes.values():
-        code_artifact_pointers = (
-            []
-            if (node_.originating_functions is None or len(node_.originating_functions) == 0)
-            else [_get_fully_qualified_function_path(fn) for fn in node_.originating_functions]
-        )
-        node_templates.append(
-            dict(
-                name=node_.name,
-                output={"type_name": str(node_.type)},
-                output_type="python_type",
-                output_schema_version=1,  # TODO -- merge this with _convert_node_dependencies
-                documentation=node_.documentation,
-                tags=node_.tags,  # TODO -- ensure serializable
-                classifications=_convert_classifications(node_),  # TODO -- manage classifications
-                code_artifact_pointers=(
-                    code_artifact_pointers
-                    if node_.originating_functions is None or len(node_.originating_functions) == 0
-                    else [
-                        _get_fully_qualified_function_path(fn) for fn in node_.originating_functions
-                    ]
-                ),
-                **_convert_node_dependencies(node_),
-            )
-        )
-    return node_templates
+    return [_extract_node_template(node_) for node_ in fn_graph.nodes.values()]
 
 
 def _derive_url(vcs_info: GitInfo, path: str, line: int) -> str:
