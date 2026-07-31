@@ -481,8 +481,9 @@ def test_no_materialize_failure(tmp_path_factory):
 def test_no_materialize_failure_with_graph_execution_hook(tmp_path_factory):
     """The no-output ValueError must survive a registered post_graph_execute hook.
 
-    The hook makes the `finally` block run, which references `function_graph` -- bound
-    after the raise -- so without the pre-init the real error is masked.
+    Registering the hook triggers the `post_graph_execute` call in the `finally` block, which
+    references `function_graph` (normally bound after the raise), so without pre-init the real
+    error is masked.
     """
 
     class TrackingHook(lifecycle.GraphExecutionHook):
