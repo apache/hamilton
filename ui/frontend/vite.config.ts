@@ -32,11 +32,23 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Split vendor chunks for better caching
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'redux-vendor': ['@reduxjs/toolkit', 'react-redux', 'redux-persist'],
-          'chart-vendor': ['chart.js', 'react-chartjs-2'],
+        // Split vendor chunks for better caching. Vite 8's rolldown-based
+        // bundler requires manualChunks to be a function rather than an
+        // object of arrays.
+        manualChunks(id) {
+          if (['react', 'react-dom', 'react-router-dom'].some((pkg) => id.includes(`/node_modules/${pkg}/`))) {
+            return 'react-vendor'
+          }
+          if (
+            ['@reduxjs/toolkit', 'react-redux', 'redux-persist'].some((pkg) =>
+              id.includes(`/node_modules/${pkg}/`)
+            )
+          ) {
+            return 'redux-vendor'
+          }
+          if (['chart.js', 'react-chartjs-2'].some((pkg) => id.includes(`/node_modules/${pkg}/`))) {
+            return 'chart-vendor'
+          }
         },
       },
     },
