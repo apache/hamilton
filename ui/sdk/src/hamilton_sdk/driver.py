@@ -431,13 +431,20 @@ def _get_fully_qualified_function_path(fn: Callable) -> str:
     return fn_name
 
 
-def hash_dag(dag: graph.FunctionGraph) -> str:
+def hash_dag(dag: graph.FunctionGraph, include_result_builder: bool = False) -> str:
     """Hashes a DAG.
 
     :param dag: DAG to hash
+    :param include_result_builder: Whether the synthetic result-builder node will be part of the
+        registered template. ``register_dag_template_if_not_exists`` matches on this hash alone,
+        so without folding the node in, a template registered before it existed would be reused
+        and the run would log task runs against a node that template does not have. Off by
+        default, so the legacy ``Driver`` below keeps hashing the way it always has.
     :return: Hash of the DAG
     """
     digest = hashlib.sha256()
+    if include_result_builder and _should_register_result_builder(dag):
+        digest.update(RESULT_BUILDER_NODE_NAME.encode())
 
     hashing_node_fields = {
         "name": str,
@@ -523,10 +530,65 @@ def _convert_classifications(node_: Node) -> list[str]:
     return out
 
 
-def _extract_node_templates_from_function_graph(fn_graph: graph.FunctionGraph) -> list[dict]:
+#: Name of the synthetic node the tracker adds to represent the result builder's output.
+#: The leading underscore keeps it clear of user functions -- ``graph_utils.py`` excludes
+#: ``_``-prefixed functions from becoming nodes -- but names that do not come from a function
+#: bypass that filter, so a collision is still possible. See
+#: ``tests/resources/dag_with_reserved_node_name.py``.
+RESULT_BUILDER_NODE_NAME = "_result_builder"
+
+
+def _should_register_result_builder(fn_graph: graph.FunctionGraph) -> bool:
+    """Whether the synthetic result-builder node can be added to this graph's template.
+
+    ``NodeTemplate`` is unique on ``("name", "dag_template")``, so a second template with this
+    name would fail DAG registration outright. Node templates, the DAG hash and the tracker's
+    task run all ask here, so they cannot disagree about whether the node exists.
+
+    :param fn_graph: The function graph being registered.
+    :return: False if the dataflow already has a node by that name, True otherwise.
+    """
+    return RESULT_BUILDER_NODE_NAME not in fn_graph.nodes
+
+
+def _result_builder_node_template() -> dict:
+    """Builds the synthetic node template for the result builder.
+
+    The output type is ``typing.Any`` because it varies per run and per result builder; the
+    real type shows up in the per-run result summary.
+
+    :return: A node template dict, shaped like the ones built from real nodes.
+    """
+    return dict(
+        name=RESULT_BUILDER_NODE_NAME,
+        output={"type_name": str(Any)},
+        output_type="python_type",
+        output_schema_version=1,
+        documentation=(
+            "The combined result of the run, as assembled by the driver's result builder. "
+            "This node is synthesized by the Hamilton tracker -- it does not exist in the "
+            "DAG itself. Its dependencies vary per run: they are the requested outputs."
+        ),
+        tags={},
+        classifications=["result_builder"],
+        code_artifact_pointers=[],  # originates from no user function
+        # Dependencies are per-run (the requested outputs), so the template has none.
+        dependencies=[],
+        dependency_specs=[],
+        dependency_specs_type="python_type",
+        dependency_specs_schema_version=1,
+    )
+
+
+def _extract_node_templates_from_function_graph(
+    fn_graph: graph.FunctionGraph, include_result_builder: bool = False
+) -> list[dict]:
     """Converts a function graph to a list of nodes that the DAGWorks graph can understand.
 
     @param fn: Function graph to convert
+    @param include_result_builder: Whether to append the synthetic result-builder node. Off by
+        default, since a caller that registers it without also emitting a task run would render
+        it as never-executed on every run -- as the legacy ``Driver`` in this module would.
     @return: A list of node objects
     """
     node_templates = []
@@ -555,6 +617,17 @@ def _extract_node_templates_from_function_graph(fn_graph: graph.FunctionGraph) -
                 **_convert_node_dependencies(node_),
             )
         )
+    if include_result_builder:
+        if _should_register_result_builder(fn_graph):
+            node_templates.append(_result_builder_node_template())
+        else:
+            # Skipping costs this run the node; registering both would cost the user their run.
+            logger.warning(
+                "Not registering the synthetic %s node: this dataflow already has a node by "
+                "that name, and registering both would fail. The combined result of the run "
+                "will not be shown in the Hamilton UI.",
+                RESULT_BUILDER_NODE_NAME,
+            )
     return node_templates
 
 
