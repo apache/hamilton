@@ -31,7 +31,7 @@ except ImportError:
 
 from types import ModuleType
 from typing import Any, Optional
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 
 from hamilton import graph as h_graph
 from hamilton import node
@@ -54,6 +54,105 @@ def get_node_name(node_: node.Node, task_id: Optional[str]) -> str:
 
 
 LONG_SCALE = float(0xFFFFFFFFFFFFFFF)
+
+
+def _result_attribute(node_name: str, name: str, observation: dict) -> dict:
+    """Shapes one observation into the attribute dict the tracking API expects."""
+    return dict(
+        node_name=node_name,
+        name=name,
+        type=observation["observability_type"],
+        # 0.0.3 -> 3
+        schema_version=int(observation["observability_schema_version"].split(".")[-1]),
+        value=observation["observability_value"],
+        attribute_role="result_summary",
+    )
+
+
+def _result_attributes(
+    node_name: str, result_summary: dict, schema: Optional[dict], additional: list[dict]
+) -> list[dict]:
+    """Builds the attribute list for a successful task run.
+
+    `result_summary` is first because the order influences UI display order.
+    """
+    others = ([schema] if schema is not None else []) + additional
+    return [_result_attribute(node_name, "result_summary", result_summary)] + [
+        # retrieve name if specified
+        _result_attribute(node_name, other.get("name", f"Attribute {i + 1}"), other)
+        for i, other in enumerate(others)
+    ]
+
+
+def _observability_failure_summary() -> dict:
+    """The result summary used when profiling the result did not produce one."""
+    return {
+        "observability_type": "observability_failure",
+        "observability_schema_version": "0.0.3",
+        "observability_value": {
+            "type": str(str),
+            "value": "Failed to process result.",
+        },
+    }
+
+
+def _result_builder_dependencies(results: Any, final_vars: list[str]) -> list[str]:
+    """The requested outputs that actually reached the result being reported.
+
+    Narrowing is only sound when the result is keyed by node name, as ``DictResult`` and the raw
+    dict ``materialize`` hands over both are. A result that cannot say what went into it -- a
+    dataframe, a custom builder's own dict -- keeps the full list rather than be credited with
+    nothing.
+
+    :param results: What the driver passed to ``post_graph_execute``.
+    :param final_vars: The outputs requested at ``pre_graph_execute``.
+    :return: The node names to record as this run's dependencies, always a subset of
+        ``final_vars``.
+    """
+    if isinstance(results, Mapping) and set(results).issubset(final_vars):
+        return [var for var in final_vars if var in results]
+    return final_vars
+
+
+def _result_builder_payload(
+    results: Any, timestamp: datetime.datetime, final_vars: list[str]
+) -> tuple[TaskRun, list[dict], dict]:
+    """Builds everything the synthetic ``_result_builder`` task run needs to be sent.
+
+    Free of I/O, so the sync and async trackers can share it and each send it their own way.
+
+    Not guarded on ``results`` being non-None: a result builder with a side effect and no return
+    value still ran. See "The result builder node" in docs/hamilton-ui/ui.rst for which execution
+    paths hand this a built result and which hand it the raw output dict.
+
+    :param results: The combined result the driver produced.
+    :param timestamp: Time to stamp the task run with -- the builder runs between the last
+        node and ``post_graph_execute``, and its duration is not observable.
+    :param final_vars: The outputs this run asked for, used where the result cannot say.
+    :return: The task run, its attributes, and the task update to send.
+    """
+    node_name = driver.RESULT_BUILDER_NODE_NAME
+    # process_result only reads `.name` and `.tags`; there is no real node to pass.
+    stand_in = node.Node(node_name, Any, callabl=lambda: None)
+    task_run = TaskRun(node_name=node_name, is_in_sample=True)
+    task_run.status = Status.SUCCESS
+    task_run.start_time = timestamp
+    task_run.end_time = timestamp
+    task_run.result_type = type(results)
+    result_summary, schema, additional_attributes = runs.process_result(results, stand_in)
+    if result_summary is None:
+        result_summary = _observability_failure_summary()
+    task_run.result_summary = result_summary
+    attributes = _result_attributes(node_name, result_summary, schema, additional_attributes)
+    task_update = dict(
+        node_template_name=node_name,
+        node_name=node_name,
+        realized_dependencies=_result_builder_dependencies(results, final_vars),
+        status=task_run.status,
+        start_time=task_run.start_time,
+        end_time=task_run.end_time,
+    )
+    return task_run, attributes, task_update
 
 
 class HamiltonTracker(
@@ -120,6 +219,8 @@ class HamiltonTracker(
         self.tracking_states = {}
         self.dw_run_ids = {}
         self.task_runs = {}
+        # requested outputs per run -- the result-builder node's per-run dependencies
+        self.final_vars = {}
         super().__init__()
         # set this to a float to sample blocks. 0.1 means 10% of blocks will be sampled.
         # set this to an int to sample blocks by modulo.
@@ -145,14 +246,16 @@ class HamiltonTracker(
             return
         module_hash = driver._get_modules_hash(modules)
         vcs_info = driver._derive_version_control_info(module_hash)
-        dag_hash = driver.hash_dag(graph)
+        dag_hash = driver.hash_dag(graph, include_result_builder=True)
         code_hash = driver.hash_dag_modules(graph, modules)
         dag_template_id = self.client.register_dag_template_if_not_exists(
             project_id=self.project_id,
             dag_hash=dag_hash,
             code_hash=code_hash,
             name=self.dag_name,
-            nodes=driver._extract_node_templates_from_function_graph(graph),
+            nodes=driver._extract_node_templates_from_function_graph(
+                graph, include_result_builder=True
+            ),
             code_artifacts=driver.extract_code_artifacts_from_function_graph(
                 graph, vcs_info, vcs_info.local_repo_base_path
             ),
@@ -189,6 +292,7 @@ class HamiltonTracker(
         )
         self.dw_run_ids[run_id] = dw_run_id
         self.task_runs[run_id] = {}
+        self.final_vars[run_id] = final_vars
         logger.warning(
             f"\nCapturing execution run. Results can be found at "
             f"{self.hamilton_ui_url}/dashboard/project/{self.project_id}/runs/{dw_run_id}\n"
@@ -363,6 +467,29 @@ class HamiltonTracker(
             in_samples=[task_run.is_in_sample for _ in attributes],
         )
 
+    def _emit_result_builder_task_run(
+        self, run_id: str, results: Any, timestamp: datetime.datetime
+    ):
+        """Emits the task run for the synthetic ``_result_builder`` node.
+
+        Failures are logged and swallowed: this runs before ``log_dag_run_end``, and an
+        otherwise-successful run should not be left rendering as still-running because
+        profiling or sending the combined result went wrong.
+        """
+        try:
+            task_run, attributes, task_update = _result_builder_payload(
+                results, timestamp, self.final_vars.get(run_id, [])
+            )
+            self.tracking_states[run_id].update_task(task_run.node_name, task_run)
+            self.client.update_tasks(
+                self.dw_run_ids[run_id],
+                attributes=attributes,
+                task_updates=[task_update for _ in attributes],
+                in_samples=[True for _ in attributes],
+            )
+        except Exception:
+            logger.exception("Failed to emit the %s task run.", driver.RESULT_BUILDER_NODE_NAME)
+
     def post_graph_execute(
         self,
         run_id: str,
@@ -393,6 +520,8 @@ class HamiltonTracker(
                         task_run.error = ["Run was likely aborted."]
                 if task_run.end_time is None and task_run.status == Status.SUCCESS:
                     task_run.end_time = finally_block_time
+        elif driver._should_register_result_builder(graph):
+            self._emit_result_builder_task_run(run_id, results, finally_block_time)
 
         self.client.log_dag_run_end(
             dag_run_id=dw_run_id,
@@ -439,6 +568,8 @@ class AsyncHamiltonTracker(
         self.tracking_states = {}
         self.dw_run_ids = {}
         self.task_runs = {}
+        # requested outputs per run -- the result-builder node's per-run dependencies
+        self.final_vars = {}
         self.initialized = False
         super().__init__()
 
@@ -479,14 +610,16 @@ class AsyncHamiltonTracker(
             return
         module_hash = driver._get_modules_hash(modules)
         vcs_info = driver._derive_version_control_info(module_hash)
-        dag_hash = driver.hash_dag(graph)
+        dag_hash = driver.hash_dag(graph, include_result_builder=True)
         code_hash = driver.hash_dag_modules(graph, modules)
         dag_template_id = await self.client.register_dag_template_if_not_exists(
             project_id=self.project_id,
             dag_hash=dag_hash,
             code_hash=code_hash,
             name=self.dag_name,
-            nodes=driver._extract_node_templates_from_function_graph(graph),
+            nodes=driver._extract_node_templates_from_function_graph(
+                graph, include_result_builder=True
+            ),
             code_artifacts=driver.extract_code_artifacts_from_function_graph(
                 graph, vcs_info, vcs_info.local_repo_base_path
             ),
@@ -523,6 +656,7 @@ class AsyncHamiltonTracker(
         )
         self.dw_run_ids[run_id] = dw_run_id
         self.task_runs[run_id] = {}
+        self.final_vars[run_id] = final_vars
 
     async def pre_node_execute(
         self, run_id: str, node_: node.Node, kwargs: dict[str, Any], task_id: Optional[str] = None
@@ -640,6 +774,31 @@ class AsyncHamiltonTracker(
             in_samples=[task_run.is_in_sample for _ in attributes],
         )
 
+    async def _emit_result_builder_task_run(
+        self, run_id: str, results: Any, timestamp: datetime.datetime
+    ):
+        """Emits the task run for the synthetic ``_result_builder`` node.
+
+        ``results`` here is always the raw output dict, never a built result:
+        ``async_driver.execute()`` awaits ``raw_execute()`` -- whose ``finally`` fires this hook
+        -- and only then calls ``do_build_result``, so the tracker cannot observe the builder.
+
+        Failures are logged and swallowed, as in the sync tracker.
+        """
+        try:
+            task_run, attributes, task_update = _result_builder_payload(
+                results, timestamp, self.final_vars.get(run_id, [])
+            )
+            self.tracking_states[run_id].update_task(task_run.node_name, task_run)
+            await self.client.update_tasks(
+                self.dw_run_ids[run_id],
+                attributes=attributes,
+                task_updates=[task_update for _ in attributes],
+                in_samples=[True for _ in attributes],
+            )
+        except Exception:
+            logger.exception("Failed to emit the %s task run.", driver.RESULT_BUILDER_NODE_NAME)
+
     async def post_graph_execute(
         self,
         run_id: str,
@@ -668,6 +827,8 @@ class AsyncHamiltonTracker(
                         task_run.error = ["Run was likely aborted."]
                 if task_run.end_time is None and task_run.status == Status.SUCCESS:
                     task_run.end_time = finally_block_time
+        elif driver._should_register_result_builder(graph):
+            await self._emit_result_builder_task_run(run_id, results, finally_block_time)
 
         # TODO: only update things that have changed?
         # self.client.update_tasks(
