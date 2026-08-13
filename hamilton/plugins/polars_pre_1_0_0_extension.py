@@ -44,9 +44,11 @@ if hasattr(pl, "type_aliases"):
 
 # for polars 0.18.0 we need to check what to do.
 if has_alias and hasattr(pl.type_aliases, "CsvEncoding"):
-    from polars.type_aliases import CsvEncoding, SchemaDefinition
+    from polars.type_aliases import CsvEncoding
+    SchemaDefinition = type
 else:
     CsvEncoding = type
+    SchemaDefinition = type
 if has_alias and hasattr(pl.type_aliases, "CsvQuoteStyle"):
     from polars.type_aliases import CsvQuoteStyle
 else:
