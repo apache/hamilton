@@ -206,7 +206,7 @@ class PolarsCSVWriter(DataSaver):
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
-        return [DATAFRAME_TYPE, pl.LazyFrame]
+        return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
         kwargs = {}
@@ -236,9 +236,7 @@ class PolarsCSVWriter(DataSaver):
             kwargs["quote_style"] = self.quote_style
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
-        if isinstance(data, pl.LazyFrame):
-            data = data.collect()
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.write_csv(self.file, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.file, data)
 
@@ -327,7 +325,7 @@ class PolarsParquetWriter(DataSaver):
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
-        return [DATAFRAME_TYPE, pl.LazyFrame]
+        return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
         kwargs = {}
@@ -345,10 +343,7 @@ class PolarsParquetWriter(DataSaver):
             kwargs["pyarrow_options"] = self.pyarrow_options
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
-        if isinstance(data, pl.LazyFrame):
-            data = data.collect()
-
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.write_parquet(self.file, **self._get_saving_kwargs())
 
         return utils.get_file_and_dataframe_metadata(self.file, data)
@@ -423,7 +418,7 @@ class PolarsFeatherWriter(DataSaver):
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
-        return [DATAFRAME_TYPE, pl.LazyFrame]
+        return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
         kwargs = {}
@@ -431,9 +426,7 @@ class PolarsFeatherWriter(DataSaver):
             kwargs["compression"] = self.compression
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
-        if isinstance(data, pl.LazyFrame):
-            data = data.collect()
+    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         data.write_ipc(self.file, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.file, data)
 

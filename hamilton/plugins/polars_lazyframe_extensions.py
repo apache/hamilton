@@ -194,8 +194,12 @@ class PolarsSinkCSVWriter(DataSaver):
     the file to exist immediately after the call returns.
     """
 
-    path: str | Path
+    file: str | Path
     # kwargs:
+    include_bom: bool | None = None
+    compression: str | None = None
+    compression_level: int | None = None
+    check_extension: bool | None = None
     include_header: bool = True
     separator: str = ","
     line_terminator: str = "\n"
@@ -206,12 +210,29 @@ class PolarsSinkCSVWriter(DataSaver):
     time_format: str | None = None
     float_scientific: bool | None = None
     float_precision: int | None = None
-    null_value: str = ""
-    quote_style: str = "necessary"
+    decimal_comma: bool | None = None
+    null_value: str | None = None
+    quote_style: Any = None
     maintain_order: bool = True
+    storage_options: dict[str, Any] | None = None
+    credential_provider: Any = None
+    retries: int | None = None
+    sync_on_close: Any = None
+    mkdir: bool | None = None
+    engine: Any = None
+    optimizations: Any = None
+    extra_kwargs: dict[str, Any] | None = None
 
-    def _get_saving_kwargs(self):
+    def _get_saving_kwargs(self) -> dict[str, Any]:
         kwargs = {}
+        if self.include_bom is not None:
+            kwargs["include_bom"] = self.include_bom
+        if self.compression is not None:
+            kwargs["compression"] = self.compression
+        if self.compression_level is not None:
+            kwargs["compression_level"] = self.compression_level
+        if self.check_extension is not None:
+            kwargs["check_extension"] = self.check_extension
         if self.include_header is not None:
             kwargs["include_header"] = self.include_header
         if self.separator is not None:
@@ -232,12 +253,30 @@ class PolarsSinkCSVWriter(DataSaver):
             kwargs["float_scientific"] = self.float_scientific
         if self.float_precision is not None:
             kwargs["float_precision"] = self.float_precision
+        if self.decimal_comma is not None:
+            kwargs["decimal_comma"] = self.decimal_comma
         if self.null_value is not None:
             kwargs["null_value"] = self.null_value
         if self.quote_style is not None:
             kwargs["quote_style"] = self.quote_style
         if self.maintain_order is not None:
             kwargs["maintain_order"] = self.maintain_order
+        if self.storage_options is not None:
+            kwargs["storage_options"] = self.storage_options
+        if self.credential_provider is not None:
+            kwargs["credential_provider"] = self.credential_provider
+        if self.retries is not None:
+            kwargs["retries"] = self.retries
+        if self.sync_on_close is not None:
+            kwargs["sync_on_close"] = self.sync_on_close
+        if self.mkdir is not None:
+            kwargs["mkdir"] = self.mkdir
+        if self.engine is not None:
+            kwargs["engine"] = self.engine
+        if self.optimizations is not None:
+            kwargs["optimizations"] = self.optimizations
+        if self.extra_kwargs is not None:
+            kwargs.update(self.extra_kwargs)
         return kwargs
 
     @classmethod
@@ -245,8 +284,8 @@ class PolarsSinkCSVWriter(DataSaver):
         return [DATAFRAME_TYPE]
 
     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
-        data.sink_csv(self.path, **self._get_saving_kwargs())
-        return utils.get_file_metadata(self.path)
+        data.sink_csv(self.file, **self._get_saving_kwargs())
+        return utils.get_file_metadata(self.file)
 
     @classmethod
     def name(cls) -> str:
@@ -320,16 +359,26 @@ class PolarsSinkParquetWriter(DataSaver):
     the file to exist immediately after the call returns.
     """
 
-    path: str | Path
+    file: str | Path
     # kwargs:
     compression: str = "zstd"
     compression_level: int | None = None
-    statistics: bool = True
+    statistics: bool | str | dict[str, bool] = True
     row_group_size: int | None = None
     data_page_size: int | None = None
     maintain_order: bool = True
+    storage_options: dict[str, Any] | None = None
+    credential_provider: Any = None
+    retries: int | None = None
+    sync_on_close: Any = None
+    metadata: Any = None
+    arrow_schema: Any = None
+    mkdir: bool | None = None
+    engine: Any = None
+    optimizations: Any = None
+    extra_kwargs: dict[str, Any] | None = None
 
-    def _get_saving_kwargs(self):
+    def _get_saving_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.compression is not None:
             kwargs["compression"] = self.compression
@@ -343,6 +392,26 @@ class PolarsSinkParquetWriter(DataSaver):
             kwargs["data_page_size"] = self.data_page_size
         if self.maintain_order is not None:
             kwargs["maintain_order"] = self.maintain_order
+        if self.storage_options is not None:
+            kwargs["storage_options"] = self.storage_options
+        if self.credential_provider is not None:
+            kwargs["credential_provider"] = self.credential_provider
+        if self.retries is not None:
+            kwargs["retries"] = self.retries
+        if self.sync_on_close is not None:
+            kwargs["sync_on_close"] = self.sync_on_close
+        if self.metadata is not None:
+            kwargs["metadata"] = self.metadata
+        if self.arrow_schema is not None:
+            kwargs["arrow_schema"] = self.arrow_schema
+        if self.mkdir is not None:
+            kwargs["mkdir"] = self.mkdir
+        if self.engine is not None:
+            kwargs["engine"] = self.engine
+        if self.optimizations is not None:
+            kwargs["optimizations"] = self.optimizations
+        if self.extra_kwargs is not None:
+            kwargs.update(self.extra_kwargs)
         return kwargs
 
     @classmethod
@@ -350,8 +419,8 @@ class PolarsSinkParquetWriter(DataSaver):
         return [DATAFRAME_TYPE]
 
     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
-        data.sink_parquet(self.path, **self._get_saving_kwargs())
-        return utils.get_file_metadata(self.path)
+        data.sink_parquet(self.file, **self._get_saving_kwargs())
+        return utils.get_file_metadata(self.file)
 
     @classmethod
     def name(cls) -> str:
@@ -419,17 +488,47 @@ class PolarsSinkFeatherWriter(DataSaver):
     the file to exist immediately after the call returns.
     """
 
-    path: str | Path
+    file: str | Path
     # kwargs:
     compression: str = "uncompressed"
+    compat_level: Any = None
+    record_batch_size: int | None = None
     maintain_order: bool = True
+    storage_options: dict[str, Any] | None = None
+    credential_provider: Any = None
+    retries: int | None = None
+    sync_on_close: Any = None
+    mkdir: bool | None = None
+    engine: Any = None
+    optimizations: Any = None
+    extra_kwargs: dict[str, Any] | None = None
 
-    def _get_saving_kwargs(self):
+    def _get_saving_kwargs(self) -> dict[str, Any]:
         kwargs = {}
         if self.compression is not None:
             kwargs["compression"] = self.compression
+        if self.compat_level is not None:
+            kwargs["compat_level"] = self.compat_level
+        if self.record_batch_size is not None:
+            kwargs["record_batch_size"] = self.record_batch_size
         if self.maintain_order is not None:
             kwargs["maintain_order"] = self.maintain_order
+        if self.storage_options is not None:
+            kwargs["storage_options"] = self.storage_options
+        if self.credential_provider is not None:
+            kwargs["credential_provider"] = self.credential_provider
+        if self.retries is not None:
+            kwargs["retries"] = self.retries
+        if self.sync_on_close is not None:
+            kwargs["sync_on_close"] = self.sync_on_close
+        if self.mkdir is not None:
+            kwargs["mkdir"] = self.mkdir
+        if self.engine is not None:
+            kwargs["engine"] = self.engine
+        if self.optimizations is not None:
+            kwargs["optimizations"] = self.optimizations
+        if self.extra_kwargs is not None:
+            kwargs.update(self.extra_kwargs)
         return kwargs
 
     @classmethod
@@ -437,8 +536,8 @@ class PolarsSinkFeatherWriter(DataSaver):
         return [DATAFRAME_TYPE]
 
     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
-        data.sink_ipc(self.path, **self._get_saving_kwargs())
-        return utils.get_file_metadata(self.path)
+        data.sink_ipc(self.file, **self._get_saving_kwargs())
+        return utils.get_file_metadata(self.file)
 
     @classmethod
     def name(cls) -> str:
@@ -456,14 +555,47 @@ class PolarsSinkNDJSONWriter(DataSaver):
     the file to exist immediately after the call returns.
     """
 
-    path: str | Path
+    file: str | Path
     # kwargs:
+    compression: str | None = None
+    compression_level: int | None = None
+    check_extension: bool | None = None
     maintain_order: bool = True
+    storage_options: dict[str, Any] | None = None
+    credential_provider: Any = None
+    retries: int | None = None
+    sync_on_close: Any = None
+    mkdir: bool | None = None
+    engine: Any = None
+    optimizations: Any = None
+    extra_kwargs: dict[str, Any] | None = None
 
-    def _get_saving_kwargs(self):
+    def _get_saving_kwargs(self) -> dict[str, Any]:
         kwargs = {}
+        if self.compression is not None:
+            kwargs["compression"] = self.compression
+        if self.compression_level is not None:
+            kwargs["compression_level"] = self.compression_level
+        if self.check_extension is not None:
+            kwargs["check_extension"] = self.check_extension
         if self.maintain_order is not None:
             kwargs["maintain_order"] = self.maintain_order
+        if self.storage_options is not None:
+            kwargs["storage_options"] = self.storage_options
+        if self.credential_provider is not None:
+            kwargs["credential_provider"] = self.credential_provider
+        if self.retries is not None:
+            kwargs["retries"] = self.retries
+        if self.sync_on_close is not None:
+            kwargs["sync_on_close"] = self.sync_on_close
+        if self.mkdir is not None:
+            kwargs["mkdir"] = self.mkdir
+        if self.engine is not None:
+            kwargs["engine"] = self.engine
+        if self.optimizations is not None:
+            kwargs["optimizations"] = self.optimizations
+        if self.extra_kwargs is not None:
+            kwargs.update(self.extra_kwargs)
         return kwargs
 
     @classmethod
@@ -471,8 +603,8 @@ class PolarsSinkNDJSONWriter(DataSaver):
         return [DATAFRAME_TYPE]
 
     def save_data(self, data: pl.LazyFrame) -> dict[str, Any]:
-        data.sink_ndjson(self.path, **self._get_saving_kwargs())
-        return utils.get_file_metadata(self.path)
+        data.sink_ndjson(self.file, **self._get_saving_kwargs())
+        return utils.get_file_metadata(self.file)
 
     @classmethod
     def name(cls) -> str:
