@@ -14,6 +14,8 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+import concurrent.futures
+from hamilton import ad_hoc_utils
 
 from unittest import mock
 
@@ -730,3 +732,52 @@ def test_driver_setstate_getstate():
         inputs={"drivers": drivers, "inputs": inputs, "final_vars": ["double"]},
     )
     assert r == {"reducer": [{"double": 0}, {"double": 2}, {"double": 4}, {"double": 6}]}
+
+
+@pytest.mark.parametrize(
+    "driver_factory",
+    [
+        (lambda mod: Builder().with_modules(mod).build()),
+        (
+            lambda mod: Builder()
+            .enable_dynamic_execution(allow_experimental_mode=True)
+            .with_modules(mod)
+            .with_remote_executor(executors.SynchronousLocalTaskExecutor())
+            .build()
+        ),
+    ],
+)
+def test_driver_thread_safety(driver_factory):
+    """Tests that a single Driver instance is safe for concurrent executions across multiple threads.
+
+    This addresses https://github.com/apache/hamilton/issues/54
+    """
+
+    def step_1(val: int) -> int:
+        return val * 2
+
+    def step_2(step_1: int, offset: int) -> int:
+        return step_1 + offset
+
+    # Do NOT pass a fixed module_name – let Hamilton generate a unique one
+    test_dag_module = ad_hoc_utils.create_temporary_module(step_1, step_2)
+
+    dr = driver_factory(test_dag_module)
+
+    def run_concurrent_execution(val: int):
+        res = dr.execute(
+            ["step_2"],
+            inputs={"val": val, "offset": 10},
+        )
+        return val, res["step_2"]
+
+    test_inputs = list(range(50))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(run_concurrent_execution, v) for v in test_inputs]
+        results = [f.result() for f in concurrent.futures.as_completed(futures)]
+
+    for val, output in results:
+        expected = (val * 2) + 10
+        assert output == expected, (
+            f"Thread collision detected: expected {expected} for input {val}, got {output}"
+        )
