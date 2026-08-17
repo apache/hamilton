@@ -45,6 +45,7 @@ if hasattr(pl, "type_aliases"):
 # for polars 0.18.0 we need to check what to do.
 if has_alias and hasattr(pl.type_aliases, "CsvEncoding"):
     from polars.type_aliases import CsvEncoding
+
     SchemaDefinition = type
 else:
     CsvEncoding = type
@@ -238,7 +239,9 @@ class PolarsCSVWriter(DataSaver):
             kwargs["quote_style"] = self.quote_style
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
+        if isinstance(data, pl.LazyFrame):
+            data = data.collect()
         data.write_csv(self.file, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.file, data)
 
@@ -345,7 +348,9 @@ class PolarsParquetWriter(DataSaver):
             kwargs["pyarrow_options"] = self.pyarrow_options
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
+        if isinstance(data, pl.LazyFrame):
+            data = data.collect()
         data.write_parquet(self.file, **self._get_saving_kwargs())
 
         return utils.get_file_and_dataframe_metadata(self.file, data)
@@ -428,7 +433,9 @@ class PolarsFeatherWriter(DataSaver):
             kwargs["compression"] = self.compression
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
+        if isinstance(data, pl.LazyFrame):
+            data = data.collect()
         data.write_ipc(self.file, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.file, data)
 

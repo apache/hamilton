@@ -227,7 +227,9 @@ class PolarsCSVWriter(DataSaver):
             kwargs["quote_style"] = self.quote_style
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
+        if isinstance(data, pl.LazyFrame):
+            data = data.collect()
         data.write_csv(self.file, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.file, data)
 
@@ -334,7 +336,9 @@ class PolarsParquetWriter(DataSaver):
             kwargs["pyarrow_options"] = self.pyarrow_options
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
+        if isinstance(data, pl.LazyFrame):
+            data = data.collect()
         data.write_parquet(self.file, **self._get_saving_kwargs())
 
         return utils.get_file_and_dataframe_metadata(self.file, data)
@@ -417,7 +421,9 @@ class PolarsFeatherWriter(DataSaver):
             kwargs["compression"] = self.compression
         return kwargs
 
-    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
+        if isinstance(data, pl.LazyFrame):
+            data = data.collect()
         data.write_ipc(self.file, **self._get_saving_kwargs())
         return utils.get_file_and_dataframe_metadata(self.file, data)
 
@@ -595,7 +601,9 @@ class PolarsNDJSONWriter(DataSaver):
     def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
+    def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
+        if isinstance(data, pl.LazyFrame):
+            data = data.collect()
         data.write_ndjson(self.file)
         return utils.get_file_and_dataframe_metadata(self.file, data)
 

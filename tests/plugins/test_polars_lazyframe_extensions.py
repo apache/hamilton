@@ -38,12 +38,15 @@ from hamilton.plugins.polars_lazyframe_extensions import (
 from hamilton.plugins.polars_post_1_0_0_extensions import (
     PolarsAvroReader,
     PolarsAvroWriter,
+    PolarsCSVWriter,
     PolarsDatabaseReader,
     PolarsDatabaseWriter,
     PolarsFeatherWriter,
     PolarsJSONReader,
     PolarsJSONWriter,
     PolarsNDJSONReader,
+    PolarsNDJSONWriter,
+    PolarsParquetWriter,
     PolarsSpreadsheetReader,
     PolarsSpreadsheetWriter,
 )
@@ -294,7 +297,7 @@ def test_polars_lazyframe_sink_ipc(df: pl.LazyFrame, tmp_path: pathlib.Path) -> 
 
     assert PolarsSinkFeatherWriter.applicable_types() == [pl.LazyFrame]
     assert file.exists()
-    assert kwargs["compression"] == "uncompressed"
+    assert "compression" not in kwargs
     assert metadata["file_metadata"]["path"] == str(file)
     assert_frame_equal(df.collect(), df2)
 
@@ -408,6 +411,42 @@ def test_lazyframe_sink_csv_complete_kwargs(tmp_path: pathlib.Path) -> None:
     assert sink._get_saving_kwargs()["decimal_comma"] is True
     assert sink._get_saving_kwargs()["storage_options"] == {"key": "value"}
     assert sink._get_saving_kwargs()["retries"] == 7
+
+
+@pytest.mark.parametrize(
+    "sink_class",
+    [
+        PolarsSinkCSVWriter,
+        PolarsSinkParquetWriter,
+        PolarsSinkFeatherWriter,
+        PolarsSinkNDJSONWriter,
+    ],
+)
+def test_lazyframe_sinks_reject_lazy_extra_kwarg(sink_class, tmp_path: pathlib.Path) -> None:
+    sink = sink_class(file=tmp_path / "output", extra_kwargs={"lazy": True})
+
+    with pytest.raises(ValueError, match="lazy=True"):
+        sink._get_saving_kwargs()
+
+
+@pytest.mark.parametrize(
+    ("writer_class", "extension"),
+    [
+        (PolarsCSVWriter, "csv"),
+        (PolarsParquetWriter, "parquet"),
+        (PolarsFeatherWriter, "ipc"),
+        (PolarsNDJSONWriter, "ndjson"),
+    ],
+)
+def test_eager_writers_preserve_direct_lazyframe_support(
+    writer_class, extension: str, df: pl.LazyFrame, tmp_path: pathlib.Path
+) -> None:
+    output_file = tmp_path / f"output.{extension}"
+
+    metadata = writer_class(file=output_file).save_data(df)
+
+    assert output_file.exists()
+    assert metadata["dataframe_metadata"]["rows"] == 2
 
 
 def test_lazyframe_sink_materializer_preserves_file_argument(tmp_path: pathlib.Path) -> None:

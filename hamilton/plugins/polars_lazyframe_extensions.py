@@ -276,6 +276,8 @@ class PolarsSinkCSVWriter(DataSaver):
         if self.optimizations is not None:
             kwargs["optimizations"] = self.optimizations
         if self.extra_kwargs is not None:
+            if self.extra_kwargs.get("lazy", False):
+                raise ValueError("lazy=True is incompatible with synchronous data savers.")
             kwargs.update(self.extra_kwargs)
         return kwargs
 
@@ -411,6 +413,8 @@ class PolarsSinkParquetWriter(DataSaver):
         if self.optimizations is not None:
             kwargs["optimizations"] = self.optimizations
         if self.extra_kwargs is not None:
+            if self.extra_kwargs.get("lazy", False):
+                raise ValueError("lazy=True is incompatible with synchronous data savers.")
             kwargs.update(self.extra_kwargs)
         return kwargs
 
@@ -490,7 +494,7 @@ class PolarsSinkFeatherWriter(DataSaver):
 
     file: str | Path
     # kwargs:
-    compression: str = "uncompressed"
+    compression: str | None = None
     compat_level: Any = None
     record_batch_size: int | None = None
     maintain_order: bool = True
@@ -528,6 +532,8 @@ class PolarsSinkFeatherWriter(DataSaver):
         if self.optimizations is not None:
             kwargs["optimizations"] = self.optimizations
         if self.extra_kwargs is not None:
+            if self.extra_kwargs.get("lazy", False):
+                raise ValueError("lazy=True is incompatible with synchronous data savers.")
             kwargs.update(self.extra_kwargs)
         return kwargs
 
@@ -595,6 +601,8 @@ class PolarsSinkNDJSONWriter(DataSaver):
         if self.optimizations is not None:
             kwargs["optimizations"] = self.optimizations
         if self.extra_kwargs is not None:
+            if self.extra_kwargs.get("lazy", False):
+                raise ValueError("lazy=True is incompatible with synchronous data savers.")
             kwargs.update(self.extra_kwargs)
         return kwargs
 
