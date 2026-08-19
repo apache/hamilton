@@ -541,10 +541,10 @@ If you don’t have it installed, you can install it with <cite>pip install slac
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_config</span><span class="p">({})</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">some_modules</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">with_adapters</span><span class="p">(</span><span class="n">h_slack</span><span class="o">.</span><span class="n">SlackNotifier</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;YOUR_API_KEY&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;YOUR_CHANNEL&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">with_adapters</span><span class="p">(</span><span class="n">h_slack</span><span class="o">.</span><span class="n">SlackNotifier</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">"YOUR_API_KEY"</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s2">"YOUR_CHANNEL"</span><span class="p">))</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
-<span class="c1"># and then when you call .execute() or .materialize() you&#39;ll get a message in your slack channel!</span>
+<span class="c1"># and then when you call .execute() or .materialize() you'll get a message in your slack channel!</span>
 </pre></div>
 </div>
 <dl class="py method">

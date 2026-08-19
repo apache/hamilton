@@ -540,15 +540,15 @@ s=d.getElementsByTagName('script')[0];
 <h3>Specifying dependencies<a class="headerlink" href="#specifying-dependencies" title="Link to this heading">¶</a></h3>
 <p>In Apache Hamilton, you define dependencies by matching parameter names with the names of other functions. Below, the function name and return type <code class="docutils literal notranslate"><span class="pre">A()</span> <span class="pre">-&gt;</span> <span class="pre">int</span></code> match the parameter <code class="docutils literal notranslate"><span class="pre">A:</span> <span class="pre">int</span></code> found in functions <code class="docutils literal notranslate"><span class="pre">B()</span></code> and <code class="docutils literal notranslate"><span class="pre">C()</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">A</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;Constant value 35&quot;&quot;&quot;</span>
+<span class="w">  </span><span class="sd">"""Constant value 35"""</span>
   <span class="k">return</span> <span class="mi">35</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">B</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Divide A by 3&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Divide A by 3"""</span>
     <span class="k">return</span> <span class="n">A</span> <span class="o">/</span> <span class="mi">3</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">C</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Square A and multiply by B&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Square A and multiply by B"""</span>
     <span class="k">return</span> <span class="n">A</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">B</span>
 </pre></div>
 </div>
@@ -559,15 +559,15 @@ s=d.getElementsByTagName('script')[0];
 <h3>Helper function<a class="headerlink" href="#helper-function" title="Link to this heading">¶</a></h3>
 <p>You can prefix a function name with an underscore (<code class="docutils literal notranslate"><span class="pre">_</span></code>) to prevent it from being included in a dataflow. Below, <code class="docutils literal notranslate"><span class="pre">A()</span></code> and <code class="docutils literal notranslate"><span class="pre">B()</span></code> are part of the dataflow, but <code class="docutils literal notranslate"><span class="pre">_round_three_decimals()</span></code> isn’t.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_round_three_decimals</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Round value by 3 decimals&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Round value by 3 decimals"""</span>
     <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">A</span><span class="p">(</span><span class="n">external_input</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Modulo 3 of input value&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Modulo 3 of input value"""</span>
     <span class="k">return</span> <span class="n">external_input</span> <span class="o">%</span> <span class="mi">3</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">B</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Divide A by 3&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Divide A by 3"""</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">A</span> <span class="o">/</span> <span class="mi">3</span>
     <span class="k">return</span> <span class="n">_round_three_decimals</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 </pre></div>

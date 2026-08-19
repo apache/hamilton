@@ -801,7 +801,7 @@ or remote_executor are also set</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_functions</span>
 
 <span class="c1"># or programmatically (e.g. you can script module loading)</span>
-<span class="n">module_name</span> <span class="o">=</span> <span class="s2">&quot;my_functions&quot;</span>
+<span class="n">module_name</span> <span class="o">=</span> <span class="s2">"my_functions"</span>
 <span class="n">my_functions</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
 
 <span class="c1"># 3. Determine the return type -- default is a pandas.DataFrame.</span>
@@ -989,6 +989,29 @@ dataframe.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hamilton.driver.Driver.get_graph">
+<span class="sig-name descname"><span class="pre">get_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">HamiltonGraph</span></span></span><a class="reference internal" href="../../../_modules/hamilton/driver/#Driver.get_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.driver.Driver.get_graph" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the public HamiltonGraph representation for this Driver.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hamilton.driver.Driver.get_variable">
+<span class="sig-name descname"><span class="pre">get_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">HamiltonNode</span></span></span><a class="reference internal" href="../../../_modules/hamilton/driver/#Driver.get_variable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.driver.Driver.get_variable" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a variable by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – Name of the variable to return.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Matching Variable.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – If the variable does not exist in this Driver’s graph.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hamilton.driver.Driver.has_cycles">
 <span class="sig-name descname"><span class="pre">has_cycles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">final_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">HamiltonNode</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_fn_graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FunctionGraph</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/hamilton/driver/#Driver.has_cycles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.driver.Driver.has_cycles" title="Link to this definition">¶</a></dt>
 <dd><p>Checks that the created graph does not have cycles.</p>
@@ -1021,13 +1044,13 @@ dataframe.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># gets all</span>
 <span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">()</span>
 <span class="c1"># gets exact matching tag name and tag value</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">({</span><span class="s2">&quot;TAG_NAME&quot;</span><span class="p">:</span> <span class="s2">&quot;TAG_VALUE&quot;</span><span class="p">})</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">({</span><span class="s2">"TAG_NAME"</span><span class="p">:</span> <span class="s2">"TAG_VALUE"</span><span class="p">})</span>
 <span class="c1"># gets all matching tag name and at least one of the values in the list</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">({</span><span class="s2">&quot;TAG_NAME&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;TAG_VALUE1&quot;</span><span class="p">,</span> <span class="s2">&quot;TAG_VALUE2&quot;</span><span class="p">]})</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">({</span><span class="s2">"TAG_NAME"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"TAG_VALUE1"</span><span class="p">,</span> <span class="s2">"TAG_VALUE2"</span><span class="p">]})</span>
 <span class="c1"># gets all with matching tag name, irrespective of value</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">({</span><span class="s2">&quot;TAG_NAME&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">})</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">({</span><span class="s2">"TAG_NAME"</span><span class="p">:</span> <span class="kc">None</span><span class="p">})</span>
 <span class="c1"># AND query between the two tags (i.e. both need to match)</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">({</span><span class="s2">&quot;TAG_NAME&quot;</span><span class="p">:</span> <span class="s2">&quot;TAG_VALUE&quot;</span><span class="p">,</span> <span class="s2">&quot;TAG_NAME2&quot;</span><span class="p">:</span> <span class="s2">&quot;TAG_VALUE2&quot;</span><span class="p">}</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">({</span><span class="s2">"TAG_NAME"</span><span class="p">:</span> <span class="s2">"TAG_VALUE"</span><span class="p">,</span> <span class="s2">"TAG_NAME2"</span><span class="p">:</span> <span class="s2">"TAG_VALUE2"</span><span class="p">}</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -1058,16 +1081,16 @@ is non-empty we will return all nodes with that tag and that value.</p>
 <span class="c1"># foo, bar are pd.Series</span>
 <span class="n">metadata</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">materialize</span><span class="p">(</span>
     <span class="n">from_</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span>
-        <span class="n">target</span><span class="o">=</span><span class="s2">&quot;input_data&quot;</span><span class="p">,</span>
-        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;./input.csv&quot;</span>
+        <span class="n">target</span><span class="o">=</span><span class="s2">"input_data"</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="s2">"./input.csv"</span>
     <span class="p">),</span>
     <span class="n">to</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span>
-        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;./output.csv&quot;</span>
-        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;foo_bar_csv&quot;</span><span class="p">,</span>
-        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">],</span>
+        <span class="n">path</span><span class="o">=</span><span class="s2">"./output.csv"</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">"foo_bar_csv"</span><span class="p">,</span>
+        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"foo"</span><span class="p">,</span> <span class="s2">"bar"</span><span class="p">],</span>
         <span class="n">combine</span><span class="o">=</span><span class="n">base</span><span class="o">.</span><span class="n">PandasDataFrameResult</span><span class="p">()</span>
     <span class="p">),</span>
-    <span class="n">additional_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">]</span>
+    <span class="n">additional_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">"foo"</span><span class="p">,</span> <span class="s2">"bar"</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -1090,13 +1113,13 @@ can be directly used. In the case below the output can be turned in to a CSV.</p
 <span class="c1"># foo, bar are pd.Series</span>
 <span class="n">metadata</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">materialize</span><span class="p">(</span>
     <span class="n">from_</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span>
-        <span class="n">target</span><span class="o">=</span><span class="s2">&quot;input_data&quot;</span><span class="p">,</span>
-        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;./input.csv&quot;</span>
+        <span class="n">target</span><span class="o">=</span><span class="s2">"input_data"</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="s2">"./input.csv"</span>
     <span class="p">),</span>
     <span class="n">to</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span>
-        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;./output.csv&quot;</span>
-        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;foo_bar_csv&quot;</span><span class="p">,</span>
-        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;foo_bar_already_joined],</span>
+        <span class="n">path</span><span class="o">=</span><span class="s2">"./output.csv"</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">"foo_bar_csv"</span><span class="p">,</span>
+        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"foo_bar_already_joined],</span>
     <span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
@@ -1118,17 +1141,17 @@ DAG, you can easily do that as well:</p>
 <span class="c1"># foo, bar are pd.Series</span>
 <span class="n">metadata</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">Materialize</span><span class="p">(</span>
     <span class="n">from_</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span>
-       <span class="n">target</span><span class="o">=</span><span class="s2">&quot;input_data&quot;</span><span class="p">,</span>
-       <span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;load_path&quot;</span><span class="p">)</span>
+       <span class="n">target</span><span class="o">=</span><span class="s2">"input_data"</span><span class="p">,</span>
+       <span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"load_path"</span><span class="p">)</span>
     <span class="p">),</span>
     <span class="n">to</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span>
-        <span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;save_path&quot;</span><span class="p">),</span>
-        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;foo_bar_csv&quot;</span><span class="p">,</span>
-        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">],</span>
+        <span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"save_path"</span><span class="p">),</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">"foo_bar_csv"</span><span class="p">,</span>
+        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"foo"</span><span class="p">,</span> <span class="s2">"bar"</span><span class="p">],</span>
         <span class="n">combine</span><span class="o">=</span><span class="n">base</span><span class="o">.</span><span class="n">PandasDataFrameResult</span><span class="p">(),</span>
     <span class="p">),</span>
-    <span class="n">additional_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;save_path&quot;</span><span class="p">:</span> <span class="s2">&quot;./output.csv&quot;</span><span class="p">},</span>
+    <span class="n">additional_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">"foo"</span><span class="p">,</span> <span class="s2">"bar"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"save_path"</span><span class="p">:</span> <span class="s2">"./output.csv"</span><span class="p">},</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -1142,10 +1165,10 @@ signature. You could call it like this:</p>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Driver</span><span class="p">(</span><span class="n">my_module</span><span class="p">,</span> <span class="p">{})</span>
 <span class="n">metadata</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">Materialize</span><span class="p">(</span>
     <span class="n">to</span><span class="o">.</span><span class="n">model_registry</span><span class="p">(</span>
-        <span class="n">training_data</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;training_data&quot;</span><span class="p">),</span>
-        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;foo_model_registry&quot;</span><span class="p">,</span>
-        <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;run_id&quot;</span> <span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">&quot;training_date&quot;</span> <span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="o">...</span><span class="p">},</span>
-        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;foo_model&quot;</span><span class="p">]</span>
+        <span class="n">training_data</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"training_data"</span><span class="p">),</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">"foo_model_registry"</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s2">"run_id"</span> <span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s2">"training_date"</span> <span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="o">...</span><span class="p">},</span>
+        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"foo_model"</span><span class="p">]</span>
     <span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
@@ -1161,16 +1184,16 @@ materializer can infer the signature.</p>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Driver</span><span class="p">(</span><span class="n">my_module</span><span class="p">,</span> <span class="p">{})</span>
 <span class="n">metadata</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">Materialize</span><span class="p">(</span>
     <span class="n">from_</span><span class="o">.</span><span class="n">model_registry</span><span class="p">(</span>
-        <span class="n">target</span><span class="o">=</span><span class="s2">&quot;input_model&quot;</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="s2">"input_model"</span><span class="p">,</span>
         <span class="n">query_tags</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;training_date&quot;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
+            <span class="s2">"training_date"</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
             <span class="n">model_version</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
         <span class="p">},</span>  <span class="c1"># query based on run_id, model_version</span>
     <span class="p">),</span>
     <span class="n">to</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span>
-        <span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;save_path&quot;</span><span class="p">),</span>
-        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;save_inference_data&quot;</span><span class="p">,</span>
-        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inference_data&quot;</span><span class="p">],</span>
+        <span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"save_path"</span><span class="p">),</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">"save_inference_data"</span><span class="p">,</span>
+        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"inference_data"</span><span class="p">],</span>
     <span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
@@ -1669,6 +1692,8 @@ well as parallel execution/dynamic spawning of nodes.</p>
 <li><a class="reference internal" href="#hamilton.driver.Driver.display_upstream_of"><code class="docutils literal notranslate"><span class="pre">Driver.display_upstream_of()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Driver.execute"><code class="docutils literal notranslate"><span class="pre">Driver.execute()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Driver.export_execution"><code class="docutils literal notranslate"><span class="pre">Driver.export_execution()</span></code></a></li>
+<li><a class="reference internal" href="#hamilton.driver.Driver.get_graph"><code class="docutils literal notranslate"><span class="pre">Driver.get_graph()</span></code></a></li>
+<li><a class="reference internal" href="#hamilton.driver.Driver.get_variable"><code class="docutils literal notranslate"><span class="pre">Driver.get_variable()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Driver.has_cycles"><code class="docutils literal notranslate"><span class="pre">Driver.has_cycles()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Driver.list_available_variables"><code class="docutils literal notranslate"><span class="pre">Driver.list_available_variables()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.driver.Driver.materialize"><code class="docutils literal notranslate"><span class="pre">Driver.materialize()</span></code></a></li>

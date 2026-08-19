@@ -559,53 +559,53 @@ pytest
 that don’t import the Driver. That makes them trivial to unit-test:</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/testing/my_functions.py</span></code></span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;A small marketing dataflow we will test.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""A small marketing dataflow we will test.</span>
 
 <span class="sd">Each public function below becomes a node in the Hamilton DAG. Functions are</span>
 <span class="sd">ordinary Python -- nothing about them depends on the driver -- which is what</span>
 <span class="sd">makes them straightforward to unit-test.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">signups</span><span class="p">(</span><span class="n">raw_signups</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Drop the first row (which is always a header sentinel in our source).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Drop the first row (which is always a header sentinel in our source)."""</span>
     <span class="k">return</span> <span class="n">raw_signups</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">spend</span><span class="p">(</span><span class="n">raw_spend</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Drop the first row to align with `signups`.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Drop the first row to align with `signups`."""</span>
     <span class="k">return</span> <span class="n">raw_spend</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">avg_3wk_spend</span><span class="p">(</span><span class="n">spend</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rolling 3-week average spend.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Rolling 3-week average spend."""</span>
     <span class="k">return</span> <span class="n">spend</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">spend_per_signup</span><span class="p">(</span><span class="n">spend</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">signups</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cost per signup, in dollars.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Cost per signup, in dollars."""</span>
     <span class="k">return</span> <span class="n">spend</span> <span class="o">/</span> <span class="n">signups</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">spend_mean</span><span class="p">(</span><span class="n">spend</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mean of the spend column.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Mean of the spend column."""</span>
     <span class="k">return</span> <span class="n">spend</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">spend_zero_mean</span><span class="p">(</span><span class="n">spend</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">spend_mean</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spend with the mean subtracted off.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Spend with the mean subtracted off."""</span>
     <span class="k">return</span> <span class="n">spend</span> <span class="o">-</span> <span class="n">spend_mean</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">spend_std_dev</span><span class="p">(</span><span class="n">spend</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Standard deviation of the spend column.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Standard deviation of the spend column."""</span>
     <span class="k">return</span> <span class="n">spend</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">spend_zero_mean_unit_variance</span><span class="p">(</span><span class="n">spend_zero_mean</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">spend_std_dev</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Standard-scaled spend (zero mean, unit variance).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Standard-scaled spend (zero mean, unit variance)."""</span>
     <span class="k">return</span> <span class="n">spend_zero_mean</span> <span class="o">/</span> <span class="n">spend_std_dev</span>
 </pre></div>
 </div>
@@ -613,11 +613,11 @@ that don’t import the Driver. That makes them trivial to unit-test:</p>
 <p>Tests are just calls to the function:</p>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/testing/test_my_functions.py</span></code></span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Unit tests for the plain (un-decorated) Hamilton functions.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Unit tests for the plain (un-decorated) Hamilton functions.</span>
 
 <span class="sd">The point of these tests: a Hamilton function is just a Python function. You</span>
 <span class="sd">can import it and call it directly -- no Driver, no DAG, no fixtures required.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_functions</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -630,7 +630,7 @@ that don’t import the Driver. That makes them trivial to unit-test:</p>
     <span class="n">result</span> <span class="o">=</span> <span class="n">my_functions</span><span class="o">.</span><span class="n">avg_3wk_spend</span><span class="p">(</span><span class="n">spend</span><span class="p">)</span>
 
     <span class="c1"># The first two entries are NaN (window not full), then rolling mean of 3.</span>
-    <span class="n">expected</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">),</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">])</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="s2">"nan"</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"nan"</span><span class="p">),</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">])</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_series_equal</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span>
 
 
@@ -653,14 +653,14 @@ that don’t import the Driver. That makes them trivial to unit-test:</p>
 
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span>
-    <span class="p">(</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;expected_first&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"expected_first"</span><span class="p">),</span>
     <span class="p">[</span>
         <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="mi">1</span><span class="p">),</span>  <span class="c1"># header sentinel dropped</span>
         <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">99</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span> <span class="mi">5</span><span class="p">),</span>
     <span class="p">],</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">test_signups_drops_header_row</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">expected_first</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;`pytest.mark.parametrize` is a clean way to cover edge cases.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""`pytest.mark.parametrize` is a clean way to cover edge cases."""</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">my_functions</span><span class="o">.</span><span class="n">signups</span><span class="p">(</span><span class="n">raw_signups</span><span class="o">=</span><span class="n">raw</span><span class="p">)</span>
 
     <span class="k">assert</span> <span class="n">result</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">expected_first</span>
@@ -694,51 +694,51 @@ but the only way to catch decorator misuse).</p></li>
 <p>The decorated module:</p>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/testing/decorated_functions.py</span></code></span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Functions that use Hamilton decorators.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Functions that use Hamilton decorators.</span>
 
 <span class="sd">Decorators are a common source of confusion when testing. The point of this</span>
 <span class="sd">module is to show that decorators do not get in the way of unit testing -- the</span>
 <span class="sd">function below the decorator is still a plain Python callable, so you can call</span>
 <span class="sd">it directly from a test. To test what the decorator *expands to*, drive the</span>
 <span class="sd">function through a Driver instead (see ``test_decorated_functions.py``).</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_columns</span><span class="p">,</span> <span class="n">parameterize</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">value</span>
 
 
-<span class="nd">@tag</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="s2">&quot;growth-team&quot;</span><span class="p">,</span> <span class="n">pii</span><span class="o">=</span><span class="s2">&quot;false&quot;</span><span class="p">)</span>
+<span class="nd">@tag</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="s2">"growth-team"</span><span class="p">,</span> <span class="n">pii</span><span class="o">=</span><span class="s2">"false"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">total_signups</span><span class="p">(</span><span class="n">signups</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum of signups across the time window.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Sum of signups across the time window."""</span>
     <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">signups</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
 
 
 <span class="nd">@parameterize</span><span class="p">(</span>
-    <span class="n">spend_in_thousands</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;raw_value&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">(</span><span class="s2">&quot;spend&quot;</span><span class="p">),</span> <span class="s2">&quot;divisor&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="mf">1000.0</span><span class="p">)},</span>
-    <span class="n">signups_in_hundreds</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;raw_value&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">(</span><span class="s2">&quot;signups&quot;</span><span class="p">),</span> <span class="s2">&quot;divisor&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="mf">100.0</span><span class="p">)},</span>
+    <span class="n">spend_in_thousands</span><span class="o">=</span><span class="p">{</span><span class="s2">"raw_value"</span><span class="p">:</span> <span class="n">source</span><span class="p">(</span><span class="s2">"spend"</span><span class="p">),</span> <span class="s2">"divisor"</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="mf">1000.0</span><span class="p">)},</span>
+    <span class="n">signups_in_hundreds</span><span class="o">=</span><span class="p">{</span><span class="s2">"raw_value"</span><span class="p">:</span> <span class="n">source</span><span class="p">(</span><span class="s2">"signups"</span><span class="p">),</span> <span class="s2">"divisor"</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="mf">100.0</span><span class="p">)},</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">scaled</span><span class="p">(</span><span class="n">raw_value</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">divisor</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scale a series by a constant divisor.</span>
+<span class="w">    </span><span class="sd">"""Scale a series by a constant divisor.</span>
 
 <span class="sd">    `@parameterize` produces one node per entry above. The function itself is</span>
 <span class="sd">    still a normal callable, so a unit test can call ``scaled(some_series, 1000)``</span>
 <span class="sd">    directly without a Driver.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">raw_value</span> <span class="o">/</span> <span class="n">divisor</span>
 
 
-<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">&quot;scaled_spend&quot;</span><span class="p">,</span> <span class="s2">&quot;scaled_signups&quot;</span><span class="p">)</span>
+<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">"scaled_spend"</span><span class="p">,</span> <span class="s2">"scaled_signups"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">scaled_features</span><span class="p">(</span><span class="n">spend_in_thousands</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">signups_in_hundreds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bundle the two scaled series into a frame, then expose each column as a node.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;scaled_spend&quot;</span><span class="p">:</span> <span class="n">spend_in_thousands</span><span class="p">,</span> <span class="s2">&quot;scaled_signups&quot;</span><span class="p">:</span> <span class="n">signups_in_hundreds</span><span class="p">})</span>
+<span class="w">    </span><span class="sd">"""Bundle the two scaled series into a frame, then expose each column as a node."""</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"scaled_spend"</span><span class="p">:</span> <span class="n">spend_in_thousands</span><span class="p">,</span> <span class="s2">"scaled_signups"</span><span class="p">:</span> <span class="n">signups_in_hundreds</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
 <p>The tests:</p>
 <div class="literal-block-wrapper docutils container" id="id5">
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/testing/test_decorated_functions.py</span></code></span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Testing functions that use Hamilton decorators.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Testing functions that use Hamilton decorators.</span>
 
 <span class="sd">There are two complementary techniques here:</span>
 
@@ -750,7 +750,7 @@ but the only way to catch decorator misuse).</p></li>
 <span class="sd">2. **Test the expanded DAG.** Build a Driver, run it, and assert on the</span>
 <span class="sd">   generated nodes (e.g. ``spend_in_thousands``, ``scaled_spend``). This is the</span>
 <span class="sd">   only way to verify that the decorator wiring is correct.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">decorated_functions</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -759,52 +759,52 @@ but the only way to catch decorator misuse).</p></li>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">test_decorated_function_is_callable_directly</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;`@parameterize` does not stop the function from being called directly.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""`@parameterize` does not stop the function from being called directly."""</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">decorated_functions</span><span class="o">.</span><span class="n">scaled</span><span class="p">(</span><span class="n">raw_value</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">2000.0</span><span class="p">]),</span> <span class="n">divisor</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">)</span>
 
     <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_series_equal</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]))</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">test_total_signups_ignores_tag</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;`@tag` is metadata only -- the function still computes a sum.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""`@tag` is metadata only -- the function still computes a sum."""</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">decorated_functions</span><span class="o">.</span><span class="n">total_signups</span><span class="p">(</span><span class="n">signups</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
 
     <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">6</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">test_parameterize_expands_into_two_nodes</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a Driver to verify `@parameterize` produced both nodes correctly.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Build a Driver to verify `@parameterize` produced both nodes correctly."""</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">decorated_functions</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
     <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;spend&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">2000.0</span><span class="p">,</span> <span class="mf">3000.0</span><span class="p">]),</span>
-        <span class="s2">&quot;signups&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">]),</span>
+        <span class="s2">"spend"</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">2000.0</span><span class="p">,</span> <span class="mf">3000.0</span><span class="p">]),</span>
+        <span class="s2">"signups"</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">]),</span>
     <span class="p">}</span>
 
-    <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;spend_in_thousands&quot;</span><span class="p">,</span> <span class="s2">&quot;signups_in_hundreds&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"spend_in_thousands"</span><span class="p">,</span> <span class="s2">"signups_in_hundreds"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
 
     <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_series_equal</span><span class="p">(</span>
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;spend_in_thousands&quot;</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]),</span> <span class="n">check_names</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">"spend_in_thousands"</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]),</span> <span class="n">check_names</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_series_equal</span><span class="p">(</span>
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;signups_in_hundreds&quot;</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]),</span> <span class="n">check_names</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">"signups_in_hundreds"</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]),</span> <span class="n">check_names</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">test_extract_columns_exposes_each_column_as_a_node</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;`@extract_columns` should make `scaled_spend` and `scaled_signups` queryable.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""`@extract_columns` should make `scaled_spend` and `scaled_signups` queryable."""</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">decorated_functions</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
     <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;spend&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">2000.0</span><span class="p">]),</span>
-        <span class="s2">&quot;signups&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">]),</span>
+        <span class="s2">"spend"</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">2000.0</span><span class="p">]),</span>
+        <span class="s2">"signups"</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">]),</span>
     <span class="p">}</span>
 
-    <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;scaled_spend&quot;</span><span class="p">,</span> <span class="s2">&quot;scaled_signups&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"scaled_spend"</span><span class="p">,</span> <span class="s2">"scaled_signups"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
 
-    <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_series_equal</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;scaled_spend&quot;</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]),</span> <span class="n">check_names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_series_equal</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"scaled_spend"</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]),</span> <span class="n">check_names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_series_equal</span><span class="p">(</span>
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;scaled_signups&quot;</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]),</span> <span class="n">check_names</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">"scaled_signups"</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]),</span> <span class="n">check_names</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -825,7 +825,7 @@ for <code class="docutils literal notranslate"><span class="pre">spend</span></c
 </ul>
 <div class="literal-block-wrapper docutils container" id="id6">
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/testing/test_driver.py</span></code></span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Integration tests that exercise the full DAG via the Driver.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Integration tests that exercise the full DAG via the Driver.</span>
 
 <span class="sd">These show three patterns:</span>
 
@@ -833,7 +833,7 @@ for <code class="docutils literal notranslate"><span class="pre">spend</span></c
 <span class="sd">2. Use ``inputs=`` to inject test data at the DAG inputs.</span>
 <span class="sd">3. Use ``overrides=`` to short-circuit an intermediate node, so you can test</span>
 <span class="sd">   downstream logic in isolation without recomputing upstream nodes.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_functions</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -842,57 +842,57 @@ for <code class="docutils literal notranslate"><span class="pre">spend</span></c
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_build_driver</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">driver</span><span class="o">.</span><span class="n">Driver</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper: construct a Driver pointed at our module under test.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Helper: construct a Driver pointed at our module under test."""</span>
     <span class="k">return</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_functions</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">test_driver_executes_full_pipeline</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="n">_build_driver</span><span class="p">()</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;raw_signups&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">]),</span>
-        <span class="s2">&quot;raw_spend&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]),</span>
+        <span class="s2">"raw_signups"</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">]),</span>
+        <span class="s2">"raw_spend"</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]),</span>
     <span class="p">}</span>
 
-    <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;spend_per_signup&quot;</span><span class="p">,</span> <span class="s2">&quot;spend_mean&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"spend_per_signup"</span><span class="p">,</span> <span class="s2">"spend_mean"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
 
     <span class="c1"># spend after dropping the header row: [10, 10, 20, 40, 40, 50] -&gt; mean 28.333...</span>
-    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;spend_mean&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"spend_mean"</span><span class="p">]</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_series_equal</span><span class="p">(</span>
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;spend_per_signup&quot;</span><span class="p">],</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">"spend_per_signup"</span><span class="p">],</span>
         <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">]),</span>
         <span class="n">check_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">test_overrides_short_circuit_upstream_nodes</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;`overrides=` lets us pin a node&#39;s value, so upstream code is skipped.</span>
+<span class="w">    </span><span class="sd">"""`overrides=` lets us pin a node's value, so upstream code is skipped.</span>
 
 <span class="sd">    This is the integration-test sweet spot: instead of fabricating realistic</span>
 <span class="sd">    raw inputs and re-deriving every intermediate, we hand the DAG a known</span>
 <span class="sd">    `spend` and assert on the *downstream* arithmetic.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="n">_build_driver</span><span class="p">()</span>
 
     <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="p">[</span><span class="s2">&quot;spend_zero_mean_unit_variance&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"spend_zero_mean_unit_variance"</span><span class="p">],</span>
         <span class="c1"># No `inputs=` needed because every upstream dependency is overridden.</span>
-        <span class="n">overrides</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;spend&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">])},</span>
+        <span class="n">overrides</span><span class="o">=</span><span class="p">{</span><span class="s2">"spend"</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">])},</span>
     <span class="p">)</span>
 
-    <span class="n">scaled</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;spend_zero_mean_unit_variance&quot;</span><span class="p">]</span>
+    <span class="n">scaled</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">"spend_zero_mean_unit_variance"</span><span class="p">]</span>
     <span class="c1"># Standardised series: mean ~0, std ~1.</span>
     <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">scaled</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mf">1e-9</span>
     <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">scaled</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-9</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">test_what_is_upstream_of</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The Driver itself can be inspected -- handy for asserting graph shape.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The Driver itself can be inspected -- handy for asserting graph shape."""</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="n">_build_driver</span><span class="p">()</span>
 
-    <span class="n">upstream_node_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">dr</span><span class="o">.</span><span class="n">what_is_upstream_of</span><span class="p">(</span><span class="s2">&quot;spend_per_signup&quot;</span><span class="p">)}</span>
+    <span class="n">upstream_node_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">dr</span><span class="o">.</span><span class="n">what_is_upstream_of</span><span class="p">(</span><span class="s2">"spend_per_signup"</span><span class="p">)}</span>
 
     <span class="c1"># `spend_per_signup` depends (transitively) on the raw inputs and on `spend`/`signups`.</span>
-    <span class="k">assert</span> <span class="p">{</span><span class="s2">&quot;spend&quot;</span><span class="p">,</span> <span class="s2">&quot;signups&quot;</span><span class="p">,</span> <span class="s2">&quot;raw_spend&quot;</span><span class="p">,</span> <span class="s2">&quot;raw_signups&quot;</span><span class="p">}</span> <span class="o">&lt;=</span> <span class="n">upstream_node_names</span>
+    <span class="k">assert</span> <span class="p">{</span><span class="s2">"spend"</span><span class="p">,</span> <span class="s2">"signups"</span><span class="p">,</span> <span class="s2">"raw_spend"</span><span class="p">,</span> <span class="s2">"raw_signups"</span><span class="p">}</span> <span class="o">&lt;=</span> <span class="n">upstream_node_names</span>
 </pre></div>
 </div>
 </div>
@@ -909,19 +909,19 @@ or demonstrate a pattern in a doctest. You don’t need to create a new
 inline-defined functions into a real module that the Driver can consume:</p>
 <div class="literal-block-wrapper docutils container" id="id7">
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/testing/test_ad_hoc_module.py</span></code></span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Testing patterns that don&#39;t need a separate module on disk.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Testing patterns that don't need a separate module on disk.</span>
 
 <span class="sd">Sometimes you want to define a tiny set of functions inside the test itself --</span>
 <span class="sd">to exercise a custom materializer, a graph adapter, or a regression case --</span>
 <span class="sd">without creating a whole new ``.py`` file. ``hamilton.ad_hoc_utils`` exposes</span>
 <span class="sd">``create_temporary_module`` for exactly that.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">ad_hoc_utils</span><span class="p">,</span> <span class="n">driver</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">test_temporary_module_can_drive_a_dag</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Define functions inline, package them into a module, run the Driver.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Define functions inline, package them into a module, run the Driver."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">base</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
@@ -933,10 +933,10 @@ inline-defined functions into a real module that the Driver can consume:</p>
 
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">temp_module</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
-    <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;squared&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"squared"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"value"</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
 
     <span class="c1"># base = 4 + 1 = 5; squared = 25</span>
-    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;squared&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">25</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"squared"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">25</span>
 </pre></div>
 </div>
 </div>

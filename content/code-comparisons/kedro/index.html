@@ -560,30 +560,30 @@ some code snippets from both tools.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_true</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;t&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">"t"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_companies</span><span class="p">(</span><span class="n">companies</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Preprocesses the data for companies.&quot;&quot;&quot;</span>
-    <span class="n">companies</span><span class="p">[</span><span class="s2">&quot;iata_approved&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span><span class="n">companies</span><span class="p">[</span><span class="s2">&quot;iata_approved&quot;</span><span class="p">])</span>
+<span class="w">    </span><span class="sd">"""Preprocesses the data for companies."""</span>
+    <span class="n">companies</span><span class="p">[</span><span class="s2">"iata_approved"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span><span class="n">companies</span><span class="p">[</span><span class="s2">"iata_approved"</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">companies</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_shuttles</span><span class="p">(</span><span class="n">shuttles</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Preprocesses the data for shuttles.&quot;&quot;&quot;</span>
-    <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;d_check_complete&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
-        <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;d_check_complete&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">"""Preprocesses the data for shuttles."""</span>
+    <span class="n">shuttles</span><span class="p">[</span><span class="s2">"d_check_complete"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
+        <span class="n">shuttles</span><span class="p">[</span><span class="s2">"d_check_complete"</span><span class="p">]</span>
     <span class="p">)</span>
-    <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;moon_clearance_complete&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
-        <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;moon_clearance_complete&quot;</span><span class="p">]</span>
+    <span class="n">shuttles</span><span class="p">[</span><span class="s2">"moon_clearance_complete"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
+        <span class="n">shuttles</span><span class="p">[</span><span class="s2">"moon_clearance_complete"</span><span class="p">]</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">shuttles</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">create_model_input_table</span><span class="p">(</span>
     <span class="n">shuttles</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">companies</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Combines all data to create a model input table.&quot;&quot;&quot;</span>
-    <span class="n">shuttles</span> <span class="o">=</span> <span class="n">shuttles</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Combines all data to create a model input table."""</span>
+    <span class="n">shuttles</span> <span class="o">=</span> <span class="n">shuttles</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">model_input_table</span> <span class="o">=</span> <span class="n">shuttles</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
-        <span class="n">companies</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;company_id&quot;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s2">&quot;id&quot;</span>
+        <span class="n">companies</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s2">"company_id"</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s2">"id"</span>
     <span class="p">)</span>
     <span class="n">model_input_table</span> <span class="o">=</span> <span class="n">model_input_table</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">model_input_table</span>
@@ -594,21 +594,21 @@ some code snippets from both tools.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_true</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;t&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">"t"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">companies_preprocessed</span><span class="p">(</span><span class="n">companies</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Companies with added column `iata_approved`&quot;&quot;&quot;</span>
-    <span class="n">companies</span><span class="p">[</span><span class="s2">&quot;iata_approved&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span><span class="n">companies</span><span class="p">[</span><span class="s2">&quot;iata_approved&quot;</span><span class="p">])</span>
+<span class="w">    </span><span class="sd">"""Companies with added column `iata_approved`"""</span>
+    <span class="n">companies</span><span class="p">[</span><span class="s2">"iata_approved"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span><span class="n">companies</span><span class="p">[</span><span class="s2">"iata_approved"</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">companies</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">shuttles_preprocessed</span><span class="p">(</span><span class="n">shuttles</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shuttles with added columns `d_check_complete`</span>
-<span class="sd">    and `moon_clearance_complete`.&quot;&quot;&quot;</span>
-    <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;d_check_complete&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
-        <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;d_check_complete&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">"""Shuttles with added columns `d_check_complete`</span>
+<span class="sd">    and `moon_clearance_complete`."""</span>
+    <span class="n">shuttles</span><span class="p">[</span><span class="s2">"d_check_complete"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
+        <span class="n">shuttles</span><span class="p">[</span><span class="s2">"d_check_complete"</span><span class="p">]</span>
     <span class="p">)</span>
-    <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;moon_clearance_complete&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
-        <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;moon_clearance_complete&quot;</span><span class="p">]</span>
+    <span class="n">shuttles</span><span class="p">[</span><span class="s2">"moon_clearance_complete"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
+        <span class="n">shuttles</span><span class="p">[</span><span class="s2">"moon_clearance_complete"</span><span class="p">]</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">shuttles</span>
 
@@ -616,10 +616,10 @@ some code snippets from both tools.</p>
     <span class="n">shuttles_preprocessed</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">companies_preprocessed</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Table containing shuttles and companies data.&quot;&quot;&quot;</span>
-    <span class="n">shuttles_preprocessed</span> <span class="o">=</span> <span class="n">shuttles_preprocessed</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Table containing shuttles and companies data."""</span>
+    <span class="n">shuttles_preprocessed</span> <span class="o">=</span> <span class="n">shuttles_preprocessed</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">model_input_table</span> <span class="o">=</span> <span class="n">shuttles_preprocessed</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
-        <span class="n">companies_preprocessed</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;company_id&quot;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s2">&quot;id&quot;</span>
+        <span class="n">companies_preprocessed</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s2">"company_id"</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s2">"id"</span>
     <span class="p">)</span>
     <span class="n">model_input_table</span> <span class="o">=</span> <span class="n">model_input_table</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">model_input_table</span>
@@ -657,24 +657,24 @@ some code snippets from both tools.</p>
         <span class="p">[</span>
             <span class="n">node</span><span class="p">(</span>
                 <span class="n">func</span><span class="o">=</span><span class="n">preprocess_companies</span><span class="p">,</span>
-                <span class="n">inputs</span><span class="o">=</span><span class="s2">&quot;companies&quot;</span><span class="p">,</span>
-                <span class="n">outputs</span><span class="o">=</span><span class="s2">&quot;preprocessed_companies&quot;</span><span class="p">,</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;preprocess_companies_node&quot;</span><span class="p">,</span>
+                <span class="n">inputs</span><span class="o">=</span><span class="s2">"companies"</span><span class="p">,</span>
+                <span class="n">outputs</span><span class="o">=</span><span class="s2">"preprocessed_companies"</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">"preprocess_companies_node"</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">node</span><span class="p">(</span>
                 <span class="n">func</span><span class="o">=</span><span class="n">preprocess_shuttles</span><span class="p">,</span>
-                <span class="n">inputs</span><span class="o">=</span><span class="s2">&quot;shuttles&quot;</span><span class="p">,</span>
-                <span class="n">outputs</span><span class="o">=</span><span class="s2">&quot;preprocessed_shuttles&quot;</span><span class="p">,</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;preprocess_shuttles_node&quot;</span><span class="p">,</span>
+                <span class="n">inputs</span><span class="o">=</span><span class="s2">"shuttles"</span><span class="p">,</span>
+                <span class="n">outputs</span><span class="o">=</span><span class="s2">"preprocessed_shuttles"</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">"preprocess_shuttles_node"</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">node</span><span class="p">(</span>
                 <span class="n">func</span><span class="o">=</span><span class="n">create_model_input_table</span><span class="p">,</span>
                 <span class="n">inputs</span><span class="o">=</span><span class="p">[</span>
-                    <span class="s2">&quot;preprocessed_shuttles&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;preprocessed_companies&quot;</span>
+                    <span class="s2">"preprocessed_shuttles"</span><span class="p">,</span>
+                    <span class="s2">"preprocessed_companies"</span>
                 <span class="p">],</span>
-                <span class="n">outputs</span><span class="o">=</span><span class="s2">&quot;model_input_table&quot;</span><span class="p">,</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;create_model_input_table_node&quot;</span><span class="p">,</span>
+                <span class="n">outputs</span><span class="o">=</span><span class="s2">"model_input_table"</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">"create_model_input_table_node"</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">]</span>
     <span class="p">)</span>
@@ -727,14 +727,14 @@ some code snippets from both tools.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_pipeline</span>
 <span class="c1"># ^ from Step 2</span>
 
-<span class="n">bootstrap_project</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+<span class="n">bootstrap_project</span><span class="p">(</span><span class="s2">"."</span><span class="p">)</span>
 <span class="k">with</span> <span class="n">KedroSession</span><span class="o">.</span><span class="n">create</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
     <span class="n">context</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">load_context</span><span class="p">()</span>
     <span class="n">catalog</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">catalog</span>
 
-<span class="n">pipeline</span> <span class="o">=</span> <span class="n">create_pipeline</span><span class="p">()</span><span class="o">.</span><span class="n">to_nodes</span><span class="p">(</span><span class="s2">&quot;create_model_input_table&quot;</span><span class="p">)</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">create_pipeline</span><span class="p">()</span><span class="o">.</span><span class="n">to_nodes</span><span class="p">(</span><span class="s2">"create_model_input_table"</span><span class="p">)</span>
 <span class="n">SequentialRunner</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">catalog</span><span class="p">)</span>
-<span class="c1"># doesn&#39;t return values in-memory</span>
+<span class="c1"># doesn't return values in-memory</span>
 </pre></div>
 </div>
 </td>
@@ -746,11 +746,11 @@ some code snippets from both tools.</p>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">dataflow</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="c1"># ^ from Step 2</span>
 <span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="n">companies</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;path/to/companies.parquet&quot;</span><span class="p">),</span>
-    <span class="n">shuttles</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;path/to/shuttles.parquet&quot;</span><span class="p">),</span>
+    <span class="n">companies</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">"path/to/companies.parquet"</span><span class="p">),</span>
+    <span class="n">shuttles</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">"path/to/shuttles.parquet"</span><span class="p">),</span>
 <span class="p">)</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;model_input_table&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
-<span class="c1"># results is a dict {&quot;model_input_table&quot;: VALUE}</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"model_input_table"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+<span class="c1"># results is a dict {"model_input_table": VALUE}</span>
 </pre></div>
 </div>
 </td>
@@ -765,44 +765,44 @@ some code snippets from both tools.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_true</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;t&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">"t"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_companies</span><span class="p">(</span><span class="n">companies</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Preprocesses the data for companies.&quot;&quot;&quot;</span>
-    <span class="n">companies</span><span class="p">[</span><span class="s2">&quot;iata_approved&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span><span class="n">companies</span><span class="p">[</span><span class="s2">&quot;iata_approved&quot;</span><span class="p">])</span>
+<span class="w">    </span><span class="sd">"""Preprocesses the data for companies."""</span>
+    <span class="n">companies</span><span class="p">[</span><span class="s2">"iata_approved"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span><span class="n">companies</span><span class="p">[</span><span class="s2">"iata_approved"</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">companies</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_shuttles</span><span class="p">(</span><span class="n">shuttles</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Preprocesses the data for shuttles.&quot;&quot;&quot;</span>
-    <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;d_check_complete&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
-        <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;d_check_complete&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">"""Preprocesses the data for shuttles."""</span>
+    <span class="n">shuttles</span><span class="p">[</span><span class="s2">"d_check_complete"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
+        <span class="n">shuttles</span><span class="p">[</span><span class="s2">"d_check_complete"</span><span class="p">]</span>
     <span class="p">)</span>
-    <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;moon_clearance_complete&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
-        <span class="n">shuttles</span><span class="p">[</span><span class="s2">&quot;moon_clearance_complete&quot;</span><span class="p">]</span>
+    <span class="n">shuttles</span><span class="p">[</span><span class="s2">"moon_clearance_complete"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_is_true</span><span class="p">(</span>
+        <span class="n">shuttles</span><span class="p">[</span><span class="s2">"moon_clearance_complete"</span><span class="p">]</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">shuttles</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">create_model_input_table</span><span class="p">(</span>
     <span class="n">shuttles</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">companies</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Combines all data to create a model input table.&quot;&quot;&quot;</span>
-    <span class="n">shuttles</span> <span class="o">=</span> <span class="n">shuttles</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Combines all data to create a model input table."""</span>
+    <span class="n">shuttles</span> <span class="o">=</span> <span class="n">shuttles</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">model_input_table</span> <span class="o">=</span> <span class="n">shuttles</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
-        <span class="n">companies</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;company_id&quot;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s2">&quot;id&quot;</span>
+        <span class="n">companies</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s2">"company_id"</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s2">"id"</span>
     <span class="p">)</span>
     <span class="n">model_input_table</span> <span class="o">=</span> <span class="n">model_input_table</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">model_input_table</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">dataflow</span>  <span class="c1"># import itself as a module</span>
 
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">dataflow</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-        <span class="n">companies</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;path/to/companies.parquet&quot;</span><span class="p">),</span>
-        <span class="n">shuttles</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;path/to/shuttles.parquet&quot;</span><span class="p">),</span>
+        <span class="n">companies</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">"path/to/companies.parquet"</span><span class="p">),</span>
+        <span class="n">shuttles</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">"path/to/shuttles.parquet"</span><span class="p">),</span>
     <span class="p">)</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;model_input_table&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"model_input_table"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>

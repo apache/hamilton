@@ -563,15 +563,15 @@ under the License.
 
 <span class="n">raw_data_path</span> <span class="o">=</span> <span class="o">...</span>
 <span class="n">feature_selection</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;has_children&quot;</span><span class="p">,</span> <span class="s2">&quot;has_pet&quot;</span><span class="p">,</span> <span class="s2">&quot;is_summer_brazil&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;service_time&quot;</span><span class="p">,</span> <span class="s2">&quot;seasons&quot;</span><span class="p">,</span> <span class="s2">&quot;disciplinary_failure&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;absenteeism_time_in_hours&quot;</span><span class="p">,</span>
+    <span class="s2">"id"</span><span class="p">,</span> <span class="s2">"has_children"</span><span class="p">,</span> <span class="s2">"has_pet"</span><span class="p">,</span> <span class="s2">"is_summer_brazil"</span><span class="p">,</span>
+    <span class="s2">"service_time"</span><span class="p">,</span> <span class="s2">"seasons"</span><span class="p">,</span> <span class="s2">"disciplinary_failure"</span><span class="p">,</span>
+    <span class="s2">"absenteeism_time_in_hours"</span><span class="p">,</span>
 <span class="p">],</span>
 
 <span class="c1"># write the expression</span>
 <span class="n">feature_set</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">ibis</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">raw_data_path</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;absenteism&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;snake_case&quot;</span><span class="p">)</span>
+    <span class="n">ibis</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">raw_data_path</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">"absenteism"</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"snake_case"</span><span class="p">)</span>
     <span class="o">.</span><span class="n">mutate</span><span class="p">(</span>
         <span class="n">has_children</span><span class="o">=</span><span class="n">ibis</span><span class="o">.</span><span class="n">ifelse</span><span class="p">(</span><span class="n">ibis</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">son</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
         <span class="n">has_pet</span><span class="o">=</span><span class="n">ibis</span><span class="o">.</span><span class="n">ifelse</span><span class="p">(</span><span class="n">ibis</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">pet</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -612,18 +612,18 @@ under the License.
 <span class="kn">import</span><span class="w"> </span><span class="nn">ibis.expr.types</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ir</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_table</span><span class="p">(</span><span class="n">raw_data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load CSV from `raw_data_path` into a Table expression</span>
+<span class="w">    </span><span class="sd">"""Load CSV from `raw_data_path` into a Table expression</span>
 <span class="sd">    and format column names to snakecase</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="n">ibis</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">raw_data_path</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;absenteism&quot;</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;snake_case&quot;</span><span class="p">)</span>
+        <span class="n">ibis</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">raw_data_path</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">"absenteism"</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"snake_case"</span><span class="p">)</span>
     <span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">feature_table</span><span class="p">(</span><span class="n">raw_table</span><span class="p">:</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add to `raw_table` the feature columns `has_children`</span>
+<span class="w">    </span><span class="sd">"""Add to `raw_table` the feature columns `has_children`</span>
 <span class="sd">    `has_pet`, and `is_summer_brazil`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">raw_table</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span>
         <span class="n">has_children</span><span class="o">=</span><span class="p">(</span><span class="n">ibis</span><span class="o">.</span><span class="n">ifelse</span><span class="p">(</span><span class="n">ibis</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">son</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
         <span class="n">has_pet</span><span class="o">=</span><span class="n">ibis</span><span class="o">.</span><span class="n">ifelse</span><span class="p">(</span><span class="n">ibis</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">pet</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
@@ -635,7 +635,7 @@ under the License.
     <span class="n">feature_selection</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">condition</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ibis</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">deferred</span><span class="o">.</span><span class="n">Deferred</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select feature columns and filter rows&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Select feature columns and filter rows"""</span>
     <span class="k">return</span> <span class="n">feature_table</span><span class="p">[</span><span class="n">feature_selection</span><span class="p">]</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -652,33 +652,33 @@ under the License.
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.plugins</span><span class="w"> </span><span class="kn">import</span> <span class="n">ibis_extensions</span>
 
 <span class="c1"># extract specific columns from the table</span>
-<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">&quot;son&quot;</span><span class="p">,</span> <span class="s2">&quot;pet&quot;</span><span class="p">,</span> <span class="s2">&quot;month_of_absence&quot;</span><span class="p">)</span>
+<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">"son"</span><span class="p">,</span> <span class="s2">"pet"</span><span class="p">,</span> <span class="s2">"month_of_absence"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_table</span><span class="p">(</span><span class="n">raw_data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load the CSV found at `raw_data_path` into a Table expression</span>
+<span class="w">    </span><span class="sd">"""Load the CSV found at `raw_data_path` into a Table expression</span>
 <span class="sd">    and format columns to snakecase</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="n">ibis</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">raw_data_path</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;absenteism&quot;</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;snake_case&quot;</span><span class="p">)</span>
+        <span class="n">ibis</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">raw_data_path</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">"absenteism"</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"snake_case"</span><span class="p">)</span>
     <span class="p">)</span>
 
 <span class="c1"># accesses a single column from `raw_table`</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">has_children</span><span class="p">(</span><span class="n">son</span><span class="p">:</span> <span class="n">ir</span><span class="o">.</span><span class="n">Column</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">BooleanColumn</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;True if someone has any children&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""True if someone has any children"""</span>
     <span class="k">return</span> <span class="n">ibis</span><span class="o">.</span><span class="n">ifelse</span><span class="p">(</span><span class="n">son</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
 <span class="c1"># narrows the return type from `ir.Column` to `ir.BooleanColumn`</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">has_pet</span><span class="p">(</span><span class="n">pet</span><span class="p">:</span> <span class="n">ir</span><span class="o">.</span><span class="n">Column</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">BooleanColumn</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;True if someone has any pets&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""True if someone has any pets"""</span>
     <span class="k">return</span> <span class="n">ibis</span><span class="o">.</span><span class="n">ifelse</span><span class="p">(</span><span class="n">pet</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
 
 <span class="c1"># typing and docstring provides business context to features</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">is_summer_brazil</span><span class="p">(</span><span class="n">month_of_absence</span><span class="p">:</span> <span class="n">ir</span><span class="o">.</span><span class="n">Column</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">BooleanColumn</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;True if it is summer in Brazil during this month</span>
+<span class="w">    </span><span class="sd">"""True if it is summer in Brazil during this month</span>
 
 <span class="sd">    People in the northern hemisphere are likely to take vacations</span>
-<span class="sd">    to warm places when it&#39;s cold locally</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    to warm places when it's cold locally</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">month_of_absence</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="p">])</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">feature_table</span><span class="p">(</span>
@@ -687,7 +687,7 @@ under the License.
     <span class="n">has_pet</span><span class="p">:</span> <span class="n">ir</span><span class="o">.</span><span class="n">BooleanColumn</span><span class="p">,</span>
     <span class="n">is_summer_brazil</span><span class="p">:</span> <span class="n">ir</span><span class="o">.</span><span class="n">BooleanColumn</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Join computed features to the `raw_data` table&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Join computed features to the `raw_data` table"""</span>
     <span class="k">return</span> <span class="n">raw_table</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span>
         <span class="n">has_children</span><span class="o">=</span><span class="n">has_children</span><span class="p">,</span>
         <span class="n">has_pet</span><span class="o">=</span><span class="n">has_pet</span><span class="p">,</span>
@@ -699,7 +699,7 @@ under the License.
     <span class="n">feature_selection</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">condition</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ibis</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">deferred</span><span class="o">.</span><span class="n">Deferred</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select feature columns and filter rows&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Select feature columns and filter rows"""</span>
     <span class="k">return</span> <span class="n">feature_table</span><span class="p">[</span><span class="n">feature_selection</span><span class="p">]</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -721,21 +721,21 @@ under the License.
 
 <span class="c1"># ... entire dataflow definition</span>
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s2">&quot;duckdb&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s2">"duckdb"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">backend_connection__duckdb</span><span class="p">(</span>
     <span class="n">connection_string</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ibis</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">BaseBackend</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connect to DuckDB backend&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Connect to DuckDB backend"""</span>
     <span class="k">return</span> <span class="n">ibis</span><span class="o">.</span><span class="n">duckdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">connection_string</span><span class="p">)</span>
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s2">&quot;bigquery&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s2">"bigquery"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">backend_connection__bigquery</span><span class="p">(</span>
     <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">dataset_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ibis</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">BaseBackend</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connect to BigQuery backend</span>
+<span class="w">    </span><span class="sd">"""Connect to BigQuery backend</span>
 <span class="sd">    Install dependencies via `pip install ibis-framework[bigquery]`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">ibis</span><span class="o">.</span><span class="n">bigquery</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
         <span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">,</span>
         <span class="n">dataset_id</span><span class="o">=</span><span class="n">dataset_id</span><span class="p">,</span>
@@ -746,7 +746,7 @@ under the License.
     <span class="n">result_table</span><span class="p">:</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">,</span>
     <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute expression and insert results&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Execute expression and insert results"""</span>
     <span class="n">backend_connection</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
         <span class="n">table_name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span><span class="n">P</span>
         <span class="n">obj</span><span class="o">=</span><span class="n">result_table</span>
@@ -782,34 +782,34 @@ under the License.
 <span class="kn">import</span><span class="w"> </span><span class="nn">ibis.expr.types</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ir</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">documents</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;load text documents from file&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">ibis</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;documents&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""load text documents from file"""</span>
+    <span class="k">return</span> <span class="n">ibis</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">"documents"</span><span class="p">)</span>
 
 <span class="c1"># the function name would need to start</span>
 <span class="c1"># with `_` to avoid being added as a node</span>
 <span class="nd">@ibis</span><span class="o">.</span><span class="n">udf</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">python</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">_generate_summary</span><span class="p">(</span><span class="n">author</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prompt_template</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;UDF Function to call the OpenAI API line by line&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""UDF Function to call the OpenAI API line by line"""</span>
     <span class="n">prompt</span> <span class="o">=</span> <span class="n">prompt_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
         <span class="n">return_value</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="n">return_value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">return_value</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="k">return</span> <span class="n">return_value</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">prompt_template</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;summarize the following text from </span><span class="si">{author}</span><span class="s2"> and add</span>
+    <span class="k">return</span> <span class="s2">"""summarize the following text from </span><span class="si">{author}</span><span class="s2"> and add</span>
 <span class="s2">    contextual notes based on it biography and other written work</span>
 
 <span class="s2">    TEXT</span>
 <span class="s2">    </span><span class="si">{text}</span>
-<span class="s2">    &quot;&quot;&quot;</span>
+<span class="s2">    """</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">summaries</span><span class="p">(</span><span class="n">documents</span><span class="p">:</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">,</span> <span class="n">prompt_template</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the UDF against the family&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Compute the UDF against the family"""</span>
     <span class="k">return</span> <span class="n">documents</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span>
         <span class="n">summary</span><span class="o">=</span><span class="n">_generated_summary</span><span class="p">(</span>
             <span class="n">_</span><span class="o">.</span><span class="n">author</span><span class="p">,</span>

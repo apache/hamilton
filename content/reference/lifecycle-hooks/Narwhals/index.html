@@ -540,7 +540,7 @@ underneath. Must have <cite>Narwhals</cite> installed to use it:</p>
 <span class="c1"># pandas</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
-    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">&quot;load&quot;</span><span class="p">:</span> <span class="s2">&quot;pandas&quot;</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">"load"</span><span class="p">:</span> <span class="s2">"pandas"</span><span class="p">})</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
     <span class="o">.</span><span class="n">with_adapters</span><span class="p">(</span>
         <span class="n">h_narwhals</span><span class="o">.</span><span class="n">NarwhalsAdapter</span><span class="p">(),</span>
@@ -552,7 +552,7 @@ underneath. Must have <cite>Narwhals</cite> installed to use it:</p>
 <span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
      <span class="p">[</span><span class="n">example</span><span class="o">.</span><span class="n">group_by_mean</span><span class="p">,</span> <span class="n">example</span><span class="o">.</span><span class="n">example1</span><span class="p">],</span>
-     <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;col_name&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">}</span>
+     <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"col_name"</span><span class="p">:</span> <span class="s2">"a"</span><span class="p">}</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -614,7 +614,7 @@ decorator function.</p>
 <span class="c1"># polars</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
-    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">&quot;load&quot;</span><span class="p">:</span> <span class="s2">&quot;polars&quot;</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">"load"</span><span class="p">:</span> <span class="s2">"polars"</span><span class="p">})</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
     <span class="o">.</span><span class="n">with_adapters</span><span class="p">(</span>
         <span class="n">h_narwhals</span><span class="o">.</span><span class="n">NarwhalsAdapter</span><span class="p">(),</span>
@@ -625,8 +625,8 @@ decorator function.</p>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;group_by_mean&quot;</span><span class="p">,</span> <span class="s2">&quot;example1&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;col_name&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">}</span>
+    <span class="p">[</span><span class="s2">"group_by_mean"</span><span class="p">,</span> <span class="s2">"example1"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"col_name"</span><span class="p">:</span> <span class="s2">"a"</span><span class="p">}</span>
 <span class="p">)</span>
 </pre></div>
 </div>

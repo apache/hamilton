@@ -588,13 +588,13 @@ under the License.
 
 <span class="c1"># define dlt pipeline to a local duckdb instance</span>
 <span class="n">extract_pipeline</span> <span class="o">=</span> <span class="n">dlt</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">&quot;slack_raw&quot;</span><span class="p">,</span>
-    <span class="n">destination</span><span class="o">=</span><span class="s1">&#39;duckdb&#39;</span><span class="p">,</span>
-    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">&quot;slack_community_backup&quot;</span>
+    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">"slack_raw"</span><span class="p">,</span>
+    <span class="n">destination</span><span class="o">=</span><span class="s1">'duckdb'</span><span class="p">,</span>
+    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">"slack_community_backup"</span>
 <span class="p">)</span>
 <span class="c1"># configure dlt slack source</span>
 <span class="n">source</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">slack_source</span><span class="p">(</span>
-    <span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;general&quot;</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">"general"</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 <span class="c1"># moves data from source to destination</span>
 <span class="n">raw_load_info</span> <span class="o">=</span> <span class="n">extract_pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
@@ -612,26 +612,26 @@ under the License.
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_table_to_df</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load data as DataFrame using the dlt SQL client&quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">client</span><span class="o">.</span><span class="n">execute_query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">table_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">t</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Load data as DataFrame using the dlt SQL client"""</span>
+    <span class="k">with</span> <span class="n">client</span><span class="o">.</span><span class="n">execute_query</span><span class="p">(</span><span class="s2">"SELECT * FROM </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">table_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">t</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">general_message</span><span class="p">(</span><span class="n">pipeline</span><span class="p">:</span> <span class="n">dlt</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load table `general_message` from dlt data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load table `general_message` from dlt data"""</span>
     <span class="k">with</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">sql_client</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_table_to_df</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;general_message&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_table_to_df</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">"general_message"</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">general_replies_message</span><span class="p">(</span><span class="n">pipeline</span><span class="p">:</span> <span class="n">dlt</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load table `general_replies_message` from dlt data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load table `general_replies_message` from dlt data"""</span>
     <span class="k">with</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">sql_client</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_table_to_df</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;general_replies_message&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_table_to_df</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">"general_replies_message"</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">threads</span><span class="p">(</span>
     <span class="n">general_message</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">general_replies_message</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reassemble from the union of parent messages and replies&quot;&quot;&quot;</span>
-    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;thread_ts&quot;</span><span class="p">,</span> <span class="s2">&quot;ts&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">"""Reassemble from the union of parent messages and replies"""</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"thread_ts"</span><span class="p">,</span> <span class="s2">"ts"</span><span class="p">,</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
         <span class="p">[</span><span class="n">general_message</span><span class="p">[</span><span class="n">columns</span><span class="p">],</span> <span class="n">general_replies_message</span><span class="p">[</span><span class="n">columns</span><span class="p">]],</span>
         <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
@@ -650,7 +650,7 @@ under the License.
 <span class="c1"># pass the `transform` module</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="c1"># request the node `threads`; pass the dlt `pipeline` as inputs</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;threads&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pipeline</span><span class="o">=</span><span class="n">extract_pipeline</span><span class="p">))</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"threads"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pipeline</span><span class="o">=</span><span class="n">extract_pipeline</span><span class="p">))</span>
 <span class="c1"># `results` is a dictionary with key `threads`</span>
 </pre></div>
 </div>
@@ -664,13 +664,13 @@ under the License.
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># run.py</span>
 <span class="c1"># define dlt pipeline to bigquery (our prod env)</span>
 <span class="n">load_pipeline</span> <span class="o">=</span> <span class="n">dlt</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">&quot;slack_final&quot;</span><span class="p">,</span>
-    <span class="n">destination</span><span class="o">=</span><span class="s1">&#39;bigquery&#39;</span><span class="p">,</span>
-    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">&quot;slack_community_backup&quot;</span>
+    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">"slack_final"</span><span class="p">,</span>
+    <span class="n">destination</span><span class="o">=</span><span class="s1">'bigquery'</span><span class="p">,</span>
+    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">"slack_community_backup"</span>
 <span class="p">)</span>
 <span class="c1"># pass the results from Apache Hamilton to dlt</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;threads&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
-<span class="n">final_load_info</span> <span class="o">=</span> <span class="n">load_pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">"threads"</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"records"</span><span class="p">)</span>
+<span class="n">final_load_info</span> <span class="o">=</span> <span class="n">load_pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">"threads"</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
@@ -687,27 +687,27 @@ under the License.
 
 <span class="c1"># EXTRACT</span>
 <span class="n">extract_pipeline</span> <span class="o">=</span> <span class="n">dlt</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">&quot;slack_raw&quot;</span><span class="p">,</span>
-    <span class="n">destination</span><span class="o">=</span><span class="s1">&#39;duckdb&#39;</span><span class="p">,</span>
-    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">&quot;slack_community_backup&quot;</span>
+    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">"slack_raw"</span><span class="p">,</span>
+    <span class="n">destination</span><span class="o">=</span><span class="s1">'duckdb'</span><span class="p">,</span>
+    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">"slack_community_backup"</span>
 <span class="p">)</span>
 <span class="n">source</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">slack_source</span><span class="p">(</span>
-    <span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;general&quot;</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">"general"</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 <span class="n">raw_load_info</span> <span class="o">=</span> <span class="n">extract_pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
 
 <span class="c1"># TRANSFORM</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;threads&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pipeline</span><span class="o">=</span><span class="n">extract_pipeline</span><span class="p">))</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"threads"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pipeline</span><span class="o">=</span><span class="n">extract_pipeline</span><span class="p">))</span>
 
 <span class="c1"># LOAD</span>
 <span class="n">load_pipeline</span> <span class="o">=</span> <span class="n">dlt</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">&quot;slack_final&quot;</span><span class="p">,</span>
-    <span class="n">destination</span><span class="o">=</span><span class="s1">&#39;bigquery&#39;</span><span class="p">,</span>
-    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">&quot;slack_community_backup&quot;</span>
+    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">"slack_final"</span><span class="p">,</span>
+    <span class="n">destination</span><span class="o">=</span><span class="s1">'bigquery'</span><span class="p">,</span>
+    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">"slack_community_backup"</span>
 <span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;threads&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
-<span class="n">final_load_info</span> <span class="o">=</span> <span class="n">load_pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">"threads"</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"records"</span><span class="p">)</span>
+<span class="n">final_load_info</span> <span class="o">=</span> <span class="n">load_pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s2">"threads"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -744,13 +744,13 @@ under the License.
 
 <span class="c1"># define dlt pipeline to duckdb</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">dlt</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">&quot;slack&quot;</span><span class="p">,</span>
-    <span class="n">destination</span><span class="o">=</span><span class="s1">&#39;duckdb&#39;</span><span class="p">,</span>
-    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">&quot;slack_community_backup&quot;</span>
+    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">"slack"</span><span class="p">,</span>
+    <span class="n">destination</span><span class="o">=</span><span class="s1">'duckdb'</span><span class="p">,</span>
+    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">"slack_community_backup"</span>
 <span class="p">)</span>
 <span class="c1"># load dlt slack source</span>
 <span class="n">source</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">slack_source</span><span class="p">(</span>
-    <span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;general&quot;</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">"general"</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 <span class="c1"># execute dlt pipeline</span>
 <span class="n">load_info</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
@@ -770,14 +770,14 @@ under the License.
 <span class="kn">import</span><span class="w"> </span><span class="nn">ibis.expr.types</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ir</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">db_con</span><span class="p">(</span><span class="n">pipeline</span><span class="p">:</span> <span class="n">dlt</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ibis</span><span class="o">.</span><span class="n">BaseBackend</span><span class="p">:</span>
-    <span class="n">backend</span> <span class="o">=</span> <span class="n">ibis</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pipeline</span><span class="o">.</span><span class="n">pipeline_name</span><span class="si">}</span><span class="s2">.duckdb&quot;</span><span class="p">)</span>
+    <span class="n">backend</span> <span class="o">=</span> <span class="n">ibis</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">pipeline</span><span class="o">.</span><span class="n">pipeline_name</span><span class="si">}</span><span class="s2">.duckdb"</span><span class="p">)</span>
     <span class="n">ibis</span><span class="o">.</span><span class="n">set_backend</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">backend</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">general_message</span><span class="p">(</span><span class="n">db_con</span><span class="p">:</span> <span class="n">ibis</span><span class="o">.</span><span class="n">BaseBackend</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">:</span> <span class="n">dlt</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load table `general_message` from dlt data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load table `general_message` from dlt data"""</span>
     <span class="k">return</span> <span class="n">db_con</span><span class="o">.</span><span class="n">table</span><span class="p">(</span>
-        <span class="s2">&quot;general_message&quot;</span><span class="p">,</span>
+        <span class="s2">"general_message"</span><span class="p">,</span>
         <span class="n">schema</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">dataset_name</span><span class="p">,</span>
         <span class="n">database</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">pipeline_name</span>
     <span class="p">)</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span>
@@ -786,9 +786,9 @@ under the License.
     <span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">general_replies_message</span><span class="p">(</span><span class="n">db_con</span><span class="p">:</span> <span class="n">ibis</span><span class="o">.</span><span class="n">BaseBackend</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">:</span> <span class="n">dlt</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load table `general_replies_message` from dlt data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load table `general_replies_message` from dlt data"""</span>
     <span class="k">return</span> <span class="n">db_con</span><span class="o">.</span><span class="n">table</span><span class="p">(</span>
-        <span class="s2">&quot;general_replies_message&quot;</span><span class="p">,</span>
+        <span class="s2">"general_replies_message"</span><span class="p">,</span>
         <span class="n">schema</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">dataset_name</span><span class="p">,</span>
         <span class="n">database</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">pipeline_name</span>
     <span class="p">)</span>
@@ -797,8 +797,8 @@ under the License.
     <span class="n">general_message</span><span class="p">:</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">,</span>
     <span class="n">general_replies_message</span><span class="p">:</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the union of `general_message` and `general_replies_message`&quot;&quot;&quot;</span>
-    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;thread_ts&quot;</span><span class="p">,</span> <span class="s2">&quot;ts&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">"""Create the union of `general_message` and `general_replies_message`"""</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"thread_ts"</span><span class="p">,</span> <span class="s2">"ts"</span><span class="p">,</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">ibis</span><span class="o">.</span><span class="n">union</span><span class="p">(</span>
         <span class="n">general_message</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">columns</span><span class="p">),</span>
         <span class="n">general_replies_message</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">columns</span><span class="p">),</span>
@@ -806,7 +806,7 @@ under the License.
 
 <span class="k">def</span><span class="w"> </span><span class="nf">insert_threads</span><span class="p">(</span><span class="n">threads</span><span class="p">:</span> <span class="n">ir</span><span class="o">.</span><span class="n">Table</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="n">db_con</span> <span class="o">=</span> <span class="n">ibis</span><span class="o">.</span><span class="n">get_backend</span><span class="p">()</span>  <span class="c1"># retrieves the backend set in `db_con()`</span>
-    <span class="n">db_con</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="s2">&quot;threads&quot;</span><span class="p">,</span> <span class="n">threads</span><span class="p">)</span>
+    <span class="n">db_con</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="s2">"threads"</span><span class="p">,</span> <span class="n">threads</span><span class="p">)</span>
     <span class="k">return</span> <span class="kc">True</span>
 </pre></div>
 </div>
@@ -819,7 +819,7 @@ under the License.
 
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;insert_threads&quot;</span><span class="p">],</span>  <span class="c1"># execute node `insert_threads`</span>
+    <span class="p">[</span><span class="s2">"insert_threads"</span><span class="p">],</span>  <span class="c1"># execute node `insert_threads`</span>
     <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pipeline</span><span class="o">=</span><span class="n">pipeline</span><span class="p">)</span>  <span class="c1"># pass the dlt pipeline</span>
 <span class="p">)</span>
 </pre></div>
@@ -838,19 +838,19 @@ under the License.
 
 <span class="c1"># EXTRACT &amp; LOAD</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">dlt</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">&quot;slack&quot;</span><span class="p">,</span>
-    <span class="n">destination</span><span class="o">=</span><span class="s1">&#39;duckdb&#39;</span><span class="p">,</span>
-    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">&quot;slack_community_backup&quot;</span>
+    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">"slack"</span><span class="p">,</span>
+    <span class="n">destination</span><span class="o">=</span><span class="s1">'duckdb'</span><span class="p">,</span>
+    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">"slack_community_backup"</span>
 <span class="p">)</span>
 <span class="n">source</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">slack_source</span><span class="p">(</span>
-    <span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;general&quot;</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">"general"</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 <span class="n">load_info</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
 
 <span class="c1"># TRANSFORM</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;insert_threads&quot;</span><span class="p">],</span>  <span class="c1"># query the `threads` node</span>
+    <span class="p">[</span><span class="s2">"insert_threads"</span><span class="p">],</span>  <span class="c1"># query the `threads` node</span>
     <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pipeline</span><span class="o">=</span><span class="n">pipeline</span><span class="p">)</span>  <span class="c1"># pass the dlt load info</span>
 <span class="p">)</span>
 </pre></div>
@@ -873,23 +873,23 @@ under the License.
 <span class="kn">import</span><span class="w"> </span><span class="nn">slack</span>  <span class="c1"># NOTE this is dlt code, not an official Slack library</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">transform</span>
 
-<span class="n">source</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">source</span><span class="p">(</span><span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;general&quot;</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">source</span><span class="p">(</span><span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">"general"</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
 <span class="n">materializers</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">from_</span><span class="o">.</span><span class="n">dlt</span><span class="p">(</span>
-        <span class="n">target</span><span class="o">=</span><span class="s2">&quot;general_message&quot;</span><span class="p">,</span>  <span class="c1"># node name assigned to the data</span>
-        <span class="n">resource</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="s2">&quot;general_message&quot;</span><span class="p">]</span>
+        <span class="n">target</span><span class="o">=</span><span class="s2">"general_message"</span><span class="p">,</span>  <span class="c1"># node name assigned to the data</span>
+        <span class="n">resource</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="s2">"general_message"</span><span class="p">]</span>
     <span class="p">),</span>
     <span class="n">from_</span><span class="o">.</span><span class="n">dlt</span><span class="p">(</span>
-        <span class="n">target</span><span class="o">=</span><span class="s2">&quot;general_replies_message&quot;</span><span class="p">,</span>
-        <span class="n">resource</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="s2">&quot;general_replies_message&quot;</span><span class="p">]</span>
+        <span class="n">target</span><span class="o">=</span><span class="s2">"general_replies_message"</span><span class="p">,</span>
+        <span class="n">resource</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="s2">"general_replies_message"</span><span class="p">]</span>
     <span class="p">),</span>
 <span class="p">]</span>
 <span class="c1"># when using only loaders (i.e., `from_`), you need to specify</span>
-<span class="c1"># `additional_vars` to compute, like you would in `.execute(final_vars=[&quot;threads&quot;])`</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">materialize</span><span class="p">(</span><span class="o">*</span><span class="n">materializers</span><span class="p">,</span> <span class="n">additional_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;threads&quot;</span><span class="p">])</span>
+<span class="c1"># `additional_vars` to compute, like you would in `.execute(final_vars=["threads"])`</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">materialize</span><span class="p">(</span><span class="o">*</span><span class="n">materializers</span><span class="p">,</span> <span class="n">additional_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">"threads"</span><span class="p">])</span>
 </pre></div>
 </div>
 </section>
@@ -904,18 +904,18 @@ under the License.
 <span class="kn">import</span><span class="w"> </span><span class="nn">transform</span>
 
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">dlt</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">&quot;slack&quot;</span><span class="p">,</span>
-    <span class="n">destination</span><span class="o">=</span><span class="s1">&#39;duckdb&#39;</span><span class="p">,</span>
-    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">&quot;slack_community_backup&quot;</span>
+    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">"slack"</span><span class="p">,</span>
+    <span class="n">destination</span><span class="o">=</span><span class="s1">'duckdb'</span><span class="p">,</span>
+    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">"slack_community_backup"</span>
 <span class="p">)</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
 <span class="n">materializers</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">to</span><span class="o">.</span><span class="n">dlt</span><span class="p">(</span>
-        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;threads__dlt&quot;</span><span class="p">,</span>  <span class="c1"># node name</span>
-        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;threads&quot;</span><span class="p">],</span>
-        <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;slack_threads&quot;</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">"threads__dlt"</span><span class="p">,</span>  <span class="c1"># node name</span>
+        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"threads"</span><span class="p">],</span>
+        <span class="n">table_name</span><span class="o">=</span><span class="s2">"slack_threads"</span><span class="p">,</span>
         <span class="n">pipeline</span><span class="o">=</span><span class="n">pipeline</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="p">]</span>
@@ -935,27 +935,27 @@ under the License.
 <span class="kn">import</span><span class="w"> </span><span class="nn">transform</span>
 
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">dlt</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">&quot;slack&quot;</span><span class="p">,</span>
-    <span class="n">destination</span><span class="o">=</span><span class="s1">&#39;duckdb&#39;</span><span class="p">,</span>
-    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">&quot;slack_community_backup&quot;</span>
+    <span class="n">pipeline_name</span><span class="o">=</span><span class="s2">"slack"</span><span class="p">,</span>
+    <span class="n">destination</span><span class="o">=</span><span class="s1">'duckdb'</span><span class="p">,</span>
+    <span class="n">dataset_name</span><span class="o">=</span><span class="s2">"slack_community_backup"</span>
 <span class="p">)</span>
-<span class="n">source</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">source</span><span class="p">(</span><span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;general&quot;</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">source</span><span class="p">(</span><span class="n">selected_channels</span><span class="o">=</span><span class="p">[</span><span class="s2">"general"</span><span class="p">],</span> <span class="n">replies</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
 <span class="n">materializers</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">from_</span><span class="o">.</span><span class="n">dlt</span><span class="p">(</span>
-        <span class="n">target</span><span class="o">=</span><span class="s2">&quot;general_message&quot;</span><span class="p">,</span>
-        <span class="n">resource</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="s2">&quot;general_message&quot;</span><span class="p">]</span>
+        <span class="n">target</span><span class="o">=</span><span class="s2">"general_message"</span><span class="p">,</span>
+        <span class="n">resource</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="s2">"general_message"</span><span class="p">]</span>
     <span class="p">),</span>
     <span class="n">from_</span><span class="o">.</span><span class="n">dlt</span><span class="p">(</span>
-        <span class="n">target</span><span class="o">=</span><span class="s2">&quot;general_replies_message&quot;</span><span class="p">,</span>
-        <span class="n">resource</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="s2">&quot;general_replies_message&quot;</span><span class="p">]</span>
+        <span class="n">target</span><span class="o">=</span><span class="s2">"general_replies_message"</span><span class="p">,</span>
+        <span class="n">resource</span><span class="o">=</span><span class="n">source</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="s2">"general_replies_message"</span><span class="p">]</span>
     <span class="p">),</span>
     <span class="n">to</span><span class="o">.</span><span class="n">dlt</span><span class="p">(</span>
-        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;threads__dlt&quot;</span><span class="p">,</span>
-        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;threads&quot;</span><span class="p">],</span>
-        <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;slack_threads&quot;</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">"threads__dlt"</span><span class="p">,</span>
+        <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"threads"</span><span class="p">],</span>
+        <span class="n">table_name</span><span class="o">=</span><span class="s2">"slack_threads"</span><span class="p">,</span>
         <span class="n">pipeline</span><span class="o">=</span><span class="n">pipeline</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="p">]</span>

@@ -543,12 +543,12 @@ s=d.getElementsByTagName('script')[0];
 <p>Python decorators are statements that begin with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> located above function definitions. Apache Hamilton uses decorators to implement function modifiers and reduce the amount of code you have to write to make expressive dataflows.</p>
 <p>Multiple decorators can be stacked on a single function and are applied from bottom to top. Apache Hamilton decorators should be insensitive to ordering, but be careful with non-Apache Hamilton decorators (e.g., &#64;retries, &#64;time). See this <a class="reference external" href="https://realpython.com/primer-on-python-decorators/">decorator primer</a> to learn more.</p>
 <p>Function modifiers were designed to have clear semantics, so you should be able to figure out what they do from their name. For instance, the following code adds metadata using <code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code> and conducts some checks over the return value with <code class="docutils literal notranslate"><span class="pre">check_output</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="s1">&#39;Data-Science&#39;</span><span class="p">,</span> <span class="n">pii</span><span class="o">=</span><span class="s1">&#39;False&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="s1">'Data-Science'</span><span class="p">,</span> <span class="n">pii</span><span class="o">=</span><span class="s1">'False'</span><span class="p">)</span>
 <span class="nd">@check_output</span><span class="p">(</span><span class="n">data_type</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),</span> <span class="n">allow_nans</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">height_zero_mean_unit_variance</span><span class="p">(</span>
     <span class="n">height_zero_mean</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">height_std_dev</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="sd">&quot;&quot;&quot;Zero mean unit variance value of height&quot;&quot;&quot;</span>
+<span class="sd">"""Zero mean unit variance value of height"""</span>
 <span class="k">return</span> <span class="n">height_zero_mean</span> <span class="o">/</span> <span class="n">height_std_dev</span>
 </pre></div>
 </div>
@@ -595,7 +595,7 @@ s=d.getElementsByTagName('script')[0];
 <p>For example, this tags the associated data product and the sensitivity of the data.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">tag</span>
 
-<span class="nd">@tag</span><span class="p">(</span><span class="n">data_product</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span> <span class="n">pii</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="p">)</span>
+<span class="nd">@tag</span><span class="p">(</span><span class="n">data_product</span><span class="o">=</span><span class="s1">'final'</span><span class="p">,</span> <span class="n">pii</span><span class="o">=</span><span class="s1">'true'</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">final_column</span><span class="p">(</span>
     <span class="n">intermediate_column</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span> <span class="o">...</span>
@@ -607,7 +607,7 @@ s=d.getElementsByTagName('script')[0];
 <p>Once you built your Driver, you can get all nodes with <code class="docutils literal notranslate"><span class="pre">Driver.list_available_variables()</span></code> and then filter them by tag. The following gets all the nodes for which <code class="docutils literal notranslate"><span class="pre">data_product=&quot;final&quot;</span></code> and passes them to <code class="docutils literal notranslate"><span class="pre">driver.execute()</span></code></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_module</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="n">tagged_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">()</span>
-                <span class="k">if</span> <span class="s1">&#39;final&#39;</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data_product&#39;</span><span class="p">)]</span>
+                <span class="k">if</span> <span class="s1">'final'</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'data_product'</span><span class="p">)]</span>
 
 <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">tagged_nodes</span><span class="p">)</span>
 </pre></div>
@@ -625,13 +625,13 @@ s=d.getElementsByTagName('script')[0];
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">schema</span>
 
 <span class="nd">@schema</span><span class="o">.</span><span class="n">output</span><span class="p">(</span>
-    <span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">)</span>
+    <span class="p">(</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"int"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"b"</span><span class="p">,</span> <span class="s2">"float"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"c"</span><span class="p">,</span> <span class="s2">"str"</span><span class="p">)</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">clean_df</span><span class="p">(</span><span class="n">raw_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span>
-        <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">],</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">]}</span>
+        <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"b"</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">],</span> <span class="s2">"c"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"3"</span><span class="p">]}</span>
     <span class="p">)</span>
 </pre></div>
 </div>
@@ -651,7 +651,7 @@ s=d.getElementsByTagName('script')[0];
 <p>The next snippet checks if the returned Series is of type <code class="docutils literal notranslate"><span class="pre">np.int32</span></code>, which is non-nullable, and if its within the range 0-100, and logs failed checks. This allows us to manually review instances where data validation failed.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_output</span>
 
-<span class="nd">@check_output</span><span class="p">(</span><span class="n">data_type</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="n">importance</span><span class="o">=</span><span class="s2">&quot;warn&quot;</span><span class="p">)</span>
+<span class="nd">@check_output</span><span class="p">(</span><span class="n">data_type</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="n">importance</span><span class="o">=</span><span class="s2">"warn"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">quiz_grade</span><span class="p">(</span><span class="n">quiz_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
     <span class="k">return</span> <span class="o">...</span>
 </pre></div>
@@ -691,9 +691,9 @@ s=d.getElementsByTagName('script')[0];
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">unpack_fields</span>
 
-<span class="nd">@unpack_fields</span><span class="p">(</span><span class="s2">&quot;X_train&quot;</span><span class="p">,</span> <span class="s2">&quot;X_validation&quot;</span><span class="p">,</span> <span class="s2">&quot;X_test&quot;</span><span class="p">)</span>
+<span class="nd">@unpack_fields</span><span class="p">(</span><span class="s2">"X_train"</span><span class="p">,</span> <span class="s2">"X_validation"</span><span class="p">,</span> <span class="s2">"X_test"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Randomly split data into train, validation, test"""</span>
     <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span>
 </pre></div>
@@ -714,7 +714,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">X_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
 <span class="p">))</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Randomly split data into train, validation, test"""</span>
     <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>  <span class="c1"># keys match those from @extract_fields</span>
@@ -729,9 +729,9 @@ s=d.getElementsByTagName('script')[0];
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_fields</span>
 
-<span class="nd">@extract_fields</span><span class="p">(</span><span class="s2">&quot;X_train&quot;</span><span class="p">,</span> <span class="s2">&quot;X_validation&quot;</span><span class="p">,</span> <span class="s2">&quot;X_test&quot;</span><span class="p">)</span>  <span class="c1"># field names only</span>
+<span class="nd">@extract_fields</span><span class="p">(</span><span class="s2">"X_train"</span><span class="p">,</span> <span class="s2">"X_validation"</span><span class="p">,</span> <span class="s2">"X_test"</span><span class="p">)</span>  <span class="c1"># field names only</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>  <span class="c1"># generic dict</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Randomly split data into train, validation, test"""</span>
     <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
@@ -749,9 +749,9 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">X_validation</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
     <span class="n">X_test</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
 
-<span class="nd">@extract_fields</span><span class="p">(</span><span class="s2">&quot;X_train&quot;</span><span class="p">,</span> <span class="s2">&quot;X_validation&quot;</span><span class="p">,</span> <span class="s2">&quot;X_test&quot;</span><span class="p">)</span>
+<span class="nd">@extract_fields</span><span class="p">(</span><span class="s2">"X_train"</span><span class="p">,</span> <span class="s2">"X_validation"</span><span class="p">,</span> <span class="s2">"X_test"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetSplits</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Randomly split data into train, validation, test"""</span>
     <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
@@ -771,7 +771,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="nd">@extract_fields</span><span class="p">(</span><span class="n">DatasetSplits</span><span class="p">)</span>  <span class="c1"># field names only</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">dataset_splits</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetSplits</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Randomly split data into train, validation, test&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Randomly split data into train, validation, test"""</span>
     <span class="n">X_train</span><span class="p">,</span> <span class="n">X_validation</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
@@ -790,9 +790,9 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="c1"># assuming `user_id` and `weekday` are existing columns</span>
 <span class="c1"># note that strings are passed directly, without a list</span>
-<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">&quot;user_id&quot;</span><span class="p">,</span> <span class="s2">&quot;weekday&quot;</span><span class="p">)</span>
+<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">"user_id"</span><span class="p">,</span> <span class="s2">"weekday"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">clean_df</span><span class="p">(</span><span class="n">raw_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean my data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Clean my data"""</span>
     <span class="n">clean_df</span> <span class="o">=</span> <span class="n">clean_my_data</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">clean_df</span>
 </pre></div>
@@ -813,14 +813,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">source</span><span class="p">,</span> <span class="n">value</span>
 
 <span class="nd">@parameterize</span><span class="p">(</span>
-    <span class="n">revenue_by_age</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;df&quot;</span><span class="p">),</span> <span class="n">groupby_col</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;age&quot;</span><span class="p">)),</span>
-    <span class="n">revenue_by_country</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;df&quot;</span><span class="p">),</span> <span class="n">groupby_col</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;country&quot;</span><span class="p">)),</span>
-    <span class="n">revenue_by_occupation</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;df&quot;</span><span class="p">),</span> <span class="n">groupby_col</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;occupation&quot;</span><span class="p">)),</span>
+    <span class="n">revenue_by_age</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"df"</span><span class="p">),</span> <span class="n">groupby_col</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">"age"</span><span class="p">)),</span>
+    <span class="n">revenue_by_country</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"df"</span><span class="p">),</span> <span class="n">groupby_col</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">"country"</span><span class="p">)),</span>
+    <span class="n">revenue_by_occupation</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"df"</span><span class="p">),</span> <span class="n">groupby_col</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">"occupation"</span><span class="p">)),</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">population_metrics</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">groupby_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute df metrics aggregates over dimension {groupby_col}&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)[</span><span class="s2">&quot;revenue&quot;</span><span class="p">]</span> \
-             <span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">])</span> \
+<span class="w">    </span><span class="sd">"""Compute df metrics aggregates over dimension {groupby_col}"""</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)[</span><span class="s2">"revenue"</span><span class="p">]</span> \
+             <span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"min"</span><span class="p">,</span> <span class="s2">"max"</span><span class="p">])</span> \
              <span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -849,11 +849,11 @@ s=d.getElementsByTagName('script')[0];
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># model_training.py</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">&quot;binary_classification&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">"binary_classification"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">base_model__binary</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">XGBClassifier</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">&quot;continuous_regression&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">"continuous_regression"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">base_model__regression</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">XGBRegressor</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">XGBRegressor</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
@@ -868,7 +868,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">model_training</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">&quot;continuous_regression&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">"continuous_regression"</span><span class="p">))</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
 </pre></div>
@@ -879,25 +879,25 @@ s=d.getElementsByTagName('script')[0];
 </a>
 <p>In the above example, if the Driver receives no value for the key <code class="docutils literal notranslate"><span class="pre">task</span></code> or the value isn’t <code class="docutils literal notranslate"><span class="pre">&quot;binary_classification&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;continuous_regression&quot;</span></code>, there would be no <code class="docutils literal notranslate"><span class="pre">base_model</span></code> node loaded and <code class="docutils literal notranslate"><span class="pre">train_model</span></code> would fail.</p>
 <p>Using <code class="docutils literal notranslate"><span class="pre">&#64;config.when_not()</span></code> can help set up a default case and ensure a <code class="docutils literal notranslate"><span class="pre">base_model</span></code> node is always loaded.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">&quot;xgboost&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">"xgboost"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">base_model__xgboost</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">XGBClassifier</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when_not</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">&quot;xgboost&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when_not</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">"xgboost"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">base_model__default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestRegressor</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestRegressor</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>There exists also <code class="docutils literal notranslate"><span class="pre">&#64;config.when_in()</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;config.when_not_in()</span></code> that accept a list of values to check. Expanding on the previous example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">&quot;xgboost&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">"xgboost"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">base_model__xgboost</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">XGBClassifier</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">&quot;lightgbm&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="s2">"lightgbm"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">base_model__lightgbm</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">LGBMClassifier</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">LGBMClassifier</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when_not_in</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;xgboost&quot;</span><span class="p">,</span> <span class="s2">&quot;lightgbm&quot;</span><span class="p">])</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when_not_in</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="p">[</span><span class="s2">"xgboost"</span><span class="p">,</span> <span class="s2">"lightgbm"</span><span class="p">])</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">base_model__default</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestRegressor</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestRegressor</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 </pre></div>
@@ -912,7 +912,7 @@ s=d.getElementsByTagName('script')[0];
 <section id="load-from">
 <h3>&#64;load_from<a class="headerlink" href="#load-from" title="Link to this heading">¶</a></h3>
 <p>You can think of <code class="docutils literal notranslate"><span class="pre">&#64;load_from</span></code> as adding an upstream node. The next example specifies the <code class="docutils literal notranslate"><span class="pre">path</span></code> of the file, which will be loaded in the variable <code class="docutils literal notranslate"><span class="pre">raw_data</span></code>. Note that the variable type should be compatible with the loaded file (<code class="docutils literal notranslate"><span class="pre">dict</span></code> for JSON here).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/path/to/file.json&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"/path/to/file.json"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">normalized_data</span><span class="p">(</span><span class="n">raw_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="o">...</span>
 </pre></div>
@@ -921,18 +921,18 @@ s=d.getElementsByTagName('script')[0];
 </a>
 <p>It is possible to use <code class="docutils literal notranslate"><span class="pre">source()</span></code> (like in <code class="docutils literal notranslate"><span class="pre">&#64;parameterize</span></code>) to specify the file path from the driver code. See:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># functions.py</span>
-<span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;raw_data_path&quot;</span><span class="p">))</span>
+<span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"raw_data_path"</span><span class="p">))</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">normalized_data</span><span class="p">(</span><span class="n">raw_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="o">...</span>
 
 <span class="c1"># run.py</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">functions</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;normalized_data&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">raw_data_path</span><span class="o">=</span><span class="s2">&quot;./this/file.json&quot;</span><span class="p">))</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"normalized_data"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">raw_data_path</span><span class="o">=</span><span class="s2">"./this/file.json"</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>You will need to use the <code class="docutils literal notranslate"><span class="pre">inject_</span></code> keyword when you load multiple files into a node or your function has multiple parameters.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/path/to/logs.json&quot;</span><span class="p">,</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">&quot;logs1&quot;</span><span class="p">)</span>
-<span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/path/to/other/logs.json&quot;</span><span class="p">,</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">&quot;logs2&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"/path/to/logs.json"</span><span class="p">,</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">"logs1"</span><span class="p">)</span>
+<span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"/path/to/other/logs.json"</span><span class="p">,</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">"logs2"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">merged_logs</span><span class="p">(</span><span class="n">logs1</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">logs2</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="o">...</span>
 </pre></div>
@@ -944,13 +944,13 @@ s=d.getElementsByTagName('script')[0];
 <h3>&#64;save_to<a class="headerlink" href="#save-to" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">&#64;save_to</span></code> decorator works very similarly to <code class="docutils literal notranslate"><span class="pre">&#64;load_from</span></code>. In this case, <code class="docutils literal notranslate"><span class="pre">path=...</span></code> specifies where the data will be saved, and an <code class="docutils literal notranslate"><span class="pre">output_name_</span></code> is required to be able to request the node from <code class="docutils literal notranslate"><span class="pre">Driver.execute()</span></code>. Here again, <code class="docutils literal notranslate"><span class="pre">source()</span></code> can be used.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># functions.py</span>
-<span class="nd">@save_to</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;metrics_path&quot;</span><span class="p">),</span> <span class="n">output_name_</span><span class="o">=</span><span class="s2">&quot;metrics_to_json&quot;</span><span class="p">)</span>
+<span class="nd">@save_to</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"metrics_path"</span><span class="p">),</span> <span class="n">output_name_</span><span class="o">=</span><span class="s2">"metrics_to_json"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_metric</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
 <span class="c1"># run.py</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">functions</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;metrics_to_json&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">metrics_path</span><span class="o">=</span><span class="s2">&quot;./out/metrics.json&quot;</span><span class="p">))</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"metrics_to_json"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">metrics_path</span><span class="o">=</span><span class="s2">"./out/metrics.json"</span><span class="p">))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../../_images/save_to.png"><img alt="../../_images/save_to.png" src="../../_images/save_to.png" style="height: 168px;" />

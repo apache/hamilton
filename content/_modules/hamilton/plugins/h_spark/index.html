@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -547,7 +547,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">dataframe</span><span class="p">,</span> <span class="n">types</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql.functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">column</span><span class="p">,</span> <span class="n">lit</span><span class="p">,</span> <span class="n">pandas_udf</span><span class="p">,</span> <span class="n">udf</span>
 <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Pyspark is not installed.&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"Pyspark is not installed."</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">base</span><span class="p">,</span> <span class="n">htypes</span><span class="p">,</span> <span class="n">node</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.execution</span><span class="w"> </span><span class="kn">import</span> <span class="n">graph_functions</span>
@@ -562,26 +562,26 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">KoalasDataFrameResult</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">ResultMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixin for building a koalas dataframe from the result&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Mixin for building a koalas dataframe from the result"""</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ps</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Right now this class is just used for signaling the return type.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Right now this class is just used for signaling the return type."""</span>
         <span class="k">pass</span>
 
 
 <div class="viewcode-block" id="SparkKoalasGraphAdapter">
 <a class="viewcode-back" href="../../../../reference/graph-adapters/SparkKoalasGraphAdapter/#hamilton.plugins.h_spark.SparkKoalasGraphAdapter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SparkKoalasGraphAdapter</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">HamiltonGraphAdapter</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">ResultMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing what&#39;s required to make Hamilton run on Spark with Koalas, i.e. Pandas on Spark.</span>
+<span class="w">    </span><span class="sd">"""Class representing what's required to make Hamilton run on Spark with Koalas, i.e. Pandas on Spark.</span>
 
-<span class="sd">    This walks the graph and translates it to run onto `Apache Spark &lt;https://spark.apache.org/&quot;&gt;`__ \</span>
+<span class="sd">    This walks the graph and translates it to run onto `Apache Spark &lt;https://spark.apache.org/"&gt;`__ \</span>
 <span class="sd">    using the \</span>
 <span class="sd">    `Pandas API on Spark &lt;https://spark.apache.org/docs/latest/api/python/user_guide/pandas_on_spark/index.html&gt;`__</span>
 
 <span class="sd">    Use `pip install apache-hamilton[spark]` to get the dependencies required to run this.</span>
 
-<span class="sd">    Currently, this class assumes you&#39;re running SPARK 3.2+. You&#39;d generally use this if you have an existing spark \</span>
+<span class="sd">    Currently, this class assumes you're running SPARK 3.2+. You'd generally use this if you have an existing spark \</span>
 <span class="sd">    cluster running in your workplace, and you want to scale to very large data set sizes.</span>
 
 <span class="sd">    Some tips on koalas (before it was merged into spark 3.2):</span>
@@ -600,7 +600,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    Function return object types supported:</span>
 <span class="sd">    ---------------------------------------</span>
 <span class="sd">      - ⛔ Not generic. This does not work for every Hamilton graph.</span>
-<span class="sd">      - ✅ Currently we&#39;re targeting this at Pandas/Koalas types [dataframes, series].</span>
+<span class="sd">      - ✅ Currently we're targeting this at Pandas/Koalas types [dataframes, series].</span>
 
 <span class="sd">    Pandas?</span>
 <span class="sd">    -------</span>
@@ -608,16 +608,16 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    CAVEATS</span>
 <span class="sd">    -------</span>
-<span class="sd">      - Serialization costs can outweigh the benefits of parallelism, so you should benchmark your code to see if it&#39;s\</span>
+<span class="sd">      - Serialization costs can outweigh the benefits of parallelism, so you should benchmark your code to see if it's\</span>
 <span class="sd">      worth it.</span>
 
 <span class="sd">    DISCLAIMER -- this class is experimental, so signature changes are a possibility!</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="SparkKoalasGraphAdapter.__init__">
 <a class="viewcode-back" href="../../../../reference/graph-adapters/SparkKoalasGraphAdapter/#hamilton.plugins.h_spark.SparkKoalasGraphAdapter.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spark_session</span><span class="p">,</span> <span class="n">result_builder</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">ResultMixin</span><span class="p">,</span> <span class="n">spine_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor</span>
+<span class="w">        </span><span class="sd">"""Constructor</span>
 
 <span class="sd">        You only have the ability to return either a Pandas on Spark Dataframe or a Pandas Dataframe. To do that you \</span>
 <span class="sd">        either use the stock \</span>
@@ -625,9 +625,9 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">         or you use `h_spark.KoalasDataframeResult &lt;https://github.com/apache/hamilton/blob/main/hamilton/experimental/h_spark.py#L16&gt;`__.</span>
 
 <span class="sd">        :param spark_session: the spark session to use.</span>
-<span class="sd">        :param result_builder: the function to build the result -- currently on Pandas and Koalas are &quot;supported&quot;.</span>
+<span class="sd">        :param result_builder: the function to build the result -- currently on Pandas and Koalas are "supported".</span>
 <span class="sd">        :param spine_column: the column we should use first as the spine and then subsequently join against.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spark_session</span> <span class="o">=</span> <span class="n">spark_session</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
             <span class="nb">isinstance</span><span class="p">(</span><span class="n">result_builder</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">PandasDataFrameResult</span><span class="p">)</span>
@@ -635,8 +635,8 @@ s=d.getElementsByTagName('script')[0];
             <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result_builder</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">DictResult</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;SparkKoalasGraphAdapter only supports returning:&quot;</span>
-                <span class="s1">&#39; a &quot;pandas&quot; DF at the moment, a &quot;koalas&quot; DF at the moment, or a &quot;dict&quot; of results.&#39;</span>
+                <span class="s2">"SparkKoalasGraphAdapter only supports returning:"</span>
+                <span class="s1">' a "pandas" DF at the moment, a "koalas" DF at the moment, or a "dict" of results.'</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result_builder</span> <span class="o">=</span> <span class="n">result_builder</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spine_column</span> <span class="o">=</span> <span class="n">spine_column</span></div>
@@ -646,14 +646,14 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/graph-adapters/SparkKoalasGraphAdapter/#hamilton.plugins.h_spark.SparkKoalasGraphAdapter.check_input_type">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_input_type</span><span class="p">(</span><span class="n">node_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">input_value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to equate an input value, with expected node type.</span>
+<span class="w">        </span><span class="sd">"""Function to equate an input value, with expected node type.</span>
 
 <span class="sd">        We need this to equate pandas and koalas objects/types.</span>
 
 <span class="sd">        :param node_type: the declared node type</span>
 <span class="sd">        :param input_value: the actual input value</span>
 <span class="sd">        :return: whether this is okay, or not.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># TODO: flesh this out more</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">node_type</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="ow">or</span> <span class="n">node_type</span> <span class="o">==</span> <span class="n">ps</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
             <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_value</span><span class="p">,</span> <span class="n">ps</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_value</span><span class="p">,</span> <span class="n">ps</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span>
@@ -669,12 +669,12 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/graph-adapters/SparkKoalasGraphAdapter/#hamilton.plugins.h_spark.SparkKoalasGraphAdapter.check_node_type_equivalence">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_node_type_equivalence</span><span class="p">(</span><span class="n">node_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">input_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to help equate pandas with koalas types.</span>
+<span class="w">        </span><span class="sd">"""Function to help equate pandas with koalas types.</span>
 
 <span class="sd">        :param node_type: the declared node type.</span>
 <span class="sd">        :param input_type: the type of what we want to pass into it.</span>
 <span class="sd">        :return: whether this is okay, or not.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">node_type</span> <span class="o">==</span> <span class="n">ps</span><span class="o">.</span><span class="n">Series</span> <span class="ow">and</span> <span class="n">input_type</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">elif</span> <span class="n">node_type</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="ow">and</span> <span class="n">input_type</span> <span class="o">==</span> <span class="n">ps</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
@@ -689,12 +689,12 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="SparkKoalasGraphAdapter.execute_node">
 <a class="viewcode-back" href="../../../../reference/graph-adapters/SparkKoalasGraphAdapter/#hamilton.plugins.h_spark.SparkKoalasGraphAdapter.execute_node">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function that is called as we walk the graph to determine how to execute a hamilton function.</span>
+<span class="w">        </span><span class="sd">"""Function that is called as we walk the graph to determine how to execute a hamilton function.</span>
 
 <span class="sd">        :param node: the node from the graph.</span>
 <span class="sd">        :param kwargs: the arguments that should be passed to it.</span>
 <span class="sd">        :return: returns a koalas column</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">callable</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
@@ -703,10 +703,10 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">ps</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result_builder</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">DictResult</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result_builder</span><span class="o">.</span><span class="n">build_result</span><span class="p">(</span><span class="o">**</span><span class="n">outputs</span><span class="p">)</span>
-        <span class="c1"># we don&#39;t use the actual function for building right now, we use this hacky equivalent</span>
+        <span class="c1"># we don't use the actual function for building right now, we use this hacky equivalent</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">spine_column</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got column </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">, with type [</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">].&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Got column </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">, with type [</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">]."</span><span class="p">)</span>
             <span class="n">df</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result_builder</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">PandasDataFrameResult</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
@@ -717,12 +717,12 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">numpy_to_spark_type</span><span class="p">(</span><span class="n">numpy_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">DataType</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function to convert a numpy type to a Spark type.</span>
+<span class="w">    </span><span class="sd">"""Function to convert a numpy type to a Spark type.</span>
 
 <span class="sd">    :param numpy_type: the numpy type to convert.</span>
 <span class="sd">    :return: the Spark type.</span>
 <span class="sd">    :raise: ValueError if the type is not supported.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="p">(</span>
         <span class="n">numpy_type</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span>
         <span class="ow">or</span> <span class="n">numpy_type</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span>
@@ -739,16 +739,16 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">elif</span> <span class="n">numpy_type</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">bytes_</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">types</span><span class="o">.</span><span class="n">BinaryType</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported NumPy type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">numpy_type</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Unsupported NumPy type: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">numpy_type</span><span class="p">))</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">python_to_spark_type</span><span class="p">(</span><span class="n">python_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">DataType</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function to convert a Python type to a Spark type.</span>
+<span class="w">    </span><span class="sd">"""Function to convert a Python type to a Spark type.</span>
 
 <span class="sd">    :param python_type: the Python type to convert.</span>
 <span class="sd">    :return: the Spark type.</span>
 <span class="sd">    :raise: ValueError if the type is not supported.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">python_type</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">types</span><span class="o">.</span><span class="n">IntegerType</span><span class="p">()</span>
     <span class="k">elif</span> <span class="n">python_type</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
@@ -760,7 +760,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">elif</span> <span class="n">python_type</span> <span class="o">==</span> <span class="nb">bytes</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">types</span><span class="o">.</span><span class="n">BinaryType</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported Python type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">python_type</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Unsupported Python type: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">python_type</span><span class="p">))</span>
 
 
 <span class="n">_list</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">bytes</span><span class="p">])</span>
@@ -771,24 +771,24 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="n">python_to_spark_type</span><span class="p">(</span><span class="n">return_type</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">return_type</span> <span class="ow">in</span> <span class="n">_list</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">types</span><span class="o">.</span><span class="n">ArrayType</span><span class="p">(</span><span class="n">python_to_spark_type</span><span class="p">(</span><span class="n">return_type</span><span class="o">.</span><span class="n">__args__</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">return_type</span><span class="p">,</span> <span class="s2">&quot;__module__&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">return_type</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">==</span> <span class="s2">&quot;numpy&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">return_type</span><span class="p">,</span> <span class="s2">"__module__"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">return_type</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">==</span> <span class="s2">"numpy"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">numpy_to_spark_type</span><span class="p">(</span><span class="n">return_type</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Currently unsupported return type </span><span class="si">{</span><span class="n">return_type</span><span class="si">}</span><span class="s2">. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Please create an issue or PR to add support for this type.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Currently unsupported return type </span><span class="si">{</span><span class="n">return_type</span><span class="si">}</span><span class="s2">. "</span>
+            <span class="sa">f</span><span class="s2">"Please create an issue or PR to add support for this type."</span>
         <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_pandas_annotations</span><span class="p">(</span><span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">bound_parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a function, return a dictionary of the parameters that are annotated as pandas series.</span>
+<span class="w">    </span><span class="sd">"""Given a function, return a dictionary of the parameters that are annotated as pandas series.</span>
 
 <span class="sd">    :param hamilton_udf: the function to check.</span>
 <span class="sd">    :return: dictionary of parameter names to boolean indicating if they are pandas series.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_type_from_annotation</span><span class="p">(</span><span class="n">annotation</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the type from the annotation if there is one.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Gets the type from the annotation if there is one."""</span>
         <span class="n">actual_type</span><span class="p">,</span> <span class="n">extras</span> <span class="o">=</span> <span class="n">htypes</span><span class="o">.</span><span class="n">get_type_information</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">actual_type</span>
 
@@ -805,7 +805,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">node_input_types</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">],</span>
     <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function that we use to bind inputs to the function, or determine we should pull them from the dataframe.</span>
+<span class="w">    </span><span class="sd">"""Function that we use to bind inputs to the function, or determine we should pull them from the dataframe.</span>
 
 <span class="sd">    It does two things:</span>
 
@@ -818,7 +818,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    :param node_input_types: the input types of the function.</span>
 <span class="sd">    :param node_name: name of the node/function.</span>
 <span class="sd">    :return: a tuple of the params that come from the dataframe and the parameters to bind.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">params_from_df</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">bind_parameters</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">input_name</span><span class="p">,</span> <span class="p">(</span><span class="n">type_</span><span class="p">,</span> <span class="n">dep_type</span><span class="p">)</span> <span class="ow">in</span> <span class="n">node_input_types</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="c1"># noqa</span>
@@ -828,19 +828,19 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">bind_parameters</span><span class="p">[</span><span class="n">input_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">actual_kwargs</span><span class="p">[</span><span class="n">input_name</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">dep_type</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="n">DependencyType</span><span class="o">.</span><span class="n">REQUIRED</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Cannot satisfy </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2"> with input types </span><span class="si">{</span><span class="n">node_input_types</span><span class="si">}</span><span class="s2"> against a &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;dataframe with &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;columns </span><span class="si">{</span><span class="n">df_columns</span><span class="si">}</span><span class="s2"> and input kwargs </span><span class="si">{</span><span class="n">actual_kwargs</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Cannot satisfy </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2"> with input types </span><span class="si">{</span><span class="n">node_input_types</span><span class="si">}</span><span class="s2"> against a "</span>
+                <span class="sa">f</span><span class="s2">"dataframe with "</span>
+                <span class="sa">f</span><span class="s2">"columns </span><span class="si">{</span><span class="n">df_columns</span><span class="si">}</span><span class="s2"> and input kwargs </span><span class="si">{</span><span class="n">actual_kwargs</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
     <span class="k">return</span> <span class="n">params_from_df</span><span class="p">,</span> <span class="n">bind_parameters</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_inspect_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Inspects kwargs, removes any dataframes, and returns the (presumed single) dataframe, with remaining kwargs.</span>
+<span class="w">    </span><span class="sd">"""Inspects kwargs, removes any dataframes, and returns the (presumed single) dataframe, with remaining kwargs.</span>
 
 <span class="sd">    :param kwargs: the inputs to the function.</span>
 <span class="sd">    :return: tuple of the dataframe and the remaining non-dataframe kwargs.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">df</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">actual_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">kwarg_key</span><span class="p">,</span> <span class="n">kwarg_value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -854,31 +854,31 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_format_pandas_udf</span><span class="p">(</span><span class="n">func_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ordered_params</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">formatting_params</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">func_name</span><span class="p">,</span>
-        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ordered_params</span><span class="p">),</span>
-        <span class="s2">&quot;param_call&quot;</span><span class="p">:</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">ordered_params</span><span class="p">]),</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="n">func_name</span><span class="p">,</span>
+        <span class="s2">"params"</span><span class="p">:</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ordered_params</span><span class="p">),</span>
+        <span class="s2">"param_call"</span><span class="p">:</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">ordered_params</span><span class="p">]),</span>
     <span class="p">}</span>
     <span class="c1"># NOTE: we intentionally omit type annotations here. The return type is passed</span>
-    <span class="c1"># explicitly to pyspark&#39;s pandas_udf(), and parameter annotations are not needed.</span>
+    <span class="c1"># explicitly to pyspark's pandas_udf(), and parameter annotations are not needed.</span>
     <span class="c1"># On Python 3.14+, annotations in dynamically compiled code create __annotate__</span>
-    <span class="c1"># functions (PEP 749) that break PySpark&#39;s UDF serialization.</span>
-    <span class="n">func_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+    <span class="c1"># functions (PEP 749) that break PySpark's UDF serialization.</span>
+    <span class="n">func_string</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">def </span><span class="si">{name}</span><span class="s2">(</span><span class="si">{params}</span><span class="s2">):</span>
 <span class="s2">    return partial_fn(</span><span class="si">{param_call}</span><span class="s2">)</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">formatting_params</span><span class="p">)</span>
+<span class="s2">"""</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">formatting_params</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">func_string</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_format_udf</span><span class="p">(</span><span class="n">func_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ordered_params</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">formatting_params</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">func_name</span><span class="p">,</span>
-        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ordered_params</span><span class="p">),</span>
-        <span class="s2">&quot;param_call&quot;</span><span class="p">:</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">ordered_params</span><span class="p">]),</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="n">func_name</span><span class="p">,</span>
+        <span class="s2">"params"</span><span class="p">:</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ordered_params</span><span class="p">),</span>
+        <span class="s2">"param_call"</span><span class="p">:</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">ordered_params</span><span class="p">]),</span>
     <span class="p">}</span>
-    <span class="n">func_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+    <span class="n">func_string</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">def </span><span class="si">{name}</span><span class="s2">(</span><span class="si">{params}</span><span class="s2">):</span>
 <span class="s2">    return partial_fn(</span><span class="si">{param_call}</span><span class="s2">)</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">formatting_params</span><span class="p">)</span>
+<span class="s2">"""</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">formatting_params</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">func_string</span>
 
 
@@ -888,7 +888,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">params_from_df</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">pandas_udf</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FunctionType</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fabricates a spark compatible UDF. We have to do this as we don&#39;t actually have a funtion</span>
+<span class="w">    </span><span class="sd">"""Fabricates a spark compatible UDF. We have to do this as we don't actually have a funtion</span>
 <span class="sd">    with annotations to use, as its lambdas passed around by decorators. We may consider pushing</span>
 <span class="sd">    this upstreams so that everything can generate its own function, but for now this is the</span>
 <span class="sd">    easiest way to do it.</span>
@@ -905,28 +905,28 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    and https://spark.apache.org/docs/3.1.3/api/python/reference/api/pyspark.sql.functions.pandas_udf.html</span>
 
 <span class="sd">    :param node_: Node to place in a spark function</span>
-<span class="sd">    :param params_to_bind: Parameters to bind to the function -- these won&#39;t go into the UDF</span>
+<span class="sd">    :param params_to_bind: Parameters to bind to the function -- these won't go into the UDF</span>
 <span class="sd">    :param params_from_df: Parameters to retrieve from the dataframe</span>
 <span class="sd">    :return: A function that can be used in a spark UDF</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">partial_fn</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">node_</span><span class="o">.</span><span class="n">callable</span><span class="p">,</span> <span class="o">**</span><span class="n">params_to_bind</span><span class="p">)</span>
     <span class="n">ordered_params</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">params_from_df</span><span class="p">)</span>
-    <span class="n">func_name</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+    <span class="n">func_name</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"."</span><span class="p">,</span> <span class="s2">"_"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">pandas_udf</span><span class="p">:</span>
         <span class="n">func_string</span> <span class="o">=</span> <span class="n">_format_pandas_udf</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">ordered_params</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">func_string</span> <span class="o">=</span> <span class="n">_format_udf</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">ordered_params</span><span class="p">)</span>
-    <span class="n">module_code</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">func_string</span><span class="p">,</span> <span class="s2">&quot;&lt;string&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;exec&quot;</span><span class="p">)</span>
+    <span class="n">module_code</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">func_string</span><span class="p">,</span> <span class="s2">"&lt;string&gt;"</span><span class="p">,</span> <span class="s2">"exec"</span><span class="p">)</span>
     <span class="c1"># Filter by name to avoid picking up __annotate__ or other helper code objects</span>
     <span class="c1"># that Python 3.14+ may generate alongside the function (PEP 749).</span>
     <span class="n">func_code</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">module_code</span><span class="o">.</span><span class="n">co_consts</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">CodeType</span><span class="p">)</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">co_name</span> <span class="o">==</span> <span class="n">func_name</span>
     <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">FunctionType</span><span class="p">(</span><span class="n">func_code</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="nb">globals</span><span class="p">(),</span> <span class="o">**</span><span class="p">{</span><span class="s2">&quot;partial_fn&quot;</span><span class="p">:</span> <span class="n">partial_fn</span><span class="p">}},</span> <span class="n">func_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">FunctionType</span><span class="p">(</span><span class="n">func_code</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="nb">globals</span><span class="p">(),</span> <span class="o">**</span><span class="p">{</span><span class="s2">"partial_fn"</span><span class="p">:</span> <span class="n">partial_fn</span><span class="p">}},</span> <span class="n">func_name</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_lambda_udf</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">actual_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function to create a lambda UDF for a function.</span>
+<span class="w">    </span><span class="sd">"""Function to create a lambda UDF for a function.</span>
 
 <span class="sd">    This functions does the following:</span>
 
@@ -940,24 +940,24 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    :param hamilton_udf: the function to apply.</span>
 <span class="sd">    :param actual_kwargs: the actual arguments to the function.</span>
 <span class="sd">    :return: the dataframe with one more column representing the result of the UDF.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">params_from_df</span><span class="p">,</span> <span class="n">params_to_bind</span> <span class="o">=</span> <span class="n">_determine_parameters_to_bind</span><span class="p">(</span>
         <span class="n">actual_kwargs</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="p">,</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span>
     <span class="p">)</span>
     <span class="n">pandas_annotation</span> <span class="o">=</span> <span class="n">_get_pandas_annotations</span><span class="p">(</span><span class="n">node_</span><span class="p">,</span> <span class="n">params_to_bind</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">pandas_annotation</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">pandas_annotation</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Currently unsupported function for </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> with function signature:</span><span class="se">\n</span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Currently unsupported function for </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> with function signature:</span><span class="se">\n</span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="si">}</span><span class="s2">."</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span><span class="n">pandas_annotation</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">pandas_annotation</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">hamilton_udf</span> <span class="o">=</span> <span class="n">_fabricate_spark_function</span><span class="p">(</span><span class="n">node_</span><span class="p">,</span> <span class="n">params_to_bind</span><span class="p">,</span> <span class="n">params_from_df</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="c1"># pull from annotation here instead of tag.</span>
         <span class="n">base_type</span><span class="p">,</span> <span class="n">type_args</span> <span class="o">=</span> <span class="n">htypes</span><span class="o">.</span><span class="n">get_type_information</span><span class="p">(</span><span class="n">node_</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;PandasUDF: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">base_type</span><span class="p">,</span> <span class="n">type_args</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"PandasUDF: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">base_type</span><span class="p">,</span> <span class="n">type_args</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">type_args</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> needs to be annotated with htypes.column[pd.Series, TYPE], &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;where TYPE could be the string name of the python type, or the python type itself.&quot;</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> needs to be annotated with htypes.column[pd.Series, TYPE], "</span>
+                <span class="sa">f</span><span class="s2">"where TYPE could be the string name of the python type, or the python type itself."</span>
             <span class="p">)</span>
         <span class="n">type_arg</span> <span class="o">=</span> <span class="n">type_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">type_arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -967,7 +967,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">spark_udf</span> <span class="o">=</span> <span class="n">pandas_udf</span><span class="p">(</span><span class="n">hamilton_udf</span><span class="p">,</span> <span class="n">spark_return_type</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">hamilton_udf</span> <span class="o">=</span> <span class="n">_fabricate_spark_function</span><span class="p">(</span><span class="n">node_</span><span class="p">,</span> <span class="n">params_to_bind</span><span class="p">,</span> <span class="n">params_from_df</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;RegularUDF: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">node_</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"RegularUDF: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">node_</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
         <span class="n">spark_return_type</span> <span class="o">=</span> <span class="n">get_spark_type</span><span class="p">(</span><span class="n">node_</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
         <span class="n">spark_udf</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="n">hamilton_udf</span><span class="p">,</span> <span class="n">spark_return_type</span><span class="p">)</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
@@ -980,7 +980,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="PySparkUDFGraphAdapter">
 <a class="viewcode-back" href="../../../../reference/graph-adapters/PySparkUDFGraphAdapter/#hamilton.plugins.h_spark.PySparkUDFGraphAdapter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PySparkUDFGraphAdapter</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">SimplePythonDataFrameGraphAdapter</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;UDF graph adapter for PySpark.</span>
+<span class="w">    </span><span class="sd">"""UDF graph adapter for PySpark.</span>
 
 <span class="sd">    This graph adapter enables one to write Hamilton functions that can be executed as UDFs in PySpark.</span>
 
@@ -993,7 +993,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    - can also run regular Hamilton functions, which will execute spark driver side.</span>
 
 <span class="sd">    DISCLAIMER -- this class is experimental, so signature changes are a possibility!</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="PySparkUDFGraphAdapter.__init__">
 <a class="viewcode-back" href="../../../../reference/graph-adapters/PySparkUDFGraphAdapter/#hamilton.plugins.h_spark.PySparkUDFGraphAdapter.__init__">[docs]</a>
@@ -1007,7 +1007,7 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/graph-adapters/PySparkUDFGraphAdapter/#hamilton.plugins.h_spark.PySparkUDFGraphAdapter.check_input_type">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_input_type</span><span class="p">(</span><span class="n">node_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">input_value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;If the input is a pyspark dataframe, skip, else delegate the check.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""If the input is a pyspark dataframe, skip, else delegate the check."""</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_value</span><span class="p">,</span> <span class="n">DataFrame</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">htypes</span><span class="o">.</span><span class="n">check_input_type</span><span class="p">(</span><span class="n">node_type</span><span class="p">,</span> <span class="n">input_value</span><span class="p">)</span></div>
@@ -1017,7 +1017,7 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/graph-adapters/PySparkUDFGraphAdapter/#hamilton.plugins.h_spark.PySparkUDFGraphAdapter.check_node_type_equivalence">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_node_type_equivalence</span><span class="p">(</span><span class="n">node_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">input_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks for the htype.column annotation and deals with it.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Checks for the htype.column annotation and deals with it."""</span>
         <span class="c1"># Good Cases:</span>
         <span class="c1"># [pd.Series, int] -&gt; [pd.Series, int]</span>
         <span class="c1"># pd.series -&gt; pd.series</span>
@@ -1036,14 +1036,14 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="PySparkUDFGraphAdapter.execute_node">
 <a class="viewcode-back" href="../../../../reference/graph-adapters/PySparkUDFGraphAdapter/#hamilton.plugins.h_spark.PySparkUDFGraphAdapter.execute_node">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a node to execute, process it and apply a UDF if applicable.</span>
+<span class="w">        </span><span class="sd">"""Given a node to execute, process it and apply a UDF if applicable.</span>
 
-<span class="sd">        :param node: the node we&#39;re processing.</span>
+<span class="sd">        :param node: the node we're processing.</span>
 <span class="sd">        :param kwargs: the inputs to the function.</span>
 <span class="sd">        :return: the result of the function.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">call_count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_object</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_object</span><span class="p">)</span>
         <span class="c1"># get dataframe object out of kwargs</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">actual_kwargs</span> <span class="o">=</span> <span class="n">_inspect_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># there were no dataframes passed in. So regular function call.</span>
@@ -1051,33 +1051,33 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_object</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">df_object</span> <span class="o">=</span> <span class="n">df</span>  <span class="c1"># this is done only once.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">original_schema</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_object</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, Before, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_object</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_object</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2">, Before, </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_object</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
         <span class="n">schema_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">_lambda_udf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_object</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">actual_kwargs</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> not in </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Error </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> not in </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="si">}</span><span class="s2">"</span>
         <span class="n">delta</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span> <span class="o">-</span> <span class="n">schema_length</span>
         <span class="k">if</span> <span class="n">delta</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;UDF </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> did not add any columns to the dataframe. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Does it already exist in the dataframe?&quot;</span>
+                <span class="sa">f</span><span class="s2">"UDF </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> did not add any columns to the dataframe. "</span>
+                <span class="sa">f</span><span class="s2">"Does it already exist in the dataframe?"</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df_object</span> <span class="o">=</span> <span class="n">df</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, After, </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2">, After, </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">df</span></div>
 
 
 <div class="viewcode-block" id="PySparkUDFGraphAdapter.build_result">
 <a class="viewcode-back" href="../../../../reference/graph-adapters/PySparkUDFGraphAdapter/#hamilton.plugins.h_spark.PySparkUDFGraphAdapter.build_result">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Builds the result and brings it back to this running process.</span>
+<span class="w">        </span><span class="sd">"""Builds the result and brings it back to this running process.</span>
 
 <span class="sd">        :param outputs: the dictionary of key -&gt; Union[ray object reference | value]</span>
 <span class="sd">        :return: The type of object returned by self.result_builder.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_object</span>
         <span class="n">output_schema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_schema</span>
-        <span class="c1"># what&#39;s in the dataframe:</span>
+        <span class="c1"># what's in the dataframe:</span>
         <span class="k">for</span> <span class="n">output_name</span><span class="p">,</span> <span class="n">output_value</span> <span class="ow">in</span> <span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">output_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">output_schema</span><span class="p">:</span>
                 <span class="n">output_schema</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output_name</span><span class="p">)</span>
@@ -1086,7 +1086,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="n">output_name</span><span class="p">,</span> <span class="n">lit</span><span class="p">(</span><span class="n">output_value</span><span class="p">))</span>
         <span class="c1"># original schema + new columns should be the order.</span>
-        <span class="c1"># if someone requests a column that is in the original schema we won&#39;t duplicate it.</span>
+        <span class="c1"># if someone requests a column that is in the original schema we won't duplicate it.</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">column</span><span class="p">(</span><span class="n">col_name</span><span class="p">)</span> <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">output_schema</span><span class="p">])</span>
         <span class="c1"># clear state out</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df_object</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1104,19 +1104,19 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">dependent_columns_in_group</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">dependent_columns_from_dataframe</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Turns a node into a spark node. This does the following:</span>
+<span class="w">    </span><span class="sd">""" """</span>
+<span class="w">    </span><span class="sd">"""Turns a node into a spark node. This does the following:</span>
 <span class="sd">    1. Makes it take the prior dataframe output as a dependency, in</span>
 <span class="sd">       conjunction to its current dependencies. This is so we can represent</span>
-<span class="sd">       the &quot;logical&quot; plan (the UDF-dependencies) as well as</span>
-<span class="sd">       the &quot;physical plan&quot; (linear, df operations)</span>
+<span class="sd">       the "logical" plan (the UDF-dependencies) as well as</span>
+<span class="sd">       the "physical plan" (linear, df operations)</span>
 <span class="sd">    2. Adjusts the function to apply the specified UDF on the</span>
 <span class="sd">       dataframe, ignoring all inputs in column_dependencies</span>
 <span class="sd">       (which are only there to demonstrate lineage/make the DAG representative)</span>
 <span class="sd">    3. Returns the resulting pyspark dataframe for downstream functions to use</span>
 
 
-<span class="sd">    :param node_: Node we&#39;re sparkifying</span>
+<span class="sd">    :param node_: Node we're sparkifying</span>
 <span class="sd">    :param linear_df_dependency_name: Name of the linearly passed along dataframe dependency</span>
 <span class="sd">    :param base_df_dependency_name: Name of the base (parent) dataframe dependency.</span>
 <span class="sd">        this is only used if dependent_columns_from_dataframe is not empty</span>
@@ -1128,7 +1128,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        base (parent) dataframe that the with_columns is operating on</span>
 <span class="sd">    :return:</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">new_callable</span><span class="p">(</span>
         <span class="n">__linear_df_dependency_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">linear_df_dependency_name</span><span class="p">,</span>
@@ -1139,9 +1139,9 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">__node</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span> <span class="o">=</span> <span class="n">node_</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ps</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is the new function that the node will call.</span>
+<span class="w">        </span><span class="sd">"""This is the new function that the node will call.</span>
 <span class="sd">        Note that this applies the hamilton UDF with *just* the input dataframe dependency,</span>
-<span class="sd">        ignoring the rest.&quot;&quot;&quot;</span>
+<span class="sd">        ignoring the rest."""</span>
         <span class="c1"># gather the dataframe from the kwargs</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">__linear_df_dependency_name</span><span class="p">]</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
@@ -1155,7 +1155,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="n">_lambda_udf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">node_</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Just extract the dependeency type</span>
-    <span class="c1"># TODO -- add something as a &quot;logical&quot; or &quot;placeholder&quot; dependency</span>
+    <span class="c1"># TODO -- add something as a "logical" or "placeholder" dependency</span>
     <span class="n">new_input_types</span> <span class="o">=</span> <span class="p">{</span>
         <span class="c1"># copy over the old ones</span>
         <span class="o">**</span><span class="p">{</span>
@@ -1166,8 +1166,8 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1"># add the new one (from the previous)</span>
         <span class="n">linear_df_dependency_name</span><span class="p">:</span> <span class="p">(</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">DependencyType</span><span class="o">.</span><span class="n">REQUIRED</span><span class="p">),</span>
         <span class="c1"># Then add all the others</span>
-        <span class="c1"># Note this might clobber the linear_df_dependency_name, but they&#39;ll be the same type</span>
-        <span class="c1"># If we have &quot;logical&quot; dependencies we&#39;ll want to be careful about the type</span>
+        <span class="c1"># Note this might clobber the linear_df_dependency_name, but they'll be the same type</span>
+        <span class="c1"># If we have "logical" dependencies we'll want to be careful about the type</span>
         <span class="o">**</span><span class="p">{</span>
             <span class="n">dep</span><span class="p">:</span> <span class="p">(</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">DependencyType</span><span class="o">.</span><span class="n">REQUIRED</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">dep</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
@@ -1198,27 +1198,27 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">if</span> <span class="n">requested_parameter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">requested_parameter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataframe_parameters</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Requested parameter </span><span class="si">{</span><span class="n">requested_parameter</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="n">location_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Requested parameter </span><span class="si">{</span><span class="n">requested_parameter</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="n">location_name</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">requested_parameter</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataframe_parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;No dataframe parameters found in: </span><span class="si">{</span><span class="n">location_name</span><span class="si">}</span><span class="s2">. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Received parameters: </span><span class="si">{</span><span class="n">param_types</span><span class="si">}</span><span class="s2">. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;@with_columns must inject a dataframe parameter into the function.&quot;</span>
+            <span class="sa">f</span><span class="s2">"No dataframe parameters found in: </span><span class="si">{</span><span class="n">location_name</span><span class="si">}</span><span class="s2">. "</span>
+            <span class="sa">f</span><span class="s2">"Received parameters: </span><span class="si">{</span><span class="n">param_types</span><span class="si">}</span><span class="s2">. "</span>
+            <span class="sa">f</span><span class="s2">"@with_columns must inject a dataframe parameter into the function."</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataframe_parameters</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;More than one dataframe parameter found in function: </span><span class="si">{</span><span class="n">location_name</span><span class="si">}</span><span class="s2">. Please &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;specify the desired one with the &#39;dataframe&#39; parameter in @with_columns&quot;</span>
+            <span class="sa">f</span><span class="s2">"More than one dataframe parameter found in function: </span><span class="si">{</span><span class="n">location_name</span><span class="si">}</span><span class="s2">. Please "</span>
+            <span class="sa">f</span><span class="s2">"specify the desired one with the 'dataframe' parameter in @with_columns"</span>
         <span class="p">)</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataframe_parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">dataframe_parameters</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">derive_dataframe_parameter_from_fn</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">requested_parameter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Utility function to grab a pyspark dataframe parameter from a function.</span>
-<span class="sd">    Note if one is supplied it&#39;ll look for that. If none is, it will look to ensure</span>
+<span class="w">    </span><span class="sd">"""Utility function to grab a pyspark dataframe parameter from a function.</span>
+<span class="sd">    Note if one is supplied it'll look for that. If none is, it will look to ensure</span>
 <span class="sd">    that there is only one dataframe parameter in the function.</span>
 
 <span class="sd">    :param fn: Function to grab the dataframe parameter from</span>
@@ -1228,45 +1228,45 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    - if no dataframe parameter is found, or if more than one is found</span>
 <span class="sd">    if a requested parameter is supplied:</span>
 <span class="sd">    - if the requested parameter is not found</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
     <span class="n">parameters_with_types</span> <span class="o">=</span> <span class="p">{</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">param</span><span class="o">.</span><span class="n">annotation</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()}</span>
     <span class="k">return</span> <span class="n">derive_dataframe_parameter</span><span class="p">(</span><span class="n">parameters_with_types</span><span class="p">,</span> <span class="n">requested_parameter</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_derive_first_dataframe_parameter_from_fn</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Utility function to derive the first parameter from a function and assert</span>
+<span class="w">    </span><span class="sd">"""Utility function to derive the first parameter from a function and assert</span>
 <span class="sd">    that it is annotated with a pyspark dataframe.</span>
 
 <span class="sd">    :param fn:</span>
 <span class="sd">    :return:</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
     <span class="n">params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Function </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> has no parameters, but was &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;decorated with with_columns. with_columns requires the first &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;parameter to be a dataframe so we know how to wire dependencies.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Function </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> has no parameters, but was "</span>
+            <span class="sa">f</span><span class="s2">"decorated with with_columns. with_columns requires the first "</span>
+            <span class="sa">f</span><span class="s2">"parameter to be a dataframe so we know how to wire dependencies."</span>
         <span class="p">)</span>
     <span class="n">first_param_name</span><span class="p">,</span> <span class="n">first_param_value</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">custom_subclass_check</span><span class="p">(</span><span class="n">first_param_value</span><span class="o">.</span><span class="n">annotation</span><span class="p">,</span> <span class="n">DataFrame</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Function </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> has a first parameter </span><span class="si">{</span><span class="n">first_param_name</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;that is not a pyspark dataframe. Instead got: </span><span class="si">{</span><span class="n">first_param_value</span><span class="o">.</span><span class="n">annotation</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;with_columns requires the first &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;parameter to be a dataframe so we know how to wire dependencies.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Function </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> has a first parameter </span><span class="si">{</span><span class="n">first_param_name</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"that is not a pyspark dataframe. Instead got: </span><span class="si">{</span><span class="n">first_param_value</span><span class="o">.</span><span class="n">annotation</span><span class="si">}</span><span class="s2">."</span>
+            <span class="sa">f</span><span class="s2">"with_columns requires the first "</span>
+            <span class="sa">f</span><span class="s2">"parameter to be a dataframe so we know how to wire dependencies."</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">first_param_name</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">derive_dataframe_parameter_from_node</span><span class="p">(</span><span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">requested_parameter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Derives the only/requested dataframe parameter from a node.</span>
+<span class="w">    </span><span class="sd">"""Derives the only/requested dataframe parameter from a node.</span>
 
 <span class="sd">    :param node_:</span>
 <span class="sd">    :param requested_parameter:</span>
 <span class="sd">    :return:</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">types_</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="n">originating_function_name</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">node_</span><span class="o">.</span><span class="n">originating_functions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">node_</span><span class="o">.</span><span class="n">originating_functions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span>
@@ -1275,16 +1275,16 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">require_columns</span><span class="p">(</span><span class="n">fm_base</span><span class="o">.</span><span class="n">NodeTransformer</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator for spark that allows for the specification of columns to transform.</span>
+<span class="w">    </span><span class="sd">"""Decorator for spark that allows for the specification of columns to transform.</span>
 <span class="sd">    These are columns within a specific node in a decorator, enabling the user to make use of pyspark</span>
 <span class="sd">    transformations inside a with_columns group. Note that this will have no impact if it is not</span>
 <span class="sd">    decorating a node inside `with_columns`.</span>
 
 <span class="sd">    Note that this currently does not work with other decorators, but it definitely could.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">TRANSFORM_TARGET_TAG</span> <span class="o">=</span> <span class="s2">&quot;hamilton.spark.target&quot;</span>
-    <span class="n">TRANSFORM_COLUMNS_TAG</span> <span class="o">=</span> <span class="s2">&quot;hamilton.spark.columns&quot;</span>
+    <span class="n">TRANSFORM_TARGET_TAG</span> <span class="o">=</span> <span class="s2">"hamilton.spark.target"</span>
+    <span class="n">TRANSFORM_COLUMNS_TAG</span> <span class="o">=</span> <span class="s2">"hamilton.spark.columns"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">columns</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">require_columns</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -1293,13 +1293,13 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">transform_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates nodes for the `@require_columns` decorator.</span>
+<span class="w">        </span><span class="sd">"""Generates nodes for the `@require_columns` decorator.</span>
 
 <span class="sd">        This does two things, but does not fully prepare the node:</span>
 <span class="sd">        1. It adds the columns as dependencies to the node</span>
 <span class="sd">        2. Adds tags with relevant metadata for later use</span>
 
-<span class="sd">        Note that, at this point, we don&#39;t actually know which columns will come from the</span>
+<span class="sd">        Note that, at this point, we don't actually know which columns will come from the</span>
 <span class="sd">        base dataframe, and which will come from the upstream nodes. This is handled in the</span>
 <span class="sd">        `with_columns` decorator, so for now, we need to give it enough information to topologically</span>
 <span class="sd">        sort/assign dependencies.</span>
@@ -1307,7 +1307,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param node_: Node to transform</span>
 <span class="sd">        :param config: Configuration to use (unused here)</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">param</span> <span class="o">=</span> <span class="n">derive_dataframe_parameter_from_node</span><span class="p">(</span><span class="n">node_</span><span class="p">)</span>
 
         <span class="c1"># This allows for injection of any extra parameters</span>
@@ -1339,22 +1339,22 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="p">[</span><span class="n">node_out</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates on the function, even though it operates on nodes. We can always loosen</span>
+<span class="w">        </span><span class="sd">"""Validates on the function, even though it operates on nodes. We can always loosen</span>
 <span class="sd">        this, but for now it should help the code stay readable.</span>
 
 <span class="sd">        :param fn: Function this is decorating</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="n">_derive_first_dataframe_parameter_from_fn</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_dataframe_params</span><span class="p">(</span><span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts the dataframe parameters from a node.</span>
+<span class="w">        </span><span class="sd">"""Extracts the dataframe parameters from a node.</span>
 
 <span class="sd">        :param node_: Node to extract from</span>
 <span class="sd">        :return: List of dataframe parameters</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">key</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
@@ -1363,24 +1363,24 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_default_pyspark_udf</span><span class="p">(</span><span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tells if a node is, by default, a pyspark UDF. This means:</span>
+<span class="w">        </span><span class="sd">"""Tells if a node is, by default, a pyspark UDF. This means:</span>
 <span class="sd">        1. It has a single dataframe parameter</span>
 <span class="sd">        2. That parameter name determines an upstream column name</span>
 
 <span class="sd">        :param node_: Node to check</span>
 <span class="sd">        :return: True if it functions as a default pyspark UDF, false otherwise</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">df_columns</span> <span class="o">=</span> <span class="n">require_columns</span><span class="o">.</span><span class="n">_extract_dataframe_params</span><span class="p">(</span><span class="n">node_</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_columns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_decorated_pyspark_udf</span><span class="p">(</span><span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tells if this is a decorated pyspark UDF. This means it has been</span>
+<span class="w">        </span><span class="sd">"""Tells if this is a decorated pyspark UDF. This means it has been</span>
 <span class="sd">        decorated by the `@transforms` decorator.</span>
 
 <span class="sd">        :return: True if it can be run as part of a group, false otherwise</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s2">&quot;hamilton.spark.columns&quot;</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span> <span class="ow">and</span> <span class="s2">&quot;hamilton.spark.target&quot;</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="s2">"hamilton.spark.columns"</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span> <span class="ow">and</span> <span class="s2">"hamilton.spark.target"</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span>
 
@@ -1393,7 +1393,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">dependent_columns_from_upstream</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">dependent_columns_from_dataframe</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transforms a pyspark node into a node that can be run as part of a `with_columns` group.</span>
+<span class="w">        </span><span class="sd">"""Transforms a pyspark node into a node that can be run as part of a `with_columns` group.</span>
 <span class="sd">        This is only for non-UDF nodes that have already been transformed by `@transforms`.</span>
 
 <span class="sd">        :param node_: Node to transform</span>
@@ -1402,25 +1402,25 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param dependent_columns_in_group:</span>
 <span class="sd">        :param dependent_columns_from_dataframe:</span>
 <span class="sd">        :return: The final node with correct dependencies</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">transformation_target</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">require_columns</span><span class="o">.</span><span class="n">TRANSFORM_TARGET_TAG</span><span class="p">)</span>
 
         <span class="c1"># Note that the following does not use the reassign_columns function as we have</span>
-        <span class="c1"># special knowledge of the function -- E.G. that it doesn&#39;t need all the parameters</span>
+        <span class="c1"># special knowledge of the function -- E.G. that it doesn't need all the parameters</span>
         <span class="c1"># we choose to pass it. Thus we can just make sure that we pass it the right one,</span>
         <span class="c1"># and not worry about value-clashes in reassigning names (as there are all sorts of</span>
         <span class="c1"># edge cases around the parameter name to be transformed).</span>
 
         <span class="c1"># We have only a few dependencies we truly need</span>
         <span class="c1"># These are the linear_df_dependency_name (the dataframe that is being modified)</span>
-        <span class="c1"># as well as any non-dataframe arguments (E.G. the ones that aren&#39;t about to be added</span>
+        <span class="c1"># as well as any non-dataframe arguments (E.G. the ones that aren't about to be added</span>
         <span class="c1"># Note that the node comes with logical dependencies already, so we filter them out</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">new_callable</span><span class="p">(</span><span class="n">__callable</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">callable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
             <span class="n">new_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">new_kwargs</span><span class="p">[</span><span class="n">transformation_target</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">linear_df_dependency_name</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">__callable</span><span class="p">(</span><span class="o">**</span><span class="n">new_kwargs</span><span class="p">)</span>
 
-        <span class="c1"># We start off with everything except the transformation target, as we&#39;re</span>
+        <span class="c1"># We start off with everything except the transformation target, as we're</span>
         <span class="c1"># going to use the linear dependency for that (see the callable above)</span>
         <span class="n">new_input_types</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">key</span><span class="p">:</span> <span class="n">value</span>
@@ -1432,13 +1432,13 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">DataFrame</span><span class="p">,</span>
             <span class="n">node</span><span class="o">.</span><span class="n">DependencyType</span><span class="o">.</span><span class="n">REQUIRED</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="c1"># Then we go through all &quot;logical&quot; dependencies -- columns we want to add to make lineage</span>
+        <span class="c1"># Then we go through all "logical" dependencies -- columns we want to add to make lineage</span>
         <span class="c1"># look nice</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dependent_columns_from_upstream</span><span class="p">:</span>
             <span class="n">new_input_types</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">DependencyType</span><span class="o">.</span><span class="n">REQUIRED</span><span class="p">)</span>
 
-        <span class="c1"># Then we see if we&#39;re trying to transform the base dataframe</span>
-        <span class="c1"># This means we&#39;re not referring to it as a column, and only happens with the</span>
+        <span class="c1"># Then we see if we're trying to transform the base dataframe</span>
+        <span class="c1"># This means we're not referring to it as a column, and only happens with the</span>
         <span class="c1"># `pass_dataframe_as` argument (which means the base_df_param_name is not None)</span>
         <span class="k">if</span> <span class="n">transformation_target</span> <span class="o">==</span> <span class="n">base_df_param_name</span><span class="p">:</span>
             <span class="n">new_input_types</span><span class="p">[</span><span class="n">base_df_dependency_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
@@ -1451,19 +1451,19 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_identify_upstream_dataframe_nodes</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gives the upstream dataframe name. This is the only ps.DataFrame parameter not</span>
+<span class="w">    </span><span class="sd">"""Gives the upstream dataframe name. This is the only ps.DataFrame parameter not</span>
 <span class="sd">    produced from within the subdag.</span>
 
 <span class="sd">    :param nodes: Nodes in the subdag</span>
 <span class="sd">    :return: The name of the upstream dataframe</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">node_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
     <span class="n">df_deps</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-        <span class="c1"># In this case its a df node that is a linear dependency, so we don&#39;t count it</span>
+        <span class="c1"># In this case its a df node that is a linear dependency, so we don't count it</span>
         <span class="c1"># Instead we count the columns it wants, as we have not yet created them TODO --</span>
-        <span class="c1"># consider moving this validation afterwards so we don&#39;t have to do this check</span>
+        <span class="c1"># consider moving this validation afterwards so we don't have to do this check</span>
         <span class="n">df_dependencies</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="n">require_columns</span><span class="o">.</span><span class="n">TRANSFORM_COLUMNS_TAG</span><span class="p">,</span>
             <span class="p">[</span>
@@ -1491,16 +1491,16 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">on_input</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">select</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;append&quot;</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"append"</span><span class="p">,</span>
         <span class="n">config_required</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a with_columns decorator for spark. This allows you to efficiently run</span>
+<span class="w">        </span><span class="sd">"""Initializes a with_columns decorator for spark. This allows you to efficiently run</span>
 <span class="sd">         groups of map operations on a dataframe, represented as pandas/primitives UDFs. This</span>
-<span class="sd">         effectively &quot;linearizes&quot; compute -- meaning that a DAG of map operations can be run</span>
-<span class="sd">         as a set of `.withColumn` operations on a single dataframe -- ensuring that you don&#39;t have</span>
+<span class="sd">         effectively "linearizes" compute -- meaning that a DAG of map operations can be run</span>
+<span class="sd">         as a set of `.withColumn` operations on a single dataframe -- ensuring that you don't have</span>
 <span class="sd">         to do a complex `extract` then `join` process on spark, which can be inefficient.</span>
 
-<span class="sd">         Here&#39;s an example of calling it -- if you&#39;ve seen `@subdag`, you should be familiar with</span>
+<span class="sd">         Here's an example of calling it -- if you've seen `@subdag`, you should be familiar with</span>
 <span class="sd">         the concepts:</span>
 
 <span class="sd">         .. code-block:: python</span>
@@ -1519,9 +1519,9 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">             # the with_columns call</span>
 <span class="sd">             @with_columns(</span>
 <span class="sd">                 load_from=[my_module], # Load from any module</span>
-<span class="sd">                 columns_to_pass=[&quot;a_from_df&quot;, &quot;b_from_df&quot;], # The columns to pass from the dataframe to</span>
+<span class="sd">                 columns_to_pass=["a_from_df", "b_from_df"], # The columns to pass from the dataframe to</span>
 <span class="sd">                 # the subdag</span>
-<span class="sd">                 select=[&quot;a&quot;, &quot;b&quot;, &quot;a_plus_b&quot;], # The columns to select from the dataframe</span>
+<span class="sd">                 select=["a", "b", "a_plus_b"], # The columns to select from the dataframe</span>
 <span class="sd">             )</span>
 <span class="sd">             def final_df(initial_df: ps.DataFrame) -&gt; ps.DataFrame:</span>
 <span class="sd">                 # process, or just return unprocessed</span>
@@ -1532,8 +1532,8 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">         extracting out the columns, applying the maps, then joining, but *also* allows you to</span>
 <span class="sd">         express the operations individually, making it easy to unit-test and reuse.</span>
 
-<span class="sd">         Note that the operation is &quot;append&quot;, meaning that the columns that are selected are appended</span>
-<span class="sd">         onto the dataframe. We will likely add an option to have this be either &quot;select&quot; or &quot;append&quot;</span>
+<span class="sd">         Note that the operation is "append", meaning that the columns that are selected are appended</span>
+<span class="sd">         onto the dataframe. We will likely add an option to have this be either "select" or "append"</span>
 <span class="sd">         mode.</span>
 
 <span class="sd">         If the function takes multiple dataframes, the dataframe input to process will always be</span>
@@ -1544,38 +1544,38 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">         You can read it as:</span>
 
-<span class="sd">         &quot;final_df is a function that transforms the upstream dataframe initial_df, running the transformations</span>
+<span class="sd">         "final_df is a function that transforms the upstream dataframe initial_df, running the transformations</span>
 <span class="sd">         from my_module. It starts with the columns a_from_df and b_from_df, and then adds the columns</span>
-<span class="sd">         a, b, and a_plus_b to the dataframe. It then returns the dataframe, and does some processing on it.&quot;</span>
+<span class="sd">         a, b, and a_plus_b to the dataframe. It then returns the dataframe, and does some processing on it."</span>
 
 
 <span class="sd">        :param load_from: The functions that will be used to generate the group of map operations.</span>
 <span class="sd">        :param columns_to_pass: The initial schema of the dataframe. This is used to determine which</span>
-<span class="sd">            upstream inputs should be taken from the dataframe, and which shouldn&#39;t. Note that, if this is</span>
+<span class="sd">            upstream inputs should be taken from the dataframe, and which shouldn't. Note that, if this is</span>
 <span class="sd">            left empty (and external_inputs is as well), we will assume that all dependencies come</span>
 <span class="sd">            from the dataframe. This cannot be used in conjunction with pass_dataframe_as.</span>
-<span class="sd">        :param pass_dataframe_as: The name of the dataframe that we&#39;re modifying, as known to the subdag.</span>
+<span class="sd">        :param pass_dataframe_as: The name of the dataframe that we're modifying, as known to the subdag.</span>
 <span class="sd">            If you pass this in, you are responsible for extracting columns out. If not provided, you have</span>
 <span class="sd">            to pass columns_to_pass in, and we will extract the columns out for you.</span>
 <span class="sd">        :param select: Outputs to select from the subdag, i.e. functions/module passed int. If this is left</span>
 <span class="sd">            blank it will add all possible columns from the subdag to the dataframe.</span>
-<span class="sd">        :param namespace: The namespace of the nodes, so they don&#39;t clash with the global namespace</span>
-<span class="sd">            and so this can be reused. If its left out, there will be no namespace (in which case you&#39;ll want</span>
+<span class="sd">        :param namespace: The namespace of the nodes, so they don't clash with the global namespace</span>
+<span class="sd">            and so this can be reused. If its left out, there will be no namespace (in which case you'll want</span>
 <span class="sd">            to be careful about repeating it/reusing the nodes in other parts of the DAG.)</span>
-<span class="sd">        :param mode: The mode of the operation. This can be either &quot;append&quot; or &quot;select&quot;.</span>
-<span class="sd">            If it is &quot;append&quot;, it will keep all original columns in the dataframe, and append what&#39;s in select.</span>
-<span class="sd">            If it is &quot;select&quot;, it will do a global select of columns in the dataframe from the `select` parameter.</span>
+<span class="sd">        :param mode: The mode of the operation. This can be either "append" or "select".</span>
+<span class="sd">            If it is "append", it will keep all original columns in the dataframe, and append what's in select.</span>
+<span class="sd">            If it is "select", it will do a global select of columns in the dataframe from the `select` parameter.</span>
 <span class="sd">            Note that, if the `select` parameter is left blank, it will add all columns in the dataframe</span>
-<span class="sd">            that are in the subdag. This defaults to `append`. If you&#39;re using select, use the `@select` decorator</span>
+<span class="sd">            that are in the subdag. This defaults to `append`. If you're using select, use the `@select` decorator</span>
 <span class="sd">            instead.</span>
 <span class="sd">        :param config_required: the list of config keys that are required to resolve any functions. Pass in None\</span>
 <span class="sd">            if you want the functions/modules to have access to all possible config.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="n">on_input</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                <span class="s2">&quot;We currently do not support on_input for spark. Please reach out if you need this &quot;</span>
-                <span class="s2">&quot;functionality.&quot;</span>
+                <span class="s2">"We currently do not support on_input for spark. Please reach out if you need this "</span>
+                <span class="s2">"functionality."</span>
             <span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -1593,13 +1593,13 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_prep_nodes</span><span class="p">(</span><span class="n">initial_nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepares nodes by decorating &quot;default&quot; UDFs with transform.</span>
+<span class="w">        </span><span class="sd">"""Prepares nodes by decorating "default" UDFs with transform.</span>
 <span class="sd">        This allows us to use the sparkify_node function in transforms</span>
 <span class="sd">        for both the default ones and the decorated ones.</span>
 
 <span class="sd">        :param initial_nodes: Initial nodes to prepare</span>
 <span class="sd">        :return: Prepared nodes</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">initial_nodes</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">require_columns</span><span class="o">.</span><span class="n">is_default_pyspark_udf</span><span class="p">(</span><span class="n">node_</span><span class="p">):</span>
@@ -1612,16 +1612,16 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_selector_node</span><span class="p">(</span>
-        <span class="n">upstream_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;select&quot;</span>
+        <span class="n">upstream_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"select"</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a selector node. The sole job of this is to select just the specified columns.</span>
-<span class="sd">        Note this is a utility function that&#39;s only called here.</span>
+<span class="w">        </span><span class="sd">"""Creates a selector node. The sole job of this is to select just the specified columns.</span>
+<span class="sd">        Note this is a utility function that's only called here.</span>
 
 <span class="sd">        :param upstream_name: Name of the upstream dataframe node</span>
 <span class="sd">        :param columns: Columns to select</span>
 <span class="sd">        :param node_name: Name of the node to create</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">new_callable</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">upstream_name</span><span class="p">]</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">columns</span><span class="p">)</span>
@@ -1635,16 +1635,16 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_drop_node</span><span class="p">(</span>
-        <span class="n">upstream_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;select&quot;</span>
+        <span class="n">upstream_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"select"</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a drop node. The sole job of this is to drop just the specified columns.</span>
-<span class="sd">        Note this is a utility function that&#39;s only called here.</span>
+<span class="w">        </span><span class="sd">"""Creates a drop node. The sole job of this is to drop just the specified columns.</span>
+<span class="sd">        Note this is a utility function that's only called here.</span>
 
 <span class="sd">        :param upstream_name: Name of the upstream dataframe node</span>
 <span class="sd">        :param columns: Columns to drop</span>
 <span class="sd">        :param node_name: Name of the node to create</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">new_callable</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">upstream_name</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="o">*</span><span class="n">columns</span><span class="p">)</span>
@@ -1666,28 +1666,28 @@ s=d.getElementsByTagName('script')[0];
             <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates_for_upstream_dataframe</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;We found multiple upstream dataframe parameters for function: </span><span class="si">{</span><span class="n">fn_name</span><span class="si">}</span><span class="s2"> decorated with &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;@with_columns. You specified pass_dataframe_as=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe_subdag_param</span><span class="si">}</span><span class="s2"> as the upstream &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;dataframe parameter, which means that your subdag must have exactly </span><span class="si">{</span><span class="mi">0</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe_subdag_param</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;upstream dataframe parameters. Instead, we found the following upstream dataframe parameters: </span><span class="si">{</span><span class="n">candidates_for_upstream_dataframe</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"We found multiple upstream dataframe parameters for function: </span><span class="si">{</span><span class="n">fn_name</span><span class="si">}</span><span class="s2"> decorated with "</span>
+                <span class="sa">f</span><span class="s2">"@with_columns. You specified pass_dataframe_as=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe_subdag_param</span><span class="si">}</span><span class="s2"> as the upstream "</span>
+                <span class="sa">f</span><span class="s2">"dataframe parameter, which means that your subdag must have exactly </span><span class="si">{</span><span class="mi">0</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe_subdag_param</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"upstream dataframe parameters. Instead, we found the following upstream dataframe parameters: </span><span class="si">{</span><span class="n">candidates_for_upstream_dataframe</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe_subdag_param</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates_for_upstream_dataframe</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;You specified your set of UDFs to use upstream dataframe parameter: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe_subdag_param</span><span class="si">}</span><span class="s2"> &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;for function: </span><span class="si">{</span><span class="n">fn_name</span><span class="si">}</span><span class="s2"> decorated with `with_columns`, but we could not find &quot;</span>
-                    <span class="s2">&quot;that parameter as a dependency of any of the nodes. Note that that dependency &quot;</span>
-                    <span class="s2">&quot;must be a pyspark dataframe. If you wish, instead, to supply an initial set of &quot;</span>
-                    <span class="s2">&quot;columns for the upstream dataframe and refer to those columns directly within &quot;</span>
-                    <span class="s2">&quot;your UDFs, please use columns_to_pass instead of pass_dataframe_as.&quot;</span>
+                    <span class="sa">f</span><span class="s2">"You specified your set of UDFs to use upstream dataframe parameter: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe_subdag_param</span><span class="si">}</span><span class="s2"> "</span>
+                    <span class="sa">f</span><span class="s2">"for function: </span><span class="si">{</span><span class="n">fn_name</span><span class="si">}</span><span class="s2"> decorated with `with_columns`, but we could not find "</span>
+                    <span class="s2">"that parameter as a dependency of any of the nodes. Note that that dependency "</span>
+                    <span class="s2">"must be a pyspark dataframe. If you wish, instead, to supply an initial set of "</span>
+                    <span class="s2">"columns for the upstream dataframe and refer to those columns directly within "</span>
+                    <span class="s2">"your UDFs, please use columns_to_pass instead of pass_dataframe_as."</span>
                 <span class="p">)</span>
             <span class="p">(</span><span class="n">upstream_dependency</span><span class="p">,)</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">candidates_for_upstream_dataframe</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">upstream_dependency</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe_subdag_param</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;You specified your set of UDFs to use upstream dataframe parameter: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe_subdag_param</span><span class="si">}</span><span class="s2"> &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;for function: </span><span class="si">{</span><span class="n">fn_name</span><span class="si">}</span><span class="s2"> decorated with `with_columns`, but we found that parameter &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;as a dependency of a node, but it was not the same as the parameter you specified. &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Instead, we found: </span><span class="si">{</span><span class="n">upstream_dependency</span><span class="si">}</span><span class="s2">.&quot;</span>
+                    <span class="sa">f</span><span class="s2">"You specified your set of UDFs to use upstream dataframe parameter: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe_subdag_param</span><span class="si">}</span><span class="s2"> "</span>
+                    <span class="sa">f</span><span class="s2">"for function: </span><span class="si">{</span><span class="n">fn_name</span><span class="si">}</span><span class="s2"> decorated with `with_columns`, but we found that parameter "</span>
+                    <span class="sa">f</span><span class="s2">"as a dependency of a node, but it was not the same as the parameter you specified. "</span>
+                    <span class="sa">f</span><span class="s2">"Instead, we found: </span><span class="si">{</span><span class="n">upstream_dependency</span><span class="si">}</span><span class="s2">."</span>
                 <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">required_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -1749,7 +1749,7 @@ s=d.getElementsByTagName('script')[0];
                     <span class="n">dependent_columns_in_mapgroup</span><span class="p">,</span>
                     <span class="n">dependent_columns_in_dataframe</span><span class="p">,</span>
                 <span class="p">)</span>
-            <span class="c1"># otherwise we&#39;re using pandas/primitive UDFs</span>
+            <span class="c1"># otherwise we're using pandas/primitive UDFs</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">sparkified</span> <span class="o">=</span> <span class="n">sparkify_node_with_udf</span><span class="p">(</span>
                     <span class="n">node_</span><span class="p">,</span>
@@ -1761,14 +1761,14 @@ s=d.getElementsByTagName('script')[0];
                 <span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">sparkified</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">:</span>
-                <span class="c1"># we need to create a drop list because we don&#39;t want to drop</span>
+                <span class="c1"># we need to create a drop list because we don't want to drop</span>
                 <span class="c1"># original columns from the DF by accident.</span>
                 <span class="n">drop_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sparkified</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
             <span class="n">output_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sparkified</span><span class="p">)</span>
             <span class="n">current_dataframe_node</span> <span class="o">=</span> <span class="n">sparkified</span><span class="o">.</span><span class="n">name</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;select&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">"select"</span><span class="p">:</span>
             <span class="c1"># Have to redo this here since for spark the nodes are of type dataframe and not columns</span>
             <span class="c1"># so with_columns.inject_nodes does not correctly select all the sink nodes</span>
             <span class="n">select_columns</span> <span class="o">=</span> <span class="p">(</span>
@@ -1777,18 +1777,18 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">select_node</span> <span class="o">=</span> <span class="n">with_columns</span><span class="o">.</span><span class="n">create_selector_node</span><span class="p">(</span>
                 <span class="n">upstream_name</span><span class="o">=</span><span class="n">current_dataframe_node</span><span class="p">,</span>
                 <span class="n">columns</span><span class="o">=</span><span class="n">select_columns</span><span class="p">,</span>
-                <span class="n">node_name</span><span class="o">=</span><span class="s2">&quot;_select&quot;</span><span class="p">,</span>
+                <span class="n">node_name</span><span class="o">=</span><span class="s2">"_select"</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">output_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">select_node</span><span class="p">)</span>
             <span class="n">current_dataframe_node</span> <span class="o">=</span> <span class="n">select_node</span><span class="o">.</span><span class="n">name</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">drop_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># since it&#39;s in append mode, we only want to append what&#39;s in the select</span>
-            <span class="c1"># but we don&#39;t know what the original schema is, so we instead drop</span>
+            <span class="c1"># since it's in append mode, we only want to append what's in the select</span>
+            <span class="c1"># but we don't know what the original schema is, so we instead drop</span>
             <span class="c1"># things from the DF to achieve the same result</span>
             <span class="n">select_node</span> <span class="o">=</span> <span class="n">with_columns</span><span class="o">.</span><span class="n">create_drop_node</span><span class="p">(</span>
                 <span class="n">upstream_name</span><span class="o">=</span><span class="n">current_dataframe_node</span><span class="p">,</span>
                 <span class="n">columns</span><span class="o">=</span><span class="n">drop_list</span><span class="p">,</span>
-                <span class="n">node_name</span><span class="o">=</span><span class="s2">&quot;_select&quot;</span><span class="p">,</span>
+                <span class="n">node_name</span><span class="o">=</span><span class="s2">"_select"</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">output_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">select_node</span><span class="p">)</span>
             <span class="n">current_dataframe_node</span> <span class="o">=</span> <span class="n">select_node</span><span class="o">.</span><span class="n">name</span>
@@ -1810,13 +1810,13 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">config_required</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a select decorator for spark. This allows you to efficiently run</span>
+<span class="w">        </span><span class="sd">"""Initializes a select decorator for spark. This allows you to efficiently run</span>
 <span class="sd">         groups of map operations on a dataframe, represented as pandas/primitives UDFs. This</span>
-<span class="sd">         effectively &quot;linearizes&quot; compute -- meaning that a DAG of map operations can be run</span>
-<span class="sd">         as a set of `.select` operations on a single dataframe -- ensuring that you don&#39;t have</span>
+<span class="sd">         effectively "linearizes" compute -- meaning that a DAG of map operations can be run</span>
+<span class="sd">         as a set of `.select` operations on a single dataframe -- ensuring that you don't have</span>
 <span class="sd">         to do a complex `extract` then `join` process on spark, which can be inefficient.</span>
 
-<span class="sd">         Here&#39;s an example of calling it -- if you&#39;ve seen `@subdag`, you should be familiar with</span>
+<span class="sd">         Here's an example of calling it -- if you've seen `@subdag`, you should be familiar with</span>
 <span class="sd">         the concepts:</span>
 
 <span class="sd">         .. code-block:: python</span>
@@ -1835,8 +1835,8 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">             # the with_columns call</span>
 <span class="sd">             @select(</span>
 <span class="sd">                 load_from=[my_module], # Load from any module</span>
-<span class="sd">                 columns_to_pass=[&quot;a_from_df&quot;, &quot;b_from_df&quot;], # The columns to pass from original dataframe to</span>
-<span class="sd">                 output_cols=[&quot;a&quot;, &quot;b&quot;, &quot;a_plus_b&quot;], # The columns to have in the final dataframe</span>
+<span class="sd">                 columns_to_pass=["a_from_df", "b_from_df"], # The columns to pass from original dataframe to</span>
+<span class="sd">                 output_cols=["a", "b", "a_plus_b"], # The columns to have in the final dataframe</span>
 <span class="sd">             )</span>
 <span class="sd">             def final_df(initial_df: ps.DataFrame) -&gt; ps.DataFrame:</span>
 <span class="sd">                 # process, or just return unprocessed</span>
@@ -1847,7 +1847,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">         extracting out the columns, applying the maps, then joining, but *also* allows you to</span>
 <span class="sd">         express the operations individually, making it easy to unit-test and reuse.</span>
 
-<span class="sd">         Note that the operation is &quot;append&quot;, meaning that the columns that are selected are appended</span>
+<span class="sd">         Note that the operation is "append", meaning that the columns that are selected are appended</span>
 <span class="sd">         onto the dataframe, and then at the end only what is request is selected.</span>
 
 <span class="sd">         If the function takes multiple dataframes, the dataframe input to process will always be</span>
@@ -1858,34 +1858,34 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">         You can read it as:</span>
 
-<span class="sd">         &quot;final_df is a function that transforms the upstream dataframe initial_df, running the transformations</span>
+<span class="sd">         "final_df is a function that transforms the upstream dataframe initial_df, running the transformations</span>
 <span class="sd">         from my_module. It starts with the columns a_from_df and b_from_df, and then adds the columns</span>
-<span class="sd">         a, b, and a_plus_b to the dataframe. It then returns the dataframe, and does some processing on it.&quot;</span>
+<span class="sd">         a, b, and a_plus_b to the dataframe. It then returns the dataframe, and does some processing on it."</span>
 
 
 <span class="sd">        :param load_from: The functions that will be used to generate the group of map operations.</span>
 <span class="sd">        :param columns_to_pass: The initial schema of the dataframe. This is used to determine which</span>
-<span class="sd">            upstream inputs should be taken from the dataframe, and which shouldn&#39;t. Note that, if this is</span>
+<span class="sd">            upstream inputs should be taken from the dataframe, and which shouldn't. Note that, if this is</span>
 <span class="sd">            left empty (and external_inputs is as well), we will assume that all dependencies come</span>
 <span class="sd">            from the dataframe. This cannot be used in conjunction with pass_dataframe_as.</span>
-<span class="sd">        :param pass_dataframe_as: The name of the dataframe that we&#39;re modifying, as known to the subdag.</span>
+<span class="sd">        :param pass_dataframe_as: The name of the dataframe that we're modifying, as known to the subdag.</span>
 <span class="sd">            If you pass this in, you are responsible for extracting columns out. If not provided, you have</span>
 <span class="sd">            to pass columns_to_pass in, and we will extract the columns out for you.</span>
 <span class="sd">        :param output_cols: Columns to select in the final dataframe. If this is left blank it will</span>
 <span class="sd">            add all possible columns from the subdag to the dataframe.</span>
-<span class="sd">        :param namespace: The namespace of the nodes, so they don&#39;t clash with the global namespace</span>
-<span class="sd">            and so this can be reused. If its left out, there will be no namespace (in which case you&#39;ll want</span>
+<span class="sd">        :param namespace: The namespace of the nodes, so they don't clash with the global namespace</span>
+<span class="sd">            and so this can be reused. If its left out, there will be no namespace (in which case you'll want</span>
 <span class="sd">            to be careful about repeating it/reusing the nodes in other parts of the DAG.)</span>
 <span class="sd">        :param config_required: the list of config keys that are required to resolve any functions. Pass in None\</span>
 <span class="sd">            if you want the functions/modules to have access to all possible config.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="o">*</span><span class="n">load_from</span><span class="p">,</span>
             <span class="n">columns_to_pass</span><span class="o">=</span><span class="n">columns_to_pass</span><span class="p">,</span>
             <span class="n">pass_dataframe_as</span><span class="o">=</span><span class="n">pass_dataframe_as</span><span class="p">,</span>
             <span class="n">select</span><span class="o">=</span><span class="n">output_cols</span><span class="p">,</span>
             <span class="n">namespace</span><span class="o">=</span><span class="n">namespace</span><span class="p">,</span>
-            <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;select&quot;</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s2">"select"</span><span class="p">,</span>
             <span class="n">config_required</span><span class="o">=</span><span class="n">config_required</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -1893,9 +1893,9 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="SparkInputValidator">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/SparkInputValidator/#hamilton.plugins.h_spark.SparkInputValidator">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SparkInputValidator</span><span class="p">(</span><span class="n">lifecycle_base</span><span class="o">.</span><span class="n">BaseDoValidateInput</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This is a graph hook adapter that allows you to get past a &lt;4.0.0 limitation in spark.</span>
+<span class="w">    </span><span class="sd">"""This is a graph hook adapter that allows you to get past a &lt;4.0.0 limitation in spark.</span>
 <span class="sd">    Spark has the option to choose between spark connect and spark, which largely have the same API.</span>
-<span class="sd">    That said, they don&#39;t have the proper subclass relationships, which make hamilton fail on the input type checking.</span>
+<span class="sd">    That said, they don't have the proper subclass relationships, which make hamilton fail on the input type checking.</span>
 
 <span class="sd">    See the following for more information as to why this is necessary:</span>
 <span class="sd">    - https://community.databricks.com/t5/data-engineering/pyspark-sql-connect-dataframe-dataframe-vs-pyspark-sql-dataframe/td-p/71055</span>
@@ -1913,22 +1913,22 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    Then run it as you would normally. Note that in spark==4.0.0, you will only need the spark session check,</span>
 <span class="sd">    not the dataframe check.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="SparkInputValidator.do_validate_input">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/SparkInputValidator/#hamilton.plugins.h_spark.SparkInputValidator.do_validate_input">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">do_validate_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">input_value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates the input. Treats connect/classic sessios/dataframe as interchangeable.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Validates the input. Treats connect/classic sessios/dataframe as interchangeable."""</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql.connect.dataframe</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrame</span> <span class="k">as</span> <span class="n">CDataFrame</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql.connect.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span> <span class="k">as</span> <span class="n">CSparkSession</span>
         <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-                <span class="s2">&quot;You need to have the spark-connect package installed to use this adapter. That said,&quot;</span>
-                <span class="s2">&quot;you really shouldn&#39;t need this adapter if you don&#39;t have it installed (as you won&#39;t be able to &quot;</span>
-                <span class="s2">&quot;get a spark connect session/dataframe without it...). Probably best to remove this&quot;</span>
-                <span class="s2">&quot;adapter all together, but if you need to you can run pip install &#39;pyspark[connect]&#39;&quot;</span>
+                <span class="s2">"You need to have the spark-connect package installed to use this adapter. That said,"</span>
+                <span class="s2">"you really shouldn't need this adapter if you don't have it installed (as you won't be able to "</span>
+                <span class="s2">"get a spark connect session/dataframe without it...). Probably best to remove this"</span>
+                <span class="s2">"adapter all together, but if you need to you can run pip install 'pyspark[connect]'"</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
         <span class="n">node_type_is_df</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_value</span><span class="p">,</span> <span class="p">(</span><span class="n">CDataFrame</span><span class="p">,</span> <span class="n">DataFrame</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">node_type_is_df</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">node_type</span><span class="p">,</span> <span class="p">(</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">CDataFrame</span><span class="p">)):</span>
@@ -1991,182 +1991,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -2211,6 +2046,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -2218,7 +2079,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -2235,42 +2104,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -2293,7 +2220,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -2304,12 +2231,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -2329,8 +2250,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -2342,7 +2263,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -2354,9 +2275,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -2379,8 +2300,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -2390,10 +2314,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -2418,10 +2340,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

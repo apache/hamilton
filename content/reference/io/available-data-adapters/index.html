@@ -550,7 +550,7 @@ dataframe adapter. Finally, we would look at the <cite>params</cite> field, find
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">value</span><span class="p">,</span> <span class="n">save_to</span>
 
-<span class="nd">@save_to</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;my_file.csv&quot;</span><span class="p">))</span>
+<span class="nd">@save_to</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">"my_file.csv"</span><span class="p">))</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">my_data</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="o">...</span>
 </pre></div>
@@ -568,7 +568,7 @@ annotated your saving/loading functions to do so, e.g. analogous to the above yo
 <span class="nd">@datasaver</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">my_data_saver</span><span class="p">(</span><span class="n">my_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="c1"># code to save my_data</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">path</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;csv&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span> <span class="c1"># add other metadata</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"path"</span><span class="p">:</span> <span class="n">path</span><span class="p">,</span> <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"csv"</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span> <span class="c1"># add other metadata</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="../../decorators/dataloader/"><span class="doc">dataloader</span></a> for more information on how to load data and expose metadata

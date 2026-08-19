@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -540,14 +540,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">graph_types</span><span class="p">,</span> <span class="n">node</span>
 
 <span class="c1"># This is only here for a type-hint</span>
-<span class="c1"># As python types aren&#39;t real (they&#39;re determined at runtime), we can&#39;t have circular import resolved</span>
-<span class="c1"># These are often necessary to handle typing -- as types don&#39;t have a perfect DAG of dependencies</span>
-<span class="c1"># In this case, we&#39;re breaking the following loop:</span>
+<span class="c1"># As python types aren't real (they're determined at runtime), we can't have circular import resolved</span>
+<span class="c1"># These are often necessary to handle typing -- as types don't have a perfect DAG of dependencies</span>
+<span class="c1"># In this case, we're breaking the following loop:</span>
 <span class="c1">#    -&gt; lifecycle_api depends on graph_types and FunctionGraph</span>
 <span class="c1">#    -&gt; graph_types depends on hamilton.base</span>
 <span class="c1">#    -&gt; hamilton.base depends on lifecycle_api, as some interfaces for graph adapters live there</span>
 <span class="c1"># To really fix this we should move everything user-facing out of base, which is a pretty sloppy name for a package anyway</span>
-<span class="c1"># And put it where it belongs. For now we&#39;re OK with the TYPE_CHECKING hack</span>
+<span class="c1"># And put it where it belongs. For now we're OK with the TYPE_CHECKING hack</span>
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.execution.grouping</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodeGroupPurpose</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">FunctionGraph</span>
@@ -584,20 +584,20 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="ResultBuilder">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/ResultBuilder/#hamilton.lifecycle.api.ResultBuilder">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ResultBuilder</span><span class="p">(</span><span class="n">BaseDoBuildResult</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract class for building results. All result builders should inherit from this class and implement the build_result function.</span>
+<span class="w">    </span><span class="sd">"""Abstract class for building results. All result builders should inherit from this class and implement the build_result function.</span>
 <span class="sd">    Note that applicable_input_type and output_type are optional, but recommended, for backwards</span>
-<span class="sd">    compatibility. They let us type-check this. They will default to Any, which means that they&#39;ll</span>
-<span class="sd">    connect to anything.&quot;&quot;&quot;</span>
+<span class="sd">    compatibility. They let us type-check this. They will default to Any, which means that they'll</span>
+<span class="sd">    connect to anything."""</span>
 
 <div class="viewcode-block" id="ResultBuilder.build_result">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/ResultBuilder/#hamilton.lifecycle.api.ResultBuilder.build_result">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a set of outputs, build the result.</span>
+<span class="w">        </span><span class="sd">"""Given a set of outputs, build the result.</span>
 
 <span class="sd">        :param outputs: the outputs from the execution of the graph.</span>
 <span class="sd">        :return: the result of the execution of the graph.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 
 
@@ -606,29 +606,29 @@ s=d.getElementsByTagName('script')[0];
     <span class="nd">@override</span>
     <span class="nd">@final</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">do_build_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Implements the do_build_result method from the BaseDoBuildResult class.</span>
+<span class="w">        </span><span class="sd">"""Implements the do_build_result method from the BaseDoBuildResult class.</span>
 <span class="sd">        This is kept from the user as the public-facing API is build_result, allowing us to change the</span>
-<span class="sd">        API/implementation of the internal set of hooks&quot;&quot;&quot;</span>
+<span class="sd">        API/implementation of the internal set of hooks"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_result</span><span class="p">(</span><span class="o">**</span><span class="n">outputs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ResultBuilder.input_types">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/ResultBuilder/#hamilton.lifecycle.api.ResultBuilder.input_types">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">input_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gives the applicable types to this result builder.</span>
+<span class="w">        </span><span class="sd">"""Gives the applicable types to this result builder.</span>
 <span class="sd">        This is optional for backwards compatibility, but is recommended.</span>
 
 <span class="sd">        :return: A list of types that this can apply to.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Any</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="ResultBuilder.output_type">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/ResultBuilder/#hamilton.lifecycle.api.ResultBuilder.output_type">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">output_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the output type of this result builder</span>
+<span class="w">        </span><span class="sd">"""Returns the output type of this result builder</span>
 <span class="sd">        :return: the type that this creates</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">Any</span></div>
 </div>
 
@@ -637,19 +637,19 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="LegacyResultMixin">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/LegacyResultMixin/#hamilton.lifecycle.api.LegacyResultMixin">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LegacyResultMixin</span><span class="p">(</span><span class="n">ResultBuilder</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Backwards compatible legacy result builder. This utilizes a static method as we used to do that,</span>
+<span class="w">    </span><span class="sd">"""Backwards compatible legacy result builder. This utilizes a static method as we used to do that,</span>
 <span class="sd">    although often times they got confused. If you want a result builder, use ResultBuilder above instead.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="LegacyResultMixin.build_result">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/LegacyResultMixin/#hamilton.lifecycle.api.LegacyResultMixin.build_result">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a set of outputs, build the result.</span>
+<span class="w">        </span><span class="sd">"""Given a set of outputs, build the result.</span>
 
 <span class="sd">        :param outputs: the outputs from the execution of the graph.</span>
 <span class="sd">        :return: the result of the execution of the graph.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -664,22 +664,22 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">BaseDoCheckEdgeTypesMatch</span><span class="p">,</span>
     <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This is an implementation of HamiltonGraphAdapter, which has now been</span>
-<span class="sd">    implemented with lifecycle methods/hooks.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""This is an implementation of HamiltonGraphAdapter, which has now been</span>
+<span class="sd">    implemented with lifecycle methods/hooks."""</span>
 
 <div class="viewcode-block" id="GraphAdapter.check_input_type">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/GraphAdapter/#hamilton.lifecycle.api.GraphAdapter.check_input_type">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_input_type</span><span class="p">(</span><span class="n">node_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">input_value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Used to check whether the user inputs match what the execution strategy &amp; functions can handle.</span>
+<span class="w">        </span><span class="sd">"""Used to check whether the user inputs match what the execution strategy &amp; functions can handle.</span>
 
 <span class="sd">        Static purely for legacy reasons.</span>
 
 <span class="sd">        :param node_type: The type of the node.</span>
 <span class="sd">        :param input_value: An actual value that we want to inspect matches our expectation.</span>
 <span class="sd">        :return: True if the input is valid, False otherwise.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 
 
@@ -688,17 +688,17 @@ s=d.getElementsByTagName('script')[0];
     <span class="nd">@staticmethod</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_node_type_equivalence</span><span class="p">(</span><span class="n">node_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">input_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Used to check whether two types are equivalent.</span>
+<span class="w">        </span><span class="sd">"""Used to check whether two types are equivalent.</span>
 
 <span class="sd">        Static, purely for legacy reasons.</span>
 
-<span class="sd">        This is used when the function graph is being created and we&#39;re statically type checking the annotations</span>
+<span class="sd">        This is used when the function graph is being created and we're statically type checking the annotations</span>
 <span class="sd">        for compatibility.</span>
 
 <span class="sd">        :param node_type: The type of the node.</span>
 <span class="sd">        :param input_type: The type of the input that would flow into the node.</span>
 <span class="sd">        :return: True if the types are equivalent, False otherwise.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 
 
@@ -732,13 +732,13 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/GraphAdapter/#hamilton.lifecycle.api.GraphAdapter.execute_node">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Given a node that represents a hamilton function, execute it.</span>
-<span class="sd">        Note, in some adapters this might just return some type of &quot;future&quot;.</span>
+<span class="w">        </span><span class="sd">"""Given a node that represents a hamilton function, execute it.</span>
+<span class="sd">        Note, in some adapters this might just return some type of "future".</span>
 
 <span class="sd">        :param node: the Hamilton Node</span>
 <span class="sd">        :param kwargs: the kwargs required to exercise the node function.</span>
 <span class="sd">        :return: the result of exercising the node.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -747,7 +747,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="NodeExecutionHook">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/NodeExecutionHook/#hamilton.lifecycle.api.NodeExecutionHook">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NodeExecutionHook</span><span class="p">(</span><span class="n">BasePreNodeExecute</span><span class="p">,</span> <span class="n">BasePostNodeExecute</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implement this to hook into the node execution lifecycle. You can call anything before and after the driver&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Implement this to hook into the node execution lifecycle. You can call anything before and after the driver"""</span>
 
 <div class="viewcode-block" id="NodeExecutionHook.run_before_node_execution">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/NodeExecutionHook/#hamilton.lifecycle.api.NodeExecutionHook.run_before_node_execution">[docs]</a>
@@ -764,7 +764,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">node_input_types</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Hook that is executed prior to node execution.</span>
+<span class="w">        </span><span class="sd">"""Hook that is executed prior to node execution.</span>
 
 <span class="sd">        :param node_name: Name of the node.</span>
 <span class="sd">        :param node_tags: Tags of the node</span>
@@ -774,7 +774,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param run_id: Run ID (unique in process scope) of the current run. Use this to track state.</span>
 <span class="sd">        :param node_input_types: the input types to the node and what it is expecting</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments -- this is kept for backwards compatibility</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 
 
@@ -790,7 +790,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wraps the before_execution method, providing a bridge to an external-facing API. Do not override this!&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Wraps the before_execution method, providing a bridge to an external-facing API. Do not override this!"""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">run_before_node_execution</span><span class="p">(</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="n">node_tags</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span>
@@ -819,7 +819,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Hook that is executed post node execution.</span>
+<span class="w">        </span><span class="sd">"""Hook that is executed post node execution.</span>
 
 <span class="sd">        :param node_name: Name of the node in question</span>
 <span class="sd">        :param node_tags: Tags of the node</span>
@@ -831,7 +831,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param task_id: The ID of the task, none if not in a task-based environment</span>
 <span class="sd">        :param run_id: Run ID (unique in process scope) of the current run. Use this to track state.</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments -- this is kept for backwards compatibility</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 
 
@@ -850,7 +850,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">result</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wraps the after_execution method, providing a bridge to an external-facing API. Do not override this!&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Wraps the after_execution method, providing a bridge to an external-facing API. Do not override this!"""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">run_after_node_execution</span><span class="p">(</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="n">node_tags</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span>
@@ -869,7 +869,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="GraphExecutionHook">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/GraphExecutionHook/#hamilton.lifecycle.api.GraphExecutionHook">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GraphExecutionHook</span><span class="p">(</span><span class="n">BasePreGraphExecute</span><span class="p">,</span> <span class="n">BasePostGraphExecute</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implement this to execute code before and after graph execution. This is useful for logging, etc...&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Implement this to execute code before and after graph execution. This is useful for logging, etc..."""</span>
 
 <div class="viewcode-block" id="GraphExecutionHook.post_graph_execute">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/GraphExecutionHook/#hamilton.lifecycle.api.GraphExecutionHook.post_graph_execute">[docs]</a>
@@ -879,12 +879,12 @@ s=d.getElementsByTagName('script')[0];
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">graph</span><span class="p">:</span> <span class="s2">&quot;FunctionGraph&quot;</span><span class="p">,</span>
+        <span class="n">graph</span><span class="p">:</span> <span class="s2">"FunctionGraph"</span><span class="p">,</span>
         <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
         <span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">results</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Just delegates to the interface method, passing in the right data.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Just delegates to the interface method, passing in the right data."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_after_graph_execution</span><span class="p">(</span>
             <span class="n">graph</span><span class="o">=</span><span class="n">HamiltonGraph</span><span class="o">.</span><span class="n">from_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">),</span>
             <span class="n">success</span><span class="o">=</span><span class="n">success</span><span class="p">,</span>
@@ -902,14 +902,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">graph</span><span class="p">:</span> <span class="s2">&quot;FunctionGraph&quot;</span><span class="p">,</span>
+        <span class="n">graph</span><span class="p">:</span> <span class="s2">"FunctionGraph"</span><span class="p">,</span>
         <span class="n">final_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">overrides</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Implementation of the pre_graph_execute hook. This just converts the inputs to</span>
+<span class="w">        </span><span class="sd">"""Implementation of the pre_graph_execute hook. This just converts the inputs to</span>
 <span class="sd">        the format the user-facing hook is expecting -- performing a walk of the DAG to pass in</span>
-<span class="sd">        the set of nodes to execute. Delegates to the interface method.&quot;&quot;&quot;</span>
+<span class="sd">        the set of nodes to execute. Delegates to the interface method."""</span>
         <span class="n">all_nodes</span><span class="p">,</span> <span class="n">user_defined_nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_upstream_nodes</span><span class="p">(</span><span class="n">final_vars</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">overrides</span><span class="p">)</span>
         <span class="n">nodes_to_execute</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">all_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">user_defined_nodes</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_before_graph_execution</span><span class="p">(</span>
@@ -936,7 +936,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is run prior to graph execution. This allows you to do anything you want before the graph executes,</span>
+<span class="w">        </span><span class="sd">"""This is run prior to graph execution. This allows you to do anything you want before the graph executes,</span>
 <span class="sd">        knowing the basic information that was passed in.</span>
 
 <span class="sd">        :param graph: Graph that is being executed</span>
@@ -947,7 +947,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            these are just the nodes (not input nodes) that will be run during the course of execution.</span>
 <span class="sd">        :param run_id: Run ID (unique in process scope) of the current run. Use this to track state.</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments -- this is kept for backwards compatibility</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 
 
@@ -964,7 +964,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is run after graph execution. This allows you to do anything you want after the graph executes,</span>
+<span class="w">        </span><span class="sd">"""This is run after graph execution. This allows you to do anything you want after the graph executes,</span>
 <span class="sd">        knowing the results of the execution/any errors.</span>
 
 <span class="sd">        :param graph: Graph that is being executed</span>
@@ -973,7 +973,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param success: Whether the graph executed successfully</span>
 <span class="sd">        :param run_id: Run ID (unique in process scope) of the current run. Use this to track state.</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments -- this is kept for backwards compatibility</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -982,8 +982,8 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="TaskSubmissionHook">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/TaskSubmissionHook/#hamilton.lifecycle.api.TaskSubmissionHook">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TaskSubmissionHook</span><span class="p">(</span><span class="n">BasePreTaskSubmission</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implement this to hook into the task submission process. Tasks are submitted to an executor,</span>
-<span class="sd">    which then controls how and where the nodes associated with the task are run.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Implement this to hook into the task submission process. Tasks are submitted to an executor,</span>
+<span class="sd">    which then controls how and where the nodes associated with the task are run."""</span>
 
 <div class="viewcode-block" id="TaskSubmissionHook.pre_task_submission">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/TaskSubmissionHook/#hamilton.lifecycle.api.TaskSubmissionHook.pre_task_submission">[docs]</a>
@@ -993,7 +993,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="o">*</span><span class="p">,</span>
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;node.Node&quot;</span><span class="p">],</span>
+        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">"node.Node"</span><span class="p">],</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">overrides</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">spawning_task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -1018,25 +1018,25 @@ s=d.getElementsByTagName('script')[0];
         <span class="o">*</span><span class="p">,</span>
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;node.Node&quot;</span><span class="p">],</span>
+        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">"node.Node"</span><span class="p">],</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">overrides</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">spawning_task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">purpose</span><span class="p">:</span> <span class="n">NodeGroupPurpose</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs prior to a task being submitted to an executor. By definition this is run *outside*</span>
+<span class="w">        </span><span class="sd">"""Runs prior to a task being submitted to an executor. By definition this is run *outside*</span>
 <span class="sd">        of the task executor, on the process that executed the driver.</span>
 
 <span class="sd">        :param run_id: ID of the run this is under.</span>
-<span class="sd">        :param task_id: ID of the task we&#39;re launching.</span>
+<span class="sd">        :param task_id: ID of the task we're launching.</span>
 <span class="sd">        :param nodes: Nodes that are part of this task</span>
 <span class="sd">        :param inputs: Inputs to the task</span>
 <span class="sd">        :param overrides: Overrides passed to the task</span>
 <span class="sd">        :param spawning_task_id: ID of the task that spawned this task</span>
 <span class="sd">        :param purpose: Purpose of the current task group</span>
 <span class="sd">        :param future_kwargs: Reserved for backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -1045,8 +1045,8 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="TaskReturnHook">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/TaskReturnHook/#hamilton.lifecycle.api.TaskReturnHook">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TaskReturnHook</span><span class="p">(</span><span class="n">BasePostTaskReturn</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implement this to hook into the task return process. Tasks are submitted to an executor,</span>
-<span class="sd">    which executes the task and returns the results (or raises an error).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Implement this to hook into the task return process. Tasks are submitted to an executor,</span>
+<span class="sd">    which executes the task and returns the results (or raises an error)."""</span>
 
 <div class="viewcode-block" id="TaskReturnHook.post_task_return">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/TaskReturnHook/#hamilton.lifecycle.api.TaskReturnHook.post_task_return">[docs]</a>
@@ -1056,7 +1056,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="o">*</span><span class="p">,</span>
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;node.Node&quot;</span><span class="p">],</span>
+        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">"node.Node"</span><span class="p">],</span>
         <span class="n">result</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
         <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
         <span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -1083,7 +1083,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="o">*</span><span class="p">,</span>
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;node.Node&quot;</span><span class="p">],</span>
+        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">"node.Node"</span><span class="p">],</span>
         <span class="n">result</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
         <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
         <span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -1091,7 +1091,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">purpose</span><span class="p">:</span> <span class="n">NodeGroupPurpose</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after a task has been returned from a executor. By definition this is run *outside*</span>
+<span class="w">        </span><span class="sd">"""Runs after a task has been returned from a executor. By definition this is run *outside*</span>
 <span class="sd">        of the task executor, on the process that executed the driver.</span>
 
 <span class="sd">        :param run_id: ID of the run this is under.</span>
@@ -1103,7 +1103,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param spawning_task_id: ID of the task that spawned this task</span>
 <span class="sd">        :param purpose: Purpose of the current task group</span>
 <span class="sd">        :param future_kwargs: Reserved for backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -1112,8 +1112,8 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="TaskExecutionHook">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/TaskExecutionHook/#hamilton.lifecycle.api.TaskExecutionHook">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TaskExecutionHook</span><span class="p">(</span><span class="n">BasePreTaskExecute</span><span class="p">,</span> <span class="n">BasePostTaskExecute</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implement this to hook into the task execution process. Tasks consist of a group of one or</span>
-<span class="sd">    more nodes that are run on a task executor.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Implement this to hook into the task execution process. Tasks consist of a group of one or</span>
+<span class="sd">    more nodes that are run on a task executor."""</span>
 
 <div class="viewcode-block" id="TaskExecutionHook.pre_task_execute">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/TaskExecutionHook/#hamilton.lifecycle.api.TaskExecutionHook.pre_task_execute">[docs]</a>
@@ -1122,7 +1122,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="o">*</span><span class="p">,</span>
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;node.Node&quot;</span><span class="p">],</span>
+        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">"node.Node"</span><span class="p">],</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">overrides</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">spawning_task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -1146,7 +1146,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="o">*</span><span class="p">,</span>
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;node.Node&quot;</span><span class="p">],</span>
+        <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">"node.Node"</span><span class="p">],</span>
         <span class="n">results</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
         <span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">,</span>
@@ -1180,10 +1180,10 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">purpose</span><span class="p">:</span> <span class="n">NodeGroupPurpose</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs prior to any of the nodes associated with a task. By definition this is run *inside*</span>
+<span class="w">        </span><span class="sd">"""Runs prior to any of the nodes associated with a task. By definition this is run *inside*</span>
 <span class="sd">        of the executor and therefore may be run on separate or distributed processes.</span>
 
-<span class="sd">        :param task_id: ID of the task we&#39;re launching.</span>
+<span class="sd">        :param task_id: ID of the task we're launching.</span>
 <span class="sd">        :param run_id: ID of the run this is under.</span>
 <span class="sd">        :param nodes: Nodes that are part of this task</span>
 <span class="sd">        :param inputs: Inputs to the task</span>
@@ -1191,7 +1191,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param future_kwargs: Reserved for backwards compatibility.</span>
 <span class="sd">        :param spawning_task_id: ID of the task that spawned this task</span>
 <span class="sd">        :param purpose: Purpose of the current task group</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 
 
@@ -1211,7 +1211,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">purpose</span><span class="p">:</span> <span class="n">NodeGroupPurpose</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after all of the nodes associated with a task have been executed. By definition this</span>
+<span class="w">        </span><span class="sd">"""Runs after all of the nodes associated with a task have been executed. By definition this</span>
 <span class="sd">        is run *inside* of the executor and therefore may be run on separate or distributed processes.</span>
 
 <span class="sd">        :param task_id: ID of the task that was just executed</span>
@@ -1223,7 +1223,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param future_kwargs: Reserved for backwards compatibility.</span>
 <span class="sd">        :param spawning_task_id: ID of the task that spawned this task</span>
 <span class="sd">        :param purpose: Purpose of the current task group</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -1232,14 +1232,14 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="EdgeConnectionHook">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/EdgeConnectionHook/#hamilton.lifecycle.api.EdgeConnectionHook">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">EdgeConnectionHook</span><span class="p">(</span><span class="n">BaseDoCheckEdgeTypesMatch</span><span class="p">,</span> <span class="n">BaseDoValidateInput</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implement this to customize edges that are allowed in the graph. You can do customizations around typing here.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Implement this to customize edges that are allowed in the graph. You can do customizations around typing here."""</span>
 
 <div class="viewcode-block" id="EdgeConnectionHook.do_check_edge_types_match">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/EdgeConnectionHook/#hamilton.lifecycle.api.EdgeConnectionHook.do_check_edge_types_match">[docs]</a>
     <span class="nd">@override</span>
     <span class="nd">@final</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">do_check_edge_types_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">type_from</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">type_to</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wraps the check_edge_types_match method, providing a bridge to an external-facing API. Do not override this!&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Wraps the check_edge_types_match method, providing a bridge to an external-facing API. Do not override this!"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_edge_types_match</span><span class="p">(</span><span class="n">type_from</span><span class="p">,</span> <span class="n">type_to</span><span class="p">)</span></div>
 
 
@@ -1247,7 +1247,7 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/EdgeConnectionHook/#hamilton.lifecycle.api.EdgeConnectionHook.check_edge_types_match">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_edge_types_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_from</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">type_to</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is run to check if edge types match. Note that this is an OR functionality</span>
+<span class="w">        </span><span class="sd">"""This is run to check if edge types match. Note that this is an OR functionality</span>
 <span class="sd">        -- this is run after we do some default checks, so this can only be permissive.</span>
 <span class="sd">        Reach out if you want to be more restrictive than the default checks.</span>
 
@@ -1255,7 +1255,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param type_to: The type of the node that is the destination of the edge.</span>
 <span class="sd">        :param kwargs: This is kept for future backwards compatibility.</span>
 <span class="sd">        :return: Whether or not the two node types form a valid edge.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 
 
@@ -1264,7 +1264,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="nd">@override</span>
     <span class="nd">@final</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">do_validate_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">input_value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wraps the validate_input method, providing a bridge to an external-facing API. Do not override this!&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Wraps the validate_input method, providing a bridge to an external-facing API. Do not override this!"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_input</span><span class="p">(</span><span class="n">node_type</span><span class="o">=</span><span class="n">node_type</span><span class="p">,</span> <span class="n">input_value</span><span class="o">=</span><span class="n">input_value</span><span class="p">)</span></div>
 
 
@@ -1272,7 +1272,7 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/EdgeConnectionHook/#hamilton.lifecycle.api.EdgeConnectionHook.validate_input">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">input_value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is run to check if the input is valid for the node type. Note that this is an OR functionality</span>
+<span class="w">        </span><span class="sd">"""This is run to check if the input is valid for the node type. Note that this is an OR functionality</span>
 <span class="sd">        -- this is run after we do some default checks, so this can only be permissive.</span>
 <span class="sd">        Reach out if you want to be more restrictive than the default checks.</span>
 
@@ -1280,7 +1280,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param input_value: Value of the input</span>
 <span class="sd">        :param kwargs: Keyword arguments -- this is kept for future backwards compatibility.</span>
 <span class="sd">        :return: Whether the input is valid for the node type.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -1289,10 +1289,10 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="NodeExecutionMethod">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/NodeExecutionMethod/#hamilton.lifecycle.api.NodeExecutionMethod">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NodeExecutionMethod</span><span class="p">(</span><span class="n">BaseDoNodeExecute</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;API for executing a node. This takes in tags, callable, node name, and kwargs, and is</span>
+<span class="w">    </span><span class="sd">"""API for executing a node. This takes in tags, callable, node name, and kwargs, and is</span>
 <span class="sd">    responsible for executing the node and returning the result. Note this is not (currently)</span>
 <span class="sd">    able to be layered together, although we may add that soon.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="NodeExecutionMethod.do_node_execute">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/NodeExecutionMethod/#hamilton.lifecycle.api.NodeExecutionMethod.do_node_execute">[docs]</a>
@@ -1332,7 +1332,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">is_collect</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This method is responsible for executing the node and returning the result.</span>
+<span class="w">        </span><span class="sd">"""This method is responsible for executing the node and returning the result.</span>
 
 <span class="sd">        :param node_name: Name of the node.</span>
 <span class="sd">        :param node_tags: Tags of the node.</span>
@@ -1343,7 +1343,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param is_collect: Whether the node is a collect node.</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments -- this is kept for backwards compatibility</span>
 <span class="sd">        :return: The result of the node execution -- up to you to return this.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -1352,33 +1352,33 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="StaticValidator">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/StaticValidator/#hamilton.lifecycle.api.StaticValidator">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">StaticValidator</span><span class="p">(</span><span class="n">BaseValidateGraph</span><span class="p">,</span> <span class="n">BaseValidateNode</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs static validation of the DAG. Note that this has the option to perform default validation for each method --</span>
-<span class="sd">    this means that if you don&#39;t implement one of these it is OK.</span>
+<span class="w">    </span><span class="sd">"""Performs static validation of the DAG. Note that this has the option to perform default validation for each method --</span>
+<span class="sd">    this means that if you don't implement one of these it is OK.</span>
 
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        class MyTagValidator(api.StaticValidator):</span>
-<span class="sd">            &#39;&#39;&#39;Validates tags on a node&#39;&#39;&#39;</span>
+<span class="sd">            '''Validates tags on a node'''</span>
 
 <span class="sd">            def run_to_validate_node(</span>
 <span class="sd">                    self, *, node: HamiltonNode, **future_kwargs</span>
 <span class="sd">            ) -&gt; tuple[bool, Optional[str]]:</span>
-<span class="sd">                if node.tags.get(&quot;node_type&quot;, &quot;&quot;) == &quot;output&quot;:</span>
-<span class="sd">                    table_name = node.tags.get(&quot;table_name&quot;)</span>
+<span class="sd">                if node.tags.get("node_type", "") == "output":</span>
+<span class="sd">                    table_name = node.tags.get("table_name")</span>
 <span class="sd">                    if not table_name:  # None or empty</span>
-<span class="sd">                        error_msg = (f&quot;Node {node.tags[&#39;module&#39;]}.{node.name} &quot;</span>
-<span class="sd">                                    &quot;is an output node, but does not have a table_name tag.&quot;)</span>
+<span class="sd">                        error_msg = (f"Node {node.tags['module']}.{node.name} "</span>
+<span class="sd">                                    "is an output node, but does not have a table_name tag.")</span>
 <span class="sd">                        return False, error_msg</span>
 <span class="sd">                return True, None</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="StaticValidator.run_to_validate_node">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/StaticValidator/#hamilton.lifecycle.api.StaticValidator.run_to_validate_node">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run_to_validate_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">HamiltonNode</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Override this to build custom node validations! Defaults to just returning that a node is valid so you don&#39;t have to implement it if you want to just implement a single method.</span>
+<span class="w">        </span><span class="sd">"""Override this to build custom node validations! Defaults to just returning that a node is valid so you don't have to implement it if you want to just implement a single method.</span>
 <span class="sd">        Runs post node construction to validate a node. You have access to a bunch of metadata about the node, stored in the hamilton_node argument</span>
 
 <span class="sd">        :param node: Node to validate</span>
@@ -1386,7 +1386,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :return: A tuple of whether the node is valid and an error</span>
 <span class="sd">            message in the case of failure. Return [True, None] for a valid node.Otherwise, return a detailed error message -- this should have all context/debugging information, but does not need to</span>
 <span class="sd">            mention the node name (it will be aggregated with others).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span></div>
 
 
@@ -1395,14 +1395,14 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">run_to_validate_graph</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">HamiltonGraph</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Override this to build custom DAG validations! Default to just returning that the graph is valid, so you don&#39;t have to implement it if you want to just implement a single method.</span>
+<span class="w">        </span><span class="sd">"""Override this to build custom DAG validations! Default to just returning that the graph is valid, so you don't have to implement it if you want to just implement a single method.</span>
 <span class="sd">        Runs post graph construction to validate a graph. You have access to a bunch of metadata about the graph, stored in the graph argument.</span>
 
 <span class="sd">        :param graph: Graph to validate.</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments -- this is kept for backwards compatibility</span>
 <span class="sd">        :return: A tuple of whether the graph is valid and an error message in the case of failure. Return [True, None] for a valid graph.</span>
 <span class="sd">            Otherwise, return a detailed error message -- this should have all context/debugging information.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span></div>
 
 
@@ -1419,7 +1419,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="nd">@override</span>
     <span class="nd">@final</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_graph</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="s2">&quot;FunctionGraph&quot;</span><span class="p">,</span> <span class="n">modules</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ModuleType</span><span class="p">],</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="s2">"FunctionGraph"</span><span class="p">,</span> <span class="n">modules</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ModuleType</span><span class="p">],</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_to_validate_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">HamiltonGraph</span><span class="o">.</span><span class="n">from_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">))</span></div>
 </div>
@@ -1429,8 +1429,8 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="TaskGroupingHook">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/TaskGroupingHook/#hamilton.lifecycle.api.TaskGroupingHook">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TaskGroupingHook</span><span class="p">(</span><span class="n">BasePostTaskGroup</span><span class="p">,</span> <span class="n">BasePostTaskExpand</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implement this to run something after task grouping or task expansion. This will allow you to</span>
-<span class="sd">    capture information about the tasks during `Parallelize`/`Collect` blocks in dynamic DAG execution.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Implement this to run something after task grouping or task expansion. This will allow you to</span>
+<span class="sd">    capture information about the tasks during `Parallelize`/`Collect` blocks in dynamic DAG execution."""</span>
 
 <div class="viewcode-block" id="TaskGroupingHook.post_task_group">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/TaskGroupingHook/#hamilton.lifecycle.api.TaskGroupingHook.post_task_group">[docs]</a>
@@ -1452,13 +1452,13 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/TaskGroupingHook/#hamilton.lifecycle.api.TaskGroupingHook.run_after_task_grouping">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">run_after_task_grouping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after task grouping. This allows you to capture information about which tasks were</span>
+<span class="w">        </span><span class="sd">"""Runs after task grouping. This allows you to capture information about which tasks were</span>
 <span class="sd">        created for a given run.</span>
 
 <span class="sd">        :param run_id: ID of the run, unique in scope of the driver.</span>
 <span class="sd">        :param task_ids: List of tasks that were grouped together.</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments -- this is kept for backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 
 
@@ -1468,14 +1468,14 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">run_after_task_expansion</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">future_kwargs</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after task expansion in Parallelize/Collect blocks. This allows you to capture information</span>
+<span class="w">        </span><span class="sd">"""Runs after task expansion in Parallelize/Collect blocks. This allows you to capture information</span>
 <span class="sd">        about the task that was expanded.</span>
 
 <span class="sd">        :param run_id: ID of the run, unique in scope of the driver.</span>
 <span class="sd">        :param task_id: ID of the task that was expanded.</span>
 <span class="sd">        :param parameters: Parameters that were passed to the task.</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments -- this is kept for backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -1484,16 +1484,16 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="GraphConstructionHook">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/GraphConstructionHook/#hamilton.lifecycle.api.GraphConstructionHook">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GraphConstructionHook</span><span class="p">(</span><span class="n">BasePostGraphConstruct</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hook that is run after graph construction. This allows you to register/capture info on the graph.</span>
+<span class="w">    </span><span class="sd">"""Hook that is run after graph construction. This allows you to register/capture info on the graph.</span>
 <span class="sd">    Note that, in the case of materialization, this may be called multiple times (once when we create the graph,</span>
 <span class="sd">    once when we materialize). Currently information into that is not exposed to the user, but we will be adding that in future</span>
 <span class="sd">    iterations.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="GraphConstructionHook.post_graph_construct">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/GraphConstructionHook/#hamilton.lifecycle.api.GraphConstructionHook.post_graph_construct">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">post_graph_construct</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="s2">&quot;FunctionGraph&quot;</span><span class="p">,</span> <span class="n">modules</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ModuleType</span><span class="p">],</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="s2">"FunctionGraph"</span><span class="p">,</span> <span class="n">modules</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ModuleType</span><span class="p">],</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">run_after_graph_construction</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">HamiltonGraph</span><span class="o">.</span><span class="n">from_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">),</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span></div>
 
@@ -1504,14 +1504,14 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">run_after_graph_construction</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">HamiltonGraph</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Hook that is run post graph construction. This allows you to register/capture info on the graph.</span>
-<span class="sd">        A common pattern is to store something in your object&#39;s state here so that you can use it later</span>
+<span class="w">        </span><span class="sd">"""Hook that is run post graph construction. This allows you to register/capture info on the graph.</span>
+<span class="sd">        A common pattern is to store something in your object's state here so that you can use it later</span>
 <span class="sd">        (E.G. compute a hash on the graph)</span>
 
 <span class="sd">        :param graph: Graph that was constructed</span>
 <span class="sd">        :param config: Configuration used to construct the graph</span>
 <span class="sd">        :param future_kwargs: Reserved for backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -1564,182 +1564,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1784,6 +1619,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1791,7 +1652,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1808,42 +1677,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1866,7 +1793,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1877,12 +1804,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1902,8 +1823,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1915,7 +1836,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1927,9 +1848,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1952,8 +1873,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1963,10 +1887,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1991,10 +1913,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

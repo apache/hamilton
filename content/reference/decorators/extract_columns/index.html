@@ -532,15 +532,15 @@ dataframe and output a specific column as named in the <code class="docutils lit
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_columns</span>
 
-<span class="nd">@extract_columns</span><span class="p">(</span><span class="s1">&#39;fiscal_date&#39;</span><span class="p">,</span> <span class="s1">&#39;fiscal_week_name&#39;</span><span class="p">,</span> <span class="s1">&#39;fiscal_month&#39;</span><span class="p">,</span> <span class="s1">&#39;fiscal_quarter&#39;</span><span class="p">,</span> <span class="s1">&#39;fiscal_year&#39;</span><span class="p">)</span>
+<span class="nd">@extract_columns</span><span class="p">(</span><span class="s1">'fiscal_date'</span><span class="p">,</span> <span class="s1">'fiscal_week_name'</span><span class="p">,</span> <span class="s1">'fiscal_month'</span><span class="p">,</span> <span class="s1">'fiscal_quarter'</span><span class="p">,</span> <span class="s1">'fiscal_year'</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">fiscal_columns</span><span class="p">(</span><span class="n">date_index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">fiscal_dates</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the fiscal column data.</span>
+<span class="w">    </span><span class="sd">"""Extracts the fiscal column data.</span>
 <span class="sd">    We want to ensure that it has the same spine as date_index.</span>
 <span class="sd">    :param fiscal_dates: the input dataframe to extract.</span>
 <span class="sd">    :return:</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;date_index&#39;</span><span class="p">:</span> <span class="n">date_index</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="n">date_index</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-    <span class="n">merged</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fiscal_dates</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'date_index'</span><span class="p">:</span> <span class="n">date_index</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="n">date_index</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">merged</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fiscal_dates</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'inner'</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">merged</span>
 </pre></div>
 </div>
@@ -551,7 +551,7 @@ asterisk like this:</p>
 
 <span class="nd">@extract_columns</span><span class="p">(</span><span class="o">*</span><span class="n">my_list_of_column_names</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">my_func</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">   </span><span class="sd">&quot;&quot;&quot;...&quot;&quot;&quot;</span>
+<span class="w">   </span><span class="sd">"""..."""</span>
 </pre></div>
 </div>
 <hr class="docutils" />

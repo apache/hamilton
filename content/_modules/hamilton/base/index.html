@@ -519,22 +519,22 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
 
-<span class="sd">&quot;&quot;&quot;This module contains base constructs for executing a hamilton graph.</span>
+<span class="sd">"""This module contains base constructs for executing a hamilton graph.</span>
 <span class="sd">It should only import hamilton.node, numpy, pandas.</span>
 <span class="sd">It cannot import hamilton.graph, or hamilton.driver.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">abc</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
@@ -558,7 +558,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="ResultMixin">
 <a class="viewcode-back" href="../../../reference/result-builders/Generic/#hamilton.base.ResultMixin">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ResultMixin</span><span class="p">(</span><span class="n">lifecycle_api</span><span class="o">.</span><span class="n">LegacyResultMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Legacy result builder -- see lifecycle methods for more information.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Legacy result builder -- see lifecycle methods for more information."""</span>
 
     <span class="k">pass</span></div>
 
@@ -567,7 +567,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="DictResult">
 <a class="viewcode-back" href="../../../reference/result-builders/Generic/#hamilton.base.DictResult">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DictResult</span><span class="p">(</span><span class="n">ResultMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple function that returns the dict of column -&gt; value results.</span>
+<span class="w">    </span><span class="sd">"""Simple function that returns the dict of column -&gt; value results.</span>
 
 <span class="sd">    It returns the results as a dictionary, where the keys map to outputs requested,</span>
 <span class="sd">    and values map to what was computed for those values.</span>
@@ -594,13 +594,13 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        adapter = base.DefaultAdapter()</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="DictResult.build_result">
 <a class="viewcode-back" href="../../../reference/result-builders/Generic/#hamilton.base.DictResult.build_result">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function builds a simple dict of output -&gt; computed values.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""This function builds a simple dict of output -&gt; computed values."""</span>
         <span class="k">return</span> <span class="n">outputs</span></div>
 
 
@@ -621,7 +621,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="PandasDataFrameResult">
 <a class="viewcode-back" href="../../../reference/result-builders/Pandas/#hamilton.base.PandasDataFrameResult">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PandasDataFrameResult</span><span class="p">(</span><span class="n">ResultMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixin for building a pandas dataframe from the result.</span>
+<span class="w">    </span><span class="sd">"""Mixin for building a pandas dataframe from the result.</span>
 
 <span class="sd">    It returns the results as a Pandas Dataframe, where the columns map to outputs requested, and values map to what\</span>
 <span class="sd">    was computed for those values. Note: this only works if the computed values are pandas series, or scalar values.</span>
@@ -637,34 +637,34 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        adapter = base.SimplePythonGraphAdapter(df_builder)</span>
 <span class="sd">        dr =  driver.Driver(config, *modules, adapter=adapter)</span>
 <span class="sd">        df = dr.execute([...], inputs=...)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">pandas_index_types</span><span class="p">(</span>
         <span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function creates three dictionaries according to whether there is an index type or not.</span>
+<span class="w">        </span><span class="sd">"""This function creates three dictionaries according to whether there is an index type or not.</span>
 
 <span class="sd">        The three dicts we create are:</span>
 <span class="sd">        1. Dict of index type to list of outputs that match it.</span>
 <span class="sd">        2. Dict of time series / categorical index types to list of outputs that match it.</span>
 <span class="sd">        3. Dict of `no-index` key to list of outputs with no index type.</span>
 
-<span class="sd">        :param outputs: the dict we&#39;re trying to create a result from.</span>
+<span class="sd">        :param outputs: the dict we're trying to create a result from.</span>
 <span class="sd">        :return: dict of all index types, dict of time series/categorical index types, dict if there is no index</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">all_index_types</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="n">time_indexes</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="n">no_indexes</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">index_key_name</span><span class="p">(</span><span class="n">pd_object</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Creates a string helping identify the index and it&#39;s type.</span>
-<span class="sd">            Useful for disambiguating time related indexes.&quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pd_object</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:::</span><span class="si">{</span><span class="n">pd_object</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">            </span><span class="sd">"""Creates a string helping identify the index and it's type.</span>
+<span class="sd">            Useful for disambiguating time related indexes."""</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">pd_object</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:::</span><span class="si">{</span><span class="n">pd_object</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">"</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">get_parent_time_index_type</span><span class="p">():</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Helper to pull the right time index parent class.&quot;&quot;&quot;</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pd_extension</span><span class="p">,</span> <span class="s2">&quot;NDArrayBackedExtensionIndex&quot;</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">"""Helper to pull the right time index parent class."""</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pd_extension</span><span class="p">,</span> <span class="s2">"NDArrayBackedExtensionIndex"</span><span class="p">):</span>
                 <span class="n">index_type</span> <span class="o">=</span> <span class="n">pd_extension</span><span class="o">.</span><span class="n">NDArrayBackedExtensionIndex</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">index_type</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># weird case, but not worth breaking for.</span>
@@ -673,20 +673,20 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">for</span> <span class="n">output_name</span><span class="p">,</span> <span class="n">output_value</span> <span class="ow">in</span> <span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
                 <span class="n">output_value</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span>
-            <span class="p">):</span>  <span class="c1"># if it has an index -- let&#39;s grab it&#39;s type</span>
+            <span class="p">):</span>  <span class="c1"># if it has an index -- let's grab it's type</span>
                 <span class="n">dict_key</span> <span class="o">=</span> <span class="n">index_key_name</span><span class="p">(</span><span class="n">output_value</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_value</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">get_parent_time_index_type</span><span class="p">()):</span>
-                    <span class="c1"># it&#39;s a time index -- these will produce garbage if not aligned properly.</span>
+                    <span class="c1"># it's a time index -- these will produce garbage if not aligned properly.</span>
                     <span class="n">time_indexes</span><span class="p">[</span><span class="n">dict_key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output_name</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span>
                 <span class="n">output_value</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span>
-            <span class="p">):</span>  <span class="c1"># there is no index on this - so it&#39;s just an integer one.</span>
+            <span class="p">):</span>  <span class="c1"># there is no index on this - so it's just an integer one.</span>
                 <span class="n">int_index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
                     <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
                 <span class="p">)</span>  <span class="c1"># dummy to get right values for string.</span>
                 <span class="n">dict_key</span> <span class="o">=</span> <span class="n">index_key_name</span><span class="p">(</span><span class="n">int_index</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">dict_key</span> <span class="o">=</span> <span class="s2">&quot;no-index&quot;</span>
+                <span class="n">dict_key</span> <span class="o">=</span> <span class="s2">"no-index"</span>
                 <span class="n">no_indexes</span><span class="p">[</span><span class="n">dict_key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output_name</span><span class="p">)</span>
             <span class="n">all_index_types</span><span class="p">[</span><span class="n">dict_key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output_name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">all_index_types</span><span class="p">,</span> <span class="n">time_indexes</span><span class="p">,</span> <span class="n">no_indexes</span>
@@ -697,10 +697,10 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">time_indexes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">no_indexes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks that pandas index types match.</span>
+<span class="w">        </span><span class="sd">"""Checks that pandas index types match.</span>
 
 <span class="sd">        This only logs warning errors, and if debug is enabled, a debug statement to list index types.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">no_index_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">no_indexes</span><span class="p">)</span>
         <span class="n">time_indexes_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">time_indexes</span><span class="p">)</span>
         <span class="n">all_indexes_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_index_types</span><span class="p">)</span>
@@ -709,65 +709,65 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1"># if there is more than one time index</span>
         <span class="k">if</span> <span class="n">time_indexes_length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;WARNING: Time/Categorical index type mismatches detected - check output to ensure Pandas &quot;</span>
-                <span class="s2">&quot;is doing what you intend to do. Else change the index types to match. Set logger to debug &quot;</span>
-                <span class="s2">&quot;to see index types.&quot;</span>
+                <span class="s2">"WARNING: Time/Categorical index type mismatches detected - check output to ensure Pandas "</span>
+                <span class="s2">"is doing what you intend to do. Else change the index types to match. Set logger to debug "</span>
+                <span class="s2">"to see index types."</span>
             <span class="p">)</span>
             <span class="n">types_match</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="c1"># if there is more than one index type and it&#39;s not explained by the time indexes then</span>
+        <span class="c1"># if there is more than one index type and it's not explained by the time indexes then</span>
         <span class="k">if</span> <span class="n">number_with_indexes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">all_indexes_length</span> <span class="o">&gt;</span> <span class="n">time_indexes_length</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;WARNING: Multiple index types detected - check output to ensure Pandas is &quot;</span>
-                <span class="s2">&quot;doing what you intend to do. Else change the index types to match. Set logger to debug to &quot;</span>
-                <span class="s2">&quot;see index types.&quot;</span>
+                <span class="s2">"WARNING: Multiple index types detected - check output to ensure Pandas is "</span>
+                <span class="s2">"doing what you intend to do. Else change the index types to match. Set logger to debug to "</span>
+                <span class="s2">"see index types."</span>
             <span class="p">)</span>
             <span class="n">types_match</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">elif</span> <span class="n">number_with_indexes</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">no_index_length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;WARNING: a single pandas index was found, but there are also </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">no_indexes</span><span class="p">[</span><span class="s1">&#39;no-index&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="s2">&quot;outputs without an index. Please check whether the dataframe created matches what what you &quot;</span>
-                <span class="s2">&quot;expect to happen.&quot;</span>
+                <span class="sa">f</span><span class="s2">"WARNING: a single pandas index was found, but there are also </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">no_indexes</span><span class="p">[</span><span class="s1">'no-index'</span><span class="p">])</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="s2">"outputs without an index. Please check whether the dataframe created matches what what you "</span>
+                <span class="s2">"expect to happen."</span>
             <span class="p">)</span>
             <span class="c1"># Strictly speaking the index types match -- there is only one -- so setting to True.</span>
             <span class="n">types_match</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1"># if all indexes matches no indexes</span>
         <span class="k">elif</span> <span class="n">no_index_length</span> <span class="o">==</span> <span class="n">all_indexes_length</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;It appears no Pandas index type was detected (ignore this warning if you&#39;re using DASK for now.) &quot;</span>
-                <span class="s2">&quot;Please check whether the dataframe created matches what what you expect to happen.&quot;</span>
+                <span class="s2">"It appears no Pandas index type was detected (ignore this warning if you're using DASK for now.) "</span>
+                <span class="s2">"Please check whether the dataframe created matches what what you expect to happen."</span>
             <span class="p">)</span>
             <span class="n">types_match</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
             <span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>
 
             <span class="n">pretty_string</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">all_index_types</span><span class="p">))</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Index types encountered:</span><span class="se">\n</span><span class="si">{</span><span class="n">pretty_string</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Index types encountered:</span><span class="se">\n</span><span class="si">{</span><span class="n">pretty_string</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">types_match</span>
 
 <div class="viewcode-block" id="PandasDataFrameResult.build_result">
 <a class="viewcode-back" href="../../../reference/result-builders/Pandas/#hamilton.base.PandasDataFrameResult.build_result">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Builds a Pandas DataFrame from the outputs.</span>
+<span class="w">        </span><span class="sd">"""Builds a Pandas DataFrame from the outputs.</span>
 
-<span class="sd">        This function will check the index types of the outputs, and log warnings if they don&#39;t match.</span>
+<span class="sd">        This function will check the index types of the outputs, and log warnings if they don't match.</span>
 <span class="sd">        The behavior of pd.Dataframe(outputs) is that it will do an outer join based on indexes of the Series passed in.</span>
 
 <span class="sd">        :param outputs: the outputs to build a dataframe from.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># TODO check inputs are pd.Series, arrays, or scalars -- else error</span>
         <span class="n">output_index_type_tuple</span> <span class="o">=</span> <span class="n">PandasDataFrameResult</span><span class="o">.</span><span class="n">pandas_index_types</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
         <span class="c1"># this next line just log warnings</span>
-        <span class="c1"># we don&#39;t actually care about the result since this is the current default behavior.</span>
+        <span class="c1"># we don't actually care about the result since this is the current default behavior.</span>
         <span class="n">PandasDataFrameResult</span><span class="o">.</span><span class="n">check_pandas_index_types_match</span><span class="p">(</span><span class="o">*</span><span class="n">output_index_type_tuple</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">value</span><span class="p">,)</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>  <span class="c1"># this works because it&#39;s length 1.</span>
+            <span class="p">(</span><span class="n">value</span><span class="p">,)</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>  <span class="c1"># this works because it's length 1.</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">value</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_list_like</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">outputs</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-            <span class="c1"># If we&#39;re dealing with all values that don&#39;t have any &quot;index&quot; that could be created</span>
+            <span class="c1"># If we're dealing with all values that don't have any "index" that could be created</span>
             <span class="c1"># (i.e. scalars, objects) coerce the output to a single-row, multi-column dataframe.</span>
             <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">outputs</span><span class="p">])</span>
         <span class="c1">#</span>
@@ -775,64 +775,64 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">if</span> <span class="n">contains_df</span><span class="p">:</span>
             <span class="c1"># build the dataframe from the outputs</span>
             <span class="k">return</span> <span class="n">PandasDataFrameResult</span><span class="o">.</span><span class="n">build_dataframe_with_dataframes</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
-        <span class="c1"># don&#39;t do anything special if dataframes aren&#39;t in the output.</span>
+        <span class="c1"># don't do anything special if dataframes aren't in the output.</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>  <span class="c1"># this does an implicit outer join based on index.</span></div>
 
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_dataframe_with_dataframes</span><span class="p">(</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Builds a dataframe from the outputs in an &quot;outer join&quot; manner based on index.</span>
+<span class="w">        </span><span class="sd">"""Builds a dataframe from the outputs in an "outer join" manner based on index.</span>
 
 <span class="sd">        The behavior of pd.Dataframe(outputs) is that it will do an outer join based on indexes of the Series passed in.</span>
 <span class="sd">        To handle dataframes, we unpack the dataframe into a dict of series, check to ensure that no columns are</span>
-<span class="sd">        redefined in a rolling fashion going in order of the outputs requested. This then results in an &quot;enlarged&quot;</span>
+<span class="sd">        redefined in a rolling fashion going in order of the outputs requested. This then results in an "enlarged"</span>
 <span class="sd">        outputs dict that is then passed to pd.Dataframe(outputs) to get the final dataframe.</span>
 
 <span class="sd">        :param outputs: The outputs to build the dataframe from.</span>
 <span class="sd">        :return: A dataframe with the outputs.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">get_output_name</span><span class="p">(</span><span class="n">output_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Add function prefix to columns.</span>
+<span class="w">            </span><span class="sd">"""Add function prefix to columns.</span>
 <span class="sd">            Note this means that they stop being valid python identifiers due to the `.` in the string.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="sd">            """</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">output_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2">"</span>
 
         <span class="n">flattened_outputs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Unpacking dataframe </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> into dict of series with columns </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Unpacking dataframe </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> into dict of series with columns </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
                     <span class="p">)</span>
 
                 <span class="n">df_dict</span> <span class="o">=</span> <span class="p">{</span>
                     <span class="n">get_output_name</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">col_name</span><span class="p">):</span> <span class="n">col_value</span>
-                    <span class="k">for</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">col_value</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;series&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">col_value</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"series"</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                 <span class="p">}</span>
                 <span class="n">flattened_outputs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">df_dict</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">flattened_outputs</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Series </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> already exists in the output. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;Please rename the series to avoid this error, or determine from where the initial series is &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;being added; it may be coming from a dataframe that is being unpacked.&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Series </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> already exists in the output. "</span>
+                        <span class="sa">f</span><span class="s2">"Please rename the series to avoid this error, or determine from where the initial series is "</span>
+                        <span class="sa">f</span><span class="s2">"being added; it may be coming from a dataframe that is being unpacked."</span>
                     <span class="p">)</span>
                 <span class="n">flattened_outputs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">flattened_outputs</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Non series output </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> already exists in the output. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;Please rename this output to avoid this error, or determine from where the initial value is &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;being added; it may be coming from a dataframe that is being unpacked.&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Non series output </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> already exists in the output. "</span>
+                        <span class="sa">f</span><span class="s2">"Please rename this output to avoid this error, or determine from where the initial value is "</span>
+                        <span class="sa">f</span><span class="s2">"being added; it may be coming from a dataframe that is being unpacked."</span>
                     <span class="p">)</span>
                 <span class="n">flattened_outputs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span>
 
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">flattened_outputs</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">input_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Currently this just shoves anything into a dataframe. We should probably</span>
-<span class="sd">        tighten this up.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Currently this just shoves anything into a dataframe. We should probably</span>
+<span class="sd">        tighten this up."""</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Any</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">output_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
@@ -843,7 +843,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="StrictIndexTypePandasDataFrameResult">
 <a class="viewcode-back" href="../../../reference/result-builders/Pandas/#hamilton.base.StrictIndexTypePandasDataFrameResult">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">StrictIndexTypePandasDataFrameResult</span><span class="p">(</span><span class="n">PandasDataFrameResult</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ResultBuilder that produces a dataframe only if the index types match exactly.</span>
+<span class="w">    </span><span class="sd">"""A ResultBuilder that produces a dataframe only if the index types match exactly.</span>
 
 <span class="sd">    Note: If there is no index type on some outputs, e.g. the value is a scalar, as long as there exists a single \</span>
 <span class="sd">    pandas index type, no error will be thrown, because a dataframe can be easily created.</span>
@@ -860,7 +860,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        adapter = base.SimplePythonGraphAdapter(strict_builder)</span>
 <span class="sd">        dr =  driver.Driver(config, *modules, adapter=adapter)</span>
 <span class="sd">        df = dr.execute([...], inputs=...)  # this will now error if index types mismatch.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="StrictIndexTypePandasDataFrameResult.build_result">
 <a class="viewcode-back" href="../../../reference/result-builders/Pandas/#hamilton.base.StrictIndexTypePandasDataFrameResult.build_result">[docs]</a>
@@ -876,8 +876,8 @@ s=d.getElementsByTagName('script')[0];
 
             <span class="n">pretty_string</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">output_index_type_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Error: pandas index types did not match exactly. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Found the following indexes:</span><span class="se">\n</span><span class="si">{</span><span class="n">pretty_string</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="s2">"Error: pandas index types did not match exactly. "</span>
+                <span class="sa">f</span><span class="s2">"Found the following indexes:</span><span class="se">\n</span><span class="si">{</span><span class="n">pretty_string</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">PandasDataFrameResult</span><span class="o">.</span><span class="n">build_result</span><span class="p">(</span><span class="o">**</span><span class="n">outputs</span><span class="p">)</span></div>
@@ -888,7 +888,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="NumpyMatrixResult">
 <a class="viewcode-back" href="../../../reference/result-builders/Numpy/#hamilton.base.NumpyMatrixResult">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NumpyMatrixResult</span><span class="p">(</span><span class="n">ResultMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixin for building a Numpy Matrix from the result of walking the graph.</span>
+<span class="w">    </span><span class="sd">"""Mixin for building a Numpy Matrix from the result of walking the graph.</span>
 
 <span class="sd">    All inputs to the build_result function are expected to be numpy arrays.</span>
 
@@ -899,19 +899,19 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        adapter = base.SimplePythonGraphAdapter(base.NumpyMatrixResult())</span>
 <span class="sd">        dr = driver.Driver(config, *modules, adapter=adapter)</span>
 <span class="sd">        numpy_matrix = dr.execute([...], inputs=...)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="NumpyMatrixResult.build_result">
 <a class="viewcode-back" href="../../../reference/result-builders/Numpy/#hamilton.base.NumpyMatrixResult.build_result">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Builds a numpy matrix from the passed in, inputs.</span>
+<span class="w">        </span><span class="sd">"""Builds a numpy matrix from the passed in, inputs.</span>
 
 <span class="sd">        Note: this does not check that the inputs are all numpy arrays/array like things.</span>
 
 <span class="sd">        :param outputs: function_name -&gt; np.array.</span>
 <span class="sd">        :return: numpy matrix</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># TODO check inputs are all numpy arrays/array like things -- else error</span>
         <span class="n">num_rows</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="n">columns_with_lengths</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">()</span>
@@ -923,12 +923,12 @@ s=d.getElementsByTagName('script')[0];
                 <span class="k">if</span> <span class="n">num_rows</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                     <span class="n">num_rows</span> <span class="o">=</span> <span class="n">length</span>
                 <span class="k">elif</span> <span class="n">length</span> <span class="o">==</span> <span class="n">num_rows</span><span class="p">:</span>
-                    <span class="c1"># we&#39;re good</span>
+                    <span class="c1"># we're good</span>
                     <span class="k">pass</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Error, got non scalar result that mismatches length of other vector. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;Got </span><span class="si">{</span><span class="n">length</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> instead of </span><span class="si">{</span><span class="n">num_rows</span><span class="si">}</span><span class="s2">.&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Error, got non scalar result that mismatches length of other vector. "</span>
+                        <span class="sa">f</span><span class="s2">"Got </span><span class="si">{</span><span class="n">length</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> instead of </span><span class="si">{</span><span class="n">num_rows</span><span class="si">}</span><span class="s2">."</span>
                     <span class="p">)</span>
                 <span class="n">columns_with_lengths</span><span class="p">[(</span><span class="n">col</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">)]</span> <span class="o">=</span> <span class="n">val</span>
         <span class="n">list_of_columns</span> <span class="o">=</span> <span class="p">[]</span>
@@ -939,14 +939,14 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">list_of_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Do not know how to make this column </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> with length </span><span class="si">{</span><span class="n">length</span><span class="si">}</span><span class="s2"> have </span><span class="si">{</span><span class="n">num_rows</span><span class="si">}</span><span class="s2"> rows&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Do not know how to make this column </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> with length </span><span class="si">{</span><span class="n">length</span><span class="si">}</span><span class="s2"> have </span><span class="si">{</span><span class="n">num_rows</span><span class="si">}</span><span class="s2"> rows"</span>
                 <span class="p">)</span>
         <span class="c1"># Create the matrix with columns as rows and then transpose</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asmatrix</span><span class="p">(</span><span class="n">list_of_columns</span><span class="p">)</span><span class="o">.</span><span class="n">T</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">input_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Currently returns anything as numpy types are relatively new and&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Currently returns anything as numpy types are relatively new and"""</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Any</span><span class="p">]</span>  <span class="c1"># Typing</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">output_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
@@ -957,7 +957,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="HamiltonGraphAdapter">
 <a class="viewcode-back" href="../../../reference/graph-adapters/HamiltonGraphAdapter/#hamilton.base.HamiltonGraphAdapter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">HamiltonGraphAdapter</span><span class="p">(</span><span class="n">lifecycle_api</span><span class="o">.</span><span class="n">GraphAdapter</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Legacy graph adapter -- see lifecycle methods for more information.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Legacy graph adapter -- see lifecycle methods for more information."""</span>
 
     <span class="k">pass</span></div>
 
@@ -966,14 +966,14 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="SimplePythonDataFrameGraphAdapter">
 <a class="viewcode-back" href="../../../reference/graph-adapters/SimplePythonDataFrameGraphAdapter/#hamilton.base.SimplePythonDataFrameGraphAdapter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SimplePythonDataFrameGraphAdapter</span><span class="p">(</span><span class="n">HamiltonGraphAdapter</span><span class="p">,</span> <span class="n">PandasDataFrameResult</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This is the original Hamilton graph adapter. It uses plain python and builds a dataframe result.</span>
+<span class="w">    </span><span class="sd">"""This is the original Hamilton graph adapter. It uses plain python and builds a dataframe result.</span>
 
 <span class="sd">    This executes the Hamilton dataflow locally on a machine in a single threaded,</span>
 <span class="sd">    single process fashion. It assumes a pandas dataframe as a result.</span>
 
 <span class="sd">    Use this when you want to execute on a single machine, without parallelization, and you want a</span>
 <span class="sd">    pandas dataframe as output.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="SimplePythonDataFrameGraphAdapter.check_input_type">
 <a class="viewcode-back" href="../../../reference/graph-adapters/SimplePythonDataFrameGraphAdapter/#hamilton.base.SimplePythonDataFrameGraphAdapter.check_input_type">[docs]</a>
@@ -1000,23 +1000,23 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="SimplePythonGraphAdapter">
 <a class="viewcode-back" href="../../../reference/graph-adapters/SimplePythonGraphAdapter/#hamilton.base.SimplePythonGraphAdapter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SimplePythonGraphAdapter</span><span class="p">(</span><span class="n">SimplePythonDataFrameGraphAdapter</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This class allows you to swap out the build_result very easily.</span>
+<span class="w">    </span><span class="sd">"""This class allows you to swap out the build_result very easily.</span>
 
 <span class="sd">    This executes the Hamilton dataflow locally on a machine in a single threaded, single process fashion. It allows\</span>
 <span class="sd">    you to specify a ResultBuilder to control the return type of what ``execute()`` returns.</span>
 
-<span class="sd">    Currently this extends SimplePythonDataFrameGraphAdapter, although that&#39;s largely for legacy reasons (and can probably be changed).</span>
+<span class="sd">    Currently this extends SimplePythonDataFrameGraphAdapter, although that's largely for legacy reasons (and can probably be changed).</span>
 
 <span class="sd">    TODO -- change this to extend the right class.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="SimplePythonGraphAdapter.__init__">
 <a class="viewcode-back" href="../../../reference/graph-adapters/SimplePythonGraphAdapter/#hamilton.base.SimplePythonGraphAdapter.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_builder</span><span class="p">:</span> <span class="n">ResultMixin</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Allows you to swap out the build_result very easily.</span>
+<span class="w">        </span><span class="sd">"""Allows you to swap out the build_result very easily.</span>
 
 <span class="sd">        :param result_builder: A ResultMixin object that will be used to build the result.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">result_builder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">result_builder</span> <span class="o">=</span> <span class="n">DictResult</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result_builder</span> <span class="o">=</span> <span class="n">result_builder</span></div>
@@ -1025,7 +1025,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="SimplePythonGraphAdapter.build_result">
 <a class="viewcode-back" href="../../../reference/graph-adapters/SimplePythonGraphAdapter/#hamilton.base.SimplePythonGraphAdapter.build_result">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delegates to the result builder function supplied.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Delegates to the result builder function supplied."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result_builder</span><span class="o">.</span><span class="n">build_result</span><span class="p">(</span><span class="o">**</span><span class="n">outputs</span><span class="p">)</span></div>
 
 
@@ -1038,8 +1038,8 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">DefaultAdapter</span><span class="p">(</span><span class="n">SimplePythonGraphAdapter</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This is a shortcut for the SimplePythonGraphAdapter. It does the exact same thing,</span>
-<span class="sd">    but allows for easier access/naming.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""This is a shortcut for the SimplePythonGraphAdapter. It does the exact same thing,</span>
+<span class="sd">    but allows for easier access/naming."""</span>
 </pre></div>
         </article>
       </div>
@@ -1089,182 +1089,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1309,6 +1144,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1316,7 +1177,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1333,42 +1202,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1391,7 +1318,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1402,12 +1329,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1427,8 +1348,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1440,7 +1361,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1452,9 +1373,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1477,8 +1398,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1488,10 +1412,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1516,10 +1438,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

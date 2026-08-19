@@ -519,19 +519,19 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
 
-<span class="sd">&quot;&quot;&quot;Decorators that attach metadata to nodes&quot;&quot;&quot;</span>
+<span class="sd">"""Decorators that attach metadata to nodes"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
@@ -540,13 +540,13 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">htypes</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">registry</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">base</span>
 
-<span class="n">RAY_REMOTE_TAG_NAMESPACE</span> <span class="o">=</span> <span class="s2">&quot;ray_remote&quot;</span>
+<span class="n">RAY_REMOTE_TAG_NAMESPACE</span> <span class="o">=</span> <span class="s2">"ray_remote"</span>
 
 
 <div class="viewcode-block" id="tag">
 <a class="viewcode-back" href="../../../../reference/decorators/tag/#hamilton.function_modifiers.metadata.tag">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">tag</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeDecorator</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator class that adds a tag to a node. Tags take the form of key/value pairings.</span>
+<span class="w">    </span><span class="sd">"""Decorator class that adds a tag to a node. Tags take the form of key/value pairings.</span>
 <span class="sd">    Tags can have dots to specify namespaces (keys with dots), but this is usually reserved for special cases</span>
 <span class="sd">    (E.G. subdecorators) that utilize them. Usually one will pass in tags as kwargs, so we expect tags to</span>
 <span class="sd">    be un-namespaced in most uses.</span>
@@ -555,16 +555,16 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">       @tag(my_tag=&#39;tag_value&#39;)</span>
+<span class="sd">       @tag(my_tag='tag_value')</span>
 <span class="sd">       def my_function(...) -&gt; ...:</span>
 
-<span class="sd">    is un-namespaced because you cannot put a `.` in the keyword part (the part before the &#39;=&#39;).</span>
+<span class="sd">    is un-namespaced because you cannot put a `.` in the keyword part (the part before the '=').</span>
 
 <span class="sd">    But using:</span>
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">       @tag(**{&#39;my.tag&#39;: &#39;tag_value&#39;})</span>
+<span class="sd">       @tag(**{'my.tag': 'tag_value'})</span>
 <span class="sd">       def my_function(...) -&gt; ...:</span>
 
 <span class="sd">    allows you to add dots that allow you to namespace your tags.</span>
@@ -581,18 +581,18 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">       @tag(foo=&#39;bar&#39;, a_tag_key=&#39;a_tag_value&#39;, **{&#39;namespace.tag_key&#39;: &#39;tag_value&#39;})</span>
+<span class="sd">       @tag(foo='bar', a_tag_key='a_tag_value', **{'namespace.tag_key': 'tag_value'})</span>
 <span class="sd">       def my_function(...) -&gt; ...:</span>
 <span class="sd">          ...</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">RESERVED_TAG_NAMESPACES</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;hamilton&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;data_quality&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;gdpr&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;ccpa&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;dag&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;module&quot;</span><span class="p">,</span>
+        <span class="s2">"hamilton"</span><span class="p">,</span>
+        <span class="s2">"data_quality"</span><span class="p">,</span>
+        <span class="s2">"gdpr"</span><span class="p">,</span>
+        <span class="s2">"ccpa"</span><span class="p">,</span>
+        <span class="s2">"dag"</span><span class="p">,</span>
+        <span class="s2">"module"</span><span class="p">,</span>
         <span class="n">RAY_REMOTE_TAG_NAMESPACE</span><span class="p">,</span>
     <span class="p">]</span>  <span class="c1"># Anything that starts with any of these is banned, the framework reserves the right to manage it</span>
 
@@ -605,12 +605,12 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">bypass_reserved_namespaces_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">tags</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor for adding tag annotations to a function.</span>
+<span class="w">        </span><span class="sd">"""Constructor for adding tag annotations to a function.</span>
 
 <span class="sd">        :param bypass_reserved_namespaces\\_: Whether to bypass Reserved Namespace checking.</span>
 <span class="sd">        :param target\\_: Target nodes to decorate. This can be one of the following:</span>
 
-<span class="sd">            * **None**: tag all nodes outputted by this that are &quot;final&quot; (E.g. do not have a node\</span>
+<span class="sd">            * **None**: tag all nodes outputted by this that are "final" (E.g. do not have a node\</span>
 <span class="sd">            outputted by this that depend on them)</span>
 <span class="sd">            * **Ellipsis (...)**: tag *all* nodes outputted by this</span>
 <span class="sd">            * **Collection[str]**: tag *only* the nodes with the specified names</span>
@@ -618,24 +618,24 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param tags: the keys are always going to be strings, so the type annotation here means the values are strings \</span>
 <span class="sd">            or lists of values. Implicitly this is `Dict[str, Union[str, List[str]]]` but the PEP guideline is to only</span>
 <span class="sd">             annotate it with the value `Union[str, List[str]]`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target_</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bypass_reserved_namespaces</span> <span class="o">=</span> <span class="n">bypass_reserved_namespaces_</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">decorate_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decorates the nodes produced by this with the specified tags</span>
+<span class="w">        </span><span class="sd">"""Decorates the nodes produced by this with the specified tags</span>
 
 <span class="sd">        :param node_: Node to decorate</span>
 <span class="sd">        :return: Copy of the node, with tags assigned</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">node_tags</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">node_tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">node_</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="n">node_tags</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_key_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that a tag key is allowed. Rules are:</span>
+<span class="w">        </span><span class="sd">"""Validates that a tag key is allowed. Rules are:</span>
 <span class="sd">        1. It must not be empty</span>
 <span class="sd">        2. It can have dots, which specify a hierarchy of order</span>
 <span class="sd">        3. All components, when split by dots, must be valid python identifiers</span>
@@ -643,8 +643,8 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        :param key: The key to validate</span>
 <span class="sd">        :return: True if it is valid, False if not</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">key_components</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">key_components</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">key_components</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># empty string...</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -658,11 +658,11 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_value_allowed</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that a tag value is allowed. Rules are only that it must be a string.</span>
+<span class="w">        </span><span class="sd">"""Validates that a tag value is allowed. Rules are only that it must be a string.</span>
 
 <span class="sd">        :param value: Value to validate</span>
 <span class="sd">        :return: True if it is valid, False otherwise</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -675,11 +675,11 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates the decorator. In this case that the set of tags produced is final.</span>
+<span class="w">        </span><span class="sd">"""Validates the decorator. In this case that the set of tags produced is final.</span>
 
 <span class="sd">        :param fn: Function that the decorator is called on.</span>
 <span class="sd">        :raises ValueError: if the specified tags contains invalid ones</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">bad_tags</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key_allowed</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">tag</span><span class="o">.</span><span class="n">_value_allowed</span><span class="p">(</span><span class="n">value</span><span class="p">)):</span>
@@ -687,15 +687,15 @@ s=d.getElementsByTagName('script')[0];
                     <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
                 <span class="n">bad_tags</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">bad_tags</span><span class="p">:</span>
-            <span class="n">bad_tags_formatted</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">bad_tags</span><span class="p">])</span>
+            <span class="n">bad_tags_formatted</span> <span class="o">=</span> <span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">bad_tags</span><span class="p">])</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;The following tags are invalid as tags: </span><span class="si">{</span><span class="n">bad_tags_formatted</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="s2">&quot;Tag keys can be split by ., to represent a hierarchy, &quot;</span>
-                <span class="s2">&quot;but each element of the hierarchy must be a valid python identifier. &quot;</span>
-                <span class="s2">&quot;Paths components also cannot be empty. &quot;</span>
-                <span class="s2">&quot;The value can only be a string, or a list of strings. &quot;</span>
-                <span class="s2">&quot;Note that the following top-level prefixes are &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;reserved as well: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">RESERVED_TAG_NAMESPACES</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"The following tags are invalid as tags: </span><span class="si">{</span><span class="n">bad_tags_formatted</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="s2">"Tag keys can be split by ., to represent a hierarchy, "</span>
+                <span class="s2">"but each element of the hierarchy must be a valid python identifier. "</span>
+                <span class="s2">"Paths components also cannot be empty. "</span>
+                <span class="s2">"The value can only be a string, or a list of strings. "</span>
+                <span class="s2">"Note that the following top-level prefixes are "</span>
+                <span class="sa">f</span><span class="s2">"reserved as well: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">RESERVED_TAG_NAMESPACES</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span></div>
 
 
@@ -706,7 +706,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="tag_outputs.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/tag/#hamilton.function_modifiers.metadata.tag_outputs.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">tag_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a tag_outputs decorator.</span>
+<span class="w">        </span><span class="sd">"""Creates a tag_outputs decorator.</span>
 
 <span class="sd">        Note that this currently does not validate whether the nodes are spelled correctly as it takes in a superset of\</span>
 <span class="sd">        nodes.</span>
@@ -718,18 +718,18 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">           @tag_output(**{&#39;a&#39;: {&#39;a_tag&#39;: &#39;a_tag_value&#39;}, &#39;b&#39;: {&#39;b_tag&#39;: &#39;b_tag_value&#39;}})</span>
-<span class="sd">           @extract_columns(&quot;a&quot;, &quot;b&quot;)</span>
+<span class="sd">           @tag_output(**{'a': {'a_tag': 'a_tag_value'}, 'b': {'b_tag': 'b_tag_value'}})</span>
+<span class="sd">           @extract_columns("a", "b")</span>
 <span class="sd">           def example_tag_outputs() -&gt; pd.DataFrame:</span>
-<span class="sd">               return pd.DataFrame.from_records({&quot;a&quot;: [1], &quot;b&quot;: [2]})</span>
+<span class="sd">               return pd.DataFrame.from_records({"a": [1], "b": [2]})</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeDecorator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">target</span><span class="o">=...</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tag_mapping</span> <span class="o">=</span> <span class="n">tag_mapping</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">decorate_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decorates all final nodes with the specified tags.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Decorates all final nodes with the specified tags."""</span>
         <span class="k">if</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_mapping</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">node_</span>  <span class="c1"># in this case we have no desire to update tags</span>
         <span class="n">new_tags</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -740,75 +740,75 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="c1"># These represent a generic schema type -- E.G. one that will</span>
 <span class="c1"># be supported across the entire set of usable dataframe/dataset types</span>
-<span class="c1"># Eventually we&#39;ll be integrating mappings of these into the registry,</span>
+<span class="c1"># Eventually we'll be integrating mappings of these into the registry,</span>
 <span class="c1"># but for now this serves largely as a placeholder/documentation</span>
 <span class="c1"># GENERIC_SCHEMA_TYPES = (</span>
-<span class="c1">#     &quot;int&quot;,</span>
-<span class="c1">#     &quot;float&quot;,</span>
-<span class="c1">#     &quot;str&quot;,</span>
-<span class="c1">#     &quot;bool&quot;,</span>
-<span class="c1">#     &quot;dict&quot;,</span>
-<span class="c1">#     &quot;list&quot;,</span>
-<span class="c1">#     &quot;object&quot;,</span>
-<span class="c1">#     &quot;datetime&quot;,</span>
-<span class="c1">#     &quot;date&quot;,</span>
+<span class="c1">#     "int",</span>
+<span class="c1">#     "float",</span>
+<span class="c1">#     "str",</span>
+<span class="c1">#     "bool",</span>
+<span class="c1">#     "dict",</span>
+<span class="c1">#     "list",</span>
+<span class="c1">#     "object",</span>
+<span class="c1">#     "datetime",</span>
+<span class="c1">#     "date",</span>
 <span class="c1"># )</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">SchemaOutput</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">fields</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">target_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes SchemaOutput. See docs for `@schema.output` for more details.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Initializes SchemaOutput. See docs for `@schema.output` for more details."""</span>
 
-        <span class="n">tag_value</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">])</span>
+        <span class="n">tag_value</span> <span class="o">=</span> <span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">])</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SchemaOutput</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="o">**</span><span class="p">{</span><span class="n">schema</span><span class="o">.</span><span class="n">INTERNAL_SCHEMA_OUTPUT_KEY</span><span class="p">:</span> <span class="n">tag_value</span><span class="p">},</span> <span class="n">target_</span><span class="o">=</span><span class="n">target_</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that the node has a return type of a registered dataframe.</span>
+<span class="w">        </span><span class="sd">"""Validates that the node has a return type of a registered dataframe.</span>
 
 <span class="sd">        :param node_: Node to validate</span>
 <span class="sd">        :raises InvalidDecoratorException: if the node does not have a return type of a registered dataframe.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">output_type</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">type</span>
         <span class="n">available_types</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_registered_dataframe_types</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">type_</span> <span class="ow">in</span> <span class="n">available_types</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">htypes</span><span class="o">.</span><span class="n">custom_subclass_check</span><span class="p">(</span><span class="n">output_type</span><span class="p">,</span> <span class="n">type_</span><span class="p">):</span>
                 <span class="k">return</span>
         <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Node </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has type </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2"> which is not a registered type for a dataset. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Registered types are </span><span class="si">{</span><span class="n">available_types</span><span class="si">}</span><span class="s2">. If you found this, either (a) ensure you have the &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;right package installed, or (b) reach out to the team to figure out how to add yours.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Node </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has type </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2"> which is not a registered type for a dataset. "</span>
+            <span class="sa">f</span><span class="s2">"Registered types are </span><span class="si">{</span><span class="n">available_types</span><span class="si">}</span><span class="s2">. If you found this, either (a) ensure you have the "</span>
+            <span class="sa">f</span><span class="s2">"right package installed, or (b) reach out to the team to figure out how to add yours."</span>
         <span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">allows_multiple</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Currently this only applies to a single output. If it is a set of nodes with multiple outputs,</span>
-<span class="sd">        it will apply to the &quot;final&quot; (sink) one. We can change this if there&#39;s need.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Currently this only applies to a single output. If it is a set of nodes with multiple outputs,</span>
+<span class="sd">        it will apply to the "final" (sink) one. We can change this if there's need."""</span>
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Bypassed for now -- we have no function-level or class-level validations yet,</span>
+<span class="w">        </span><span class="sd">"""Bypassed for now -- we have no function-level or class-level validations yet,</span>
 <span class="sd">        but this is done at `@tag`, which this inherits. We will be moving away from inheriting tag.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span>
 
 
 <div class="viewcode-block" id="schema">
 <a class="viewcode-back" href="../../../../reference/decorators/schema/#hamilton.function_modifiers.metadata.schema">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">schema</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Container class for schema stuff. This is purely so we can have a nice API for it -- E.G. Schema.output&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Container class for schema stuff. This is purely so we can have a nice API for it -- E.G. Schema.output"""</span>
 
-    <span class="n">INTERNAL_SCHEMA_OUTPUT_KEY</span> <span class="o">=</span> <span class="s2">&quot;hamilton.internal.schema_output&quot;</span>
+    <span class="n">INTERNAL_SCHEMA_OUTPUT_KEY</span> <span class="o">=</span> <span class="s2">"hamilton.internal.schema_output"</span>
 
 <div class="viewcode-block" id="schema.output">
 <a class="viewcode-back" href="../../../../reference/decorators/schema/#hamilton.function_modifiers.metadata.schema.output">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">output</span><span class="p">(</span><span class="o">*</span><span class="n">fields</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">target_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemaOutput</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a `@schema.output` decorator. This takes in a list of fields, which are tuples of the form</span>
+<span class="w">        </span><span class="sd">"""Initializes a `@schema.output` decorator. This takes in a list of fields, which are tuples of the form</span>
 <span class="sd">        `(field_name, field_type)`. The field type must be one of the function_modifiers.SchemaTypes types.</span>
 
-<span class="sd">        :param target_: Target node to decorate -- if `None` it&#39;ll decorate all final nodes (E.G. sinks in the subdag),</span>
+<span class="sd">        :param target_: Target node to decorate -- if `None` it'll decorate all final nodes (E.G. sinks in the subdag),</span>
 <span class="sd">            otherwise it will decorate the specified node.</span>
 <span class="sd">        :param fields: List of fields to add to the schema. Each field is a tuple of the form `(field_name, field_type)`</span>
 
@@ -822,15 +822,15 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">           @schema.output(</span>
-<span class="sd">               (&quot;a&quot;, &quot;int&quot;),</span>
-<span class="sd">               (&quot;b&quot;, &quot;float&quot;),</span>
-<span class="sd">               (&quot;c&quot;, &quot;str&quot;)</span>
+<span class="sd">               ("a", "int"),</span>
+<span class="sd">               ("b", "float"),</span>
+<span class="sd">               ("c", "str")</span>
 <span class="sd">            )</span>
 <span class="sd">           def example_schema() -&gt; pd.DataFrame:</span>
-<span class="sd">               return pd.DataFrame.from_records({&quot;a&quot;: [1], &quot;b&quot;: [2.0], &quot;c&quot;: [&quot;3&quot;]})</span>
+<span class="sd">               return pd.DataFrame.from_records({"a": [1], "b": [2.0], "c": ["3"]})</span>
 
 <span class="sd">        Then, when drawing the DAG, the schema will be displayed as sub-elements in the node for the DAG (if `display_schema` is selected).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">SchemaOutput</span><span class="p">(</span><span class="o">*</span><span class="n">fields</span><span class="p">,</span> <span class="n">target_</span><span class="o">=</span><span class="n">target_</span><span class="p">)</span></div>
 </div>
 
@@ -838,15 +838,15 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="k">class</span><span class="w"> </span><span class="nc">RayRemote</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes RayRemote. See docs for `@ray_remote_options` for more details.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Initializes RayRemote. See docs for `@ray_remote_options` for more details."""</span>
 
-        <span class="n">ray_tags</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;ray_remote.</span><span class="si">{</span><span class="n">option</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">option</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">ray_tags</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">"ray_remote.</span><span class="si">{</span><span class="n">option</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">option</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">RayRemote</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">bypass_reserved_namespaces_</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">ray_tags</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">ray_remote_options</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RayRemote</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes a `@ray_remote_options` decorator. This takes in a list of options to pass to ray.remote().</span>
+<span class="w">    </span><span class="sd">"""Initializes a `@ray_remote_options` decorator. This takes in a list of options to pass to ray.remote().</span>
 
 <span class="sd">    Supported options include resources, as well as other options:</span>
 <span class="sd">    https://docs.ray.io/en/latest/ray-core/scheduling/resources.html</span>
@@ -862,39 +862,39 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        @ray_remote_options(</span>
 <span class="sd">            num_gpus=1,</span>
-<span class="sd">            resources={&quot;my_custom_resource&quot;: 1},</span>
+<span class="sd">            resources={"my_custom_resource": 1},</span>
 <span class="sd">        )</span>
 <span class="sd">        def example() -&gt; pd.DataFrame: ...</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">RayRemote</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
 <span class="c1"># materializers that have a `path` kwarg and are part of the core Hamilton library</span>
-<span class="c1"># parquet, csv, feather, orc, and excel are via the pandas extension because it&#39;s currently a Hamilton dependency</span>
+<span class="c1"># parquet, csv, feather, orc, and excel are via the pandas extension because it's currently a Hamilton dependency</span>
 <span class="n">CACHE_MATERIALIZERS</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span>
-    <span class="s2">&quot;json&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;file&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;pickle&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;parquet&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;csv&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;feather&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;orc&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;excel&quot;</span><span class="p">,</span>
+    <span class="s2">"json"</span><span class="p">,</span>
+    <span class="s2">"file"</span><span class="p">,</span>
+    <span class="s2">"pickle"</span><span class="p">,</span>
+    <span class="s2">"parquet"</span><span class="p">,</span>
+    <span class="s2">"csv"</span><span class="p">,</span>
+    <span class="s2">"feather"</span><span class="p">,</span>
+    <span class="s2">"orc"</span><span class="p">,</span>
+    <span class="s2">"excel"</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="c1"># see hamilton.caching.adapter.CachingBehavior enum for details.</span>
 <span class="c1"># default: caching is enabled</span>
 <span class="c1"># recompute: always compute the node instead of retrieving</span>
-<span class="c1"># ignore: the data version won&#39;t be part of downstream keys</span>
-<span class="c1"># disable: act as if caching wasn&#39;t enabled.</span>
-<span class="n">CACHE_BEHAVIORS</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;recompute&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="s2">&quot;disable&quot;</span><span class="p">]</span>
+<span class="c1"># ignore: the data version won't be part of downstream keys</span>
+<span class="c1"># disable: act as if caching wasn't enabled.</span>
+<span class="n">CACHE_BEHAVIORS</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"default"</span><span class="p">,</span> <span class="s2">"recompute"</span><span class="p">,</span> <span class="s2">"ignore"</span><span class="p">,</span> <span class="s2">"disable"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="cache">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.function_modifiers.metadata.cache">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">cache</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeDecorator</span><span class="p">):</span>
-    <span class="n">BEHAVIOR_KEY</span> <span class="o">=</span> <span class="s2">&quot;cache.behavior&quot;</span>
-    <span class="n">FORMAT_KEY</span> <span class="o">=</span> <span class="s2">&quot;cache.format&quot;</span>
+    <span class="n">BEHAVIOR_KEY</span> <span class="o">=</span> <span class="s2">"cache.behavior"</span>
+    <span class="n">FORMAT_KEY</span> <span class="o">=</span> <span class="s2">"cache.format"</span>
 
 <div class="viewcode-block" id="cache.__init__">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.function_modifiers.metadata.cache.__init__">[docs]</a>
@@ -905,14 +905,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="nb">format</span><span class="p">:</span> <span class="n">CACHE_MATERIALIZERS</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">target_</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">TargetType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The ``@cache`` decorator can define the behavior and format of a specific node.</span>
+<span class="w">        </span><span class="sd">"""The ``@cache`` decorator can define the behavior and format of a specific node.</span>
 
 <span class="sd">        This feature is implemented via tags, but that could change. Thus you should not</span>
 <span class="sd">        rely on these tags for other purposes.</span>
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            @cache(behavior=&quot;recompute&quot;, format=&quot;parquet&quot;)</span>
+<span class="sd">            @cache(behavior="recompute", format="parquet")</span>
 <span class="sd">            def raw_data() -&gt; pd.DataFrame: ...</span>
 
 
@@ -921,19 +921,19 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            @cache(format=&quot;json&quot;, target_=&quot;performance&quot;)</span>
+<span class="sd">            @cache(format="json", target_="performance")</span>
 <span class="sd">            @extract_fields(trained_model=LinearRegression, performance: dict)</span>
 <span class="sd">            def model_training() -&gt; dict:</span>
 <span class="sd">                # ...</span>
-<span class="sd">                performance = {&quot;rmse&quot;: 0.1, &quot;mae&quot;: 0.2}</span>
-<span class="sd">                return {&quot;trained_model&quot;: trained_model, &quot;performance&quot;: performance}</span>
+<span class="sd">                performance = {"rmse": 0.1, "mae": 0.2}</span>
+<span class="sd">                return {"trained_model": trained_model, "performance": performance}</span>
 
 
 <span class="sd">        :param behavior: The behavior of the cache. This can be one of the following:</span>
 <span class="sd">            * **default**: caching is enabled</span>
 <span class="sd">            * **recompute**: always compute the node instead of retrieving</span>
-<span class="sd">            * **ignore**: the data version won&#39;t be part of downstream keys</span>
-<span class="sd">            * **disable**: act as if caching wasn&#39;t enabled.</span>
+<span class="sd">            * **ignore**: the data version won't be part of downstream keys</span>
+<span class="sd">            * **disable**: act as if caching wasn't enabled.</span>
 <span class="sd">        :param format: The format of the cache. This can be one of the following:</span>
 <span class="sd">            * **json**: JSON format</span>
 <span class="sd">            * **file**: file format</span>
@@ -944,15 +944,15 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            * **orc**: orc format</span>
 <span class="sd">            * **excel**: excel format</span>
 <span class="sd">        :param target\\_: Target nodes to decorate. This can be one of the following:</span>
-<span class="sd">            * **None**: tag all nodes outputted by this that are &quot;final&quot; (E.g. do not have a node\</span>
+<span class="sd">            * **None**: tag all nodes outputted by this that are "final" (E.g. do not have a node\</span>
 <span class="sd">            outputted by this that depend on them)</span>
 <span class="sd">            * **Ellipsis (...)**: tag *all* nodes outputted by this</span>
 <span class="sd">            * **Collection[str]**: tag *only* the nodes with the specified names</span>
 <span class="sd">            * **str**: tag *only* the node with the specified name</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target_</span><span class="p">)</span>
 
-        <span class="c1"># don&#39;t provide default value for behavior and format if not provided by user</span>
+        <span class="c1"># don't provide default value for behavior and format if not provided by user</span>
         <span class="c1"># the SmartCacheAdapter expects the field to be empty if not set</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cache_tags</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">behavior</span><span class="p">:</span>
@@ -965,11 +965,11 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="cache.decorate_node">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.function_modifiers.metadata.cache.decorate_node">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">decorate_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decorates the nodes with the cache tags.</span>
+<span class="w">        </span><span class="sd">"""Decorates the nodes with the cache tags.</span>
 
 <span class="sd">        :param node_: Node to decorate</span>
 <span class="sd">        :return: Copy of the node, with tags assigned</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">node_tags</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">node_tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache_tags</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">node_</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="n">node_tags</span><span class="p">)</span></div>
@@ -1024,182 +1024,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1244,6 +1079,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1251,7 +1112,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1268,42 +1137,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1326,7 +1253,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1337,12 +1264,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1362,8 +1283,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1375,7 +1296,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1387,9 +1308,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1412,8 +1333,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1423,10 +1347,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1451,10 +1373,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

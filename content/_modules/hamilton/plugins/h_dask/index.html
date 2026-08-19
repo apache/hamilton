@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -558,7 +558,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="DaskGraphAdapter">
 <a class="viewcode-back" href="../../../../reference/graph-adapters/DaskGraphAdapter/#hamilton.plugins.h_dask.DaskGraphAdapter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DaskGraphAdapter</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">HamiltonGraphAdapter</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing what&#39;s required to make Hamilton run on Dask.</span>
+<span class="w">    </span><span class="sd">"""Class representing what's required to make Hamilton run on Dask.</span>
 
 <span class="sd">    This walks the graph and translates it to run onto `Dask &lt;https://dask.org/&gt;`__.</span>
 
@@ -566,11 +566,11 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    Try this adapter when:</span>
 
-<span class="sd">        1. Dask is a good choice to scale computation when you really can&#39;t do things in memory anymore with pandas. \</span>
+<span class="sd">        1. Dask is a good choice to scale computation when you really can't do things in memory anymore with pandas. \</span>
 <span class="sd">        For most simple pandas operations, you should not have to do anything to scale! You just need to load in \</span>
 <span class="sd">        data via dask rather than pandas.</span>
-<span class="sd">        2. Dask can help scale to larger data sets if running on a cluster -- you&#39;ll just have to switch to\</span>
-<span class="sd">        natively using their object types if that&#39;s the case (set use_delayed=False, and compute_at_end=False).</span>
+<span class="sd">        2. Dask can help scale to larger data sets if running on a cluster -- you'll just have to switch to\</span>
+<span class="sd">        natively using their object types if that's the case (set use_delayed=False, and compute_at_end=False).</span>
 <span class="sd">        3. Use this adapter if you want to utilize multiple cores on a single machine, or you want to scale to large \</span>
 <span class="sd">        data set sizes with a Dask cluster that you can connect to.</span>
 <span class="sd">        4. The ONLY CAVEAT really is whether you use `delayed` or `dask datatypes` (or both).</span>
@@ -606,14 +606,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    CAVEATS with use_delayed=True:</span>
 <span class="sd">    ------------------------------</span>
 <span class="sd">      - If using `use_delayed=True` serialization costs can outweigh the benefits of parallelism, so you should \</span>
-<span class="sd">       benchmark your code to see if it&#39;s worth it.</span>
+<span class="sd">       benchmark your code to see if it's worth it.</span>
 <span class="sd">      - With this adapter &amp; use_delayed=True, it can naively wrap all your functions with `delayed`, which will mean \</span>
 <span class="sd">       they will be executed and scheduled across the dask workers. This is a good choice if your computation is slow, \</span>
 <span class="sd">       or Hamilton graph is highly parallelizable.</span>
 
-<span class="sd">    DISCLAIMER -- this class is experimental, so signature changes are a possibility! But we&#39;ll aim to be backwards</span>
+<span class="sd">    DISCLAIMER -- this class is experimental, so signature changes are a possibility! But we'll aim to be backwards</span>
 <span class="sd">    compatible where possible.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="DaskGraphAdapter.__init__">
 <a class="viewcode-back" href="../../../../reference/graph-adapters/DaskGraphAdapter/#hamilton.plugins.h_dask.DaskGraphAdapter.__init__">[docs]</a>
@@ -625,25 +625,25 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">use_delayed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">compute_at_end</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor</span>
+<span class="w">        </span><span class="sd">"""Constructor</span>
 
 <span class="sd">        You have the ability to pass in a ResultMixin object to the constructor to control the return type that gets\</span>
 <span class="sd">        produced by running on Dask.</span>
 
-<span class="sd">        :param dask_client: the dask client -- we don&#39;t do anything with it, but thought that it would be useful\</span>
+<span class="sd">        :param dask_client: the dask client -- we don't do anything with it, but thought that it would be useful\</span>
 <span class="sd">            to wire through here.</span>
 <span class="sd">        :param result_builder: The function that will build the result. Optional, defaults to pandas dataframe.</span>
-<span class="sd">        :param visualize_kwargs: Arguments to visualize the graph using dask&#39;s internals.\</span>
+<span class="sd">        :param visualize_kwargs: Arguments to visualize the graph using dask's internals.\</span>
 <span class="sd">            **None**, means no visualization.\</span>
 <span class="sd">            **Dict**, means visualize -- see https://docs.dask.org/en/latest/api.html?highlight=visualize#dask.visualize\</span>
 <span class="sd">            for what to pass in.</span>
 <span class="sd">        :param use_delayed: Default is True for backwards compatibility. Whether to use dask.delayed to wrap every</span>
 <span class="sd">            function. Note: it is probably not necessary to mix this with using dask objects, e.g. dataframes/series.</span>
-<span class="sd">            They are by nature lazily computed and operate over the dask data types, so you don&#39;t need to wrap them</span>
+<span class="sd">            They are by nature lazily computed and operate over the dask data types, so you don't need to wrap them</span>
 <span class="sd">            with delayed. Use delayed if you want to farm out computation.</span>
 <span class="sd">        :param compute_at_end: Default is True for backwards compatibility. Whether to compute() at the end.</span>
 <span class="sd">            That is, should `.compute()` be called in the result builder to quick off computation.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">dask_client</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result_builder</span> <span class="o">=</span> <span class="n">result_builder</span> <span class="ow">or</span> <span class="n">base</span><span class="o">.</span><span class="n">PandasDataFrameResult</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">visualize_kwargs</span> <span class="o">=</span> <span class="n">visualize_kwargs</span>
@@ -679,19 +679,19 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="DaskGraphAdapter.execute_node">
 <a class="viewcode-back" href="../../../../reference/graph-adapters/DaskGraphAdapter/#hamilton.plugins.h_dask.DaskGraphAdapter.execute_node">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function that is called as we walk the graph to determine how to execute a hamilton function.</span>
+<span class="w">        </span><span class="sd">"""Function that is called as we walk the graph to determine how to execute a hamilton function.</span>
 
 <span class="sd">        :param node: the node from the graph.</span>
 <span class="sd">        :param kwargs: the arguments that should be passed to it.</span>
 <span class="sd">        :return: returns a dask delayed object.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_delayed</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">callable</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c1"># we want to ensure the name in dask corresponds to the node name, and not the wrapped</span>
         <span class="c1"># function name that hamilton might have wrapped it with.</span>
         <span class="nb">hash</span> <span class="o">=</span> <span class="n">tokenize</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># this is what the dask docs recommend.</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="nb">hash</span>
-        <span class="n">dask_key_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">hash</span>
+        <span class="n">dask_key_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="nb">hash</span>
         <span class="k">return</span> <span class="n">delayed</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">callable</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)(</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
             <span class="n">dask_key_name</span><span class="o">=</span><span class="n">dask_key_name</span><span class="p">,</span>  <span class="c1"># this is what shows up in the dask console</span>
@@ -701,7 +701,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="DaskGraphAdapter.build_result">
 <a class="viewcode-back" href="../../../../reference/graph-adapters/DaskGraphAdapter/#hamilton.plugins.h_dask.DaskGraphAdapter.build_result">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Builds the result and brings it back to this running process.</span>
+<span class="w">        </span><span class="sd">"""Builds the result and brings it back to this running process.</span>
 
 <span class="sd">        :param outputs: the dictionary of key -&gt; Union[delayed object reference | value]</span>
 <span class="sd">        :return: The type of object returned by self.result_builder. Note the following behaviors:</span>
@@ -711,10 +711,10 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">          - if you use_delayed=False &amp; computed_at_end=True, this will only work if the self.result_builder</span>
 <span class="sd">          returns a dask type, as we will try to compute it.</span>
 <span class="sd">          - if you use_delayed=False &amp; computed_at_end=False, this will return the result of self.result_builder.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got column </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">, with type [</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">].&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Got column </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">, with type [</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">]."</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_delayed</span><span class="p">:</span>
             <span class="n">delayed_result</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result_builder</span><span class="o">.</span><span class="n">build_result</span><span class="p">)(</span><span class="o">**</span><span class="n">outputs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -737,26 +737,26 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/result-builders/Dask/#hamilton.plugins.h_dask.DaskDataFrameResult.build_result">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Builds a dask dataframe from the outputs.</span>
+<span class="w">        </span><span class="sd">"""Builds a dask dataframe from the outputs.</span>
 
 <span class="sd">        This has some assumptions:</span>
-<span class="sd">         1. the order specified in the output will mirror the order of &quot;joins&quot; here.</span>
+<span class="sd">         1. the order specified in the output will mirror the order of "joins" here.</span>
 <span class="sd">         2. it tries to massage types into dask types where it can</span>
-<span class="sd">         3. otherwise it duplicates any &quot;scalars/objects&quot; using the first valid input with an index as the</span>
+<span class="sd">         3. otherwise it duplicates any "scalars/objects" using the first valid input with an index as the</span>
 <span class="sd">            template. It assumes a single partition.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">get_output_name</span><span class="p">(</span><span class="n">output_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Add function prefix to columns.</span>
+<span class="w">            </span><span class="sd">"""Add function prefix to columns.</span>
 <span class="sd">            Note this means that they stop being valid python identifiers due to the `.` in the string.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="sd">            """</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">output_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2">"</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No outputs were specified. Cannot build a dataframe.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No outputs were specified. Cannot build a dataframe."</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got column </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">, with type [</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">].&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Got column </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">, with type [</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">]."</span><span class="p">)</span>
 
         <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">index</span> <span class="o">=</span> <span class="kc">None</span>
@@ -812,13 +812,13 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">columns_expected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Unknown type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2"> for output </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">. &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Do not know how to handle making a dataframe from this.&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Unknown type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2"> for output </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">. "</span>
+                    <span class="sa">f</span><span class="s2">"Do not know how to handle making a dataframe from this."</span>
                 <span class="p">)</span>
 
         <span class="c1"># assumption is that everything here is a dask series or dataframe</span>
-        <span class="c1"># we assume that we do column concatenation and that it&#39;s an outer join (TBD: make this configurable)</span>
-        <span class="n">_df</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">o</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">massaged_outputs</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s2">&quot;outer&quot;</span><span class="p">)</span>
+        <span class="c1"># we assume that we do column concatenation and that it's an outer join (TBD: make this configurable)</span>
+        <span class="n">_df</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">o</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">massaged_outputs</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s2">"outer"</span><span class="p">)</span>
         <span class="n">_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns_expected</span>
         <span class="k">return</span> <span class="n">_df</span></div>
 </div>
@@ -829,27 +829,27 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">DaskExecutor</span><span class="p">(</span><span class="n">executors</span><span class="o">.</span><span class="n">TaskExecutor</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A DaskExecutor for task-based execution on dask in the new Hamilton execution API.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A DaskExecutor for task-based execution on dask in the new Hamilton execution API."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">DaskClient</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the DaskExecutor. Note this currently takes in the client -- we will likely</span>
+<span class="w">        </span><span class="sd">"""Initializes the DaskExecutor. Note this currently takes in the client -- we will likely</span>
 <span class="sd">        add the ability to make it take in parameters to instantiate/tear down a client on its own.</span>
 <span class="sd">        This just allows full flexibility for now.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;No-op -- client already passed in by the user.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""No-op -- client already passed in by the user."""</span>
         <span class="k">pass</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;No-op -- client already passed in by the user, who is responsible for shutting it</span>
-<span class="sd">        down.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""No-op -- client already passed in by the user, who is responsible for shutting it</span>
+<span class="sd">        down."""</span>
         <span class="k">pass</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">submit_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="n">executors</span><span class="o">.</span><span class="n">TaskImplementation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">executors</span><span class="o">.</span><span class="n">TaskFuture</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Submits a task using the dask futures API. Note that we are not using dask delayed --</span>
+<span class="w">        </span><span class="sd">"""Submits a task using the dask futures API. Note that we are not using dask delayed --</span>
 <span class="sd">        as the idea is that tasks are potentially dynamic, meaning that we have to resolve some</span>
 <span class="sd">        before we create others. That makes the delayed API a little messier -- we would have to</span>
 <span class="sd">        call .compute() at certain steps. We *may* consider doing this, but for now, we are just</span>
@@ -857,17 +857,17 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        :param task: Task to execute (contains all arguments necessary)</span>
 <span class="sd">        :return: The future for the task</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">return</span> <span class="n">executors</span><span class="o">.</span><span class="n">TaskFutureWrappingPythonFuture</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">executors</span><span class="o">.</span><span class="n">base_execute_task</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">can_submit_task</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;For now we always can -- it will block on the dask side.</span>
+<span class="w">        </span><span class="sd">"""For now we always can -- it will block on the dask side.</span>
 
 <span class="sd">        :return: True</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="kc">True</span>
 </pre></div>
         </article>
@@ -918,182 +918,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1138,6 +973,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1145,7 +1006,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1162,42 +1031,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1220,7 +1147,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1231,12 +1158,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1256,8 +1177,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1269,7 +1190,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1281,9 +1202,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1306,8 +1227,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1317,10 +1241,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1345,10 +1267,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

@@ -575,7 +575,7 @@ is call out to the hamilton library within your task. If your orchestrator suppo
 <span class="kn">import</span><span class="w"> </span><span class="nn">hamilton</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_transformations</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">hamilton</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">Driver</span><span class="p">({},</span> <span class="n">my_functions</span><span class="p">)</span>
-<span class="n">output</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s1">&#39;final_var&#39;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=...</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s1">'final_var'</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=...</span><span class="p">)</span>
 <span class="n">do_something_with</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -588,7 +588,7 @@ of a manual/power-user feature. Some pseudocode:</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">hamilton</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_functions</span>
 <span class="n">prior_inputs</span> <span class="o">=</span> <span class="n">load_relevant_task_results</span><span class="p">()</span>
-<span class="n">desired_outputs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;final_var_1&#39;</span><span class="p">,</span> <span class="s1">&#39;final_var_2&#39;</span><span class="p">]</span>
+<span class="n">desired_outputs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'final_var_1'</span><span class="p">,</span> <span class="s1">'final_var_2'</span><span class="p">]</span>
 <span class="n">inputs</span> <span class="o">=</span> <span class="n">my_inputs</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">hamilton</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">Driver</span><span class="p">({},</span> <span class="n">my_functions</span><span class="p">)</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>

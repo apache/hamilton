@@ -558,23 +558,23 @@ underneath.</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_prompt</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Tell me a short joke about </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Tell me a short joke about </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_messages</span><span class="p">(</span><span class="n">joke_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">joke_prompt</span><span class="p">}]</span>
+    <span class="k">return</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">joke_prompt</span><span class="p">}]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_response</span><span class="p">(</span><span class="n">llm_client</span><span class="p">:</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">,</span>
                   <span class="n">joke_messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">llm_client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">,</span>
         <span class="n">messages</span><span class="o">=</span><span class="n">joke_messages</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">hamilton_invoke</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
@@ -584,9 +584,9 @@ underneath.</p>
         <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">hamilton_invoke</span><span class="p">)</span>
         <span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="p">)</span>
-    <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">&quot;hamilton-invoke.png&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;joke_response&quot;</span><span class="p">],</span>
-                     <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;ice cream&quot;</span><span class="p">}))</span>
+    <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">"hamilton-invoke.png"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"joke_response"</span><span class="p">],</span>
+                     <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="s2">"ice cream"</span><span class="p">}))</span>
 </pre></div>
 </div>
 </td>
@@ -594,13 +594,13 @@ underneath.</p>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">openai</span>
 
-<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span>
+<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">call_chat_model</span><span class="p">(</span><span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">,</span>
         <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
@@ -608,12 +608,12 @@ underneath.</p>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">invoke_chain</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">prompt_value</span> <span class="o">=</span> <span class="n">prompt_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">)</span>
-    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt_value</span><span class="p">}]</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">prompt_value</span><span class="p">}]</span>
     <span class="k">return</span> <span class="n">call_chat_model</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">invoke_chain</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">))</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">invoke_chain</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">))</span>
 </pre></div>
 </div>
 </td>
@@ -623,17 +623,17 @@ underneath.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">langchain_openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOpenAI</span>
 
 <span class="n">prompt</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
-    <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">output_parser</span> <span class="o">=</span> <span class="n">StrOutputParser</span><span class="p">()</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">)</span>
 <span class="n">chain</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
+    <span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
     <span class="o">|</span> <span class="n">prompt</span>
     <span class="o">|</span> <span class="n">model</span>
     <span class="o">|</span> <span class="n">output_parser</span>
 <span class="p">)</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">))</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">))</span>
 </pre></div>
 </div>
 </td>
@@ -675,21 +675,21 @@ Note: you could use &#64;config.when to include both streamed and non-streamed v
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_prompt</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Tell me a short joke about </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"Tell me a short joke about </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">"</span>
     <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_messages</span><span class="p">(</span>
         <span class="n">joke_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">joke_prompt</span><span class="p">}]</span>
+    <span class="k">return</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>
+             <span class="s2">"content"</span><span class="p">:</span> <span class="n">joke_prompt</span><span class="p">}]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_response</span><span class="p">(</span>
         <span class="n">llm_client</span><span class="p">:</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">,</span>
         <span class="n">joke_messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="n">stream</span> <span class="o">=</span> <span class="n">llm_client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">,</span>
         <span class="n">messages</span><span class="o">=</span><span class="n">joke_messages</span><span class="p">,</span>
         <span class="n">stream</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
@@ -699,7 +699,7 @@ Note: you could use &#64;config.when to include both streamed and non-streamed v
             <span class="k">yield</span> <span class="n">content</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">hamilton_streaming</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 
@@ -709,14 +709,14 @@ Note: you could use &#64;config.when to include both streamed and non-streamed v
         <span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span>
-        <span class="s2">&quot;hamilton-streaming.png&quot;</span>
+        <span class="s2">"hamilton-streaming.png"</span>
     <span class="p">)</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="p">[</span><span class="s2">&quot;joke_response&quot;</span><span class="p">],</span>
-        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;ice cream&quot;</span><span class="p">}</span>
+        <span class="p">[</span><span class="s2">"joke_response"</span><span class="p">],</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="s2">"ice cream"</span><span class="p">}</span>
     <span class="p">)</span>
-    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;joke_response&quot;</span><span class="p">]:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s2">"joke_response"</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </td>
@@ -725,14 +725,14 @@ Note: you could use &#64;config.when to include both streamed and non-streamed v
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">openai</span>
 
-<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span>
+<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">stream_chat_model</span><span class="p">(</span>
         <span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="n">stream</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">,</span>
         <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
         <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
@@ -745,12 +745,12 @@ Note: you could use &#64;config.when to include both streamed and non-streamed v
 <span class="k">def</span><span class="w"> </span><span class="nf">stream_chain</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="n">prompt_value</span> <span class="o">=</span> <span class="n">prompt_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">stream_chat_model</span><span class="p">(</span>
-        <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt_value</span><span class="p">}])</span>
+        <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">prompt_value</span><span class="p">}])</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">stream_chain</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">stream_chain</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </td>
@@ -762,20 +762,20 @@ Note: you could use &#64;config.when to include both streamed and non-streamed v
 
 
 <span class="n">prompt</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
-    <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span>
+    <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span>
 <span class="p">)</span>
 <span class="n">output_parser</span> <span class="o">=</span> <span class="n">StrOutputParser</span><span class="p">()</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">)</span>
 <span class="n">chain</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
+    <span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
     <span class="o">|</span> <span class="n">prompt</span>
     <span class="o">|</span> <span class="n">model</span>
     <span class="o">|</span> <span class="n">output_parser</span>
 <span class="p">)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chain</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chain</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </td>
@@ -827,19 +827,19 @@ e.g. Ray, Dask, etc. We use multi-threading here.</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_prompt</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Tell me a short joke about </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Tell me a short joke about </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_messages</span><span class="p">(</span>
         <span class="n">joke_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">joke_prompt</span><span class="p">}]</span>
+    <span class="k">return</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>
+             <span class="s2">"content"</span><span class="p">:</span> <span class="n">joke_prompt</span><span class="p">}]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_response</span><span class="p">(</span><span class="n">llm_client</span><span class="p">:</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">,</span>
                   <span class="n">joke_messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">llm_client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">,</span>
         <span class="n">messages</span><span class="o">=</span><span class="n">joke_messages</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
@@ -850,7 +850,7 @@ e.g. Ray, Dask, etc. We use multi-threading here.</p>
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">joke_response</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">hamilton_batch</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
@@ -866,14 +866,14 @@ e.g. Ray, Dask, etc. We use multi-threading here.</p>
         <span class="p">)</span>
         <span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="p">)</span>
-    <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">&quot;hamilton-batch.png&quot;</span><span class="p">)</span>
+    <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">"hamilton-batch.png"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;joke_responses&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">"joke_responses"</span><span class="p">],</span>
             <span class="n">inputs</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;topics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ice cream&quot;</span><span class="p">,</span>
-                           <span class="s2">&quot;spaghetti&quot;</span><span class="p">,</span>
-                           <span class="s2">&quot;dumplings&quot;</span><span class="p">]</span>
+                <span class="s2">"topics"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"ice cream"</span><span class="p">,</span>
+                           <span class="s2">"spaghetti"</span><span class="p">,</span>
+                           <span class="s2">"dumplings"</span><span class="p">]</span>
             <span class="p">}</span>
         <span class="p">)</span>
     <span class="p">)</span>
@@ -882,8 +882,8 @@ e.g. Ray, Dask, etc. We use multi-threading here.</p>
     <span class="c1"># and getting just one response</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;joke_response&quot;</span><span class="p">],</span>
-            <span class="n">overrides</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;lettuce&quot;</span><span class="p">}</span>
+            <span class="p">[</span><span class="s2">"joke_response"</span><span class="p">],</span>
+            <span class="n">overrides</span><span class="o">=</span><span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="s2">"lettuce"</span><span class="p">}</span>
         <span class="p">)</span>
     <span class="p">)</span>
 </pre></div>
@@ -895,13 +895,13 @@ e.g. Ray, Dask, etc. We use multi-threading here.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">openai</span>
 
 
-<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span>
+<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">call_chat_model</span><span class="p">(</span><span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">,</span>
         <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
@@ -909,8 +909,8 @@ e.g. Ray, Dask, etc. We use multi-threading here.</p>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">invoke_chain</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">prompt_value</span> <span class="o">=</span> <span class="n">prompt_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">)</span>
-    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-                 <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt_value</span><span class="p">}]</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>
+                 <span class="s2">"content"</span><span class="p">:</span> <span class="n">prompt_value</span><span class="p">}]</span>
     <span class="k">return</span> <span class="n">call_chat_model</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
 
 
@@ -921,10 +921,10 @@ e.g. Ray, Dask, etc. We use multi-threading here.</p>
         <span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="n">batch_chain</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;ice cream&quot;</span><span class="p">,</span> <span class="s2">&quot;spaghetti&quot;</span><span class="p">,</span> <span class="s2">&quot;dumplings&quot;</span><span class="p">]</span>
+            <span class="p">[</span><span class="s2">"ice cream"</span><span class="p">,</span> <span class="s2">"spaghetti"</span><span class="p">,</span> <span class="s2">"dumplings"</span><span class="p">]</span>
         <span class="p">)</span>
     <span class="p">)</span>
 </pre></div>
@@ -936,21 +936,21 @@ e.g. Ray, Dask, etc. We use multi-threading here.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">langchain_openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOpenAI</span>
 
 <span class="n">prompt</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
-    <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">output_parser</span> <span class="o">=</span> <span class="n">StrOutputParser</span><span class="p">()</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">)</span>
 <span class="n">chain</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
+    <span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
     <span class="o">|</span> <span class="n">prompt</span>
     <span class="o">|</span> <span class="n">model</span>
     <span class="o">|</span> <span class="n">output_parser</span>
 <span class="p">)</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="n">chain</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;ice cream&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;spaghetti&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;dumplings&quot;</span><span class="p">]</span>
+            <span class="p">[</span><span class="s2">"ice cream"</span><span class="p">,</span>
+             <span class="s2">"spaghetti"</span><span class="p">,</span>
+             <span class="s2">"dumplings"</span><span class="p">]</span>
         <span class="p">)</span>
     <span class="p">)</span>
 </pre></div>
@@ -995,14 +995,14 @@ is that you need to use the async Hamilton Driver.</p>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_prompt</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Tell me a short joke about </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"Tell me a short joke about </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">"</span>
     <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_messages</span><span class="p">(</span>
         <span class="n">joke_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">joke_prompt</span><span class="p">}]</span>
+    <span class="k">return</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>
+             <span class="s2">"content"</span><span class="p">:</span> <span class="n">joke_prompt</span><span class="p">}]</span>
 
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">joke_response</span><span class="p">(</span>
@@ -1010,14 +1010,14 @@ is that you need to use the async Hamilton Driver.</p>
         <span class="n">joke_messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="p">(</span>
         <span class="n">llm_client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">,</span>
             <span class="n">messages</span><span class="o">=</span><span class="n">joke_messages</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
 
     <span class="kn">import</span><span class="w"> </span><span class="nn">hamilton_async</span>
@@ -1030,12 +1030,12 @@ is that you need to use the async Hamilton Driver.</p>
         <span class="n">hamilton_async</span><span class="p">,</span>
         <span class="n">result_builder</span><span class="o">=</span><span class="n">base</span><span class="o">.</span><span class="n">DictResult</span><span class="p">()</span>
     <span class="p">)</span>
-    <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">&quot;hamilton-async.png&quot;</span><span class="p">)</span>
+    <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">"hamilton-async.png"</span><span class="p">)</span>
     <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span>
         <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;joke_response&quot;</span><span class="p">],</span>
-            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;ice cream&quot;</span><span class="p">}</span>
+            <span class="p">[</span><span class="s2">"joke_response"</span><span class="p">],</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="s2">"ice cream"</span><span class="p">}</span>
         <span class="p">)</span>
     <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -1047,7 +1047,7 @@ is that you need to use the async Hamilton Driver.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">openai</span>
 
 
-<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span>
+<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">()</span>
 
 
@@ -1057,7 +1057,7 @@ is that you need to use the async Hamilton Driver.</p>
         <span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="p">(</span>
         <span class="n">async_client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">,</span>
             <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span>
@@ -1067,17 +1067,17 @@ is that you need to use the async Hamilton Driver.</p>
     <span class="n">prompt_value</span> <span class="o">=</span> <span class="n">prompt_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <span class="n">topic</span><span class="o">=</span><span class="n">topic</span>
     <span class="p">)</span>
-    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-                 <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt_value</span><span class="p">}]</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>
+                 <span class="s2">"content"</span><span class="p">:</span> <span class="n">prompt_value</span><span class="p">}]</span>
     <span class="k">return</span> <span class="k">await</span> <span class="n">acall_chat_model</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
 
     <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span>
-        <span class="n">ainvoke_chain</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">)</span>
+        <span class="n">ainvoke_chain</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
@@ -1089,20 +1089,20 @@ is that you need to use the async Hamilton Driver.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">langchain_openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOpenAI</span>
 
 <span class="n">prompt</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
-    <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">output_parser</span> <span class="o">=</span> <span class="n">StrOutputParser</span><span class="p">()</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">)</span>
 <span class="n">chain</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
+    <span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
     <span class="o">|</span> <span class="n">prompt</span>
     <span class="o">|</span> <span class="n">model</span>
     <span class="o">|</span> <span class="n">output_parser</span>
 <span class="p">)</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
     <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span>
-        <span class="n">chain</span><span class="o">.</span><span class="n">ainvoke</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">)</span>
+        <span class="n">chain</span><span class="o">.</span><span class="n">ainvoke</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
@@ -1148,38 +1148,38 @@ that uses the different OpenAI model.</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_prompt</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Tell me a short joke about </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Tell me a short joke about </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_messages</span><span class="p">(</span>
         <span class="n">joke_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">joke_prompt</span><span class="p">}]</span>
+    <span class="k">return</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>
+             <span class="s2">"content"</span><span class="p">:</span> <span class="n">joke_prompt</span><span class="p">}]</span>
 
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;completion&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">"completion"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_response__completion</span><span class="p">(</span>
         <span class="n">llm_client</span><span class="p">:</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">,</span>
         <span class="n">joke_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">llm_client</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo-instruct&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo-instruct"</span><span class="p">,</span>
         <span class="n">prompt</span><span class="o">=</span><span class="n">joke_prompt</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
 
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;chat&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">"chat"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_response__chat</span><span class="p">(</span>
         <span class="n">llm_client</span><span class="p">:</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">,</span>
         <span class="n">joke_messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">llm_client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">,</span>
         <span class="n">messages</span><span class="o">=</span><span class="n">joke_messages</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">hamilton_completion</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
@@ -1187,30 +1187,30 @@ that uses the different OpenAI model.</p>
     <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
         <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">hamilton_completion</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;completion&quot;</span><span class="p">})</span>
+        <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"completion"</span><span class="p">})</span>
         <span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span>
-        <span class="s2">&quot;hamilton-completion.png&quot;</span>
+        <span class="s2">"hamilton-completion.png"</span>
     <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;joke_response&quot;</span><span class="p">],</span>
-            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;ice cream&quot;</span><span class="p">}</span>
+            <span class="p">[</span><span class="s2">"joke_response"</span><span class="p">],</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="s2">"ice cream"</span><span class="p">}</span>
         <span class="p">)</span>
     <span class="p">)</span>
 
     <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
         <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">hamilton_completion</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;chat&quot;</span><span class="p">})</span>
+        <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"chat"</span><span class="p">})</span>
         <span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="p">)</span>
-    <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">&quot;hamilton-chat.png&quot;</span><span class="p">)</span>
+    <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">"hamilton-chat.png"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;joke_response&quot;</span><span class="p">],</span>
-            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;ice cream&quot;</span><span class="p">}</span>
+            <span class="p">[</span><span class="s2">"joke_response"</span><span class="p">],</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="s2">"ice cream"</span><span class="p">}</span>
         <span class="p">)</span>
     <span class="p">)</span>
 </pre></div>
@@ -1218,13 +1218,13 @@ that uses the different OpenAI model.</p>
 </td>
 <td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">openai</span>
 
-<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span>
+<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">call_llm</span><span class="p">(</span><span class="n">prompt_value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo-instruct&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo-instruct"</span><span class="p">,</span>
         <span class="n">prompt</span><span class="o">=</span><span class="n">prompt_value</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
@@ -1235,8 +1235,8 @@ that uses the different OpenAI model.</p>
 
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">invoke_llm_chain</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">))</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">invoke_llm_chain</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">))</span>
 </pre></div>
 </div>
 </td>
@@ -1246,18 +1246,18 @@ that uses the different OpenAI model.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">langchain_openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
 
 <span class="n">prompt</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
-    <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">output_parser</span> <span class="o">=</span> <span class="n">StrOutputParser</span><span class="p">()</span>
-<span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo-instruct&quot;</span><span class="p">)</span>
+<span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo-instruct"</span><span class="p">)</span>
 <span class="n">llm_chain</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
+    <span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
     <span class="o">|</span> <span class="n">prompt</span>
     <span class="o">|</span> <span class="n">llm</span>
     <span class="o">|</span> <span class="n">output_parser</span>
 <span class="p">)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">llm_chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">))</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">llm_chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">))</span>
 </pre></div>
 </div>
 </td>
@@ -1296,48 +1296,48 @@ to use Anthropic.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">"openai"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">llm_client__openai</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">()</span>
 
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">&quot;anthropic&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">"anthropic"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">llm_client__anthropic</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">anthropic</span><span class="o">.</span><span class="n">Anthropic</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">anthropic</span><span class="o">.</span><span class="n">Anthropic</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_prompt</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="s2">&quot;Human:</span><span class="se">\n\n</span><span class="s2">&quot;</span> 
-        <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-        <span class="s2">&quot;Assistant:&quot;</span>
+        <span class="s2">"Human:</span><span class="se">\n\n</span><span class="s2">"</span> 
+        <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="se">\n\n</span><span class="s2">"</span>
+        <span class="s2">"Assistant:"</span>
     <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">)</span>
 
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">"openai"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_response__openai</span><span class="p">(</span>
         <span class="n">llm_client</span><span class="p">:</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">,</span>
         <span class="n">joke_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">llm_client</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo-instruct&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo-instruct"</span><span class="p">,</span>
         <span class="n">prompt</span><span class="o">=</span><span class="n">joke_prompt</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
 
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">&quot;anthropic&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">"anthropic"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">joke_response__anthropic</span><span class="p">(</span>
         <span class="n">llm_client</span><span class="p">:</span> <span class="n">anthropic</span><span class="o">.</span><span class="n">Anthropic</span><span class="p">,</span>
         <span class="n">joke_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">llm_client</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-2&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"claude-2"</span><span class="p">,</span>
         <span class="n">prompt</span><span class="o">=</span><span class="n">joke_prompt</span><span class="p">,</span>
         <span class="n">max_tokens_to_sample</span><span class="o">=</span><span class="mi">256</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">completion</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">hamilton_invoke_anthropic</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
@@ -1345,29 +1345,29 @@ to use Anthropic.</p>
     <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
         <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">hamilton_invoke_anthropic</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">&quot;provider&quot;</span><span class="p">:</span> <span class="s2">&quot;anthropic&quot;</span><span class="p">})</span>
+        <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">"provider"</span><span class="p">:</span> <span class="s2">"anthropic"</span><span class="p">})</span>
         <span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span>
-        <span class="s2">&quot;hamilton-anthropic.png&quot;</span>
+        <span class="s2">"hamilton-anthropic.png"</span>
     <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="p">[</span><span class="s2">&quot;joke_response&quot;</span><span class="p">],</span>
-        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;ice cream&quot;</span><span class="p">}</span>
+        <span class="p">[</span><span class="s2">"joke_response"</span><span class="p">],</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="s2">"ice cream"</span><span class="p">}</span>
         <span class="p">)</span>
     <span class="p">)</span>
 
     <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
         <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">hamilton_invoke_anthropic</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">&quot;provider&quot;</span><span class="p">:</span> <span class="s2">&quot;openai&quot;</span><span class="p">})</span>
+        <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">"provider"</span><span class="p">:</span> <span class="s2">"openai"</span><span class="p">})</span>
         <span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;joke_response&quot;</span><span class="p">],</span>
-            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;ice cream&quot;</span><span class="p">}</span>
+            <span class="p">[</span><span class="s2">"joke_response"</span><span class="p">],</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="s2">"ice cream"</span><span class="p">}</span>
         <span class="p">)</span>
     <span class="p">)</span>
 </pre></div>
@@ -1375,14 +1375,14 @@ to use Anthropic.</p>
 </td>
 <td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">anthropic</span>
 
-<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span>
-<span class="n">anthropic_template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Human:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">prompt_template</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Assistant:&quot;</span>
+<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span>
+<span class="n">anthropic_template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Human:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">prompt_template</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Assistant:"</span>
 <span class="n">anthropic_client</span> <span class="o">=</span> <span class="n">anthropic</span><span class="o">.</span><span class="n">Anthropic</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">call_anthropic</span><span class="p">(</span><span class="n">prompt_value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">anthropic_client</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-2&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"claude-2"</span><span class="p">,</span>
         <span class="n">prompt</span><span class="o">=</span><span class="n">prompt_value</span><span class="p">,</span>
         <span class="n">max_tokens_to_sample</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
     <span class="p">)</span>
@@ -1394,8 +1394,8 @@ to use Anthropic.</p>
     <span class="k">return</span> <span class="n">call_anthropic</span><span class="p">(</span><span class="n">prompt_value</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">invoke_anthropic_chain</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">))</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">invoke_anthropic_chain</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">))</span>
 </pre></div>
 </div>
 </td>
@@ -1405,19 +1405,19 @@ to use Anthropic.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">langchain_community.chat_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatAnthropic</span>
 
 <span class="n">prompt</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
-    <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">output_parser</span> <span class="o">=</span> <span class="n">StrOutputParser</span><span class="p">()</span>
-<span class="n">anthropic</span> <span class="o">=</span> <span class="n">ChatAnthropic</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-2&quot;</span><span class="p">)</span>
+<span class="n">anthropic</span> <span class="o">=</span> <span class="n">ChatAnthropic</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"claude-2"</span><span class="p">)</span>
 <span class="n">anthropic_chain</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
+    <span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
     <span class="o">|</span> <span class="n">prompt</span>
     <span class="o">|</span> <span class="n">anthropic</span>
     <span class="o">|</span> <span class="n">output_parser</span>
 <span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">anthropic_chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">))</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">anthropic_chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">))</span>
 </pre></div>
 </div>
 </td>
@@ -1455,7 +1455,7 @@ printing.</p>
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">hamilton_anthropic</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">&quot;provider&quot;</span><span class="p">:</span> <span class="s2">&quot;anthropic&quot;</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">"provider"</span><span class="p">:</span> <span class="s2">"anthropic"</span><span class="p">})</span>
     <span class="c1"># we just need to add this line to get things printing</span>
     <span class="c1"># to the console; see DAGWorks for a more off-the-shelf</span>
     <span class="c1"># solution.</span>
@@ -1464,8 +1464,8 @@ printing.</p>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span>
     <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="p">[</span><span class="s2">&quot;joke_response&quot;</span><span class="p">],</span>
-        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;ice cream&quot;</span><span class="p">}</span>
+        <span class="p">[</span><span class="s2">"joke_response"</span><span class="p">],</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="s2">"ice cream"</span><span class="p">}</span>
     <span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
@@ -1473,14 +1473,14 @@ printing.</p>
 </td>
 <td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">anthropic</span>
 
-<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span>
-<span class="n">anthropic_template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Human:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">prompt_template</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Assistant:&quot;</span>
+<span class="n">prompt_template</span> <span class="o">=</span> <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span>
+<span class="n">anthropic_template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Human:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">prompt_template</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Assistant:"</span>
 <span class="n">anthropic_client</span> <span class="o">=</span> <span class="n">anthropic</span><span class="o">.</span><span class="n">Anthropic</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">call_anthropic</span><span class="p">(</span><span class="n">prompt_value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">anthropic_client</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-2&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">"claude-2"</span><span class="p">,</span>
         <span class="n">prompt</span><span class="o">=</span><span class="n">prompt_value</span><span class="p">,</span>
         <span class="n">max_tokens_to_sample</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
     <span class="p">)</span>
@@ -1488,17 +1488,17 @@ printing.</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">invoke_anthropic_chain_with_logging</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input: </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input: </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">prompt_value</span> <span class="o">=</span> <span class="n">anthropic_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Formatted prompt: </span><span class="si">{</span><span class="n">prompt_value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Formatted prompt: </span><span class="si">{</span><span class="n">prompt_value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">output</span> <span class="o">=</span> <span class="n">call_anthropic</span><span class="p">(</span><span class="n">prompt_value</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Output: </span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Output: </span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">output</span>
 
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">invoke_anthropic_chain_with_logging</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">))</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">invoke_anthropic_chain_with_logging</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">))</span>
 </pre></div>
 </div>
 </td>
@@ -1508,24 +1508,24 @@ printing.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">langchain_community.chat_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatAnthropic</span>
 
 <span class="n">prompt</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
-    <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">output_parser</span> <span class="o">=</span> <span class="n">StrOutputParser</span><span class="p">()</span>
-<span class="n">anthropic</span> <span class="o">=</span> <span class="n">ChatAnthropic</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-2&quot;</span><span class="p">)</span>
+<span class="n">anthropic</span> <span class="o">=</span> <span class="n">ChatAnthropic</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"claude-2"</span><span class="p">)</span>
 <span class="n">anthropic_chain</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
+    <span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
     <span class="o">|</span> <span class="n">prompt</span>
     <span class="o">|</span> <span class="n">anthropic</span>
     <span class="o">|</span> <span class="n">output_parser</span>
 <span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;LANGCHAIN_API_KEY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;LANGCHAIN_TRACING_V2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
-    <span class="c1"># it&#39;s hard to customize the logging output of langchain</span>
-    <span class="c1"># so here&#39;s their way to try to make money from you!</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">anthropic_chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">))</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"LANGCHAIN_API_KEY"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"..."</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"LANGCHAIN_TRACING_V2"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"true"</span>
+    <span class="c1"># it's hard to customize the logging output of langchain</span>
+    <span class="c1"># so here's their way to try to make money from you!</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">anthropic_chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">))</span>
 </pre></div>
 </div>
 </td>
@@ -1557,35 +1557,35 @@ opinion it’s better to be explicit about it.</p>
 <span class="n">anthropic_driver</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">hamilton_anthropic</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">&quot;provider&quot;</span><span class="p">:</span> <span class="s2">&quot;anthropic&quot;</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">"provider"</span><span class="p">:</span> <span class="s2">"anthropic"</span><span class="p">})</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
 <span class="n">openai_driver</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">hamilton_anthropic</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">&quot;provider&quot;</span><span class="p">:</span> <span class="s2">&quot;openai&quot;</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">"provider"</span><span class="p">:</span> <span class="s2">"openai"</span><span class="p">})</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="n">anthropic_driver</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;joke_response&quot;</span><span class="p">],</span>
-            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;ice cream&quot;</span><span class="p">}</span>
+            <span class="p">[</span><span class="s2">"joke_response"</span><span class="p">],</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="s2">"ice cream"</span><span class="p">}</span>
         <span class="p">)</span>
     <span class="p">)</span>
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="c1"># this is the current way to do fall backs</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="n">openai_driver</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;joke_response&quot;</span><span class="p">],</span>
-            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;ice cream&quot;</span><span class="p">}</span>
+            <span class="p">[</span><span class="s2">"joke_response"</span><span class="p">],</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="s2">"ice cream"</span><span class="p">}</span>
         <span class="p">)</span>
     <span class="p">)</span>
 </pre></div>
 </div>
 </td>
 <td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">invoke_chain_with_fallback</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Invoke a chain with a fallback to Anthropic chain.</span>
+<span class="w">    </span><span class="sd">"""Invoke a chain with a fallback to Anthropic chain.</span>
 
 <span class="sd">    Attempts to invoke a chain using `invoke_chain` and falls back to</span>
 <span class="sd">    `invoke_anthropic_chain` if any exception is raised.</span>
@@ -1595,14 +1595,14 @@ opinion it’s better to be explicit about it.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The result from the successful chain invocation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">invoke_chain</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>  <span class="c1"># noqa: F821</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">invoke_anthropic_chain</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>  <span class="c1"># noqa: F821</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">invoke_chain_with_fallback</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">))</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">invoke_chain_with_fallback</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">))</span>
 </pre></div>
 </div>
 </td>
@@ -1613,18 +1613,18 @@ opinion it’s better to be explicit about it.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">langchain_community.chat_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOpenAI</span>
 
 <span class="n">prompt</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
-    <span class="s2">&quot;Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="s2">"Tell me a short joke about </span><span class="si">{topic}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">output_parser</span> <span class="o">=</span> <span class="n">StrOutputParser</span><span class="p">()</span>
-<span class="n">anthropic</span> <span class="o">=</span> <span class="n">ChatAnthropic</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-2&quot;</span><span class="p">)</span>
+<span class="n">anthropic</span> <span class="o">=</span> <span class="n">ChatAnthropic</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"claude-2"</span><span class="p">)</span>
 <span class="n">anthropic_chain</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
+    <span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
     <span class="o">|</span> <span class="n">prompt</span>
     <span class="o">|</span> <span class="n">anthropic</span>
     <span class="o">|</span> <span class="n">output_parser</span>
 <span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"gpt-3.5-turbo"</span><span class="p">)</span>
 <span class="n">chain</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
+    <span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
     <span class="o">|</span> <span class="n">prompt</span>
     <span class="o">|</span> <span class="n">model</span>
     <span class="o">|</span> <span class="n">output_parser</span>
@@ -1632,8 +1632,8 @@ opinion it’s better to be explicit about it.</p>
 
 <span class="n">fallback_chain</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">with_fallbacks</span><span class="p">([</span><span class="n">anthropic_chain</span><span class="p">])</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">fallback_chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ice cream&quot;</span><span class="p">))</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fallback_chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">"ice cream"</span><span class="p">))</span>
 </pre></div>
 </div>
 </td>

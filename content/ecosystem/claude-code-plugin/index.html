@@ -605,11 +605,11 @@ curl<span class="w"> </span>-fsSL<span class="w"> </span>https://cli.claude.ai/i
 <section id="automatic-assistance">
 <h3>Automatic Assistance<a class="headerlink" href="#automatic-assistance" title="Link to this heading">¶</a></h3>
 <p>Claude Code will automatically use the Hamilton plugin when it detects you’re working with Hamilton code. Just ask questions or give instructions naturally:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>claude<span class="w"> </span><span class="s2">&quot;Help me create a Hamilton module for processing customer data&quot;</span>
-claude<span class="w"> </span><span class="s2">&quot;Explain what this DAG does&quot;</span>
-claude<span class="w"> </span><span class="s2">&quot;Convert this pandas script to Hamilton&quot;</span>
-claude<span class="w"> </span><span class="s2">&quot;Add caching to my expensive computation function&quot;</span>
-claude<span class="w"> </span><span class="s2">&quot;Why am I getting a circular dependency error?&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>claude<span class="w"> </span><span class="s2">"Help me create a Hamilton module for processing customer data"</span>
+claude<span class="w"> </span><span class="s2">"Explain what this DAG does"</span>
+claude<span class="w"> </span><span class="s2">"Convert this pandas script to Hamilton"</span>
+claude<span class="w"> </span><span class="s2">"Add caching to my expensive computation function"</span>
+claude<span class="w"> </span><span class="s2">"Why am I getting a circular dependency error?"</span>
 </pre></div>
 </div>
 </section>
@@ -632,10 +632,10 @@ claude
 </div>
 <p>Then interact naturally:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">You</span><span class="p">:</span> <span class="n">I</span> <span class="n">need</span> <span class="n">to</span> <span class="n">create</span> <span class="n">a</span> <span class="n">DAG</span> <span class="n">that</span> <span class="n">processes</span> <span class="n">customer</span> <span class="n">transactions</span>
-<span class="n">Claude</span><span class="p">:</span> <span class="n">I</span><span class="s1">&#39;ll help you create a Hamilton module for processing customer transactions...</span>
+<span class="n">Claude</span><span class="p">:</span> <span class="n">I</span><span class="s1">'ll help you create a Hamilton module for processing customer transactions...</span>
 
 <span class="n">You</span><span class="p">:</span> <span class="n">Add</span> <span class="n">validation</span> <span class="n">to</span> <span class="n">ensure</span> <span class="nb">all</span> <span class="n">amounts</span> <span class="n">are</span> <span class="n">positive</span>
-<span class="n">Claude</span><span class="p">:</span> <span class="n">I</span><span class="s1">&#39;ll add a @check_output decorator with validation...</span>
+<span class="n">Claude</span><span class="p">:</span> <span class="n">I</span><span class="s1">'ll add a @check_output decorator with validation...</span>
 </pre></div>
 </div>
 </section>
@@ -650,51 +650,51 @@ claude
 </pre></div>
 </div>
 <p><strong>Claude generates:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Sales analysis DAG.&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Sales analysis DAG."""</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_sales</span><span class="p">(</span><span class="n">csv_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load sales data from CSV.</span>
+<span class="w">    </span><span class="sd">"""Load sales data from CSV.</span>
 
 <span class="sd">    :param csv_path: Path to sales CSV file</span>
 <span class="sd">    :return: Raw sales DataFrame</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">cleaned_sales</span><span class="p">(</span><span class="n">raw_sales</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove null values from sales data.</span>
+<span class="w">    </span><span class="sd">"""Remove null values from sales data.</span>
 
 <span class="sd">    :param raw_sales: Raw sales data</span>
 <span class="sd">    :return: Cleaned sales DataFrame</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">raw_sales</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">rolling_avg_7d</span><span class="p">(</span><span class="n">cleaned_sales</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate 7-day rolling average of sales.</span>
+<span class="w">    </span><span class="sd">"""Calculate 7-day rolling average of sales.</span>
 
 <span class="sd">    :param cleaned_sales: Cleaned sales data</span>
 <span class="sd">    :return: 7-day rolling average</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">cleaned_sales</span><span class="p">[</span><span class="s1">&#39;sales&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">cleaned_sales</span><span class="p">[</span><span class="s1">'sales'</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">top_10_sales_days</span><span class="p">(</span>
     <span class="n">cleaned_sales</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">rolling_avg_7d</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get top 10 days by rolling average.</span>
+<span class="w">    </span><span class="sd">"""Get top 10 days by rolling average.</span>
 
 <span class="sd">    :param cleaned_sales: Cleaned sales data</span>
 <span class="sd">    :param rolling_avg_7d: 7-day rolling average</span>
 <span class="sd">    :return: Top 10 sales days</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">cleaned_sales</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;rolling_avg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rolling_avg_7d</span>
-    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;rolling_avg&#39;</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">[</span><span class="s1">'rolling_avg'</span><span class="p">]</span> <span class="o">=</span> <span class="n">rolling_avg_7d</span>
+    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">'rolling_avg'</span><span class="p">)</span>
 
 <span class="c1"># Usage:</span>
 <span class="c1"># from hamilton import driver</span>
 <span class="c1"># dr = driver.Driver({}, __name__)</span>
-<span class="c1"># results = dr.execute([&#39;top_10_sales_days&#39;], inputs={&#39;csv_path&#39;: &#39;sales.csv&#39;})</span>
+<span class="c1"># results = dr.execute(['top_10_sales_days'], inputs={'csv_path': 'sales.csv'})</span>
 </pre></div>
 </div>
 </section>
@@ -704,32 +704,32 @@ claude
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Convert</span> <span class="n">this</span> <span class="n">script</span> <span class="n">to</span> <span class="n">Hamilton</span><span class="p">:</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data.csv&#39;</span><span class="p">)</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;feature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;col_a&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;col_b&#39;</span><span class="p">]</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)[</span><span class="s1">&#39;feature&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'data.csv'</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'feature'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'col_a'</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">'col_b'</span><span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)[</span><span class="s1">'feature'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Claude refactors to:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Data processing DAG.&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Data processing DAG."""</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_data</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load raw data from CSV.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load raw data from CSV."""</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">feature</span><span class="p">(</span><span class="n">raw_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate feature from columns.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">raw_data</span><span class="p">[</span><span class="s1">&#39;col_a&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">raw_data</span><span class="p">[</span><span class="s1">&#39;col_b&#39;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">"""Calculate feature from columns."""</span>
+    <span class="k">return</span> <span class="n">raw_data</span><span class="p">[</span><span class="s1">'col_a'</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">raw_data</span><span class="p">[</span><span class="s1">'col_b'</span><span class="p">]</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">data_with_feature</span><span class="p">(</span><span class="n">raw_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">feature</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add feature column to dataset.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Add feature column to dataset."""</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;feature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">feature</span>
+    <span class="n">result</span><span class="p">[</span><span class="s1">'feature'</span><span class="p">]</span> <span class="o">=</span> <span class="n">feature</span>
     <span class="k">return</span> <span class="n">result</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">result</span><span class="p">(</span><span class="n">data_with_feature</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate mean feature by category.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">data_with_feature</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)[</span><span class="s1">&#39;feature&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">"""Calculate mean feature by category."""</span>
+    <span class="k">return</span> <span class="n">data_with_feature</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)[</span><span class="s1">'feature'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
@@ -744,15 +744,15 @@ How do I do this without repeating code?
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">parameterize</span>
 
 <span class="nd">@parameterize</span><span class="p">(</span>
-    <span class="n">rolling_7d</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;window&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">},</span>
-    <span class="n">rolling_30d</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;window&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
-    <span class="n">rolling_90d</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;window&#39;</span><span class="p">:</span> <span class="mi">90</span><span class="p">},</span>
+    <span class="n">rolling_7d</span><span class="o">=</span><span class="p">{</span><span class="s1">'window'</span><span class="p">:</span> <span class="mi">7</span><span class="p">},</span>
+    <span class="n">rolling_30d</span><span class="o">=</span><span class="p">{</span><span class="s1">'window'</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
+    <span class="n">rolling_90d</span><span class="o">=</span><span class="p">{</span><span class="s1">'window'</span><span class="p">:</span> <span class="mi">90</span><span class="p">},</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">rolling_average</span><span class="p">(</span><span class="n">sales</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate rolling average for different windows.</span>
+<span class="w">    </span><span class="sd">"""Calculate rolling average for different windows.</span>
 
 <span class="sd">    Creates three nodes: rolling_7d, rolling_30d, rolling_90d</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">sales</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -760,18 +760,18 @@ How do I do this without repeating code?
 <section id="debugging">
 <h3>Debugging<a class="headerlink" href="#debugging" title="Link to this heading">¶</a></h3>
 <p><strong>Prompt:</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">I</span><span class="s1">&#39;m getting: &quot;Could not find parameter &#39;</span><span class="n">processed_data</span><span class="s1">&#39; in graph&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">I</span><span class="s1">'m getting: "Could not find parameter '</span><span class="n">processed_data</span><span class="s1">' in graph"</span>
 </pre></div>
 </div>
 <p><strong>Claude analyzes:</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="n">error</span> <span class="n">occurs</span> <span class="n">when</span> <span class="n">a</span> <span class="n">function</span> <span class="n">parameter</span> <span class="n">references</span> <span class="n">a</span> <span class="n">node</span> <span class="n">that</span> <span class="n">doesn</span><span class="s1">&#39;t exist</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="n">error</span> <span class="n">occurs</span> <span class="n">when</span> <span class="n">a</span> <span class="n">function</span> <span class="n">parameter</span> <span class="n">references</span> <span class="n">a</span> <span class="n">node</span> <span class="n">that</span> <span class="n">doesn</span><span class="s1">'t exist</span>
 <span class="ow">in</span> <span class="n">your</span> <span class="n">DAG</span><span class="o">.</span> <span class="n">Common</span> <span class="n">causes</span><span class="p">:</span>
 
-<span class="mf">1.</span> <span class="n">Typo</span> <span class="ow">in</span> <span class="n">parameter</span> <span class="n">name</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="p">,</span> <span class="s1">&#39;processed_data&#39;</span> <span class="n">vs</span> <span class="s1">&#39;process_data&#39;</span><span class="p">)</span>
-<span class="mf">2.</span> <span class="n">Missing</span> <span class="n">function</span> <span class="n">definition</span> <span class="k">for</span> <span class="s1">&#39;processed_data&#39;</span>
+<span class="mf">1.</span> <span class="n">Typo</span> <span class="ow">in</span> <span class="n">parameter</span> <span class="n">name</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="p">,</span> <span class="s1">'processed_data'</span> <span class="n">vs</span> <span class="s1">'process_data'</span><span class="p">)</span>
+<span class="mf">2.</span> <span class="n">Missing</span> <span class="n">function</span> <span class="n">definition</span> <span class="k">for</span> <span class="s1">'processed_data'</span>
 <span class="mf">3.</span> <span class="n">Function</span> <span class="n">excluded</span> <span class="n">via</span> <span class="nd">@hamilton_exclude</span> <span class="ow">or</span> <span class="nd">@config</span><span class="o">.</span><span class="n">when</span>
 
-<span class="n">Check</span> <span class="n">your</span> <span class="n">module</span> <span class="k">for</span> <span class="n">a</span> <span class="n">function</span> <span class="n">named</span> <span class="s1">&#39;processed_data&#39;</span><span class="o">.</span> <span class="n">If</span> <span class="n">it</span> <span class="n">doesn</span><span class="s1">&#39;t exist,</span>
+<span class="n">Check</span> <span class="n">your</span> <span class="n">module</span> <span class="k">for</span> <span class="n">a</span> <span class="n">function</span> <span class="n">named</span> <span class="s1">'processed_data'</span><span class="o">.</span> <span class="n">If</span> <span class="n">it</span> <span class="n">doesn</span><span class="s1">'t exist,</span>
 <span class="n">either</span><span class="p">:</span>
 <span class="o">-</span> <span class="n">Add</span> <span class="n">the</span> <span class="n">function</span><span class="p">,</span> <span class="ow">or</span>
 <span class="o">-</span> <span class="n">Fix</span> <span class="n">the</span> <span class="n">parameter</span> <span class="n">name</span> <span class="n">to</span> <span class="n">match</span> <span class="n">an</span> <span class="n">existing</span> <span class="n">function</span>
@@ -910,7 +910,7 @@ claude<span class="w"> </span>plugin<span class="w"> </span>install<span class="
 claude<span class="w"> </span>/hamilton<span class="w"> </span>&lt;your-question&gt;
 
 <span class="c1"># Or mention Hamilton explicitly in your prompt</span>
-claude<span class="w"> </span><span class="s2">&quot;Using Hamilton framework, create a DAG for...&quot;</span>
+claude<span class="w"> </span><span class="s2">"Using Hamilton framework, create a DAG for..."</span>
 </pre></div>
 </div>
 </section>

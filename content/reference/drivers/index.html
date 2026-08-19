@@ -548,8 +548,8 @@ It’s highly parameterizable, allowing you to customize:</p>
 <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="c1"># 2. we need to tell hamilton where to load function definitions from</span>
-<span class="n">module_name</span> <span class="o">=</span> <span class="s1">&#39;my_functions&#39;</span>
-<span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>  <span class="c1"># or simply &quot;import my_functions&quot;</span>
+<span class="n">module_name</span> <span class="o">=</span> <span class="s1">'my_functions'</span>
+<span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>  <span class="c1"># or simply "import my_functions"</span>
 
 <span class="c1"># 3. Determine the return type -- default is a pandas.DataFrame.</span>
 <span class="n">adapter</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">SimplePythonDataFrameGraphAdapter</span><span class="p">()</span> <span class="c1"># See GraphAdapter docs for more details.</span>
@@ -564,7 +564,7 @@ It’s highly parameterizable, allowing you to customize:</p>
 <section id="using-a-dag-once">
 <h3>Using a DAG once<a class="headerlink" href="#using-a-dag-once" title="Link to this heading">¶</a></h3>
 <p>This approach assumes that all inputs were passed in with the <code class="docutils literal notranslate"><span class="pre">config</span></code> dictionary above.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;output1&#39;</span><span class="p">,</span> <span class="s1">&#39;output2&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'output1'</span><span class="p">,</span> <span class="s1">'output2'</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -573,7 +573,7 @@ It’s highly parameterizable, allowing you to customize:</p>
 <h3>Using a DAG multiple times<a class="headerlink" href="#using-a-dag-multiple-times" title="Link to this heading">¶</a></h3>
 <p>This approach assumes that at least one input is not provided in the <code class="docutils literal notranslate"><span class="pre">config</span></code> dictionary provided to the constructor,
 and instead you provide that input to each <code class="docutils literal notranslate"><span class="pre">execute</span></code> invocation.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;output1&#39;</span><span class="p">,</span> <span class="s1">&#39;output2&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'output1'</span><span class="p">,</span> <span class="s1">'output2'</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>  <span class="c1"># if data is a dict of values.</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
@@ -583,8 +583,8 @@ and instead you provide that input to each <code class="docutils literal notrans
 <h3>Short circuiting some DAG computation<a class="headerlink" href="#short-circuiting-some-dag-computation" title="Link to this heading">¶</a></h3>
 <p>This will force Apache Hamilton to short circuit a particular computation path, and use the passed in override as a result of
 that particular node.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;output1&#39;</span><span class="p">,</span> <span class="s1">&#39;output2&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;intermediate_node&#39;</span><span class="p">:</span> <span class="n">intermediate_value</span><span class="p">})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'output1'</span><span class="p">,</span> <span class="s1">'output2'</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="p">{</span><span class="s1">'intermediate_node'</span><span class="p">:</span> <span class="n">intermediate_value</span><span class="p">})</span>
 </pre></div>
 </div>
 <section id="reference">

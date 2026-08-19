@@ -844,7 +844,7 @@ on the implementation.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.caching.stores.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">InMemoryMetadataStore</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_dataflow</span>
 
-<span class="n">sqlite_metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./.hamilton_cache&quot;</span><span class="p">)</span>
+<span class="n">sqlite_metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"./.hamilton_cache"</span><span class="p">)</span>
 <span class="n">in_memory_metadata_store</span> <span class="o">=</span> <span class="n">InMemoryMetadataStore</span><span class="o">.</span><span class="n">load_from</span><span class="p">(</span><span class="n">sqlite_metadata_store</span><span class="p">)</span>
 
 <span class="c1"># create the Driver with the in-memory metadata store</span>
@@ -884,7 +884,7 @@ If None, a SQLiteMetadataStore is created with the default path “./.hamilton_c
 <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
 <span class="c1"># persist to disk in-memory metadata</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">persist_to</span><span class="p">(</span><span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./.hamilton_cache&quot;</span><span class="p">))</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">persist_to</span><span class="p">(</span><span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"./.hamilton_cache"</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -949,7 +949,7 @@ should be loaded in memory.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.caching.stores.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">InMemoryMetadataStore</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_dataflow</span>
 
-<span class="n">sqlite_metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./.hamilton_cache&quot;</span><span class="p">)</span>
+<span class="n">sqlite_metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"./.hamilton_cache"</span><span class="p">)</span>
 <span class="n">in_memory_metadata_store</span> <span class="o">=</span> <span class="n">InMemoryMetadataStore</span><span class="o">.</span><span class="n">load_from</span><span class="p">(</span><span class="n">sqlite_metadata_store</span><span class="p">)</span>
 
 <span class="c1"># create the Driver with the in-memory metadata store</span>

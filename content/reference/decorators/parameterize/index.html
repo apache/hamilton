@@ -539,22 +539,22 @@ by:</p>
 
 
 <span class="nd">@parameterize</span><span class="p">(</span>
-    <span class="n">D_ELECTION_2016_shifted</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">n_off_date</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s1">&#39;D_ELECTION_2016&#39;</span><span class="p">),</span> <span class="n">shift_by</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span>
-    <span class="n">SOME_OUTPUT_NAME</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">n_off_date</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s1">&#39;SOME_INPUT_NAME&#39;</span><span class="p">),</span> <span class="n">shift_by</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="n">D_ELECTION_2016_shifted</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">n_off_date</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s1">'D_ELECTION_2016'</span><span class="p">),</span> <span class="n">shift_by</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span>
+    <span class="n">SOME_OUTPUT_NAME</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">n_off_date</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s1">'SOME_INPUT_NAME'</span><span class="p">),</span> <span class="n">shift_by</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">date_shifter</span><span class="p">(</span><span class="n">n_off_date</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">shift_by</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;{one_off_date} shifted by shift_by to create {output_name}&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""{one_off_date} shifted by shift_by to create {output_name}"""</span>
     <span class="k">return</span> <span class="n">n_off_date</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">shift_by</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>By choosing <code class="docutils literal notranslate"><span class="pre">value()</span></code> or <code class="docutils literal notranslate"><span class="pre">source()</span></code>, you can determine the source of your dependency. Note that you can also pass
 documentation. If you don’t, it will use the parameterized docstring.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterize</span><span class="p">(</span>
-    <span class="n">D_ELECTION_2016_shifted</span><span class="o">=</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">n_off_date</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s1">&#39;D_ELECTION_2016&#39;</span><span class="p">),</span> <span class="n">shift_by</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="s2">&quot;D_ELECTION_2016 shifted by 3&quot;</span><span class="p">),</span>
-    <span class="n">SOME_OUTPUT_NAME</span><span class="o">=</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">n_off_date</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s1">&#39;SOME_INPUT_NAME&#39;</span><span class="p">),</span> <span class="n">shift_by</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span><span class="s2">&quot;SOME_INPUT_NAME shifted by 1&quot;</span><span class="p">)</span>
+    <span class="n">D_ELECTION_2016_shifted</span><span class="o">=</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">n_off_date</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s1">'D_ELECTION_2016'</span><span class="p">),</span> <span class="n">shift_by</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="s2">"D_ELECTION_2016 shifted by 3"</span><span class="p">),</span>
+    <span class="n">SOME_OUTPUT_NAME</span><span class="o">=</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">n_off_date</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s1">'SOME_INPUT_NAME'</span><span class="p">),</span> <span class="n">shift_by</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span><span class="s2">"SOME_INPUT_NAME shifted by 1"</span><span class="p">)</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">date_shifter</span><span class="p">(</span><span class="n">n_off_date</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">shift_by</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;{one_off_date} shifted by shift_by to create {output_name}&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""{one_off_date} shifted by shift_by to create {output_name}"""</span>
     <span class="k">return</span> <span class="n">n_off_date</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">shift_by</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -612,7 +612,7 @@ be assigned the value that “foo” outputs.</p>
 <dd><p>Specifies that a parameterized dependency comes from a “grouped” source.</p>
 <p>This means that it gets injected into a list of dependencies that are grouped together. E.G.
 dep=group(source(“foo”), source(“bar”)) for the function:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@inject</span><span class="p">(</span><span class="n">dep</span><span class="o">=</span><span class="n">group</span><span class="p">(</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">),</span> <span class="n">source</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@inject</span><span class="p">(</span><span class="n">dep</span><span class="o">=</span><span class="n">group</span><span class="p">(</span><span class="n">source</span><span class="p">(</span><span class="s2">"foo"</span><span class="p">),</span> <span class="n">source</span><span class="p">(</span><span class="s2">"bar"</span><span class="p">)))</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">dep</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
     <span class="k">return</span> <span class="o">...</span>
 </pre></div>
@@ -645,7 +645,7 @@ dep=group(source(“foo”), source(“bar”)) for the function:</p>
 <p>Examples expressing different syntax:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterize</span><span class="p">(</span>
     <span class="c1"># tuple of assignments (consisting of literals/upstream specifications), and docstring.</span>
-    <span class="n">replace_no_parameters</span><span class="o">=</span><span class="p">({},</span> <span class="s1">&#39;fn with no parameters replaced&#39;</span><span class="p">),</span>
+    <span class="n">replace_no_parameters</span><span class="o">=</span><span class="p">({},</span> <span class="s1">'fn with no parameters replaced'</span><span class="p">),</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">no_param_function</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
     <span class="o">...</span>
@@ -653,41 +653,41 @@ dep=group(source(“foo”), source(“bar”)) for the function:</p>
 <span class="nd">@parameterize</span><span class="p">(</span>
     <span class="c1"># tuple of assignments (consisting of literals/upstream specifications), and docstring.</span>
     <span class="n">replace_just_upstream_parameter</span><span class="o">=</span><span class="p">(</span>
-        <span class="p">{</span><span class="s1">&#39;upstream_source&#39;</span><span class="p">:</span> <span class="n">source</span><span class="p">(</span><span class="s1">&#39;foo_source&#39;</span><span class="p">)},</span>
-        <span class="s1">&#39;fn with upstream_parameter set to node foo&#39;</span>
+        <span class="p">{</span><span class="s1">'upstream_source'</span><span class="p">:</span> <span class="n">source</span><span class="p">(</span><span class="s1">'foo_source'</span><span class="p">)},</span>
+        <span class="s1">'fn with upstream_parameter set to node foo'</span>
     <span class="p">),</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">param_is_upstream_function</span><span class="p">(</span><span class="n">upstream_source</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Doc string that can also be parameterized: {upstream_source}.&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">'''Doc string that can also be parameterized: {upstream_source}.'''</span>
     <span class="o">...</span>
 
 <span class="nd">@parameterize</span><span class="p">(</span>
-    <span class="n">replace_just_literal_parameter</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;literal_parameter&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)},</span>
+    <span class="n">replace_just_literal_parameter</span><span class="o">=</span><span class="p">{</span><span class="s1">'literal_parameter'</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s1">'bar'</span><span class="p">)},</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">param_is_literal_value</span><span class="p">(</span><span class="n">literal_parameter</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Doc string that can also be parameterized: {literal_parameter}.&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">'''Doc string that can also be parameterized: {literal_parameter}.'''</span>
     <span class="o">...</span>
 
 <span class="nd">@parameterize</span><span class="p">(</span>
     <span class="n">replace_both_parameters</span><span class="o">=</span><span class="p">{</span>
-        <span class="s1">&#39;upstream_parameter&#39;</span><span class="p">:</span> <span class="n">source</span><span class="p">(</span><span class="s1">&#39;foo_source&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;literal_parameter&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+        <span class="s1">'upstream_parameter'</span><span class="p">:</span> <span class="n">source</span><span class="p">(</span><span class="s1">'foo_source'</span><span class="p">),</span>
+        <span class="s1">'literal_parameter'</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s1">'bar'</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">concat</span><span class="p">(</span><span class="n">upstream_parameter</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">literal_parameter</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Adding {literal_parameter} to {upstream_parameter} to create {output_name}.&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">'''Adding {literal_parameter} to {upstream_parameter} to create {output_name}.'''</span>
     <span class="k">return</span> <span class="n">upstream_parameter</span> <span class="o">+</span> <span class="n">literal_parameter</span>
 </pre></div>
 </div>
 <p>You also have the capability to “group” parameters, which will combine them into a list.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterize</span><span class="p">(</span>
     <span class="n">a_plus_b_plus_c</span><span class="o">=</span><span class="p">{</span>
-        <span class="s1">&#39;to_concat&#39;</span> <span class="p">:</span> <span class="n">group</span><span class="p">(</span><span class="n">source</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="n">value</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">),</span> <span class="n">source</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">))</span>
+        <span class="s1">'to_concat'</span> <span class="p">:</span> <span class="n">group</span><span class="p">(</span><span class="n">source</span><span class="p">(</span><span class="s1">'a'</span><span class="p">),</span> <span class="n">value</span><span class="p">(</span><span class="s1">'b'</span><span class="p">),</span> <span class="n">source</span><span class="p">(</span><span class="s1">'c'</span><span class="p">))</span>
     <span class="p">}</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">concat</span><span class="p">(</span><span class="n">to_concat</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Adding {literal_parameter} to {upstream_parameter} to create {output_name}.&#39;&#39;&#39;</span>
-    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">to_concat</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">'''Adding {literal_parameter} to {upstream_parameter} to create {output_name}.'''</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">to_concat</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">

@@ -547,18 +547,18 @@ your Hamilton DAG to be captured in the Hamilton UI / adapters:</p>
 
 
 <span class="nd">@dataloader</span><span class="p">()</span>  <span class="c1"># you need ()</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">load_json_data</span><span class="p">(</span><span class="n">json_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;data/my_data.json&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Loads a dataframe from a JSON file.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_json_data</span><span class="p">(</span><span class="n">json_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"data/my_data.json"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">'''Loads a dataframe from a JSON file.</span>
 
 <span class="sd">    :return: A tuple containing two dictionaries:</span>
 <span class="sd">        - The first dictionary contains the loaded JSON data as a dataframe</span>
 <span class="sd">        - The second dictionary contains metadata about the loading process.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    '''</span>
     <span class="c1"># Load the data</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span>
 
     <span class="c1"># Metadata about the loading process</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">json_path</span><span class="p">,</span> <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">}</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"source"</span><span class="p">:</span> <span class="n">json_path</span><span class="p">,</span> <span class="s2">"format"</span><span class="p">:</span> <span class="s2">"json"</span><span class="p">}</span>
 
     <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">metadata</span>
 </pre></div>

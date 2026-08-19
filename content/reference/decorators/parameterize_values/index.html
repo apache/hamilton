@@ -534,13 +534,13 @@ that <cite>specific value</cite>.</p>
 
 <span class="n">ONE_OFF_DATES</span> <span class="o">=</span> <span class="p">{</span>
      <span class="c1">#output name        # doc string               # input value to function</span>
-    <span class="p">(</span><span class="s1">&#39;D_ELECTION_2016&#39;</span><span class="p">,</span> <span class="s1">&#39;US Election 2016 Dummy&#39;</span><span class="p">):</span> <span class="s1">&#39;2016-11-12&#39;</span><span class="p">,</span>
-    <span class="p">(</span><span class="s1">&#39;SOME_OUTPUT_NAME&#39;</span><span class="p">,</span> <span class="s1">&#39;Doc string for this thing&#39;</span><span class="p">):</span> <span class="s1">&#39;value to pass to function&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="s1">'D_ELECTION_2016'</span><span class="p">,</span> <span class="s1">'US Election 2016 Dummy'</span><span class="p">):</span> <span class="s1">'2016-11-12'</span><span class="p">,</span>
+    <span class="p">(</span><span class="s1">'SOME_OUTPUT_NAME'</span><span class="p">,</span> <span class="s1">'Doc string for this thing'</span><span class="p">):</span> <span class="s1">'value to pass to function'</span><span class="p">,</span>
 <span class="p">}</span>
             <span class="c1"># parameter matches the name of the argument in the function below</span>
-<span class="nd">@parameterize_values</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;one_off_date&#39;</span><span class="p">,</span> <span class="n">assigned_output</span><span class="o">=</span><span class="n">ONE_OFF_DATES</span><span class="p">)</span>
+<span class="nd">@parameterize_values</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">'one_off_date'</span><span class="p">,</span> <span class="n">assigned_output</span><span class="o">=</span><span class="n">ONE_OFF_DATES</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_one_off_dates</span><span class="p">(</span><span class="n">date_index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">one_off_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a date index, produces a series where a 1 is placed at the date index that would contain that event.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Given a date index, produces a series where a 1 is placed at the date index that would contain that event."""</span>
     <span class="n">one_off_dates</span> <span class="o">=</span> <span class="n">internal_package_with_logic</span><span class="o">.</span><span class="n">get_business_week</span><span class="p">(</span><span class="n">one_off_date</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">internal_package_with_logic</span><span class="o">.</span><span class="n">bool_to_int</span><span class="p">(</span><span class="n">date_index</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="n">one_off_dates</span><span class="p">]))</span>
 </pre></div>
@@ -561,13 +561,13 @@ tuple(Output Name, Documentation string) -&gt; value.</p>
 
 <span class="n">ONE_OFF_DATES</span> <span class="o">=</span> <span class="p">{</span>
      <span class="c1">#output name        # doc string               # input value to function</span>
-    <span class="p">(</span><span class="s1">&#39;D_ELECTION_2016&#39;</span><span class="p">,</span> <span class="s1">&#39;US Election 2016 Dummy&#39;</span><span class="p">):</span> <span class="s1">&#39;2016-11-12&#39;</span><span class="p">,</span>
-    <span class="p">(</span><span class="s1">&#39;SOME_OUTPUT_NAME&#39;</span><span class="p">,</span> <span class="s1">&#39;Doc string for this thing&#39;</span><span class="p">):</span> <span class="s1">&#39;value to pass to function&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="s1">'D_ELECTION_2016'</span><span class="p">,</span> <span class="s1">'US Election 2016 Dummy'</span><span class="p">):</span> <span class="s1">'2016-11-12'</span><span class="p">,</span>
+    <span class="p">(</span><span class="s1">'SOME_OUTPUT_NAME'</span><span class="p">,</span> <span class="s1">'Doc string for this thing'</span><span class="p">):</span> <span class="s1">'value to pass to function'</span><span class="p">,</span>
 <span class="p">}</span>
             <span class="c1"># parameter matches the name of the argument in the function below</span>
-<span class="nd">@parameterize_values</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;one_off_date&#39;</span><span class="p">,</span> <span class="n">assigned_output</span><span class="o">=</span><span class="n">ONE_OFF_DATES</span><span class="p">)</span>
+<span class="nd">@parameterize_values</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">'one_off_date'</span><span class="p">,</span> <span class="n">assigned_output</span><span class="o">=</span><span class="n">ONE_OFF_DATES</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_one_off_dates</span><span class="p">(</span><span class="n">date_index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">one_off_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Given a date index, produces a series where a 1 is placed at the date index that would contain that event.&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">'''Given a date index, produces a series where a 1 is placed at the date index that would contain that event.'''</span>
     <span class="n">one_off_dates</span> <span class="o">=</span> <span class="n">internal_package_with_logic</span><span class="o">.</span><span class="n">get_business_week</span><span class="p">(</span><span class="n">one_off_date</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">internal_package_with_logic</span><span class="o">.</span><span class="n">bool_to_int</span><span class="p">(</span><span class="n">date_index</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="n">one_off_dates</span><span class="p">]))</span>
 </pre></div>

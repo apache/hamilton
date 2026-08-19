@@ -559,25 +559,25 @@ under the License.
 
 <span class="c1"># external function writing component</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">greeting</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Hello </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">app</span><span class="p">():</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Apache Hamilton + Streamlit 🐱‍🚀&quot;</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Apache Hamilton + Streamlit 🐱‍🚀"</span><span class="p">)</span>
 
-    <span class="n">main</span><span class="p">,</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tabs</span><span class="p">([</span><span class="s2">&quot;Main&quot;</span><span class="p">,</span> <span class="s2">&quot;Settings&quot;</span><span class="p">])</span>
+    <span class="n">main</span><span class="p">,</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tabs</span><span class="p">([</span><span class="s2">"Main"</span><span class="p">,</span> <span class="s2">"Settings"</span><span class="p">])</span>
     <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="c1"># nesting tabs and columns</span>
     <span class="k">with</span> <span class="n">main</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">left</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_input</span><span class="p">(</span>
-                <span class="s2">&quot;What&#39;s your name&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Lambda&quot;</span>
+                <span class="s2">"What's your name"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">"Lambda"</span>
             <span class="p">)</span>
 
         <span class="k">with</span> <span class="n">right</span><span class="p">:</span>
             <span class="n">greeting</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">app</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -596,23 +596,23 @@ under the License.
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">app</span><span class="p">():</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Apache Hamilton + Streamlit 🐱‍🚀&quot;</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Apache Hamilton + Streamlit 🐱‍🚀"</span><span class="p">)</span>
 
     <span class="c1"># load_dataframe() will only run the first time</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">load_dataframe</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">load_dataframe</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"..."</span><span class="p">)</span>
     <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
     <span class="c1"># If favorite flavor is known, display it.</span>
-    <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">(</span><span class="s2">&quot;favorite&quot;</span><span class="p">):</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Your favorite ice cream is: </span><span class="si">{</span><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">&#39;favorite&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">(</span><span class="s2">"favorite"</span><span class="p">):</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Your favorite ice cream is: </span><span class="si">{</span><span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="p">[</span><span class="s1">'favorite'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="c1"># Ask for the favorite ice cream until an answer is given.</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">st</span><span class="o">.</span><span class="n">text_input</span><span class="p">(</span>
-            <span class="s2">&quot;What&#39;s your favorite ice cream flavor?&quot;</span><span class="p">,</span>
-            <span class="n">key</span><span class="o">=</span><span class="s2">&quot;favorite&quot;</span><span class="p">,</span>  <span class="c1"># key to st.session_state</span>
+            <span class="s2">"What's your favorite ice cream flavor?"</span><span class="p">,</span>
+            <span class="n">key</span><span class="o">=</span><span class="s2">"favorite"</span><span class="p">,</span>  <span class="c1"># key to st.session_state</span>
         <span class="p">)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">app</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -638,28 +638,28 @@ under the License.
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">base_df</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/Lexie88rus/bank-marketing-analysis/master/bank.csv&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/Lexie88rus/bank-marketing-analysis/master/bank.csv"</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">all_jobs</span><span class="p">(</span><span class="n">base_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="n">base_df</span><span class="p">[</span><span class="s2">&quot;job&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">base_df</span><span class="p">[</span><span class="s2">"job"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">balance_per_job</span><span class="p">(</span><span class="n">base_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">base_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;job&quot;</span><span class="p">)[</span><span class="s2">&quot;balance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">base_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"job"</span><span class="p">)[</span><span class="s2">"balance"</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">balance_per_job_boxplot</span><span class="p">(</span><span class="n">base_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">px</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">base_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;job&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;balance&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">px</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">base_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">"job"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">"balance"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">job_df</span><span class="p">(</span><span class="n">base_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">selected_job</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">base_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">base_df</span><span class="p">[</span><span class="s1">&#39;job&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">selected_job</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">base_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">base_df</span><span class="p">[</span><span class="s1">'job'</span><span class="p">]</span><span class="o">==</span><span class="n">selected_job</span><span class="p">]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">job_hist</span><span class="p">(</span><span class="n">job_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">px</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">job_df</span><span class="p">[</span><span class="s2">&quot;balance&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">px</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">job_df</span><span class="p">[</span><span class="s2">"balance"</span><span class="p">])</span>
 </pre></div>
 </div>
 <p><img alt="logic dataflow" src="../../_images/streamlit_logic.png" /></p>
@@ -695,13 +695,13 @@ under the License.
     <span class="n">inputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">overrides</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generic utility to cache Apache Hamilton results&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Generic utility to cache Apache Hamilton results"""</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="n">get_hamilton_driver</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">final_vars</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_state_inputs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;selected_job&quot;</span><span class="p">]</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"selected_job"</span><span class="p">]</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">session_state</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
 
 
@@ -715,23 +715,23 @@ under the License.
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">app</span><span class="p">():</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Apache Hamilton + Streamlit 🐱‍🚀&quot;</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Apache Hamilton + Streamlit 🐱‍🚀"</span><span class="p">)</span>
 
     <span class="c1"># run the base data that always needs to be displayed</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">execute</span><span class="p">([</span><span class="s2">&quot;all_jobs&quot;</span><span class="p">,</span> <span class="s2">&quot;balance_per_job&quot;</span><span class="p">,</span> <span class="s2">&quot;balance_per_job_boxplot&quot;</span><span class="p">])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">execute</span><span class="p">([</span><span class="s2">"all_jobs"</span><span class="p">,</span> <span class="s2">"balance_per_job"</span><span class="p">,</span> <span class="s2">"balance_per_job_boxplot"</span><span class="p">])</span>
 
     <span class="c1"># display the base dataframe and plotly chart</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;balance_per_job&quot;</span><span class="p">])</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;balance_per_job_boxplot&quot;</span><span class="p">])</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"balance_per_job"</span><span class="p">])</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"balance_per_job_boxplot"</span><span class="p">])</span>
 
     <span class="c1"># get the selection options from `data`</span>
     <span class="c1"># store the selection in the state `selected_job`</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">selectbox</span><span class="p">(</span><span class="s2">&quot;Select a job&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;all_jobs&quot;</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;selected_job&quot;</span><span class="p">)</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">selectbox</span><span class="p">(</span><span class="s2">"Select a job"</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"all_jobs"</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="s2">"selected_job"</span><span class="p">)</span>
     <span class="c1"># get the value from the dict</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;job_hist&quot;</span><span class="p">])[</span><span class="s2">&quot;job_hist&quot;</span><span class="p">])</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">execute</span><span class="p">([</span><span class="s2">"job_hist"</span><span class="p">])[</span><span class="s2">"job_hist"</span><span class="p">])</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">app</span><span class="p">()</span>
 </pre></div>
 </div>

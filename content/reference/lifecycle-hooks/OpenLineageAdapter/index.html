@@ -536,16 +536,16 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># write to file</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">openlineage.client.transport.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileConfig</span><span class="p">,</span> <span class="n">FileTransport</span>
 <span class="n">file_config</span> <span class="o">=</span> <span class="n">FileConfig</span><span class="p">(</span>
-    <span class="n">log_file_path</span><span class="o">=</span><span class="s2">&quot;/path/to/your/file&quot;</span><span class="p">,</span>
+    <span class="n">log_file_path</span><span class="o">=</span><span class="s2">"/path/to/your/file"</span><span class="p">,</span>
     <span class="n">append</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">OpenLineageClient</span><span class="p">(</span><span class="n">transport</span><span class="o">=</span><span class="n">FileTransport</span><span class="p">(</span><span class="n">file_config</span><span class="p">))</span>
 
 <span class="c1"># write to HTTP, e.g. marquez</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">OpenLineageClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://localhost:5000&quot;</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenLineageClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">"http://localhost:5000"</span><span class="p">)</span>
 
 <span class="c1"># create the adapter</span>
-<span class="n">adapter</span> <span class="o">=</span> <span class="n">OpenLineageAdapter</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;my_namespace&quot;</span><span class="p">,</span> <span class="s2">&quot;my_job_name&quot;</span><span class="p">)</span>
+<span class="n">adapter</span> <span class="o">=</span> <span class="n">OpenLineageAdapter</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">"my_namespace"</span><span class="p">,</span> <span class="s2">"my_job_name"</span><span class="p">)</span>
 
 <span class="c1"># add to Hamilton</span>
 <span class="c1"># import your pipeline code</span>

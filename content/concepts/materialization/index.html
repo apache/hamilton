@@ -567,38 +567,38 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_df</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load raw data from parquet file&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load raw data from parquet file"""</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">preprocessed_df</span><span class="p">(</span><span class="n">raw_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;preprocess raw data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""preprocess raw data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">model</span><span class="p">(</span><span class="n">preprocessed_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">XGBModel</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train model on preprocessed data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Train model on preprocessed data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">save_model</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">XGBModel</span><span class="p">,</span> <span class="n">model_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save trained model to JSON format&quot;&quot;&quot;</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Save trained model to JSON format"""</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json"</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">__main__</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">__main__</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
-    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
-    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
+    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">"..."</span>
+    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">"..."</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span> <span class="n">model_dir</span><span class="o">=</span><span class="n">model_dir</span><span class="p">)</span>
-    <span class="n">final_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;save_model&quot;</span><span class="p">]</span>
+    <span class="n">final_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"save_model"</span><span class="p">]</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">final_vars</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
-    <span class="c1"># results[&quot;save_model&quot;] == None</span>
+    <span class="c1"># results["save_model"] == None</span>
 </pre></div>
 </div>
 </td>
@@ -607,29 +607,29 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">preprocessed_df</span><span class="p">(</span><span class="n">raw_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;preprocess raw data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""preprocess raw data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">model</span><span class="p">(</span><span class="n">preprocessed_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">XGBModel</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train model on preprocessed data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Train model on preprocessed data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">__main__</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">__main__</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
-    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
-    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
+    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">"..."</span>
+    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">"..."</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">raw_df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">data_path</span><span class="p">))</span>
-    <span class="n">final_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
+    <span class="n">final_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"model"</span><span class="p">]</span>
 
     <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">final_vars</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
-    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json&quot;</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="s2">"model"</span><span class="p">]</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json"</span><span class="p">)</span>
 </pre></div>
 </div>
 </td>
@@ -693,40 +693,40 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="nd">@dataloader</span><span class="p">()</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_df</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load raw data from parquet file&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load raw data from parquet file"""</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_file_and_dataframe_metadata</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">preprocessed_df</span><span class="p">(</span><span class="n">raw_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;preprocess raw data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""preprocess raw data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">model</span><span class="p">(</span><span class="n">preprocessed_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">XGBModel</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train model on preprocessed data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Train model on preprocessed data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
 <span class="nd">@datasaver</span><span class="p">()</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">save_model</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">XGBModel</span><span class="p">,</span> <span class="n">model_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save trained model to JSON format&quot;&quot;&quot;</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_file_metadata</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Save trained model to JSON format"""</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_file_metadata</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json"</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">__main__</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">__main__</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
-    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
+    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">"..."</span>
+    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">"..."</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span> <span class="n">model_dir</span><span class="o">=</span><span class="n">model_dir</span><span class="p">)</span>
-    <span class="n">final_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;save_model&quot;</span><span class="p">]</span>
+    <span class="n">final_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"save_model"</span><span class="p">]</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">final_vars</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
-    <span class="c1"># results[&quot;save_model&quot;] == None</span>
+    <span class="c1"># results["save_model"] == None</span>
 </pre></div>
 </div>
 </td>
@@ -735,29 +735,29 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">preprocessed_df</span><span class="p">(</span><span class="n">raw_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;preprocess raw data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""preprocess raw data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">model</span><span class="p">(</span><span class="n">preprocessed_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">XGBModel</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train model on preprocessed data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Train model on preprocessed data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">__main__</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.io.materialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_</span><span class="p">,</span> <span class="n">to</span>
 
-    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
-    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
+    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">"..."</span>
+    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">"..."</span>
     <span class="n">materializers</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">from_</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;raw_df&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">data_path</span><span class="p">),</span>
+        <span class="n">from_</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">"raw_df"</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">data_path</span><span class="p">),</span>
         <span class="n">to</span><span class="o">.</span><span class="n">json</span><span class="p">(</span>
-            <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;model__json&quot;</span><span class="p">,</span>  <span class="c1"># name of the DataSaver node</span>
-            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span>
-            <span class="n">path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json&quot;</span><span class="p">,</span>
+            <span class="nb">id</span><span class="o">=</span><span class="s2">"model__json"</span><span class="p">,</span>  <span class="c1"># name of the DataSaver node</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"model"</span><span class="p">],</span>
+            <span class="n">path</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json"</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
@@ -767,9 +767,9 @@ s=d.getElementsByTagName('script')[0];
         <span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="p">)</span>
 
-    <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;model__json&quot;</span><span class="p">])</span>
-    <span class="c1"># results[&quot;model&quot;]  &lt;- the model</span>
-    <span class="c1"># results[&quot;model__json&quot;] &lt;- metadata from saving the model</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"model"</span><span class="p">,</span> <span class="s2">"model__json"</span><span class="p">])</span>
+    <span class="c1"># results["model"]  &lt;- the model</span>
+    <span class="c1"># results["model__json"] &lt;- metadata from saving the model</span>
 </pre></div>
 </div>
 </td>
@@ -778,36 +778,36 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">preprocessed_df</span><span class="p">(</span><span class="n">raw_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;preprocess raw data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""preprocess raw data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">model</span><span class="p">(</span><span class="n">preprocessed_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">XGBModel</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train model on preprocessed data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Train model on preprocessed data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">__main__</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.io.materialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_</span><span class="p">,</span> <span class="n">to</span>
 
-    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
-    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
+    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">"..."</span>
+    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">"..."</span>
     <span class="n">materializers</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">from_</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;raw_df&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">data_path</span><span class="p">),</span>
+        <span class="n">from_</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">"raw_df"</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">data_path</span><span class="p">),</span>
         <span class="n">to</span><span class="o">.</span><span class="n">json</span><span class="p">(</span>
-            <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;model__json&quot;</span><span class="p">,</span>  <span class="c1"># name of the DataSaver node</span>
-            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span>
-            <span class="n">path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json&quot;</span><span class="p">,</span>
+            <span class="nb">id</span><span class="o">=</span><span class="s2">"model__json"</span><span class="p">,</span>  <span class="c1"># name of the DataSaver node</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"model"</span><span class="p">],</span>
+            <span class="n">path</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_dir</span><span class="si">}</span><span class="s2">/model.json"</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">__main__</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="c1"># executes all `to.` materializers; use `additional_vars` to execute other nodes</span>
-    <span class="n">metadata</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">materialize</span><span class="p">(</span><span class="o">*</span><span class="n">materializers</span><span class="p">,</span> <span class="n">additional_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">])</span>
-    <span class="c1"># results[&quot;model&quot;]  &lt;- the model</span>
-    <span class="c1"># metadata[&quot;model__json&quot;] &lt;- metadata from saving the model</span>
+    <span class="n">metadata</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">materialize</span><span class="p">(</span><span class="o">*</span><span class="n">materializers</span><span class="p">,</span> <span class="n">additional_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">"model"</span><span class="p">])</span>
+    <span class="c1"># results["model"]  &lt;- the model</span>
+    <span class="c1"># metadata["model__json"] &lt;- metadata from saving the model</span>
 </pre></div>
 </div>
 </td>
@@ -817,33 +817,33 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_from</span><span class="p">,</span> <span class="n">save_to</span><span class="p">,</span> <span class="n">source</span>
 
 
-<span class="c1"># source(&quot;data_path&quot;) allows to read the input value for `data_path`</span>
-<span class="nd">@load_from</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;data_path&quot;</span><span class="p">))</span>
+<span class="c1"># source("data_path") allows to read the input value for `data_path`</span>
+<span class="nd">@load_from</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"data_path"</span><span class="p">))</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">preprocessed_df</span><span class="p">(</span><span class="n">raw_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;preprocess raw data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""preprocess raw data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
-<span class="nd">@save_to</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;model_path&quot;</span><span class="p">))</span>
+<span class="nd">@save_to</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"model_path"</span><span class="p">))</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">model</span><span class="p">(</span><span class="n">preprocessed_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">XGBModel</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train model on preprocessed data&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Train model on preprocessed data"""</span>
     <span class="k">return</span> <span class="o">...</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">__main__</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">__main__</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
-    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
-    <span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span>
+    <span class="n">data_path</span> <span class="o">=</span> <span class="s2">"..."</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="s2">"..."</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
-    <span class="n">final_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;save.model&quot;</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">]</span>
+    <span class="n">final_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"save.model"</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">]</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">final_vars</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
-    <span class="c1"># results[&quot;model&quot;]  &lt;- the model</span>
-    <span class="c1"># results[&quot;save.model&quot;] &lt;- metadata from saving the model</span>
+    <span class="c1"># results["model"]  &lt;- the model</span>
+    <span class="c1"># results["save.model"] &lt;- metadata from saving the model</span>
 </pre></div>
 </div>
 </td>
@@ -961,7 +961,7 @@ was read and written.</p>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;json&quot;</span>  <span class="c1"># the name for `from_.{name}`</span>
+        <span class="k">return</span> <span class="s2">"json"</span>  <span class="c1"># the name for `from_.{name}`</span>
 </pre></div>
 </div>
 </td>
@@ -990,7 +990,7 @@ was read and written.</p>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;json&quot;</span>  <span class="c1"># the name for `to.{name}`</span>
+        <span class="k">return</span> <span class="s2">"json"</span>  <span class="c1"># the name for `to.{name}`</span>
 </pre></div>
 </div>
 </td>

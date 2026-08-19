@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -557,19 +557,19 @@ s=d.getElementsByTagName('script')[0];
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">override</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>  <span class="c1"># noqa E731</span>
 
-<span class="sd">&quot;&quot;&quot;Decorators that enables DRY code by expanding one node into many&quot;&quot;&quot;</span>
+<span class="sd">"""Decorators that enables DRY code by expanding one node into many"""</span>
 
 
 <div class="viewcode-block" id="parameterize">
 <a class="viewcode-back" href="../../../../reference/decorators/parameterize/#hamilton.function_modifiers.parameterize">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">parameterize</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeExpander</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to use to create many functions.</span>
+<span class="w">    </span><span class="sd">"""Decorator to use to create many functions.</span>
 
 <span class="sd">    Expands a single function into n, each of which correspond to a function in which the parameter value is replaced\</span>
 <span class="sd">    either by:</span>
 
-<span class="sd">    #. A specified literal value, denoted value(&#39;literal_value&#39;).</span>
-<span class="sd">    #. The output from a specified upstream function (i.e. node), denoted source(&#39;upstream_function_name&#39;).</span>
+<span class="sd">    #. A specified literal value, denoted value('literal_value').</span>
+<span class="sd">    #. The output from a specified upstream function (i.e. node), denoted source('upstream_function_name').</span>
 
 <span class="sd">    Note that ``parameterize`` can take the place of ``@parameterize_sources`` or ``@parameterize_values`` decorators \</span>
 <span class="sd">    below. In fact, they delegate to this!</span>
@@ -580,7 +580,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        @parameterize(</span>
 <span class="sd">            # tuple of assignments (consisting of literals/upstream specifications), and docstring.</span>
-<span class="sd">            replace_no_parameters=({}, &#39;fn with no parameters replaced&#39;),</span>
+<span class="sd">            replace_no_parameters=({}, 'fn with no parameters replaced'),</span>
 <span class="sd">        )</span>
 <span class="sd">        def no_param_function() -&gt; Any:</span>
 <span class="sd">            ...</span>
@@ -588,53 +588,53 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        @parameterize(</span>
 <span class="sd">            # tuple of assignments (consisting of literals/upstream specifications), and docstring.</span>
 <span class="sd">            replace_just_upstream_parameter=(</span>
-<span class="sd">                {&#39;upstream_source&#39;: source(&#39;foo_source&#39;)},</span>
-<span class="sd">                &#39;fn with upstream_parameter set to node foo&#39;</span>
+<span class="sd">                {'upstream_source': source('foo_source')},</span>
+<span class="sd">                'fn with upstream_parameter set to node foo'</span>
 <span class="sd">            ),</span>
 <span class="sd">        )</span>
 <span class="sd">        def param_is_upstream_function(upstream_source: Any) -&gt; Any:</span>
-<span class="sd">            &#39;&#39;&#39;Doc string that can also be parameterized: {upstream_source}.&#39;&#39;&#39;</span>
+<span class="sd">            '''Doc string that can also be parameterized: {upstream_source}.'''</span>
 <span class="sd">            ...</span>
 
 <span class="sd">        @parameterize(</span>
-<span class="sd">            replace_just_literal_parameter={&#39;literal_parameter&#39;: value(&#39;bar&#39;)},</span>
+<span class="sd">            replace_just_literal_parameter={'literal_parameter': value('bar')},</span>
 <span class="sd">        )</span>
 <span class="sd">        def param_is_literal_value(literal_parameter: Any) -&gt; Any:</span>
-<span class="sd">            &#39;&#39;&#39;Doc string that can also be parameterized: {literal_parameter}.&#39;&#39;&#39;</span>
+<span class="sd">            '''Doc string that can also be parameterized: {literal_parameter}.'''</span>
 <span class="sd">            ...</span>
 
 <span class="sd">        @parameterize(</span>
 <span class="sd">            replace_both_parameters={</span>
-<span class="sd">                &#39;upstream_parameter&#39;: source(&#39;foo_source&#39;),</span>
-<span class="sd">                &#39;literal_parameter&#39;: value(&#39;bar&#39;)</span>
+<span class="sd">                'upstream_parameter': source('foo_source'),</span>
+<span class="sd">                'literal_parameter': value('bar')</span>
 <span class="sd">            }</span>
 <span class="sd">        )</span>
 <span class="sd">        def concat(upstream_parameter: Any, literal_parameter: str) -&gt; Any:</span>
-<span class="sd">            &#39;&#39;&#39;Adding {literal_parameter} to {upstream_parameter} to create {output_name}.&#39;&#39;&#39;</span>
+<span class="sd">            '''Adding {literal_parameter} to {upstream_parameter} to create {output_name}.'''</span>
 <span class="sd">            return upstream_parameter + literal_parameter</span>
 
-<span class="sd">    You also have the capability to &quot;group&quot; parameters, which will combine them into a list.</span>
+<span class="sd">    You also have the capability to "group" parameters, which will combine them into a list.</span>
 
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        @parameterize(</span>
 <span class="sd">            a_plus_b_plus_c={</span>
-<span class="sd">                &#39;to_concat&#39; : group(source(&#39;a&#39;), value(&#39;b&#39;), source(&#39;c&#39;))</span>
+<span class="sd">                'to_concat' : group(source('a'), value('b'), source('c'))</span>
 <span class="sd">            }</span>
 <span class="sd">        )</span>
 <span class="sd">        def concat(to_concat: List[str]) -&gt; Any:</span>
-<span class="sd">            &#39;&#39;&#39;Adding {literal_parameter} to {upstream_parameter} to create {output_name}.&#39;&#39;&#39;</span>
-<span class="sd">            return sum(to_concat, &#39;&#39;)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">            '''Adding {literal_parameter} to {upstream_parameter} to create {output_name}.'''</span>
+<span class="sd">            return sum(to_concat, '')</span>
+<span class="sd">    """</span>
 
-    <span class="n">RESERVED_KWARG</span> <span class="o">=</span> <span class="s2">&quot;output_name&quot;</span>
+    <span class="n">RESERVED_KWARG</span> <span class="o">=</span> <span class="s2">"output_name"</span>
     <span class="c1"># This is a kwarg that replaces it with the name of the function</span>
     <span class="c1"># Double underscore means it will not be provided as user-base kwargs</span>
     <span class="c1"># as hamilton is not OK with these output names</span>
     <span class="c1"># We need this as we need to know the name of the function</span>
     <span class="c1"># for the `@inject` usage but its not provided at</span>
     <span class="c1"># construction time, so we provide a placeholder</span>
-    <span class="n">PLACEHOLDER_PARAM_NAME</span> <span class="o">=</span> <span class="s2">&quot;__&lt;function_name&gt;&quot;</span>
+    <span class="n">PLACEHOLDER_PARAM_NAME</span> <span class="o">=</span> <span class="s2">"__&lt;function_name&gt;"</span>
 
 <div class="viewcode-block" id="parameterize.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/parameterize/#hamilton.function_modifiers.parameterize.__init__">[docs]</a>
@@ -643,13 +643,13 @@ s=d.getElementsByTagName('script')[0];
         <span class="o">**</span><span class="n">parametrization</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ParametrizedDependency</span><span class="p">]</span>
         <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ParametrizedDependency</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decorator to use to create many functions.</span>
+<span class="w">        </span><span class="sd">"""Decorator to use to create many functions.</span>
 
 <span class="sd">        :param parametrization: `**kwargs` with one of two things:</span>
 
 <span class="sd">            - a tuple of assignments (consisting of literals/upstream specifications), and docstring.</span>
 <span class="sd">            - just assignments, in which case it parametrizes the existing docstring.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameterization</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">key</span><span class="p">:</span> <span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">value</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
@@ -661,8 +661,8 @@ s=d.getElementsByTagName('script')[0];
                     <span class="n">bad_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">bad_values</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;@parameterize must specify a dependency type -- either source() or value().&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;The following are not allowed: </span><span class="si">{</span><span class="n">bad_values</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"@parameterize must specify a dependency type -- either source() or value()."</span>
+                <span class="sa">f</span><span class="s2">"The following are not allowed: </span><span class="si">{</span><span class="n">bad_values</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">specified_docstrings</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">parametrization</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
@@ -672,20 +672,20 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">split_parameterizations</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">parameterizations</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ParametrizedDependency</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">ParametrizedDependencySource</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ParametrizedDependency</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Split parameterizations into two groups: those that are literal values, and those that are upstream nodes.</span>
+<span class="w">        </span><span class="sd">"""Split parameterizations into two groups: those that are literal values, and those that are upstream nodes.</span>
 <span class="sd">        Will have a key for each existing dependency type.</span>
 
 <span class="sd">        :param parameterizations: Passed into @parameterize</span>
 <span class="sd">        :return: The parameterizations grouped by dependency type</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">replacement</span> <span class="ow">in</span> <span class="n">parameterizations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">out</span><span class="p">[</span><span class="n">replacement</span><span class="o">.</span><span class="n">get_dependency_type</span><span class="p">()][</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">replacement</span>
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_grouped_list_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">arg_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the name of the arg for a given index in a list of args, using grouped&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;__</span><span class="si">{</span><span class="n">arg_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="sd">"""Gets the name of the arg for a given index in a list of args, using grouped"""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"__</span><span class="si">{</span><span class="n">arg_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">expand_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
@@ -723,17 +723,17 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">former_inputs</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>  <span class="c1"># noqa</span>
                 <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
             <span class="p">):</span>
-<span class="w">                </span><span class="sd">&quot;&quot;&quot;This function rewrites what is passed in kwargs to the right kwarg for the function.</span>
-<span class="sd">                The passed in kwargs are all the dependencies of this node. Note that we actually have the &quot;former inputs&quot;,</span>
+<span class="w">                </span><span class="sd">"""This function rewrites what is passed in kwargs to the right kwarg for the function.</span>
+<span class="sd">                The passed in kwargs are all the dependencies of this node. Note that we actually have the "former inputs",</span>
 <span class="sd">                which are what the node declares as its dependencies. So, we just have to loop through all of them to</span>
-<span class="sd">                get the &quot;new&quot; value. This &quot;new&quot; value comes from the parameterization.</span>
+<span class="sd">                get the "new" value. This "new" value comes from the parameterization.</span>
 
 <span class="sd">                Note that much of this code should *probably* live within the source/value/grouped functions, but</span>
-<span class="sd">                it is here as we&#39;re not 100% sure about the abstraction.</span>
+<span class="sd">                it is here as we're not 100% sure about the abstraction.</span>
 
 <span class="sd">                TODO -- think about how the grouped/source/literal functions should be able to grab the values from kwargs/args.</span>
-<span class="sd">                Should be easy -- they should just have something like a &quot;resolve(**kwargs)&quot; function that they can call.</span>
-<span class="sd">                &quot;&quot;&quot;</span>
+<span class="sd">                Should be easy -- they should just have something like a "resolve(**kwargs)" function that they can call.</span>
+<span class="sd">                """</span>
                 <span class="n">new_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="k">for</span> <span class="n">node_input</span> <span class="ow">in</span> <span class="n">former_inputs</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">node_input</span> <span class="ow">in</span> <span class="n">upstream_dependencies</span><span class="p">:</span>
@@ -768,7 +768,7 @@ s=d.getElementsByTagName('script')[0];
                             <span class="n">new_kwargs</span><span class="p">[</span><span class="n">node_input</span><span class="p">][</span><span class="n">dependency</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_value</span>
                     <span class="k">elif</span> <span class="n">node_input</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                         <span class="n">new_kwargs</span><span class="p">[</span><span class="n">node_input</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">node_input</span><span class="p">]</span>
-                    <span class="c1"># This case is left blank for optional parameters. If we error here, we&#39;ll break</span>
+                    <span class="c1"># This case is left blank for optional parameters. If we error here, we'll break</span>
                     <span class="c1"># the (supported) case of optionals. We do know whether its optional but for</span>
                     <span class="c1"># now the error will be clear enough</span>
                 <span class="k">return</span> <span class="n">node_</span><span class="o">.</span><span class="n">callable</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">new_kwargs</span><span class="p">)</span>
@@ -799,7 +799,7 @@ s=d.getElementsByTagName('script')[0];
                     <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">unpacked_dependencies</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">dep</span><span class="o">.</span><span class="n">get_dependency_type</span><span class="p">()</span> <span class="o">==</span> <span class="n">ParametrizedDependencySource</span><span class="o">.</span><span class="n">UPSTREAM</span><span class="p">:</span>
                             <span class="c1"># TODO -- think through what happens if we have optional pieces...</span>
-                            <span class="c1"># I think that we shouldn&#39;t allow it...</span>
+                            <span class="c1"># I think that we shouldn't allow it...</span>
                             <span class="n">new_input_types</span><span class="p">[</span><span class="n">dep</span><span class="o">.</span><span class="n">source</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
                                 <span class="n">sequence_component_type</span><span class="p">,</span>
                                 <span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
@@ -818,7 +818,7 @@ s=d.getElementsByTagName('script')[0];
                     <span class="p">),</span>
                     <span class="n">input_types</span><span class="o">=</span><span class="n">new_input_types</span><span class="p">,</span>
                     <span class="n">include_refs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Include refs is here as this is earlier than compile time</span>
-                    <span class="c1"># TODO -- figure out why this isn&#39;t getting replaced later...</span>
+                    <span class="c1"># TODO -- figure out why this isn't getting replaced later...</span>
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">nodes</span>
@@ -834,14 +834,14 @@ s=d.getElementsByTagName('script')[0];
                 <span class="bp">self</span><span class="o">.</span><span class="n">format_doc_string</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">output_name</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function docstring templating is incorrect. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Please fix up the docstring </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function docstring templating is incorrect. "</span>
+                <span class="sa">f</span><span class="s2">"Please fix up the docstring </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">RESERVED_KWARG</span> <span class="ow">in</span> <span class="n">func_param_names</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Error function </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> cannot have &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">RESERVED_KWARG</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;as a parameter it is reserved.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Error function </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> cannot have '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">RESERVED_KWARG</span><span class="si">}</span><span class="s2">'"</span>
+                <span class="sa">f</span><span class="s2">"as a parameter it is reserved."</span>
             <span class="p">)</span>
         <span class="n">missing_parameters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">mapping</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameterization</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -850,7 +850,7 @@ s=d.getElementsByTagName('script')[0];
                     <span class="n">missing_parameters</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">param_to_replace</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">missing_parameters</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Parametrization is invalid: the following parameters don&#39;t appear in the function itself: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_parameters</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Parametrization is invalid: the following parameters don't appear in the function itself: </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_parameters</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="n">type_hints</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">_output_name</span><span class="p">,</span> <span class="n">mapping</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameterization</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -875,7 +875,7 @@ s=d.getElementsByTagName('script')[0];
                         <span class="k">if</span> <span class="n">origin</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
                             <span class="n">invalid_types</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">param</span><span class="p">,</span> <span class="n">param_annotation</span><span class="p">))</span>
                     <span class="c1"># 3.9 + this works</span>
-                    <span class="c1"># 3.8 they changed it, so it gives false positives, but we&#39;re OK not fixing</span>
+                    <span class="c1"># 3.8 they changed it, so it gives false positives, but we're OK not fixing</span>
                     <span class="c1"># for older versions of python</span>
                     <span class="n">args</span> <span class="o">=</span> <span class="n">typing_inspect</span><span class="o">.</span><span class="n">get_args</span><span class="p">(</span><span class="n">param_annotation</span><span class="p">)</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -897,19 +897,19 @@ s=d.getElementsByTagName('script')[0];
                             <span class="n">invalid_types</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">param</span><span class="p">,</span> <span class="n">param_annotation</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">invalid_types</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Validation for fn: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> All parameters with a group() parameterization must be annotated as a list: &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;the following are not: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">annotation</span><span class="si">}</span><span class="s1">)&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">param</span><span class="p">,</span><span class="w"> </span><span class="n">annotation</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">invalid_types</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Validation for fn: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> All parameters with a group() parameterization must be annotated as a list: "</span>
+                    <span class="sa">f</span><span class="s2">"the following are not: </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">annotation</span><span class="si">}</span><span class="s1">)'</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">param</span><span class="p">,</span><span class="w"> </span><span class="n">annotation</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">invalid_types</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">format_doc_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">output_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper function to format a function documentation string.</span>
+<span class="w">        </span><span class="sd">"""Helper function to format a function documentation string.</span>
 
 <span class="sd">        :param doc: the string template to format</span>
 <span class="sd">        :param output_name: the output name of the function</span>
 <span class="sd">        :param params: the parameter mappings</span>
 <span class="sd">        :return: formatted string</span>
 <span class="sd">        :raises: KeyError if there is a template variable missing from the parameter mapping.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">class</span><span class="w"> </span><span class="nc">IdentityDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
             <span class="c1"># quick hack to allow for formatting of missing parameters</span>
@@ -947,7 +947,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="parameterize_values">
 <a class="viewcode-back" href="../../../../reference/decorators/parameterize_values/#hamilton.function_modifiers.parameterize_values">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">parameterize_values</span><span class="p">(</span><span class="n">parameterize</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Expands a single function into n, each of which corresponds to a function in which the parameter value is \</span>
+<span class="w">    </span><span class="sd">"""Expands a single function into n, each of which corresponds to a function in which the parameter value is \</span>
 <span class="sd">    replaced by that `specific value`.</span>
 
 <span class="sd">    .. code-block:: python</span>
@@ -958,32 +958,32 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        ONE_OFF_DATES = {</span>
 <span class="sd">             #output name        # doc string               # input value to function</span>
-<span class="sd">            (&#39;D_ELECTION_2016&#39;, &#39;US Election 2016 Dummy&#39;): &#39;2016-11-12&#39;,</span>
-<span class="sd">            (&#39;SOME_OUTPUT_NAME&#39;, &#39;Doc string for this thing&#39;): &#39;value to pass to function&#39;,</span>
+<span class="sd">            ('D_ELECTION_2016', 'US Election 2016 Dummy'): '2016-11-12',</span>
+<span class="sd">            ('SOME_OUTPUT_NAME', 'Doc string for this thing'): 'value to pass to function',</span>
 <span class="sd">        }</span>
 <span class="sd">                    # parameter matches the name of the argument in the function below</span>
-<span class="sd">        @parameterize_values(parameter=&#39;one_off_date&#39;, assigned_output=ONE_OFF_DATES)</span>
+<span class="sd">        @parameterize_values(parameter='one_off_date', assigned_output=ONE_OFF_DATES)</span>
 <span class="sd">        def create_one_off_dates(date_index: pd.Series, one_off_date: str) -&gt; pd.Series:</span>
-<span class="sd">            &#39;&#39;&#39;Given a date index, produces a series where a 1 is placed at the date index that would contain that event.&#39;&#39;&#39;</span>
+<span class="sd">            '''Given a date index, produces a series where a 1 is placed at the date index that would contain that event.'''</span>
 <span class="sd">            one_off_dates = internal_package_with_logic.get_business_week(one_off_date)</span>
 <span class="sd">            return internal_package_with_logic.bool_to_int(date_index.isin([one_off_dates]))</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="parameterize_values.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/parameterize_values/#hamilton.function_modifiers.parameterize_values.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">assigned_output</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Any</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor for a modifier that expands a single function into n, each of which</span>
+<span class="w">        </span><span class="sd">"""Constructor for a modifier that expands a single function into n, each of which</span>
 <span class="sd">        corresponds to a function in which the parameter value is replaced by that *specific value*.</span>
 
 <span class="sd">        :param parameter: Parameter to expand on.</span>
 <span class="sd">        :param assigned_output: A map of tuple of [parameter names, documentation] to values</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">assigned_output</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;assigned_output key is incorrect: </span><span class="si">{</span><span class="n">node_</span><span class="si">}</span><span class="s2">. The parameterized decorator needs a dict of &quot;</span>
-                    <span class="s2">&quot;[name, doc string] -&gt; value to function.&quot;</span>
+                    <span class="sa">f</span><span class="s2">"assigned_output key is incorrect: </span><span class="si">{</span><span class="n">node_</span><span class="si">}</span><span class="s2">. The parameterized decorator needs a dict of "</span>
+                    <span class="s2">"[name, doc string] -&gt; value to function."</span>
                 <span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">parameterize_values</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="o">**</span><span class="p">{</span>
@@ -999,8 +999,8 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">warn_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">fail_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">use_this</span><span class="o">=</span><span class="n">parameterize_values</span><span class="p">,</span>
-    <span class="n">explanation</span><span class="o">=</span><span class="s2">&quot;We now support three parametrize decorators. @parameterize, @parameterize_values, and @parameterize_inputs&quot;</span><span class="p">,</span>
-    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">&quot;https://github.com/apache/hamilton/blob/main/decorators.md#migrating-parameterized&quot;</span><span class="p">,</span>
+    <span class="n">explanation</span><span class="o">=</span><span class="s2">"We now support three parametrize decorators. @parameterize, @parameterize_values, and @parameterize_inputs"</span><span class="p">,</span>
+    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">"https://github.com/apache/hamilton/blob/main/decorators.md#migrating-parameterized"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">parametrized</span><span class="p">(</span><span class="n">parameterize_values</span><span class="p">):</span>
     <span class="k">pass</span>
@@ -1009,7 +1009,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="parameterize_sources">
 <a class="viewcode-back" href="../../../../reference/decorators/parameterize_sources/#hamilton.function_modifiers.parameterize_sources">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">parameterize_sources</span><span class="p">(</span><span class="n">parameterize</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Expands a single function into `n`, each of which corresponds to a function in which the parameters specified \</span>
+<span class="w">    </span><span class="sd">"""Expands a single function into `n`, each of which corresponds to a function in which the parameters specified \</span>
 <span class="sd">    are mapped to the specified inputs. Note this decorator and ``@parameterize_values`` are quite similar, except \</span>
 <span class="sd">    that the input here is another DAG node(s), i.e. column/input, rather than a specific scalar/static value.</span>
 
@@ -1019,19 +1019,19 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">       from hamilton.function_modifiers import parameterize_sources</span>
 
 <span class="sd">       @parameterize_sources(</span>
-<span class="sd">          D_ELECTION_2016_shifted=dict(one_off_date=&#39;D_ELECTION_2016&#39;),</span>
-<span class="sd">          SOME_OUTPUT_NAME=dict(one_off_date=&#39;SOME_INPUT_NAME&#39;)</span>
+<span class="sd">          D_ELECTION_2016_shifted=dict(one_off_date='D_ELECTION_2016'),</span>
+<span class="sd">          SOME_OUTPUT_NAME=dict(one_off_date='SOME_INPUT_NAME')</span>
 <span class="sd">       )</span>
 <span class="sd">       def date_shifter(one_off_date: pd.Series) -&gt; pd.Series:</span>
-<span class="sd">          &#39;&#39;&#39;{one_off_date} shifted by 1 to create {output_name}&#39;&#39;&#39;</span>
+<span class="sd">          '''{one_off_date} shifted by 1 to create {output_name}'''</span>
 <span class="sd">          return one_off_date.shift(1)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="parameterize_sources.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/parameterize_sources/#hamilton.function_modifiers.parameterize_sources.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">parameterization</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor for a modifier that expands a single function into n, each of which corresponds to replacing\</span>
+<span class="w">        </span><span class="sd">"""Constructor for a modifier that expands a single function into n, each of which corresponds to replacing\</span>
 <span class="sd">        some subset of the specified parameters with specific upstream nodes.</span>
 
 <span class="sd">        Note this decorator and `@parametrized_input` are similar, except this one allows multiple \</span>
@@ -1048,14 +1048,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        corresponding values from the parameterization.</span>
 
 <span class="sd">        :param \\*\\*parameterization: kwargs of output name to dict of parameter mappings.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parametrization</span> <span class="o">=</span> <span class="n">parameterization</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">parameterization</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot pass empty/None dictionary to parameterize_sources&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Cannot pass empty/None dictionary to parameterize_sources"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">output</span><span class="p">,</span> <span class="n">mappings</span> <span class="ow">in</span> <span class="n">parameterization</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">mappings</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Error, </span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2"> has a none/empty dictionary mapping. Please fill it.&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Error, </span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2"> has a none/empty dictionary mapping. Please fill it."</span>
                 <span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">parameterize_sources</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="o">**</span><span class="p">{</span>
@@ -1073,14 +1073,14 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">warn_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">fail_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">use_this</span><span class="o">=</span><span class="n">parameterize_sources</span><span class="p">,</span>
-    <span class="n">explanation</span><span class="o">=</span><span class="s2">&quot;We now support three parametrize decorators. @parameterize, &quot;</span>
-    <span class="s2">&quot;@parameterize_values, and @parameterize_inputs&quot;</span><span class="p">,</span>
-    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">&quot;https://github.com/apache/hamilton/blob/main/decorators.md#migrating&quot;</span>
-    <span class="s2">&quot;-parameterized&quot;</span><span class="p">,</span>
+    <span class="n">explanation</span><span class="o">=</span><span class="s2">"We now support three parametrize decorators. @parameterize, "</span>
+    <span class="s2">"@parameterize_values, and @parameterize_inputs"</span><span class="p">,</span>
+    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">"https://github.com/apache/hamilton/blob/main/decorators.md#migrating"</span>
+    <span class="s2">"-parameterized"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">parametrized_input</span><span class="p">(</span><span class="n">parameterize</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">variable_inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor for a modifier that expands a single function into n, each of which</span>
+<span class="w">        </span><span class="sd">"""Constructor for a modifier that expands a single function into n, each of which</span>
 <span class="sd">        corresponds to the specified parameter replaced by a *specific input column*.</span>
 
 <span class="sd">        Note this decorator and `@parametrized` are quite similar, except that the input here is another DAG node,</span>
@@ -1094,12 +1094,12 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        :param parameter: Parameter to expand on.</span>
 <span class="sd">        :param variable_inputs: A map of tuple of [parameter names, documentation] to values</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">variable_inputs</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;assigned_output key is incorrect: </span><span class="si">{</span><span class="n">node</span><span class="si">}</span><span class="s2">. The parameterized decorator needs a dict of &quot;</span>
-                    <span class="s2">&quot;input column -&gt; [name, description] to function.&quot;</span>
+                    <span class="sa">f</span><span class="s2">"assigned_output key is incorrect: </span><span class="si">{</span><span class="n">node</span><span class="si">}</span><span class="s2">. The parameterized decorator needs a dict of "</span>
+                    <span class="s2">"input column -&gt; [name, description] to function."</span>
                 <span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">parametrized_input</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="o">**</span><span class="p">{</span>
@@ -1113,8 +1113,8 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">warn_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">fail_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">use_this</span><span class="o">=</span><span class="n">parameterize_sources</span><span class="p">,</span>
-    <span class="n">explanation</span><span class="o">=</span><span class="s2">&quot;We now support three parametrize decorators. @parameterize, @parameterize_values, and @parameterize_inputs&quot;</span><span class="p">,</span>
-    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">&quot;https://github.com/apache/hamilton/blob/main/decorators.md#migrating-parameterized&quot;</span><span class="p">,</span>
+    <span class="n">explanation</span><span class="o">=</span><span class="s2">"We now support three parametrize decorators. @parameterize, @parameterize_values, and @parameterize_inputs"</span><span class="p">,</span>
+    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">"https://github.com/apache/hamilton/blob/main/decorators.md#migrating-parameterized"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">parameterized_inputs</span><span class="p">(</span><span class="n">parameterize_sources</span><span class="p">):</span>
     <span class="k">pass</span>
@@ -1126,24 +1126,24 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="extract_columns.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/extract_columns/#hamilton.function_modifiers.extract_columns.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">columns</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fill_with</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor for a modifier that expands a single function into the following nodes:</span>
+<span class="w">        </span><span class="sd">"""Constructor for a modifier that expands a single function into the following nodes:</span>
 
 <span class="sd">        - n functions, each of which take in the original dataframe and output a specific column</span>
 <span class="sd">        - 1 function that outputs the original dataframe</span>
 
 <span class="sd">        :param columns: Columns to extract, that can be a list of tuples of (name, documentation) or just names.</span>
-<span class="sd">        :param fill_with: If you want to extract a column that doesn&#39;t exist, do you want to fill it with a default \</span>
+<span class="sd">        :param fill_with: If you want to extract a column that doesn't exist, do you want to fill it with a default \</span>
 <span class="sd">        value? Or do you want to error out? Leave empty/None to error out, set fill_value to dynamically create a \</span>
 <span class="sd">        column.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">extract_columns</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">columns</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="s2">&quot;Error empty arguments passed to extract_columns decorator.&quot;</span>
+                <span class="s2">"Error empty arguments passed to extract_columns decorator."</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="s2">&quot;Error list passed in. Please `*` in front of it to expand it.&quot;</span>
+                <span class="s2">"Error list passed in. Please `*` in front of it to expand it."</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fill_with</span> <span class="o">=</span> <span class="n">fill_with</span></div>
@@ -1151,38 +1151,38 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_return_type</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that the return type of the function is a pandas dataframe.</span>
+<span class="w">        </span><span class="sd">"""Validates that the return type of the function is a pandas dataframe.</span>
 <span class="sd">        :param fn: Function to validate</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">output_type</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;return&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">output_type</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"return"</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">registry</span><span class="o">.</span><span class="n">get_column_type_from_df_type</span><span class="p">(</span><span class="n">output_type</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">NotImplementedError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
                 <span class="c1"># TODO: capture was dataframe libraries are supported and print here.</span>
-                <span class="sa">f</span><span class="s2">&quot;Error </span><span class="si">{</span><span class="n">fn</span><span class="si">}</span><span class="s2"> does not output a type we know about. Is it a dataframe type we &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;support? &quot;</span>
+                <span class="sa">f</span><span class="s2">"Error </span><span class="si">{</span><span class="n">fn</span><span class="si">}</span><span class="s2"> does not output a type we know about. Is it a dataframe type we "</span>
+                <span class="sa">f</span><span class="s2">"support? "</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;A function is invalid if it does not output a dataframe.</span>
+<span class="w">        </span><span class="sd">"""A function is invalid if it does not output a dataframe.</span>
 
 <span class="sd">        :param fn: Function to validate.</span>
 <span class="sd">        :raises: InvalidDecoratorException If the function does not output a Dataframe</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">extract_columns</span><span class="o">.</span><span class="n">validate_return_type</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">transform_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;For each column to extract, output a node that extracts that column. Also, output the original dataframe</span>
+<span class="w">        </span><span class="sd">"""For each column to extract, output a node that extracts that column. Also, output the original dataframe</span>
 <span class="sd">        generator.</span>
 <span class="sd">        :param node_: Node to transform</span>
 <span class="sd">        :param config: Config to use</span>
 <span class="sd">        :param fn: Function to extract columns from. Must output a dataframe.</span>
 <span class="sd">        :return: A collection of nodes --</span>
 <span class="sd">                one for the original dataframe generator, and another for each column to extract.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">callable</span>
         <span class="n">base_doc</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">documentation</span>
 
@@ -1223,8 +1223,8 @@ s=d.getElementsByTagName('script')[0];
                     <span class="n">df</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
                     <span class="k">if</span> <span class="n">column_to_extract</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;No such column: </span><span class="si">{</span><span class="n">column_to_extract</span><span class="si">}</span><span class="s2"> produced by </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">. &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;It only produced </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="sa">f</span><span class="s2">"No such column: </span><span class="si">{</span><span class="n">column_to_extract</span><span class="si">}</span><span class="s2"> produced by </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">. "</span>
+                            <span class="sa">f</span><span class="s2">"It only produced </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
                         <span class="p">)</span>
                     <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column_to_extract</span><span class="p">)</span>
 
@@ -1236,8 +1236,8 @@ s=d.getElementsByTagName('script')[0];
                     <span class="n">df</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
                     <span class="k">if</span> <span class="n">column_to_extract</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;No such column: </span><span class="si">{</span><span class="n">column_to_extract</span><span class="si">}</span><span class="s2"> produced by </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">. &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;It only produced </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="sa">f</span><span class="s2">"No such column: </span><span class="si">{</span><span class="n">column_to_extract</span><span class="si">}</span><span class="s2"> produced by </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">. "</span>
+                            <span class="sa">f</span><span class="s2">"It only produced </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
                         <span class="p">)</span>
                     <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column_to_extract</span><span class="p">)</span>
 
@@ -1258,18 +1258,18 @@ s=d.getElementsByTagName('script')[0];
 <span class="k">def</span><span class="w"> </span><span class="nf">_determine_fields_to_extract</span><span class="p">(</span>
     <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">output_type</span><span class="p">:</span> <span class="n">Any</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines which fields to extract based on user requested fields and the output type of</span>
+<span class="w">    </span><span class="sd">"""Determines which fields to extract based on user requested fields and the output type of</span>
 <span class="sd">    the return type of the function.</span>
 
 <span class="sd">    :param fields: Dict of fields to extract.</span>
 <span class="sd">    :param output_type: The output type of the node function.</span>
 <span class="sd">    :return: List of field types.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">output_type_error</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;For extracting fields, the decorated function output type must be a `dict` or a &quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;`typing.Dict` with or without type parameters (i.e. `dict[str, int]` or &quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;`typing.Dict[str, int]`), not: </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"For extracting fields, the decorated function output type must be a `dict` or a "</span>
+        <span class="sa">f</span><span class="s2">"`typing.Dict` with or without type parameters (i.e. `dict[str, int]` or "</span>
+        <span class="sa">f</span><span class="s2">"`typing.Dict[str, int]`), not: </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">"</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">output_type</span> <span class="o">==</span> <span class="nb">dict</span> <span class="ow">or</span> <span class="n">output_type</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
@@ -1277,8 +1277,8 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1">#       so we need to address the bare dictionaries first before generics.</span>
         <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="s2">&quot;When extracting fields from a function that returns a bare `dict` output without &quot;</span>
-                <span class="s2">&quot;type parameters, you must supply a `dict` mapping field names to types.&quot;</span>
+                <span class="s2">"When extracting fields from a function that returns a bare `dict` output without "</span>
+                <span class="s2">"type parameters, you must supply a `dict` mapping field names to types."</span>
             <span class="p">)</span>
     <span class="k">elif</span> <span class="n">typing_inspect</span><span class="o">.</span><span class="n">is_generic_type</span><span class="p">(</span><span class="n">output_type</span><span class="p">):</span>
         <span class="n">base_type</span> <span class="o">=</span> <span class="n">typing_inspect</span><span class="o">.</span><span class="n">get_origin</span><span class="p">(</span><span class="n">output_type</span><span class="p">)</span>
@@ -1286,15 +1286,15 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="n">output_type_error</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="s2">&quot;When extracting fields from a function that returns a generic `dict`, you must &quot;</span>
-                <span class="s2">&quot;supply either a `dict` (`typing.Dict`) mapping field names to types or &quot;</span>
-                <span class="s2">&quot;alternatively a `list` (`typing.List`) of field names.&quot;</span>
+                <span class="s2">"When extracting fields from a function that returns a generic `dict`, you must "</span>
+                <span class="s2">"supply either a `dict` (`typing.Dict`) mapping field names to types or "</span>
+                <span class="s2">"alternatively a `list` (`typing.List`) of field names."</span>
             <span class="p">)</span>
         <span class="n">output_args</span> <span class="o">=</span> <span class="n">typing_inspect</span><span class="o">.</span><span class="n">get_args</span><span class="p">(</span><span class="n">output_type</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;When extracting fields from a function that returns a generic `dict`, you &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;must specify only two type parameters (key, value), not </span><span class="si">{</span><span class="n">output_args</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"When extracting fields from a function that returns a generic `dict`, you "</span>
+                <span class="sa">f</span><span class="s2">"must specify only two type parameters (key, value), not </span><span class="si">{</span><span class="n">output_args</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">field</span><span class="p">:</span> <span class="n">output_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">}</span>  <span class="c1"># Infer type from annotation</span>
@@ -1307,39 +1307,39 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">reduced_fields</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">typed_dict_fields</span><span class="p">:</span>
-                    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> is not a field in the `TypedDict` </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> is not a field in the `TypedDict` </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
                 <span class="n">reduced_fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">typed_dict_fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
             <span class="n">fields</span> <span class="o">=</span> <span class="n">reduced_fields</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_type</span> <span class="ow">in</span> <span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">expected_type</span> <span class="o">=</span> <span class="n">typed_dict_fields</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2"> is not a field in the `TypedDict` </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2"> is not a field in the `TypedDict` </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
                     <span class="k">continue</span>
                 <span class="k">elif</span> <span class="n">expected_type</span> <span class="o">==</span> <span class="n">field_type</span> <span class="ow">or</span> <span class="n">htypes</span><span class="o">.</span><span class="n">custom_subclass_check</span><span class="p">(</span>
                     <span class="n">field_type</span><span class="p">,</span> <span class="n">expected_type</span>
                 <span class="p">):</span>
                     <span class="k">continue</span>
                 <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Error </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2"> did not match the TypedDict annotation&#39;s field &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field_type</span><span class="si">}</span><span class="s2">. Expected </span><span class="si">{</span><span class="n">expected_type</span><span class="si">}</span><span class="s2">.&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Error </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2"> did not match the TypedDict annotation's field "</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">field_type</span><span class="si">}</span><span class="s2">. Expected </span><span class="si">{</span><span class="n">expected_type</span><span class="si">}</span><span class="s2">."</span>
                 <span class="p">)</span>
         <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Error </span><span class="si">{</span><span class="n">fields</span><span class="si">}</span><span class="s2"> did not match a subset of the TypedDict annotation&#39;s fields &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">typed_dict_fields</span><span class="si">}</span><span class="s2">. The following fields were not valid: </span><span class="si">{</span><span class="n">errors</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Error </span><span class="si">{</span><span class="n">fields</span><span class="si">}</span><span class="s2"> did not match a subset of the TypedDict annotation's fields "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">typed_dict_fields</span><span class="si">}</span><span class="s2">. The following fields were not valid: </span><span class="si">{</span><span class="n">errors</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="n">output_type_error</span><span class="p">)</span>
 
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="s2">&quot;Internal error: fields should be a dict at this point.&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="s2">"Internal error: fields should be a dict at this point."</span>
     <span class="n">_validate_extract_fields</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fields</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_extract_fields</span><span class="p">(</span><span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validates the fields dict for extract field.</span>
+<span class="w">    </span><span class="sd">"""Validates the fields dict for extract field.</span>
 <span class="sd">    Rules are:</span>
 <span class="sd">    - All keys must be strings</span>
 <span class="sd">    - All values must be types</span>
@@ -1347,18 +1347,18 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    :param fields: Constructor argument to extract_fields</span>
 <span class="sd">    :raises InvalidDecoratorException: If the fields dict is invalid.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fields</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-            <span class="s2">&quot;Error an empty dict, or no dict, passed to extract_fields decorator.&quot;</span>
+            <span class="s2">"Error an empty dict, or no dict, passed to extract_fields decorator."</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error, please pass in a dict, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error, please pass in a dict, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">field_type</span> <span class="ow">in</span> <span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> is not a string. All keys must be strings.&quot;</span><span class="p">)</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> is not a string. All keys must be strings."</span><span class="p">)</span>
 
             <span class="c1"># second condition needed because isinstance(Any, type) == False for Python &lt;3.11</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
@@ -1367,18 +1367,18 @@ s=d.getElementsByTagName('script')[0];
                 <span class="ow">or</span> <span class="n">typing_inspect</span><span class="o">.</span><span class="n">is_generic_type</span><span class="p">(</span><span class="n">field_type</span><span class="p">)</span>
                 <span class="ow">or</span> <span class="n">typing_inspect</span><span class="o">.</span><span class="n">is_union_type</span><span class="p">(</span><span class="n">field_type</span><span class="p">)</span>
             <span class="p">):</span>
-                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> does not declare a type. Instead it passes </span><span class="si">{</span><span class="n">field_type</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> does not declare a type. Instead it passes </span><span class="si">{</span><span class="n">field_type</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Error, found these </span><span class="si">{</span><span class="n">errors</span><span class="si">}</span><span class="s2">. Please pass in a dict of string to types. &quot;</span>
+                <span class="sa">f</span><span class="s2">"Error, found these </span><span class="si">{</span><span class="n">errors</span><span class="si">}</span><span class="s2">. Please pass in a dict of string to types. "</span>
             <span class="p">)</span>
 
 
 <div class="viewcode-block" id="extract_fields">
 <a class="viewcode-back" href="../../../../reference/decorators/extract_fields/#hamilton.function_modifiers.extract_fields">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">extract_fields</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">SingleNodeNodeTransformer</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts fields from a dictionary of output.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Extracts fields from a dictionary of output."""</span>
 
     <span class="n">output_type</span><span class="p">:</span> <span class="n">Any</span>
     <span class="n">resolved_fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span>
@@ -1391,17 +1391,17 @@ s=d.getElementsByTagName('script')[0];
         <span class="o">*</span><span class="n">others</span><span class="p">,</span>
         <span class="n">fill_with</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor for a modifier that expands a single function into the following nodes:</span>
+<span class="w">        </span><span class="sd">"""Constructor for a modifier that expands a single function into the following nodes:</span>
 
 <span class="sd">        - n functions, each of which take in the original dict and output a specific field</span>
 <span class="sd">        - 1 function that outputs the original dict</span>
 
 <span class="sd">        :param fields: Fields to extract. Can be a dict of field names to types, a list of field names, or a single field name.</span>
 <span class="sd">        :param others: Additional fields names to extract - argument unpacking. Ignored if `fields` is a dict.</span>
-<span class="sd">        :param fill_with: If you want to extract a field that doesn&#39;t exist, do you want to fill it with a default \</span>
+<span class="sd">        :param fill_with: If you want to extract a field that doesn't exist, do you want to fill it with a default \</span>
 <span class="sd">        value? Or do you want to error out? Leave empty/None to error out, set fill_value to dynamically create a \</span>
 <span class="sd">        field value.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">extract_fields</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">others</span><span class="p">)</span>
@@ -1412,19 +1412,19 @@ s=d.getElementsByTagName('script')[0];
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;A function is invalid if it is not annotated with a dict or typing.Dict return type or if the</span>
+<span class="w">        </span><span class="sd">"""A function is invalid if it is not annotated with a dict or typing.Dict return type or if the</span>
 <span class="sd">        fields to extract are not valid.</span>
 
 <span class="sd">        :param fn: Function to validate.</span>
 <span class="sd">        :raises: InvalidDecoratorException If the function is not annotated with a dict or typing.Dict type as output.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;return&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"return"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resolved_fields</span> <span class="o">=</span> <span class="n">_determine_fields_to_extract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">transform_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;For each field to extract, output a node that extracts that field. Also, output the original TypedDict</span>
+<span class="w">        </span><span class="sd">"""For each field to extract, output a node that extracts that field. Also, output the original TypedDict</span>
 <span class="sd">        generator.</span>
 
 <span class="sd">        :param node_:</span>
@@ -1432,7 +1432,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param fn: Function to extract columns from. Must output a dataframe.</span>
 <span class="sd">        :return: A collection of nodes --</span>
 <span class="sd">                one for the original dataframe generator, and another for each column to extract.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">callable</span>
         <span class="n">base_doc</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">documentation</span>
 
@@ -1467,8 +1467,8 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">dt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">field_to_extract</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dt</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;No such field: </span><span class="si">{</span><span class="n">field_to_extract</span><span class="si">}</span><span class="s2"> produced by </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;It only produced </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="sa">f</span><span class="s2">"No such field: </span><span class="si">{</span><span class="n">field_to_extract</span><span class="si">}</span><span class="s2"> produced by </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">. "</span>
+                        <span class="sa">f</span><span class="s2">"It only produced </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span>
                     <span class="p">)</span>
                 <span class="k">return</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="n">field_to_extract</span><span class="p">]</span>
 
@@ -1487,21 +1487,21 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_determine_fields_to_unpack</span><span class="p">(</span><span class="n">fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">output_type</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">type</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines which fields to unpack based on user requested fields and the output type of</span>
+<span class="w">    </span><span class="sd">"""Determines which fields to unpack based on user requested fields and the output type of</span>
 <span class="sd">    the return type of the function.</span>
 
 <span class="sd">    :param fields: List of fields to to unpack.</span>
 <span class="sd">    :param output_type: The output type of the node function.</span>
 <span class="sd">    :return: List of field types.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">base_type</span> <span class="o">=</span> <span class="n">typing_inspect</span><span class="o">.</span><span class="n">get_origin</span><span class="p">(</span><span class="n">output_type</span><span class="p">)</span>  <span class="c1"># Returns None when output_type is None</span>
     <span class="k">if</span> <span class="n">base_type</span> <span class="o">!=</span> <span class="nb">tuple</span> <span class="ow">and</span> <span class="n">base_type</span> <span class="o">!=</span> <span class="nb">tuple</span><span class="p">:</span>
         <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;For unpacking fields, the decorated function output type must be either an &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;explicit length tuple (e.g.`tuple[int, str]`, `typing.Tuple[int, str]`) or an &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;indeterminate length tuple (e.g. `tuple[int, ...]`, `typing.Tuple[int, ...]`), &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;not: </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"For unpacking fields, the decorated function output type must be either an "</span>
+            <span class="sa">f</span><span class="s2">"explicit length tuple (e.g.`tuple[int, str]`, `typing.Tuple[int, str]`) or an "</span>
+            <span class="sa">f</span><span class="s2">"indeterminate length tuple (e.g. `tuple[int, ...]`, `typing.Tuple[int, ...]`), "</span>
+            <span class="sa">f</span><span class="s2">"not: </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
@@ -1509,20 +1509,20 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">num_ellipsis</span> <span class="o">=</span> <span class="n">output_args</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="bp">Ellipsis</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">num_ellipsis</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Invalid tuple: Found more than one ellipsis (&#39;...&#39;): </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Invalid tuple: Found more than one ellipsis ('...'): </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="n">num_ellipsis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">output_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">Ellipsis</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid tuple: Ellipsis (&#39;...&#39;) must be second element: </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Invalid tuple: Ellipsis ('...') must be second element: </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="c1"># Valid Indeterminate length tuple, e.g. `tuple[int, ...]`, `typing.Tuple[int, ...]`</span>
         <span class="n">output_args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">output_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)))</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Number of unpacked fields (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span><span class="si">}</span><span class="s2">) is greater than the number of fields in &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;the output type (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">output_args</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Number of unpacked fields (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span><span class="si">}</span><span class="s2">) is greater than the number of fields in "</span>
+            <span class="sa">f</span><span class="s2">"the output type (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">output_args</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
     <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1536,11 +1536,11 @@ s=d.getElementsByTagName('script')[0];
             <span class="ow">or</span> <span class="n">typing_inspect</span><span class="o">.</span><span class="n">is_union_type</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">field_name</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
-            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Field </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2"> (index </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">) does not declare a valid type: </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Field </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2"> (index </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">) does not declare a valid type: </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">field_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found errors in the output type: </span><span class="si">{</span><span class="n">errors</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Found errors in the output type: </span><span class="si">{</span><span class="n">errors</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">field_types</span>
 
@@ -1548,7 +1548,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="unpack_fields">
 <a class="viewcode-back" href="../../../../reference/decorators/unpack_fields/#hamilton.function_modifiers.unpack_fields">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">unpack_fields</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">SingleNodeNodeTransformer</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unpacks fields from a tuple output.</span>
+<span class="w">    </span><span class="sd">"""Unpacks fields from a tuple output.</span>
 
 <span class="sd">    Expands a single function into the following nodes:</span>
 
@@ -1561,7 +1561,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    - An indeterminate length tuple (e.g. `tuple[int, ...]`, `typing.Tuple[int, ...]`)</span>
 
 <span class="sd">    :param fields: Fields to unpack from the return value of the decorated function.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">output_type</span><span class="p">:</span> <span class="n">Any</span>
     <span class="n">field_types</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span>
@@ -1575,12 +1575,12 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="nd">@override</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that the return type of the function is a tuple or typing.Tuple with the</span>
+<span class="w">        </span><span class="sd">"""Validates that the return type of the function is a tuple or typing.Tuple with the</span>
 
 <span class="sd">        :param fn: Function to validate</span>
 <span class="sd">        :raises: InvalidDecoratorException If the function does not output a tuple or typing.Tuple type.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">output_type</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;return&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">output_type</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"return"</span><span class="p">)</span>
         <span class="n">field_types</span> <span class="o">=</span> <span class="n">_determine_fields_to_unpack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">,</span> <span class="n">output_type</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">field_types</span> <span class="o">=</span> <span class="n">field_types</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="n">output_type</span>
@@ -1589,14 +1589,14 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">transform_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unpacks the specified fields form the tuple output into separate nodes.</span>
+<span class="w">        </span><span class="sd">"""Unpacks the specified fields form the tuple output into separate nodes.</span>
 
 <span class="sd">        :param node_: Node to transform</span>
 <span class="sd">        :param config: Config to use</span>
 <span class="sd">        :param fn: Function to unpack fields from. Must output a tuple.</span>
 <span class="sd">        :return: A collection of nodes --</span>
 <span class="sd">                one for the original tuple generator, and another for each field to unpack.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">callable</span>
         <span class="n">base_doc</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">documentation</span>
         <span class="n">base_tags</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -1624,8 +1624,8 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">dt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">field_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">field_index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Out of bounds field: </span><span class="si">{</span><span class="n">field_index</span><span class="si">}</span><span class="s2"> produced by </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;It only produced </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span><span class="si">}</span><span class="s2"> fields.&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Out of bounds field: </span><span class="si">{</span><span class="n">field_index</span><span class="si">}</span><span class="s2"> produced by </span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">. "</span>
+                        <span class="sa">f</span><span class="s2">"It only produced </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span><span class="si">}</span><span class="s2"> fields."</span>
                     <span class="p">)</span>
                 <span class="k">return</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="n">field_index</span><span class="p">]</span>
 
@@ -1647,13 +1647,13 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/decorators/parameterize/#hamilton.function_modifiers.ParameterizedExtract">[docs]</a>
 <span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">ParameterizedExtract</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataclass to hold inputs for @parameterize and @parameterize_extract_columns.</span>
+<span class="w">    </span><span class="sd">"""Dataclass to hold inputs for @parameterize and @parameterize_extract_columns.</span>
 
 <span class="sd">    :param outputs: A tuple of strings, each of which is the name of an output.</span>
 <span class="sd">    :param input_mapping: A dictionary of string to ParametrizedDependency. The string is the name of the python \</span>
-<span class="sd">    parameter of the decorated function, and the value is a &quot;source&quot;/&quot;value&quot; which will be passed as input for that\</span>
+<span class="sd">    parameter of the decorated function, and the value is a "source"/"value" which will be passed as input for that\</span>
 <span class="sd">    parameter to the function.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">outputs</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
     <span class="n">input_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ParametrizedDependency</span><span class="p">]</span></div>
@@ -1663,7 +1663,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="parameterize_extract_columns">
 <a class="viewcode-back" href="../../../../reference/decorators/parameterize_extract_columns/#hamilton.function_modifiers.parameterize_extract_columns">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">parameterize_extract_columns</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeExpander</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;`@parameterize_extract_columns` gives you the power of both `@extract_columns` and `@parameterize` in one\</span>
+<span class="w">    </span><span class="sd">"""`@parameterize_extract_columns` gives you the power of both `@extract_columns` and `@parameterize` in one\</span>
 <span class="sd">     decorator.</span>
 
 <span class="sd">    It takes in a list of `Parameterized_Extract` objects, each of which is composed of:</span>
@@ -1678,29 +1678,29 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        from function_modifiers import parameterize_extract_columns, ParameterizedExtract, source, value</span>
 <span class="sd">        @parameterize_extract_columns(</span>
 <span class="sd">            ParameterizedExtract(</span>
-<span class="sd">                (&quot;outseries1a&quot;, &quot;outseries2a&quot;),</span>
-<span class="sd">                {&quot;input1&quot;: source(&quot;inseries1a&quot;), &quot;input2&quot;: source(&quot;inseries1b&quot;), &quot;input3&quot;: value(10)},</span>
+<span class="sd">                ("outseries1a", "outseries2a"),</span>
+<span class="sd">                {"input1": source("inseries1a"), "input2": source("inseries1b"), "input3": value(10)},</span>
 <span class="sd">            ),</span>
 <span class="sd">            ParameterizedExtract(</span>
-<span class="sd">                (&quot;outseries1b&quot;, &quot;outseries2b&quot;),</span>
-<span class="sd">                {&quot;input1&quot;: source(&quot;inseries2a&quot;), &quot;input2&quot;: source(&quot;inseries2b&quot;), &quot;input3&quot;: value(100)},</span>
+<span class="sd">                ("outseries1b", "outseries2b"),</span>
+<span class="sd">                {"input1": source("inseries2a"), "input2": source("inseries2b"), "input3": value(100)},</span>
 <span class="sd">            ),</span>
 <span class="sd">        )</span>
 <span class="sd">        def fn(input1: pd.Series, input2: pd.Series, input3: float) -&gt; pd.DataFrame:</span>
 <span class="sd">            return pd.concat([input1 * input2 * input3, input1 + input2 + input3], axis=1)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="parameterize_extract_columns.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/parameterize_extract_columns/#hamilton.function_modifiers.parameterize_extract_columns.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">extract_config</span><span class="p">:</span> <span class="n">ParameterizedExtract</span><span class="p">,</span> <span class="n">reassign_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a `parameterized_extract` decorator. Note this currently works for series,</span>
+<span class="w">        </span><span class="sd">"""Initializes a `parameterized_extract` decorator. Note this currently works for series,</span>
 <span class="sd">        but the plan is to extend it to fields as well...</span>
 
 <span class="sd">        :param extract_config: A configuration consisting of a list ParameterizedExtract classes\</span>
 <span class="sd">        These contain the information of a `@parameterized` and `@extract...` together.</span>
 <span class="sd">        :param reassign_columns: Whether we want to reassign the columns as part of the function.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extract_config</span> <span class="o">=</span> <span class="n">extract_config</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reassign_columns</span> <span class="o">=</span> <span class="n">reassign_columns</span></div>
 
@@ -1708,7 +1708,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">expand_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expands a node into multiple, given the extract_config passed to</span>
+<span class="w">        </span><span class="sd">"""Expands a node into multiple, given the extract_config passed to</span>
 <span class="sd">        parameterize_extract_columns. Goes through all parameterizations,</span>
 <span class="sd">        creates an extract_columns node for each, then delegates to that.</span>
 <span class="sd">        Note this calls out to `@parameterize` and `@extract_columns` rather</span>
@@ -1718,7 +1718,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param config: Config to use to expand</span>
 <span class="sd">        :param fn: Original function</span>
 <span class="sd">        :return: The nodes produced by this decorator.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">output_nodes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">parameterization</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extract_config</span><span class="p">):</span>
 
@@ -1734,7 +1734,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="c1"># get naming collisions. Using __ is cleaner than using a uuid</span>
             <span class="c1"># as it is easier to read/manage and naturally maeks sense.</span>
             <span class="n">parameterization_decorator</span> <span class="o">=</span> <span class="n">parameterize</span><span class="p">(</span>
-                <span class="o">**</span><span class="p">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;__</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">parameterization</span><span class="o">.</span><span class="n">input_mapping</span><span class="p">}</span>
+                <span class="o">**</span><span class="p">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"__</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="n">parameterization</span><span class="o">.</span><span class="n">input_mapping</span><span class="p">}</span>
             <span class="p">)</span>
             <span class="p">(</span><span class="n">parameterized_node</span><span class="p">,)</span> <span class="o">=</span> <span class="n">parameterization_decorator</span><span class="o">.</span><span class="n">expand_node</span><span class="p">(</span>
                 <span class="n">new_node</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">fn_to_call</span>
@@ -1756,7 +1756,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="inject">
 <a class="viewcode-back" href="../../../../reference/decorators/inject/#hamilton.function_modifiers.inject">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">inject</span><span class="p">(</span><span class="n">parameterize</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;@inject allows you to replace parameters with values passed in. You can think of</span>
+<span class="w">    </span><span class="sd">"""@inject allows you to replace parameters with values passed in. You can think of</span>
 <span class="sd">    it as a `@parameterize` call that has only one parameterization, the result of which</span>
 <span class="sd">    is the name of the function. See the following examples:</span>
 
@@ -1765,7 +1765,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        import pandas as pd</span>
 <span class="sd">        from function_modifiers import inject, source, value, group</span>
 
-<span class="sd">        @inject(nums=group(source(&#39;a&#39;), value(10), source(&#39;b&#39;), value(2)))</span>
+<span class="sd">        @inject(nums=group(source('a'), value(10), source('b'), value(2)))</span>
 <span class="sd">        def a_plus_10_plus_b_plus_2(nums: List[int]) -&gt; int:</span>
 <span class="sd">            return sum(nums)</span>
 
@@ -1773,7 +1773,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        @parameterize(</span>
 <span class="sd">            a_plus_10_plus_b_plus_2={</span>
-<span class="sd">                &#39;nums&#39;: group(source(&#39;a&#39;), value(10), source(&#39;b&#39;), value(2))</span>
+<span class="sd">                'nums': group(source('a'), value(10), source('b'), value(2))</span>
 <span class="sd">            })</span>
 <span class="sd">        def sum_numbers(nums: List[int]) -&gt; int:</span>
 <span class="sd">            return sum(nums)</span>
@@ -1782,16 +1782,16 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    multiple times as an injection. E.G. two lists, a list and a dict, two sources, etc...</span>
 
 <span class="sd">    This is considered undefined behavior, and should be avoided.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="inject.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/inject/#hamilton.function_modifiers.inject.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">key_mapping</span><span class="p">:</span> <span class="n">ParametrizedDependency</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates an @inject decorator with the given key_mapping.</span>
+<span class="w">        </span><span class="sd">"""Instantiates an @inject decorator with the given key_mapping.</span>
 
 <span class="sd">        :param key_mapping: A dictionary of string to dependency spec.</span>
 <span class="sd">            This is the same as the input mapping in `@parameterize`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">inject</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">parameterize</span><span class="o">.</span><span class="n">PLACEHOLDER_PARAM_NAME</span><span class="p">:</span> <span class="n">key_mapping</span><span class="p">})</span></div>
 </div>
 
@@ -1844,182 +1844,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -2064,6 +1899,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -2071,7 +1932,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -2088,42 +1957,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -2146,7 +2073,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -2157,12 +2084,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -2182,8 +2103,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -2195,7 +2116,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -2207,9 +2128,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -2232,8 +2153,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -2243,10 +2167,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -2271,10 +2193,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

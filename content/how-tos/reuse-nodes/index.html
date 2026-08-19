@@ -584,14 +584,14 @@ example shows how to opt in to a “later wins” rule with
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/module_overrides/module_a.py</span></code></span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="s2">&quot;This is module a.&quot;</span>
+    <span class="k">return</span> <span class="s2">"This is module a."</span>
 </pre></div>
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id5">
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/module_overrides/module_b.py</span></code></span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="s2">&quot;This is module b.&quot;</span>
+    <span class="k">return</span> <span class="s2">"This is module b."</span>
 </pre></div>
 </div>
 </div>
@@ -602,7 +602,7 @@ example shows how to opt in to a “later wins” rule with
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
         <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span>
@@ -613,7 +613,7 @@ example shows how to opt in to a “later wins” rule with
         <span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;builder: &quot;</span><span class="p">,</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">{},</span> <span class="n">final_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"builder: "</span><span class="p">,</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">{},</span> <span class="n">final_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">"foo"</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -655,11 +655,11 @@ The shared logic lives in <code class="docutils literal notranslate"><span class
 <div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">examples/reusing_functions/unique_users.py</span></code></span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="n">_grain_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;day&quot;</span><span class="p">:</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;week&quot;</span><span class="p">:</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;month&quot;</span><span class="p">:</span> <span class="s2">&quot;M&quot;</span><span class="p">}</span>
+<span class="n">_grain_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"day"</span><span class="p">:</span> <span class="s2">"D"</span><span class="p">,</span> <span class="s2">"week"</span><span class="p">:</span> <span class="s2">"W"</span><span class="p">,</span> <span class="s2">"month"</span><span class="p">:</span> <span class="s2">"M"</span><span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_grain</span><span class="p">(</span><span class="n">grain</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="n">grain</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">,</span> <span class="s2">&quot;week&quot;</span><span class="p">,</span> <span class="s2">&quot;month&quot;</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">grain</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"day"</span><span class="p">,</span> <span class="s2">"week"</span><span class="p">,</span> <span class="s2">"month"</span><span class="p">]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">filtered_interactions</span><span class="p">(</span><span class="n">website_interactions</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">region</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -667,9 +667,9 @@ The shared logic lives in <code class="docutils literal notranslate"><span class
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">unique_users</span><span class="p">(</span><span class="n">filtered_interactions</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">grain</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gives the number of shares traded by the frequency&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gives the number of shares traded by the frequency"""</span>
     <span class="n">_validate_grain</span><span class="p">(</span><span class="n">grain</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">filtered_interactions</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">_grain_mapping</span><span class="p">[</span><span class="n">grain</span><span class="p">])[</span><span class="s2">&quot;user_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">filtered_interactions</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">_grain_mapping</span><span class="p">[</span><span class="n">grain</span><span class="p">])[</span><span class="s2">"user_id"</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -679,8 +679,8 @@ named instance of that subgraph, with its own <code class="docutils literal notr
 <div class="code-block-caption"><span class="caption-text">One &#64;subdag invocation from <code class="docutils literal notranslate"><span class="pre">examples/reusing_functions/reusable_subdags.py</span></code></span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@subdag</span><span class="p">(</span>
     <span class="n">unique_users</span><span class="p">,</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;grain&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;day&quot;</span><span class="p">)},</span>
-    <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;US&quot;</span><span class="p">},</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"grain"</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">"day"</span><span class="p">)},</span>
+    <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">"region"</span><span class="p">:</span> <span class="s2">"US"</span><span class="p">},</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">daily_unique_users_US</span><span class="p">(</span><span class="n">unique_users</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">unique_users</span>
@@ -729,11 +729,11 @@ several nodes from one function.</p>
 <a class="reference external" href="https://github.com/apache/hamilton/blob/main/hamilton/function_modifiers/recursive.py">source documentation</a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterized_subdag</span><span class="p">(</span>
     <span class="n">feature_modules</span><span class="p">,</span>
-    <span class="n">from_datasource_1</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_1.csv&quot;</span><span class="p">)}},</span>
-    <span class="n">from_datasource_2</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_2.csv&quot;</span><span class="p">)}},</span>
+    <span class="n">from_datasource_1</span><span class="o">=</span><span class="p">{</span><span class="s2">"inputs"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">"datasource_1.csv"</span><span class="p">)}},</span>
+    <span class="n">from_datasource_2</span><span class="o">=</span><span class="p">{</span><span class="s2">"inputs"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">"datasource_2.csv"</span><span class="p">)}},</span>
     <span class="n">from_datasource_3</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_3.csv&quot;</span><span class="p">)},</span>
-        <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="s2">&quot;only_even_client_ids&quot;</span><span class="p">},</span>
+        <span class="s2">"inputs"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">"datasource_3.csv"</span><span class="p">)},</span>
+        <span class="s2">"config"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"filter"</span><span class="p">:</span> <span class="s2">"only_even_client_ids"</span><span class="p">},</span>
     <span class="p">},</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">feature_engineering</span><span class="p">(</span><span class="n">feature_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>

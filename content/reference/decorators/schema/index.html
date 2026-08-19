@@ -552,12 +552,12 @@ rely on the tags created by this decorator (which is why they are prefixed with 
 <p>To use this, you should decorate a node with <cite>&#64;schema.output</cite></p>
 <p>Example usage:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@schema</span><span class="o">.</span><span class="n">output</span><span class="p">(</span>
-    <span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;int&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">)</span>
+    <span class="p">(</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"int"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"b"</span><span class="p">,</span> <span class="s2">"float"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"c"</span><span class="p">,</span> <span class="s2">"str"</span><span class="p">)</span>
  <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">example_schema</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">],</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">]})</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">({</span><span class="s2">"a"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"b"</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">],</span> <span class="s2">"c"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"3"</span><span class="p">]})</span>
 </pre></div>
 </div>
 <p>Then, when drawing the DAG, the schema will be displayed as sub-elements in the node for the DAG (if <cite>display_schema</cite> is selected).</p>

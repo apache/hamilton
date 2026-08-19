@@ -536,21 +536,21 @@ a pure transform should either call this, or accept inputs from an external loca
 the following code will load the json file, and inject it into the function as the parameter
 <cite>input_data</cite>. Note that the path for the JSON file comes from another node called
 raw_data_path (which could also be passed in as an external input).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;raw_data_path&quot;</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"raw_data_path"</span><span class="p">))</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">input_data</span>
 </pre></div>
 </div>
 <p>The decorator can also be used with <cite>value</cite> to inject a constant value into the loader.
 In the following case, we use the literal value “some/path.json” as the path to the JSON file.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;some/path.json&quot;</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">value</span><span class="p">(</span><span class="s2">"some/path.json"</span><span class="p">))</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">input_data</span>
 </pre></div>
 </div>
 <p>Note that, if neither <cite>source</cite> nor <cite>value</cite> is specified, the value will be passed in as a
 literal value.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;some/path.json&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"some/path.json"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">input_data</span>
 </pre></div>
@@ -558,7 +558,7 @@ literal value.</p>
 <p>You can also utilize the <cite>inject_</cite> parameter in the loader if you want to inject the data
 into a specific param. For example, the following code will load the json file, and inject it
 into the function as the parameter <cite>data</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;raw_data_path&quot;</span><span class="p">),</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"raw_data_path"</span><span class="p">),</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">"data"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">valid_keys</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">valid_keys</span><span class="p">]</span>
 </pre></div>
@@ -566,8 +566,8 @@ into the function as the parameter <cite>data</cite>.</p>
 <p>You can also utilize multiple data loaders with separate <cite>inject_</cite> parameters to
 load from multiple files.
 data loaders to a single function:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;raw_data_path&quot;</span><span class="p">),</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
-<span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">&quot;raw_data_path2&quot;</span><span class="p">),</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">&quot;data2&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"raw_data_path"</span><span class="p">),</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">"data"</span><span class="p">)</span>
+<span class="nd">@load_from</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">(</span><span class="s2">"raw_data_path2"</span><span class="p">),</span> <span class="n">inject_</span><span class="o">=</span><span class="s2">"data2"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">data2</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">]</span>
 </pre></div>

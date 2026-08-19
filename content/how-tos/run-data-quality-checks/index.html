@@ -555,7 +555,7 @@ The goal of this is to show how to use runtime data quality checks in a larger, 
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">hamilton</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_pipeline</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">&quot;hamilton.data_quality.disable_checks&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DISABLE_DQ&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">})</span>
+    <span class="o">.</span><span class="n">with_config</span><span class="p">({</span><span class="s2">"hamilton.data_quality.disable_checks"</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">"DISABLE_DQ"</span><span class="p">,</span> <span class="s2">"false"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"true"</span><span class="p">})</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
 </pre></div>
@@ -568,7 +568,7 @@ The goal of this is to show how to use runtime data quality checks in a larger, 
     <span class="o">.</span><span class="n">with_data_quality_disabled</span><span class="p">()</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
-<span class="n">dr_viz</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">&quot;pipeline.png&quot;</span><span class="p">)</span>
+<span class="n">dr_viz</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">"pipeline.png"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Note that this requires a separate driver instance from the one used for execution if you still want validations to run.</p>

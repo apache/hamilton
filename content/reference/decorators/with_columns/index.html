@@ -556,9 +556,9 @@ the concepts:</p>
 <span class="nd">@with_columns</span><span class="p">(</span>
     <span class="o">*</span><span class="p">[</span><span class="n">my_module</span><span class="p">],</span> <span class="c1"># Load from any module</span>
     <span class="o">*</span><span class="p">[</span><span class="n">a_plus_b</span><span class="p">],</span> <span class="c1"># or list operations directly</span>
-    <span class="n">columns_to_pass</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a_from_df&quot;</span><span class="p">,</span> <span class="s2">&quot;b_from_df&quot;</span><span class="p">],</span> <span class="c1"># The columns to pass from the dataframe to</span>
+    <span class="n">columns_to_pass</span><span class="o">=</span><span class="p">[</span><span class="s2">"a_from_df"</span><span class="p">,</span> <span class="s2">"b_from_df"</span><span class="p">],</span> <span class="c1"># The columns to pass from the dataframe to</span>
     <span class="c1"># the subdag</span>
-    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;a_plus_b&quot;</span><span class="p">,</span> <span class="s2">&quot;a_b_average&quot;</span><span class="p">],</span> <span class="c1"># The columns to select from the dataframe</span>
+    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"a_plus_b"</span><span class="p">,</span> <span class="s2">"a_b_average"</span><span class="p">],</span> <span class="c1"># The columns to select from the dataframe</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">final_df</span><span class="p">(</span><span class="n">initial_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="c1"># process, or just return unprocessed</span>
@@ -582,18 +582,18 @@ a, b, and a_plus_b to the dataframe. It then returns the dataframe, and does som
 <p>In case you need more flexibility you can alternatively use <code class="docutils literal notranslate"><span class="pre">on_input</span></code>, for example,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># with_columns_module.py</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">a_from_df</span><span class="p">(</span><span class="n">initial_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">initial_df</span><span class="p">[</span><span class="s2">&quot;a_from_df&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="n">initial_df</span><span class="p">[</span><span class="s2">"a_from_df"</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">b_from_df</span><span class="p">(</span><span class="n">initial_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">initial_df</span><span class="p">[</span><span class="s2">&quot;b_from_df&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="n">initial_df</span><span class="p">[</span><span class="s2">"b_from_df"</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
 
 
 <span class="c1"># the with_columns call</span>
 <span class="nd">@with_columns</span><span class="p">(</span>
     <span class="o">*</span><span class="p">[</span><span class="n">my_module</span><span class="p">],</span>
     <span class="o">*</span><span class="p">[</span><span class="n">a_from_df</span><span class="p">],</span>
-    <span class="n">on_input</span><span class="o">=</span><span class="s2">&quot;initial_df&quot;</span><span class="p">,</span>
-    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a_from_df&quot;</span><span class="p">,</span> <span class="s2">&quot;b_from_df&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;a_plus_b&quot;</span><span class="p">,</span> <span class="s2">&quot;a_b_average&quot;</span><span class="p">],</span>
+    <span class="n">on_input</span><span class="o">=</span><span class="s2">"initial_df"</span><span class="p">,</span>
+    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">"a_from_df"</span><span class="p">,</span> <span class="s2">"b_from_df"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"a_plus_b"</span><span class="p">,</span> <span class="s2">"a_b_average"</span><span class="p">],</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">final_df</span><span class="p">(</span><span class="n">initial_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="c1"># process, or just return unprocessed</span>
@@ -658,9 +658,9 @@ the concepts:</p>
 <span class="nd">@with_columns</span><span class="p">(</span>
     <span class="o">*</span><span class="p">[</span><span class="n">my_module</span><span class="p">],</span> <span class="c1"># Load from any module</span>
     <span class="o">*</span><span class="p">[</span><span class="n">a_plus_b</span><span class="p">],</span> <span class="c1"># or list operations directly</span>
-    <span class="n">columns_to_pass</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="c1"># The columns to pass from the dataframe to</span>
+    <span class="n">columns_to_pass</span><span class="o">=</span><span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">],</span> <span class="c1"># The columns to pass from the dataframe to</span>
     <span class="c1"># the subdag</span>
-    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a_plus_b&quot;</span><span class="p">,</span> <span class="s2">&quot;a_b_average&quot;</span><span class="p">],</span> <span class="c1"># The columns to append to the dataframe</span>
+    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">"a_plus_b"</span><span class="p">,</span> <span class="s2">"a_b_average"</span><span class="p">],</span> <span class="c1"># The columns to append to the dataframe</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">final_df</span><span class="p">(</span><span class="n">initial_df</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="c1"># process, or just return unprocessed</span>
@@ -682,17 +682,17 @@ a, b, and a_plus_b to the dataframe. It then returns the dataframe, and does som
 <p>In case you need more flexibility you can alternatively use <code class="docutils literal notranslate"><span class="pre">on_input</span></code>, for example,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># with_columns_module.py</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">a_from_df</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">"a"</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">b_from_df</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">"b"</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
 
 
 <span class="c1"># the with_columns call</span>
 <span class="nd">@with_columns</span><span class="p">(</span>
     <span class="o">*</span><span class="p">[</span><span class="n">my_module</span><span class="p">],</span>
-    <span class="n">on_input</span><span class="o">=</span><span class="s2">&quot;initial_df&quot;</span><span class="p">,</span>
-    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a_from_df&quot;</span><span class="p">,</span> <span class="s2">&quot;b_from_df&quot;</span><span class="p">,</span> <span class="s2">&quot;a_plus_b&quot;</span><span class="p">,</span> <span class="s2">&quot;a_b_average&quot;</span><span class="p">],</span>
+    <span class="n">on_input</span><span class="o">=</span><span class="s2">"initial_df"</span><span class="p">,</span>
+    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">"a_from_df"</span><span class="p">,</span> <span class="s2">"b_from_df"</span><span class="p">,</span> <span class="s2">"a_plus_b"</span><span class="p">,</span> <span class="s2">"a_b_average"</span><span class="p">],</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">final_df</span><span class="p">(</span><span class="n">initial_df</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="c1"># process, or just return unprocessed</span>
@@ -757,9 +757,9 @@ implementation in both variations.</p>
 <span class="nd">@with_columns</span><span class="p">(</span>
     <span class="o">*</span><span class="p">[</span><span class="n">my_module</span><span class="p">],</span> <span class="c1"># Load from any module</span>
     <span class="o">*</span><span class="p">[</span><span class="n">a_plus_b</span><span class="p">],</span> <span class="c1"># or list operations directly</span>
-    <span class="n">columns_to_pass</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a_from_df&quot;</span><span class="p">,</span> <span class="s2">&quot;b_from_df&quot;</span><span class="p">],</span> <span class="c1"># The columns to pass from the dataframe to</span>
+    <span class="n">columns_to_pass</span><span class="o">=</span><span class="p">[</span><span class="s2">"a_from_df"</span><span class="p">,</span> <span class="s2">"b_from_df"</span><span class="p">],</span> <span class="c1"># The columns to pass from the dataframe to</span>
     <span class="c1"># the subdag</span>
-    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a_plus_b&quot;</span><span class="p">,</span> <span class="s2">&quot;a_b_average&quot;</span><span class="p">],</span> <span class="c1"># The columns to append to the dataframe</span>
+    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">"a_plus_b"</span><span class="p">,</span> <span class="s2">"a_b_average"</span><span class="p">],</span> <span class="c1"># The columns to append to the dataframe</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">final_df</span><span class="p">(</span><span class="n">initial_df</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">LazyFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">LazyFrame</span><span class="p">:</span>
     <span class="c1"># process, or just return unprocessed</span>
@@ -780,17 +780,17 @@ a, b, and a_plus_b to the dataframe. It then returns the dataframe, and does som
 <p>In case you need more flexibility you can alternatively use <code class="docutils literal notranslate"><span class="pre">on_input</span></code>, for example,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># with_columns_module.py</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">a_from_df</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">"a"</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">b_from_df</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">"b"</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
 
 
 <span class="c1"># the with_columns call</span>
 <span class="nd">@with_columns</span><span class="p">(</span>
     <span class="o">*</span><span class="p">[</span><span class="n">my_module</span><span class="p">],</span>
-    <span class="n">on_input</span><span class="o">=</span><span class="s2">&quot;initial_df&quot;</span><span class="p">,</span>
-    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a_from_df&quot;</span><span class="p">,</span> <span class="s2">&quot;b_from_df&quot;</span><span class="p">,</span> <span class="s2">&quot;a_plus_b&quot;</span><span class="p">,</span> <span class="s2">&quot;a_b_average&quot;</span><span class="p">],</span>
+    <span class="n">on_input</span><span class="o">=</span><span class="s2">"initial_df"</span><span class="p">,</span>
+    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">"a_from_df"</span><span class="p">,</span> <span class="s2">"b_from_df"</span><span class="p">,</span> <span class="s2">"a_plus_b"</span><span class="p">,</span> <span class="s2">"a_b_average"</span><span class="p">],</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">final_df</span><span class="p">(</span><span class="n">initial_df</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">LazyFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">LazyFrame</span><span class="p">:</span>
     <span class="c1"># process, or just return unprocessed</span>
@@ -861,9 +861,9 @@ the concepts:</p>
 <span class="c1"># the with_columns call</span>
 <span class="nd">@with_columns</span><span class="p">(</span>
     <span class="n">load_from</span><span class="o">=</span><span class="p">[</span><span class="n">my_module</span><span class="p">],</span> <span class="c1"># Load from any module</span>
-    <span class="n">columns_to_pass</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a_from_df&quot;</span><span class="p">,</span> <span class="s2">&quot;b_from_df&quot;</span><span class="p">],</span> <span class="c1"># The columns to pass from the dataframe to</span>
+    <span class="n">columns_to_pass</span><span class="o">=</span><span class="p">[</span><span class="s2">"a_from_df"</span><span class="p">,</span> <span class="s2">"b_from_df"</span><span class="p">],</span> <span class="c1"># The columns to pass from the dataframe to</span>
     <span class="c1"># the subdag</span>
-    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;a_plus_b&quot;</span><span class="p">],</span> <span class="c1"># The columns to select from the dataframe</span>
+    <span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"a_plus_b"</span><span class="p">],</span> <span class="c1"># The columns to select from the dataframe</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">final_df</span><span class="p">(</span><span class="n">initial_df</span><span class="p">:</span> <span class="n">ps</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ps</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="c1"># process, or just return unprocessed</span>

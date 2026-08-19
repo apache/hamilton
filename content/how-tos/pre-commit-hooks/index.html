@@ -575,7 +575,7 @@ under the License.
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">end-of-file-fixer</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">trailing-whitespace</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">check-yaml</span>
-<span class="w">        </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;--unsafe&#39;</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># some accept arguments</span>
+<span class="w">        </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'--unsafe'</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># some accept arguments</span>
 
 <span class="w">    </span><span class="c1"># download another repository with hooks</span>
 <span class="p p-Indicator">-</span><span class="w">   </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/psf/black</span>
@@ -630,7 +630,7 @@ under the License.
 
 <span class="c1"># driver code</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_module</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">validate_execution</span><span class="p">(</span><span class="n">final_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">])</span> <span class="c1"># &lt;- success</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">validate_execution</span><span class="p">(</span><span class="n">final_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">"C"</span><span class="p">])</span> <span class="c1"># &lt;- success</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_module.py - v2</span>
@@ -640,14 +640,14 @@ under the License.
 
 <span class="c1"># driver code</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_module</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">validate_execution</span><span class="p">(</span><span class="n">final_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">])</span> <span class="c1"># &lt;- failure. missing `A`</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">validate_execution</span><span class="p">(</span><span class="n">final_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">"C"</span><span class="p">])</span> <span class="c1"># &lt;- failure. missing `A`</span>
 </pre></div>
 </div>
 <p><img alt="alt text" src="../../_images/validate_changes.png" /></p>
 <p>In <code class="docutils literal notranslate"><span class="pre">v1</span></code>, the dataflow could be validated for <code class="docutils literal notranslate"><span class="pre">C</span></code> without any inputs. Now, a developer made <code class="docutils literal notranslate"><span class="pre">B</span></code> depend on <code class="docutils literal notranslate"><span class="pre">X</span></code> instead of <code class="docutils literal notranslate"><span class="pre">A</span></code> and removed <code class="docutils literal notranslate"><span class="pre">A</span></code>. This change accidentally impacted <code class="docutils literal notranslate"><span class="pre">C</span></code> which now depends on the external input <code class="docutils literal notranslate"><span class="pre">A</span></code>. Note that both <code class="docutils literal notranslate"><span class="pre">v1</span></code> and <code class="docutils literal notranslate"><span class="pre">v2</span></code> have a valid dataflow definition. To catch breaking changes to the path to <code class="docutils literal notranslate"><span class="pre">C</span></code>, we could use <code class="docutils literal notranslate"><span class="pre">hamilton</span> <span class="pre">validate</span> <span class="pre">--context</span> <span class="pre">context.json</span> <span class="pre">my_module.py</span></code> with the context:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="c1">// context.json</span>
-<span class="p">{</span><span class="w"> </span><span class="nt">&quot;HAMILTON_FINAL_VARS&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
-<span class="c1">// will call .validate_execution(final_vars[&quot;C&quot;])</span>
+<span class="p">{</span><span class="w"> </span><span class="nt">"HAMILTON_FINAL_VARS"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"C"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+<span class="c1">// will call .validate_execution(final_vars["C"])</span>
 </pre></div>
 </div>
 <div class="admonition note">

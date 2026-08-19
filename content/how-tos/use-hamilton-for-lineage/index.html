@@ -706,13 +706,13 @@ changes over time, since it’s encoded in code!</p></li>
 </ol>
 <p>In code this should look something like the following:</p>
 <p>(1) and (2) write Apache Hamilton code and annotate with <code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code> (and/or <code class="docutils literal notranslate"><span class="pre">&#64;tag_outputs</span></code>).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="s2">&quot;data-science&quot;</span><span class="p">,</span> <span class="n">importance</span><span class="o">=</span><span class="s2">&quot;production&quot;</span><span class="p">,</span> <span class="n">artifact</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="s2">"data-science"</span><span class="p">,</span> <span class="n">importance</span><span class="o">=</span><span class="s2">"production"</span><span class="p">,</span> <span class="n">artifact</span><span class="o">=</span><span class="s2">"model"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">fit_random_forest</span><span class="p">(</span>
     <span class="n">prefit_random_forest</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">ClassifierMixin</span><span class="p">,</span>
     <span class="n">X_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">y_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">base</span><span class="o">.</span><span class="n">ClassifierMixin</span><span class="p">:</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;Returns a fit RF model.&quot;&quot;&quot;</span>
+<span class="w">  </span><span class="sd">"""Returns a fit RF model."""</span>
   <span class="c1"># ... contents of function not important ... code skipped for brevity</span>
 </pre></div>
 </div>
@@ -727,30 +727,30 @@ changes over time, since it’s encoded in code!</p></li>
 <span class="c1"># ask questions of the driver</span>
 <span class="c1"># E.g. How do the feature encoders get computed and what flows into them?</span>
 <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="s2">&quot;data/train.csv&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;index_col&quot;</span><span class="p">:</span> <span class="s2">&quot;passengerid&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;target_col&quot;</span><span class="p">:</span> <span class="s2">&quot;survived&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;random_state&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
-    <span class="s2">&quot;max_depth&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;validation_size_fraction&quot;</span><span class="p">:</span> <span class="mf">0.33</span><span class="p">,</span>
+    <span class="s2">"location"</span><span class="p">:</span> <span class="s2">"data/train.csv"</span><span class="p">,</span>
+    <span class="s2">"index_col"</span><span class="p">:</span> <span class="s2">"passengerid"</span><span class="p">,</span>
+    <span class="s2">"target_col"</span><span class="p">:</span> <span class="s2">"survived"</span><span class="p">,</span>
+    <span class="s2">"random_state"</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="s2">"max_depth"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">"validation_size_fraction"</span><span class="p">:</span> <span class="mf">0.33</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">dr</span><span class="o">.</span><span class="n">visualize_execution</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">features</span><span class="o">.</span><span class="n">encoders</span><span class="p">],</span> <span class="s2">&quot;encoder_lineage&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;png&quot;</span><span class="p">},</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span>
+    <span class="p">[</span><span class="n">features</span><span class="o">.</span><span class="n">encoders</span><span class="p">],</span> <span class="s2">"encoder_lineage"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"format"</span><span class="p">:</span> <span class="s2">"png"</span><span class="p">},</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span>
 <span class="p">)</span>
 <span class="c1"># what is upstream of the fit_random_forest node?</span>
-<span class="n">upstream_nodes</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">what_is_upstream_of</span><span class="p">(</span><span class="s2">&quot;fit_random_forest&quot;</span><span class="p">)</span>
+<span class="n">upstream_nodes</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">what_is_upstream_of</span><span class="p">(</span><span class="s2">"fit_random_forest"</span><span class="p">)</span>
 <span class="c1"># can now filter the nodes by tags, and pull that information out...</span>
 
 <span class="c1"># what is downstream of the titanic_data node?</span>
-<span class="n">downstream_nodes</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">what_is_downstream_of</span><span class="p">(</span><span class="s2">&quot;titanic_data&quot;</span><span class="p">)</span>
+<span class="n">downstream_nodes</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">what_is_downstream_of</span><span class="p">(</span><span class="s2">"titanic_data"</span><span class="p">)</span>
 <span class="c1"># can now filter the nodes by tags, and pull that information out...</span>
 
 <span class="c1"># what nodes are PII?</span>
 <span class="n">pii_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">()</span>
-             <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PII&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">]</span>
+             <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PII"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"true"</span><span class="p">]</span>
 
-<span class="c1"># what nodes are called between &quot;age&quot; and &quot;fit_random_forest&quot;?</span>
-<span class="n">nodes_in_path</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">what_is_the_path_between</span><span class="p">(</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;fit_random_forest&quot;</span><span class="p">)</span>
+<span class="c1"># what nodes are called between "age" and "fit_random_forest"?</span>
+<span class="n">nodes_in_path</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">what_is_the_path_between</span><span class="p">(</span><span class="s2">"age"</span><span class="p">,</span> <span class="s2">"fit_random_forest"</span><span class="p">)</span>
 
 <span class="c1"># etc</span>
 </pre></div>

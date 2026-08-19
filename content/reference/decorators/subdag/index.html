@@ -534,16 +534,16 @@ s=d.getElementsByTagName('script')[0];
 That is, it enables you to “chain” what you could express with a driver into a single DAG.</p>
 <p>That is, instead of using Hamilton within itself:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">feature_engineering</span><span class="p">(</span><span class="n">source_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;You could recursively use Hamilton within itself.&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">'''You could recursively use Hamilton within itself.'''</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Driver</span><span class="p">({},</span> <span class="n">feature_modules</span><span class="p">)</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;feature_df&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">source_path</span><span class="p">})</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"feature_df"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"path"</span><span class="p">:</span> <span class="n">source_path</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">df</span>
 </pre></div>
 </div>
 <p>You instead can use the <cite>&#64;subdag</cite> decorator to do the same thing, with the added benefit of visibility into the    whole DAG:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@subdag</span><span class="p">(</span>
     <span class="n">feature_modules</span><span class="p">,</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">(</span><span class="s2">&quot;source_path&quot;</span><span class="p">)},</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"path"</span><span class="p">:</span> <span class="n">source</span><span class="p">(</span><span class="s2">"source_path"</span><span class="p">)},</span>
     <span class="n">config</span><span class="o">=</span><span class="p">{}</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">feature_engineering</span><span class="p">(</span><span class="n">feature_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>

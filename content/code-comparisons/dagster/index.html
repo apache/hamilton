@@ -641,31 +641,31 @@ s=d.getElementsByTagName('script')[0];
 <tbody>
 <tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_columns</span>
 
-<span class="n">NEWSTORIES_URL</span> <span class="o">=</span> <span class="s2">&quot;https://hacker-news.firebaseio.com/v0/topstories.json&quot;</span>
+<span class="n">NEWSTORIES_URL</span> <span class="o">=</span> <span class="s2">"https://hacker-news.firebaseio.com/v0/topstories.json"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">topstory_ids</span><span class="p">(</span><span class="n">newstories_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">NEWSTORIES_URL</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Query the id of the top HackerNews stories&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Query the id of the top HackerNews stories"""</span>
     <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">newstories_url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()[:</span><span class="mi">100</span><span class="p">]</span>
 
-<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">topstories</span><span class="p">(</span><span class="n">topstory_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Query the top HackerNews stories based on ids&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Query the top HackerNews stories based on ids"""</span>
     <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">item_id</span> <span class="ow">in</span> <span class="n">topstory_ids</span><span class="p">:</span>
         <span class="n">item</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;https://hacker-news.firebaseio.com/v0/item/</span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">.json&quot;</span>
+            <span class="sa">f</span><span class="s2">"https://hacker-news.firebaseio.com/v0/item/</span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">.json"</span>
         <span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
         <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">most_frequent_words</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute word frequency in HackerNews story titles&quot;&quot;&quot;</span>
-    <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;the&quot;</span><span class="p">,</span> <span class="s2">&quot;an&quot;</span><span class="p">,</span> <span class="s2">&quot;of&quot;</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span>
-                 <span class="s2">&quot;for&quot;</span><span class="p">,</span> <span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="s2">&quot;with&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;is&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\u2013</span><span class="s2">&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">"""Compute word frequency in HackerNews story titles"""</span>
+    <span class="n">STOPWORDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"the"</span><span class="p">,</span> <span class="s2">"an"</span><span class="p">,</span> <span class="s2">"of"</span><span class="p">,</span> <span class="s2">"to"</span><span class="p">,</span> <span class="s2">"in"</span><span class="p">,</span>
+                 <span class="s2">"for"</span><span class="p">,</span> <span class="s2">"and"</span><span class="p">,</span> <span class="s2">"with"</span><span class="p">,</span> <span class="s2">"on"</span><span class="p">,</span> <span class="s2">"is"</span><span class="p">,</span> <span class="s2">"</span><span class="se">\u2013</span><span class="s2">"</span><span class="p">]</span>
     <span class="n">word_counts</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">raw_title</span> <span class="ow">in</span> <span class="n">title</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">raw_title</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
-            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;.,-!?:;()[]&#39;</span><span class="se">\&quot;</span><span class="s2">-&quot;</span><span class="p">)</span>
+            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">".,-!?:;()[]'</span><span class="se">\"</span><span class="s2">-"</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">continue</span>
             
@@ -676,7 +676,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">return</span> <span class="n">word_counts</span>
                  
 <span class="k">def</span><span class="w"> </span><span class="nf">top_25_words_plot</span><span class="p">(</span><span class="n">most_frequent_words</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bar plot of the frequency of the top 25 words in HackerNews titles&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Bar plot of the frequency of the top 25 words in HackerNews titles"""</span>
     <span class="n">top_words</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
@@ -686,22 +686,22 @@ s=d.getElementsByTagName('script')[0];
     
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">top_words</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">top_words</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Top 25 Words in Hacker News Titles&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">"right"</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Top 25 Words in Hacker News Titles"</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">fig</span>
 
-<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">&quot;registered_at&quot;</span><span class="p">)</span>
+<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">"registered_at"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">signups</span><span class="p">(</span><span class="n">hackernews_api</span><span class="p">:</span> <span class="n">DataGeneratorResource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Query HackerNews signups using a mock API endpoint&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Query HackerNews signups using a mock API endpoint"""</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">hackernews_api</span><span class="o">.</span><span class="n">get_signups</span><span class="p">())</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">earliest_signup</span><span class="p">(</span><span class="n">registered_at</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Earliest signup on HackerNews&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Earliest signup on HackerNews"""</span>
     <span class="k">return</span> <span class="n">registered_at</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">latest_signup</span><span class="p">(</span><span class="n">registered_at</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Latest signup on HackerNews&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Latest signup on HackerNews"""</span>
     <span class="k">return</span> <span class="n">registered_at</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -710,49 +710,49 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="nd">@asset</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">topstory_ids</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">newstories_url</span> <span class="o">=</span> <span class="s2">&quot;https://hacker-news.firebaseio.com/v0/topstories.json&quot;</span>
+    <span class="n">newstories_url</span> <span class="o">=</span> <span class="s2">"https://hacker-news.firebaseio.com/v0/topstories.json"</span>
     <span class="n">top_new_story_ids</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">newstories_url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()[:</span><span class="mi">100</span><span class="p">]</span>
 
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/topstory_ids.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"data/topstory_ids.json"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">top_new_story_ids</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
         
 <span class="nd">@asset</span><span class="p">(</span><span class="n">deps</span><span class="o">=</span><span class="p">[</span><span class="n">topstory_ids</span><span class="p">])</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">topstories</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">AssetExecutionContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MaterializeResult</span><span class="p">:</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/topstory_ids.json&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"data/topstory_ids.json"</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">topstory_ids</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
     <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">item_id</span> <span class="ow">in</span> <span class="n">topstory_ids</span><span class="p">:</span>
         <span class="n">item</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;https://hacker-news.firebaseio.com/v0/item/</span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">.json&quot;</span>
+            <span class="sa">f</span><span class="s2">"https://hacker-news.firebaseio.com/v0/item/</span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">.json"</span>
         <span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
         <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">%</span> <span class="mi">20</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> items so far.&quot;</span><span class="p">)</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> items so far."</span><span class="p">)</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;data/topstories.csv&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"data/topstories.csv"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">MaterializeResult</span><span class="p">(</span>
         <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;num_records&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span>
-            <span class="s2">&quot;preview&quot;</span><span class="p">:</span> <span class="n">MetadataValue</span><span class="o">.</span><span class="n">md</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()),</span>
+            <span class="s2">"num_records"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span>
+            <span class="s2">"preview"</span><span class="p">:</span> <span class="n">MetadataValue</span><span class="o">.</span><span class="n">md</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()),</span>
         <span class="p">}</span>
     <span class="p">)</span>
     
 <span class="nd">@asset</span><span class="p">(</span><span class="n">deps</span><span class="o">=</span><span class="p">[</span><span class="n">topstories</span><span class="p">])</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">most_frequent_words</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">MaterializeResult</span><span class="p">:</span>
-    <span class="n">stopwords</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;the&quot;</span><span class="p">,</span> <span class="s2">&quot;an&quot;</span><span class="p">,</span> <span class="s2">&quot;of&quot;</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span>
-                 <span class="s2">&quot;for&quot;</span><span class="p">,</span> <span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="s2">&quot;with&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;is&quot;</span><span class="p">]</span>
-    <span class="n">topstories</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/topstories.csv&quot;</span><span class="p">)</span>
+    <span class="n">stopwords</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"the"</span><span class="p">,</span> <span class="s2">"an"</span><span class="p">,</span> <span class="s2">"of"</span><span class="p">,</span> <span class="s2">"to"</span><span class="p">,</span> <span class="s2">"in"</span><span class="p">,</span>
+                 <span class="s2">"for"</span><span class="p">,</span> <span class="s2">"and"</span><span class="p">,</span> <span class="s2">"with"</span><span class="p">,</span> <span class="s2">"on"</span><span class="p">,</span> <span class="s2">"is"</span><span class="p">]</span>
+    <span class="n">topstories</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"data/topstories.csv"</span><span class="p">)</span>
 
     <span class="n">word_counts</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">raw_title</span> <span class="ow">in</span> <span class="n">topstories</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">raw_title</span> <span class="ow">in</span> <span class="n">topstories</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]:</span>
         <span class="n">title</span> <span class="o">=</span> <span class="n">raw_title</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
-            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;.,-!?:;()[]&#39;</span><span class="se">\&quot;</span><span class="s2">-&quot;</span><span class="p">)</span>
+            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">".,-!?:;()[]'</span><span class="se">\"</span><span class="s2">-"</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">cleaned_word</span> <span class="ow">in</span> <span class="n">stopwords</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">cleaned_word</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">continue</span>
             
@@ -767,35 +767,35 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">top_words</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">top_words</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Top 25 Words in Hacker News Titles&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">"right"</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Top 25 Words in Hacker News Titles"</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
     <span class="n">buffer</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"png"</span><span class="p">)</span>
     <span class="n">image_data</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
 
-    <span class="n">md_content</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;![img](data:image/png;base64,</span><span class="si">{</span><span class="n">image_data</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="n">md_content</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"![img](data:image/png;base64,</span><span class="si">{</span><span class="n">image_data</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="si">}</span><span class="s2">)"</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/most_frequent_words.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"data/most_frequent_words.json"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">top_words</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">MaterializeResult</span><span class="p">(</span>
-        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="n">MetadataValue</span><span class="o">.</span><span class="n">md</span><span class="p">(</span><span class="n">md_content</span><span class="p">)}</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">"plot"</span><span class="p">:</span> <span class="n">MetadataValue</span><span class="o">.</span><span class="n">md</span><span class="p">(</span><span class="n">md_content</span><span class="p">)}</span>
     <span class="p">)</span>
 
 <span class="nd">@asset</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">signups</span><span class="p">(</span><span class="n">hackernews_api</span><span class="p">:</span> <span class="n">DataGeneratorResource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MaterializeResult</span><span class="p">:</span>
     <span class="n">signups</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">hackernews_api</span><span class="o">.</span><span class="n">get_signups</span><span class="p">())</span>
 
-    <span class="n">signups</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;data/signups.csv&quot;</span><span class="p">)</span>
+    <span class="n">signups</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"data/signups.csv"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">MaterializeResult</span><span class="p">(</span>
         <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;Record Count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">signups</span><span class="p">),</span>
-            <span class="s2">&quot;Preview&quot;</span><span class="p">:</span> <span class="n">MetadataValue</span><span class="o">.</span><span class="n">md</span><span class="p">(</span><span class="n">signups</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()),</span>
-            <span class="s2">&quot;Earliest Signup&quot;</span><span class="p">:</span> <span class="n">signups</span><span class="p">[</span><span class="s2">&quot;registered_at&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
-            <span class="s2">&quot;Latest Signup&quot;</span><span class="p">:</span> <span class="n">signups</span><span class="p">[</span><span class="s2">&quot;registered_at&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+            <span class="s2">"Record Count"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">signups</span><span class="p">),</span>
+            <span class="s2">"Preview"</span><span class="p">:</span> <span class="n">MetadataValue</span><span class="o">.</span><span class="n">md</span><span class="p">(</span><span class="n">signups</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()),</span>
+            <span class="s2">"Earliest Signup"</span><span class="p">:</span> <span class="n">signups</span><span class="p">[</span><span class="s2">"registered_at"</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+            <span class="s2">"Latest Signup"</span><span class="p">:</span> <span class="n">signups</span><span class="p">[</span><span class="s2">"registered_at"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
         <span class="p">}</span>
     <span class="p">)</span>
 </pre></div>
@@ -873,7 +873,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="p">)</span>
     
     <span class="c1"># load environment variable</span>
-    <span class="n">num_days</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HACKERNEWS_NUM_DAYS_WINDOW&quot;</span><span class="p">)</span>
+    <span class="n">num_days</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"HACKERNEWS_NUM_DAYS_WINDOW"</span><span class="p">)</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span> <span class="c1"># mock an API connection</span>
         <span class="n">hackernews_api</span><span class="o">=</span><span class="n">DataGeneratorResource</span><span class="p">(</span><span class="n">num_days</span><span class="o">=</span><span class="n">num_days</span><span class="p">),</span>
     <span class="p">)</span>
@@ -881,24 +881,24 @@ s=d.getElementsByTagName('script')[0];
     <span class="c1"># define I/O operations; decoupled from dataflow def</span>
     <span class="n">materializers</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">to</span><span class="o">.</span><span class="n">json</span><span class="p">(</span>  <span class="c1"># JSON file type</span>
-            <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;most_frequent_words.json&quot;</span><span class="p">,</span>
-            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;most_frequent_words&quot;</span><span class="p">],</span>
-            <span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/most_frequent_words.json&quot;</span><span class="p">,</span>
+            <span class="nb">id</span><span class="o">=</span><span class="s2">"most_frequent_words.json"</span><span class="p">,</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"most_frequent_words"</span><span class="p">],</span>
+            <span class="n">path</span><span class="o">=</span><span class="s2">"data/most_frequent_words.json"</span><span class="p">,</span>
         <span class="p">),</span>
         <span class="n">to</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span>  <span class="c1"># CSV file type</span>
-            <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;topstories.csv&quot;</span><span class="p">,</span>
-            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;topstories&quot;</span><span class="p">],</span>
-            <span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/topstories.csv&quot;</span><span class="p">,</span>
+            <span class="nb">id</span><span class="o">=</span><span class="s2">"topstories.csv"</span><span class="p">,</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"topstories"</span><span class="p">],</span>
+            <span class="n">path</span><span class="o">=</span><span class="s2">"data/topstories.csv"</span><span class="p">,</span>
         <span class="p">),</span>
         <span class="n">to</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span>
-            <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;signups.csv&quot;</span><span class="p">,</span>
-            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;signups&quot;</span><span class="p">],</span>
-            <span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/signups.csv&quot;</span><span class="p">,</span>
+            <span class="nb">id</span><span class="o">=</span><span class="s2">"signups.csv"</span><span class="p">,</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"signups"</span><span class="p">],</span>
+            <span class="n">path</span><span class="o">=</span><span class="s2">"data/signups.csv"</span><span class="p">,</span>
         <span class="p">),</span>
         <span class="n">to</span><span class="o">.</span><span class="n">plt</span><span class="p">(</span>  <span class="c1"># Use matplotlib.pyplot to render</span>
-            <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;top_25_words_plot.plt&quot;</span><span class="p">,</span>
-            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;top_25_words_plot&quot;</span><span class="p">],</span>
-            <span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/top_25_words_plot.png&quot;</span><span class="p">,</span>
+            <span class="nb">id</span><span class="o">=</span><span class="s2">"top_25_words_plot.plt"</span><span class="p">,</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"top_25_words_plot"</span><span class="p">],</span>
+            <span class="n">path</span><span class="o">=</span><span class="s2">"data/top_25_words_plot.png"</span><span class="p">,</span>
         <span class="p">),</span>
     <span class="p">]</span>
     
@@ -906,12 +906,12 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">dr</span><span class="o">.</span><span class="n">visualize_materialization</span><span class="p">(</span>
         <span class="o">*</span><span class="n">materializers</span><span class="p">,</span>
         <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
-        <span class="n">output_file_path</span><span class="o">=</span><span class="s2">&quot;dataflow.png&quot;</span>
+        <span class="n">output_file_path</span><span class="o">=</span><span class="s2">"dataflow.png"</span>
     <span class="p">)</span>
     <span class="c1"># pass I/O operations and inputs to materialize dataflow</span>
     <span class="n">dr</span><span class="o">.</span><span class="n">materialize</span><span class="p">(</span><span class="o">*</span><span class="n">materializers</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
     
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
         
 </pre></div>
@@ -931,15 +931,15 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># load assets from passed modules</span>
 <span class="n">all_assets</span> <span class="o">=</span> <span class="n">load_assets_from_modules</span><span class="p">([</span><span class="n">assets</span><span class="p">])</span>
 <span class="c1"># select assets to include in the job</span>
-<span class="n">hackernews_job</span> <span class="o">=</span> <span class="n">define_asset_job</span><span class="p">(</span><span class="s2">&quot;hackernews_job&quot;</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="n">AssetSelection</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+<span class="n">hackernews_job</span> <span class="o">=</span> <span class="n">define_asset_job</span><span class="p">(</span><span class="s2">"hackernews_job"</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="n">AssetSelection</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
 
 <span class="c1"># load environment variable</span>
-<span class="n">num_days</span> <span class="o">=</span> <span class="n">EnvVar</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="s2">&quot;HACKERNEWS_NUM_DAYS_WINDOW&quot;</span><span class="p">)</span>
+<span class="n">num_days</span> <span class="o">=</span> <span class="n">EnvVar</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="s2">"HACKERNEWS_NUM_DAYS_WINDOW"</span><span class="p">)</span>
 <span class="n">defs</span> <span class="o">=</span> <span class="n">Definitions</span><span class="p">(</span>
     <span class="n">assets</span><span class="o">=</span><span class="n">all_assets</span><span class="p">,</span>
     <span class="n">jobs</span><span class="o">=</span><span class="p">[</span><span class="n">hackernews_job</span><span class="p">],</span>
     <span class="n">resources</span><span class="o">=</span><span class="p">{</span>  <span class="c1"># register mock API connection</span>
-        <span class="s2">&quot;hackernews_api&quot;</span><span class="p">:</span> <span class="n">DataGeneratorResource</span><span class="p">(</span><span class="n">num_days</span><span class="o">=</span><span class="n">num_days</span><span class="p">),</span>
+        <span class="s2">"hackernews_api"</span><span class="p">:</span> <span class="n">DataGeneratorResource</span><span class="p">(</span><span class="n">num_days</span><span class="o">=</span><span class="n">num_days</span><span class="p">),</span>
     <span class="p">},</span>
 <span class="p">)</span>
 </pre></div>

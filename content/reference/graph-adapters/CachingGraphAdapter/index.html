@@ -580,7 +580,7 @@ you can do the following:</p>
 <span class="k">def</span><span class="w"> </span><span class="nf">data_a</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span> <span class="o">...</span>
 
 
-<span class="nd">@tag</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="s2">&quot;parquet&quot;</span><span class="p">)</span>
+<span class="nd">@tag</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="s2">"parquet"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">data_b</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span> <span class="o">...</span>
 
 
@@ -597,11 +597,11 @@ you can do the following:</p>
 
 <span class="n">adapter</span> <span class="o">=</span> <span class="n">h_cache</span><span class="o">.</span><span class="n">CachingGraphAdapter</span><span class="p">(</span><span class="n">cache_path</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">PandasDataFrameResult</span><span class="p">())</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">Driver</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">adapter</span><span class="o">=</span><span class="n">adapter</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;transformed&quot;</span><span class="p">])</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"transformed"</span><span class="p">])</span>
 
 <span class="c1"># Because `data_b` has been cached now, only `data_a` and `transformed` nodes</span>
 <span class="c1"># will actually run.</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;transformed&quot;</span><span class="p">])</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"transformed"</span><span class="p">])</span>
 </pre></div>
 </div>
 <dl class="py method">

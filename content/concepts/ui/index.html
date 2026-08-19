@@ -544,7 +544,7 @@ The UI consists of the following features:</p>
 <section id="local-mode">
 <h1>Local Mode<a class="headerlink" href="#local-mode" title="Link to this heading">¶</a></h1>
 <p>To run the hamilton UI in local mode, you can do the following:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;apache-hamilton[ui,sdk]&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"apache-hamilton[ui,sdk]"</span>
 hamilton<span class="w"> </span>ui
 <span class="c1"># python -m hamilton.cli.__main__ ui # on windows</span>
 </pre></div>
@@ -631,7 +631,7 @@ chart contribution!</p>
 <p>Now that you have your server running, you can run a simple dataflow and watch it in the UI!
 You can follow instructions in the UI when you create a new project, or follow the instructions here.</p>
 <p>First, install the SDK:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;apache-hamilton[sdk]&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"apache-hamilton[sdk]"</span>
 </pre></div>
 </div>
 <p>Then, navigate to the project page (dashboard/projects), in the running UI, and click the green <code class="docutils literal notranslate"><span class="pre">+</span> <span class="pre">New</span> <span class="pre">DAG</span></code> button.</p>
@@ -644,9 +644,9 @@ You can follow instructions in the UI when you create a new project, or follow t
 
 <span class="n">tracker</span> <span class="o">=</span> <span class="n">adapters</span><span class="o">.</span><span class="n">HamiltonTracker</span><span class="p">(</span>
    <span class="n">project_id</span><span class="o">=</span><span class="n">PROJECT_ID_FROM_ABOVE</span><span class="p">,</span>
-   <span class="n">username</span><span class="o">=</span><span class="s2">&quot;USERNAME/EMAIL_YOU_PUT_IN_THE_UI&quot;</span><span class="p">,</span>
-   <span class="n">dag_name</span><span class="o">=</span><span class="s2">&quot;my_version_of_the_dag&quot;</span><span class="p">,</span>
-   <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="s2">&quot;DEV&quot;</span><span class="p">,</span> <span class="s2">&quot;team&quot;</span><span class="p">:</span> <span class="s2">&quot;MY_TEAM&quot;</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;X&quot;</span><span class="p">}</span>
+   <span class="n">username</span><span class="o">=</span><span class="s2">"USERNAME/EMAIL_YOU_PUT_IN_THE_UI"</span><span class="p">,</span>
+   <span class="n">dag_name</span><span class="o">=</span><span class="s2">"my_version_of_the_dag"</span><span class="p">,</span>
+   <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s2">"environment"</span><span class="p">:</span> <span class="s2">"DEV"</span><span class="p">,</span> <span class="s2">"team"</span><span class="p">:</span> <span class="s2">"MY_TEAM"</span><span class="p">,</span> <span class="s2">"version"</span><span class="p">:</span> <span class="s2">"X"</span><span class="p">}</span>
 <span class="p">)</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
@@ -664,7 +664,7 @@ the local mode – if you’re on postgres it links to 8241 (but you’ll want t
 <section id="i-need-some-apache-hamilton-code-to-run">
 <h2>I need some Apache Hamilton code to run<a class="headerlink" href="#i-need-some-apache-hamilton-code-to-run" title="Link to this heading">¶</a></h2>
 <p>If you don’t have Apache Hamilton code to run this with, you can run Apache Hamilton UI example under <a class="reference external" href="https://github.com/apache/hamilton/tree/main/examples/hamilton_ui">examples/hamilton_ui</a>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># we assume you&#39;re in the Apache Hamilton repository root</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># we assume you're in the Apache Hamilton repository root</span>
 <span class="nb">cd</span><span class="w"> </span>examples/hamilton_ui
 <span class="c1"># make sure you have the right python packages installed</span>
 pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
@@ -715,11 +715,11 @@ HamiltonTracker constructor. By default, these are set to <cite>localhost:8241/8
 
 <span class="n">tracker</span> <span class="o">=</span> <span class="n">adapters</span><span class="o">.</span><span class="n">HamiltonTracker</span><span class="p">(</span>
    <span class="n">project_id</span><span class="o">=</span><span class="n">PROJECT_ID_FROM_ABOVE</span><span class="p">,</span>
-   <span class="n">username</span><span class="o">=</span><span class="s2">&quot;USERNAME/EMAIL_YOU_PUT_IN_THE_UI&quot;</span><span class="p">,</span>
-   <span class="n">dag_name</span><span class="o">=</span><span class="s2">&quot;my_version_of_the_dag&quot;</span><span class="p">,</span>
-   <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="s2">&quot;DEV&quot;</span><span class="p">,</span> <span class="s2">&quot;team&quot;</span><span class="p">:</span> <span class="s2">&quot;MY_TEAM&quot;</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;X&quot;</span><span class="p">},</span>
-   <span class="n">hamilton_api_url</span><span class="o">=</span><span class="s2">&quot;http://YOUR_DOMAIN_HERE:8241&quot;</span><span class="p">,</span>
-   <span class="n">hamilton_ui_url</span><span class="o">=</span><span class="s2">&quot;http://YOUR_DOMAIN_HERE:8242&quot;</span> <span class="c1"># if using docker the UI is on 8242.</span>
+   <span class="n">username</span><span class="o">=</span><span class="s2">"USERNAME/EMAIL_YOU_PUT_IN_THE_UI"</span><span class="p">,</span>
+   <span class="n">dag_name</span><span class="o">=</span><span class="s2">"my_version_of_the_dag"</span><span class="p">,</span>
+   <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s2">"environment"</span><span class="p">:</span> <span class="s2">"DEV"</span><span class="p">,</span> <span class="s2">"team"</span><span class="p">:</span> <span class="s2">"MY_TEAM"</span><span class="p">,</span> <span class="s2">"version"</span><span class="p">:</span> <span class="s2">"X"</span><span class="p">},</span>
+   <span class="n">hamilton_api_url</span><span class="o">=</span><span class="s2">"http://YOUR_DOMAIN_HERE:8241"</span><span class="p">,</span>
+   <span class="n">hamilton_ui_url</span><span class="o">=</span><span class="s2">"http://YOUR_DOMAIN_HERE:8242"</span> <span class="c1"># if using docker the UI is on 8242.</span>
 <span class="p">)</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
@@ -790,9 +790,9 @@ python<span class="w"> </span>run_my_hamilton_code.py
 
 <span class="n">tracker</span> <span class="o">=</span> <span class="n">adapters</span><span class="o">.</span><span class="n">HamiltonTracker</span><span class="p">(</span>
    <span class="n">project_id</span><span class="o">=</span><span class="n">PROJECT_ID_FROM_ABOVE</span><span class="p">,</span>
-   <span class="n">username</span><span class="o">=</span><span class="s2">&quot;USERNAME/EMAIL_YOU_PUT_IN_THE_UI&quot;</span><span class="p">,</span>
-   <span class="n">dag_name</span><span class="o">=</span><span class="s2">&quot;my_version_of_the_dag&quot;</span><span class="p">,</span>
-   <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="s2">&quot;DEV&quot;</span><span class="p">,</span> <span class="s2">&quot;team&quot;</span><span class="p">:</span> <span class="s2">&quot;MY_TEAM&quot;</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;X&quot;</span><span class="p">}</span>
+   <span class="n">username</span><span class="o">=</span><span class="s2">"USERNAME/EMAIL_YOU_PUT_IN_THE_UI"</span><span class="p">,</span>
+   <span class="n">dag_name</span><span class="o">=</span><span class="s2">"my_version_of_the_dag"</span><span class="p">,</span>
+   <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s2">"environment"</span><span class="p">:</span> <span class="s2">"DEV"</span><span class="p">,</span> <span class="s2">"team"</span><span class="p">:</span> <span class="s2">"MY_TEAM"</span><span class="p">,</span> <span class="s2">"version"</span><span class="p">:</span> <span class="s2">"X"</span><span class="p">}</span>
 <span class="p">)</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>

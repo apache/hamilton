@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -556,7 +556,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<span class="sd">&quot;&quot;&quot;Decorators that replace a function&#39;s execution with specified behavior&quot;&quot;&quot;</span>
+<span class="sd">"""Decorators that replace a function's execution with specified behavior"""</span>
 
 <span class="c1"># Python 3.10 + has this built in, otherwise we have to define it</span>
 <span class="k">try</span><span class="p">:</span>
@@ -571,29 +571,29 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_empty_function_with_docstring</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Docstring for an empty function&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Docstring for an empty function"""</span>
     <span class="k">pass</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">ensure_function_empty</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Ensures that a function is empty. This is strict definition -- the function must have only one line (and</span>
-<span class="sd">    possibly a docstring), and that line must say &quot;pass&quot;.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    possibly a docstring), and that line must say "pass".</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span>
         <span class="n">_empty_function</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_code</span><span class="p">,</span>
         <span class="n">_empty_function_with_docstring</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_code</span><span class="p">,</span>
     <span class="p">}:</span>
         <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s1">&#39;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> is not empty. Must have only one line that consists of &quot;pass&quot;&#39;</span>
+            <span class="sa">f</span><span class="s1">'Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> is not empty. Must have only one line that consists of "pass"'</span>
         <span class="p">)</span>
 
 
 <div class="viewcode-block" id="does">
 <a class="viewcode-back" href="../../../../reference/decorators/does/#hamilton.function_modifiers.does">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">does</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeCreator</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;``@does`` is a decorator that essentially allows you to run a function over all the input parameters. \</span>
-<span class="sd">    So you can&#39;t pass any old function to ``@does``, instead the function passed has to take any amount of inputs and \</span>
+<span class="w">    </span><span class="sd">"""``@does`` is a decorator that essentially allows you to run a function over all the input parameters. \</span>
+<span class="sd">    So you can't pass any old function to ``@does``, instead the function passed has to take any amount of inputs and \</span>
 <span class="sd">    process them all in the same way.</span>
 
 <span class="sd">    .. code-block:: python</span>
@@ -603,50 +603,50 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        import internal_package_with_logic</span>
 
 <span class="sd">        def sum_series(**series: pd.Series) -&gt; pd.Series:</span>
-<span class="sd">            &#39;&#39;&#39;This function takes any number of inputs and sums them all together.&#39;&#39;&#39;</span>
+<span class="sd">            '''This function takes any number of inputs and sums them all together.'''</span>
 <span class="sd">            ...</span>
 
 <span class="sd">        @does(sum_series)</span>
 <span class="sd">        def D_XMAS_GC_WEIGHTED_BY_DAY(D_XMAS_GC_WEIGHTED_BY_DAY_1: pd.Series,</span>
 <span class="sd">                                      D_XMAS_GC_WEIGHTED_BY_DAY_2: pd.Series) -&gt; pd.Series:</span>
-<span class="sd">            &#39;&#39;&#39;Adds D_XMAS_GC_WEIGHTED_BY_DAY_1 and D_XMAS_GC_WEIGHTED_BY_DAY_2&#39;&#39;&#39;</span>
+<span class="sd">            '''Adds D_XMAS_GC_WEIGHTED_BY_DAY_1 and D_XMAS_GC_WEIGHTED_BY_DAY_2'''</span>
 <span class="sd">            pass</span>
 
 <span class="sd">        @does(internal_package_with_logic.identity_function)</span>
 <span class="sd">        def copy_of_x(x: pd.Series) -&gt; pd.Series:</span>
-<span class="sd">            &#39;&#39;&#39;Just returns x&#39;&#39;&#39;</span>
+<span class="sd">            '''Just returns x'''</span>
 <span class="sd">            pass</span>
 
 <span class="sd">    The example here is a function, that all that it does, is sum all the parameters together. So we can annotate it \</span>
 <span class="sd">    with the ``@does`` decorator and pass it the ``sum_series`` function. The ``@does`` decorator is currently limited \</span>
 <span class="sd">    to just allow functions that consist only of one argument, a generic \\*\\*kwargs.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="does.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/does/#hamilton.function_modifiers.does.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replacing_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="o">**</span><span class="n">argument_mapping</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor for a modifier that replaces the annotated functions functionality with something else.</span>
+<span class="w">        </span><span class="sd">"""Constructor for a modifier that replaces the annotated functions functionality with something else.</span>
 <span class="sd">        Right now this has a very strict validation requirements to make compliance with the framework easy.</span>
 
 <span class="sd">        :param replacing_function: The function to replace the original function with.</span>
 <span class="sd">        :param argument_mapping: A mapping of argument name in the replacing function to argument name in the \</span>
 <span class="sd">        decorating function.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">replacing_function</span> <span class="o">=</span> <span class="n">replacing_function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">argument_mapping</span> <span class="o">=</span> <span class="n">argument_mapping</span></div>
 
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">map_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">argument_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps kwargs using the argument mapping.</span>
+<span class="w">        </span><span class="sd">"""Maps kwargs using the argument mapping.</span>
 <span class="sd">        This does 2 things:</span>
 <span class="sd">        1. Replaces all kwargs in passed_in_kwargs with their mapping</span>
 <span class="sd">        2. Injects all defaults from the origin function signature</span>
 
 <span class="sd">        :param kwargs: Keyword arguments that will be passed into a hamilton function.</span>
-<span class="sd">        :param argument_mapping: Mapping of those arguments to a replacing function&#39;s arguments.</span>
-<span class="sd">        :return: The new kwargs for the replacing function&#39;s arguments.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        :param argument_mapping: Mapping of those arguments to a replacing function's arguments.</span>
+<span class="sd">        :return: The new kwargs for the replacing function's arguments.</span>
+<span class="sd">        """</span>
         <span class="n">output</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">arg_mapped_to</span><span class="p">,</span> <span class="n">original_arg</span> <span class="ow">in</span> <span class="n">argument_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">original_arg</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span> <span class="n">arg_mapped_to</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">argument_mapping</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -661,23 +661,23 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">replace_with_signature</span><span class="p">:</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Signature</span><span class="p">,</span>
         <span class="n">argument_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests whether a function signature and the signature of the replacing function are compatible.</span>
+<span class="w">        </span><span class="sd">"""Tests whether a function signature and the signature of the replacing function are compatible.</span>
 
 <span class="sd">        :param fn_signature:</span>
 <span class="sd">        :param replace_with_signature:</span>
 <span class="sd">        :param argument_mapping:</span>
-<span class="sd">        :return: True if they&#39;re compatible, False otherwise</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        :return: True if they're compatible, False otherwise</span>
+<span class="sd">        """</span>
         <span class="c1"># The easy (and robust) way to do this is to use the bind with a set of dummy arguments and test if it breaks.</span>
-        <span class="c1"># This way we&#39;re not reinventing the wheel.</span>
+        <span class="c1"># This way we're not reinventing the wheel.</span>
         <span class="n">SENTINEL_ARG_VALUE</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># does not matter as we never use it</span>
-        <span class="c1"># We initialize as the default values, as they&#39;ll always be injected in</span>
+        <span class="c1"># We initialize as the default values, as they'll always be injected in</span>
         <span class="n">dummy_param_values</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">key</span><span class="p">:</span> <span class="n">SENTINEL_ARG_VALUE</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">param_spec</span> <span class="ow">in</span> <span class="n">fn_signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">param_spec</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span>
         <span class="p">}</span>
-        <span class="c1"># Then we update with the dummy values. Again, replacing doesn&#39;t matter (we&#39;ll be mimicking it later)</span>
+        <span class="c1"># Then we update with the dummy values. Again, replacing doesn't matter (we'll be mimicking it later)</span>
         <span class="n">dummy_param_values</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">SENTINEL_ARG_VALUE</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">fn_signature</span><span class="o">.</span><span class="n">parameters</span><span class="p">})</span>
         <span class="n">dummy_param_values</span> <span class="o">=</span> <span class="n">does</span><span class="o">.</span><span class="n">map_kwargs</span><span class="p">(</span><span class="n">dummy_param_values</span><span class="p">,</span> <span class="n">argument_mapping</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -694,13 +694,13 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">replacing_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
         <span class="n">argument_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensures that a function signature is compatible with the replacing function, given the argument mapping</span>
+<span class="w">        </span><span class="sd">"""Ensures that a function signature is compatible with the replacing function, given the argument mapping</span>
 
-<span class="sd">        :param og_function: Function that&#39;s getting replaced (decorated with `@does`)</span>
+<span class="sd">        :param og_function: Function that's getting replaced (decorated with `@does`)</span>
 <span class="sd">        :param replacing_function: A function that gets called in its place (passed in by `@does`)</span>
 <span class="sd">        :param argument_mapping: The mapping of arguments from fn to replace_with</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">fn_parameters</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">og_function</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span>
         <span class="n">invalid_fn_parameters</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_spec</span> <span class="ow">in</span> <span class="n">fn_parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -712,9 +712,9 @@ s=d.getElementsByTagName('script')[0];
 
         <span class="k">if</span> <span class="n">invalid_fn_parameters</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Decorated function for @does (and really, all of hamilton), &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;can only consist of keyword-friendly arguments. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;The following parameters for </span><span class="si">{</span><span class="n">og_function</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> are not keyword-friendly: </span><span class="si">{</span><span class="n">invalid_fn_parameters</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Decorated function for @does (and really, all of hamilton), "</span>
+                <span class="sa">f</span><span class="s2">"can only consist of keyword-friendly arguments. "</span>
+                <span class="sa">f</span><span class="s2">"The following parameters for </span><span class="si">{</span><span class="n">og_function</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> are not keyword-friendly: </span><span class="si">{</span><span class="n">invalid_fn_parameters</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">does</span><span class="o">.</span><span class="n">test_function_signatures_compatible</span><span class="p">(</span>
             <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">og_function</span><span class="p">),</span>
@@ -722,33 +722,33 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">argument_mapping</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;The following function signatures are not compatible for use with @does: &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">og_function</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with signature </span><span class="si">{</span><span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">og_function</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;and replacing function </span><span class="si">{</span><span class="n">replacing_function</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with signature </span><span class="si">{</span><span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">replacing_function</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Mapping for arguments provided was: </span><span class="si">{</span><span class="n">argument_mapping</span><span class="si">}</span><span class="s2">. You can fix this by either adjusting &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;the signature for the replacing function *or* adjusting the mapping.&quot;</span>
+                <span class="sa">f</span><span class="s2">"The following function signatures are not compatible for use with @does: "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">og_function</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with signature </span><span class="si">{</span><span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">og_function</span><span class="p">)</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"and replacing function </span><span class="si">{</span><span class="n">replacing_function</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with signature </span><span class="si">{</span><span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">replacing_function</span><span class="p">)</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="sa">f</span><span class="s2">"Mapping for arguments provided was: </span><span class="si">{</span><span class="n">argument_mapping</span><span class="si">}</span><span class="s2">. You can fix this by either adjusting "</span>
+                <span class="sa">f</span><span class="s2">"the signature for the replacing function *or* adjusting the mapping."</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that the function:</span>
-<span class="sd">        - Is empty (we don&#39;t want to be overwriting actual code)</span>
+<span class="w">        </span><span class="sd">"""Validates that the function:</span>
+<span class="sd">        - Is empty (we don't want to be overwriting actual code)</span>
 <span class="sd">        - Has a compatible return type</span>
 <span class="sd">        - Matches the function signature with the appropriate mapping</span>
 <span class="sd">        :param fn: Function to validate</span>
 <span class="sd">        :raises: InvalidDecoratorException</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">ensure_function_empty</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
         <span class="n">does</span><span class="o">.</span><span class="n">ensure_function_signature_compatible</span><span class="p">(</span>
             <span class="n">fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">replacing_function</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">argument_mapping</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns one node which has the replaced functionality</span>
+<span class="w">        </span><span class="sd">"""Returns one node which has the replaced functionality</span>
 <span class="sd">        :param fn: Function to decorate</span>
 <span class="sd">        :param config: Configuration (not used in this)</span>
 <span class="sd">        :return: A node with the function in `@does` injected,</span>
 <span class="sd">        and the same parameters/types as the original function.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">wrapper_function</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">final_kwarg_values</span> <span class="o">=</span> <span class="p">{</span>
@@ -765,24 +765,24 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_default_tags</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function that encapsulates default tags on a function.</span>
+<span class="w">    </span><span class="sd">"""Function that encapsulates default tags on a function.</span>
 
 <span class="sd">    :param fn: the function we want to create default tags for.</span>
 <span class="sd">    :return: a dictionary with str -&gt; str values representing the default tags.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">module_name</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="n">module_name</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"module"</span><span class="p">:</span> <span class="n">module_name</span><span class="p">}</span>
 
 
 <span class="nd">@deprecated</span><span class="p">(</span>
     <span class="n">warn_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">fail_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">use_this</span><span class="o">=</span><span class="n">delayed_resolve</span><span class="p">,</span>
-    <span class="n">explanation</span><span class="o">=</span><span class="s2">&quot;dynamic_transform has been replaced with @resolve -- a cleaner way&quot;</span>
-    <span class="s2">&quot;to utilize config for resolving decorators. Note this allows you to use any&quot;</span>
-    <span class="s2">&quot;existing decorators.&quot;</span><span class="p">,</span>
+    <span class="n">explanation</span><span class="o">=</span><span class="s2">"dynamic_transform has been replaced with @resolve -- a cleaner way"</span>
+    <span class="s2">"to utilize config for resolving decorators. Note this allows you to use any"</span>
+    <span class="s2">"existing decorators."</span><span class="p">,</span>
     <span class="n">current_version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">&quot;https://hamilton.apache.org/reference/decorators/&quot;</span><span class="p">,</span>
+    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">"https://hamilton.apache.org/reference/decorators/"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">dynamic_transform</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeCreator</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -791,35 +791,35 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">config_param</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">**</span><span class="n">extra_transform_params</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructs a model. Takes in a model_cls, which has to have a parameter.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Constructs a model. Takes in a model_cls, which has to have a parameter."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transform_cls</span> <span class="o">=</span> <span class="n">transform_cls</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config_param</span> <span class="o">=</span> <span class="n">config_param</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extra_transform_params</span> <span class="o">=</span> <span class="n">extra_transform_params</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that the model works with the function -- ensures:</span>
+<span class="w">        </span><span class="sd">"""Validates that the model works with the function -- ensures:</span>
 <span class="sd">        1. function has no code</span>
 <span class="sd">        2. function has no parameters</span>
 <span class="sd">        3. function has series as a return type</span>
 <span class="sd">        :param fn: Function to validate</span>
 <span class="sd">        :raises InvalidDecoratorException if the model is not valid.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="n">ensure_function_empty</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>  <span class="c1"># it has to look exactly</span>
         <span class="n">signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;return&quot;</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"return"</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="s2">&quot;Models must declare their return type as a pandas Series&quot;</span>
+                <span class="s2">"Models must declare their return type as a pandas Series"</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">signature</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="s2">&quot;Models must have no parameters -- all are passed in through the config&quot;</span>
+                <span class="s2">"Models must have no parameters -- all are passed in through the config"</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_param</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Configuration has no parameter: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config_param</span><span class="si">}</span><span class="s2">. Did you define it? If so did you spell it right?&quot;</span>
+                <span class="sa">f</span><span class="s2">"Configuration has no parameter: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config_param</span><span class="si">}</span><span class="s2">. Did you define it? If so did you spell it right?"</span>
             <span class="p">)</span>
         <span class="n">fn_name</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span>
         <span class="n">transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_cls</span><span class="p">(</span>
@@ -828,7 +828,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">fn_name</span><span class="p">,</span>
-                <span class="n">typ</span><span class="o">=</span><span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;return&quot;</span><span class="p">),</span>
+                <span class="n">typ</span><span class="o">=</span><span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"return"</span><span class="p">),</span>
                 <span class="n">doc_string</span><span class="o">=</span><span class="n">fn</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">,</span>
                 <span class="n">callabl</span><span class="o">=</span><span class="n">transform</span><span class="o">.</span><span class="n">compute</span><span class="p">,</span>
                 <span class="n">input_types</span><span class="o">=</span><span class="p">{</span><span class="n">dep</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">transform</span><span class="o">.</span><span class="n">get_dependents</span><span class="p">()},</span>
@@ -837,15 +837,15 @@ s=d.getElementsByTagName('script')[0];
         <span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">require_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the configuration parameters that this model requires</span>
+<span class="w">        </span><span class="sd">"""Returns the configuration parameters that this model requires</span>
 
 <span class="sd">        :return: Just the one config param used by this model</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">config_param</span><span class="p">]</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">model</span><span class="p">(</span><span class="n">dynamic_transform</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model, same as a dynamic transform&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Model, same as a dynamic transform"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_cls</span><span class="p">,</span> <span class="n">config_param</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_model_params</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -857,8 +857,8 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Applicable</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Applicable is a largely internal construct that represents a function that can be applied as a node.</span>
-<span class="sd">    A few of these function are external-facing, however (named, when, when_not, ...)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Applicable is a largely internal construct that represents a function that can be applied as a node.</span>
+<span class="sd">    A few of these function are external-facing, however (named, when, when_not, ...)"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -871,7 +871,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">_namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
         <span class="n">_target</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">TargetType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates an Applicable.</span>
+<span class="w">        </span><span class="sd">"""Instantiates an Applicable.</span>
 
 <span class="sd">        We allow fn=None for the use-cases where we want to store the Applicable config (i.e. .when* family, namespace, target, etc.)</span>
 <span class="sd">        but do not yet the access to the actual function we are turning into the Applicable. In addition, in case the target nodes come</span>
@@ -887,18 +887,18 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param _target: Selects which target nodes it will be appended onto. Default None gets resolved on decorator level.</span>
 <span class="sd">            Specifically, pipe_input would use the first parameter and pipe_output / mutate would apply it to all sink nodes.</span>
 <span class="sd">        :param kwargs: Kwargs (**kwargs) to pass to the function</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_fn</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Strings are not supported currently. Please provide function pointer.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Strings are not supported currently. Please provide function pointer."</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target_fn</span> <span class="o">=</span> <span class="n">target_fn</span>
 
-        <span class="k">if</span> <span class="s2">&quot;_name&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot pass in _name as a kwarg&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"_name"</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Cannot pass in _name as a kwarg"</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;__name&quot;</span><span class="p">}</span>  <span class="c1"># TODO --</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">"__name"</span><span class="p">}</span>  <span class="c1"># TODO --</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
         <span class="c1"># figure out why this was showing up in two places...</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resolvers</span> <span class="o">=</span> <span class="n">_resolvers</span> <span class="k">if</span> <span class="n">_resolvers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
@@ -906,8 +906,8 @@ s=d.getElementsByTagName('script')[0];
         <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="o">=</span> <span class="n">_namespace</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">_target</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_with_resolvers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">additional_resolvers</span><span class="p">:</span> <span class="n">ConfigResolver</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Applicable&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper function for the .when* group&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_with_resolvers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">additional_resolvers</span><span class="p">:</span> <span class="n">ConfigResolver</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Applicable"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Helper function for the .when* group"""</span>
         <span class="k">return</span> <span class="n">Applicable</span><span class="p">(</span>
             <span class="n">fn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span>
             <span class="n">_resolvers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resolvers</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">additional_resolvers</span><span class="p">),</span>
@@ -919,49 +919,49 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">target_fn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target_fn</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">when</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">key_value_pairs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Applicable&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Choose to apply this function when all of the keys in the function</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">when</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">key_value_pairs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Applicable"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Choose to apply this function when all of the keys in the function</span>
 <span class="sd">        are present in the config, and the values match the values in the config.</span>
 
 <span class="sd">        :param key_value_pairs: key/value pairs to match</span>
 <span class="sd">        :return: The Applicable with this condition applied</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_with_resolvers</span><span class="p">(</span><span class="n">ConfigResolver</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="o">**</span><span class="n">key_value_pairs</span><span class="p">))</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">when_not</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">key_value_pairs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Applicable&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Choose to apply this function when all of the keys specified</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">when_not</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">key_value_pairs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Applicable"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Choose to apply this function when all of the keys specified</span>
 <span class="sd">        do not match the values specified in the config.</span>
 
 <span class="sd">        :param key_value_pairs: key/value pairs to match</span>
 <span class="sd">        :return: The Applicable with this condition applied</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_with_resolvers</span><span class="p">(</span><span class="n">ConfigResolver</span><span class="o">.</span><span class="n">when_not</span><span class="p">(</span><span class="o">**</span><span class="n">key_value_pairs</span><span class="p">))</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">when_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">key_value_group_pairs</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Applicable&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Choose to apply this function when all the keys provided have values contained within the list of values</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">when_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">key_value_group_pairs</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Applicable"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Choose to apply this function when all the keys provided have values contained within the list of values</span>
 <span class="sd">        specified</span>
 
 <span class="sd">        :param key_value_group_pairs: key/value pairs to match</span>
 <span class="sd">        :return:  The Applicable with this condition applied</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_with_resolvers</span><span class="p">(</span><span class="n">ConfigResolver</span><span class="o">.</span><span class="n">when_in</span><span class="p">(</span><span class="o">**</span><span class="n">key_value_group_pairs</span><span class="p">))</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">when_not_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">key_value_group_pairs</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Applicable&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Choose to apply this function when all the keys provided have values not contained within the list of values</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">when_not_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">key_value_group_pairs</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Applicable"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Choose to apply this function when all the keys provided have values not contained within the list of values</span>
 <span class="sd">        specified.</span>
 
 <span class="sd">        :param key_value_group_pairs: key/value pairs to match</span>
 <span class="sd">        :return:  The Applicable with this condition applied</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_with_resolvers</span><span class="p">(</span><span class="n">ConfigResolver</span><span class="o">.</span><span class="n">when_not_in</span><span class="p">(</span><span class="o">**</span><span class="n">key_value_group_pairs</span><span class="p">))</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">namespaced</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="n">NamespaceType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Applicable&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a namespace to this node. You probably don&#39;t need this -- you should look at &quot;named&quot; instead.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">namespaced</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="n">NamespaceType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Applicable"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Add a namespace to this node. You probably don't need this -- you should look at "named" instead.</span>
 
 <span class="sd">        :param namespace: Namespace to apply, can be ..., None, or a string.</span>
 <span class="sd">        :return: The Applicable with this namespace</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">Applicable</span><span class="p">(</span>
             <span class="n">fn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span>
             <span class="n">_resolvers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resolvers</span><span class="p">,</span>
@@ -974,18 +974,18 @@ s=d.getElementsByTagName('script')[0];
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">resolves</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns whether the Applicable resolves with the given config</span>
+<span class="w">        </span><span class="sd">"""Returns whether the Applicable resolves with the given config</span>
 
 <span class="sd">        :param config: Configuration to check</span>
 <span class="sd">        :return: Whether the Applicable resolves with the given config</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">resolver</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolvers</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">resolver</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
                 <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">named</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="n">NamespaceType</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Applicable&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Names the function application. This has the following rules:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">named</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="n">NamespaceType</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Applicable"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Names the function application. This has the following rules:</span>
 <span class="sd">        1. The name will be the name passed in, this is required</span>
 <span class="sd">        2. If the namespace is `None`, then there will be no namespace</span>
 <span class="sd">        3. If the namespace is `...`, then the namespace will be the namespace that already exists, usually the name of the</span>
@@ -996,7 +996,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param name: Name of the node to be created</span>
 <span class="sd">        :param namespace: Namespace of the node to be created -- currently only single-level namespaces are supported</span>
 <span class="sd">        :return: The applicable with the new name</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">Applicable</span><span class="p">(</span>
             <span class="n">fn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span>
             <span class="n">_resolvers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resolvers</span><span class="p">,</span>
@@ -1014,17 +1014,17 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="c1"># on_input / on_output are the same but here for naming convention</span>
     <span class="c1"># I know there is a way to dynamically resolve this to revert to a common function</span>
-    <span class="c1"># just can&#39;t remember it now or find it online...</span>
+    <span class="c1"># just can't remember it now or find it online...</span>
     <span class="c1"># TODO: adding the option to select target parameter for each transform</span>
-    <span class="c1"># def on_input(self, target: base.TargetType) -&gt; &quot;Applicable&quot;:</span>
-    <span class="c1">#     &quot;&quot;&quot;Add Target on a single function level.</span>
+    <span class="c1"># def on_input(self, target: base.TargetType) -&gt; "Applicable":</span>
+    <span class="c1">#     """Add Target on a single function level.</span>
 
     <span class="c1">#     This determines to which node(s) it will applies. Should match the same naming convention</span>
     <span class="c1">#     as the NodeTransorfmLifecycle child class (for example NodeTransformer).</span>
 
     <span class="c1">#     :param target: Which node(s) to apply on top of</span>
     <span class="c1">#     :return: The Applicable with specified target</span>
-    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     """</span>
     <span class="c1">#     return Applicable(</span>
     <span class="c1">#         fn=self.fn,</span>
     <span class="c1">#         _resolvers=self.resolvers,</span>
@@ -1036,15 +1036,15 @@ s=d.getElementsByTagName('script')[0];
     <span class="c1">#         target_fn=self.target_fn,</span>
     <span class="c1">#     )</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">on_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">TargetType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Applicable&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add Target on a single function level.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">TargetType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Applicable"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Add Target on a single function level.</span>
 
 <span class="sd">        This determines to which node(s) it will applies. Should match the same naming convention</span>
 <span class="sd">        as the NodeTransorfmLifecycle child class (for example NodeTransformer).</span>
 
 <span class="sd">        :param target: Which node(s) to apply on top of</span>
 <span class="sd">        :return: The Applicable with specified target</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">Applicable</span><span class="p">(</span>
             <span class="n">fn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span>
             <span class="n">_resolvers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resolvers</span><span class="p">,</span>
@@ -1057,14 +1057,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_config_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the config elements that this Applicable uses&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns the config elements that this Applicable uses"""</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">resolver</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolvers</span><span class="p">:</span>
             <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">resolver</span><span class="o">.</span><span class="n">optional_config</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chain_first_param</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">allow_custom_namespace</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that the Applicable function can be applied given the</span>
+<span class="w">        </span><span class="sd">"""Validates that the Applicable function can be applied given the</span>
 <span class="sd">        set of args/kwargs passed in. This says that:</span>
 
 <span class="sd">        1. The signature binds appropriately</span>
@@ -1078,13 +1078,13 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param chain_first_param: Whether we chain the first parameter</span>
 <span class="sd">        :raises InvalidDecoratorException if the function cannot be applied</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">((</span><span class="o">...</span><span class="p">,)</span> <span class="k">if</span> <span class="n">chain_first_param</span> <span class="k">else</span> <span class="p">())</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>  <span class="c1"># dummy argument at first</span>
         <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has no parameters. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;You cannot apply a function with no parameters.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has no parameters. "</span>
+                <span class="sa">f</span><span class="s2">"You cannot apply a function with no parameters."</span>
             <span class="p">)</span>
         <span class="n">invalid_args</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">item</span>
@@ -1097,45 +1097,45 @@ s=d.getElementsByTagName('script')[0];
         <span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">invalid_args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has invalid parameters. &quot;</span>
-                <span class="s2">&quot;You cannot apply a function with parameters that are not keyword-friendly. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;The following parameters are not keyword-friendly: </span><span class="si">{</span><span class="n">invalid_args</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has invalid parameters. "</span>
+                <span class="s2">"You cannot apply a function with parameters that are not keyword-friendly. "</span>
+                <span class="sa">f</span><span class="s2">"The following parameters are not keyword-friendly: </span><span class="si">{</span><span class="n">invalid_args</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">sig</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> cannot be applied with the following args: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;and the following kwargs: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> cannot be applied with the following args: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"and the following kwargs: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has no parameters. &quot;</span>
-                <span class="s2">&quot;You cannot apply a function with no parameters.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has no parameters. "</span>
+                <span class="s2">"You cannot apply a function with no parameters."</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="o">...</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">allow_custom_namespace</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="s2">&quot;Currently, setting namespace globally inside &quot;</span>
-                <span class="s2">&quot;pipe(...)/flow(...) is not compatible with setting namespace &quot;</span>
-                <span class="s2">&quot;for a step(...) call.&quot;</span>
+                <span class="s2">"Currently, setting namespace globally inside "</span>
+                <span class="s2">"pipe(...)/flow(...) is not compatible with setting namespace "</span>
+                <span class="s2">"for a step(...) call."</span>
             <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="o">.</span><span class="n">from_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> cannot be applied with the following args: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;and the following kwargs: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">. See documentation on pipe(), the function &quot;</span>
-                <span class="s2">&quot;shapes are currently restrictive to anything with named kwargs (either kwarg-only or positional/kwarg arguments), &quot;</span>
-                <span class="s2">&quot;and must be typed. If you need functions that don&#39;t have these requirements, please reach out to the Hamilton team.&quot;</span>
-                <span class="s2">&quot;Current workarounds are to define a wrapper function that assigns types with the proper keyword-friendly arguments.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> cannot be applied with the following args: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"and the following kwargs: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">. See documentation on pipe(), the function "</span>
+                <span class="s2">"shapes are currently restrictive to anything with named kwargs (either kwarg-only or positional/kwarg arguments), "</span>
+                <span class="s2">"and must be typed. If you need functions that don't have these requirements, please reach out to the Hamilton team."</span>
+                <span class="s2">"Current workarounds are to define a wrapper function that assigns types with the proper keyword-friendly arguments."</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">resolve_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolves the namespace -- see rules in `named` for more details.</span>
+<span class="w">        </span><span class="sd">"""Resolves the namespace -- see rules in `named` for more details.</span>
 
 <span class="sd">        :param default_namespace: namespace to use as a default if we do not wish to override it</span>
 <span class="sd">        :return: The namespace to use, as a tuple (hierarchical)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="p">(</span><span class="n">default_namespace</span><span class="p">,)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="ow">is</span> <span class="o">...</span>
@@ -1147,11 +1147,11 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">bind_function_args</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">current_param</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Binds function arguments, given current, chained parameter</span>
+<span class="w">        </span><span class="sd">"""Binds function arguments, given current, chained parameter</span>
 
-<span class="sd">        :param current_param: Current, chained parameter. None, if we&#39;re not chaining.</span>
+<span class="sd">        :param current_param: Current, chained parameter. None, if we're not chaining.</span>
 <span class="sd">        :return: A tuple of (upstream_inputs, literal_inputs)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">args_to_bind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span>
         <span class="k">if</span> <span class="n">current_param</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">args_to_bind</span> <span class="o">=</span> <span class="p">(</span><span class="n">source</span><span class="p">(</span><span class="n">current_param</span><span class="p">),)</span> <span class="o">+</span> <span class="n">args_to_bind</span>
@@ -1175,7 +1175,7 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">SingleDependency</span> <span class="o">|</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">SingleDependency</span> <span class="o">|</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Applicable</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies a function to for a node (or a subcomponent of a node).</span>
+<span class="w">    </span><span class="sd">"""Applies a function to for a node (or a subcomponent of a node).</span>
 <span class="sd">    See documentation for `pipe` to see how this is used.</span>
 
 <span class="sd">    :param fn: Function to use. Must be validly called as f(**kwargs), and have a 1:1 mapping of kwargs to parameters.</span>
@@ -1184,17 +1184,17 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    :param kwargs: Kwargs to pass to the function. These can be source/value, or they can be literals. If they are literals,</span>
 <span class="sd">    they will be converted to a value (a literal)</span>
 <span class="sd">    :return: an applicable with the function applied</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">Applicable</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span> <span class="n">_resolvers</span><span class="o">=</span><span class="p">[],</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
 
 
 <span class="c1"># TODO: In case of multiple parameter targets we want to safeguard that it is a clear target distribution</span>
 <span class="c1"># class MissingTargetError(Exception):</span>
-<span class="c1">#     &quot;&quot;&quot;When setting target make sure it is clear which transform targets which node.</span>
+<span class="c1">#     """When setting target make sure it is clear which transform targets which node.</span>
 
 <span class="c1">#     This is a safeguard, because the default behavior may not apply if targets are partially set</span>
 <span class="c1">#     and we do not want to make assumptions what the user meant.</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     """</span>
 
 <span class="c1">#     pass</span>
 
@@ -1202,9 +1202,9 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="pipe_input">
 <a class="viewcode-back" href="../../../../reference/decorators/pipe/#hamilton.function_modifiers.pipe_input">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">pipe_input</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeInjector</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Running a series of transformations on the input of the function.</span>
+<span class="w">    </span><span class="sd">"""Running a series of transformations on the input of the function.</span>
 
-<span class="sd">    To demonstrate the rules for chaining nodes, we&#39;ll be using the following example. This is</span>
+<span class="sd">    To demonstrate the rules for chaining nodes, we'll be using the following example. This is</span>
 <span class="sd">    using primitives to demonstrate, but as hamilton is just functions of any python objects, this works perfectly with</span>
 <span class="sd">    dataframes, series, etc...</span>
 
@@ -1231,7 +1231,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            step(_add_one),</span>
 <span class="sd">            step(_multiply, y=2),</span>
 <span class="sd">            step(_sum, y=value(3)),</span>
-<span class="sd">            step(_multiply, y=source(&quot;upstream_node_to_multiply&quot;)),</span>
+<span class="sd">            step(_multiply, y=source("upstream_node_to_multiply")),</span>
 <span class="sd">        )</span>
 <span class="sd">        def final_result(upstream_int: int) -&gt; int:</span>
 <span class="sd">            return upstream_int</span>
@@ -1270,7 +1270,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    Note that functions must have no position-only arguments (this is rare in python, but hamilton does not handle these).</span>
 <span class="sd">    This basically means that the functions must be defined similarly to ``def fn(x, y, z=10)`` and not ``def fn(x, y, /, z=10)``.</span>
-<span class="sd">    In fact, all arguments must be named and &quot;kwarg-friendly&quot;, meaning that the function can happily be called with ``**kwargs``,</span>
+<span class="sd">    In fact, all arguments must be named and "kwarg-friendly", meaning that the function can happily be called with ``**kwargs``,</span>
 <span class="sd">    where kwargs are some set of resolved upstream values. So, no ``*args`` are allowed, and ``**kwargs`` (variable keyword-only) are not</span>
 <span class="sd">    permitted. Note that this is not a design limitation, rather an implementation detail -- if you feel like you need this, please</span>
 <span class="sd">    reach out.</span>
@@ -1288,8 +1288,8 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            @pipe_input(</span>
-<span class="sd">                step(_add_one).when(foo=&quot;bar&quot;),</span>
-<span class="sd">                step(_add_two, y=source(&quot;other_node_to_add&quot;).when(foo=&quot;baz&quot;),</span>
+<span class="sd">                step(_add_one).when(foo="bar"),</span>
+<span class="sd">                step(_add_two, y=source("other_node_to_add").when(foo="baz"),</span>
 <span class="sd">            )</span>
 <span class="sd">            def final_result(upstream_int: int) -&gt; int:</span>
 <span class="sd">                return upstream_int</span>
@@ -1307,8 +1307,8 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            @pipe_input(</span>
-<span class="sd">                step(_add_one).named(&quot;a&quot;),</span>
-<span class="sd">                step(_add_two, y=source(&quot;upstream_node&quot;)).named(&quot;b&quot;),</span>
+<span class="sd">                step(_add_one).named("a"),</span>
+<span class="sd">                step(_add_two, y=source("upstream_node")).named("b"),</span>
 <span class="sd">            )</span>
 <span class="sd">            def final_result(upstream_int: int) -&gt; int:</span>
 <span class="sd">                return upstream_int</span>
@@ -1328,8 +1328,8 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="sd">            @pipe_input(</span>
-<span class="sd">                step(_add_one).named(&quot;a&quot;, namespace=&quot;foo&quot;),  # foo.a</span>
-<span class="sd">                step(_add_two, y=source(&quot;upstream_node&quot;)).named(&quot;b&quot;, namespace=...),  # final_result.b</span>
+<span class="sd">                step(_add_one).named("a", namespace="foo"),  # foo.a</span>
+<span class="sd">                step(_add_two, y=source("upstream_node")).named("b", namespace=...),  # final_result.b</span>
 <span class="sd">            )</span>
 <span class="sd">            def final_result(upstream_int: int) -&gt; int:</span>
 <span class="sd">                return upstream_int</span>
@@ -1341,11 +1341,11 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            :name: pipe_input with globally applied namespace</span>
 
 <span class="sd">            @pipe_input(</span>
-<span class="sd">                step(_add_one).named(&quot;a&quot;), # a</span>
-<span class="sd">                step(_add_two, y=source(&quot;upstream_node&quot;)).named(&quot;b&quot;), # foo.b</span>
+<span class="sd">                step(_add_one).named("a"), # a</span>
+<span class="sd">                step(_add_two, y=source("upstream_node")).named("b"), # foo.b</span>
 <span class="sd">                namespace=..., # default -- final_result.a and final_result.b, OR</span>
 <span class="sd">                namespace=None, # no namespace -- a and b are exposed as that, OR</span>
-<span class="sd">                namespace=&quot;foo&quot;, # foo.a and foo.b</span>
+<span class="sd">                namespace="foo", # foo.a and foo.b</span>
 <span class="sd">            )</span>
 <span class="sd">            def final_result(upstream_int: int) -&gt; int:</span>
 <span class="sd">                return upstream_int</span>
@@ -1363,8 +1363,8 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">            @pipe_input(</span>
 <span class="sd">                step(_add_one)</span>
-<span class="sd">                step(_add_two, y=source(&quot;upstream_node&quot;)),</span>
-<span class="sd">                on_input = &quot;p2&quot;</span>
+<span class="sd">                step(_add_two, y=source("upstream_node")),</span>
+<span class="sd">                on_input = "p2"</span>
 <span class="sd">            )</span>
 <span class="sd">            def final_result(p1: int, p2: int, p3: int) -&gt; int:</span>
 <span class="sd">                return upstream_int</span>
@@ -1380,8 +1380,8 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            .. code-block:: python</span>
 
 <span class="sd">                @pipe_input(</span>
-<span class="sd">                    step(_add_one).on_input([&quot;p1&quot;,&quot;p3&quot;])</span>
-<span class="sd">                    step(_add_two, y=source(&quot;upstream_node&quot;)).on_input(&quot;p2&quot;)</span>
+<span class="sd">                    step(_add_one).on_input(["p1","p3"])</span>
+<span class="sd">                    step(_add_two, y=source("upstream_node")).on_input("p2")</span>
 <span class="sd">                )</span>
 <span class="sd">                def final_result(p1: int, p2: int, p3: int) -&gt; int:</span>
 <span class="sd">                    return p1 + p2 + p3</span>
@@ -1395,14 +1395,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            .. code-block:: python</span>
 
 <span class="sd">                @pipe_input(</span>
-<span class="sd">                    step(_add_one).on_input([&quot;p1&quot;,&quot;p3&quot;])</span>
-<span class="sd">                    step(_add_two, y=source(&quot;upstream_node&quot;)),</span>
-<span class="sd">                    on_input = &quot;p2&quot;</span>
+<span class="sd">                    step(_add_one).on_input(["p1","p3"])</span>
+<span class="sd">                    step(_add_two, y=source("upstream_node")),</span>
+<span class="sd">                    on_input = "p2"</span>
 <span class="sd">                )</span>
 <span class="sd">                def final_result(p1: int, p2: int, p3: int) -&gt; int:</span>
 <span class="sd">                    return upstream_int</span>
 <span class="sd">            | replace:: \</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="pipe_input.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/pipe/#hamilton.function_modifiers.pipe_input.__init__">[docs]</a>
@@ -1414,19 +1414,19 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">collapse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">_chain</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates a ``@pipe_input`` decorator.</span>
+<span class="w">        </span><span class="sd">"""Instantiates a ``@pipe_input`` decorator.</span>
 
 <span class="sd">        :param transforms: step transformations to be applied, in order</span>
-<span class="sd">        :param namespace: namespace to apply to all nodes in the pipe. This can be &quot;...&quot; (the default), which resolves to the name of the decorated function, None (which means no namespace), or a string (which means that all nodes will be namespaced with that string). Note that you can either use this *or* namespaces inside ``pipe_input()``...</span>
+<span class="sd">        :param namespace: namespace to apply to all nodes in the pipe. This can be "..." (the default), which resolves to the name of the decorated function, None (which means no namespace), or a string (which means that all nodes will be namespaced with that string). Note that you can either use this *or* namespaces inside ``pipe_input()``...</span>
 <span class="sd">        :param on_input: setting the target parameter for all steps in the pipe. Leave empty to select only the first argument.</span>
 <span class="sd">        :param collapse: Whether to collapse this into a single node. This is not currently supported.</span>
 <span class="sd">        :param _chain: Whether to chain the first parameter. This is the only mode that is supported. Furthermore, this is not externally exposed. ``@flow`` will make use of this.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">on_input</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">on_input</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                    <span class="s2">&quot;on_input currently only supports a single target parameter specified by a string. &quot;</span>
-                    <span class="s2">&quot;Please reach out if you want a more flexible option in the feature.&quot;</span>
+                    <span class="s2">"on_input currently only supports a single target parameter specified by a string. "</span>
+                    <span class="s2">"Please reach out if you want a more flexible option in the feature."</span>
                 <span class="p">)</span>
         <span class="n">base</span><span class="o">.</span><span class="n">NodeTransformer</span><span class="o">.</span><span class="n">_early_validate_target</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">on_input</span><span class="p">,</span> <span class="n">allow_multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -1446,17 +1446,17 @@ s=d.getElementsByTagName('script')[0];
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">collapse</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                <span class="s2">&quot;Collapsing step() functions as one node is not yet implemented for pipe_input(). Please reach out if you want this feature.&quot;</span>
+                <span class="s2">"Collapsing step() functions as one node is not yet implemented for pipe_input(). Please reach out if you want this feature."</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;@flow() is not yet supported -- this is &quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"@flow() is not yet supported -- this is "</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_distribute_transforms_to_parameters</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Applicable</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolves target option on the transform level.</span>
+<span class="w">        </span><span class="sd">"""Resolves target option on the transform level.</span>
 <span class="sd">        Adds option that we can decide for each applicable which input parameter it will target on</span>
 <span class="sd">        top of the global target (if it is set).</span>
 
@@ -1465,7 +1465,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        :params: Available input parameters of the function</span>
 <span class="sd">        :return: A dictionary mapping between selected parameters and list of transforms</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="n">selected_transforms</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
@@ -1491,7 +1491,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">_create_valid_parameters_transforms_mapping</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Applicable</span><span class="p">]],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Applicable</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks for a valid distribution of transforms to parameters.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Checks for a valid distribution of transforms to parameters."""</span>
         <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
         <span class="n">param_names</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
@@ -1507,9 +1507,9 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">first_parameter</span> <span class="o">=</span> <span class="n">param_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">first_parameter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has a first parameter that is not a dependency. &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;@pipe requires the parameter names to match the function parameters. &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Thus it might not be compatible with some other decorators&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has a first parameter that is not a dependency. "</span>
+                    <span class="sa">f</span><span class="s2">"@pipe requires the parameter names to match the function parameters. "</span>
+                    <span class="sa">f</span><span class="s2">"Thus it might not be compatible with some other decorators"</span>
                 <span class="p">)</span>
             <span class="n">mapping</span><span class="p">[</span><span class="n">first_parameter</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span>
         <span class="c1"># TODO: validate that all transforms have a target in case multiple parameters targeted</span>
@@ -1521,18 +1521,18 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1">#     transform_set = set(transform_set)</span>
         <span class="c1">#     if len(transform_set) != len(self.transforms):</span>
         <span class="c1">#         raise MissingTargetError(</span>
-        <span class="c1">#             &quot;The on_input settings are unclear. Please make sure all transforms &quot;</span>
-        <span class="c1">#             &quot;either have specified individually or globally a target or there is &quot;</span>
-        <span class="c1">#             &quot;no on_input usage.&quot;</span>
+        <span class="c1">#             "The on_input settings are unclear. Please make sure all transforms "</span>
+        <span class="c1">#             "either have specified individually or globally a target or there is "</span>
+        <span class="c1">#             "no on_input usage."</span>
         <span class="c1">#         )</span>
 
         <span class="c1"># similar to above we check that the target parameter is among the actual function parameters</span>
         <span class="k">if</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">mapping</span><span class="p">))</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">param_names</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with parameters </span><span class="si">{</span><span class="n">param_names</span><span class="si">}</span><span class="s2"> does not a have &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;dependency </span><span class="si">{</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">mapping</span><span class="p">))</span><span class="si">}</span><span class="s2">. @pipe_input requires the parameter &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;names to match the function parameters. Thus it might not be compatible &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;with some other decorators.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with parameters </span><span class="si">{</span><span class="n">param_names</span><span class="si">}</span><span class="s2"> does not a have "</span>
+                <span class="sa">f</span><span class="s2">"dependency </span><span class="si">{</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">mapping</span><span class="p">))</span><span class="si">}</span><span class="s2">. @pipe_input requires the parameter "</span>
+                <span class="sa">f</span><span class="s2">"names to match the function parameters. Thus it might not be compatible "</span>
+                <span class="sa">f</span><span class="s2">"with some other decorators."</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">mapping</span>
@@ -1541,20 +1541,20 @@ s=d.getElementsByTagName('script')[0];
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add parameter name to namespace.</span>
+<span class="w">        </span><span class="sd">"""Add parameter name to namespace.</span>
 <span class="sd">        In case we pipe_input on multiple parameters we have to duplicate nodes to be able to chain</span>
 <span class="sd">        them together for each argument and they have to have different names.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="ow">is</span> <span class="o">...</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">param</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">inject_nodes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]],</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Injects nodes into the graph. This creates a node for each pipe() step,</span>
-<span class="sd">        then reassigns the inputs to pass it in.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Injects nodes into the graph. This creates a node for each pipe() step,</span>
+<span class="sd">        then reassigns the inputs to pass it in."""</span>
 
         <span class="n">parameters_transforms_mapping</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distribute_transforms_to_parameters</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
         <span class="n">parameters_transforms_mapping</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_valid_parameters_transforms_mapping</span><span class="p">(</span>
@@ -1586,7 +1586,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="n">total_nodes</span><span class="p">,</span> <span class="n">total_rename_maps</span>  <span class="c1"># rename to ensure it all works</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates the the individual steps work together.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Validates the the individual steps work together."""</span>
         <span class="k">for</span> <span class="n">applicable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">:</span>
             <span class="n">applicable</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span>
                 <span class="n">chain_first_param</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_custom_namespace</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="ow">is</span> <span class="o">...</span>
@@ -1594,14 +1594,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1"># TODO -- validate that the types match on the chain (this is de-facto done later)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">optional_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Declares the optional configuration keys for this decorator.</span>
+<span class="w">        </span><span class="sd">"""Declares the optional configuration keys for this decorator.</span>
 <span class="sd">        These are configuration keys that can be used by the decorator, but are not required.</span>
 <span class="sd">        Along with these we have *defaults*, which we will use to pass to the config.</span>
 
 <span class="sd">        :return: The optional configuration keys with defaults. Note that this will return None</span>
 <span class="sd">        if we have no idea what they are, which bypasses the configuration filtering we use entirely.</span>
 <span class="sd">        This is mainly for the legacy API.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">applicable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">resolver</span> <span class="ow">in</span> <span class="n">applicable</span><span class="o">.</span><span class="n">resolvers</span><span class="p">:</span>
@@ -1616,10 +1616,10 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">warn_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">fail_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">use_this</span><span class="o">=</span><span class="n">pipe_input</span><span class="p">,</span>
-    <span class="n">explanation</span><span class="o">=</span><span class="s2">&quot;pipe has been replaced with pipe_input -- a clearer name since &quot;</span>
-    <span class="s2">&quot;we also added pipe_output with complimentary functionality.&quot;</span><span class="p">,</span>
+    <span class="n">explanation</span><span class="o">=</span><span class="s2">"pipe has been replaced with pipe_input -- a clearer name since "</span>
+    <span class="s2">"we also added pipe_output with complimentary functionality."</span><span class="p">,</span>
     <span class="n">current_version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">&quot;https://hamilton.apache.org/reference/decorators/&quot;</span><span class="p">,</span>
+    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">"https://hamilton.apache.org/reference/decorators/"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">pipe</span><span class="p">(</span><span class="n">pipe_input</span><span class="p">):</span>
 <div class="viewcode-block" id="pipe.__init__">
@@ -1645,7 +1645,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="c1"># # TODO -- implement flow!</span>
 <span class="c1"># class flow(pipe):</span>
-<span class="c1">#     &quot;&quot;&quot;flow() is a more flexible, power-user version of `pipe`. The rules are largely similar, with a few key differences:</span>
+<span class="c1">#     """flow() is a more flexible, power-user version of `pipe`. The rules are largely similar, with a few key differences:</span>
 <span class="c1">#</span>
 <span class="c1">#     1. The first parameter is not passed through -- the user is responsible for passing all parameters into a function</span>
 <span class="c1">#     2. The final function can depend on any of the prior functions -- it will declare those as inputs using the input parameters. These will</span>
@@ -1660,21 +1660,21 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1">#     DAGs. Again, however, this is meant to be a subset of a declarative DAG -- procedurally defined subdags can help with flexibility, but</span>
 <span class="c1">#     should not be overused.</span>
 <span class="c1">#</span>
-<span class="c1">#     Now, let&#39;s get to some examples:</span>
+<span class="c1">#     Now, let's get to some examples:</span>
 <span class="c1">#</span>
 <span class="c1">#     TODO -- basic example</span>
 <span class="c1">#</span>
 <span class="c1">#     TODO -- example with resolve</span>
 <span class="c1">#</span>
 <span class="c1">#     TODO -- examples with namespacing</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     """</span>
 <span class="c1">#</span>
 <span class="c1">#     def __init__(self, *transforms: Applicable, collapse=False):</span>
 <span class="c1">#         super(flow, self).__init__(*transforms, collapse=collapse, _chain=False)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">SingleTargetError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;We prohibit the target to be raise both globally and locally.</span>
+<span class="w">    </span><span class="sd">"""We prohibit the target to be raise both globally and locally.</span>
 
 <span class="sd">    Decorators that transform the output of a node can be set to transform only</span>
 <span class="sd">    a certain output node (useful with extract_columns / extract_fields). Some decorators</span>
@@ -1684,7 +1684,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    This is a safeguard, because when you set the global target it creates a subset of those nodes and</span>
 <span class="sd">    if the local target is outside of that subset it gets ignore (opposed to the logical assumption that</span>
 <span class="sd">    it can override the global one). So we disable that case.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">pass</span>
 
@@ -1692,7 +1692,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="pipe_output">
 <a class="viewcode-back" href="../../../../reference/decorators/pipe/#hamilton.function_modifiers.pipe_output">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">pipe_output</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeTransformer</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Running a series of transformation on the output of the function.</span>
+<span class="w">    </span><span class="sd">"""Running a series of transformation on the output of the function.</span>
 
 <span class="sd">    The decorated function declares the dependency, the body of the function gets executed, and then</span>
 <span class="sd">    we run a series of transformations on the result of the function specified by ``pipe_output``.</span>
@@ -1709,7 +1709,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        def B(...):</span>
 <span class="sd">            return ...</span>
 
-<span class="sd">    we obtain the new DAG **A --&gt; B.raw --&gt; B1 --&gt; B2 --&gt; B --&gt; C**, where we can think of the **B.raw --&gt; B1 --&gt; B2 --&gt; B** as a &quot;pipe&quot; that takes the raw output of **B**, applies to it</span>
+<span class="sd">    we obtain the new DAG **A --&gt; B.raw --&gt; B1 --&gt; B2 --&gt; B --&gt; C**, where we can think of the **B.raw --&gt; B1 --&gt; B2 --&gt; B** as a "pipe" that takes the raw output of **B**, applies to it</span>
 <span class="sd">    **B1**, takes the output of **B1** applies to it **B2** and then gets renamed to **B** to re-connect to the rest of the DAG.</span>
 
 <span class="sd">    The rules for chaining nodes are the same as for ``pipe_input``.</span>
@@ -1720,7 +1720,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    .. code-block:: python</span>
 <span class="sd">        :name: Simple @pipe_output example targeting specific nodes</span>
 
-<span class="sd">        @extract_columns(&quot;col_1&quot;, &quot;col_2&quot;)</span>
+<span class="sd">        @extract_columns("col_1", "col_2")</span>
 <span class="sd">        def A(...):</span>
 <span class="sd">            return ...</span>
 
@@ -1730,13 +1730,13 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">         @pipe_output(</span>
 <span class="sd">            step(A),</span>
-<span class="sd">            step(B).on_output(&quot;field_1&quot;),</span>
+<span class="sd">            step(B).on_output("field_1"),</span>
 <span class="sd">        )</span>
 <span class="sd">        @extract_fields(</span>
-<span class="sd">                {&quot;field_1&quot;:int, &quot;field_2&quot;:int, &quot;field_3&quot;:int}</span>
+<span class="sd">                {"field_1":int, "field_2":int, "field_3":int}</span>
 <span class="sd">        )</span>
 <span class="sd">        def foo(a:int)-&gt;Dict[str,int]:</span>
-<span class="sd">            return {&quot;field_1&quot;:1, &quot;field_2&quot;:2, &quot;field_3&quot;:3}</span>
+<span class="sd">            return {"field_1":1, "field_2":2, "field_3":3}</span>
 
 <span class="sd">    We can also do this on the global level (but cannot do on both levels at the same time). The following would apply function *A* and function *B* to only ``field_1`` and ``field_2``</span>
 
@@ -1746,25 +1746,25 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        @pipe_output(</span>
 <span class="sd">            step(A),</span>
 <span class="sd">            step(B),</span>
-<span class="sd">            on_output = [&quot;field_1&quot;,&quot;field_2]</span>
+<span class="sd">            on_output = ["field_1","field_2]</span>
 <span class="sd">        )</span>
 <span class="sd">        @extract_fields(</span>
-<span class="sd">                {&quot;field_1&quot;:int, &quot;field_2&quot;:int, &quot;field_3&quot;:int}</span>
+<span class="sd">                {"field_1":int, "field_2":int, "field_3":int}</span>
 <span class="sd">        )</span>
 <span class="sd">        def foo(a:int)-&gt;Dict[str,int]:</span>
-<span class="sd">            return {&quot;field_1&quot;:1, &quot;field_2&quot;:2, &quot;field_3&quot;:3}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">            return {"field_1":1, "field_2":2, "field_3":3}</span>
+<span class="sd">    """</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate_single_target_level</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">TargetType</span><span class="p">,</span> <span class="n">transforms</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Applicable</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;We want to make sure that target gets applied on a single level.</span>
+<span class="w">        </span><span class="sd">"""We want to make sure that target gets applied on a single level.</span>
 <span class="sd">        Either choose for each step individually what it targets or set it on the global level where</span>
 <span class="sd">        all steps will target the same node(s).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">transform</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">transform</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="n">SingleTargetError</span><span class="p">(</span><span class="s2">&quot;Cannot have target set on pipe_output and step level.&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">SingleTargetError</span><span class="p">(</span><span class="s2">"Cannot have target set on pipe_output and step level."</span><span class="p">)</span>
 
 <div class="viewcode-block" id="pipe_output.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/pipe/#hamilton.function_modifiers.pipe_output.__init__">[docs]</a>
@@ -1776,23 +1776,23 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">collapse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">_chain</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates a ``@pipe_output`` decorator.</span>
+<span class="w">        </span><span class="sd">"""Instantiates a ``@pipe_output`` decorator.</span>
 
 <span class="sd">        Warning: if there is a global pipe_output target, the individual ``step(...).target`` would only choose</span>
 <span class="sd">        from the subset pre-selected from the global pipe_output target. We have disabled this for now to avoid</span>
 <span class="sd">        confusion. Leave global pipe_output target empty if you want to choose between all the nodes on the individual step level.</span>
 
 <span class="sd">        :param transforms: step transformations to be applied, in order</span>
-<span class="sd">        :param namespace: namespace to apply to all nodes in the pipe. This can be &quot;...&quot; (the default), which resolves to the name of the decorated function, None (which means no namespace), or a string (which means that all nodes will be namespaced with that string). Note that you can either use this *or* namespaces inside ``pipe_output()``...</span>
+<span class="sd">        :param namespace: namespace to apply to all nodes in the pipe. This can be "..." (the default), which resolves to the name of the decorated function, None (which means no namespace), or a string (which means that all nodes will be namespaced with that string). Note that you can either use this *or* namespaces inside ``pipe_output()``...</span>
 <span class="sd">        :param on_output: setting the target node for all steps in the pipe. Leave empty to select all the output nodes.</span>
 <span class="sd">        :param collapse: Whether to collapse this into a single node. This is not currently supported.</span>
 <span class="sd">        :param _chain: Whether to chain the first parameter. This is the only mode that is supported. Furthermore, this is not externally exposed. ``@flow`` will make use of this.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">pipe_output</span><span class="o">.</span><span class="n">_validate_single_target_level</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">on_output</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">on_output</span> <span class="o">==</span> <span class="o">...</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Cannot apply Elipsis(...) to on_output. Use None, single string or list of strings.&quot;</span>
+                <span class="s2">"Cannot apply Elipsis(...) to on_output. Use None, single string or list of strings."</span>
             <span class="p">)</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">pipe_output</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">on_output</span><span class="p">)</span>
@@ -1803,20 +1803,20 @@ s=d.getElementsByTagName('script')[0];
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">collapse</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                <span class="s2">&quot;Collapsing step() functions as one node is not yet implemented for pipe(). Please reach out if you want this feature.&quot;</span>
+                <span class="s2">"Collapsing step() functions as one node is not yet implemented for pipe(). Please reach out if you want this feature."</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;@flow() is not yet supported -- this is &quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"@flow() is not yet supported -- this is "</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_filter_individual_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolves target option on the transform level.</span>
+<span class="w">        </span><span class="sd">"""Resolves target option on the transform level.</span>
 <span class="sd">        Adds option that we can decide for each applicable which output node it will target.</span>
 
 <span class="sd">        :param node_: The current output node.</span>
 <span class="sd">        :return: The set of transforms that target this node</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">selected_transforms</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">transform</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">:</span>
             <span class="n">target</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">target</span>
@@ -1834,13 +1834,13 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">transform_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Injects nodes into the graph.</span>
+<span class="w">        </span><span class="sd">"""Injects nodes into the graph.</span>
 
 <span class="sd">        We create a copy of the original function and rename it to `function_name.raw` to be the</span>
 <span class="sd">        initial node. Then we create a node for each step in `post-pipe` and chain them together.</span>
 <span class="sd">        The last node is an identity to the previous one with the original name `function_name` to</span>
 <span class="sd">        represent an exit point of `pipe_output`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">transforms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_individual_target</span><span class="p">(</span><span class="n">node_</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">transforms</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># in case no functions in pipeline we short-circuit and return the original node</span>
@@ -1854,7 +1854,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">_namespace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span>
 
         <span class="c1"># We pick a reserved prefix that ovoids clashes with user defined functions / nodes</span>
-        <span class="n">original_node</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.raw&quot;</span><span class="p">)</span>
+        <span class="n">original_node</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.raw"</span><span class="p">)</span>
 
         <span class="n">is_async</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">iscoroutinefunction</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>  <span class="c1"># determine if its async</span>
 
@@ -1879,7 +1879,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">node_</span><span class="p">]</span>
 
-        <span class="n">last_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="n">nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+        <span class="n">last_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="n">nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">original_node</span><span class="p">]</span>
         <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">nodes</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
@@ -1887,7 +1887,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates the the individual steps work together.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Validates the the individual steps work together."""</span>
         <span class="k">for</span> <span class="n">applicable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">:</span>
             <span class="n">applicable</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span>
                 <span class="n">chain_first_param</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_custom_namespace</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="ow">is</span> <span class="o">...</span>
@@ -1895,14 +1895,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1"># TODO -- validate that the types match on the chain (this is de-facto done later)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">optional_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Declares the optional configuration keys for this decorator.</span>
+<span class="w">        </span><span class="sd">"""Declares the optional configuration keys for this decorator.</span>
 <span class="sd">        These are configuration keys that can be used by the decorator, but are not required.</span>
 <span class="sd">        Along with these we have *defaults*, which we will use to pass to the config.</span>
 
 <span class="sd">        :return: The optional configuration keys with defaults. Note that this will return None</span>
 <span class="sd">        if we have no idea what they are, which bypasses the configuration filtering we use entirely.</span>
 <span class="sd">        This is mainly for the legacy API.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">applicable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">resolver</span> <span class="ow">in</span> <span class="n">applicable</span><span class="o">.</span><span class="n">resolvers</span><span class="p">:</span>
@@ -1918,16 +1918,16 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Chaining nodes together sequentially through the a specified argument.</span>
+<span class="w">    </span><span class="sd">"""Chaining nodes together sequentially through the a specified argument.</span>
 
 <span class="sd">    :param target_arg: assigning the name of the specified argument of the first node in chain</span>
 <span class="sd">    :param transforms: step transformations to be applied, in order</span>
-<span class="sd">    :param namespace: namespace to apply to all nodes. This can be &quot;...&quot; (the default), which resolves to the name of the decorated function, None (which means no namespace), or a string (which means that all nodes will be namespaced with that string)</span>
+<span class="sd">    :param namespace: namespace to apply to all nodes. This can be "..." (the default), which resolves to the name of the decorated function, None (which means no namespace), or a string (which means that all nodes will be namespaced with that string)</span>
 <span class="sd">    :param config: Configuration to use -- this can be specified in the decorator</span>
 <span class="sd">    :param fn: initial function that was decorated</span>
 
 <span class="sd">    :return: A list of nodes that have been chained together through the specified argument.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">fn_count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
     <span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1938,15 +1938,15 @@ s=d.getElementsByTagName('script')[0];
             <span class="p">)</span>  <span class="c1"># we reassign the global namespace</span>
         <span class="k">if</span> <span class="n">applicable</span><span class="o">.</span><span class="n">resolves</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
             <span class="n">fn_name</span> <span class="o">=</span> <span class="n">applicable</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span>
-            <span class="n">postfix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">fn_count</span><span class="p">[</span><span class="n">fn_name</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">fn_count</span><span class="p">[</span><span class="n">fn_name</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">postfix</span> <span class="o">=</span> <span class="s2">""</span> <span class="k">if</span> <span class="n">fn_count</span><span class="p">[</span><span class="n">fn_name</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"_</span><span class="si">{</span><span class="n">fn_count</span><span class="p">[</span><span class="n">fn_name</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
             <span class="n">node_name</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">applicable</span><span class="o">.</span><span class="n">name</span>
                 <span class="k">if</span> <span class="n">applicable</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-                <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;with</span><span class="si">{</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">fn_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fn_name</span><span class="si">}{</span><span class="n">postfix</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">else</span> <span class="sa">f</span><span class="s2">"with</span><span class="si">{</span><span class="p">(</span><span class="s1">'_'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">fn_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'_'</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fn_name</span><span class="si">}{</span><span class="n">postfix</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="n">raw_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="o">.</span><span class="n">from_fn</span><span class="p">(</span>
                 <span class="n">applicable</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;with</span><span class="si">{</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">fn_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fn_name</span><span class="si">}{</span><span class="n">postfix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"with</span><span class="si">{</span><span class="p">(</span><span class="s1">'_'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">fn_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'_'</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fn_name</span><span class="si">}{</span><span class="n">postfix</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">node_namespace</span> <span class="o">=</span> <span class="n">applicable</span><span class="o">.</span><span class="n">resolve_namespace</span><span class="p">(</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
             <span class="n">raw_node</span> <span class="o">=</span> <span class="n">raw_node</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="n">node_namespace</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">node_name</span><span class="p">)</span>
@@ -1964,7 +1964,7 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">apply_to</span><span class="p">(</span><span class="n">fn_</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">mutating_fn_kwargs</span><span class="p">:</span> <span class="n">SingleDependency</span> <span class="o">|</span> <span class="n">Any</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates an applicable placeholder with potential kwargs that will be applied to a node (or a subcomponent of a node).</span>
+<span class="w">    </span><span class="sd">"""Creates an applicable placeholder with potential kwargs that will be applied to a node (or a subcomponent of a node).</span>
 <span class="sd">    See documentation for ``mutate`` to see how this is used. It de facto allows a postponed ``step``.</span>
 
 <span class="sd">    We pass fn=None here as this will be the function we are decorating and need to delay passing it in. The target</span>
@@ -1973,30 +1973,30 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    :param fn: Function the applicable will be applied to</span>
 <span class="sd">    :param mutating_fn_kwargs: Kwargs (**kwargs) to pass to the mutator function. Must be validly called as f(**kwargs), and have a 1:1 mapping of kwargs to parameters.</span>
 <span class="sd">    :return: an applicable placeholder with the target function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">Applicable</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(),</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">mutating_fn_kwargs</span><span class="p">,</span> <span class="n">target_fn</span><span class="o">=</span><span class="n">fn_</span><span class="p">,</span> <span class="n">_resolvers</span><span class="o">=</span><span class="p">[])</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">NotSameModuleError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Limit the use of a decorator on functions from the same module.</span>
+<span class="w">    </span><span class="sd">"""Limit the use of a decorator on functions from the same module.</span>
 
 <span class="sd">    Some decorators have the ability to transform also other functions than the one they are decorating (for example mutate).</span>
 <span class="sd">    This ensures that all the functions are located within the same module.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">target_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;The functions have to be in the same module... &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;The target function </span><span class="si">{</span><span class="n">target_fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is in module </span><span class="si">{</span><span class="n">target_fn</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2"> and &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;the mutator function </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is in module </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">./n&quot;</span>
-            <span class="s2">&quot;Use power user setting to disable this restriction.&quot;</span>
+            <span class="sa">f</span><span class="s2">"The functions have to be in the same module... "</span>
+            <span class="sa">f</span><span class="s2">"The target function </span><span class="si">{</span><span class="n">target_fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is in module </span><span class="si">{</span><span class="n">target_fn</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2"> and "</span>
+            <span class="sa">f</span><span class="s2">"the mutator function </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is in module </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">./n"</span>
+            <span class="s2">"Use power user setting to disable this restriction."</span>
         <span class="p">)</span>
 
 
 <div class="viewcode-block" id="mutate">
 <a class="viewcode-back" href="../../../../reference/decorators/pipe/#hamilton.function_modifiers.mutate">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">mutate</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Running a transformation on the outputs of a series of functions.</span>
+<span class="w">    </span><span class="sd">"""Running a transformation on the outputs of a series of functions.</span>
 
 <span class="sd">    This is closely related to ``pipe_output`` as it effectively allows you to run transformations on the output of a node without touching that node.</span>
 <span class="sd">    We choose which target functions we wish to mutate by the transformation we are decorating. For now, the target functions, that will be mutated,</span>
@@ -2040,7 +2040,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    .. code-block:: python</span>
 <span class="sd">        :name: Simple @mutate example with multiple arguments</span>
 
-<span class="sd">        @mutate(A, B, arg2=step(&#39;upstream_node&#39;), arg3=value(some_literal), ...)</span>
+<span class="sd">        @mutate(A, B, arg2=step('upstream_node'), arg3=value(some_literal), ...)</span>
 <span class="sd">        def _transform1(output_from_target:correct_type, arg2:arg2_type, arg3:arg3_type,...):</span>
 <span class="sd">            return ...</span>
 
@@ -2050,8 +2050,8 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :name: Simple @mutate example with multiple arguments allowing individual actions</span>
 
 <span class="sd">        @mutate(</span>
-<span class="sd">                apply_to(A, arg2=step(&#39;upstream_node_1&#39;), arg3=value(some_literal_1)),</span>
-<span class="sd">                apply_to(B, arg2=step(&#39;upstream_node_2&#39;), arg3=value(some_literal_2)),</span>
+<span class="sd">                apply_to(A, arg2=step('upstream_node_1'), arg3=value(some_literal_1)),</span>
+<span class="sd">                apply_to(B, arg2=step('upstream_node_2'), arg3=value(some_literal_2)),</span>
 <span class="sd">                )</span>
 <span class="sd">        def _transform1(output_from_target:correct_type, arg2:arg2_type, arg3:arg3_type, ...):</span>
 <span class="sd">            return ...</span>
@@ -2062,24 +2062,24 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    .. code-block:: python</span>
 <span class="sd">        :name: @mutate example targeting specific nodes local</span>
 
-<span class="sd">        @extract_columns(&quot;col_1&quot;, &quot;col_2&quot;)</span>
+<span class="sd">        @extract_columns("col_1", "col_2")</span>
 <span class="sd">        def A(...):</span>
 <span class="sd">            return ...</span>
 
 <span class="sd">        @extract_fields(</span>
-<span class="sd">                {&quot;field_1&quot;:int, &quot;field_2&quot;:int, &quot;field_3&quot;:int}</span>
+<span class="sd">                {"field_1":int, "field_2":int, "field_3":int}</span>
 <span class="sd">        )</span>
 <span class="sd">        def B(...):</span>
 <span class="sd">            return ...</span>
 
 <span class="sd">        @mutate(</span>
 <span class="sd">            apply_to(A),</span>
-<span class="sd">            apply_to(B).on_output(&quot;field_1&quot;),</span>
+<span class="sd">            apply_to(B).on_output("field_1"),</span>
 <span class="sd">            )</span>
 
 <span class="sd">        def foo(a:int)-&gt;Dict[str,int]:</span>
-<span class="sd">            return {&quot;field_1&quot;:1, &quot;field_2&quot;:2, &quot;field_3&quot;:3}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">            return {"field_1":1, "field_2":2, "field_3":3}</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="mutate.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/pipe/#hamilton.function_modifiers.mutate.__init__">[docs]</a>
@@ -2090,7 +2090,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">_chain</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">mutating_function_kwargs</span><span class="p">:</span> <span class="n">SingleDependency</span> <span class="o">|</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates a ``mutate`` decorator.</span>
+<span class="w">        </span><span class="sd">"""Instantiates a ``mutate`` decorator.</span>
 
 <span class="sd">        We assume the first argument of the decorated function to be the output of the function we are targeting.</span>
 
@@ -2098,16 +2098,16 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param collapse: Whether to collapse this into a single node. This is not currently supported.</span>
 <span class="sd">        :param _chain: Whether to chain the first parameter. This is the only mode that is supported. Furthermore, this is not externally exposed. ``@flow`` will make use of this.</span>
 <span class="sd">        :param `**mutating_function_kwargs`: other kwargs that the decorated function has. Must be validly called as ``f(**kwargs)``, and have a 1-to-1 mapping of kwargs to parameters. This will be applied for all ``target_functions``, unless ``apply_to`` already has the mutator function kwargs, in which case it takes those.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="n">collapse</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chain</span> <span class="o">=</span> <span class="n">_chain</span>
         <span class="c1"># keeping it here once it gets implemented maybe nice to have options</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">collapse</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                <span class="s2">&quot;Collapsing functions as one node is not yet implemented for mutate(). Please reach out if you want this feature.&quot;</span>
+                <span class="s2">"Collapsing functions as one node is not yet implemented for mutate(). Please reach out if you want this feature."</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;@flow() is not yet supported -- this is &quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">"@flow() is not yet supported -- this is "</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">remote_applicables</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
             <span class="p">[</span><span class="n">apply_to</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">Callable</span><span class="p">)</span> <span class="k">else</span> <span class="n">fn</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">target_functions</span><span class="p">]</span>
@@ -2119,18 +2119,18 @@ s=d.getElementsByTagName('script')[0];
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_same_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mutating_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates target functions are in the same module as the mutator function.</span>
+<span class="w">        </span><span class="sd">"""Validates target functions are in the same module as the mutator function.</span>
 
 <span class="sd">        :param mutating_fn: Function to validate against</span>
 <span class="sd">        :return: Nothing, raises exception if not valid.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">local_module</span> <span class="o">=</span> <span class="n">mutating_fn</span><span class="o">.</span><span class="vm">__module__</span>
         <span class="k">for</span> <span class="n">remote_applicable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_applicables</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">remote_applicable</span><span class="o">.</span><span class="n">target_fn</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">!=</span> <span class="n">local_module</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">NotSameModuleError</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">mutating_fn</span><span class="p">,</span> <span class="n">target_fn</span><span class="o">=</span><span class="n">remote_applicable</span><span class="o">.</span><span class="n">target_fn</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_create_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mutating_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">remote_applicable_builder</span><span class="p">:</span> <span class="n">Applicable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds the correct function for the applicable and resolves kwargs&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Adds the correct function for the applicable and resolves kwargs"""</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">remote_applicable_builder</span><span class="o">.</span><span class="n">kwargs</span><span class="p">:</span>
             <span class="n">remote_applicable_builder</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mutating_function_kwargs</span>
@@ -2140,16 +2140,16 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="n">remote_applicable_builder</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mutating_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds to an existing pipe_output or creates a new pipe_output.</span>
+<span class="w">        </span><span class="sd">"""Adds to an existing pipe_output or creates a new pipe_output.</span>
 
 <span class="sd">        This is a new type of decorator that builds ``pipe_output`` for multiple nodes in the DAG. It does</span>
 <span class="sd">        not fit in the current decorator framework since it does not decorate the node function in the DAG</span>
-<span class="sd">        but allows us to &quot;remotely decorate&quot; multiple nodes at once, which needs to happen before the</span>
+<span class="sd">        but allows us to "remotely decorate" multiple nodes at once, which needs to happen before the</span>
 <span class="sd">        NodeTransformLifecycle gets applied / resolved.</span>
 
 <span class="sd">        :param mutating_fn: function that will be used in pipe_output to transform target function</span>
 <span class="sd">        :return: mutating_fn, to guarantee function works even when Hamilton driver is not used</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># This function will be excluded from the DAG as a node since we are inserting it manually</span>
         <span class="n">mutating_fn</span> <span class="o">=</span> <span class="n">hamilton_exclude</span><span class="p">()(</span><span class="n">mutating_fn</span><span class="p">)</span>
@@ -2157,9 +2157,9 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">restrict_to_single_module</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">validate_same_module</span><span class="p">(</span><span class="n">mutating_fn</span><span class="o">=</span><span class="n">mutating_fn</span><span class="p">)</span>
 
-        <span class="c1"># TODO:  If @mutate runs once it&#39;s good</span>
+        <span class="c1"># TODO:  If @mutate runs once it's good</span>
         <span class="c1">#       If you run that again, it might double-up</span>
-        <span class="c1"># In the juptyer notebook/cross-module case we&#39;ll want to guard against it.</span>
+        <span class="c1"># In the juptyer notebook/cross-module case we'll want to guard against it.</span>
         <span class="k">for</span> <span class="n">remote_applicable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_applicables</span><span class="p">:</span>
             <span class="n">new_pipe_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_step</span><span class="p">(</span>
                 <span class="n">mutating_fn</span><span class="o">=</span><span class="n">mutating_fn</span><span class="p">,</span> <span class="n">remote_applicable_builder</span><span class="o">=</span><span class="n">remote_applicable</span>
@@ -2227,182 +2227,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -2447,6 +2282,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -2454,7 +2315,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -2471,42 +2340,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -2529,7 +2456,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -2540,12 +2467,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -2565,8 +2486,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -2578,7 +2499,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -2590,9 +2511,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -2615,8 +2536,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -2626,10 +2550,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -2654,10 +2576,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

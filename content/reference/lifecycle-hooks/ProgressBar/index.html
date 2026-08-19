@@ -541,10 +541,10 @@ If you don’t have it installed, you can install it with <cite>pip install tqdm
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_config</span><span class="p">({})</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">some_modules</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">with_adapters</span><span class="p">(</span><span class="n">h_tqdm</span><span class="o">.</span><span class="n">ProgressBar</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;DAG-NAME&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">with_adapters</span><span class="p">(</span><span class="n">h_tqdm</span><span class="o">.</span><span class="n">ProgressBar</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">"DAG-NAME"</span><span class="p">))</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
-<span class="c1"># and then when you call .execute() or .materialize() you&#39;ll get a progress bar!</span>
+<span class="c1"># and then when you call .execute() or .materialize() you'll get a progress bar!</span>
 </pre></div>
 </div>
 <dl class="py method">

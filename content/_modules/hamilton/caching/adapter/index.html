@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -564,41 +564,41 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">BasePreNodeExecute</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;hamilton.caching&quot;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"hamilton.caching"</span><span class="p">)</span>
 
 <span class="n">SENTINEL</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
-<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"S"</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
 
 
-<span class="n">CACHING_BEHAVIORS</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;recompute&quot;</span><span class="p">,</span> <span class="s2">&quot;disable&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">]</span>
+<span class="n">CACHING_BEHAVIORS</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"default"</span><span class="p">,</span> <span class="s2">"recompute"</span><span class="p">,</span> <span class="s2">"disable"</span><span class="p">,</span> <span class="s2">"ignore"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="CachingBehavior">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.CachingBehavior">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CachingBehavior</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Behavior applied by the caching adapter</span>
+<span class="w">    </span><span class="sd">"""Behavior applied by the caching adapter</span>
 
 <span class="sd">    DEFAULT:</span>
 <span class="sd">        Try to retrieve result from cache instead of executing the node. If the node is executed, store the result.</span>
 <span class="sd">        Compute the result data version and store it too.</span>
 
 <span class="sd">    RECOMPUTE:</span>
-<span class="sd">        Don&#39;t try to retrieve result from cache and always execute the node. Otherwise, behaves as default.</span>
+<span class="sd">        Don't try to retrieve result from cache and always execute the node. Otherwise, behaves as default.</span>
 <span class="sd">        Useful when nodes are stochastic (e.g., model training) or interact with external</span>
 <span class="sd">        components (e.g., read from database).</span>
 
 <span class="sd">    DISABLE:</span>
-<span class="sd">        Node is executed as if the caching feature wasn&#39;t enabled.</span>
+<span class="sd">        Node is executed as if the caching feature wasn't enabled.</span>
 <span class="sd">        It never tries to retrieve results. Results are never stored nor versioned.</span>
 <span class="sd">        Behaves like IGNORE, but the node remains a dependency for downstream nodes.</span>
 <span class="sd">        This means downstream cache lookup will likely fail systematically (i.e., if the cache is empty).</span>
 
 <span class="sd">    IGNORE:</span>
-<span class="sd">        Node is executed as if the caching feature wasn&#39;t enable.</span>
+<span class="sd">        Node is executed as if the caching feature wasn't enable.</span>
 <span class="sd">        It never tries to retrieve results. Results are never stored nor versioned.</span>
 <span class="sd">        IGNORE means downstream nodes will ignore this node as a dependency for lookup.</span>
-<span class="sd">        Ignoring clients and connections can be useful since they shouldn&#39;t directly impact the downstream results.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        Ignoring clients and connections can be useful since they shouldn't directly impact the downstream results.</span>
+<span class="sd">    """</span>
 
     <span class="n">DEFAULT</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">RECOMPUTE</span> <span class="o">=</span> <span class="mi">2</span>
@@ -608,26 +608,26 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="CachingBehavior.from_string">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.CachingBehavior.from_string">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CachingBehavior&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a caching behavior from a string of the enum value. This is</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"CachingBehavior"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create a caching behavior from a string of the enum value. This is</span>
 <span class="sd">        leveraged by the ``hamilton.lifecycle.caching.SmartCacheAdapter`` and</span>
 <span class="sd">        the ``hamilton.function_modifiers.metadata.cache`` decorator.</span>
 
 <span class="sd">        .. code-block::</span>
 
-<span class="sd">            CachingBehavior.from_string(&quot;recompute&quot;)</span>
+<span class="sd">            CachingBehavior.from_string("recompute")</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="p">[</span><span class="n">string</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2"> is an invalid `CachingBehavior` value&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">string</span><span class="si">}</span><span class="s2"> is an invalid `CachingBehavior` value"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
 </div>
 
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">NodeRoleInTaskExecution</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Identify the role of a node in task-based execution, in particular when</span>
+<span class="w">    </span><span class="sd">"""Identify the role of a node in task-based execution, in particular when</span>
 <span class="sd">    ``Parallelizable/Collect`` are used.</span>
 
 <span class="sd">    NOTE This is an internal construct and it will likely change in the future.</span>
@@ -637,11 +637,11 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        Dependencies can only be OUTSIDE.</span>
 <span class="sd">    COLLECT: node with type ``Collect``. It returns an iterable where individual items need to be handled.</span>
 <span class="sd">        Dependencies can be INSIDE, OUTSIDE, or EXPAND</span>
-<span class="sd">    OUTSIDE: &quot;outside&quot; of ``Parallelizable/Collect`` paths; handled like STANDARD in most cases.</span>
+<span class="sd">    OUTSIDE: "outside" of ``Parallelizable/Collect`` paths; handled like STANDARD in most cases.</span>
 <span class="sd">        Dependencies can be OUTSIDE or COLLECT</span>
-<span class="sd">    INSIDE: &quot;inside&quot; or &quot;between&quot; a ``Parallelizable/Collect`` nodes.</span>
+<span class="sd">    INSIDE: "inside" or "between" a ``Parallelizable/Collect`` nodes.</span>
 <span class="sd">        Dependencies can be INSIDE, OUTSIDE, or EXPAND.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">STANDARD</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">EXPAND</span> <span class="o">=</span> <span class="mi">2</span>
@@ -653,24 +653,24 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="CachingEventType">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.CachingEventType">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CachingEventType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Event types logged by the caching adapter&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Event types logged by the caching adapter"""</span>
 
-    <span class="n">GET_DATA_VERSION</span> <span class="o">=</span> <span class="s2">&quot;get_data_version&quot;</span>
-    <span class="n">SET_DATA_VERSION</span> <span class="o">=</span> <span class="s2">&quot;set_data_version&quot;</span>
-    <span class="n">GET_CACHE_KEY</span> <span class="o">=</span> <span class="s2">&quot;get_cache_key&quot;</span>
-    <span class="n">SET_CACHE_KEY</span> <span class="o">=</span> <span class="s2">&quot;set_cache_key&quot;</span>
-    <span class="n">GET_RESULT</span> <span class="o">=</span> <span class="s2">&quot;get_result&quot;</span>
-    <span class="n">SET_RESULT</span> <span class="o">=</span> <span class="s2">&quot;set_result&quot;</span>
-    <span class="n">MISSING_RESULT</span> <span class="o">=</span> <span class="s2">&quot;missing_result&quot;</span>
-    <span class="n">FAILED_RETRIEVAL</span> <span class="o">=</span> <span class="s2">&quot;failed_retrieval&quot;</span>
-    <span class="n">EXECUTE_NODE</span> <span class="o">=</span> <span class="s2">&quot;execute_node&quot;</span>
-    <span class="n">FAILED_EXECUTION</span> <span class="o">=</span> <span class="s2">&quot;failed_execution&quot;</span>
-    <span class="n">RESOLVE_BEHAVIOR</span> <span class="o">=</span> <span class="s2">&quot;resolve_behavior&quot;</span>
-    <span class="n">UNHASHABLE_DATA_VERSION</span> <span class="o">=</span> <span class="s2">&quot;unhashable_data_version&quot;</span>
-    <span class="n">IS_OVERRIDE</span> <span class="o">=</span> <span class="s2">&quot;is_override&quot;</span>
-    <span class="n">IS_INPUT</span> <span class="o">=</span> <span class="s2">&quot;is_input&quot;</span>
-    <span class="n">IS_FINAL_VAR</span> <span class="o">=</span> <span class="s2">&quot;is_final_var&quot;</span>
-    <span class="n">IS_DEFAULT_PARAMETER_VALUE</span> <span class="o">=</span> <span class="s2">&quot;is_default_parameter_value&quot;</span></div>
+    <span class="n">GET_DATA_VERSION</span> <span class="o">=</span> <span class="s2">"get_data_version"</span>
+    <span class="n">SET_DATA_VERSION</span> <span class="o">=</span> <span class="s2">"set_data_version"</span>
+    <span class="n">GET_CACHE_KEY</span> <span class="o">=</span> <span class="s2">"get_cache_key"</span>
+    <span class="n">SET_CACHE_KEY</span> <span class="o">=</span> <span class="s2">"set_cache_key"</span>
+    <span class="n">GET_RESULT</span> <span class="o">=</span> <span class="s2">"get_result"</span>
+    <span class="n">SET_RESULT</span> <span class="o">=</span> <span class="s2">"set_result"</span>
+    <span class="n">MISSING_RESULT</span> <span class="o">=</span> <span class="s2">"missing_result"</span>
+    <span class="n">FAILED_RETRIEVAL</span> <span class="o">=</span> <span class="s2">"failed_retrieval"</span>
+    <span class="n">EXECUTE_NODE</span> <span class="o">=</span> <span class="s2">"execute_node"</span>
+    <span class="n">FAILED_EXECUTION</span> <span class="o">=</span> <span class="s2">"failed_execution"</span>
+    <span class="n">RESOLVE_BEHAVIOR</span> <span class="o">=</span> <span class="s2">"resolve_behavior"</span>
+    <span class="n">UNHASHABLE_DATA_VERSION</span> <span class="o">=</span> <span class="s2">"unhashable_data_version"</span>
+    <span class="n">IS_OVERRIDE</span> <span class="o">=</span> <span class="s2">"is_override"</span>
+    <span class="n">IS_INPUT</span> <span class="o">=</span> <span class="s2">"is_input"</span>
+    <span class="n">IS_FINAL_VAR</span> <span class="o">=</span> <span class="s2">"is_final_var"</span>
+    <span class="n">IS_DEFAULT_PARAMETER_VALUE</span> <span class="o">=</span> <span class="s2">"is_default_parameter_value"</span></div>
 
 
 
@@ -678,10 +678,10 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.CachingEvent">[docs]</a>
 <span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">CachingEvent</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Event logged by the caching adapter&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Event logged by the caching adapter"""</span>
 
     <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">actor</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span> <span class="s2">&quot;metadata_store&quot;</span><span class="p">,</span> <span class="s2">&quot;result_store&quot;</span><span class="p">]</span>
+    <span class="n">actor</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"adapter"</span><span class="p">,</span> <span class="s2">"metadata_store"</span><span class="p">,</span> <span class="s2">"result_store"</span><span class="p">]</span>
     <span class="n">event_type</span><span class="p">:</span> <span class="n">CachingEventType</span>
     <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
@@ -692,15 +692,15 @@ s=d.getElementsByTagName('script')[0];
     <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a human-readable string format for `print()`&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Create a human-readable string format for `print()`"""</span>
 
         <span class="n">string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_name</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;::</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;::</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;::</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">event_type</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"::</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="si">}</span><span class="s2">"</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"::</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="si">}</span><span class="s2">"</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"::</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">event_type</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">:</span>  <span class="c1"># this catches None and empty strings</span>
-            <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;::</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"::</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="si">}</span><span class="s2">"</span>
 
         <span class="k">return</span> <span class="n">string</span>
 
@@ -718,13 +718,13 @@ s=d.getElementsByTagName('script')[0];
 
 
 
-<span class="c1"># TODO we could add a &quot;driver-level&quot; kwarg to specify the cache format (e.g., parquet, JSON, etc.)</span>
+<span class="c1"># TODO we could add a "driver-level" kwarg to specify the cache format (e.g., parquet, JSON, etc.)</span>
 <div class="viewcode-block" id="HamiltonCacheAdapter">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.HamiltonCacheAdapter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">HamiltonCacheAdapter</span><span class="p">(</span>
     <span class="n">BaseDoNodeExecute</span><span class="p">,</span> <span class="n">BasePreGraphExecute</span><span class="p">,</span> <span class="n">BasePostNodeExecute</span><span class="p">,</span> <span class="n">BasePreNodeExecute</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adapter enabling Hamilton&#39;s caching feature through ``Builder.with_cache()``</span>
+<span class="w">    </span><span class="sd">"""Adapter enabling Hamilton's caching feature through ``Builder.with_cache()``</span>
 
 <span class="sd">    .. code-block:: python</span>
 
@@ -741,13 +741,13 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        # then, you can access the adapter via</span>
 <span class="sd">        dr.cache</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="HamiltonCacheAdapter.__init__">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.HamiltonCacheAdapter.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">=</span> <span class="s2">&quot;.hamilton_cache&quot;</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">=</span> <span class="s2">".hamilton_cache"</span><span class="p">,</span>
         <span class="n">metadata_store</span><span class="p">:</span> <span class="n">MetadataStore</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">result_store</span><span class="p">:</span> <span class="n">ResultStore</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">default</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">|</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -760,7 +760,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">log_to_file</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the cache adapter.</span>
+<span class="w">        </span><span class="sd">"""Initialize the cache adapter.</span>
 
 <span class="sd">        :param path: path where the cache metadata and results will be stored</span>
 <span class="sd">        :param metadata_store: BaseStore handling metadata for the cache adapter</span>
@@ -773,7 +773,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param default_loader_behavior: Set the default caching behavior `DataLoader` nodes.</span>
 <span class="sd">        :param default_saver_behavior: Set the default caching behavior `DataSaver` nodes.</span>
 <span class="sd">        :param log_to_file: If True, append cache event logs as they happen in JSONL format.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">metadata_store</span> <span class="k">if</span> <span class="n">metadata_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
@@ -785,7 +785,7 @@ s=d.getElementsByTagName('script')[0];
 
         <span class="k">if</span> <span class="nb">sum</span><span class="p">([</span><span class="n">default</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">,</span> <span class="n">recompute</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">,</span> <span class="n">disable</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ignore</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Can only set one of (`default`, `recompute`, `disable`, `ignore`) to True. Please pass mutually exclusive sets of node names&quot;</span>
+                <span class="s2">"Can only set one of (`default`, `recompute`, `disable`, `ignore`) to True. Please pass mutually exclusive sets of node names"</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_default</span> <span class="o">=</span> <span class="n">default</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_recompute</span> <span class="o">=</span> <span class="n">recompute</span>
@@ -815,49 +815,49 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">last_run_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run id of the last started run. Not necessarily the last to complete.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Run id of the last started run. Not necessarily the last to complete."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Serialization method required for multiprocessing and multithreading</span>
+<span class="w">        </span><span class="sd">"""Serialization method required for multiprocessing and multithreading</span>
 <span class="sd">        when using task-based execution with `Parallelizable/Collect`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="c1"># store the classes to reinstantiate the same backend in __setstate__</span>
-        <span class="n">state</span><span class="p">[</span><span class="s2">&quot;metadata_store_cls&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="vm">__class__</span>
-        <span class="n">state</span><span class="p">[</span><span class="s2">&quot;metadata_store_init&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
-        <span class="n">state</span><span class="p">[</span><span class="s2">&quot;result_store_cls&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="vm">__class__</span>
-        <span class="n">state</span><span class="p">[</span><span class="s2">&quot;result_store_init&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;metadata_store&quot;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;result_store&quot;</span><span class="p">]</span>
+        <span class="n">state</span><span class="p">[</span><span class="s2">"metadata_store_cls"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">state</span><span class="p">[</span><span class="s2">"metadata_store_init"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
+        <span class="n">state</span><span class="p">[</span><span class="s2">"result_store_cls"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">state</span><span class="p">[</span><span class="s2">"result_store_init"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">"metadata_store"</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">"result_store"</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">state</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Serialization method required for multiprocessing and multithreading</span>
+<span class="w">        </span><span class="sd">"""Serialization method required for multiprocessing and multithreading</span>
 <span class="sd">        when using task-based execution with `Parallelizable/Collect`.</span>
 
 <span class="sd">        Create new instances of metadata and result stores to have one connection</span>
 <span class="sd">        per thread.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># instantiate the backend from the class, then delete the attribute before</span>
         <span class="c1"># setting it on the adapter instance.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;metadata_store_cls&quot;</span><span class="p">](</span><span class="o">**</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;metadata_store_init&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">result_store</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;result_store_cls&quot;</span><span class="p">](</span><span class="o">**</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;result_store_init&quot;</span><span class="p">])</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;metadata_store_cls&quot;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;result_store_cls&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"metadata_store_cls"</span><span class="p">](</span><span class="o">**</span><span class="n">state</span><span class="p">[</span><span class="s2">"metadata_store_init"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result_store</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"result_store_cls"</span><span class="p">](</span><span class="o">**</span><span class="n">state</span><span class="p">[</span><span class="s2">"result_store_init"</span><span class="p">])</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">"metadata_store_cls"</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">"result_store_cls"</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_log_event</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">actor</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span> <span class="s2">&quot;metadata_store&quot;</span><span class="p">,</span> <span class="s2">&quot;result_store&quot;</span><span class="p">],</span>
+        <span class="n">actor</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"adapter"</span><span class="p">,</span> <span class="s2">"metadata_store"</span><span class="p">,</span> <span class="s2">"result_store"</span><span class="p">],</span>
         <span class="n">event_type</span><span class="p">:</span> <span class="n">CachingEventType</span><span class="p">,</span>
         <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a single event to logs stored in state, keyed by run_id</span>
+<span class="w">        </span><span class="sd">"""Add a single event to logs stored in state, keyed by run_id</span>
 
 <span class="sd">        If global log level is set to logging.INFO, only log if event type is GET_RESULT or EXECUTE_NODE;</span>
 <span class="sd">        If it is set to logging.DEBUG, log all events.</span>
@@ -870,7 +870,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param event_type: enum specifying what type of event (execute, retrieve, etc.)</span>
 <span class="sd">        :param msg: additional message to display in the logs (e.g., via terminal)</span>
 <span class="sd">        :param value: arbitrary value to include (typically a string for data version, code version, cache_key). Must be small and JSON-serializable.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">event</span> <span class="o">=</span> <span class="n">CachingEvent</span><span class="p">(</span>
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
@@ -881,26 +881,26 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">GET_RESULT</span><span class="p">,</span> <span class="n">CachingEventType</span><span class="o">.</span><span class="n">EXECUTE_NODE</span><span class="p">):</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_logs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_to_file</span><span class="p">:</span>
-            <span class="n">log_file_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">_directory</span><span class="p">,</span> <span class="s2">&quot;cache_logs.jsonl&quot;</span><span class="p">)</span>
+            <span class="n">log_file_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">_directory</span><span class="p">,</span> <span class="s2">"cache_logs.jsonl"</span><span class="p">)</span>
             <span class="n">json_line</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">as_dict</span><span class="p">())</span>
-            <span class="k">with</span> <span class="n">log_file_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json_line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">log_file_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"a"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json_line</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_log_by_node_name</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"debug"</span><span class="p">,</span> <span class="s2">"info"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"info"</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;For a given run, group logs to key them by ``node_name`` or ``(node_name, run_id)`` if applicable.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""For a given run, group logs to key them by ``node_name`` or ``(node_name, run_id)`` if applicable."""</span>
         <span class="n">run_logs</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;info&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">"info"</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
                     <span class="n">CachingEventType</span><span class="o">.</span><span class="n">GET_RESULT</span><span class="p">,</span>
                     <span class="n">CachingEventType</span><span class="o">.</span><span class="n">EXECUTE_NODE</span><span class="p">,</span>
@@ -913,11 +913,11 @@ s=d.getElementsByTagName('script')[0];
 
 <div class="viewcode-block" id="HamiltonCacheAdapter.logs">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.HamiltonCacheAdapter.logs">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execution logs of the cache adapter.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"debug"</span><span class="p">,</span> <span class="s2">"info"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"info"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Execution logs of the cache adapter.</span>
 
 <span class="sd">        :param run_id: If ``None``, return all logged runs. If provided a ``run_id``, group logs by node.</span>
-<span class="sd">        :param level: If ``&quot;debug&quot;`` log all events. If ``&quot;info&quot;`` only log if result is retrieved or executed.</span>
+<span class="sd">        :param level: If ``"debug"`` log all events. If ``"info"`` only log if result is retrieved or executed.</span>
 <span class="sd">        :return: a mapping between node/task and a list of logged events</span>
 
 <span class="sd">        .. code-block:: python</span>
@@ -943,14 +943,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            # or ``(node_name, task_id)`` if task-based execution is used.</span>
 <span class="sd">            # {(node_name_1, task_id_1): [CachingEvent(...), CachingEvent(...)], ...}</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">run_id</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_by_node_name</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
 
         <span class="n">logs</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">run_logs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">run_logs</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;info&quot;</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">"info"</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
                     <span class="n">CachingEventType</span><span class="o">.</span><span class="n">GET_RESULT</span><span class="p">,</span>
                     <span class="n">CachingEventType</span><span class="o">.</span><span class="n">EXECUTE_NODE</span><span class="p">,</span>
                 <span class="p">):</span>
@@ -970,21 +970,21 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">overrides</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">output_file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a Hamilton visualization of the execution and the cache hits/misses.</span>
+<span class="w">        </span><span class="sd">"""Create a Hamilton visualization of the execution and the cache hits/misses.</span>
 
 <span class="sd">        This leverages the ``custom_style_function`` feature internally.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.driver</span><span class="w"> </span><span class="kn">import</span> <span class="n">Driver</span>  <span class="c1"># avoid circular import</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_visualization_styling_function</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">node_class</span><span class="p">,</span> <span class="n">logs</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Custom style function for the visualization.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""Custom style function for the visualization."""</span>
             <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
                 <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">CachingEventType</span><span class="o">.</span><span class="n">GET_RESULT</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">logs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[])</span>
             <span class="p">):</span>
                 <span class="n">style</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="p">{</span><span class="s2">&quot;penwidth&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;#F06449&quot;</span><span class="p">,</span> <span class="s2">&quot;fillcolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">"penwidth"</span><span class="p">:</span> <span class="s2">"3"</span><span class="p">,</span> <span class="s2">"color"</span><span class="p">:</span> <span class="s2">"#F06449"</span><span class="p">,</span> <span class="s2">"fillcolor"</span><span class="p">:</span> <span class="s2">"#ffffff"</span><span class="p">},</span>
                     <span class="n">node_class</span><span class="p">,</span>
-                    <span class="s2">&quot;from cache&quot;</span><span class="p">,</span>
+                    <span class="s2">"from cache"</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">style</span> <span class="o">=</span> <span class="p">({},</span> <span class="n">node_class</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -1004,11 +1004,11 @@ s=d.getElementsByTagName('script')[0];
         <span class="p">)</span>
 
     <span class="c1"># TODO make this work directly from the metadata_store too</span>
-    <span class="c1"># visualization from logs is convenient when debugging someone else&#39;s issue</span>
+    <span class="c1"># visualization from logs is convenient when debugging someone else's issue</span>
 <div class="viewcode-block" id="HamiltonCacheAdapter.view_run">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.HamiltonCacheAdapter.view_run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">view_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;View the dataflow execution, including cache hits/misses.</span>
+<span class="w">        </span><span class="sd">"""View the dataflow execution, including cache hits/misses.</span>
 
 <span class="sd">        :param run_id: If ``None``, view the last run. If provided a ``run_id``, view that run.</span>
 <span class="sd">        :param output_file_path: If provided a path, save the visualization to a file.</span>
@@ -1034,12 +1034,12 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            run_id = dr.cache.run_ids[1]</span>
 <span class="sd">            dr.cache.view_run(run_id=run_id)</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">run_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">run_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_run_id</span>
 
         <span class="n">fn_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fn_graphs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span>
-        <span class="n">logs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+        <span class="n">logs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">"debug"</span><span class="p">)</span>
 
         <span class="n">final_vars</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1047,8 +1047,8 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">events</span> <span class="ow">in</span> <span class="n">logs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;`.view()` is currently not supported for task-based execution. &quot;</span>
-                    <span class="s2">&quot;Please inspect the logs directly via `.logs(run_id=...)` for debugging.&quot;</span>
+                    <span class="s2">"`.view()` is currently not supported for task-based execution. "</span>
+                    <span class="s2">"Please inspect the logs directly via `.logs(run_id=...)` for debugging."</span>
                 <span class="p">)</span>
 
             <span class="n">node_name</span> <span class="o">=</span> <span class="n">key</span>
@@ -1056,11 +1056,11 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">final_vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">CachingEventType</span><span class="o">.</span><span class="n">IS_INPUT</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">events</span><span class="p">):</span>
-                <span class="n">inputs</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># the value doesn&#39;t matter, only the key of the dict</span>
+                <span class="n">inputs</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># the value doesn't matter, only the key of the dict</span>
                 <span class="k">continue</span>
 
             <span class="k">elif</span> <span class="nb">any</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">CachingEventType</span><span class="o">.</span><span class="n">IS_OVERRIDE</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">events</span><span class="p">):</span>
-                <span class="n">overrides</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># the value doesn&#39;t matter, only the key of the dict</span>
+                <span class="n">overrides</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># the value doesn't matter, only the key of the dict</span>
                 <span class="k">continue</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_run</span><span class="p">(</span>
@@ -1076,7 +1076,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_node_role</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeRoleInTaskExecution</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine based on the node name and task_id if a node is part of parallel execution.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Determine based on the node name and task_id if a node is part of parallel execution."""</span>
         <span class="k">if</span> <span class="n">task_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">role</span> <span class="o">=</span> <span class="n">NodeRoleInTaskExecution</span><span class="o">.</span><span class="n">STANDARD</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1095,7 +1095,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="HamiltonCacheAdapter.get_cache_key">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.HamiltonCacheAdapter.get_cache_key">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_cache_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">S</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the ``cache_key`` stored in-memory for a specific ``run_id``, ``node_name``, and ``task_id``.</span>
+<span class="w">        </span><span class="sd">"""Get the ``cache_key`` stored in-memory for a specific ``run_id``, ``node_name``, and ``task_id``.</span>
 
 <span class="sd">        This method is public-facing and can be used directly to inspect the cache.</span>
 
@@ -1114,13 +1114,13 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            dr = driver.Builder().with_modules(my_dataflow).with_cache().build()</span>
 <span class="sd">            dr.execute(...)</span>
 
-<span class="sd">            dr.cache.get_cache_key(run_id=dr.last_run_id, node_name=&quot;my_node&quot;, task_id=None)</span>
+<span class="sd">            dr.cache.get_cache_key(run_id=dr.last_run_id, node_name="my_node", task_id=None)</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">node_role</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_node_role</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">node_role</span> <span class="o">==</span> <span class="n">NodeRoleInTaskExecution</span><span class="o">.</span><span class="n">INSIDE</span><span class="p">:</span>
-            <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_keys</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">SENTINEL</span><span class="p">)</span>  <span class="c1"># type: ignore ; `task_id` can&#39;t be None</span>
+            <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_keys</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">SENTINEL</span><span class="p">)</span>  <span class="c1"># type: ignore ; `task_id` can't be None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_keys</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">SENTINEL</span><span class="p">)</span>
 
@@ -1129,9 +1129,9 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
             <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-            <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
+            <span class="n">actor</span><span class="o">=</span><span class="s2">"adapter"</span><span class="p">,</span>
             <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">GET_CACHE_KEY</span><span class="p">,</span>
-            <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;hit&quot;</span> <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">SENTINEL</span> <span class="k">else</span> <span class="s2">&quot;miss&quot;</span><span class="p">,</span>
+            <span class="n">msg</span><span class="o">=</span><span class="s2">"hit"</span> <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">SENTINEL</span> <span class="k">else</span> <span class="s2">"miss"</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="n">cache_key</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">cache_key</span></div>
@@ -1140,10 +1140,10 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">_set_cache_key</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cache_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the ``cache_key`` stored in-memory for a specific ``run_id``, ``node_name``, and ``task_id``.</span>
+<span class="w">        </span><span class="sd">"""Set the ``cache_key`` stored in-memory for a specific ``run_id``, ``node_name``, and ``task_id``.</span>
 
 <span class="sd">        When calling this method, ``cache_key`` must not be ``None``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">assert</span> <span class="n">cache_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="n">node_role</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_node_role</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">node_role</span> <span class="ow">in</span> <span class="p">(</span>
@@ -1159,14 +1159,14 @@ s=d.getElementsByTagName('script')[0];
             <span class="bp">self</span><span class="o">.</span><span class="n">cache_keys</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">node_name</span><span class="p">][</span><span class="n">task_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">cache_key</span>  <span class="c1"># type: ignore ; we just initialized the nested dict</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Received `</span><span class="si">{</span><span class="n">node_role</span><span class="si">}</span><span class="s2">`. Unhandled `NodeRoleInTaskExecution`, please report this bug.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Received `</span><span class="si">{</span><span class="n">node_role</span><span class="si">}</span><span class="s2">`. Unhandled `NodeRoleInTaskExecution`, please report this bug."</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
             <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-            <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
+            <span class="n">actor</span><span class="o">=</span><span class="s2">"adapter"</span><span class="p">,</span>
             <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">SET_CACHE_KEY</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="n">cache_key</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1174,7 +1174,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_memory_data_version</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">S</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the ``data_version`` stored in-memory for a specific ``run_id``, ``node_name``, and ``task_id``.</span>
+<span class="w">        </span><span class="sd">"""Get the ``data_version`` stored in-memory for a specific ``run_id``, ``node_name``, and ``task_id``.</span>
 
 <span class="sd">        The behavior depends on the ``CacheBehavior`` (e.g., RECOMPUTE, IGNORE, DISABLE, DEFAULT) and</span>
 <span class="sd">        the ``NodeRoleInTaskExecution`` of the node (e.g., STANDARD, OUTSIDE, INSIDE, EXPAND, COLLECT).</span>
@@ -1184,7 +1184,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            if task-based execution is not used.</span>
 <span class="sd">        :param task_id: Id of the task when task-based execution is used. Then, the tuple ``(node_name, task_id)``</span>
 <span class="sd">            is a unique identifier.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">node_role</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_node_role</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">node_role</span> <span class="ow">in</span> <span class="p">(</span>
             <span class="n">NodeRoleInTaskExecution</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">,</span>
@@ -1202,35 +1202,35 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">data_version</span> <span class="o">=</span> <span class="n">SENTINEL</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Received `</span><span class="si">{</span><span class="n">node_role</span><span class="si">}</span><span class="s2">`. Unhandled `NodeRoleInTaskExecution`, please report this bug.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Received `</span><span class="si">{</span><span class="n">node_role</span><span class="si">}</span><span class="s2">`. Unhandled `NodeRoleInTaskExecution`, please report this bug."</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
             <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-            <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
+            <span class="n">actor</span><span class="o">=</span><span class="s2">"adapter"</span><span class="p">,</span>
             <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">GET_DATA_VERSION</span><span class="p">,</span>
-            <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;hit&quot;</span> <span class="k">if</span> <span class="n">data_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">SENTINEL</span> <span class="k">else</span> <span class="s2">&quot;miss&quot;</span><span class="p">,</span>
+            <span class="n">msg</span><span class="o">=</span><span class="s2">"hit"</span> <span class="k">if</span> <span class="n">data_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">SENTINEL</span> <span class="k">else</span> <span class="s2">"miss"</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">data_version</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_stored_data_version</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cache_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">S</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the ``data_version`` stored in the metadata store associated with the ``cache_key``.</span>
+<span class="w">        </span><span class="sd">"""Get the ``data_version`` stored in the metadata store associated with the ``cache_key``.</span>
 
 <span class="sd">        The ``run_id``, ``node_name``, and ``task_id`` are included only for logging purposes.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">data_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cache_key</span><span class="o">=</span><span class="n">cache_key</span><span class="p">)</span>
         <span class="n">data_version</span> <span class="o">=</span> <span class="n">SENTINEL</span> <span class="k">if</span> <span class="n">data_version</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">data_version</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
             <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-            <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;metadata_store&quot;</span><span class="p">,</span>
+            <span class="n">actor</span><span class="o">=</span><span class="s2">"metadata_store"</span><span class="p">,</span>
             <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">GET_DATA_VERSION</span><span class="p">,</span>
-            <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;hit&quot;</span> <span class="k">if</span> <span class="n">data_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">SENTINEL</span> <span class="k">else</span> <span class="s2">&quot;miss&quot;</span><span class="p">,</span>
+            <span class="n">msg</span><span class="o">=</span><span class="s2">"hit"</span> <span class="k">if</span> <span class="n">data_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">SENTINEL</span> <span class="k">else</span> <span class="s2">"miss"</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">data_version</span>
@@ -1244,7 +1244,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">cache_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">S</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the ``data_version``  for a specific ``run_id``, ``node_name``, and ``task_id``.</span>
+<span class="w">        </span><span class="sd">"""Get the ``data_version``  for a specific ``run_id``, ``node_name``, and ``task_id``.</span>
 
 <span class="sd">        This method is public-facing and can be used directly to inspect the cache. This will check data versions</span>
 <span class="sd">        stored both in-memory and in the metadata store.</span>
@@ -1264,9 +1264,9 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            dr = driver.Builder().with_modules(my_dataflow).with_cache().build()</span>
 <span class="sd">            dr.execute(...)</span>
 
-<span class="sd">            dr.cache.get_data_version(run_id=dr.last_run_id, node_name=&quot;my_node&quot;, task_id=None)</span>
+<span class="sd">            dr.cache.get_data_version(run_id=dr.last_run_id, node_name="my_node", task_id=None)</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="n">data_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_memory_data_version</span><span class="p">(</span>
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span>
@@ -1283,7 +1283,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">_set_memory_metadata</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set in-memory data_version whether a task_id is specified or not&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Set in-memory data_version whether a task_id is specified or not"""</span>
         <span class="k">assert</span> <span class="n">data_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="n">node_role</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_node_role</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">node_role</span> <span class="ow">in</span> <span class="p">(</span>
@@ -1300,14 +1300,14 @@ s=d.getElementsByTagName('script')[0];
             <span class="bp">self</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">node_name</span><span class="p">][</span><span class="n">task_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_version</span>  <span class="c1"># type: ignore ; we just initialized the nested dict</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Received `</span><span class="si">{</span><span class="n">node_role</span><span class="si">}</span><span class="s2">`. Unhandled `NodeRoleInTaskExecution`, please report this bug.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Received `</span><span class="si">{</span><span class="n">node_role</span><span class="si">}</span><span class="s2">`. Unhandled `NodeRoleInTaskExecution`, please report this bug."</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
             <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-            <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
+            <span class="n">actor</span><span class="o">=</span><span class="s2">"adapter"</span><span class="p">,</span>
             <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">SET_DATA_VERSION</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1320,7 +1320,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">data_version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set data_version in the metadata store associated with the cache_key&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Set data_version in the metadata store associated with the cache_key"""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
@@ -1332,7 +1332,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
             <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-            <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;metadata_store&quot;</span><span class="p">,</span>
+            <span class="n">actor</span><span class="o">=</span><span class="s2">"metadata_store"</span><span class="p">,</span>
             <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">SET_DATA_VERSION</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1340,36 +1340,36 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">_version_data</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a unique data version for the result&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Create a unique data version for the result"""</span>
         <span class="n">data_version</span> <span class="o">=</span> <span class="n">fingerprinting</span><span class="o">.</span><span class="n">hash_value</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">data_version</span> <span class="o">==</span> <span class="n">fingerprinting</span><span class="o">.</span><span class="n">UNHASHABLE</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
                 <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                 <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
                 <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-                <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
+                <span class="n">actor</span><span class="o">=</span><span class="s2">"adapter"</span><span class="p">,</span>
                 <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">UNHASHABLE_DATA_VERSION</span><span class="p">,</span>
-                <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;unhashable type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2">; set CachingBehavior.IGNORE to silence warning&quot;</span><span class="p">,</span>
+                <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">"unhashable type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2">; set CachingBehavior.IGNORE to silence warning"</span><span class="p">,</span>
                 <span class="n">value</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Node `</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">` has unhashable result of type `</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2">`. &quot;</span>
-                <span class="s2">&quot;Set `CachingBehavior.IGNORE` or register a versioning function to silence warning. &quot;</span>
-                <span class="s2">&quot;Learn more: https://hamilton.apache.org/concepts/caching/#caching-behavior</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Node `</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">` has unhashable result of type `</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2">`. "</span>
+                <span class="s2">"Set `CachingBehavior.IGNORE` or register a versioning function to silence warning. "</span>
+                <span class="s2">"Learn more: https://hamilton.apache.org/concepts/caching/#caching-behavior</span><span class="se">\n</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="c1"># if the data version is unhashable, we need to set a random suffix to the cache_key</span>
             <span class="c1"># to prevent the cache from thinking this value is constant, causing a cache hit.</span>
-            <span class="n">data_version</span> <span class="o">=</span> <span class="s2">&quot;&lt;unhashable&gt;&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">data_version</span> <span class="o">=</span> <span class="s2">"&lt;unhashable&gt;"</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"_</span><span class="si">{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
 
         <span class="k">return</span> <span class="n">data_version</span>
 
 <div class="viewcode-block" id="HamiltonCacheAdapter.version_data">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.HamiltonCacheAdapter.version_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">version_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a unique data version for the result</span>
+<span class="w">        </span><span class="sd">"""Create a unique data version for the result</span>
 
 <span class="sd">        This is a user-facing method.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># stuff the internal function call to not log event</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version_data</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
 
@@ -1377,7 +1377,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="HamiltonCacheAdapter.version_code">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.HamiltonCacheAdapter.version_code">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">version_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a unique code version for the source code defining the node&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Create a unique code version for the source code defining the node"""</span>
         <span class="n">run_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_run_id</span> <span class="k">if</span> <span class="n">run_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">run_id</span>
         <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fn_graphs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">graph_types</span><span class="o">.</span><span class="n">HamiltonNode</span><span class="o">.</span><span class="n">from_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">version</span>  <span class="c1"># type: ignore</span></div>
@@ -1391,14 +1391,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">node_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Simple wrapper that logs the regular execution of a node.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Simple wrapper that logs the regular execution of a node."""</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">node_callable</span><span class="p">(</span><span class="o">**</span><span class="n">node_kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
             <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-            <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
+            <span class="n">actor</span><span class="o">=</span><span class="s2">"adapter"</span><span class="p">,</span>
             <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">EXECUTE_NODE</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span>
@@ -1410,16 +1410,16 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">disable</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">recompute</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">ignore</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">default_behavior</span><span class="p">:</span> <span class="n">CACHING_BEHAVIORS</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
-        <span class="n">default_loader_behavior</span><span class="p">:</span> <span class="n">CACHING_BEHAVIORS</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
-        <span class="n">default_saver_behavior</span><span class="p">:</span> <span class="n">CACHING_BEHAVIORS</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+        <span class="n">default_behavior</span><span class="p">:</span> <span class="n">CACHING_BEHAVIORS</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">,</span>
+        <span class="n">default_loader_behavior</span><span class="p">:</span> <span class="n">CACHING_BEHAVIORS</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">,</span>
+        <span class="n">default_saver_behavior</span><span class="p">:</span> <span class="n">CACHING_BEHAVIORS</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CachingBehavior</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine the cache behavior of a node.</span>
+<span class="w">        </span><span class="sd">"""Determine the cache behavior of a node.</span>
 <span class="sd">        Behavior specified via the ``Builder`` has precedence over the ``@cache`` decorator.</span>
 <span class="sd">        Otherwise, set the ``DEFAULT`` behavior.</span>
 <span class="sd">        If the node is `Parallelizable` enforce the ``RECOMPUTE`` behavior to ensure</span>
 <span class="sd">        yielded items are versioned individually.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">node_role</span> <span class="o">==</span> <span class="n">hamilton</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">NodeType</span><span class="o">.</span><span class="n">EXPAND</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">RECOMPUTE</span>
 
@@ -1441,7 +1441,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">node_set</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">behavior_from_driver</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">SENTINEL</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Multiple caching behaviors specified by Driver for node: </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Multiple caching behaviors specified by Driver for node: </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
                     <span class="p">)</span>
                 <span class="n">behavior_from_driver</span> <span class="o">=</span> <span class="n">behavior</span>
 
@@ -1449,9 +1449,9 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">return</span> <span class="n">behavior_from_driver</span>
         <span class="k">elif</span> <span class="n">behavior_from_tag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">SENTINEL</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">behavior_from_tag</span>
-        <span class="k">elif</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hamilton.data_loader&quot;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"hamilton.data_loader"</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">default_loader_behavior</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hamilton.data_saver&quot;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"hamilton.data_saver"</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">default_saver_behavior</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">default_behavior</span><span class="p">)</span>
@@ -1459,7 +1459,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="HamiltonCacheAdapter.resolve_behaviors">
 <a class="viewcode-back" href="../../../../reference/caching/caching-logic/#hamilton.caching.adapter.HamiltonCacheAdapter.resolve_behaviors">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">resolve_behaviors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">CachingBehavior</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve the caching behavior for each node based on the ``@cache`` decorator</span>
+<span class="w">        </span><span class="sd">"""Resolve the caching behavior for each node based on the ``@cache`` decorator</span>
 <span class="sd">        and the ``Builder.with_cache()`` parameters for a specific ``run_id``.</span>
 
 <span class="sd">        This is a user-facing method.</span>
@@ -1472,7 +1472,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        :param run_id: Id of the Hamilton execution run.</span>
 <span class="sd">        :return: A dictionary of ``{node name: caching behavior}``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fn_graphs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span>
 
         <span class="n">_default</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default</span>
@@ -1489,7 +1489,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">elif</span> <span class="n">_ignore</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">_ignore</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()]</span>
 
-        <span class="n">default_behavior</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
+        <span class="n">default_behavior</span> <span class="o">=</span> <span class="s2">"default"</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_behavior</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">default_behavior</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_behavior</span>
 
@@ -1519,16 +1519,16 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                 <span class="n">node_name</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                 <span class="n">task_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
+                <span class="n">actor</span><span class="o">=</span><span class="s2">"adapter"</span><span class="p">,</span>
                 <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">RESOLVE_BEHAVIOR</span><span class="p">,</span>
                 <span class="n">value</span><span class="o">=</span><span class="n">behavior</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="c1"># need to handle materializers via a second pass to copy the behavior</span>
-        <span class="c1"># of their &quot;main node&quot;</span>
+        <span class="c1"># of their "main node"</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hamilton.data_loader&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="n">main_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;hamilton.data_loader.node&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"hamilton.data_loader"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">main_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">"hamilton.data_loader.node"</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">main_node</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
                     <span class="k">continue</span>
 
@@ -1555,7 +1555,7 @@ s=d.getElementsByTagName('script')[0];
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">_data_loaders</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">main_node</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hamilton.data_saver&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"hamilton.data_saver"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_data_savers</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">behaviors</span></div>
@@ -1570,7 +1570,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">overrides</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve the code version for each node for a specific ``run_id``.</span>
+<span class="w">        </span><span class="sd">"""Resolve the code version for each node for a specific ``run_id``.</span>
 
 <span class="sd">        This is a user-facing method.</span>
 
@@ -1583,7 +1583,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param inputs: Input node values.</span>
 <span class="sd">        :param overrides: Override node values.</span>
 <span class="sd">        :return: A dictionary of ``{node name: code version}``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fn_graphs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span>
 
         <span class="n">final_vars</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">final_vars</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">final_vars</span>
@@ -1602,37 +1602,37 @@ s=d.getElementsByTagName('script')[0];
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_process_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process input nodes to version data and code.</span>
+<span class="w">        </span><span class="sd">"""Process input nodes to version data and code.</span>
 
 <span class="sd">        To enable caching, input values must be versioned. Since inputs have no associated code,</span>
-<span class="sd">        set a constant &quot;code version&quot; ``f&quot;input__{node_name}&quot;`` that uniquely identifies this input.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        set a constant "code version" ``f"input__{node_name}"`` that uniquely identifies this input.</span>
+<span class="sd">        """</span>
         <span class="n">data_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version_data</span><span class="p">(</span><span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">code_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">node_name</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;input__</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">code_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">node_name</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"input__</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">node_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_version</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
             <span class="n">task_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
+            <span class="n">actor</span><span class="o">=</span><span class="s2">"adapter"</span><span class="p">,</span>
             <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">IS_INPUT</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_process_override</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process override nodes to version data and code.</span>
+<span class="w">        </span><span class="sd">"""Process override nodes to version data and code.</span>
 
 <span class="sd">        To enable caching, override values must be versioned. As opposed to executed nodes,</span>
 <span class="sd">        code and data versions for overrides are not stored because their value is user provided</span>
-<span class="sd">        and isn&#39;t necessarily tied to the code.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        and isn't necessarily tied to the code.</span>
+<span class="sd">        """</span>
         <span class="n">data_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version_data</span><span class="p">(</span><span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">node_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_version</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
             <span class="n">task_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
+            <span class="n">actor</span><span class="o">=</span><span class="s2">"adapter"</span><span class="p">,</span>
             <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">IS_OVERRIDE</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1641,11 +1641,11 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_default_parameter_values</span><span class="p">(</span>
         <span class="n">node_</span><span class="p">:</span> <span class="n">hamilton</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">node_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If a node uses the function&#39;s default parameter values, they won&#39;t be part of the</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        If a node uses the function's default parameter values, they won't be part of the</span>
 <span class="sd">        node_kwargs. To ensure a consistent `cache_key` we want to retrieve default parameter</span>
-<span class="sd">        values if they&#39;re used</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        values if they're used</span>
+<span class="sd">        """</span>
         <span class="n">resolved_kwargs</span> <span class="o">=</span> <span class="n">node_kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_value</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">default_parameter_values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="c1"># if the `param_name` not in `node_kwargs`, it means the node uses the default</span>
@@ -1666,11 +1666,11 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">overrides</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up the state of the adapter for a new execution.</span>
+<span class="w">        </span><span class="sd">"""Set up the state of the adapter for a new execution.</span>
 
 <span class="sd">        Most attributes need to be keyed by run_id to prevent potential conflicts because</span>
 <span class="sd">        the same adapter instance is shared between across all ``Driver.execute()`` calls.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">run_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_logs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1693,7 +1693,7 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                 <span class="n">node_name</span><span class="o">=</span><span class="n">final_var</span><span class="p">,</span>
                 <span class="n">task_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
+                <span class="n">actor</span><span class="o">=</span><span class="s2">"adapter"</span><span class="p">,</span>
                 <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">IS_FINAL_VAR</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -1717,8 +1717,8 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Before node execution or retrieval, create the cache_key and set it in memory.</span>
-<span class="sd">        The cache_key is created based on the node&#39;s code version and its dependencies&#39; data versions.</span>
+<span class="w">        </span><span class="sd">"""Before node execution or retrieval, create the cache_key and set it in memory.</span>
+<span class="sd">        The cache_key is created based on the node's code version and its dependencies' data versions.</span>
 
 <span class="sd">        Collecting ``data_version`` for upstream dependencies requires handling special cases when</span>
 <span class="sd">        task-based execution is used:</span>
@@ -1727,17 +1727,17 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        collect order is inconsistent.</span>
 <span class="sd">        - If the current node is ``INSIDE`` and the dependency is ``EXPAND``, this means the</span>
 <span class="sd">        ``kwargs`` dictionary contains a single item. We need to version this individual item because</span>
-<span class="sd">        it will not be available from &quot;inside&quot; the branch for some executors (multiprocessing, multithreading)</span>
+<span class="sd">        it will not be available from "inside" the branch for some executors (multiprocessing, multithreading)</span>
 <span class="sd">        because they lose access to the data_versions of ``OUTSIDE`` nodes stored in ``self.data_versions``.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">node_name</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span>
         <span class="n">node_kwargs</span> <span class="o">=</span> <span class="n">HamiltonCacheAdapter</span><span class="o">.</span><span class="n">_resolve_default_parameter_values</span><span class="p">(</span><span class="n">node_</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">behaviors</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">node_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">IGNORE</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="c1"># won&#39;t need the cache_key for either result retrieval or storage</span>
+        <span class="c1"># won't need the cache_key for either result retrieval or storage</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">behaviors</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">node_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">DISABLE</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -1750,14 +1750,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">for</span> <span class="n">dep_name</span><span class="p">,</span> <span class="n">dep_value</span> <span class="ow">in</span> <span class="n">node_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="c1"># resolve caching behaviors</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">behaviors</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">dep_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">IGNORE</span><span class="p">:</span>
-                <span class="c1"># setting the data_version to &quot;&lt;ignore&gt;&quot; in the cache_key means that</span>
+                <span class="c1"># setting the data_version to "&lt;ignore&gt;" in the cache_key means that</span>
                 <span class="c1"># the value of the dependency appears constant to this node</span>
-                <span class="n">dependencies_data_versions</span><span class="p">[</span><span class="n">dep_name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&lt;ignore&gt;&quot;</span>
+                <span class="n">dependencies_data_versions</span><span class="p">[</span><span class="n">dep_name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"&lt;ignore&gt;"</span>
                 <span class="k">continue</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">behaviors</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">dep_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">DISABLE</span><span class="p">:</span>
-                <span class="c1"># setting the data_version to &quot;&lt;disable&gt;&quot; with a random suffix in the</span>
+                <span class="c1"># setting the data_version to "&lt;disable&gt;" with a random suffix in the</span>
                 <span class="c1"># cache_key means the current node will be a cache miss and forced to recompute</span>
-                <span class="n">dependencies_data_versions</span><span class="p">[</span><span class="n">dep_name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&lt;disable&gt;&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">dependencies_data_versions</span><span class="p">[</span><span class="n">dep_name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"&lt;disable&gt;"</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"_</span><span class="si">{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
                 <span class="k">continue</span>
 
             <span class="c1"># resolve NodeRoleInTaskExecution</span>
@@ -1766,7 +1766,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># want to check if dependency is an EXPAND node. We must not pass the current `task_id`</span>
                 <span class="n">dep_role</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_node_role</span><span class="p">(</span>
-                    <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">dep_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="s2">&quot;&lt;placeholder&gt;&quot;</span>
+                    <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">dep_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="s2">"&lt;placeholder&gt;"</span>
                 <span class="p">)</span>
 
             <span class="c1"># if dep_role == NodeRoleInTaskExecution.STANDARD:</span>
@@ -1795,7 +1795,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">if</span> <span class="n">dep_data_version</span> <span class="o">==</span> <span class="n">fingerprinting</span><span class="o">.</span><span class="n">UNHASHABLE</span><span class="p">:</span>
                 <span class="c1"># if the data version is unhashable, we need to set a random suffix to the cache_key</span>
                 <span class="c1"># to prevent the cache from thinking this value is constant, causing a cache hit.</span>
-                <span class="n">dep_data_version</span> <span class="o">=</span> <span class="s2">&quot;&lt;unhashable&gt;&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">dep_data_version</span> <span class="o">=</span> <span class="s2">"&lt;unhashable&gt;"</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"_</span><span class="si">{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
 
             <span class="n">dependencies_data_versions</span><span class="p">[</span><span class="n">dep_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dep_data_version</span>
 
@@ -1821,12 +1821,12 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Try to retrieve stored result from previous executions or execute the node.</span>
+<span class="w">        </span><span class="sd">"""Try to retrieve stored result from previous executions or execute the node.</span>
 
 <span class="sd">        Use the previously created cache_key to retrieve the data_version from memory or the metadata_store.</span>
 <span class="sd">        If data_version is retrieved try to retrieve the result. If it fails, execute the node.</span>
 <span class="sd">        Else, execute the node.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">node_name</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span>
         <span class="n">node_callable</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">callable</span>
         <span class="n">node_kwargs</span> <span class="o">=</span> <span class="n">HamiltonCacheAdapter</span><span class="o">.</span><span class="n">_resolve_default_parameter_values</span><span class="p">(</span><span class="n">node_</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
@@ -1863,7 +1863,7 @@ s=d.getElementsByTagName('script')[0];
                 <span class="c1"># we do not version nor store the metadata. This node is executed for its</span>
                 <span class="c1"># external effect of saving a file</span>
                 <span class="k">if</span> <span class="n">node_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_savers</span><span class="p">[</span><span class="n">run_id</span><span class="p">]:</span>
-                    <span class="n">data_version</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">__metadata&quot;</span>
+                    <span class="n">data_version</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">__metadata"</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_memory_metadata</span><span class="p">(</span>
                     <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">data_version</span><span class="o">=</span><span class="n">data_version</span>
@@ -1890,31 +1890,31 @@ s=d.getElementsByTagName('script')[0];
             <span class="c1"># must execute: data_version not found in memory or in metadata_store</span>
             <span class="n">need_to_compute_node</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">elif</span> <span class="n">data_version</span> <span class="o">==</span> <span class="n">fingerprinting</span><span class="o">.</span><span class="n">UNHASHABLE</span><span class="p">:</span>
-            <span class="c1"># must execute: the retrieved data_version is UNHASHABLE, therefore it isn&#39;t stored.</span>
+            <span class="c1"># must execute: the retrieved data_version is UNHASHABLE, therefore it isn't stored.</span>
             <span class="n">need_to_compute_node</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">data_version</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="c1"># must execute: data_version retrieved, but result store can&#39;t find result</span>
+            <span class="c1"># must execute: data_version retrieved, but result store can't find result</span>
             <span class="n">need_to_compute_node</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
                 <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                 <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
                 <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-                <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;result_store&quot;</span><span class="p">,</span>
+                <span class="n">actor</span><span class="o">=</span><span class="s2">"result_store"</span><span class="p">,</span>
                 <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">MISSING_RESULT</span><span class="p">,</span>
                 <span class="n">value</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># try to retrieve: data_version retrieve, result store found result</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="c1"># successful retrieval: retrieve the result; potentially load using the DataLoader if e.g.,``@cache(format=&quot;json&quot;)``</span>
+                <span class="c1"># successful retrieval: retrieve the result; potentially load using the DataLoader if e.g.,``@cache(format="json")``</span>
                 <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_version</span><span class="o">=</span><span class="n">data_version</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
                     <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                     <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
                     <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-                    <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;result_store&quot;</span><span class="p">,</span>
+                    <span class="n">actor</span><span class="o">=</span><span class="s2">"result_store"</span><span class="p">,</span>
                     <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">GET_RESULT</span><span class="p">,</span>
-                    <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;hit&quot;</span><span class="p">,</span>
+                    <span class="n">msg</span><span class="o">=</span><span class="s2">"hit"</span><span class="p">,</span>
                     <span class="n">value</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># set the data_version previously retrieved (could be from memory or store)</span>
@@ -1922,7 +1922,7 @@ s=d.getElementsByTagName('script')[0];
                     <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">data_version</span><span class="o">=</span><span class="n">data_version</span>
                 <span class="p">)</span>
             <span class="k">except</span> <span class="n">ResultRetrievalError</span><span class="p">:</span>
-                <span class="c1"># failed retrieval: despite finding the result, probably failed loading data using DataLoader if e.g.,``@cache(format=&quot;json&quot;)``</span>
+                <span class="c1"># failed retrieval: despite finding the result, probably failed loading data using DataLoader if e.g.,``@cache(format="json")``</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">cache_key</span><span class="o">=</span><span class="n">cache_key</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">data_version</span><span class="p">)</span>
                 <span class="n">need_to_compute_node</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1950,7 +1950,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="c1"># we do not version nor store the metadata. This node is executed for its</span>
             <span class="c1"># external effect of saving a file</span>
             <span class="k">if</span> <span class="n">node_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_savers</span><span class="p">[</span><span class="n">run_id</span><span class="p">]:</span>
-                <span class="n">data_version</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">__metadata&quot;</span>
+                <span class="n">data_version</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">__metadata"</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_memory_metadata</span><span class="p">(</span>
                 <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">data_version</span><span class="o">=</span><span class="n">data_version</span>
@@ -1979,10 +1979,10 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the cache_key and data_version stored in memory (respectively from</span>
+<span class="w">        </span><span class="sd">"""Get the cache_key and data_version stored in memory (respectively from</span>
 <span class="sd">        pre_node_execute and do_node_execute) and store the result in result_store</span>
-<span class="sd">        if it doesn&#39;t exist.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        if it doesn't exist.</span>
+<span class="sd">        """</span>
         <span class="n">node_name</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span>
 
         <span class="k">if</span> <span class="n">success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
@@ -1990,9 +1990,9 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                 <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
                 <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-                <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
+                <span class="n">actor</span><span class="o">=</span><span class="s2">"adapter"</span><span class="p">,</span>
                 <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">FAILED_EXECUTION</span><span class="p">,</span>
-                <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">return</span>
 
@@ -2009,7 +2009,7 @@ s=d.getElementsByTagName('script')[0];
 
             <span class="c1"># TODO clean up this logic</span>
             <span class="c1"># check if a materialized file exist before writing results</span>
-            <span class="c1"># when using `@cache(format=&quot;json&quot;)`</span>
+            <span class="c1"># when using `@cache(format="json")`</span>
             <span class="n">cache_format</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_fn_graphs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span>
                 <span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span>
@@ -2037,7 +2037,7 @@ s=d.getElementsByTagName('script')[0];
                     <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                     <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
                     <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-                    <span class="n">actor</span><span class="o">=</span><span class="s2">&quot;result_store&quot;</span><span class="p">,</span>
+                    <span class="n">actor</span><span class="o">=</span><span class="s2">"result_store"</span><span class="p">,</span>
                     <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">SET_RESULT</span><span class="p">,</span>
                     <span class="n">value</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
                 <span class="p">)</span></div>
@@ -2092,182 +2092,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -2312,6 +2147,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -2319,7 +2180,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -2336,42 +2205,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -2394,7 +2321,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -2405,12 +2332,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -2430,8 +2351,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -2443,7 +2364,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -2455,9 +2376,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -2480,8 +2401,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -2491,10 +2415,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -2519,10 +2441,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

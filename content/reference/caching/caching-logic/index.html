@@ -557,7 +557,7 @@ Ignoring clients and connections can be useful since they shouldn’t directly i
 <dd><p>Create a caching behavior from a string of the enum value. This is
 leveraged by the <code class="docutils literal notranslate"><span class="pre">hamilton.lifecycle.caching.SmartCacheAdapter</span></code> and
 the <code class="docutils literal notranslate"><span class="pre">hamilton.function_modifiers.metadata.cache</span></code> decorator.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CachingBehavior</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;recompute&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CachingBehavior</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"recompute"</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -586,18 +586,18 @@ the <code class="docutils literal notranslate"><span class="pre">hamilton.functi
 <dd><p>The <code class="docutils literal notranslate"><span class="pre">&#64;cache</span></code> decorator can define the behavior and format of a specific node.</p>
 <p>This feature is implemented via tags, but that could change. Thus you should not
 rely on these tags for other purposes.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@cache</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s2">&quot;recompute&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;parquet&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@cache</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s2">"recompute"</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"parquet"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span> <span class="o">...</span>
 </pre></div>
 </div>
 <p>If the function uses other function modifiers and define multiple nodes, you can
 set <code class="docutils literal notranslate"><span class="pre">target_</span></code> to specify which nodes to cache. The following only caches the <code class="docutils literal notranslate"><span class="pre">performance</span></code> node.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@cache</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">,</span> <span class="n">target_</span><span class="o">=</span><span class="s2">&quot;performance&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@cache</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span> <span class="n">target_</span><span class="o">=</span><span class="s2">"performance"</span><span class="p">)</span>
 <span class="nd">@extract_fields</span><span class="p">(</span><span class="n">trained_model</span><span class="o">=</span><span class="n">LinearRegression</span><span class="p">,</span> <span class="n">performance</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">model_training</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="c1"># ...</span>
-    <span class="n">performance</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rmse&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;mae&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">}</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;trained_model&quot;</span><span class="p">:</span> <span class="n">trained_model</span><span class="p">,</span> <span class="s2">&quot;performance&quot;</span><span class="p">:</span> <span class="n">performance</span><span class="p">}</span>
+    <span class="n">performance</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"rmse"</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">"mae"</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"trained_model"</span><span class="p">:</span> <span class="n">trained_model</span><span class="p">,</span> <span class="s2">"performance"</span><span class="p">:</span> <span class="n">performance</span><span class="p">}</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -741,7 +741,7 @@ is a unique identifier.</p></li>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_dataflow</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
-<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">get_cache_key</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">dr</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="s2">&quot;my_node&quot;</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">get_cache_key</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">dr</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="s2">"my_node"</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

@@ -561,7 +561,7 @@ under the License.</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;hamilton.caching&quot;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"hamilton.caching"</span><span class="p">)</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
 </pre></div>
@@ -573,7 +573,7 @@ under the License.</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 
-<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s2">&quot;./.hamilton_cache&quot;</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s2">"./.hamilton_cache"</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -588,22 +588,22 @@ under the License.</p>
 import pandas as pd
 
 DATA = {
-    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;],
-    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;],
-    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56],
-    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;],
-    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;],
+    "cities": ["New York", "Los Angeles", "Chicago", "Montréal", "Vancouver"],
+    "date": ["2024-09-13", "2024-09-12", "2024-09-11", "2024-09-11", "2024-09-09"],
+    "amount": [478.23, 251.67, 989.34, 742.14, 584.56],
+    "country": ["USA", "USA", "USA", "Canada", "Canada"],
+    "currency": ["USD", "USD", "USD", "CAD", "CAD"],
 }
 
 def raw_data() -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    """Loading raw data. This simulates loading from a file, database, or external service."""
     return pd.DataFrame(DATA)
 
 def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    """Filter out rows before cutoff date and convert currency to USD."""
     df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
-    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
-    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.73
+    df["amound_in_usd"] = df["amount"]
+    df.loc[df.country == "Canada", "amound_in_usd"] *= 0.73
     return df
 </pre></div>
 </div>
@@ -617,9 +617,9 @@ def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">basics_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">basics_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
-<span class="n">basics_results_1</span> <span class="o">=</span> <span class="n">basics_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;processed_data&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="n">basics_results_1</span> <span class="o">=</span> <span class="n">basics_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"processed_data"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">basics_results_1</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">basics_results_1</span><span class="p">[</span><span class="s2">"processed_data"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -652,9 +652,9 @@ processed_data::adapter::execute_node
 <p>On the second execution, <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> is retrieved from cache as reported in the logs and highlighted in the visualization</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">basics_results_2</span> <span class="o">=</span> <span class="n">basics_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;processed_data&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">basics_results_2</span> <span class="o">=</span> <span class="n">basics_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"processed_data"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">basics_results_2</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">basics_results_2</span><span class="p">[</span><span class="s2">"processed_data"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">basics_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -681,16 +681,16 @@ processed_data::result_store::get_result::hit
 <p>The Hamilton cache stores results using a <code class="docutils literal notranslate"><span class="pre">cache_key</span></code>. It is composed of the node’s name (<code class="docutils literal notranslate"><span class="pre">node_name</span></code>), the code that defines it (<code class="docutils literal notranslate"><span class="pre">code_version</span></code>), and its data inputs (<code class="docutils literal notranslate"><span class="pre">data_version</span></code> of its dependencies).</p>
 <p>For example, the cache keys for the previous cells are:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;node_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;raw_data&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;code_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;9d727859b9fd883247c3379d4d25a35af4a56df9d9fde20c75c6375dde631c68&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;dependencies_data_versions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">  </span><span class="c1">// it has no dependencies</span>
+<span class="w">    </span><span class="nt">"node_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"raw_data"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"code_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9d727859b9fd883247c3379d4d25a35af4a56df9d9fde20c75c6375dde631c68"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"dependencies_data_versions"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">  </span><span class="c1">// it has no dependencies</span>
 <span class="p">}</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;node_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;code_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;c9e3377d6c5044944bd89eeb7073c730ee8707627c39906b4156c6411f056f00&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;dependencies_data_versions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;cutoff_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WkGjJythLWYAIj2Qr8T_ug==&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// input value</span>
-<span class="w">        </span><span class="nt">&quot;raw_data&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;t-BDcMLikFSNdn4piUKy1mBcKPoEsnsYjUNzWg==&quot;</span><span class="w">  </span><span class="c1">// raw_data&#39;s result</span>
+<span class="w">    </span><span class="nt">"node_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"processed_data"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"code_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"c9e3377d6c5044944bd89eeb7073c730ee8707627c39906b4156c6411f056f00"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"dependencies_data_versions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"cutoff_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WkGjJythLWYAIj2Qr8T_ug=="</span><span class="p">,</span><span class="w">  </span><span class="c1">// input value</span>
+<span class="w">        </span><span class="nt">"raw_data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"t-BDcMLikFSNdn4piUKy1mBcKPoEsnsYjUNzWg=="</span><span class="w">  </span><span class="c1">// raw_data's result</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -711,27 +711,27 @@ processed_data::result_store::get_result::hit
 import pandas as pd
 
 DATA = {
-    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;],
-    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;],
-    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56],
-    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;],
-    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;],
+    "cities": ["New York", "Los Angeles", "Chicago", "Montréal", "Vancouver"],
+    "date": ["2024-09-13", "2024-09-12", "2024-09-11", "2024-09-11", "2024-09-09"],
+    "amount": [478.23, 251.67, 989.34, 742.14, 584.56],
+    "country": ["USA", "USA", "USA", "Canada", "Canada"],
+    "currency": ["USD", "USD", "USD", "CAD", "CAD"],
 }
 
 def raw_data() -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    """Loading raw data. This simulates loading from a file, database, or external service."""
     return pd.DataFrame(DATA)
 
 def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    """Filter out rows before cutoff date and convert currency to USD."""
     df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
-    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
-    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.73
+    df["amound_in_usd"] = df["amount"]
+    df.loc[df.country == "Canada", "amound_in_usd"] *= 0.73
     return df
 
 def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
-    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+    """Sum the amount in USD per country"""
+    return processed_data.groupby("country")["amound_in_usd"].sum().to_frame()
 </pre></div>
 </div>
 </div>
@@ -745,11 +745,11 @@ def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adding_node_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">adding_node_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
 <span class="n">adding_node_results</span> <span class="o">=</span> <span class="n">adding_node_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span> <span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+    <span class="p">[</span><span class="s2">"processed_data"</span><span class="p">,</span> <span class="s2">"amount_per_country"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">adding_node_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adding_node_results</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">adding_node_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -783,11 +783,11 @@ USA           1719.240
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_inputs_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">adding_node_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
 <span class="n">changing_inputs_results_1</span> <span class="o">=</span> <span class="n">changing_inputs_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span> <span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-11&quot;</span><span class="p">}</span>
+    <span class="p">[</span><span class="s2">"processed_data"</span><span class="p">,</span> <span class="s2">"amount_per_country"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-11"</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">changing_inputs_results_1</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_inputs_results_1</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">changing_inputs_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -811,11 +811,11 @@ USA              729.9
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_inputs_results_2</span> <span class="o">=</span> <span class="n">changing_inputs_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span> <span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-05&quot;</span><span class="p">}</span>
+    <span class="p">[</span><span class="s2">"processed_data"</span><span class="p">,</span> <span class="s2">"amount_per_country"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-05"</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">changing_inputs_results_2</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_inputs_results_2</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">changing_inputs_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -840,9 +840,9 @@ USA           1719.240
 <p>In concrete terms, filtering rows by the date <code class="docutils literal notranslate"><span class="pre">&quot;2024-09-05&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;2024-09-01&quot;</span></code> includes the same rows and produces the same dataframe.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">adding_node_results</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">adding_node_results</span><span class="p">[</span><span class="s2">"processed_data"</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">changing_inputs_results_2</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_inputs_results_2</span><span class="p">[</span><span class="s2">"processed_data"</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -877,27 +877,27 @@ USA           1719.240
 import pandas as pd
 
 DATA = {
-    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;],
-    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;],
-    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56],
-    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;],
-    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;],
+    "cities": ["New York", "Los Angeles", "Chicago", "Montréal", "Vancouver"],
+    "date": ["2024-09-13", "2024-09-12", "2024-09-11", "2024-09-11", "2024-09-09"],
+    "amount": [478.23, 251.67, 989.34, 742.14, 584.56],
+    "country": ["USA", "USA", "USA", "Canada", "Canada"],
+    "currency": ["USD", "USD", "USD", "CAD", "CAD"],
 }
 
 def raw_data() -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    """Loading raw data. This simulates loading from a file, database, or external service."""
     return pd.DataFrame(DATA)
 
 def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    """Filter out rows before cutoff date and convert currency to USD."""
     df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
-    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
-    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  # &lt;- VALUE CHANGED FROM module_2
+    df["amound_in_usd"] = df["amount"]
+    df.loc[df.country == "Canada", "amound_in_usd"] *= 0.71  # &lt;- VALUE CHANGED FROM module_2
     return df
 
 def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
-    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+    """Sum the amount in USD per country"""
+    return processed_data.groupby("country")["amound_in_usd"].sum().to_frame()
 </pre></div>
 </div>
 </div>
@@ -908,11 +908,11 @@ def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_code_dr_1</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_code_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
 <span class="n">changing_code_results_1</span> <span class="o">=</span> <span class="n">changing_code_dr_1</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span> <span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+    <span class="p">[</span><span class="s2">"processed_data"</span><span class="p">,</span> <span class="s2">"amount_per_country"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_1</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_1</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">changing_code_dr_1</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -940,29 +940,29 @@ USA           1719.240
 import pandas as pd
 
 DATA = {
-    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;],
-    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;],
-    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56],
-    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;],
-    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;],
+    "cities": ["New York", "Los Angeles", "Chicago", "Montréal", "Vancouver"],
+    "date": ["2024-09-13", "2024-09-12", "2024-09-11", "2024-09-11", "2024-09-09"],
+    "amount": [478.23, 251.67, 989.34, 742.14, 584.56],
+    "country": ["USA", "USA", "USA", "Canada", "Canada"],
+    "currency": ["USD", "USD", "USD", "CAD", "CAD"],
 }
 
 def raw_data() -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    """Loading raw data. This simulates loading from a file, database, or external service."""
     return pd.DataFrame(DATA)
 
 def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    """Filter out rows before cutoff date and convert currency to USD."""
     df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
-    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
-    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  
-    df.loc[df.country == &quot;Brazil&quot;, &quot;amound_in_usd&quot;] *= 0.18  # &lt;- LINE ADDED
-    df.loc[df.country == &quot;Mexico&quot;, &quot;amound_in_usd&quot;] *= 0.05  # &lt;- LINE ADDED
+    df["amound_in_usd"] = df["amount"]
+    df.loc[df.country == "Canada", "amound_in_usd"] *= 0.71  
+    df.loc[df.country == "Brazil", "amound_in_usd"] *= 0.18  # &lt;- LINE ADDED
+    df.loc[df.country == "Mexico", "amound_in_usd"] *= 0.05  # &lt;- LINE ADDED
     return df
 
 def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
-    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+    """Sum the amount in USD per country"""
+    return processed_data.groupby("country")["amound_in_usd"].sum().to_frame()
 </pre></div>
 </div>
 </div>
@@ -972,9 +972,9 @@ def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_code_dr_2</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_code_module_2</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
-<span class="n">changing_code_results_2</span> <span class="o">=</span> <span class="n">changing_code_dr_2</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="n">changing_code_results_2</span> <span class="o">=</span> <span class="n">changing_code_dr_2</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"processed_data"</span><span class="p">,</span><span class="s2">"amount_per_country"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_2</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_2</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">changing_code_dr_2</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -1002,9 +1002,9 @@ USA           1719.240
 </div></blockquote>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_1</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_1</span><span class="p">[</span><span class="s2">"processed_data"</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_2</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_code_results_2</span><span class="p">[</span><span class="s2">"processed_data"</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1056,29 +1056,29 @@ USA           1719.240
 import pandas as pd
 
 DATA = {
-    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;, &quot;Houston&quot;, &quot;Phoenix&quot;, &quot;Mexico City&quot;, &quot;Chihuahua City&quot;, &quot;Rio de Janeiro&quot;],
-    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;, &quot;2024-09-08&quot;, &quot;2024-09-07&quot;, &quot;2024-09-06&quot;, &quot;2024-09-05&quot;, &quot;2024-09-04&quot;],
-    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
-    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Mexico&quot;, &quot;Mexico&quot;, &quot;Brazil&quot;],
-    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;MXN&quot;, &quot;MXN&quot;, &quot;BRL&quot;],
+    "cities": ["New York", "Los Angeles", "Chicago", "Montréal", "Vancouver", "Houston", "Phoenix", "Mexico City", "Chihuahua City", "Rio de Janeiro"],
+    "date": ["2024-09-13", "2024-09-12", "2024-09-11", "2024-09-11", "2024-09-09", "2024-09-08", "2024-09-07", "2024-09-06", "2024-09-05", "2024-09-04"],
+    "amount": [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
+    "country": ["USA", "USA", "USA", "Canada", "Canada", "USA", "USA", "Mexico", "Mexico", "Brazil"],
+    "currency": ["USD", "USD", "USD", "CAD", "CAD", "USD", "USD", "MXN", "MXN", "BRL"],
 }
 
 def raw_data() -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    """Loading raw data. This simulates loading from a file, database, or external service."""
     return pd.DataFrame(DATA)
 
 def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    """Filter out rows before cutoff date and convert currency to USD."""
     df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
-    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
-    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  
-    df.loc[df.country == &quot;Brazil&quot;, &quot;amound_in_usd&quot;] *= 0.18
-    df.loc[df.country == &quot;Mexico&quot;, &quot;amound_in_usd&quot;] *= 0.05
+    df["amound_in_usd"] = df["amount"]
+    df.loc[df.country == "Canada", "amound_in_usd"] *= 0.71  
+    df.loc[df.country == "Brazil", "amound_in_usd"] *= 0.18
+    df.loc[df.country == "Mexico", "amound_in_usd"] *= 0.05
     return df
 
 def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
-    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+    """Sum the amount in USD per country"""
+    return processed_data.groupby("country")["amound_in_usd"].sum().to_frame()
 </pre></div>
 </div>
 </div>
@@ -1088,9 +1088,9 @@ def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_external_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_external_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
-<span class="n">changing_external_results</span> <span class="o">=</span> <span class="n">changing_external_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="n">changing_external_results</span> <span class="o">=</span> <span class="n">changing_external_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"amount_per_country"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">changing_external_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_external_results</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">changing_external_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -1118,11 +1118,11 @@ USA           1719.240
 <p>The visualization shows that <code class="docutils literal notranslate"><span class="pre">raw_data</span></code> was executed, and because of the new data, all downstream nodes also need to be executed. The results now include Brazil and Mexico.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_external_with_cache_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_external_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;raw_data&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">changing_external_with_cache_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_external_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="p">[</span><span class="s2">"raw_data"</span><span class="p">])</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
-<span class="n">changing_external_with_cache_results</span> <span class="o">=</span> <span class="n">changing_external_with_cache_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="n">changing_external_with_cache_results</span> <span class="o">=</span> <span class="n">changing_external_with_cache_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"amount_per_country"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">changing_external_with_cache_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_external_with_cache_results</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">changing_external_with_cache_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -1156,30 +1156,30 @@ import pandas as pd
 from hamilton.function_modifiers import cache
 
 DATA = {
-    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;, &quot;Houston&quot;, &quot;Phoenix&quot;, &quot;Mexico City&quot;, &quot;Chihuahua City&quot;, &quot;Rio de Janeiro&quot;],
-    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;, &quot;2024-09-08&quot;, &quot;2024-09-07&quot;, &quot;2024-09-06&quot;, &quot;2024-09-05&quot;, &quot;2024-09-04&quot;],
-    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
-    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Mexico&quot;, &quot;Mexico&quot;, &quot;Brazil&quot;],
-    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;MXN&quot;, &quot;MXN&quot;, &quot;BRL&quot;],
+    "cities": ["New York", "Los Angeles", "Chicago", "Montréal", "Vancouver", "Houston", "Phoenix", "Mexico City", "Chihuahua City", "Rio de Janeiro"],
+    "date": ["2024-09-13", "2024-09-12", "2024-09-11", "2024-09-11", "2024-09-09", "2024-09-08", "2024-09-07", "2024-09-06", "2024-09-05", "2024-09-04"],
+    "amount": [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
+    "country": ["USA", "USA", "USA", "Canada", "Canada", "USA", "USA", "Mexico", "Mexico", "Brazil"],
+    "currency": ["USD", "USD", "USD", "CAD", "CAD", "USD", "USD", "MXN", "MXN", "BRL"],
 }
 
-@cache(behavior=&quot;recompute&quot;)
+@cache(behavior="recompute")
 def raw_data() -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    """Loading raw data. This simulates loading from a file, database, or external service."""
     return pd.DataFrame(DATA)
 
 def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    """Filter out rows before cutoff date and convert currency to USD."""
     df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
-    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
-    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  
-    df.loc[df.country == &quot;Brazil&quot;, &quot;amound_in_usd&quot;] *= 0.18
-    df.loc[df.country == &quot;Mexico&quot;, &quot;amound_in_usd&quot;] *= 0.05
+    df["amound_in_usd"] = df["amount"]
+    df.loc[df.country == "Canada", "amound_in_usd"] *= 0.71  
+    df.loc[df.country == "Brazil", "amound_in_usd"] *= 0.18
+    df.loc[df.country == "Mexico", "amound_in_usd"] *= 0.05
     return df
 
 def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
-    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+    """Sum the amount in USD per country"""
+    return processed_data.groupby("country")["amound_in_usd"].sum().to_frame()
 </pre></div>
 </div>
 </div>
@@ -1195,11 +1195,11 @@ def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
 <span class="p">)</span>
 
 <span class="n">changing_external_decorator_results</span> <span class="o">=</span> <span class="n">changing_external_decorator_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+    <span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">changing_external_decorator_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">changing_external_decorator_results</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">changing_external_decorator_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -1250,11 +1250,11 @@ USA          2959.7600
 <span class="p">)</span>
 
 <span class="n">recompute_all_results</span> <span class="o">=</span> <span class="n">recompute_all_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+    <span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">recompute_all_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">recompute_all_results</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">recompute_all_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -1289,16 +1289,16 @@ USA          2959.7600
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">default_behavior_dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">changing_external_decorator_module</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">default_behavior</span><span class="o">=</span><span class="s2">&quot;disable&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">default_behavior</span><span class="o">=</span><span class="s2">"disable"</span><span class="p">)</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
 
 <span class="n">default_behavior_results</span> <span class="o">=</span> <span class="n">default_behavior_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+    <span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">default_behavior_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">default_behavior_results</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">default_behavior_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -1328,10 +1328,10 @@ USA          2959.7600
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;amount_per_country&#39;: &lt;CachingBehavior.DISABLE: 3&gt;,
- &#39;processed_data&#39;: &lt;CachingBehavior.DISABLE: 3&gt;,
- &#39;raw_data&#39;: &lt;CachingBehavior.RECOMPUTE: 2&gt;,
- &#39;cutoff_date&#39;: &lt;CachingBehavior.DISABLE: 3&gt;}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'amount_per_country': &lt;CachingBehavior.DISABLE: 3&gt;,
+ 'processed_data': &lt;CachingBehavior.DISABLE: 3&gt;,
+ 'raw_data': &lt;CachingBehavior.RECOMPUTE: 2&gt;,
+ 'cutoff_date': &lt;CachingBehavior.DISABLE: 3&gt;}
 </pre></div>
 </div>
 </div>
@@ -1363,37 +1363,37 @@ import pandas as pd
 from hamilton.function_modifiers import dataloader, datasaver
 
 DATA = {
-    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;, &quot;Houston&quot;, &quot;Phoenix&quot;, &quot;Mexico City&quot;, &quot;Chihuahua City&quot;, &quot;Rio de Janeiro&quot;],
-    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;, &quot;2024-09-08&quot;, &quot;2024-09-07&quot;, &quot;2024-09-06&quot;, &quot;2024-09-05&quot;, &quot;2024-09-04&quot;],
-    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
-    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Mexico&quot;, &quot;Mexico&quot;, &quot;Brazil&quot;],
-    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;MXN&quot;, &quot;MXN&quot;, &quot;BRL&quot;],
+    "cities": ["New York", "Los Angeles", "Chicago", "Montréal", "Vancouver", "Houston", "Phoenix", "Mexico City", "Chihuahua City", "Rio de Janeiro"],
+    "date": ["2024-09-13", "2024-09-12", "2024-09-11", "2024-09-11", "2024-09-09", "2024-09-08", "2024-09-07", "2024-09-06", "2024-09-05", "2024-09-04"],
+    "amount": [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
+    "country": ["USA", "USA", "USA", "Canada", "Canada", "USA", "USA", "Mexico", "Mexico", "Brazil"],
+    "currency": ["USD", "USD", "USD", "CAD", "CAD", "USD", "USD", "MXN", "MXN", "BRL"],
 }
 
 @dataloader()
 def raw_data() -&gt; tuple[pd.DataFrame, dict]:
-    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    """Loading raw data. This simulates loading from a file, database, or external service."""
     data = pd.DataFrame(DATA)
-    metadata = {&quot;source&quot;: &quot;notebook&quot;, &quot;format&quot;: &quot;json&quot;}
+    metadata = {"source": "notebook", "format": "json"}
     return data, metadata
 
 def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    """Filter out rows before cutoff date and convert currency to USD."""
     df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
-    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
-    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  
-    df.loc[df.country == &quot;Brazil&quot;, &quot;amound_in_usd&quot;] *= 0.18
-    df.loc[df.country == &quot;Mexico&quot;, &quot;amound_in_usd&quot;] *= 0.05
+    df["amound_in_usd"] = df["amount"]
+    df.loc[df.country == "Canada", "amound_in_usd"] *= 0.71  
+    df.loc[df.country == "Brazil", "amound_in_usd"] *= 0.18
+    df.loc[df.country == "Mexico", "amound_in_usd"] *= 0.05
     return df
 
 def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
-    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum().to_frame()
+    """Sum the amount in USD per country"""
+    return processed_data.groupby("country")["amound_in_usd"].sum().to_frame()
 
 @datasaver()
 def saved_data(amount_per_country: pd.DataFrame) -&gt; dict:
-    amount_per_country.to_parquet(&quot;./saved_data.parquet&quot;)
-    metadata = {&quot;source&quot;: &quot;notebook&quot;, &quot;format&quot;: &quot;parquet&quot;}
+    amount_per_country.to_parquet("./saved_data.parquet")
+    metadata = {"source": "notebook", "format": "parquet"}
     return metadata
 </pre></div>
 </div>
@@ -1413,11 +1413,11 @@ def saved_data(amount_per_country: pd.DataFrame) -&gt; dict:
 <span class="p">)</span>
 
 <span class="n">materializers_results</span> <span class="o">=</span> <span class="n">materializers_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">,</span> <span class="s2">&quot;saved_data&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+    <span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">,</span> <span class="s2">"saved_data"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">materializers_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">materializers_results</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">materializers_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -1446,11 +1446,11 @@ USA          2959.7600
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">materializers_results</span> <span class="o">=</span> <span class="n">materializers_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">,</span> <span class="s2">&quot;saved_data&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+    <span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">,</span> <span class="s2">"saved_data"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">materializers_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">materializers_results</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">materializers_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -1500,18 +1500,18 @@ USA          2959.7600
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">materializers_module</span><span class="p">)</span>
     <span class="o">.</span><span class="n">with_cache</span><span class="p">(</span>
-        <span class="n">default_loader_behavior</span><span class="o">=</span><span class="s2">&quot;recompute&quot;</span><span class="p">,</span>
-        <span class="n">default_saver_behavior</span><span class="o">=</span><span class="s2">&quot;disable&quot;</span>
+        <span class="n">default_loader_behavior</span><span class="o">=</span><span class="s2">"recompute"</span><span class="p">,</span>
+        <span class="n">default_saver_behavior</span><span class="o">=</span><span class="s2">"disable"</span>
     <span class="p">)</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
 
 <span class="n">materializers_results_2</span> <span class="o">=</span> <span class="n">materializers_dr_2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">,</span> <span class="s2">&quot;saved_data&quot;</span><span class="p">],</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">}</span>
+    <span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">,</span> <span class="s2">"saved_data"</span><span class="p">],</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">materializers_results_2</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">materializers_results_2</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">materializers_dr_2</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -1543,12 +1543,12 @@ USA          2959.7600
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;amount_per_country&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;,
- &#39;processed_data&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;,
- &#39;raw_data.loader&#39;: &lt;CachingBehavior.RECOMPUTE: 2&gt;,
- &#39;raw_data&#39;: &lt;CachingBehavior.RECOMPUTE: 2&gt;,
- &#39;saved_data&#39;: &lt;CachingBehavior.DISABLE: 3&gt;,
- &#39;cutoff_date&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'amount_per_country': &lt;CachingBehavior.DEFAULT: 1&gt;,
+ 'processed_data': &lt;CachingBehavior.DEFAULT: 1&gt;,
+ 'raw_data.loader': &lt;CachingBehavior.RECOMPUTE: 2&gt;,
+ 'raw_data': &lt;CachingBehavior.RECOMPUTE: 2&gt;,
+ 'saved_data': &lt;CachingBehavior.DISABLE: 3&gt;,
+ 'cutoff_date': &lt;CachingBehavior.DEFAULT: 1&gt;}
 </pre></div>
 </div>
 </div>
@@ -1580,30 +1580,30 @@ import pandas as pd
 from hamilton.function_modifiers import cache
 
 DATA = {
-    &quot;cities&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;, &quot;Houston&quot;, &quot;Phoenix&quot;, &quot;Mexico City&quot;, &quot;Chihuahua City&quot;, &quot;Rio de Janeiro&quot;],
-    &quot;date&quot;: [&quot;2024-09-13&quot;, &quot;2024-09-12&quot;, &quot;2024-09-11&quot;, &quot;2024-09-11&quot;, &quot;2024-09-09&quot;, &quot;2024-09-08&quot;, &quot;2024-09-07&quot;, &quot;2024-09-06&quot;, &quot;2024-09-05&quot;, &quot;2024-09-04&quot;],
-    &quot;amount&quot;: [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
-    &quot;country&quot;: [&quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Canada&quot;, &quot;Canada&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Mexico&quot;, &quot;Mexico&quot;, &quot;Brazil&quot;],
-    &quot;currency&quot;: [&quot;USD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;CAD&quot;, &quot;CAD&quot;, &quot;USD&quot;, &quot;USD&quot;, &quot;MXN&quot;, &quot;MXN&quot;, &quot;BRL&quot;],
+    "cities": ["New York", "Los Angeles", "Chicago", "Montréal", "Vancouver", "Houston", "Phoenix", "Mexico City", "Chihuahua City", "Rio de Janeiro"],
+    "date": ["2024-09-13", "2024-09-12", "2024-09-11", "2024-09-11", "2024-09-09", "2024-09-08", "2024-09-07", "2024-09-06", "2024-09-05", "2024-09-04"],
+    "amount": [478.23, 251.67, 989.34, 742.14, 584.56, 321.85, 918.67, 135.22, 789.12, 432.78],
+    "country": ["USA", "USA", "USA", "Canada", "Canada", "USA", "USA", "Mexico", "Mexico", "Brazil"],
+    "currency": ["USD", "USD", "USD", "CAD", "CAD", "USD", "USD", "MXN", "MXN", "BRL"],
 }
 
 def raw_data() -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Loading raw data. This simulates loading from a file, database, or external service.&quot;&quot;&quot;
+    """Loading raw data. This simulates loading from a file, database, or external service."""
     return pd.DataFrame(DATA)
 
-@cache(format=&quot;parquet&quot;)
+@cache(format="parquet")
 def processed_data(raw_data: pd.DataFrame, cutoff_date: str) -&gt; pd.DataFrame:
-    &quot;&quot;&quot;Filter out rows before cutoff date and convert currency to USD.&quot;&quot;&quot;
+    """Filter out rows before cutoff date and convert currency to USD."""
     df = raw_data.loc[raw_data.date &gt; cutoff_date].copy()
-    df[&quot;amound_in_usd&quot;] = df[&quot;amount&quot;]
-    df.loc[df.country == &quot;Canada&quot;, &quot;amound_in_usd&quot;] *= 0.71  
-    df.loc[df.country == &quot;Brazil&quot;, &quot;amound_in_usd&quot;] *= 0.18
-    df.loc[df.country == &quot;Mexico&quot;, &quot;amound_in_usd&quot;] *= 0.05
+    df["amound_in_usd"] = df["amount"]
+    df.loc[df.country == "Canada", "amound_in_usd"] *= 0.71  
+    df.loc[df.country == "Brazil", "amound_in_usd"] *= 0.18
+    df.loc[df.country == "Mexico", "amound_in_usd"] *= 0.05
     return df
 
 def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.Series:
-    &quot;&quot;&quot;Sum the amount in USD per country&quot;&quot;&quot;
-    return processed_data.groupby(&quot;country&quot;)[&quot;amound_in_usd&quot;].sum()
+    """Sum the amount in USD per country"""
+    return processed_data.groupby("country")["amound_in_usd"].sum()
 </pre></div>
 </div>
 </div>
@@ -1613,9 +1613,9 @@ def amount_per_country(processed_data: pd.DataFrame) -&gt; pd.Series:
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cache_format_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">cache_format_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
-<span class="n">cache_format_results</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
+<span class="n">cache_format_results</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"amount_per_country"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">cache_format_results</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cache_format_results</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">()</span>
 </pre></div>
@@ -1640,8 +1640,8 @@ Name: amound_in_usd, dtype: float64
 <p>You can access the path programmatically via the <code class="docutils literal notranslate"><span class="pre">result_store._path_from_data_version(...)</span></code> method.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_version</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">][</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]</span>
-<span class="n">parquet_path</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">_path_from_data_version</span><span class="p">(</span><span class="n">data_version</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.parquet&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_version</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">][</span><span class="s2">"processed_data"</span><span class="p">]</span>
+<span class="n">parquet_path</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">_path_from_data_version</span><span class="p">(</span><span class="n">data_version</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".parquet"</span><span class="p">)</span>
 <span class="n">parquet_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1669,18 +1669,18 @@ Name: amound_in_usd, dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;amount_per_country&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;,
- &#39;processed_data&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;,
- &#39;raw_data&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;,
- &#39;cutoff_date&#39;: &lt;CachingBehavior.DEFAULT: 1&gt;}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'amount_per_country': &lt;CachingBehavior.DEFAULT: 1&gt;,
+ 'processed_data': &lt;CachingBehavior.DEFAULT: 1&gt;,
+ 'raw_data': &lt;CachingBehavior.DEFAULT: 1&gt;,
+ 'cutoff_date': &lt;CachingBehavior.DEFAULT: 1&gt;}
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_logs</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">run_logs</span><span class="p">[</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_logs</span> <span class="o">=</span> <span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">cache_format_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">"debug"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">run_logs</span><span class="p">[</span><span class="s2">"processed_data"</span><span class="p">]:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1721,11 +1721,11 @@ processed_data::adapter::resolve_behavior
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">interactive_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">cache_format_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
-<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-01&quot;</span><span class="p">})</span>
-<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-05&quot;</span><span class="p">})</span>
-<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-10&quot;</span><span class="p">})</span>
-<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-11&quot;</span><span class="p">})</span>
-<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;cutoff_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-09-13&quot;</span><span class="p">})</span>
+<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"amount_per_country"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-01"</span><span class="p">})</span>
+<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"amount_per_country"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-05"</span><span class="p">})</span>
+<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"amount_per_country"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-10"</span><span class="p">})</span>
+<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"amount_per_country"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-11"</span><span class="p">})</span>
+<span class="n">interactive_dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"amount_per_country"</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"cutoff_date"</span><span class="p">:</span> <span class="s2">"2024-09-13"</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
@@ -1747,7 +1747,7 @@ processed_data::adapter::execute_node
 amount_per_country::adapter::execute_node
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;amount_per_country&#39;: Series([], Name: amound_in_usd, dtype: float64)}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'amount_per_country': Series([], Name: amound_in_usd, dtype: float64)}
 </pre></div>
 </div>
 </div>
@@ -1779,7 +1779,7 @@ amount_per_country::adapter::execute_node
 <p>Running the next cell will create the directory <code class="docutils literal notranslate"><span class="pre">./my_other_cache</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">manual_path_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">cache_format_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./my_other_cache&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">manual_path_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">cache_format_module</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"./my_other_cache"</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1793,8 +1793,8 @@ amount_per_country::adapter::execute_node
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.caching.stores.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileResultStore</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.caching.stores.sqlite</span><span class="w"> </span><span class="kn">import</span> <span class="n">SQLiteMetadataStore</span>
 
-<span class="n">result_store</span> <span class="o">=</span> <span class="n">FileResultStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./results&quot;</span><span class="p">)</span>
-<span class="n">metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./metadata&quot;</span><span class="p">)</span>
+<span class="n">result_store</span> <span class="o">=</span> <span class="n">FileResultStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"./results"</span><span class="p">)</span>
+<span class="n">metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"./metadata"</span><span class="p">)</span>
 
 <span class="n">manual_stores_dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
@@ -1843,7 +1843,7 @@ amount_per_country::adapter::execute_node
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_id</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">run_ids</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-<span class="n">data_version</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]</span>
+<span class="n">data_version</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">"processed_data"</span><span class="p">]</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_version</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
@@ -1867,15 +1867,15 @@ amount_per_country::adapter::execute_node
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.caching.cache_key</span><span class="w"> </span><span class="kn">import</span> <span class="n">decode_key</span>
 
 <span class="n">run_id</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">run_ids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">cache_key</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">cache_keys</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span>
+<span class="n">cache_key</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">cache_keys</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">"amount_per_country"</span><span class="p">]</span>
 <span class="n">decode_key</span><span class="p">(</span><span class="n">cache_key</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;node_name&#39;: &#39;amount_per_country&#39;,
- &#39;code_version&#39;: &#39;c2ccafa54280fbc969870b6baa445211277d7e8cfa98a0821836c175603ffda2&#39;,
- &#39;dependencies_data_versions&#39;: {&#39;processed_data&#39;: &#39;WgV5-4SfdKTfUY66x-msj_xXsKNPNTP2guRhfw==&#39;}}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'node_name': 'amount_per_country',
+ 'code_version': 'c2ccafa54280fbc969870b6baa445211277d7e8cfa98a0821836c175603ffda2',
+ 'dependencies_data_versions': {'processed_data': 'WgV5-4SfdKTfUY66x-msj_xXsKNPNTP2guRhfw=='}}
 </pre></div>
 </div>
 </div>
@@ -1883,12 +1883,12 @@ amount_per_country::adapter::execute_node
 <p>Indeed, this match the data version for <code class="docutils literal notranslate"><span class="pre">processed_data</span></code> for the 3rd execution.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">&quot;processed_data&quot;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">"processed_data"</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;WgV5-4SfdKTfUY66x-msj_xXsKNPNTP2guRhfw==&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>'WgV5-4SfdKTfUY66x-msj_xXsKNPNTP2guRhfw=='
 </pre></div>
 </div>
 </div>
@@ -1901,7 +1901,7 @@ amount_per_country::adapter::execute_node
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_id</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">run_ids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">cache_key</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">cache_keys</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span>
+<span class="n">cache_key</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">cache_keys</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="s2">"amount_per_country"</span><span class="p">]</span>
 <span class="n">amount_data_version</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cache_key</span><span class="p">)</span>
 <span class="n">amount_result</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">amount_data_version</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">amount_result</span><span class="p">)</span>
@@ -1919,7 +1919,7 @@ Name: amound_in_usd, dtype: float64
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">dep_name</span><span class="p">,</span> <span class="n">dependency_data_version</span> <span class="ow">in</span> <span class="n">decode_key</span><span class="p">(</span><span class="n">cache_key</span><span class="p">)[</span><span class="s2">&quot;dependencies_data_versions&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">dep_name</span><span class="p">,</span> <span class="n">dependency_data_version</span> <span class="ow">in</span> <span class="n">decode_key</span><span class="p">(</span><span class="n">cache_key</span><span class="p">)[</span><span class="s2">"dependencies_data_versions"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="n">dep_result</span> <span class="o">=</span> <span class="n">interactive_dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dependency_data_version</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">dep_name</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">dep_result</span><span class="p">)</span>

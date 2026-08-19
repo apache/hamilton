@@ -545,17 +545,17 @@ s=d.getElementsByTagName('script')[0];
 <p>This passes dataflow modules to the Driver. When passing multiple modules, the Driver assembles them into a single dataflow.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_dataflow.py</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">A</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constant value 35&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Constant value 35"""</span>
     <span class="k">return</span> <span class="mi">35</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">B</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Divide A by 3&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Divide A by 3"""</span>
     <span class="k">return</span> <span class="n">A</span> <span class="o">/</span> <span class="mi">3</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_other_dataflow.py</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">C</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Square A and multiply by B&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Square A and multiply by B"""</span>
     <span class="k">return</span> <span class="n">A</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">B</span>
 </pre></div>
 </div>
@@ -603,17 +603,17 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">A</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constant value 35&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Constant value 35"""</span>
     <span class="k">return</span> <span class="mi">35</span>
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when_not</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;remote&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when_not</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">"remote"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">B__default</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Divide A by 3&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Divide A by 3"""</span>
     <span class="k">return</span> <span class="n">A</span> <span class="o">/</span> <span class="mi">3</span>
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;remote&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">"remote"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">B__remote</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Divide A by 2&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Divide A by 2"""</span>
     <span class="k">return</span> <span class="n">A</span> <span class="o">/</span> <span class="mi">2</span>
 </pre></div>
 </div>
@@ -624,11 +624,11 @@ s=d.getElementsByTagName('script')[0];
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_dataflow</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;remote&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">with_config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">"remote"</span><span class="p">))</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
 
-<span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">&quot;dag.png&quot;</span><span class="p">)</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">"dag.png"</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/config_when.png" class="align-center" src="../../_images/config_when.png" />
@@ -651,11 +651,11 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.io.materialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_</span><span class="p">,</span> <span class="n">to</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_dataflow</span>
 
-<span class="n">loader</span> <span class="o">=</span> <span class="n">from_</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;raw_df&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;/my/raw_file.parquet&quot;</span><span class="p">)</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">from_</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">"raw_df"</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">"/my/raw_file.parquet"</span><span class="p">)</span>
 <span class="n">saver</span> <span class="o">=</span> <span class="n">to</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span>
-    <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;features__parquet&quot;</span><span class="p">,</span>
-    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;features_df&quot;</span><span class="p">],</span>
-    <span class="n">path</span><span class="o">=</span><span class="s2">&quot;/my/feature_file.parquet&quot;</span>
+    <span class="nb">id</span><span class="o">=</span><span class="s2">"features__parquet"</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"features_df"</span><span class="p">],</span>
+    <span class="n">path</span><span class="o">=</span><span class="s2">"/my/feature_file.parquet"</span>
 <span class="p">)</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
@@ -664,9 +664,9 @@ s=d.getElementsByTagName('script')[0];
     <span class="o">.</span><span class="n">with_materializers</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="n">saver</span><span class="p">)</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">&quot;dag.png&quot;</span><span class="p">)</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">"dag.png"</span><span class="p">)</span>
 
-<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;features__parquet&quot;</span><span class="p">])</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"features__parquet"</span><span class="p">])</span>
 </pre></div>
 </div>
 <img alt="../../_images/materializers.png" class="align-center" src="../../_images/materializers.png" />
@@ -694,7 +694,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span><span class="p">,</span> <span class="n">lifecycle</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_dataflow</span>
 
-<span class="n">debug_hook</span> <span class="o">=</span> <span class="n">lifecycle</span><span class="o">.</span><span class="n">default</span><span class="o">.</span><span class="n">PDBDebugger</span><span class="p">(</span><span class="n">node_filter</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">during</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">debug_hook</span> <span class="o">=</span> <span class="n">lifecycle</span><span class="o">.</span><span class="n">default</span><span class="o">.</span><span class="n">PDBDebugger</span><span class="p">(</span><span class="n">node_filter</span><span class="o">=</span><span class="s2">"B"</span><span class="p">,</span> <span class="n">during</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_dataflow</span><span class="p">)</span>

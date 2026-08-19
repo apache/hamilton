@@ -519,25 +519,25 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">This module contains hashing functions for Python objects. It uses</span>
 <span class="sd">functools.singledispatch to allow specialized implementations based on type.</span>
 <span class="sd">Singledispatch automatically applies the most specific implementation</span>
 
 <span class="sd">This module houses implementations for the Python standard library. Supporting</span>
-<span class="sd">all types is considerable endeavor, so we&#39;ll add support as types are requested</span>
+<span class="sd">all types is considerable endeavor, so we'll add support as types are requested</span>
 <span class="sd">by users.</span>
 
 <span class="sd">Otherwise, 3rd party types can be supported via the `h_databackends` module.</span>
@@ -547,15 +547,17 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">IMPORTANT all container types that make a recursive call to `hash_value` or a specific</span>
 <span class="sd">implementation should pass the `depth` parameter to prevent `RecursionError`.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.experimental</span><span class="w"> </span><span class="kn">import</span> <span class="n">h_databackends</span>
 
@@ -565,75 +567,108 @@ s=d.getElementsByTagName('script')[0];
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">NoneType</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">Callable</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;hamilton.caching&quot;</span><span class="p">)</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Hash</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">digest</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="n">hash_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">Buffer</span><span class="p">],</span> <span class="n">Hash</span><span class="p">]</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># xxh3_128 produces a 16-byte digest (24 base64url chars, the same width as the</span>
+    <span class="c1"># md5 it replaces) while running substantially faster on buffer-bound paths.</span>
+    <span class="c1"># TODO(2.0): revisit once/if a dependency-free `apache-hamilton-core` package</span>
+    <span class="c1"># exists, so this optional performance dependency lands in the right tier.</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">xxhash</span>
+
+    <span class="n">hash_func</span> <span class="o">=</span> <span class="n">xxhash</span><span class="o">.</span><span class="n">xxh3_128</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ModuleNotFoundError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+    <span class="c1"># ModuleNotFoundError covers xxhash not being installed; AttributeError</span>
+    <span class="c1"># covers an xxhash older than 0.8.0 (which added xxh3_128).</span>
+    <span class="c1"># usedforsecurity=False avoids a ValueError on FIPS-mode Python; it</span>
+    <span class="c1"># doesn't change the digest.</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+
+    <span class="n">hash_func</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">,</span> <span class="n">usedforsecurity</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"hamilton.caching"</span><span class="p">)</span>
 
 
 <span class="n">MAX_DEPTH</span> <span class="o">=</span> <span class="mi">6</span>
-<span class="n">UNHASHABLE</span> <span class="o">=</span> <span class="s2">&quot;&lt;unhashable&gt;&quot;</span>
-<span class="n">NONE_HASH</span> <span class="o">=</span> <span class="s2">&quot;&lt;none&gt;&quot;</span>
+<span class="n">UNHASHABLE</span> <span class="o">=</span> <span class="s2">"&lt;unhashable&gt;"</span>
+<span class="n">NONE_HASH</span> <span class="o">=</span> <span class="s2">"&lt;none&gt;"</span>
 
 
 <div class="viewcode-block" id="set_max_depth">
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.set_max_depth">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">set_max_depth</span><span class="p">(</span><span class="n">depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the maximum recursion depth for fingerprinting non-supported types.</span>
+<span class="w">    </span><span class="sd">"""Set the maximum recursion depth for fingerprinting non-supported types.</span>
 
 <span class="sd">    :param depth: The maximum depth for fingerprinting.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">MAX_DEPTH</span>
     <span class="n">MAX_DEPTH</span> <span class="o">=</span> <span class="n">depth</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_compact_hash</span><span class="p">(</span><span class="n">digest</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compact the hash to a string that&#39;s safe to pass around.</span>
+<span class="w">    </span><span class="sd">"""Compact the hash to a string that's safe to pass around.</span>
 
 <span class="sd">    NOTE this is particularly relevant for the Hamilton UI and</span>
 <span class="sd">    passing hashes/fingerprints through web services.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">base64</span><span class="o">.</span><span class="n">urlsafe_b64encode</span><span class="p">(</span><span class="n">digest</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_hash_bytes</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash raw bytes and compact-encode the digest.</span>
+<span class="w">    </span><span class="sd">"""Hash raw bytes and compact-encode the digest.</span>
 
 <span class="sd">    All hashing in this module routes through this single helper so the</span>
 <span class="sd">    underlying hashing algorithm can be changed in exactly one place.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_compact_hash</span><span class="p">(</span><span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span>
+
+<span class="sd">    Uses the non-cryptographic xxh3_128 algorithm when the optional</span>
+<span class="sd">    ``xxhash`` package is installed (see the ``performance`` extra),</span>
+<span class="sd">    falling back to hashlib's md5 otherwise. Both produce a 16-byte digest</span>
+<span class="sd">    (24 base64url chars), so digest width is unaffected either way, but the</span>
+<span class="sd">    two algorithms don't produce the same bytes for the same input:</span>
+<span class="sd">    fingerprints are stable within an environment, not across installs with</span>
+<span class="sd">    a different backend.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">_compact_hash</span><span class="p">(</span><span class="n">hash_func</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span>
 
 
 <div class="viewcode-block" id="hash_value">
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_value">[docs]</a>
 <span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatch</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_value</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fingerprinting strategy that computes a hash of the</span>
+<span class="w">    </span><span class="sd">"""Fingerprinting strategy that computes a hash of the</span>
 <span class="sd">    full Python object.</span>
 
 <span class="sd">    The default case hashes the `__dict__` attribute of the</span>
 <span class="sd">    object (recursive).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;</span> <span class="n">MAX_DEPTH</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">UNHASHABLE</span>
 
     <span class="c1"># __dict__ attribute contains the instance attributes of the object.</span>
-    <span class="c1"># this is typically sufficient to define the object and its behavior, so it&#39;s a good target</span>
+    <span class="c1"># this is typically sufficient to define the object and its behavior, so it's a good target</span>
     <span class="c1"># for a hash in the default case.</span>
     <span class="c1"># Objects that return an empty dict should be skipped (very odd behavior, happens with pandas type)</span>
-    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__dict__&quot;</span><span class="p">,</span> <span class="p">{})</span> <span class="o">!=</span> <span class="p">{}:</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">"__dict__"</span><span class="p">,</span> <span class="p">{})</span> <span class="o">!=</span> <span class="p">{}:</span>
         <span class="k">return</span> <span class="n">hash_value</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># check if the object comes from a module part of the standard library</span>
-    <span class="c1"># if it&#39;s the case, hash it&#39;s __repr__(), which is a string representation of the object</span>
+    <span class="c1"># if it's the case, hash it's __repr__(), which is a string representation of the object</span>
     <span class="c1"># __repr__() from the standard library should be well-formed and offer a reliable basis</span>
     <span class="c1"># for fingerprinting.</span>
     <span class="c1"># for example, this will catch: pathlib.Path, enum.Enum, argparse.Namespace</span>
-    <span class="k">elif</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__module__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">builtin_module_names</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">"__module__"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">builtin_module_names</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">hash_repr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span>
 
-    <span class="c1"># cover the datetime module, which doesn&#39;t have a __module__ attribute</span>
+    <span class="c1"># cover the datetime module, which doesn't have a __module__ attribute</span>
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="n">datetime</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
         <span class="k">return</span> <span class="n">hash_repr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span>
 
@@ -645,10 +680,10 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_none">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">NoneType</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_none</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash for None is &lt;none&gt;</span>
+<span class="w">    </span><span class="sd">"""Hash for None is &lt;none&gt;</span>
 
-<span class="sd">    Primitive type returns a hash and doesn&#39;t have to handle depth.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Primitive type returns a hash and doesn't have to handle depth.</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">NONE_HASH</span></div>
 
 
@@ -656,20 +691,20 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="hash_repr">
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_repr">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_repr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Use the built-in repr() to get a string representation of the object</span>
+<span class="w">    </span><span class="sd">"""Use the built-in repr() to get a string representation of the object</span>
 <span class="sd">    and hash it.</span>
 
 <span class="sd">    While `.__repr__()` might not be implemented for all classes, the function</span>
 <span class="sd">    `repr()` will handle it, along with exceptions, to always return a value.</span>
 
-<span class="sd">    Primitive type returns a hash and doesn&#39;t have to handle depth.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Primitive type returns a hash and doesn't have to handle depth.</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">hash_primitive</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span></div>
 
 
 
 <span class="c1"># we need to use explicit multiple registration because older Python</span>
-<span class="c1"># versions don&#39;t support type annotations with Union types</span>
+<span class="c1"># versions don't support type annotations with Union types</span>
 <div class="viewcode-block" id="hash_primitive">
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_primitive">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
@@ -677,15 +712,15 @@ s=d.getElementsByTagName('script')[0];
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_primitive</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert the primitive to a string and hash it.</span>
+<span class="w">    </span><span class="sd">"""Convert the primitive to a string and hash it.</span>
 
 <span class="sd">    The hash is prefixed with the type name so that values sharing the same</span>
-<span class="sd">    string form but differing in type (e.g. ``1`` vs ``&quot;1&quot;`` vs ``1.0``) do</span>
+<span class="sd">    string form but differing in type (e.g. ``1`` vs ``"1"`` vs ``1.0``) do</span>
 <span class="sd">    not collide.</span>
 
-<span class="sd">    Primitive type returns a hash and doesn&#39;t have to handle depth.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span></div>
+<span class="sd">    Primitive type returns a hash and doesn't have to handle depth.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s2">"</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span></div>
 
 
 
@@ -693,14 +728,14 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_bytes">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_bytes</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash a bytes object.</span>
+<span class="w">    </span><span class="sd">"""Hash a bytes object.</span>
 
-<span class="sd">    The hash is prefixed with a ``bytes`` type tag so that ``b&quot;1&quot;`` and the</span>
-<span class="sd">    string ``&quot;1&quot;`` (handled by :func:`hash_primitive`) do not collide.</span>
+<span class="sd">    The hash is prefixed with a ``bytes`` type tag so that ``b"1"`` and the</span>
+<span class="sd">    string ``"1"`` (handled by :func:`hash_primitive`) do not collide.</span>
 
-<span class="sd">    Primitive type returns a hash and doesn&#39;t have to handle depth.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;bytes:&quot;</span> <span class="o">+</span> <span class="n">obj</span><span class="p">)</span></div>
+<span class="sd">    Primitive type returns a hash and doesn't have to handle depth.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="sa">b</span><span class="s2">"bytes:"</span> <span class="o">+</span> <span class="n">obj</span><span class="p">)</span></div>
 
 
 
@@ -708,11 +743,11 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_sequence">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Sequence</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_sequence</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash each object of the sequence.</span>
+<span class="w">    </span><span class="sd">"""Hash each object of the sequence.</span>
 
 <span class="sd">    Orders matters for the hash since orders matters in a sequence.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hash_value</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hash_value</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
 
 
@@ -720,23 +755,23 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="hash_unordered_mapping">
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_unordered_mapping">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_unordered_mapping</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 
 <span class="sd">    When hashing an unordered mapping, the two following dict have the same hash.</span>
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        foo = {&quot;key&quot;: 3, &quot;key2&quot;: 13}</span>
-<span class="sd">        bar = {&quot;key2&quot;: 13, &quot;key&quot;: 3}</span>
+<span class="sd">        foo = {"key": 3, "key2": 13}</span>
+<span class="sd">        bar = {"key2": 13, "key": 3}</span>
 
 <span class="sd">        hash_mapping(foo) == hash_mapping(bar)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">hashed_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">hashed_mapping</span><span class="p">[</span><span class="n">hash_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">hash_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="n">key</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">value</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hashed_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
@@ -747,28 +782,28 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_mapping">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Mapping</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_mapping</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ignore_order</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash each key then its value.</span>
+<span class="w">    </span><span class="sd">"""Hash each key then its value.</span>
 
-<span class="sd">    The mapping is always sorted first because order shouldn&#39;t matter</span>
+<span class="sd">    The mapping is always sorted first because order shouldn't matter</span>
 <span class="sd">    in a mapping.</span>
 
 <span class="sd">    NOTE Since Python 3.7, dictionary store insertion order. However, this</span>
-<span class="sd">    function assumes that they key order doesn&#39;t matter to uniquely identify</span>
+<span class="sd">    function assumes that they key order doesn't matter to uniquely identify</span>
 <span class="sd">    the dictionary.</span>
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        foo = {&quot;key&quot;: 3, &quot;key2&quot;: 13}</span>
-<span class="sd">        bar = {&quot;key2&quot;: 13, &quot;key&quot;: 3}</span>
+<span class="sd">        foo = {"key": 3, "key2": 13}</span>
+<span class="sd">        bar = {"key2": 13, "key": 3}</span>
 
 <span class="sd">        hash_mapping(foo) == hash_mapping(bar)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">ignore_order</span><span class="p">:</span>
-        <span class="c1"># use the same depth because we&#39;re simply dispatching to another implementation</span>
+        <span class="c1"># use the same depth because we're simply dispatching to another implementation</span>
         <span class="k">return</span> <span class="n">hash_unordered_mapping</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span>
 
-    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="n">hash_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">hash_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">)</span>
@@ -780,14 +815,14 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_set">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Set</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_set</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash each element of the set, then sort hashes, and</span>
+<span class="w">    </span><span class="sd">"""Hash each element of the set, then sort hashes, and</span>
 <span class="sd">    create a hash of hashes.</span>
 
 <span class="sd">    For the same objects in the set, the hashes will be the</span>
 <span class="sd">    same.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">sorted_hashes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hash_value</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">)</span>
-    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">hash</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="nb">hash</span> <span class="ow">in</span> <span class="n">sorted_hashes</span><span class="p">)</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">hash</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="nb">hash</span> <span class="ow">in</span> <span class="n">sorted_hashes</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
 
 
@@ -797,7 +832,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">h_databackends</span><span class="o">.</span><span class="n">AbstractPandasDataFrame</span><span class="p">)</span>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">h_databackends</span><span class="o">.</span><span class="n">AbstractPandasColumn</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_pandas_obj</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash a pandas DataFrame, Series, or Index via vectorized row hashing.</span>
+<span class="w">    </span><span class="sd">"""Hash a pandas DataFrame, Series, or Index via vectorized row hashing.</span>
 
 <span class="sd">    ``pandas.util.hash_pandas_object`` computes a uint64 hash per row in a</span>
 <span class="sd">    single vectorized pass; we hash that buffer in one shot rather than</span>
@@ -807,14 +842,14 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    The hash is order-sensitive: reordering rows changes the per-row hash</span>
 <span class="sd">    buffer and therefore the fingerprint.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pandas.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">hash_pandas_object</span>
 
     <span class="n">row_hashes</span> <span class="o">=</span> <span class="n">hash_pandas_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">):</span>
-        <span class="n">schema</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">dtype</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">obj</span><span class="o">.</span><span class="n">dtypes</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">"columns"</span><span class="p">):</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">dtype</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">obj</span><span class="o">.</span><span class="n">dtypes</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">schema</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">None</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="s1">'name'</span><span class="p">,</span><span class="w"> </span><span class="kc">None</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">"</span>
     <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">schema</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">row_hashes</span><span class="p">)</span></div>
 
 
@@ -823,15 +858,15 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_polars_dataframe">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">h_databackends</span><span class="o">.</span><span class="n">AbstractPolarsDataFrame</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_polars_dataframe</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash a polars DataFrame via vectorized row hashing.</span>
+<span class="w">    </span><span class="sd">"""Hash a polars DataFrame via vectorized row hashing.</span>
 
 <span class="sd">    ``DataFrame.hash_rows`` computes a per-row hash in a single vectorized</span>
 <span class="sd">    pass; we hash that buffer (``to_numpy().tobytes()``) in one shot rather</span>
 <span class="sd">    than iterating element-by-element in Python. Column names and dtypes</span>
 <span class="sd">    (the schema) are folded in so frames carrying identical cell values under</span>
 <span class="sd">    different schemas do not collide.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">schema_str</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="sd">    """</span>
+    <span class="n">schema_str</span> <span class="o">=</span> <span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
     <span class="n">schema_hash</span> <span class="o">=</span> <span class="n">hash_bytes</span><span class="p">(</span><span class="n">schema_str</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
     <span class="n">row_hash</span> <span class="o">=</span> <span class="n">hash_bytes</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">hash_rows</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">schema_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">row_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span></div>
@@ -842,8 +877,8 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_polars_column">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">h_databackends</span><span class="o">.</span><span class="n">AbstractPolarsColumn</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_polars_column</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Promote the single Series to a dataframe and hash it&quot;&quot;&quot;</span>
-    <span class="c1"># use the same depth because we&#39;re simply dispatching to another implementation</span>
+<span class="w">    </span><span class="sd">"""Promote the single Series to a dataframe and hash it"""</span>
+    <span class="c1"># use the same depth because we're simply dispatching to another implementation</span>
     <span class="k">return</span> <span class="n">hash_polars_dataframe</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(),</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span></div>
 
 
@@ -852,13 +887,13 @@ s=d.getElementsByTagName('script')[0];
 <a class="viewcode-back" href="../../../../reference/caching/data-versioning/#hamilton.caching.fingerprinting.hash_numpy_array">[docs]</a>
 <span class="nd">@hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">h_databackends</span><span class="o">.</span><span class="n">AbstractNumpyArray</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_numpy_array</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hash a numpy array including shape and dtype metadata.</span>
+<span class="w">    </span><span class="sd">"""Hash a numpy array including shape and dtype metadata.</span>
 
 <span class="sd">    Without metadata, arrays with the same raw bytes but different shapes</span>
 <span class="sd">    or dtypes (e.g., shape=(6,) vs shape=(2,3), or float32 vs int32 with</span>
 <span class="sd">    identical bit patterns) would produce identical hashes.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+<span class="sd">    """</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">"</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">hash_bytes</span><span class="p">(</span><span class="n">metadata</span> <span class="o">+</span> <span class="n">obj</span><span class="o">.</span><span class="n">tobytes</span><span class="p">(),</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span></div>
 
 </pre></div>
@@ -910,182 +945,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1130,6 +1000,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1137,7 +1033,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1154,42 +1058,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1212,7 +1174,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1223,12 +1185,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1248,8 +1204,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1261,7 +1217,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1273,9 +1229,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1298,8 +1254,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1309,10 +1268,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1337,10 +1294,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

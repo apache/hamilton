@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -547,7 +547,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">HamiltonFacet</span><span class="p">(</span><span class="n">facet_v2</span><span class="o">.</span><span class="n">RunFacet</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for Hamilton Facet.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Class for Hamilton Facet."""</span>
 
     <span class="n">hamilton_run_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
     <span class="n">graph_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
@@ -563,20 +563,20 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">etype</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="n">exception</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="n">exception</span><span class="p">,</span> <span class="n">tb</span><span class="o">=</span><span class="n">exception</span><span class="o">.</span><span class="n">__traceback__</span>
         <span class="p">)</span>
 
-    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exception</span><span class="p">(</span><span class="n">exception</span><span class="p">))</span>
+    <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exception</span><span class="p">(</span><span class="n">exception</span><span class="p">))</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_schema_facet</span><span class="p">(</span><span class="n">metadata</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the schema facet from the metadata.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="s2">&quot;dataframe_metadata&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Extracts the schema facet from the metadata."""</span>
+    <span class="k">if</span> <span class="s2">"dataframe_metadata"</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
         <span class="n">schema_datatypes</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">facet_v2</span><span class="o">.</span><span class="n">schema_dataset</span><span class="o">.</span><span class="n">SchemaDatasetFacetFields</span><span class="p">(</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
                 <span class="nb">type</span><span class="o">=</span><span class="n">v</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;dataframe_metadata&quot;</span><span class="p">][</span><span class="s2">&quot;column_names&quot;</span><span class="p">],</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;dataframe_metadata&quot;</span><span class="p">][</span><span class="s2">&quot;datatypes&quot;</span><span class="p">],</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"dataframe_metadata"</span><span class="p">][</span><span class="s2">"column_names"</span><span class="p">],</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"dataframe_metadata"</span><span class="p">][</span><span class="s2">"datatypes"</span><span class="p">],</span>
                 <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">]</span>
@@ -588,39 +588,39 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">create_input_dataset</span><span class="p">(</span><span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">node_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">event_v2</span><span class="o">.</span><span class="n">InputDataset</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the open lineage input dataset.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Creates the open lineage input dataset."""</span>
     <span class="n">datasource_facet</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">storage_facet</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">sql_facet</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;file_metadata&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"file_metadata"</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span>
-        <span class="k">if</span> <span class="s2">&quot;.loader&quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.loader&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;file_metadata&quot;</span><span class="p">][</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
-        <span class="nb">format</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">name</span> <span class="k">else</span> <span class="s2">&quot;unknown&quot;</span>
+        <span class="k">if</span> <span class="s2">".loader"</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">".loader"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">"file_metadata"</span><span class="p">][</span><span class="s2">"path"</span><span class="p">]</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="s2">"."</span> <span class="ow">in</span> <span class="n">name</span> <span class="k">else</span> <span class="s2">"unknown"</span>
         <span class="n">storage_facet</span> <span class="o">=</span> <span class="n">facet_v2</span><span class="o">.</span><span class="n">storage_dataset</span><span class="o">.</span><span class="n">StorageDatasetFacet</span><span class="p">(</span>
-            <span class="n">storageLayer</span><span class="o">=</span><span class="s2">&quot;FileSystem&quot;</span><span class="p">,</span>
+            <span class="n">storageLayer</span><span class="o">=</span><span class="s2">"FileSystem"</span><span class="p">,</span>
             <span class="n">fileFormat</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">datasource_facet</span> <span class="o">=</span> <span class="n">facet_v2</span><span class="o">.</span><span class="n">datasource_dataset</span><span class="o">.</span><span class="n">DatasourceDatasetFacet</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
             <span class="n">uri</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">elif</span> <span class="s2">&quot;sql_metadata&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sql_metadata&quot;</span><span class="p">][</span><span class="s2">&quot;table_name&quot;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s2">"sql_metadata"</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">"sql_metadata"</span><span class="p">][</span><span class="s2">"table_name"</span><span class="p">]</span>
         <span class="n">sql_facet</span> <span class="o">=</span> <span class="n">facet_v2</span><span class="o">.</span><span class="n">sql_job</span><span class="o">.</span><span class="n">SQLJobFacet</span><span class="p">(</span>
-            <span class="n">query</span><span class="o">=</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sql_metadata&quot;</span><span class="p">][</span><span class="s2">&quot;query&quot;</span><span class="p">],</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"sql_metadata"</span><span class="p">][</span><span class="s2">"query"</span><span class="p">],</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;--UNKNOWN--&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">"--UNKNOWN--"</span>
     <span class="n">schema_facet</span> <span class="o">=</span> <span class="n">extract_schema_facet</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
     <span class="n">inputFacets</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">storage_facet</span><span class="p">:</span>
-        <span class="n">inputFacets</span><span class="p">[</span><span class="s2">&quot;storage&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">storage_facet</span>
+        <span class="n">inputFacets</span><span class="p">[</span><span class="s2">"storage"</span><span class="p">]</span> <span class="o">=</span> <span class="n">storage_facet</span>
     <span class="k">if</span> <span class="n">datasource_facet</span><span class="p">:</span>
-        <span class="n">inputFacets</span><span class="p">[</span><span class="s2">&quot;dataSource&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datasource_facet</span>
+        <span class="n">inputFacets</span><span class="p">[</span><span class="s2">"dataSource"</span><span class="p">]</span> <span class="o">=</span> <span class="n">datasource_facet</span>
     <span class="k">if</span> <span class="n">schema_facet</span><span class="p">:</span>
-        <span class="n">inputFacets</span><span class="p">[</span><span class="s2">&quot;schema&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schema_facet</span>
+        <span class="n">inputFacets</span><span class="p">[</span><span class="s2">"schema"</span><span class="p">]</span> <span class="o">=</span> <span class="n">schema_facet</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputFacets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">inputFacets</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">event_v2</span><span class="o">.</span><span class="n">InputDataset</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">facets</span><span class="o">=</span><span class="n">inputFacets</span><span class="p">)]</span>
@@ -628,32 +628,32 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">create_output_dataset</span><span class="p">(</span><span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">node_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">event_v2</span><span class="o">.</span><span class="n">OutputDataset</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the open lineage output dataset.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Creates the open lineage output dataset."""</span>
     <span class="n">datasource_facet</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">storage_facet</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="s2">&quot;file_metadata&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;file_metadata&quot;</span><span class="p">][</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
-        <span class="nb">format</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">name</span> <span class="k">else</span> <span class="s2">&quot;unknown&quot;</span>
+    <span class="k">if</span> <span class="s2">"file_metadata"</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">"file_metadata"</span><span class="p">][</span><span class="s2">"path"</span><span class="p">]</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="s2">"."</span> <span class="ow">in</span> <span class="n">name</span> <span class="k">else</span> <span class="s2">"unknown"</span>
         <span class="n">storage_facet</span> <span class="o">=</span> <span class="n">facet_v2</span><span class="o">.</span><span class="n">storage_dataset</span><span class="o">.</span><span class="n">StorageDatasetFacet</span><span class="p">(</span>
-            <span class="n">storageLayer</span><span class="o">=</span><span class="s2">&quot;FileSystem&quot;</span><span class="p">,</span>
+            <span class="n">storageLayer</span><span class="o">=</span><span class="s2">"FileSystem"</span><span class="p">,</span>
             <span class="n">fileFormat</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">datasource_facet</span> <span class="o">=</span> <span class="n">facet_v2</span><span class="o">.</span><span class="n">datasource_dataset</span><span class="o">.</span><span class="n">DatasourceDatasetFacet</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="n">uri</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">elif</span> <span class="s2">&quot;sql_metadata&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sql_metadata&quot;</span><span class="p">][</span><span class="s2">&quot;table_name&quot;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s2">"sql_metadata"</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">"sql_metadata"</span><span class="p">][</span><span class="s2">"table_name"</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;--UNKNOWN--&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">"--UNKNOWN--"</span>
     <span class="n">schema_facet</span> <span class="o">=</span> <span class="n">extract_schema_facet</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
     <span class="n">outputFacets</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">storage_facet</span><span class="p">:</span>
-        <span class="n">outputFacets</span><span class="p">[</span><span class="s2">&quot;storage&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">storage_facet</span>
+        <span class="n">outputFacets</span><span class="p">[</span><span class="s2">"storage"</span><span class="p">]</span> <span class="o">=</span> <span class="n">storage_facet</span>
     <span class="k">if</span> <span class="n">datasource_facet</span><span class="p">:</span>
-        <span class="n">outputFacets</span><span class="p">[</span><span class="s2">&quot;dataSource&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datasource_facet</span>
+        <span class="n">outputFacets</span><span class="p">[</span><span class="s2">"dataSource"</span><span class="p">]</span> <span class="o">=</span> <span class="n">datasource_facet</span>
     <span class="k">if</span> <span class="n">schema_facet</span><span class="p">:</span>
-        <span class="n">outputFacets</span><span class="p">[</span><span class="s2">&quot;schema&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schema_facet</span>
+        <span class="n">outputFacets</span><span class="p">[</span><span class="s2">"schema"</span><span class="p">]</span> <span class="o">=</span> <span class="n">schema_facet</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputFacets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">outputFacets</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">event_v2</span><span class="o">.</span><span class="n">OutputDataset</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">facets</span><span class="o">=</span><span class="n">outputFacets</span><span class="p">)]</span>
@@ -668,7 +668,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">base</span><span class="o">.</span><span class="n">BasePostNodeExecute</span><span class="p">,</span>
     <span class="n">base</span><span class="o">.</span><span class="n">BasePostGraphExecute</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This adapter emits OpenLineage events.</span>
 
 <span class="sd">    .. code-block:: python</span>
@@ -679,16 +679,16 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        # write to file</span>
 <span class="sd">        from openlineage.client.transport.file import FileConfig, FileTransport</span>
 <span class="sd">        file_config = FileConfig(</span>
-<span class="sd">            log_file_path=&quot;/path/to/your/file&quot;,</span>
+<span class="sd">            log_file_path="/path/to/your/file",</span>
 <span class="sd">            append=False,</span>
 <span class="sd">        )</span>
 <span class="sd">        client = OpenLineageClient(transport=FileTransport(file_config))</span>
 
 <span class="sd">        # write to HTTP, e.g. marquez</span>
-<span class="sd">        client = OpenLineageClient(url=&quot;http://localhost:5000&quot;)</span>
+<span class="sd">        client = OpenLineageClient(url="http://localhost:5000")</span>
 
 <span class="sd">        # create the adapter</span>
-<span class="sd">        adapter = OpenLineageAdapter(client, &quot;my_namespace&quot;, &quot;my_job_name&quot;)</span>
+<span class="sd">        adapter = OpenLineageAdapter(client, "my_namespace", "my_job_name")</span>
 
 <span class="sd">        # add to Hamilton</span>
 <span class="sd">        # import your pipeline code</span>
@@ -696,25 +696,25 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        # execute as normal -- and openlineage events will be emitted</span>
 <span class="sd">        dr.execute(...)</span>
 
-<span class="sd">    Note for data lineage to be emitted, you must use the &quot;materializer&quot; abstraction to provide</span>
+<span class="sd">    Note for data lineage to be emitted, you must use the "materializer" abstraction to provide</span>
 <span class="sd">    metadata. See https://hamilton.apache.org/concepts/materialization/.</span>
 <span class="sd">    This can be done via the `@datasaver()` and `@dataloader()` decorators, or</span>
 <span class="sd">    using the `@load_from` or `@save_to` decorators, as well as passing in data savers</span>
 <span class="sd">    and data loaders via `.with_materializers()` on the Driver Builder, or via `.materialize()`</span>
 <span class="sd">    on the driver object.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="OpenLineageAdapter.__init__">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/OpenLineageAdapter/#hamilton.plugins.h_openlineage.OpenLineageAdapter.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">OpenLineageClient</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor. You pass in the OLClient.</span>
+<span class="w">        </span><span class="sd">"""Constructor. You pass in the OLClient.</span>
 
 <span class="sd">        :param self:</span>
 <span class="sd">        :param client:</span>
 <span class="sd">        :param namespace:</span>
 <span class="sd">        :param job_name:</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># self.transport = transport</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="o">=</span> <span class="n">namespace</span>
@@ -731,7 +731,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">overrides</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Emits a Run START event.</span>
 <span class="sd">        Emits a Job Event with the sourceCode Facet for the entire DAG as the job.</span>
 
@@ -741,7 +741,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param inputs:</span>
 <span class="sd">        :param overrides:</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">exportable_graph</span> <span class="o">=</span> <span class="n">graph_types</span><span class="o">.</span><span class="n">HamiltonGraph</span><span class="o">.</span><span class="n">from_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
         <span class="n">graph_version</span> <span class="o">=</span> <span class="n">exportable_graph</span><span class="o">.</span><span class="n">version</span>
         <span class="n">node_dict</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">exportable_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">]</span>
@@ -749,21 +749,21 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">namespace</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span>
             <span class="n">facets</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;sourceCode&quot;</span><span class="p">:</span> <span class="n">facet_v2</span><span class="o">.</span><span class="n">source_code_job</span><span class="o">.</span><span class="n">SourceCodeJobFacet</span><span class="p">(</span>
-                    <span class="n">language</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">,</span>
+                <span class="s2">"sourceCode"</span><span class="p">:</span> <span class="n">facet_v2</span><span class="o">.</span><span class="n">source_code_job</span><span class="o">.</span><span class="n">SourceCodeJobFacet</span><span class="p">(</span>
+                    <span class="n">language</span><span class="o">=</span><span class="s2">"python"</span><span class="p">,</span>
                     <span class="n">sourceCode</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">node_dict</span><span class="p">),</span>
                 <span class="p">),</span>
-                <span class="s2">&quot;jobType&quot;</span><span class="p">:</span> <span class="n">facet_v2</span><span class="o">.</span><span class="n">job_type_job</span><span class="o">.</span><span class="n">JobTypeJobFacet</span><span class="p">(</span>
-                    <span class="n">processingType</span><span class="o">=</span><span class="s2">&quot;BATCH&quot;</span><span class="p">,</span>
-                    <span class="n">integration</span><span class="o">=</span><span class="s2">&quot;Hamilton&quot;</span><span class="p">,</span>
-                    <span class="n">jobType</span><span class="o">=</span><span class="s2">&quot;DAG&quot;</span><span class="p">,</span>
+                <span class="s2">"jobType"</span><span class="p">:</span> <span class="n">facet_v2</span><span class="o">.</span><span class="n">job_type_job</span><span class="o">.</span><span class="n">JobTypeJobFacet</span><span class="p">(</span>
+                    <span class="n">processingType</span><span class="o">=</span><span class="s2">"BATCH"</span><span class="p">,</span>
+                    <span class="n">integration</span><span class="o">=</span><span class="s2">"Hamilton"</span><span class="p">,</span>
+                    <span class="n">jobType</span><span class="o">=</span><span class="s2">"DAG"</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">},</span>
         <span class="p">)</span>
         <span class="n">run</span> <span class="o">=</span> <span class="n">event_v2</span><span class="o">.</span><span class="n">Run</span><span class="p">(</span>
             <span class="n">runId</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
             <span class="n">facets</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;hamilton&quot;</span><span class="p">:</span> <span class="n">HamiltonFacet</span><span class="p">(</span>
+                <span class="s2">"hamilton"</span><span class="p">:</span> <span class="n">HamiltonFacet</span><span class="p">(</span>
                     <span class="n">hamilton_run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                     <span class="n">graph_version</span><span class="o">=</span><span class="n">graph_version</span><span class="p">,</span>
                     <span class="n">final_vars</span><span class="o">=</span><span class="n">final_vars</span><span class="p">,</span>
@@ -786,7 +786,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">pre_node_execute</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;No event emitted.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""No event emitted."""</span>
         <span class="k">pass</span></div>
 
 
@@ -802,7 +802,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">result</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Run Event: will emit a RUNNING event with updates on input/outputs.</span>
 
 <span class="sd">        A Job Event will be emitted for graph execution, and additional SQLJob facet if data was loaded</span>
@@ -824,24 +824,24 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param result:</span>
 <span class="sd">        :param task_id:</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
             <span class="c1"># do not emit anything</span>
             <span class="k">return</span>
         <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">saved_or_loaded</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hamilton.data_saver&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">saved_or_loaded</span> <span class="o">=</span> <span class="s2">""</span>
+        <span class="k">if</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"hamilton.data_saver"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">metadata</span> <span class="o">=</span> <span class="n">result</span>
-            <span class="n">saved_or_loaded</span> <span class="o">=</span> <span class="s2">&quot;saved&quot;</span>
+            <span class="n">saved_or_loaded</span> <span class="o">=</span> <span class="s2">"saved"</span>
         <span class="k">elif</span> <span class="p">(</span>
-            <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hamilton.data_loader&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
-            <span class="ow">and</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hamilton.data_loader.has_metadata&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+            <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"hamilton.data_loader"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+            <span class="ow">and</span> <span class="n">node_</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"hamilton.data_loader.has_metadata"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
             <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
             <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
             <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">metadata</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">saved_or_loaded</span> <span class="o">=</span> <span class="s2">&quot;loaded&quot;</span>
+            <span class="n">saved_or_loaded</span> <span class="o">=</span> <span class="s2">"loaded"</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">metadata</span><span class="p">:</span>
             <span class="c1"># no metadata to emit</span>
             <span class="k">return</span>
@@ -849,7 +849,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">inputs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">sql_facet</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">saved_or_loaded</span> <span class="o">==</span> <span class="s2">&quot;loaded&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">saved_or_loaded</span> <span class="o">==</span> <span class="s2">"loaded"</span><span class="p">:</span>
             <span class="n">inputs</span><span class="p">,</span> <span class="n">sql_facet</span> <span class="o">=</span> <span class="n">create_input_dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">node_</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">outputs</span> <span class="o">=</span> <span class="n">create_output_dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">node_</span><span class="p">)</span>
@@ -859,7 +859,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="p">)</span>
         <span class="n">job_facets</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">sql_facet</span><span class="p">:</span>
-            <span class="n">job_facets</span><span class="p">[</span><span class="s2">&quot;sql&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sql_facet</span>
+            <span class="n">job_facets</span><span class="p">[</span><span class="s2">"sql"</span><span class="p">]</span> <span class="o">=</span> <span class="n">sql_facet</span>
         <span class="n">job</span> <span class="o">=</span> <span class="n">event_v2</span><span class="o">.</span><span class="n">Job</span><span class="p">(</span><span class="n">namespace</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span> <span class="n">facets</span><span class="o">=</span><span class="n">job_facets</span><span class="p">)</span>
         <span class="n">run_event</span> <span class="o">=</span> <span class="n">event_v2</span><span class="o">.</span><span class="n">RunEvent</span><span class="p">(</span>
             <span class="n">eventType</span><span class="o">=</span><span class="n">event_v2</span><span class="o">.</span><span class="n">RunState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">,</span>
@@ -882,7 +882,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">results</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Emits a Run COMPLETE or FAIL event.</span>
+<span class="w">        </span><span class="sd">"""Emits a Run COMPLETE or FAIL event.</span>
 
 <span class="sd">        :param run_id:</span>
 <span class="sd">        :param graph:</span>
@@ -890,7 +890,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param error:</span>
 <span class="sd">        :param results:</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">job</span> <span class="o">=</span> <span class="n">event_v2</span><span class="o">.</span><span class="n">Job</span><span class="p">(</span>
             <span class="n">namespace</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_name</span><span class="p">,</span>
@@ -901,10 +901,10 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">run_event_type</span> <span class="o">=</span> <span class="n">event_v2</span><span class="o">.</span><span class="n">RunState</span><span class="o">.</span><span class="n">FAIL</span>
             <span class="n">error_message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
             <span class="n">facets</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;errorMessage&quot;</span><span class="p">:</span> <span class="n">facet_v2</span><span class="o">.</span><span class="n">error_message_run</span><span class="o">.</span><span class="n">ErrorMessageRunFacet</span><span class="p">(</span>
+                <span class="s2">"errorMessage"</span><span class="p">:</span> <span class="n">facet_v2</span><span class="o">.</span><span class="n">error_message_run</span><span class="o">.</span><span class="n">ErrorMessageRunFacet</span><span class="p">(</span>
                     <span class="n">message</span><span class="o">=</span><span class="n">error_message</span><span class="p">,</span>
                     <span class="n">stackTrace</span><span class="o">=</span><span class="n">get_stack_trace</span><span class="p">(</span><span class="n">error</span><span class="p">),</span>
-                    <span class="n">programmingLanguage</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">,</span>
+                    <span class="n">programmingLanguage</span><span class="o">=</span><span class="s2">"python"</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">}</span>
         <span class="n">run</span> <span class="o">=</span> <span class="n">event_v2</span><span class="o">.</span><span class="n">Run</span><span class="p">(</span><span class="n">runId</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">facets</span><span class="o">=</span><span class="n">facets</span><span class="p">)</span>
@@ -920,17 +920,17 @@ s=d.getElementsByTagName('script')[0];
 
 
 
-<span class="c1"># if __name__ == &quot;__main__&quot;:</span>
+<span class="c1"># if __name__ == "__main__":</span>
 <span class="c1">#     from openlineage.client import OpenLineageClient</span>
 <span class="c1">#     from openlineage.client.transport.file import FileConfig, FileTransport</span>
 <span class="c1">#</span>
 <span class="c1">#     file_config = FileConfig(</span>
-<span class="c1">#         log_file_path=&quot;/path/to/your/file&quot;,</span>
+<span class="c1">#         log_file_path="/path/to/your/file",</span>
 <span class="c1">#         append=False,</span>
 <span class="c1">#     )</span>
 <span class="c1">#</span>
 <span class="c1">#     client = OpenLineageClient(transport=FileTransport(file_config))</span>
-<span class="c1">#     namespace = &quot;my_namespace&quot;</span>
+<span class="c1">#     namespace = "my_namespace"</span>
 <span class="c1">#     db_datset = Dataset(namespace, name, facets)</span>
 </pre></div>
         </article>
@@ -981,182 +981,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1201,6 +1036,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1208,7 +1069,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1225,42 +1094,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1283,7 +1210,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1294,12 +1221,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1319,8 +1240,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1332,7 +1253,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1344,9 +1265,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1369,8 +1290,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1380,10 +1304,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1408,10 +1330,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

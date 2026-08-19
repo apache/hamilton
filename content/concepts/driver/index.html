@@ -535,15 +535,15 @@ s=d.getElementsByTagName('script')[0];
 <p>For this page, let’s pretend we defined the following module <code class="docutils literal notranslate"><span class="pre">my_dataflow.py</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_dataflow.py</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">A</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constant value 35&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Constant value 35"""</span>
     <span class="k">return</span> <span class="mi">35</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">B</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Divide A by 3&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Divide A by 3"""</span>
     <span class="k">return</span> <span class="n">A</span> <span class="o">/</span> <span class="mi">3</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">C</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Square A and multiply by B&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Square A and multiply by B"""</span>
     <span class="k">return</span> <span class="n">A</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">B</span>
 </pre></div>
 </div>
@@ -571,7 +571,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_dataflow</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_dataflow</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">&quot;dag.png&quot;</span><span class="p">)</span>  <span class="c1"># outputs a file dag.png</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">"dag.png"</span><span class="p">)</span>  <span class="c1"># outputs a file dag.png</span>
 <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">()</span>  <span class="c1"># to view directly in a notebook</span>
 </pre></div>
 </div>
@@ -586,10 +586,10 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_dataflow</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_dataflow</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">visualize_execution</span><span class="p">([</span><span class="s2">&quot;C&quot;</span><span class="p">],</span> <span class="s2">&quot;execute_c.png&quot;</span><span class="p">)</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;C&quot;</span><span class="p">])</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">visualize_execution</span><span class="p">([</span><span class="s2">"C"</span><span class="p">],</span> <span class="s2">"execute_c.png"</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"C"</span><span class="p">])</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">])</span>  <span class="c1"># access results dictionary</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">"C"</span><span class="p">])</span>  <span class="c1"># access results dictionary</span>
 </pre></div>
 </div>
 <p>The Driver automatically determines the minimum required path to compute requested nodes. See the respective outputs for <code class="docutils literal notranslate"><span class="pre">dr.visualize_execution([&quot;C&quot;])</span></code> and <code class="docutils literal notranslate"><span class="pre">dr.visualize_execution([&quot;B&quot;])</span></code>:</p>
@@ -607,21 +607,21 @@ s=d.getElementsByTagName('script')[0];
 <p>For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_dataflow.py</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">A</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constant value 35&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Constant value 35"""</span>
     <span class="k">return</span> <span class="mi">35</span>
 
 <span class="c1"># ... more functions</span>
 
 <span class="c1"># is True when calling `python my_dataflow.py`</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
     <span class="c1"># __main__ refers to the file itself</span>
     <span class="c1"># and yes, a file can import itself as a module!</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">__main__</span>
 
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">__main__</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-    <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">&quot;dag.png&quot;</span><span class="p">)</span>
-    <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;C&quot;</span><span class="p">])</span>
+    <span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">"dag.png"</span><span class="p">)</span>
+    <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"C"</span><span class="p">])</span>
 </pre></div>
 </div>
 </section>
@@ -641,12 +641,12 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="c1"># rebuild the `Driver` with the reloaded module and execute again</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_dataflow</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">&quot;dag.png&quot;</span><span class="p">)</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;C&quot;</span><span class="p">])</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">display_all_functions</span><span class="p">(</span><span class="s2">"dag.png"</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"C"</span><span class="p">])</span>
 
 <span class="c1"># %%cell 3</span>
 <span class="c1"># do something with results</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">"C"</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Learn other Jupyter development tips on the page <a class="reference internal" href="../../how-tos/use-in-jupyter-notebook/"><span class="doc">Jupyter notebooks</span></a>.</p>

@@ -574,8 +574,8 @@ to use <code class="docutils literal notranslate"><span class="pre">None</span><
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
 <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="p">[</span><span class="s2">&quot;will_proceed&quot;</span><span class="p">,</span> <span class="s2">&quot;never_reached&quot;</span><span class="p">]</span>
-<span class="p">)</span>  <span class="c1"># will return {&#39;will_proceed&#39;: 1, &#39;never_reached&#39;: None}</span>
+    <span class="p">[</span><span class="s2">"will_proceed"</span><span class="p">,</span> <span class="s2">"never_reached"</span><span class="p">]</span>
+<span class="p">)</span>  <span class="c1"># will return {'will_proceed': 1, 'never_reached': None}</span>
 </pre></div>
 </div>
 <p>Note you can customize the error you want it to fail on and the sentinel value to use in place of a node’s result if it fails.</p>
@@ -617,7 +617,7 @@ will occur. Meaning if item (3) fails out of 1,2,3,4,5, 4/5 will not run. If you
     <span class="p">)</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;gather&quot;</span><span class="p">])</span>  <span class="c1"># will return {&#39;gather&#39;: [0,1,2,None]}</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"gather"</span><span class="p">])</span>  <span class="c1"># will return {'gather': [0,1,2,None]}</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
@@ -631,7 +631,7 @@ will occur. Meaning if item (3) fails out of 1,2,3,4,5, 4/5 will not run. If you
     <span class="p">)</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;gather&quot;</span><span class="p">])</span>  <span class="c1"># will return {&#39;gather&#39;: [None]}</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"gather"</span><span class="p">])</span>  <span class="c1"># will return {'gather': [None]}</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -666,10 +666,10 @@ or considers a failure interesting enough to log or notify.</p>
 <span class="nd">@accept_error_sentinels</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">results_gathering</span><span class="p">(</span><span class="n">result_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">result_2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
     <span class="n">answer</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">&quot;result 1&quot;</span><span class="p">,</span> <span class="s2">&quot;result 2&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">result_1</span><span class="p">,</span> <span class="n">result_2</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">"result 1"</span><span class="p">,</span> <span class="s2">"result 2"</span><span class="p">],</span> <span class="p">[</span><span class="n">result_1</span><span class="p">,</span> <span class="n">result_2</span><span class="p">])</span>
         <span class="n">answer</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span>
         <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="n">SENTINEL</span><span class="p">:</span>
-            <span class="n">answer</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Node failure: no result&quot;</span>
+            <span class="n">answer</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Node failure: no result"</span>
             <span class="c1"># You may want side-effects for a failure.</span>
             <span class="n">_send_text_that_your_runs_errored</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">answer</span>

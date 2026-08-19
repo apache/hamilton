@@ -536,24 +536,24 @@ s=d.getElementsByTagName('script')[0];
 <p>For this page, we’ll assume we have the following dataflow and Driver:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_dataflow.py</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">A</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constant value 35&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Constant value 35"""</span>
     <span class="k">return</span> <span class="mi">35</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">B</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Divide A by 3&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Divide A by 3"""</span>
     <span class="k">return</span> <span class="n">A</span> <span class="o">/</span> <span class="mi">3</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">C</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Square A and multiply by B&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Square A and multiply by B"""</span>
     <span class="k">return</span> <span class="n">A</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">B</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">D</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Say `hello` A times&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="s2">&quot;hello &quot;</span>
+<span class="w">    </span><span class="sd">"""Say `hello` A times"""</span>
+    <span class="k">return</span> <span class="s2">"hello "</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">E</span><span class="p">(</span><span class="n">D</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Say hello*A world&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">D</span> <span class="o">+</span> <span class="s2">&quot;world&quot;</span>
+<span class="w">    </span><span class="sd">"""Say hello*A world"""</span>
+    <span class="k">return</span> <span class="n">D</span> <span class="o">+</span> <span class="s2">"world"</span>
 
 <span class="c1"># run.py</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
@@ -580,7 +580,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># pull variables to ensure .execute() and</span>
 <span class="c1"># .visualize_execution() receive the same</span>
 <span class="c1"># arguments</span>
-<span class="n">final_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">]</span>
+<span class="n">final_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">,</span> <span class="s2">"E"</span><span class="p">]</span>
 <span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 <span class="n">overrides</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">B</span><span class="o">=</span><span class="mf">36.1</span><span class="p">)</span>
 
@@ -600,12 +600,12 @@ s=d.getElementsByTagName('script')[0];
 </a>
 <p>An equivalent method is available if you’re using materialization.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">materializer</span> <span class="o">=</span>  <span class="n">to</span><span class="o">.</span><span class="n">json</span><span class="p">(</span>
-    <span class="n">path</span><span class="o">=</span><span class="s2">&quot;./out.json&quot;</span><span class="p">,</span>
-    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">],</span>
+    <span class="n">path</span><span class="o">=</span><span class="s2">"./out.json"</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">"C"</span><span class="p">,</span> <span class="s2">"E"</span><span class="p">],</span>
     <span class="n">combine</span><span class="o">=</span><span class="n">base</span><span class="o">.</span><span class="n">DictResult</span><span class="p">(),</span>
-    <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;results_to_json&quot;</span><span class="p">,</span>
+    <span class="nb">id</span><span class="o">=</span><span class="s2">"results_to_json"</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">additional_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span>
+<span class="n">additional_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"A"</span><span class="p">]</span>
 <span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 <span class="n">overrides</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">B</span><span class="o">=</span><span class="mf">36.1</span><span class="p">)</span>
 
@@ -614,7 +614,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">additional_vars</span><span class="o">=</span><span class="n">additional_vars</span><span class="p">,</span>
     <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
     <span class="n">overrides</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">B</span><span class="o">=</span><span class="mf">36.1</span><span class="p">),</span>
-    <span class="n">output_file_path</span><span class="o">=</span><span class="s2">&quot;dag.png&quot;</span>
+    <span class="n">output_file_path</span><span class="o">=</span><span class="s2">"dag.png"</span>
 <span class="p">)</span>
 <span class="n">dr</span><span class="o">.</span><span class="n">materialize</span><span class="p">(</span>
     <span class="n">materializer</span><span class="p">,</span>
@@ -639,20 +639,20 @@ s=d.getElementsByTagName('script')[0];
 </ul>
 <p>These functions are wrapped into their visualization counterparts:</p>
 <p>Display ancestors of <code class="docutils literal notranslate"><span class="pre">B</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span><span class="o">.</span><span class="n">display_upstream</span><span class="p">([</span><span class="s2">&quot;B&quot;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span><span class="o">.</span><span class="n">display_upstream</span><span class="p">([</span><span class="s2">"B"</span><span class="p">])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../../_images/upstream.png"><img alt="../../_images/upstream.png" src="../../_images/upstream.png" style="height: 200px;" />
 </a>
 <p>Display descendants of <code class="docutils literal notranslate"><span class="pre">D</span></code> and its immediate parents (<code class="docutils literal notranslate"><span class="pre">A</span></code> only).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span><span class="o">.</span><span class="n">display_downstream</span><span class="p">([</span><span class="s2">&quot;D&quot;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span><span class="o">.</span><span class="n">display_downstream</span><span class="p">([</span><span class="s2">"D"</span><span class="p">])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../../_images/downstream.png"><img alt="../../_images/downstream.png" src="../../_images/downstream.png" style="height: 200px;" />
 </a>
 <p>Filter nodes to the necessary path:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span><span class="o">.</span><span class="n">visualize_path</span><span class="o">-</span><span class="n">between</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">)</span>
-<span class="c1"># dr.visualize_path-between(&quot;C&quot;, &quot;D&quot;) would return</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span><span class="o">.</span><span class="n">visualize_path</span><span class="o">-</span><span class="n">between</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">)</span>
+<span class="c1"># dr.visualize_path-between("C", "D") would return</span>
 <span class="c1"># ValueError: No path found between C and D.</span>
 </pre></div>
 </div>
@@ -667,11 +667,11 @@ s=d.getElementsByTagName('script')[0];
 <p>Use the <code class="docutils literal notranslate"><span class="pre">&#64;tag</span></code> decorator with <code class="docutils literal notranslate"><span class="pre">display_name</span></code> to show human-readable labels in visualizations while keeping valid Python identifiers as function names. This is useful for creating presentation-ready diagrams or adding business-friendly names:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">tag</span>
 
-<span class="nd">@tag</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Parse Raw JSON&quot;</span><span class="p">)</span>
+<span class="nd">@tag</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s2">"Parse Raw JSON"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_raw_json</span><span class="p">(</span><span class="n">raw_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
 
-<span class="nd">@tag</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Transform to DataFrame&quot;</span><span class="p">)</span>
+<span class="nd">@tag</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s2">"Transform to DataFrame"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">transform_to_df</span><span class="p">(</span><span class="n">parse_raw_json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">parse_raw_json</span><span class="p">)</span>
 </pre></div>
@@ -701,14 +701,14 @@ s=d.getElementsByTagName('script')[0];
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">custom_style</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">graph_types</span><span class="o">.</span><span class="n">HamiltonNode</span><span class="p">,</span> <span class="n">node_class</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom style function for the visualization.</span>
+<span class="w">    </span><span class="sd">"""Custom style function for the visualization.</span>
 
 <span class="sd">    :param node: node that Apache Hamilton is styling.</span>
 <span class="sd">    :param node_class: class used to style the default visualization</span>
 <span class="sd">    :return: a triple of (style, node_class, legend_name)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-        <span class="n">style</span> <span class="o">=</span> <span class="p">({</span><span class="s2">&quot;fillcolor&quot;</span><span class="p">:</span> <span class="s2">&quot;aquamarine&quot;</span><span class="p">},</span> <span class="n">node_class</span><span class="p">,</span> <span class="s2">&quot;numbers&quot;</span><span class="p">)</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="p">({</span><span class="s2">"fillcolor"</span><span class="p">:</span> <span class="s2">"aquamarine"</span><span class="p">},</span> <span class="n">node_class</span><span class="p">,</span> <span class="s2">"numbers"</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">style</span> <span class="o">=</span> <span class="p">({},</span> <span class="n">node_class</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>

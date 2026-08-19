@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -547,7 +547,7 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">await_dict_of_tasks</span><span class="p">(</span><span class="n">task_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Util to await a dictionary of tasks as asyncio.gather is kind of garbage&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Util to await a dictionary of tasks as asyncio.gather is kind of garbage"""</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">task_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="n">coroutines</span> <span class="o">=</span> <span class="p">[</span><span class="n">task_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
     <span class="n">coroutines_gathered</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">coroutines</span><span class="p">)</span>
@@ -555,12 +555,12 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process_value</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper function to process the value of a potential awaitable.</span>
+<span class="w">    </span><span class="sd">"""Helper function to process the value of a potential awaitable.</span>
 <span class="sd">    This is very simple -- all it does is await the value if its not already resolved.</span>
 
 <span class="sd">    :param val: Value to process.</span>
 <span class="sd">    :return: The value (awaited if it is a coroutine, raw otherwise).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isawaitable</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">val</span>
     <span class="k">return</span> <span class="k">await</span> <span class="n">val</span>
@@ -569,7 +569,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="AsyncGraphAdapter">
 <a class="viewcode-back" href="../../../reference/graph-adapters/AsyncGraphAdapter/#hamilton.async_driver.AsyncGraphAdapter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AsyncGraphAdapter</span><span class="p">(</span><span class="n">lifecycle_base</span><span class="o">.</span><span class="n">BaseDoNodeExecute</span><span class="p">,</span> <span class="n">lifecycle</span><span class="o">.</span><span class="n">ResultBuilder</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Graph adapter for use with the :class:`AsyncDriver` class.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Graph adapter for use with the :class:`AsyncDriver` class."""</span>
 
 <div class="viewcode-block" id="AsyncGraphAdapter.__init__">
 <a class="viewcode-back" href="../../../reference/graph-adapters/AsyncGraphAdapter/#hamilton.async_driver.AsyncGraphAdapter.__init__">[docs]</a>
@@ -578,14 +578,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">result_builder</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">ResultMixin</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">async_lifecycle_adapters</span><span class="p">:</span> <span class="n">lifecycle_base</span><span class="o">.</span><span class="n">LifecycleAdapterSet</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates an AsyncGraphAdapter class. Note this will *only* work with the AsyncDriver class.</span>
+<span class="w">        </span><span class="sd">"""Creates an AsyncGraphAdapter class. Note this will *only* work with the AsyncDriver class.</span>
 
 <span class="sd">        Some things to note:</span>
 
 <span class="sd">            1. This executes everything at the end (recursively). E.G. the final DAG nodes are awaited</span>
 <span class="sd">            2. This does *not* work with decorators when the async function is being decorated. That is\</span>
 <span class="sd">            because that function is called directly within the decorator, so we cannot await it.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">AsyncGraphAdapter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">async_lifecycle_adapters</span>
@@ -606,12 +606,12 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">],</span>
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Executes a node. Note this doesn&#39;t actually execute it -- rather, it returns a task.</span>
+<span class="w">        </span><span class="sd">"""Executes a node. Note this doesn't actually execute it -- rather, it returns a task.</span>
 <span class="sd">        This does *not* use async def, as we want it to be awaited on later -- this await is done</span>
 <span class="sd">        in processing parameters of downstream functions/final results. We can ensure that as</span>
 <span class="sd">        we also run the driver that this corresponds to.</span>
 
-<span class="sd">        Note that this assumes that everything is awaitable, even if it isn&#39;t.</span>
+<span class="sd">        Note that this assumes that everything is awaitable, even if it isn't.</span>
 <span class="sd">        In that case, it just wraps it in one.</span>
 
 <span class="sd">        :param task_id:</span>
@@ -620,7 +620,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param node: Node to wrap</span>
 <span class="sd">        :param kwargs: Keyword arguments (either coroutines or raw values) to call it with</span>
 <span class="sd">        :return: A task</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">callabl</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">callable</span>
 
         <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">new_fn</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">callabl</span><span class="p">,</span> <span class="o">**</span><span class="n">fn_kwargs</span><span class="p">):</span>
@@ -631,10 +631,10 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">pre_node_execute_errored</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">does_hook</span><span class="p">(</span><span class="s2">&quot;pre_node_execute&quot;</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">does_hook</span><span class="p">(</span><span class="s2">"pre_node_execute"</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">call_all_lifecycle_hooks_async</span><span class="p">(</span>
-                            <span class="s2">&quot;pre_node_execute&quot;</span><span class="p">,</span>
+                            <span class="s2">"pre_node_execute"</span><span class="p">,</span>
                             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                             <span class="n">node_</span><span class="o">=</span><span class="n">node_</span><span class="p">,</span>
                             <span class="n">kwargs</span><span class="o">=</span><span class="n">fn_kwargs</span><span class="p">,</span>
@@ -645,9 +645,9 @@ s=d.getElementsByTagName('script')[0];
                         <span class="k">raise</span> <span class="n">e</span>
                 <span class="c1"># TODO -- consider how to use node execution methods in the future</span>
                 <span class="c1"># This is messy as it is a method called within a method...</span>
-                <span class="c1"># if self.adapter.does_method(&quot;do_node_execute&quot;, is_async=False):</span>
+                <span class="c1"># if self.adapter.does_method("do_node_execute", is_async=False):</span>
                 <span class="c1">#     result = self.adapter.call_lifecycle_method_sync(</span>
-                <span class="c1">#         &quot;do_node_execute&quot;,</span>
+                <span class="c1">#         "do_node_execute",</span>
                 <span class="c1">#         run_id=run_id,</span>
                 <span class="c1">#         node_=node_,</span>
                 <span class="c1">#         kwargs=kwargs,</span>
@@ -661,17 +661,17 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="n">error</span> <span class="o">=</span> <span class="n">e</span>
-                <span class="n">step</span> <span class="o">=</span> <span class="s2">&quot;[pre-node-execute:async]&quot;</span> <span class="k">if</span> <span class="n">pre_node_execute_errored</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">step</span> <span class="o">=</span> <span class="s2">"[pre-node-execute:async]"</span> <span class="k">if</span> <span class="n">pre_node_execute_errored</span> <span class="k">else</span> <span class="s2">""</span>
                 <span class="n">message</span> <span class="o">=</span> <span class="n">create_error_message</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">node_</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
                 <span class="k">raise</span>
             <span class="k">finally</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">pre_node_execute_errored</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">does_hook</span><span class="p">(</span>
-                    <span class="s2">&quot;post_node_execute&quot;</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="s2">"post_node_execute"</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span>
                 <span class="p">):</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">call_all_lifecycle_hooks_async</span><span class="p">(</span>
-                            <span class="s2">&quot;post_node_execute&quot;</span><span class="p">,</span>
+                            <span class="s2">"post_node_execute"</span><span class="p">,</span>
                             <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                             <span class="n">node_</span><span class="o">=</span><span class="n">node_</span><span class="p">,</span>
                             <span class="n">kwargs</span><span class="o">=</span><span class="n">fn_kwargs</span><span class="p">,</span>
@@ -681,7 +681,7 @@ s=d.getElementsByTagName('script')[0];
                             <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                        <span class="n">message</span> <span class="o">=</span> <span class="n">create_error_message</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">node_</span><span class="p">,</span> <span class="s2">&quot;[post-node-execute]&quot;</span><span class="p">)</span>
+                        <span class="n">message</span> <span class="o">=</span> <span class="n">create_error_message</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">node_</span><span class="p">,</span> <span class="s2">"[post-node-execute]"</span><span class="p">)</span>
                         <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
                         <span class="k">raise</span>
 
@@ -703,12 +703,12 @@ s=d.getElementsByTagName('script')[0];
 <span class="k">def</span><span class="w"> </span><span class="nf">separate_sync_from_async</span><span class="p">(</span>
     <span class="n">adapters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">lifecycle</span><span class="o">.</span><span class="n">LifecycleAdapter</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">lifecycle</span><span class="o">.</span><span class="n">LifecycleAdapter</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">lifecycle</span><span class="o">.</span><span class="n">LifecycleAdapter</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Separates the sync and async adapters from a list of adapters.</span>
-<span class="sd">    Note this only works with hooks -- we&#39;ll be dealing with methods later.</span>
+<span class="w">    </span><span class="sd">"""Separates the sync and async adapters from a list of adapters.</span>
+<span class="sd">    Note this only works with hooks -- we'll be dealing with methods later.</span>
 
 <span class="sd">    :param adapters: List of adapters</span>
 <span class="sd">    :return: Tuple of sync adapters, async adapters</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">adapter_set</span> <span class="o">=</span> <span class="n">lifecycle_base</span><span class="o">.</span><span class="n">LifecycleAdapterSet</span><span class="p">(</span><span class="o">*</span><span class="n">adapters</span><span class="p">)</span>
     <span class="c1"># this is using internal(ish) fields (.sync_hooks/.async_hooks) -- we should probably expose it</span>
@@ -727,14 +727,14 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="AsyncDriver">
 <a class="viewcode-back" href="../../../reference/drivers/AsyncDriver/#hamilton.async_driver.AsyncDriver">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AsyncDriver</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">Driver</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Async driver. This is a driver that uses the AsyncGraphAdapter to execute the graph.</span>
+<span class="w">    </span><span class="sd">"""Async driver. This is a driver that uses the AsyncGraphAdapter to execute the graph.</span>
 
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        dr = async_driver.AsyncDriver({}, async_module, result_builder=base.DictResult())</span>
 <span class="sd">        df = await dr.execute([...], inputs=...)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="AsyncDriver.__init__">
 <a class="viewcode-back" href="../../../reference/drivers/AsyncDriver/#hamilton.async_driver.AsyncDriver.__init__">[docs]</a>
@@ -746,7 +746,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">adapters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">lifecycle</span><span class="o">.</span><span class="n">LifecycleAdapter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">allow_module_overrides</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates an asynchronous driver.</span>
+<span class="w">        </span><span class="sd">"""Instantiates an asynchronous driver.</span>
 
 <span class="sd">        You will also need to call `ainit` to initialize the driver if you have any hooks/adapters.</span>
 
@@ -757,26 +757,26 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        :param config: Config to build the graph</span>
 <span class="sd">        :param modules: Modules to crawl for fns/graph nodes</span>
-<span class="sd">        :param result_builder: Results mixin to compile the graph&#39;s final results. TBD whether this should be included in the long run.</span>
+<span class="sd">        :param result_builder: Results mixin to compile the graph's final results. TBD whether this should be included in the long run.</span>
 <span class="sd">        :param adapters: Adapters to use for lifecycle methods.</span>
 <span class="sd">        :param allow_module_overrides: Optional. Same named functions get overridden by later modules.</span>
 <span class="sd">            The order of listing the modules is important, since later ones will overwrite the previous ones.</span>
 <span class="sd">            This is a global call affecting all imported modules.</span>
 <span class="sd">            See https://github.com/apache/hamilton/tree/main/examples/module_overrides for more info.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">adapters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">adapters</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">sync_adapters</span><span class="p">,</span> <span class="n">async_adapters</span> <span class="o">=</span> <span class="n">separate_sync_from_async</span><span class="p">(</span><span class="n">adapters</span><span class="p">)</span>
 
-        <span class="c1"># we&#39;ll need to use this in multiple contexts so we&#39;ll keep it around for later</span>
+        <span class="c1"># we'll need to use this in multiple contexts so we'll keep it around for later</span>
 
         <span class="n">result_builders</span> <span class="o">=</span> <span class="p">[</span><span class="n">adapter</span> <span class="k">for</span> <span class="n">adapter</span> <span class="ow">in</span> <span class="n">adapters</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adapter</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">ResultMixin</span><span class="p">)]</span>
         <span class="k">if</span> <span class="n">result_builder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">result_builders</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result_builder</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result_builders</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;You cannot pass more than one result builder to the async driver. &quot;</span>
-                <span class="s2">&quot;Please pass in a single result builder&quot;</span>
+                <span class="s2">"You cannot pass more than one result builder to the async driver. "</span>
+                <span class="s2">"Please pass in a single result builder"</span>
             <span class="p">)</span>
         <span class="c1"># it will be defaulted by the graph adapter</span>
         <span class="n">result_builder</span> <span class="o">=</span> <span class="n">result_builders</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result_builders</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
@@ -801,17 +801,17 @@ s=d.getElementsByTagName('script')[0];
 
 <div class="viewcode-block" id="AsyncDriver.ainit">
 <a class="viewcode-back" href="../../../reference/drivers/AsyncDriver/#hamilton.async_driver.AsyncDriver.ainit">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">ainit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;AsyncDriver&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the driver when using async. This only exists for backwards compatibility.</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">ainit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"AsyncDriver"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Initializes the driver when using async. This only exists for backwards compatibility.</span>
 <span class="sd">        In Hamilton 2.0, we will be using an asynchronous constructor.</span>
 <span class="sd">        See https://dev.to/akarshan/asynchronous-python-magic-how-to-create-awaitable-constructors-with-asyncmixin-18j5.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
             <span class="c1"># this way it can be called twice</span>
             <span class="k">return</span> <span class="bp">self</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">does_hook</span><span class="p">(</span><span class="s2">&quot;post_graph_construct&quot;</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">does_hook</span><span class="p">(</span><span class="s2">"post_graph_construct"</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">call_all_lifecycle_hooks_async</span><span class="p">(</span>
-                <span class="s2">&quot;post_graph_construct&quot;</span><span class="p">,</span>
+                <span class="s2">"post_graph_construct"</span><span class="p">,</span>
                 <span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span>
                 <span class="n">modules</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_modules</span><span class="p">,</span>
                 <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
@@ -827,11 +827,11 @@ s=d.getElementsByTagName('script')[0];
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">final_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">overrides</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">display_graph</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># don&#39;t care</span>
+        <span class="n">display_graph</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># don't care</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">_fn_graph</span><span class="p">:</span> <span class="n">graph</span><span class="o">.</span><span class="n">FunctionGraph</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Executes the graph, returning a dictionary of strings (node keys) to final results.</span>
+<span class="w">        </span><span class="sd">"""Executes the graph, returning a dictionary of strings (node keys) to final results.</span>
 
 <span class="sd">        :param final_vars: Variables to execute (+ upstream)</span>
 <span class="sd">        :param overrides: Overrides for nodes</span>
@@ -839,17 +839,17 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param inputs:  Inputs for DAG runtime calculation</span>
 <span class="sd">        :param _fn_graph: Function graph for compatibility with superclass -- unused</span>
 <span class="sd">        :return: A dict of key -&gt; result</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">assert</span> <span class="n">_fn_graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span>
-            <span class="s2">&quot;_fn_graph must not be provided &quot;</span>
-            <span class="s2">&quot;-- the only reason you&#39;d do this is to use materialize(), which is not supported yet..&quot;</span>
+            <span class="s2">"_fn_graph must not be provided "</span>
+            <span class="s2">"-- the only reason you'd do this is to use materialize(), which is not supported yet.."</span>
         <span class="p">)</span>
         <span class="n">run_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
         <span class="n">nodes</span><span class="p">,</span> <span class="n">user_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">get_upstream_nodes</span><span class="p">(</span><span class="n">final_vars</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">overrides</span><span class="p">)</span>
         <span class="n">memoized_computation</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># memoized storage</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">does_hook</span><span class="p">(</span><span class="s2">&quot;pre_graph_execute&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">does_hook</span><span class="p">(</span><span class="s2">"pre_graph_execute"</span><span class="p">):</span>
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">call_all_lifecycle_hooks_sync_and_async</span><span class="p">(</span>
-                <span class="s2">&quot;pre_graph_execute&quot;</span><span class="p">,</span>
+                <span class="s2">"pre_graph_execute"</span><span class="p">,</span>
                 <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                 <span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span>
                 <span class="n">final_vars</span><span class="o">=</span><span class="n">final_vars</span><span class="p">,</span>
@@ -863,8 +863,8 @@ s=d.getElementsByTagName('script')[0];
             <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">memoized_computation</span><span class="p">,</span> <span class="n">overrides</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">display_graph</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;display_graph=True is not supported for the async graph adapter. &quot;</span>
-                    <span class="s2">&quot;Instead you should be using visualize_execution.&quot;</span>
+                    <span class="s2">"display_graph=True is not supported for the async graph adapter. "</span>
+                    <span class="s2">"Instead you should be using visualize_execution."</span>
                 <span class="p">)</span>
             <span class="n">task_dict</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="n">key</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">process_value</span><span class="p">(</span><span class="n">memoized_computation</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
@@ -877,9 +877,9 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">raise</span> <span class="n">e</span>
         <span class="k">finally</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">does_hook</span><span class="p">(</span><span class="s2">&quot;post_graph_execute&quot;</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">does_hook</span><span class="p">(</span><span class="s2">"post_graph_execute"</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
                 <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">call_all_lifecycle_hooks_sync_and_async</span><span class="p">(</span>
-                    <span class="s2">&quot;post_graph_execute&quot;</span><span class="p">,</span>
+                    <span class="s2">"post_graph_execute"</span><span class="p">,</span>
                     <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
                     <span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span>
                     <span class="n">success</span><span class="o">=</span><span class="n">success</span><span class="p">,</span>
@@ -898,27 +898,27 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">display_graph</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Executes computation.</span>
+<span class="w">        </span><span class="sd">"""Executes computation.</span>
 
 <span class="sd">        :param final_vars: the final list of variables we want to compute.</span>
-<span class="sd">        :param overrides: values that will override &quot;nodes&quot; in the DAG.</span>
+<span class="sd">        :param overrides: values that will override "nodes" in the DAG.</span>
 <span class="sd">        :param display_graph: DEPRECATED. Whether we want to display the graph being computed.</span>
 <span class="sd">        :param inputs: Runtime inputs to the DAG.</span>
 <span class="sd">        :return: an object consisting of the variables requested, matching the type returned by the GraphAdapter.</span>
 <span class="sd">            See constructor for how the GraphAdapter is initialized. The default one right now returns a pandas</span>
 <span class="sd">            dataframe.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">display_graph</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;display_graph=True is not supported for the async graph adapter. &quot;</span>
-                <span class="s2">&quot;Instead you should be using visualize_execution.&quot;</span>
+                <span class="s2">"display_graph=True is not supported for the async graph adapter. "</span>
+                <span class="s2">"Instead you should be using visualize_execution."</span>
             <span class="p">)</span>
         <span class="n">_final_vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_final_vars</span><span class="p">(</span><span class="n">final_vars</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">outputs</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_execute</span><span class="p">(</span><span class="n">_final_vars</span><span class="p">,</span> <span class="n">overrides</span><span class="p">,</span> <span class="n">display_graph</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
-            <span class="c1"># Currently we don&#39;t allow async build results, but we could.</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">does_method</span><span class="p">(</span><span class="s2">&quot;do_build_result&quot;</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">call_lifecycle_method_sync</span><span class="p">(</span><span class="s2">&quot;do_build_result&quot;</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">)</span>
+            <span class="c1"># Currently we don't allow async build results, but we could.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">does_method</span><span class="p">(</span><span class="s2">"do_build_result"</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter</span><span class="o">.</span><span class="n">call_lifecycle_method_sync</span><span class="p">(</span><span class="s2">"do_build_result"</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">outputs</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">SLACK_ERROR_MESSAGE</span><span class="p">)</span>
@@ -930,7 +930,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="Builder">
 <a class="viewcode-back" href="../../../reference/drivers/AsyncDriver/#hamilton.async_driver.Builder">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Builder</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Builder for the async driver. This is equivalent to the standard builder, but has a more limited API.</span>
+<span class="w">    </span><span class="sd">"""Builder for the async driver. This is equivalent to the standard builder, but has a more limited API.</span>
 <span class="sd">    Note this does not support dynamic execution or materializers (for now).</span>
 
 <span class="sd">    Here is an example of how you might use it to get the tracker working:</span>
@@ -941,8 +941,8 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        tracker_async = adapters.AsyncHamiltonTracker(</span>
 <span class="sd">            project_id=1,</span>
-<span class="sd">            username=&quot;elijah&quot;,</span>
-<span class="sd">            dag_name=&quot;async_tracker&quot;,</span>
+<span class="sd">            username="elijah",</span>
+<span class="sd">            dag_name="async_tracker",</span>
 <span class="sd">        )</span>
 <span class="sd">        dr = (</span>
 <span class="sd">            await async_driver.Builder()</span>
@@ -950,7 +950,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            .with_adapters(tracking_async)</span>
 <span class="sd">            .build()</span>
 <span class="sd">        )</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="Builder.__init__">
 <a class="viewcode-back" href="../../../reference/drivers/AsyncDriver/#hamilton.async_driver.Builder.__init__">[docs]</a>
@@ -958,42 +958,42 @@ s=d.getElementsByTagName('script')[0];
         <span class="nb">super</span><span class="p">(</span><span class="n">Builder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_not_supported</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">additional_message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_not_supported</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">additional_message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Builder().</span><span class="si">{</span><span class="n">method_name</span><span class="si">}</span><span class="s2">() is not supported for the async driver. </span><span class="si">{</span><span class="n">additional_message</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Builder().</span><span class="si">{</span><span class="n">method_name</span><span class="si">}</span><span class="s2">() is not supported for the async driver. </span><span class="si">{</span><span class="n">additional_message</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="Builder.enable_dynamic_execution">
 <a class="viewcode-back" href="../../../reference/drivers/AsyncDriver/#hamilton.async_driver.Builder.enable_dynamic_execution">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">enable_dynamic_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">allow_experimental_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Builder&quot;</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_not_supported</span><span class="p">(</span><span class="s2">&quot;enable_dynamic_execution&quot;</span><span class="p">)</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">enable_dynamic_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">allow_experimental_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Builder"</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_not_supported</span><span class="p">(</span><span class="s2">"enable_dynamic_execution"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Builder.with_materializers">
 <a class="viewcode-back" href="../../../reference/drivers/AsyncDriver/#hamilton.async_driver.Builder.with_materializers">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">with_materializers</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">materializers</span><span class="p">:</span> <span class="n">ExtractorFactory</span> <span class="o">|</span> <span class="n">MaterializerFactory</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Builder&quot;</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_not_supported</span><span class="p">(</span><span class="s2">&quot;with_materializers&quot;</span><span class="p">)</span></div>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Builder"</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_not_supported</span><span class="p">(</span><span class="s2">"with_materializers"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Builder.with_adapter">
 <a class="viewcode-back" href="../../../reference/drivers/AsyncDriver/#hamilton.async_driver.Builder.with_adapter">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">with_adapter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adapter</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">HamiltonGraphAdapter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Builder&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">with_adapter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adapter</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">HamiltonGraphAdapter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Builder"</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_not_supported</span><span class="p">(</span>
-            <span class="s2">&quot;with_adapter&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Use with_adapters instead to pass in the tracker (or other async hooks/methods)&quot;</span><span class="p">,</span>
+            <span class="s2">"with_adapter"</span><span class="p">,</span>
+            <span class="s2">"Use with_adapters instead to pass in the tracker (or other async hooks/methods)"</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Builder.build_without_init">
 <a class="viewcode-back" href="../../../reference/drivers/AsyncDriver/#hamilton.async_driver.Builder.build_without_init">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_without_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncDriver</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Allows you to build the async driver without initialization. Use this at</span>
+<span class="w">        </span><span class="sd">"""Allows you to build the async driver without initialization. Use this at</span>
 <span class="sd">        your own risk -- we highly recommend calling `.ainit` on the final result.</span>
 
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">adapters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapters</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">legacy_graph_adapter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">adapters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">legacy_graph_adapter</span><span class="p">)</span>
@@ -1001,7 +1001,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1"># We should really be doing this in the constructor</span>
         <span class="c1"># but the AsyncGraphAdapter originally used the pandas builder</span>
         <span class="c1"># so we pass in the right one to ensure backwards compatibility</span>
-        <span class="c1"># This will become the default API soon, so it&#39;s OK to put the complexity here</span>
+        <span class="c1"># This will become the default API soon, so it's OK to put the complexity here</span>
         <span class="n">result_builders</span> <span class="o">=</span> <span class="p">[</span><span class="n">adapter</span> <span class="k">for</span> <span class="n">adapter</span> <span class="ow">in</span> <span class="n">adapters</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adapter</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">ResultMixin</span><span class="p">)]</span>
         <span class="n">specified_result_builder</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">DictResult</span><span class="p">()</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result_builders</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="n">AsyncDriver</span><span class="p">(</span>
@@ -1016,13 +1016,13 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="Builder.build">
 <a class="viewcode-back" href="../../../reference/drivers/AsyncDriver/#hamilton.async_driver.Builder.build">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncDriver</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Builds the async driver. This also initializes it, hence the async definition.</span>
-<span class="sd">        If you don&#39;t want to use async, you can use `build_without_init` and call `ainit` later,</span>
+<span class="w">        </span><span class="sd">"""Builds the async driver. This also initializes it, hence the async definition.</span>
+<span class="sd">        If you don't want to use async, you can use `build_without_init` and call `ainit` later,</span>
 <span class="sd">        but we recommend using this in an asynchronous lifespan management function (E.G. in fastAPI),</span>
 <span class="sd">        or something similar.</span>
 
 <span class="sd">        :return: The fully</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">dr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_without_init</span><span class="p">()</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">dr</span><span class="o">.</span><span class="n">ainit</span><span class="p">()</span></div>
 </div>
@@ -1076,182 +1076,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1296,6 +1131,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1303,7 +1164,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1320,42 +1189,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1378,7 +1305,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1389,12 +1316,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1414,8 +1335,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1427,7 +1348,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1439,9 +1360,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1464,8 +1385,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1475,10 +1399,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1503,10 +1425,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

@@ -562,7 +562,7 @@ s=d.getElementsByTagName('script')[0];
 </li>
 </ol>
 <p>Example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@config</span><span class="o">.</span><span class="n">when_in</span><span class="p">(</span><span class="n">business_line</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mens&quot;</span><span class="p">,</span><span class="s2">&quot;kids&quot;</span><span class="p">],</span> <span class="n">region</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;uk&quot;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@config</span><span class="o">.</span><span class="n">when_in</span><span class="p">(</span><span class="n">business_line</span><span class="o">=</span><span class="p">[</span><span class="s2">"mens"</span><span class="p">,</span><span class="s2">"kids"</span><span class="p">],</span> <span class="n">region</span><span class="o">=</span><span class="p">[</span><span class="s2">"uk"</span><span class="p">])</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">LEAD_LOG_BASS_MODEL_TIMES_TREND</span><span class="p">(</span>
      <span class="n">TREND_BSTS_WOMENS_ACQUISITIONS</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
      <span class="n">LEAD_LOG_BASS_MODEL_SIGNUPS_NON_REFERRAL</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
@@ -573,12 +573,12 @@ s=d.getElementsByTagName('script')[0];
 <p>Example - use of <cite>__suffix</cite> to differentiate between functions with the same name. This is required if you want to
 use the same function name in multiple configurations. Hamilton will automatically drop the suffix for you. The
 following will ensure only one function is registered with the name <cite>my_transform</cite>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="s2">&quot;us&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="s2">"us"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">my_transform__us</span><span class="p">(</span><span class="n">some_input</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">some_input_b</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
      <span class="c1"># logic</span>
      <span class="o">...</span>
 
-<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="s2">&quot;uk&quot;</span><span class="p">)</span>
+<span class="nd">@config</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="s2">"uk"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">my_transform__uk</span><span class="p">(</span><span class="n">some_input</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">some_input_c</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
      <span class="c1"># logic</span>
      <span class="o">...</span>
@@ -611,7 +611,7 @@ for the exceptional case, it can be useful for decorating helper functions witho
 them with “_” and use them either inside other nodes or in conjunction with <code class="docutils literal notranslate"><span class="pre">step</span></code> or <code class="docutils literal notranslate"><span class="pre">apply_to</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@hamilton_exclude</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">helper</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">...</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;This will not be part of the DAG&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">'''This will not be part of the DAG'''</span>
     <span class="o">...</span>
 </pre></div>
 </div>

@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -561,10 +561,10 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="PolarsDataFrameResult">
 <a class="viewcode-back" href="../../../../reference/result-builders/Polars/#hamilton.plugins.h_polars.PolarsDataFrameResult">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PolarsDataFrameResult</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">ResultMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ResultBuilder that produces a polars dataframe.</span>
+<span class="w">    </span><span class="sd">"""A ResultBuilder that produces a polars dataframe.</span>
 
 <span class="sd">    Use this when you want to create a polars dataframe from the outputs. Caveat: you need to ensure that the length</span>
-<span class="sd">    of the outputs is the same, otherwise you will get an error; mixed outputs aren&#39;t that well handled.</span>
+<span class="sd">    of the outputs is the same, otherwise you will get an error; mixed outputs aren't that well handled.</span>
 
 <span class="sd">    To use:</span>
 
@@ -579,29 +579,29 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        df = dr.execute([...], inputs=...)  # returns polars dataframe</span>
 
 <span class="sd">    Note: this is just a first attempt at something for Polars. Think it should handle more? Come chat/open a PR!</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="PolarsDataFrameResult.build_result">
 <a class="viewcode-back" href="../../../../reference/result-builders/Polars/#hamilton.plugins.h_polars.PolarsDataFrameResult.build_result">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is the method that Hamilton will call to build the final result. It will pass in the results</span>
+<span class="w">        </span><span class="sd">"""This is the method that Hamilton will call to build the final result. It will pass in the results</span>
 <span class="sd">        of the requested outputs that you passed in to the execute() method.</span>
 
 <span class="sd">        Note: this function could do smarter things; looking for contributions here!</span>
 
 <span class="sd">        :param outputs: The results of the requested outputs.</span>
 <span class="sd">        :return: a polars DataFrame.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">value</span><span class="p">,)</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>  <span class="c1"># this works because it&#39;s length 1.</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>  <span class="c1"># it&#39;s a dataframe</span>
+            <span class="p">(</span><span class="n">value</span><span class="p">,)</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>  <span class="c1"># this works because it's length 1.</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>  <span class="c1"># it's a dataframe</span>
                 <span class="k">return</span> <span class="n">value</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">LazyFrame</span><span class="p">):</span>  <span class="c1"># it&#39;s a lazyframe</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">LazyFrame</span><span class="p">):</span>  <span class="c1"># it's a lazyframe</span>
                 <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
-            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>  <span class="c1"># it&#39;s a single scalar/object</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>  <span class="c1"># it's a single scalar/object</span>
                 <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">popitem</span><span class="p">()</span>
                 <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="p">[</span><span class="n">value</span><span class="p">]})</span>
-            <span class="k">else</span><span class="p">:</span>  <span class="c1"># it&#39;s a series</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># it's a series</span>
                 <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
         <span class="c1"># TODO: check for length of outputs and determine what should</span>
         <span class="c1"># happen for mixed outputs that include scalars for example.</span>
@@ -617,13 +617,13 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="with_columns">
 <a class="viewcode-back" href="../../../../reference/decorators/with_columns/#hamilton.plugins.h_polars.with_columns">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">with_columns</span><span class="p">(</span><span class="n">with_columns_base</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes a with_columns decorator for polars.</span>
+<span class="w">    </span><span class="sd">"""Initializes a with_columns decorator for polars.</span>
 
 <span class="sd">    This allows you to efficiently run groups of map operations on a dataframe. We support</span>
 <span class="sd">    both eager and lazy mode in polars. In case of using eager mode the type should be</span>
 <span class="sd">    pl.DataFrame and the subsequent operations run on columns with type pl.Series.</span>
 
-<span class="sd">    Here&#39;s an example of calling in eager mode -- if you&#39;ve seen ``@subdag``, you should be familiar with</span>
+<span class="sd">    Here's an example of calling in eager mode -- if you've seen ``@subdag``, you should be familiar with</span>
 <span class="sd">    the concepts:</span>
 
 <span class="sd">    .. code-block:: python</span>
@@ -644,9 +644,9 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        @with_columns(</span>
 <span class="sd">            *[my_module], # Load from any module</span>
 <span class="sd">            *[a_plus_b], # or list operations directly</span>
-<span class="sd">            columns_to_pass=[&quot;a&quot;, &quot;b&quot;], # The columns to pass from the dataframe to</span>
+<span class="sd">            columns_to_pass=["a", "b"], # The columns to pass from the dataframe to</span>
 <span class="sd">            # the subdag</span>
-<span class="sd">            select=[&quot;a_plus_b&quot;, &quot;a_b_average&quot;], # The columns to append to the dataframe</span>
+<span class="sd">            select=["a_plus_b", "a_b_average"], # The columns to append to the dataframe</span>
 <span class="sd">        )</span>
 <span class="sd">        def final_df(initial_df: pl.DataFrame) -&gt; pl.DataFrame:</span>
 <span class="sd">            # process, or just return unprocessed</span>
@@ -654,7 +654,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    In this instance the ``initial_df`` would get two columns added: ``a_plus_b`` and ``a_b_average``.</span>
 
-<span class="sd">    Note that the operation is &quot;append&quot;, meaning that the columns that are selected are appended</span>
+<span class="sd">    Note that the operation is "append", meaning that the columns that are selected are appended</span>
 <span class="sd">    onto the dataframe.</span>
 
 <span class="sd">    If the function takes multiple dataframes, the dataframe input to process will always be</span>
@@ -665,9 +665,9 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    You can read it as:</span>
 
-<span class="sd">    &quot;final_df is a function that transforms the upstream dataframe initial_df, running the transformations</span>
+<span class="sd">    "final_df is a function that transforms the upstream dataframe initial_df, running the transformations</span>
 <span class="sd">    from my_module. It starts with the columns a_from_df and b_from_df, and then adds the columns</span>
-<span class="sd">    a, b, and a_plus_b to the dataframe. It then returns the dataframe, and does some processing on it.&quot;</span>
+<span class="sd">    a, b, and a_plus_b to the dataframe. It then returns the dataframe, and does some processing on it."</span>
 
 <span class="sd">    In case you need more flexibility you can alternatively use ``on_input``, for example,</span>
 
@@ -675,17 +675,17 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        # with_columns_module.py</span>
 <span class="sd">        def a_from_df() -&gt; pl.Expr:</span>
-<span class="sd">            return pl.col(a).alias(&quot;a&quot;) / 100</span>
+<span class="sd">            return pl.col(a).alias("a") / 100</span>
 
 <span class="sd">        def b_from_df() -&gt; pl.Expr:</span>
-<span class="sd">            return pl.col(b).alias(&quot;b&quot;) / 100</span>
+<span class="sd">            return pl.col(b).alias("b") / 100</span>
 
 
 <span class="sd">        # the with_columns call</span>
 <span class="sd">        @with_columns(</span>
 <span class="sd">            *[my_module],</span>
-<span class="sd">            on_input=&quot;initial_df&quot;,</span>
-<span class="sd">            select=[&quot;a_from_df&quot;, &quot;b_from_df&quot;, &quot;a_plus_b&quot;, &quot;a_b_average&quot;],</span>
+<span class="sd">            on_input="initial_df",</span>
+<span class="sd">            select=["a_from_df", "b_from_df", "a_plus_b", "a_b_average"],</span>
 <span class="sd">        )</span>
 <span class="sd">        def final_df(initial_df: pl.DataFrame) -&gt; pl.DataFrame:</span>
 <span class="sd">            # process, or just return unprocessed</span>
@@ -693,7 +693,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    the above would output a dataframe where the two columns ``a`` and ``b`` get</span>
 <span class="sd">    overwritten.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="with_columns.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/with_columns/#hamilton.plugins.h_polars.with_columns.__init__">[docs]</a>
@@ -707,30 +707,30 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">config_required</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates a ``@with_columns`` decorator.</span>
+<span class="w">        </span><span class="sd">"""Instantiates a ``@with_columns`` decorator.</span>
 
 <span class="sd">        :param load_from: The functions or modules that will be used to generate the group of map operations.</span>
 <span class="sd">        :param columns_to_pass: The initial schema of the dataframe. This is used to determine which</span>
-<span class="sd">            upstream inputs should be taken from the dataframe, and which shouldn&#39;t. Note that, if this is</span>
+<span class="sd">            upstream inputs should be taken from the dataframe, and which shouldn't. Note that, if this is</span>
 <span class="sd">            left empty (and external_inputs is as well), we will assume that all dependencies come</span>
 <span class="sd">            from the dataframe. This cannot be used in conjunction with on_input.</span>
-<span class="sd">        :param on_input: The name of the dataframe that we&#39;re modifying, as known to the subdag.</span>
+<span class="sd">        :param on_input: The name of the dataframe that we're modifying, as known to the subdag.</span>
 <span class="sd">            If you pass this in, you are responsible for extracting columns out. If not provided, you have</span>
 <span class="sd">            to pass columns_to_pass in, and we will extract the columns out on the first parameter for you.</span>
 <span class="sd">        :param select: The end nodes that represent columns to be appended to the original dataframe</span>
 <span class="sd">            via with_columns. Existing columns will be overridden. The selected nodes need to have the</span>
 <span class="sd">            corresponding column type, in this case pl.Series, to be appended to the original dataframe.</span>
-<span class="sd">        :param namespace: The namespace of the nodes, so they don&#39;t clash with the global namespace</span>
-<span class="sd">            and so this can be reused. If its left out, there will be no namespace (in which case you&#39;ll want</span>
+<span class="sd">        :param namespace: The namespace of the nodes, so they don't clash with the global namespace</span>
+<span class="sd">            and so this can be reused. If its left out, there will be no namespace (in which case you'll want</span>
 <span class="sd">            to be careful about repeating it/reusing the nodes in other parts of the DAG.)</span>
 <span class="sd">        :param config_required: the list of config keys that are required to resolve any functions. Pass in None\</span>
 <span class="sd">            if you want the functions/modules to have access to all possible config.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="n">pass_dataframe_as</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                <span class="s2">&quot;We currently do not support pass_dataframe_as for pandas. Please reach out if you need this &quot;</span>
-                <span class="s2">&quot;functionality.&quot;</span>
+                <span class="s2">"We currently do not support pass_dataframe_as for pandas. Please reach out if you need this "</span>
+                <span class="s2">"functionality."</span>
             <span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -768,7 +768,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">get_initial_nodes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Selects the correct dataframe and optionally extracts out columns.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Selects the correct dataframe and optionally extracts out columns."""</span>
         <span class="n">inject_parameter</span> <span class="o">=</span> <span class="n">_default_inject_parameter</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span> <span class="n">target_dataframe</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target_dataframe</span><span class="p">)</span>
         <span class="n">with_columns_base</span><span class="o">.</span><span class="n">validate_dataframe</span><span class="p">(</span>
             <span class="n">fn</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span>
@@ -791,7 +791,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">chain_subdag_nodes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">inject_parameter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">generated_nodes</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
-        <span class="s2">&quot;Node that adds to / overrides columns for the original dataframe based on selected output.&quot;</span>
+        <span class="s2">"Node that adds to / overrides columns for the original dataframe based on selected output."</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="p">[</span>
@@ -812,7 +812,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">input_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">column</span><span class="p">:</span> <span class="n">column_type</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">}</span>
         <span class="n">input_map</span><span class="p">[</span><span class="n">inject_parameter</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe_type</span>
         <span class="n">merge_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;_append&quot;</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">"_append"</span><span class="p">,</span>
             <span class="n">typ</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe_type</span><span class="p">,</span>
             <span class="n">callabl</span><span class="o">=</span><span class="n">new_callable</span><span class="p">,</span>
             <span class="n">input_types</span><span class="o">=</span><span class="n">input_map</span><span class="p">,</span>
@@ -879,182 +879,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1099,6 +934,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1106,7 +967,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1123,42 +992,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1181,7 +1108,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1192,12 +1119,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1217,8 +1138,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1230,7 +1151,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1242,9 +1163,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1267,8 +1188,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1278,10 +1202,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1306,10 +1228,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

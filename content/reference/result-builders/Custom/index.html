@@ -532,10 +532,10 @@ or via a <a class="reference external" href="https://github.com/apache/hamilton/
 <h2>What you need to do<a class="headerlink" href="#what-you-need-to-do" title="Link to this heading">¶</a></h2>
 <p>You need to implement a class that implements a single function - see <a class="reference external" href="https://github.com/apache/hamilton/blob/main/hamilton/base.py#L18-L28">GitHub</a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ResultBuilder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class housing the result builder&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Base class housing the result builder"""</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function builds the result given the computed values.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""This function builds the result given the computed values."""</span>
         <span class="k">pass</span>
 </pre></div>
 </div>
@@ -546,7 +546,7 @@ or via a <a class="reference external" href="https://github.com/apache/hamilton/
      <span class="c1"># add a constructor if you need to</span>
      <span class="nd">@staticmethod</span>
      <span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="o">**</span><span class="n">outputs</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">YOUR_RETURN_TYPE</span><span class="p">:</span>
-<span class="w">         </span><span class="sd">&quot;&quot;&quot;Custom function you fill in&quot;&quot;&quot;</span>
+<span class="w">         </span><span class="sd">"""Custom function you fill in"""</span>
          <span class="c1"># your logic would go here</span>
          <span class="k">return</span> <span class="n">OBJECT_OF_YOUR_CHOOSING</span>
 </pre></div>

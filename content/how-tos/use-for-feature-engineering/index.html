@@ -556,7 +556,7 @@ python module structure you should be going for with Apache Hamilton. If you nee
 <span class="o">...</span>
 <span class="c1"># dataset.py (optional)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">model_set_x</span><span class="p">(</span><span class="n">feature_a</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;feature_a&#39;</span><span class="p">:</span> <span class="n">feature_a</span><span class="p">,</span> <span class="o">...</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'feature_a'</span><span class="p">:</span> <span class="n">feature_a</span><span class="p">,</span> <span class="o">...</span><span class="p">})</span>
 <span class="c1"># run.py</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Driver</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">,</span> <span class="n">feature_transform</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>

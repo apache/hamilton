@@ -541,11 +541,11 @@ around with the code to get comfortable.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">avg_3wk_spend</span><span class="p">(</span><span class="n">spend</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rolling 3 week average spend.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Rolling 3 week average spend."""</span>
     <span class="k">return</span> <span class="n">spend</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">acquisition_cost</span><span class="p">(</span><span class="n">avg_3wk_spend</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">signups</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The cost per signup in relation to a rolling average of spend.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The cost per signup in relation to a rolling average of spend."""</span>
     <span class="k">return</span> <span class="n">avg_3wk_spend</span> <span class="o">/</span> <span class="n">signups</span>
 </pre></div>
 </div>
@@ -558,19 +558,19 @@ around with the code to get comfortable.</p>
 </ol>
 <p>Let’s add a few more functions to our <code class="docutils literal notranslate"><span class="pre">my_functions.py</span></code> file:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">spend_mean</span><span class="p">(</span><span class="n">spend</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shows function creating a scalar. In this case it computes the mean of the entire column.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Shows function creating a scalar. In this case it computes the mean of the entire column."""</span>
     <span class="k">return</span> <span class="n">spend</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">spend_zero_mean</span><span class="p">(</span><span class="n">spend</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">spend_mean</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shows function that takes a scalar. In this case to zero mean spend.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Shows function that takes a scalar. In this case to zero mean spend."""</span>
     <span class="k">return</span> <span class="n">spend</span> <span class="o">-</span> <span class="n">spend_mean</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">spend_std_dev</span><span class="p">(</span><span class="n">spend</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function that computes the standard deviation of the spend column.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Function that computes the standard deviation of the spend column."""</span>
     <span class="k">return</span> <span class="n">spend</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">spend_zero_mean_unit_variance</span><span class="p">(</span><span class="n">spend_zero_mean</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">spend_std_dev</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function showing one way to make spend have zero mean and unit variance.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Function showing one way to make spend have zero mean and unit variance."""</span>
     <span class="k">return</span> <span class="n">spend_zero_mean</span> <span class="o">/</span> <span class="n">spend_std_dev</span>
 </pre></div>
 </div>
@@ -593,32 +593,32 @@ around with the code to get comfortable.</p>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="c1"># Instantiate a common spine for your pipeline</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s2">&quot;2022-01-01&quot;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s2">"2022-01-01"</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s2">"w"</span><span class="p">)</span>
     <span class="n">initial_columns</span> <span class="o">=</span> <span class="p">{</span>  <span class="c1"># load from actuals or wherever -- this is our initial data we use as input.</span>
         <span class="c1"># Note: these do not have to be all series, they could be scalar inputs.</span>
-        <span class="s1">&#39;signups&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">),</span>
-        <span class="s1">&#39;spend&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">),</span>
+        <span class="s1">'signups'</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">),</span>
+        <span class="s1">'spend'</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">),</span>
     <span class="p">}</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
       <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
-        <span class="o">.</span><span class="n">with_config</span><span class="p">({})</span>  <span class="c1"># we don&#39;t have any configuration or invariant data for this example.</span>
+        <span class="o">.</span><span class="n">with_config</span><span class="p">({})</span>  <span class="c1"># we don't have any configuration or invariant data for this example.</span>
         <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_functions</span><span class="p">)</span>  <span class="c1"># we need to tell hamilton where to load function definitions from</span>
         <span class="o">.</span><span class="n">with_adapters</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">PandasDataFrameResult</span><span class="p">())</span>  <span class="c1"># we want a pandas dataframe as output</span>
         <span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="c1"># we need to specify what we want in the final dataframe (these could be function pointers).</span>
     <span class="n">output_columns</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s1">&#39;spend&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;signups&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;avg_3wk_spend&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;acquisition_cost&#39;</span><span class="p">,</span>
+        <span class="s1">'spend'</span><span class="p">,</span>
+        <span class="s1">'signups'</span><span class="p">,</span>
+        <span class="s1">'avg_3wk_spend'</span><span class="p">,</span>
+        <span class="s1">'acquisition_cost'</span><span class="p">,</span>
     <span class="p">]</span>
-    <span class="c1"># let&#39;s create the dataframe!</span>
+    <span class="c1"># let's create the dataframe!</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">output_columns</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">initial_columns</span><span class="p">)</span>
     <span class="c1"># `pip install apache-hamilton[visualization]` earlier you can also do</span>
-    <span class="c1"># dr.visualize_execution(output_columns,&#39;./my_dag.png&#39;, {})</span>
+    <span class="c1"># dr.visualize_execution(output_columns,'./my_dag.png', {})</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>

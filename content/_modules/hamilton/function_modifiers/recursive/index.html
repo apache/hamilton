@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -561,25 +561,25 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">assign_namespace</span><span class="p">(</span><span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">derive_type</span><span class="p">(</span><span class="n">dependency</span><span class="p">:</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">LiteralDependency</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Quick hack to derive the type of a static dependency.</span>
+<span class="w">    </span><span class="sd">"""Quick hack to derive the type of a static dependency.</span>
 <span class="sd">    We might want to consider the type provided by the function that needs it.</span>
 <span class="sd">    Or we can use the subclass checker/whatnot in function_graph</span>
-<span class="sd">    (althoyugh we&#39;ll want to move it out)</span>
+<span class="sd">    (althoyugh we'll want to move it out)</span>
 
 <span class="sd">    :param dependency: Dependency on which</span>
 <span class="sd">    :return: The type of the dependency</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">dependency</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">create_identity_node</span><span class="p">(</span>
     <span class="n">from_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">typ</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">tags</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates an identity node -- this passes through the exact</span>
+<span class="w">    </span><span class="sd">"""Creates an identity node -- this passes through the exact</span>
 <span class="sd">    value returned by the upstream node.</span>
 
 <span class="sd">    :param from_: Source node</span>
@@ -587,7 +587,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    :param name: Name of the final node to create</span>
 <span class="sd">    :param namespace: Namespace of the node</span>
 <span class="sd">    :return: A node that simply copies the source node</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">identity</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Maybe come up with a better way to do this</span>
@@ -595,7 +595,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span>
         <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
         <span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">,</span>
-        <span class="n">doc_string</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">doc_string</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
         <span class="n">callabl</span><span class="o">=</span><span class="n">identity</span><span class="p">,</span>
         <span class="n">input_types</span><span class="o">=</span><span class="p">{</span><span class="n">from_</span><span class="p">:</span> <span class="n">typ</span><span class="p">},</span>
         <span class="n">namespace</span><span class="o">=</span><span class="n">namespace</span><span class="p">,</span>
@@ -605,16 +605,16 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_all_known_types</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts all known types from a set of nodes given the dependencies.</span>
-<span class="sd">    We have to do this as we don&#39;t know the dependency types at compile-time of</span>
+<span class="w">    </span><span class="sd">"""Extracts all known types from a set of nodes given the dependencies.</span>
+<span class="sd">    We have to do this as we don't know the dependency types at compile-time of</span>
 <span class="sd">    upstream nodes. That said, this is only used for guessing dependency types of</span>
-<span class="sd">    identity nodes. In which case, we probably want some sort of sentinel &quot;pass-through&quot;</span>
-<span class="sd">    dependency type that handles this better. But, for now, we&#39;ll derive it from the</span>
-<span class="sd">    dependencies we&#39;ve seen.</span>
+<span class="sd">    identity nodes. In which case, we probably want some sort of sentinel "pass-through"</span>
+<span class="sd">    dependency type that handles this better. But, for now, we'll derive it from the</span>
+<span class="sd">    dependencies we've seen.</span>
 
 <span class="sd">    :param nodes: nodes to look through for dependencies</span>
 <span class="sd">    :return: A dictionary of all known types.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">observed_types</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">dep_name</span><span class="p">,</span> <span class="p">(</span><span class="n">type_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -625,14 +625,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="k">def</span><span class="w"> </span><span class="nf">create_static_node</span><span class="p">(</span>
     <span class="n">typ</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">tags</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Utility function to create a static node -- this helps us bridge nodes together.</span>
+<span class="w">    </span><span class="sd">"""Utility function to create a static node -- this helps us bridge nodes together.</span>
 
 <span class="sd">    :param typ: Type of the node to create</span>
 <span class="sd">    :param name: Name of the node to create</span>
-<span class="sd">    :param value: Value that the node&#39;s function always returns</span>
+<span class="sd">    :param value: Value that the node's function always returns</span>
 <span class="sd">    :param namespace: Namespace of the node</span>
 <span class="sd">    :return: The instantiated static node</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">node_fn</span><span class="p">(</span><span class="n">_value</span><span class="o">=</span><span class="n">value</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">_value</span>
@@ -643,37 +643,37 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_config_inputs</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validates that the inputs specified in the config are valid.</span>
+<span class="w">    </span><span class="sd">"""Validates that the inputs specified in the config are valid.</span>
 
 <span class="sd">    :param original_config: Original configuration</span>
 <span class="sd">    :return: None</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># TODO -- implement this</span>
     <span class="n">shared_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
     <span class="k">if</span> <span class="n">shared_keys</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Config keys </span><span class="si">{</span><span class="n">shared_keys</span><span class="si">}</span><span class="s2"> are shared with inputs. This is not allowed.&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Instead, please specify the inputs you need *just* as part of the config. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;That way, you only write them once! Or, if you don&#39;t need them as a config item,&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;just use them in inputs.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Config keys </span><span class="si">{</span><span class="n">shared_keys</span><span class="si">}</span><span class="s2"> are shared with inputs. This is not allowed."</span>
+            <span class="sa">f</span><span class="s2">"Instead, please specify the inputs you need *just* as part of the config. "</span>
+            <span class="sa">f</span><span class="s2">"That way, you only write them once! Or, if you don't need them as a config item,"</span>
+            <span class="sa">f</span><span class="s2">"just use them in inputs."</span>
         <span class="p">)</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">inputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">UpstreamDependency</span><span class="p">,</span> <span class="n">LiteralDependency</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Input </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> must be either an UpstreamDependency or a LiteralDependency ,&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot; not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Input </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> must be either an UpstreamDependency or a LiteralDependency ,"</span>
+                <span class="sa">f</span><span class="s2">" not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_subdag_configuration</span><span class="p">(</span>
     <span class="n">configuration</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">function_name</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolves the configuration for a subdag.</span>
+<span class="w">    </span><span class="sd">"""Resolves the configuration for a subdag.</span>
 
 <span class="sd">    :param configuration: the Hamilton configuration</span>
 <span class="sd">    :param fields: the fields passed to the subdag decorator</span>
 <span class="sd">    :return: resolved configuration to use for this subdag.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">sources_to_map</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">values_to_include</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -683,8 +683,8 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">values_to_include</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">value</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">dependencies</span><span class="o">.</span><span class="n">GroupedDependency</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">SingleDependency</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;`</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">` is not allowed in the config= part of the subdag decorator. &quot;</span>
-                <span class="s2">&quot;Please use `configuration()` or `value()` or literal python values.&quot;</span>
+                <span class="sa">f</span><span class="s2">"`</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">` is not allowed in the config= part of the subdag decorator. "</span>
+                <span class="s2">"Please use `configuration()` or `value()` or literal python values."</span>
             <span class="p">)</span>
     <span class="n">plain_configs</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sources_to_map</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values_to_include</span>
@@ -697,7 +697,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">resolved_config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_config</span><span class="p">[</span><span class="n">source</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Source </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2"> was not found in the configuration. This is required for the </span><span class="si">{</span><span class="n">function_name</span><span class="si">}</span><span class="s2"> subdag.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Source </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2"> was not found in the configuration. This is required for the </span><span class="si">{</span><span class="n">function_name</span><span class="si">}</span><span class="s2"> subdag."</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
     <span class="k">return</span> <span class="n">resolved_config</span>
 
@@ -708,17 +708,17 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="subdag">
 <a class="viewcode-back" href="../../../../reference/decorators/subdag/#hamilton.function_modifiers.subdag">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">subdag</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeCreator</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The `@subdag` decorator enables you to rerun components of your DAG with varying parameters.</span>
-<span class="sd">    That is, it enables you to &quot;chain&quot; what you could express with a driver into a single DAG.</span>
+<span class="w">    </span><span class="sd">"""The `@subdag` decorator enables you to rerun components of your DAG with varying parameters.</span>
+<span class="sd">    That is, it enables you to "chain" what you could express with a driver into a single DAG.</span>
 
 <span class="sd">    That is, instead of using Hamilton within itself:</span>
 
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        def feature_engineering(source_path: str) -&gt; pd.DataFrame:</span>
-<span class="sd">            &#39;&#39;&#39;You could recursively use Hamilton within itself.&#39;&#39;&#39;</span>
+<span class="sd">            '''You could recursively use Hamilton within itself.'''</span>
 <span class="sd">            dr = driver.Driver({}, feature_modules)</span>
-<span class="sd">            df = dr.execute([&quot;feature_df&quot;], inputs={&quot;path&quot;: source_path})</span>
+<span class="sd">            df = dr.execute(["feature_df"], inputs={"path": source_path})</span>
 <span class="sd">            return df</span>
 
 <span class="sd">    You instead can use the `@subdag` decorator to do the same thing, with the added benefit of visibility into the\</span>
@@ -728,7 +728,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        @subdag(</span>
 <span class="sd">            feature_modules,</span>
-<span class="sd">            inputs={&quot;path&quot;: source(&quot;source_path&quot;)},</span>
+<span class="sd">            inputs={"path": source("source_path")},</span>
 <span class="sd">            config={}</span>
 <span class="sd">        )</span>
 <span class="sd">        def feature_engineering(feature_df: pd.DataFrame) -&gt; pd.DataFrame:</span>
@@ -752,7 +752,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    components of the DAG, you can use the `external_inputs` parameter to declare the parameters that do *not* come</span>
 <span class="sd">    from the subDAG.</span>
 
-<span class="sd">    Why might you want to use this? Let&#39;s take a look at some examples:</span>
+<span class="sd">    Why might you want to use this? Let's take a look at some examples:</span>
 
 <span class="sd">    1. You have a feature engineering pipeline that you want to run on multiple datasets. If its exactly the same, \</span>
 <span class="sd">    this is perfect. If not, this works perfectly as well, you just have to utilize different functions in each or \</span>
@@ -764,7 +764,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    This basically bridges the gap between the flexibility of non-declarative pipelining frameworks with the \</span>
 <span class="sd">    readability/maintainability of declarative ones.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="subdag.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/subdag/#hamilton.function_modifiers.subdag.__init__">[docs]</a>
@@ -777,23 +777,23 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">final_node_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">external_inputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a subDAG to the main DAG.</span>
+<span class="w">        </span><span class="sd">"""Adds a subDAG to the main DAG.</span>
 
 <span class="sd">        :param load_from: The functions that will be used to generate this subDAG.</span>
 <span class="sd">        :param inputs: Parameterized dependencies to inject into all sources of this subDAG.</span>
 <span class="sd">            This should *not* be an intermediate node in the subDAG.</span>
 <span class="sd">        :param config: A configuration dictionary for *just* this subDAG. Note that this passed in</span>
-<span class="sd">            value takes precedence over the DAG&#39;s config.</span>
+<span class="sd">            value takes precedence over the DAG's config.</span>
 <span class="sd">        :param namespace: Namespace with which to prefix nodes. This is optional -- if not included,</span>
 <span class="sd">            this will default to the function name.</span>
 <span class="sd">        :param final_node_name: Name of the final node in the subDAG. This is optional -- if not included,</span>
 <span class="sd">            this will default to the function name.</span>
 <span class="sd">        :param external_inputs: Parameters in the function that are not produced by the functions</span>
 <span class="sd">            passed to the subdag. This is useful if you want to perform some logic with other inputs</span>
-<span class="sd">            in the subdag&#39;s processing function. Note that this is currently required to</span>
+<span class="sd">            in the subdag's processing function. Note that this is currently required to</span>
 <span class="sd">            differentiate and clarify the inputs to the subdag.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subdag_functions</span> <span class="o">=</span> <span class="n">subdag</span><span class="o">.</span><span class="n">collect_functions</span><span class="p">(</span><span class="n">load_from</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="k">if</span> <span class="n">inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
@@ -807,13 +807,13 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">collect_functions</span><span class="p">(</span>
         <span class="n">load_from</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">ModuleType</span><span class="p">]</span> <span class="o">|</span> <span class="n">Collection</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Callable</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Utility function to collect functions from a list of callables/modules.</span>
+<span class="w">        </span><span class="sd">"""Utility function to collect functions from a list of callables/modules.</span>
 
 <span class="sd">        :param load_from: A list of callables or modules to load from</span>
 <span class="sd">        :return: a list of callables to use to create a DAG.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">load_from</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No functions were passed to </span><span class="si">{</span><span class="n">subdag</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(load_from=...)&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"No functions were passed to </span><span class="si">{</span><span class="n">subdag</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(load_from=...)"</span><span class="p">)</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">load_from</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Callable</span><span class="p">):</span>
@@ -839,7 +839,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">node_types</span> <span class="o">=</span> <span class="n">extract_all_known_types</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="c1"># TODO -- fix type derivation. Currently we don&#39;t use the specified type as we don&#39;t</span>
+            <span class="c1"># TODO -- fix type derivation. Currently we don't use the specified type as we don't</span>
             <span class="c1">#  really know what it should be...</span>
             <span class="n">new_node_name</span> <span class="o">=</span> <span class="n">assign_namespace</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">get_dependency_type</span><span class="p">()</span> <span class="o">==</span> <span class="n">dependencies</span><span class="o">.</span><span class="n">ParametrizedDependencySource</span><span class="o">.</span><span class="n">LITERAL</span><span class="p">:</span>
@@ -883,11 +883,11 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Utility function to add a namespace to nodes.</span>
+<span class="w">        </span><span class="sd">"""Utility function to add a namespace to nodes.</span>
 
 <span class="sd">        :param nodes:</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="k">if</span> <span class="n">inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="n">new_nodes</span> <span class="o">=</span> <span class="p">[]</span>
@@ -915,7 +915,7 @@ s=d.getElementsByTagName('script')[0];
                 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">node_</span><span class="o">.</span><span class="n">input_types</span>
             <span class="p">}</span>
 
-            <span class="c1"># Map of argument in function to source, can&#39;t be the other way</span>
+            <span class="c1"># Map of argument in function to source, can't be the other way</span>
             <span class="c1"># around as sources can potentially serve multiple destinations (with the source()) decorator</span>
             <span class="k">def</span><span class="w"> </span><span class="nf">fn</span><span class="p">(</span>
                 <span class="n">_callabl</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">callable</span><span class="p">,</span>
@@ -948,11 +948,11 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="n">new_nodes</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">add_final_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 
 <span class="sd">        :param fn:</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">is_async</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">iscoroutinefunction</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>  <span class="c1"># determine if its async</span>
         <span class="n">node_</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="o">.</span><span class="n">from_fn</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
         <span class="n">namespaced_input_map</span> <span class="o">=</span> <span class="p">{</span>
@@ -980,21 +980,21 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="n">node_</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">input_types</span><span class="o">=</span><span class="n">new_input_types</span><span class="p">,</span> <span class="n">callabl</span><span class="o">=</span><span class="n">fn_to_use</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_derive_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Utility function to derive a namespace from a function.</span>
+<span class="w">        </span><span class="sd">"""Utility function to derive a namespace from a function.</span>
 
-<span class="sd">        :param fn: Function we&#39;re decorating.</span>
-<span class="sd">        :return: The function we&#39;re outputting.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        :param fn: Function we're decorating.</span>
+<span class="sd">        :return: The function we're outputting.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_derive_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Utility function to derive a name from a function.</span>
+<span class="w">        </span><span class="sd">"""Utility function to derive a name from a function.</span>
 <span class="sd">        The user will be able to likely pass this in as an override, but</span>
 <span class="sd">        we have not exposed it yet.</span>
 
-<span class="sd">        :param fn: Function we&#39;re decorating.</span>
-<span class="sd">        :return: The function we&#39;re outputting.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        :param fn: Function we're decorating.</span>
+<span class="sd">        :return: The function we're outputting.</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_node_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_node_name</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">configuration</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
@@ -1021,31 +1021,31 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">invalid_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">invalid_values</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Parameterization using the following values is not permitted -- &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;must be either source() or value(): </span><span class="si">{</span><span class="n">invalid_values</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Parameterization using the following values is not permitted -- "</span>
+                <span class="sa">f</span><span class="s2">"must be either source() or value(): </span><span class="si">{</span><span class="n">invalid_values</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates everything we can before we create the subdag.</span>
+<span class="w">        </span><span class="sd">"""Validates everything we can before we create the subdag.</span>
 
 <span class="sd">        :param fn: Function that this decorates</span>
 <span class="sd">        :raises InvalidDecoratorException: if this is not a valid decorator</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_parameterization</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">required_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Currently we do not filter for subdag as we do not *statically* know what configuration</span>
+<span class="w">        </span><span class="sd">"""Currently we do not filter for subdag as we do not *statically* know what configuration</span>
 <span class="sd">        is required. This is because we need to parse the function so that we can figure it out,</span>
 <span class="sd">        and that is not available at the time that we call required_config. We need to think about</span>
-<span class="sd">        the best way to do this, but its likely that we&#39;ll want to allow required_config to consume</span>
+<span class="sd">        the best way to do this, but its likely that we'll want to allow required_config to consume</span>
 <span class="sd">        the function itself, and pass it in when its called with that.</span>
 
-<span class="sd">        That said, we don&#39;t have sufficient justification to do that yet, so we&#39;re just going to</span>
+<span class="sd">        That said, we don't have sufficient justification to do that yet, so we're just going to</span>
 <span class="sd">        return None for now, meaning that it has access to all configuration variables.</span>
 
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
@@ -1059,7 +1059,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="parameterized_subdag">
 <a class="viewcode-back" href="../../../../reference/decorators/parameterize_subdag/#hamilton.function_modifiers.parameterized_subdag">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">parameterized_subdag</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeCreator</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;parameterized subdag is when you want to create multiple subdags at one time.</span>
+<span class="w">    </span><span class="sd">"""parameterized subdag is when you want to create multiple subdags at one time.</span>
 <span class="sd">    Why might you want to do this?</span>
 
 <span class="sd">    1. You have multiple data sets you want to run the same feature engineering pipeline on.</span>
@@ -1068,23 +1068,23 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    Note that this really is just syntactic sugar for creating multiple subdags, just as `@parameterize</span>
 <span class="sd">    is syntactic sugar for creating multiple nodes from a function. That said, it is common that you</span>
-<span class="sd">    won&#39;t know what you want until compile time (E.G. when you have the config available), so this</span>
+<span class="sd">    won't know what you want until compile time (E.G. when you have the config available), so this</span>
 <span class="sd">    decorator along with the `@resolve` decorator is a good way to make that feasible. Note that</span>
-<span class="sd">    we are getting into *advanced* Hamilton here -- we don&#39;t recommend starting with this. In fact,</span>
-<span class="sd">    we generally recommend repeating subdags multiple times if you don&#39;t have too many. That said,</span>
+<span class="sd">    we are getting into *advanced* Hamilton here -- we don't recommend starting with this. In fact,</span>
+<span class="sd">    we generally recommend repeating subdags multiple times if you don't have too many. That said,</span>
 <span class="sd">    that can get cumbersome if you have a lot, so this decorator is a good way to help with that.</span>
 
-<span class="sd">    Let&#39;s take a look at an example:</span>
+<span class="sd">    Let's take a look at an example:</span>
 
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        @parameterized_subdag(</span>
 <span class="sd">            feature_modules,</span>
-<span class="sd">            from_datasource_1={&quot;inputs&quot; : {&quot;data&quot; : value(&quot;datasource_1.csv&quot;)}},</span>
-<span class="sd">            from_datasource_2={&quot;inputs&quot; : {&quot;data&quot; : value(&quot;datasource_2.csv&quot;)}},</span>
+<span class="sd">            from_datasource_1={"inputs" : {"data" : value("datasource_1.csv")}},</span>
+<span class="sd">            from_datasource_2={"inputs" : {"data" : value("datasource_2.csv")}},</span>
 <span class="sd">            from_datasource_3={</span>
-<span class="sd">                &quot;inputs&quot; : {&quot;data&quot; : value(&quot;datasource_3.csv&quot;)},</span>
-<span class="sd">                &quot;config&quot; : {&quot;filter&quot; : &quot;only_even_client_ids&quot;}</span>
+<span class="sd">                "inputs" : {"data" : value("datasource_3.csv")},</span>
+<span class="sd">                "config" : {"filter" : "only_even_client_ids"}</span>
 <span class="sd">            }</span>
 <span class="sd">        )</span>
 <span class="sd">        def feature_engineering(feature_df: pd.DataFrame) -&gt; pd.DataFrame:</span>
@@ -1100,20 +1100,20 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        @parameterized_subdag(</span>
 <span class="sd">            feature_modules,</span>
-<span class="sd">            inputs={&quot;data&quot; : value(&quot;datasource_1.csv&quot;)},</span>
+<span class="sd">            inputs={"data" : value("datasource_1.csv")},</span>
 <span class="sd">            from_datasource_1={},</span>
 <span class="sd">            from_datasource_2={</span>
-<span class="sd">                    &quot;inputs&quot; : {&quot;data&quot; : value(&quot;datasource_2.csv&quot;)}</span>
+<span class="sd">                    "inputs" : {"data" : value("datasource_2.csv")}</span>
 <span class="sd">            },</span>
 <span class="sd">            from_datasource_3={</span>
-<span class="sd">                    &quot;inputs&quot; : {&quot;data&quot; : value(&quot;datasource_3.csv&quot;)},</span>
-<span class="sd">                    &quot;config&quot; : {&quot;filter&quot; : &quot;only_even_client_ids&quot;},</span>
+<span class="sd">                    "inputs" : {"data" : value("datasource_3.csv")},</span>
+<span class="sd">                    "config" : {"filter" : "only_even_client_ids"},</span>
 <span class="sd">            }</span>
 <span class="sd">        )</span>
 
 <span class="sd">    Again, think about whether this feature is really the one you want -- often times, verbose,</span>
 <span class="sd">    static DAGs are far more readable than very concise, highly parameterized DAGs.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="parameterized_subdag.__init__">
 <a class="viewcode-back" href="../../../../reference/decorators/parameterize_subdag/#hamilton.function_modifiers.parameterized_subdag.__init__">[docs]</a>
@@ -1127,7 +1127,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">external_inputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">parameterization</span><span class="p">:</span> <span class="n">SubdagParams</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a parameterized_subdag decorator.</span>
+<span class="w">        </span><span class="sd">"""Initializes a parameterized_subdag decorator.</span>
 
 <span class="sd">        :param load_from: Modules to load from</span>
 <span class="sd">        :param inputs: Inputs for each subdag generated by the decorated function</span>
@@ -1140,12 +1140,12 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            Furthermore, note the following:</span>
 
 <span class="sd">            1. The parameterizations passed to the constructor are \\*\\*kwargs, so you are not</span>
-<span class="sd">            allowed to name these `load_from`, `inputs`, or `config`. That&#39;s a good thing, as these</span>
+<span class="sd">            allowed to name these `load_from`, `inputs`, or `config`. That's a good thing, as these</span>
 <span class="sd">            are not good names for variables anyway.</span>
 
 <span class="sd">            2. Any empty items (not included) will default to an empty dict (or an empty list in</span>
 <span class="sd">            the case of parameterization)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_from</span> <span class="o">=</span> <span class="n">load_from</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="n">inputs</span> <span class="k">if</span> <span class="n">inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
@@ -1159,9 +1159,9 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">subdag_generators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">subdag</span><span class="p">(</span>
                     <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">load_from</span><span class="p">,</span>
-                    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="o">**</span><span class="n">parameterization</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;inputs&quot;</span><span class="p">,</span> <span class="p">{})},</span>
-                    <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">parameterization</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="p">{})},</span>
-                    <span class="n">external_inputs</span><span class="o">=</span><span class="n">parameterization</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;external_inputs&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_inputs</span><span class="p">),</span>
+                    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">,</span> <span class="o">**</span><span class="n">parameterization</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"inputs"</span><span class="p">,</span> <span class="p">{})},</span>
+                    <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">parameterization</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"config"</span><span class="p">,</span> <span class="p">{})},</span>
+                    <span class="n">external_inputs</span><span class="o">=</span><span class="n">parameterization</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"external_inputs"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_inputs</span><span class="p">),</span>
                     <span class="n">namespace</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
                     <span class="n">final_node_name</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
                 <span class="p">)</span>
@@ -1179,16 +1179,16 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">subdag_generator</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">required_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;See note for subdag.required_config -- this is the same pattern.</span>
+<span class="w">        </span><span class="sd">"""See note for subdag.required_config -- this is the same pattern.</span>
 
 <span class="sd">        :return: Any required config items.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">prune_nodes</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="n">select</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prunes the nodes to only include those upstream from the select columns.</span>
+<span class="w">    </span><span class="sd">"""Prunes the nodes to only include those upstream from the select columns.</span>
 <span class="sd">    Conducts a depth-first search using the nodes `input_types` field.</span>
 
 <span class="sd">    If select is None, we just assume all nodes should be included.</span>
@@ -1196,7 +1196,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    :param nodes: Full set of nodes</span>
 <span class="sd">    :param select: Columns to select</span>
 <span class="sd">    :return:  Pruned set of nodes</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">select</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">nodes</span>
 
@@ -1215,8 +1215,8 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">select</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">([</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">output</span><span class="p">]):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;At least one of the selected nodes is not not in the DAG. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;You selected: </span><span class="si">{</span><span class="n">select</span><span class="si">}</span><span class="s2">, but we only found nodes: </span><span class="si">{</span><span class="n">nodes</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="s2">"At least one of the selected nodes is not not in the DAG. "</span>
+            <span class="sa">f</span><span class="s2">"You selected: </span><span class="si">{</span><span class="n">select</span><span class="si">}</span><span class="s2">, but we only found nodes: </span><span class="si">{</span><span class="n">nodes</span><span class="si">}</span><span class="s2">."</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">output</span>
 
@@ -1225,21 +1225,21 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">if</span> <span class="n">target_dataframe</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">inject_parameter</span> <span class="o">=</span> <span class="n">target_dataframe</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># If we don&#39;t have a specified dataframe we assume it&#39;s the first argument</span>
+        <span class="c1"># If we don't have a specified dataframe we assume it's the first argument</span>
         <span class="n">function_parameters</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
         <span class="k">if</span> <span class="n">function_parameters</span><span class="p">:</span>
             <span class="n">inject_parameter</span> <span class="o">=</span> <span class="n">function_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> has no parameters, but was &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;decorated with with_columns. with_columns requires the first &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;parameter to be a dataframe or using the on_input argument.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> has no parameters, but was "</span>
+                <span class="sa">f</span><span class="s2">"decorated with with_columns. with_columns requires the first "</span>
+                <span class="sa">f</span><span class="s2">"parameter to be a dataframe or using the on_input argument."</span>
             <span class="p">)</span>
     <span class="k">return</span> <span class="n">inject_parameter</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">with_columns_base</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeInjector</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Factory for with_columns operation on a dataframe. This is used when you want to extract some</span>
+<span class="w">    </span><span class="sd">"""Factory for with_columns operation on a dataframe. This is used when you want to extract some</span>
 <span class="sd">    columns out of the dataframe, perform operations on them and then append to the original dataframe.</span>
 
 <span class="sd">    This is an internal class that is meant to be extended by each individual dataframe library implementing</span>
@@ -1249,20 +1249,20 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    - get_subdag_nodes</span>
 <span class="sd">    - chain_subdag_nodes</span>
 <span class="sd">    - validate</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># TODO: if we rename the column nodes into something smarter this can be avoided and</span>
     <span class="c1"># can also modify columns in place</span>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">contains_duplicates</span><span class="p">(</span><span class="n">nodes_</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensures that we don&#39;t run into name clashing of columns and group operations.</span>
+<span class="w">        </span><span class="sd">"""Ensures that we don't run into name clashing of columns and group operations.</span>
 
 <span class="sd">        In the case when we extract columns for the user, because ``columns_to_pass`` was used, we want</span>
 <span class="sd">        to safeguard against nameclashing with functions that are passed into ``with_columns`` - i.e.</span>
 <span class="sd">        there are no functions that have the same name as the columns. This effectively means that</span>
 <span class="sd">        using ``columns_to_pass`` will only append new columns to the dataframe and for changing</span>
 <span class="sd">        existing columns ``pass_dataframe_as`` or ``on_input`` needs to be used.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">node_counter</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">node_</span> <span class="ow">in</span> <span class="n">nodes_</span><span class="p">:</span>
             <span class="n">node_counter</span><span class="p">[</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -1277,16 +1277,16 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">input_types</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">inject_parameter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not have the parameter </span><span class="si">{</span><span class="n">inject_parameter</span><span class="si">}</span><span class="s2"> as a dependency. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;@with_columns requires the parameter names to match the function parameters. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;If you wish do not wish to use the first argument, please use ``pass_dataframe_as`` or ``on_input`` option. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;It might not be compatible with some other decorators.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not have the parameter </span><span class="si">{</span><span class="n">inject_parameter</span><span class="si">}</span><span class="s2"> as a dependency. "</span>
+                <span class="sa">f</span><span class="s2">"@with_columns requires the parameter names to match the function parameters. "</span>
+                <span class="sa">f</span><span class="s2">"If you wish do not wish to use the first argument, please use ``pass_dataframe_as`` or ``on_input`` option. "</span>
+                <span class="sa">f</span><span class="s2">"It might not be compatible with some other decorators."</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_types</span><span class="p">[</span><span class="n">inject_parameter</span><span class="p">],</span> <span class="n">required_type</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="s2">&quot;The selected dataframe parameter is not the correct dataframe type. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;You selected a parameter of type </span><span class="si">{</span><span class="n">input_types</span><span class="p">[</span><span class="n">inject_parameter</span><span class="p">]</span><span class="si">}</span><span class="s2">, but we expect to get </span><span class="si">{</span><span class="n">required_type</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="s2">"The selected dataframe parameter is not the correct dataframe type. "</span>
+                <span class="sa">f</span><span class="s2">"You selected a parameter of type </span><span class="si">{</span><span class="n">input_types</span><span class="p">[</span><span class="n">inject_parameter</span><span class="p">]</span><span class="si">}</span><span class="s2">, but we expect to get </span><span class="si">{</span><span class="n">required_type</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -1300,26 +1300,26 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">config_required</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">dataframe_type</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates a ``@with_columns`` decorator.</span>
+<span class="w">        </span><span class="sd">"""Instantiates a ``@with_columns`` decorator.</span>
 
 <span class="sd">        :param load_from: The functions or modules that will be used to generate the group of map operations.</span>
 <span class="sd">        :param columns_to_pass: The initial schema of the dataframe. This is used to determine which</span>
-<span class="sd">            upstream inputs should be taken from the dataframe, and which shouldn&#39;t. Note that, if this is</span>
+<span class="sd">            upstream inputs should be taken from the dataframe, and which shouldn't. Note that, if this is</span>
 <span class="sd">            left empty (and external_inputs is as well), we will assume that all dependencies come</span>
 <span class="sd">            from the dataframe. This cannot be used in conjunction with pass_dataframe_as.</span>
-<span class="sd">        :param pass_dataframe_as: The name of the dataframe that we&#39;re modifying, as known to the subdag.</span>
+<span class="sd">        :param pass_dataframe_as: The name of the dataframe that we're modifying, as known to the subdag.</span>
 <span class="sd">            If you pass this in, you are responsible for extracting columns out. If not provided, you have</span>
 <span class="sd">            to pass columns_to_pass in, and we will extract the columns out for you.</span>
 <span class="sd">        :param on_input: the dataframe parameter that we are applying with_columns on. By default we</span>
 <span class="sd">            will assume the first parameter is the corresponding dataframe.</span>
 <span class="sd">        :param select: The end nodes that represent columns to be appended to the original dataframe</span>
 <span class="sd">            via with_columns. Existing columns will be overridden.</span>
-<span class="sd">        :param namespace: The namespace of the nodes, so they don&#39;t clash with the global namespace</span>
-<span class="sd">            and so this can be reused. If its left out, there will be no namespace (in which case you&#39;ll want</span>
+<span class="sd">        :param namespace: The namespace of the nodes, so they don't clash with the global namespace</span>
+<span class="sd">            and so this can be reused. If its left out, there will be no namespace (in which case you'll want</span>
 <span class="sd">            to be careful about repeating it/reusing the nodes in other parts of the DAG.)</span>
 <span class="sd">        :param config_required: the list of config keys that are required to resolve any functions. Pass in None\</span>
 <span class="sd">            if you want the functions/modules to have access to all possible config.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">subdag_functions</span> <span class="o">=</span> <span class="n">subdag</span><span class="o">.</span><span class="n">collect_functions</span><span class="p">(</span><span class="n">load_from</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="n">select</span>
@@ -1331,21 +1331,20 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1"># We can decouple it so that on_input selects the target dataframe parameter that will inject into the next node</span>
         <span class="c1"># pass_dataframe_as selects the original dataframe we want to extract columns from</span>
         <span class="c1"># columns_to_pass is optinal helper that can be toggled on/off so no need to raise this error.</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">pass_dataframe_as</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">columns_to_pass</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">on_input</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="o">==</span> <span class="mi">1</span>
-        <span class="p">):</span>
+        <span class="n">n_set</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">arg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="p">(</span><span class="n">pass_dataframe_as</span><span class="p">,</span> <span class="n">columns_to_pass</span><span class="p">,</span> <span class="n">on_input</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">n_set</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;You must specify only one of ``columns_to_pass``, ``pass_dataframe_as``, and ``on_input``. &quot;</span>
-                <span class="s2">&quot;This is because specifying ``pass_dataframe_as`` or ``on_input`` injects into &quot;</span>
-                <span class="s2">&quot;the set of columns, allowing you to perform your own extraction&quot;</span>
-                <span class="s2">&quot;from the dataframe. We then execute all columns in the subdag&quot;</span>
-                <span class="s2">&quot;in order, passing in that initial dataframe. If you want&quot;</span>
-                <span class="s2">&quot;to reference columns in your code, you&#39;ll have to specify &quot;</span>
-                <span class="s2">&quot;the set of initial columns, and allow the subdag decorator &quot;</span>
-                <span class="s2">&quot;to inject the dataframe through. The initial columns tell &quot;</span>
-                <span class="s2">&quot;us which parameters to take from that dataframe, so we can&quot;</span>
-                <span class="s2">&quot;feed the right data into the right columns.&quot;</span>
+                <span class="s2">"You must specify exactly one of ``columns_to_pass``, ``pass_dataframe_as``, "</span>
+                <span class="s2">"and ``on_input``. "</span>
+                <span class="s2">"This is because specifying ``pass_dataframe_as`` or ``on_input`` injects into "</span>
+                <span class="s2">"the set of columns, allowing you to perform your own extraction"</span>
+                <span class="s2">"from the dataframe. We then execute all columns in the subdag"</span>
+                <span class="s2">"in order, passing in that initial dataframe. If you want"</span>
+                <span class="s2">"to reference columns in your code, you'll have to specify "</span>
+                <span class="s2">"the set of initial columns, and allow the subdag decorator "</span>
+                <span class="s2">"to inject the dataframe through. The initial columns tell "</span>
+                <span class="s2">"us which parameters to take from that dataframe, so we can"</span>
+                <span class="s2">"feed the right data into the right columns."</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">initial_schema</span> <span class="o">=</span> <span class="n">columns_to_pass</span>
@@ -1356,7 +1355,7 @@ s=d.getElementsByTagName('script')[0];
 
         <span class="k">if</span> <span class="n">dataframe_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="s2">&quot;Please provide the dataframe type for this specific library.&quot;</span>
+                <span class="s2">"Please provide the dataframe type for this specific library."</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dataframe_type</span> <span class="o">=</span> <span class="n">dataframe_type</span>
@@ -1368,7 +1367,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">get_initial_nodes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Preparation stage where columns get extracted into nodes. In case `pass_dataframe_as` or `on_input` is</span>
+<span class="w">        </span><span class="sd">"""Preparation stage where columns get extracted into nodes. In case `pass_dataframe_as` or `on_input` is</span>
 <span class="sd">        used, this should return an empty list (no column nodes) since the users will extract it</span>
 <span class="sd">        themselves.</span>
 
@@ -1376,29 +1375,29 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            about what arguments it has / find out the dataframe argument.</span>
 <span class="sd">        :param params: Dictionary of all the type names one wants to inject.</span>
 <span class="sd">        :return: name of the dataframe parameter and list of nodes representing the extracted columns (can be empty).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span>
 
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_subdag_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates subdag from the passed in module / functions.</span>
+<span class="w">        </span><span class="sd">"""Creates subdag from the passed in module / functions.</span>
 
 <span class="sd">        :param config: Configuration with which the DAG was constructed.</span>
 <span class="sd">        :return: the subdag as a list of nodes.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span>
 
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">chain_subdag_nodes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">inject_parameter</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">generated_nodes</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Combines the origanl dataframe with selected columns. This should produce a</span>
+<span class="w">        </span><span class="sd">"""Combines the origanl dataframe with selected columns. This should produce a</span>
 <span class="sd">        dataframe output that is injected into the decorated function with new columns</span>
 <span class="sd">        appended and existing columns overriden.</span>
 
 <span class="sd">        :param inject_parameter: the name of the original dataframe that.</span>
 <span class="sd">        :return: the new dataframe with the columns appended / overwritten.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">inject_nodes</span><span class="p">(</span>
@@ -1415,17 +1414,17 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1"># changes when using columns_to_pass</span>
         <span class="k">if</span> <span class="n">with_columns_base</span><span class="o">.</span><span class="n">contains_duplicates</span><span class="p">(</span><span class="n">generated_nodes</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;You can only specify columns once. You used `columns_to_pass` and we &quot;</span>
-                <span class="s2">&quot;extract the columns for you. In this case they cannot be overwritten -- only new columns get &quot;</span>
-                <span class="s2">&quot;appended. If you want to modify in-place columns pass in a dataframe and &quot;</span>
-                <span class="s2">&quot;extract + modify the columns and afterwards select them.&quot;</span>
+                <span class="s2">"You can only specify columns once. You used `columns_to_pass` and we "</span>
+                <span class="s2">"extract the columns for you. In this case they cannot be overwritten -- only new columns get "</span>
+                <span class="s2">"appended. If you want to modify in-place columns pass in a dataframe and "</span>
+                <span class="s2">"extract + modify the columns and afterwards select them."</span>
             <span class="p">)</span>
 
         <span class="n">pruned_nodes</span> <span class="o">=</span> <span class="n">prune_nodes</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">generated_nodes</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pruned_nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;No nodes found upstream from select columns: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="si">}</span><span class="s2"> for function: &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"No nodes found upstream from select columns: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="si">}</span><span class="s2"> for function: "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
 
         <span class="c1"># Node combining columns and dataframe might need info about prior nodes</span>
@@ -1483,182 +1482,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1703,6 +1537,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1710,7 +1570,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1727,42 +1595,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1785,7 +1711,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1796,12 +1722,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1821,8 +1741,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1834,7 +1754,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1846,9 +1766,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1871,8 +1791,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1882,10 +1805,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1910,10 +1831,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

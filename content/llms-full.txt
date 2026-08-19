@@ -1687,6 +1687,21 @@ Data version
 
 Caching requires the ability to uniquely identify data (e.g., create a hash). By default, all Python primitive types (``int``, ``str``, ``dict``, etc.) are supported and more types can be added via extensions (e.g., ``pandas``). For types not explicitly supported, caching can still function by versioning the object's internal ``__dict__`` instead. However, this could be expensive to compute or less reliable than alternatives.
 
+Hashing backend
+~~~~~~~~~~~~~~~
+
+By default, hashing uses the standard library's ``hashlib.md5`` (chosen for speed, not for cryptographic security). Installing the optional `xxhash <https://github.com/ifduyue/python-xxhash>`_ dependency switches the backend to ``xxhash.xxh3_128``, which is substantially faster on buffer-bound paths (e.g. numpy arrays, polars DataFrames):
+
+.. code-block:: console
+
+    pip install "apache-hamilton[performance]"
+
+Both backends produce a 16-byte digest, so cache keys and ``data_version`` strings are unaffected in shape. However, the two algorithms produce different digests for the same input, so **installing or removing xxhash changes every ``data_version`` in your dataflow**, invalidating previously persisted caches. Cached results are just recomputed on the next run, at the cost of losing the benefit of the existing cache.
+
+.. note::
+
+    Because the resolved backend is process-wide, keep it consistent across the environments that share a cache (e.g. all workers writing to the same cache store) to avoid needless cache misses.
+
 Recursion depth
 ~~~~~~~~~~~~~~~
 

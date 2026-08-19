@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -560,11 +560,11 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">AdapterFactory</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Factory for data loaders. This handles the fact that we pass in source(...) and value(...)</span>
-<span class="sd">    parameters to the data loaders.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Factory for data loaders. This handles the fact that we pass in source(...) and value(...)</span>
+<span class="sd">    parameters to the data loaders."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adapter_cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">AdapterCommon</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">ParametrizedDependency</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes an adapter factory. This takes in parameterized dependencies</span>
+<span class="w">        </span><span class="sd">"""Initializes an adapter factory. This takes in parameterized dependencies</span>
 <span class="sd">        and stores them for later resolution.</span>
 
 <span class="sd">        Note that this is not strictly necessary -- we could easily put this in the</span>
@@ -573,17 +573,17 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        :param adapter_cls: Class of the loader to create.</span>
 <span class="sd">        :param kwargs: Keyword arguments to pass to the loader, as parameterized dependencies.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span> <span class="o">=</span> <span class="n">adapter_cls</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that the loader class has the required arguments, and that</span>
+<span class="w">        </span><span class="sd">"""Validates that the loader class has the required arguments, and that</span>
 <span class="sd">        the arguments passed in are valid.</span>
 
 <span class="sd">        :raises InvalidDecoratorException: If the arguments are invalid.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">required_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="o">.</span><span class="n">get_required_arguments</span><span class="p">()</span>
         <span class="n">optional_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="o">.</span><span class="n">get_optional_arguments</span><span class="p">()</span>
         <span class="n">missing_params</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">required_args</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -592,34 +592,34 @@ s=d.getElementsByTagName('script')[0];
         <span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_params</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Missing required parameters for adapter : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">missing_params</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Required parameters/types are: </span><span class="si">{</span><span class="n">required_args</span><span class="si">}</span><span class="s2">. Optional parameters/types are: &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">optional_args</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">"Missing required parameters for adapter : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">missing_params</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="sa">f</span><span class="s2">"Required parameters/types are: </span><span class="si">{</span><span class="n">required_args</span><span class="si">}</span><span class="s2">. Optional parameters/types are: "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">optional_args</span><span class="si">}</span><span class="s2">. "</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">extra_params</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">available_args</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">required_args</span><span class="p">,</span> <span class="o">**</span><span class="n">optional_args</span><span class="p">}</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Extra parameters for loader: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">extra_params</span><span class="si">}</span><span class="s2">. Choices for parameters are: &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">available_args</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Extra parameters for loader: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">extra_params</span><span class="si">}</span><span class="s2">. Choices for parameters are: "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">available_args</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">create_loader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">resolved_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataLoader</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="o">.</span><span class="n">can_load</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Adapter </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="si">}</span><span class="s2"> cannot load data.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Adapter </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="si">}</span><span class="s2"> cannot load data."</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="p">(</span><span class="o">**</span><span class="n">resolved_kwargs</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">create_saver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">resolved_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataSaver</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="o">.</span><span class="n">can_save</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Adapter </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="si">}</span><span class="s2"> cannot save data.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Adapter </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="si">}</span><span class="s2"> cannot save data."</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapter_cls</span><span class="p">(</span><span class="o">**</span><span class="n">resolved_kwargs</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">resolve_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolves kwargs to a list of dependencies, and a dictionary of name</span>
+<span class="w">    </span><span class="sd">"""Resolves kwargs to a list of dependencies, and a dictionary of name</span>
 <span class="sd">    to resolved literal values.</span>
 
 <span class="sd">    :return: A tuple of the dependencies, and the resolved literal kwargs.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">dependencies</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">resolved_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">dependency</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -635,18 +635,18 @@ s=d.getElementsByTagName('script')[0];
 <span class="k">def</span><span class="w"> </span><span class="nf">resolve_adapter_class</span><span class="p">(</span>
     <span class="n">type_</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">],</span> <span class="n">loader_classes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">AdapterCommon</span><span class="p">]]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">AdapterCommon</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolves the loader class for a function. This will return the most recently</span>
+<span class="w">    </span><span class="sd">"""Resolves the loader class for a function. This will return the most recently</span>
 <span class="sd">    registered loader class that applies to the injection type, hence the reversed order.</span>
 
 <span class="sd">    :param fn: Function to inject the loaded data into.</span>
 <span class="sd">    :return: The loader class to use.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">applicable_adapters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">AdapterCommon</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">loaders_with_any</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">loader_cls</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">loader_classes</span><span class="p">):</span>
         <span class="c1"># We do this here, rather than in applies_to, as its a bit of a special case</span>
         <span class="c1"># Any should always get last priority, as its very non-specific and should be able to</span>
-        <span class="c1"># This is partially for backwards compatibility as we haven&#39;t always supported these -- including it now</span>
+        <span class="c1"># This is partially for backwards compatibility as we haven't always supported these -- including it now</span>
         <span class="c1"># would potentially use the wrong loader for production cases</span>
         <span class="k">if</span> <span class="n">Any</span> <span class="ow">in</span> <span class="n">loader_cls</span><span class="o">.</span><span class="n">applicable_types</span><span class="p">():</span>
             <span class="n">loaders_with_any</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loader_cls</span><span class="p">)</span>
@@ -655,8 +655,8 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">applicable_adapters</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">applicable_adapters</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;More than one applicable adapter detected for </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Using the last one registered </span><span class="si">{</span><span class="n">applicable_adapters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"More than one applicable adapter detected for </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="sa">f</span><span class="s2">"Using the last one registered </span><span class="si">{</span><span class="n">applicable_adapters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">applicable_adapters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">loaders_with_any</span><span class="p">:</span>
@@ -671,33 +671,33 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">inject_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">ParametrizedDependency</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiates a load_from decorator. This decorator will load from a data source,</span>
+<span class="w">        </span><span class="sd">"""Instantiates a load_from decorator. This decorator will load from a data source,</span>
 <span class="sd">        and</span>
 
 <span class="sd">        :param inject: The name of the parameter to inject the data into.</span>
 <span class="sd">        :param loader_cls: The data loader class to use.</span>
 <span class="sd">        :param kwargs: The arguments to pass to the data loader.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loader_classes</span> <span class="o">=</span> <span class="n">loader_classes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inject</span> <span class="o">=</span> <span class="n">inject_</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_select_param_to_inject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Chooses a parameter to inject, given the parameters available. If self.inject is None</span>
-<span class="sd">        (meaning we inject the only parameter), then that&#39;s the one. If it is not None, then</span>
+<span class="w">        </span><span class="sd">"""Chooses a parameter to inject, given the parameters available. If self.inject is None</span>
+<span class="sd">        (meaning we inject the only parameter), then that's the one. If it is not None, then</span>
 <span class="sd">        we need to ensure it is one of the available parameters, in which case we choose it.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;If the nodes produced by </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> require multiple inputs, &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;you must pass `inject_` to the load_from decorator for &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"If the nodes produced by </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> require multiple inputs, "</span>
+                <span class="sa">f</span><span class="s2">"you must pass `inject_` to the load_from decorator for "</span>
+                <span class="sa">f</span><span class="s2">"function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Parameter </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">inject</span><span class="si">}</span><span class="s2"> not required by nodes produced by </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Parameter </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">inject</span><span class="si">}</span><span class="s2"> not required by nodes produced by </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject</span>
 
@@ -710,7 +710,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">loader_cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Could not resolve loader for type: </span><span class="si">{</span><span class="n">load_type</span><span class="si">}</span><span class="s2"> given possibilities: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">loader_classes</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">"Could not resolve loader for type: </span><span class="si">{</span><span class="n">load_type</span><span class="si">}</span><span class="s2"> given possibilities: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">loader_classes</span><span class="si">}</span><span class="s2"> "</span>
             <span class="p">)</span>
         <span class="n">loader_factory</span> <span class="o">=</span> <span class="n">AdapterFactory</span><span class="p">(</span><span class="n">loader_cls</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c1"># dependencies is a map from param name -&gt; source name</span>
@@ -757,19 +757,19 @@ s=d.getElementsByTagName('script')[0];
 
         <span class="c1"># the loader node is the node that loads the data from the data source.</span>
         <span class="n">loader_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inject_parameter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">inject_parameter</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="n">callabl</span><span class="o">=</span><span class="n">load_data</span><span class="p">,</span>
             <span class="n">typ</span><span class="o">=</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">load_type</span><span class="p">],</span>
             <span class="n">input_types</span><span class="o">=</span><span class="n">input_types</span><span class="p">,</span>
             <span class="n">tags</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;hamilton.data_loader&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.has_metadata&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.source&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">loader_cls</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.classname&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">loader_cls</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.node&quot;</span><span class="p">:</span> <span class="n">inject_parameter</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.has_metadata"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.source"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">loader_cls</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.classname"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">loader_cls</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.node"</span><span class="p">:</span> <span class="n">inject_parameter</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="n">namespace</span><span class="o">=</span><span class="p">(</span>
-                <span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="s2">&quot;load_data&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">namespace</span> <span class="k">else</span> <span class="p">(</span><span class="s2">&quot;load_data&quot;</span><span class="p">,)</span>
+                <span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="s2">"load_data"</span><span class="p">)</span> <span class="k">if</span> <span class="n">namespace</span> <span class="k">else</span> <span class="p">(</span><span class="s2">"load_data"</span><span class="p">,)</span>
             <span class="p">),</span>  <span class="c1"># We want no namespace in this case</span>
         <span class="p">)</span>
 
@@ -781,36 +781,36 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">return</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">loader_node</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># filter it out</span>
 
         <span class="n">filter_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inject_parameter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">inject_parameter</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="n">callabl</span><span class="o">=</span><span class="n">filter_function</span><span class="p">,</span>
             <span class="n">typ</span><span class="o">=</span><span class="n">load_type</span><span class="p">,</span>
             <span class="n">input_types</span><span class="o">=</span><span class="p">{</span><span class="n">loader_node</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">loader_node</span><span class="o">.</span><span class="n">type</span><span class="p">},</span>
             <span class="n">tags</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;hamilton.data_loader&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.has_metadata&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.source&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">loader_cls</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.classname&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">loader_cls</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.node&quot;</span><span class="p">:</span> <span class="n">inject_parameter</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.has_metadata"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.source"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">loader_cls</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.classname"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">loader_cls</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.node"</span><span class="p">:</span> <span class="n">inject_parameter</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="c1"># This is a little sloppy -- we need to figure out the best way to handle namespacing</span>
-            <span class="c1"># In reality we will likely be changing the API -- using the logging construct so we don&#39;t have</span>
+            <span class="c1"># In reality we will likely be changing the API -- using the logging construct so we don't have</span>
             <span class="c1"># to have this weird DAG shape. For now, this solves the problem, and this is an internal component of the API</span>
-            <span class="c1"># so we&#39;re good to go</span>
-            <span class="n">namespace</span><span class="o">=</span><span class="p">((</span><span class="n">namespace</span><span class="p">,</span> <span class="s2">&quot;select_data&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">namespace</span> <span class="k">else</span> <span class="p">()),</span>  <span class="c1"># We want no namespace</span>
+            <span class="c1"># so we're good to go</span>
+            <span class="n">namespace</span><span class="o">=</span><span class="p">((</span><span class="n">namespace</span><span class="p">,</span> <span class="s2">"select_data"</span><span class="p">)</span> <span class="k">if</span> <span class="n">namespace</span> <span class="k">else</span> <span class="p">()),</span>  <span class="c1"># We want no namespace</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">loader_node</span><span class="p">,</span> <span class="n">filter_node</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">inject_nodes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]],</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates two nodes:</span>
+<span class="w">        </span><span class="sd">"""Generates two nodes:</span>
 <span class="sd">        1. A node that loads the data from the data source, and returns that + metadata</span>
 <span class="sd">        2. A node that takes the data from the data source, injects it into, and runs, the function.</span>
 
 <span class="sd">        :param fn: The function to decorate.</span>
 <span class="sd">        :param config: The configuration to use.</span>
 <span class="sd">        :return: The resolved nodes</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">inject_parameter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_param_to_inject</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">fn</span><span class="p">)</span>
         <span class="n">load_type</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">inject_parameter</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
@@ -818,67 +818,67 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">inject_parameter</span><span class="p">,</span> <span class="n">load_type</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="n">InvalidDecoratorException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot find : </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Cannot find : </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
         <span class="k">return</span> <span class="p">[</span><span class="n">loader_node</span><span class="p">,</span> <span class="n">filter_node</span><span class="p">],</span> <span class="p">{</span><span class="n">inject_parameter</span><span class="p">:</span> <span class="n">filter_node</span><span class="o">.</span><span class="n">name</span><span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_inject_parameter_from_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the name of the parameter to inject the data into.</span>
+<span class="w">        </span><span class="sd">"""Gets the name of the parameter to inject the data into.</span>
 
 <span class="sd">        :param fn: The function to decorate.</span>
 <span class="sd">        :return: The name of the parameter to inject the data into.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;The function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> has no parameters. &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;The data loader functionality injects the loaded data &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;into the function, so you must have at least one parameter.&quot;</span>
+                    <span class="sa">f</span><span class="s2">"The function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> has no parameters. "</span>
+                    <span class="sa">f</span><span class="s2">"The data loader functionality injects the loaded data "</span>
+                    <span class="sa">f</span><span class="s2">"into the function, so you must have at least one parameter."</span>
                 <span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;If you have multiple parameters in the signature, &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;you must pass `inject_` to the load_from decorator for &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"If you have multiple parameters in the signature, "</span>
+                    <span class="sa">f</span><span class="s2">"you must pass `inject_` to the load_from decorator for "</span>
+                    <span class="sa">f</span><span class="s2">"function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
             <span class="n">inject</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Invalid inject parameter: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">inject</span><span class="si">}</span><span class="s2"> for fn: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Invalid inject parameter: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">inject</span><span class="si">}</span><span class="s2"> for fn: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
             <span class="n">inject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inject</span>
         <span class="k">return</span> <span class="n">inject</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)[</span><span class="n">inject</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Note that we actually do something a little clever here. While the decorator operates</span>
+<span class="w">        </span><span class="sd">"""Note that we actually do something a little clever here. While the decorator operates</span>
 <span class="sd">        on the nodes in the subdag, we actually validate it against the function. This ensures that</span>
-<span class="sd">        we&#39;re not doing a lot of weird dynamic things that inject parameters that aren&#39;t in the</span>
+<span class="sd">        we're not doing a lot of weird dynamic things that inject parameters that aren't in the</span>
 <span class="sd">        function.</span>
 
 <span class="sd">        :param fn: Function that produces the data loader.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="n">inject_parameter</span><span class="p">,</span> <span class="n">type_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_inject_parameter_from_function</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
         <span class="bp">cls</span> <span class="o">=</span> <span class="n">resolve_adapter_class</span><span class="p">(</span><span class="n">type_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loader_classes</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;No loader class found for type: </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2"> specified by &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;parameter: </span><span class="si">{</span><span class="n">inject_parameter</span><span class="si">}</span><span class="s2"> in function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"No loader class found for type: </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2"> specified by "</span>
+                <span class="sa">f</span><span class="s2">"parameter: </span><span class="si">{</span><span class="n">inject_parameter</span><span class="si">}</span><span class="s2"> in function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="n">loader_factory</span> <span class="o">=</span> <span class="n">AdapterFactory</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">loader_factory</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">load_from__meta__</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Metaclass for the load_from decorator. This is specifically to allow class access method.</span>
+<span class="w">    </span><span class="sd">"""Metaclass for the load_from decorator. This is specifically to allow class access method.</span>
 <span class="sd">    Note that there *is* another way to do this -- we couold add attributes dynamically on the</span>
 <span class="sd">    class in registry, or make it a function that just proxies to the decorator. We can always</span>
 <span class="sd">    change this up, but this felt like a pretty clean way of doing it, where we can decouple the</span>
 <span class="sd">    registry from the decorator class.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">LOADER_REGISTRY</span><span class="p">:</span>
@@ -887,39 +887,39 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;No loader named: </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2"> available for </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Available loaders are: </span><span class="si">{</span><span class="n">LOADER_REGISTRY</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;If you&#39;ve gotten to this point, you either (1) spelled the &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;loader name wrong, (2) are trying to use a loader that does&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;not exist (yet). For a list of available loaders, see: &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;https://hamilton.readthedocs.io/reference/io/available-data-adapters/#data&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;-loaders &quot;</span>
+                <span class="sa">f</span><span class="s2">"No loader named: </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2"> available for </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="sa">f</span><span class="s2">"Available loaders are: </span><span class="si">{</span><span class="n">LOADER_REGISTRY</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="sa">f</span><span class="s2">"If you've gotten to this point, you either (1) spelled the "</span>
+                <span class="sa">f</span><span class="s2">"loader name wrong, (2) are trying to use a loader that does"</span>
+                <span class="sa">f</span><span class="s2">"not exist (yet). For a list of available loaders, see: "</span>
+                <span class="sa">f</span><span class="s2">"https://hamilton.readthedocs.io/reference/io/available-data-adapters/#data"</span>
+                <span class="sa">f</span><span class="s2">"-loaders "</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
 
 <div class="viewcode-block" id="load_from">
 <a class="viewcode-back" href="../../../../reference/decorators/load_from/#hamilton.function_modifiers.load_from">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">load_from</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">load_from__meta__</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to inject externally loaded data into a function. Ideally, anything that is not</span>
+<span class="w">    </span><span class="sd">"""Decorator to inject externally loaded data into a function. Ideally, anything that is not</span>
 <span class="sd">    a pure transform should either call this, or accept inputs from an external location.</span>
 
-<span class="sd">    This decorator functions by &quot;injecting&quot; a parameter into the function. For example,</span>
+<span class="sd">    This decorator functions by "injecting" a parameter into the function. For example,</span>
 <span class="sd">    the following code will load the json file, and inject it into the function as the parameter</span>
 <span class="sd">    `input_data`. Note that the path for the JSON file comes from another node called</span>
 <span class="sd">    raw_data_path (which could also be passed in as an external input).</span>
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        @load_from.json(path=source(&quot;raw_data_path&quot;))</span>
+<span class="sd">        @load_from.json(path=source("raw_data_path"))</span>
 <span class="sd">        def raw_data(input_data: dict) -&gt; dict:</span>
 <span class="sd">            return input_data</span>
 
 <span class="sd">    The decorator can also be used with `value` to inject a constant value into the loader.</span>
-<span class="sd">    In the following case, we use the literal value &quot;some/path.json&quot; as the path to the JSON file.</span>
+<span class="sd">    In the following case, we use the literal value "some/path.json" as the path to the JSON file.</span>
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        @load_from.json(path=value(&quot;some/path.json&quot;))</span>
+<span class="sd">        @load_from.json(path=value("some/path.json"))</span>
 <span class="sd">        def raw_data(input_data: dict) -&gt; dict:</span>
 <span class="sd">            return input_data</span>
 
@@ -928,7 +928,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        @load_from.json(path=&quot;some/path.json&quot;)</span>
+<span class="sd">        @load_from.json(path="some/path.json")</span>
 <span class="sd">        def raw_data(input_data: dict) -&gt; dict:</span>
 <span class="sd">            return input_data</span>
 
@@ -938,7 +938,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        @load_from.json(path=source(&quot;raw_data_path&quot;), inject_=&quot;data&quot;)</span>
+<span class="sd">        @load_from.json(path=source("raw_data_path"), inject_="data")</span>
 <span class="sd">        def raw_data(data: dict, valid_keys: List[str]) -&gt; dict:</span>
 <span class="sd">            return [item for item in data if item in valid_keys]</span>
 
@@ -948,15 +948,15 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        @load_from.json(path=source(&quot;raw_data_path&quot;), inject_=&quot;data&quot;)</span>
-<span class="sd">        @load_from.json(path=source(&quot;raw_data_path2&quot;), inject_=&quot;data2&quot;)</span>
+<span class="sd">        @load_from.json(path=source("raw_data_path"), inject_="data")</span>
+<span class="sd">        @load_from.json(path=source("raw_data_path2"), inject_="data2")</span>
 <span class="sd">        def raw_data(data: dict, data2: dict) -&gt; dict:</span>
 <span class="sd">            return [item for item in data if item in data2]</span>
 
 
-<span class="sd">    This is a highly pluggable functionality -- here&#39;s the basics of how it works:</span>
+<span class="sd">    This is a highly pluggable functionality -- here's the basics of how it works:</span>
 
-<span class="sd">    1. Every &quot;key&quot; (json above, but others include csv, literal, file, pickle, etc...) corresponds</span>
+<span class="sd">    1. Every "key" (json above, but others include csv, literal, file, pickle, etc...) corresponds</span>
 <span class="sd">    to a set of loader classes. For example, the json key corresponds to the JSONLoader class in</span>
 <span class="sd">    default_data_loaders. They implement the classmethod `name`. Once they are registered with the</span>
 <span class="sd">    central registry they pick</span>
@@ -975,15 +975,15 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    enable debugging after the fact. This is unstructured, but can be used down the line to describe</span>
 <span class="sd">    any metadata to help debug.</span>
 
-<span class="sd">    The &quot;core&quot; hamilton library contains a few basic data loaders that can be implemented within</span>
-<span class="sd">    the confines of python&#39;s standard library. pandas_extensions contains a few more that require</span>
+<span class="sd">    The "core" hamilton library contains a few basic data loaders that can be implemented within</span>
+<span class="sd">    the confines of python's standard library. pandas_extensions contains a few more that require</span>
 <span class="sd">    pandas to be installed.</span>
 
 <span class="sd">    Note that these can have `default` arguments, specified by defaults in the dataclass fields.</span>
-<span class="sd">    For the full set of &quot;keys&quot; and &quot;types&quot; (e.g. load_from.json, etc...), look for all classes</span>
+<span class="sd">    For the full set of "keys" and "types" (e.g. load_from.json, etc...), look for all classes</span>
 <span class="sd">    that inherit from `DataLoader` in the hamilton library. We plan to improve documentation shortly</span>
 <span class="sd">    to make this discoverable.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">LoadFromDecorator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -992,12 +992,12 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">decorator_factory</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">loaders</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">DataLoader</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">LoadFromDecorator</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Effectively a partial function for the load_from decorator. Broken into its own (</span>
+<span class="w">        </span><span class="sd">"""Effectively a partial function for the load_from decorator. Broken into its own (</span>
 <span class="sd">        rather than using functools.partial) as it is a little clearer to parse.</span>
 
 <span class="sd">        :param loaders: Options of data loader classes to use</span>
 <span class="sd">        :return: The data loader decorator.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">create_decorator</span><span class="p">(</span>
             <span class="n">__loaders</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">loaders</span><span class="p">),</span> <span class="n">inject_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">ParametrizedDependency</span>
@@ -1009,7 +1009,7 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">save_to__meta__</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;See note on load_from__meta__ for details on how this works.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""See note on load_from__meta__ for details on how this works."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">SAVER_REGISTRY</span><span class="p">:</span>
@@ -1018,12 +1018,12 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;No saver named: </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2"> available for </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Available data savers are: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">SAVER_REGISTRY</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;If you&#39;ve gotten to this point, you either (1) spelled the &quot;</span>
-                <span class="s2">&quot;loader name wrong, (2) are trying to use a saver that does&quot;</span>
-                <span class="s2">&quot;not exist (yet). For a list of available savers, see &quot;</span>
-                <span class="s2">&quot;https://hamilton.apache.org/reference/io/available-data-adapters/&quot;</span>
+                <span class="sa">f</span><span class="s2">"No saver named: </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2"> available for </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="sa">f</span><span class="s2">"Available data savers are: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">SAVER_REGISTRY</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"If you've gotten to this point, you either (1) spelled the "</span>
+                <span class="s2">"loader name wrong, (2) are trying to use a saver that does"</span>
+                <span class="s2">"not exist (yet). For a list of available savers, see "</span>
+                <span class="s2">"https://hamilton.apache.org/reference/io/available-data-adapters/"</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
 
@@ -1050,7 +1050,7 @@ s=d.getElementsByTagName('script')[0];
 
         <span class="k">if</span> <span class="n">artifact_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">artifact_name</span> <span class="o">=</span> <span class="n">node_to_save</span>
-            <span class="n">artifact_namespace</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;save&quot;</span><span class="p">,)</span>
+            <span class="n">artifact_namespace</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"save"</span><span class="p">,)</span>
 
         <span class="n">type_</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">type</span>
         <span class="n">saver_cls</span> <span class="o">=</span> <span class="n">resolve_adapter_class</span><span class="p">(</span>
@@ -1059,9 +1059,9 @@ s=d.getElementsByTagName('script')[0];
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">saver_cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;No saver class found for type: </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2"> specified by &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;output type: </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2"> in node: </span><span class="si">{</span><span class="n">node_to_save</span><span class="si">}</span><span class="s2"> generated by &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"No saver class found for type: </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2"> specified by "</span>
+                <span class="sa">f</span><span class="s2">"output type: </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2"> in node: </span><span class="si">{</span><span class="n">node_to_save</span><span class="si">}</span><span class="s2"> generated by "</span>
+                <span class="sa">f</span><span class="s2">"function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
 
         <span class="n">adapter_factory</span> <span class="o">=</span> <span class="n">AdapterFactory</span><span class="p">(</span><span class="n">saver_cls</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
@@ -1111,9 +1111,9 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">input_types</span><span class="o">=</span><span class="n">input_types</span><span class="p">,</span>
             <span class="n">namespace</span><span class="o">=</span><span class="n">artifact_namespace</span><span class="p">,</span>
             <span class="n">tags</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;hamilton.data_saver&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_saver.sink&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">saver_cls</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_saver.classname&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">saver_cls</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_saver"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_saver.sink"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">saver_cls</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_saver.classname"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">saver_cls</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">save_node</span>
@@ -1121,13 +1121,13 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">transform_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Collection</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transforms the node to a data saver.</span>
+<span class="w">        </span><span class="sd">"""Transforms the node to a data saver.</span>
 
 <span class="sd">        :param node_: Node to transform</span>
 <span class="sd">        :param config: Config to use</span>
 <span class="sd">        :param fn: Original function that generated the node</span>
 <span class="sd">        :return: The transformed node</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">return</span> <span class="p">[</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">create_saver_node</span><span class="p">(</span><span class="n">node_</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">fn</span><span class="p">),</span>
@@ -1141,7 +1141,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="save_to">
 <a class="viewcode-back" href="../../../../reference/decorators/save_to/#hamilton.function_modifiers.save_to">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">save_to</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">save_to__meta__</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator that outputs data to some external source. You can think</span>
+<span class="w">    </span><span class="sd">"""Decorator that outputs data to some external source. You can think</span>
 <span class="sd">    about this as the inverse of load_from.</span>
 
 <span class="sd">    This decorates a function, takes the final node produced by that function</span>
@@ -1156,14 +1156,14 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        @save_to.json(path=source(&quot;raw_data_path&quot;), output_name_=&quot;data_save_output&quot;)</span>
+<span class="sd">        @save_to.json(path=source("raw_data_path"), output_name_="data_save_output")</span>
 <span class="sd">        def final_output(data: dict, valid_keys: List[str]) -&gt; dict:</span>
 <span class="sd">            return [item for item in data if item in valid_keys]</span>
 
-<span class="sd">    This adds a final node to the DAG with the name &quot;data_save_output&quot; that</span>
-<span class="sd">    accepts the output of the function &quot;final_output&quot; and saves it to a json.</span>
+<span class="sd">    This adds a final node to the DAG with the name "data_save_output" that</span>
+<span class="sd">    accepts the output of the function "final_output" and saves it to a json.</span>
 <span class="sd">    In this case, the JSONSaver accepts a `path` parameter, which is provided</span>
-<span class="sd">    by the upstream node (or input) named &quot;raw_data_path&quot;. The `output_name_`</span>
+<span class="sd">    by the upstream node (or input) named "raw_data_path". The `output_name_`</span>
 <span class="sd">    parameter then says how to refer to the output of this node in the DAG.</span>
 
 <span class="sd">    If you called this with the driver:</span>
@@ -1171,7 +1171,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        dr = driver.Driver(my_module)</span>
-<span class="sd">        output = dr.execute([&quot;final_output&quot;], {&quot;raw_data_path&quot;: &quot;/path/my_data.json&quot;})</span>
+<span class="sd">        output = dr.execute(["final_output"], {"raw_data_path": "/path/my_data.json"})</span>
 
 <span class="sd">    You would *just* get the final result, and nothing would be saved.</span>
 
@@ -1180,7 +1180,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        dr = driver.Driver(my_module)</span>
-<span class="sd">        output = dr.execute([&quot;data_save_output&quot;], {&quot;raw_data_path&quot;: &quot;/path/my_data.json&quot;})</span>
+<span class="sd">        output = dr.execute(["data_save_output"], {"raw_data_path": "/path/my_data.json"})</span>
 
 <span class="sd">    You would get a dictionary of metadata (about the saving output), and the final result would</span>
 <span class="sd">    be saved to a path.</span>
@@ -1189,24 +1189,24 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        @save_to.json(path=value(&quot;/path/my_data.json&quot;), output_name_=&quot;data_save_output&quot;)</span>
+<span class="sd">        @save_to.json(path=value("/path/my_data.json"), output_name_="data_save_output")</span>
 <span class="sd">        def final_output(data: dict, valid_keys: List[str]) -&gt; dict:</span>
 <span class="sd">            return [item for item in data if item in valid_keys]</span>
 
-<span class="sd">    Note that, like the loader function, you can use literal values as kwargs and they&#39;ll get interpreted as values.</span>
-<span class="sd">    If you needs savers, you should also look into `.materialize` on the driver -- it&#39;s a clean way to do this in a more</span>
+<span class="sd">    Note that, like the loader function, you can use literal values as kwargs and they'll get interpreted as values.</span>
+<span class="sd">    If you needs savers, you should also look into `.materialize` on the driver -- it's a clean way to do this in a more</span>
 <span class="sd">    ad-hoc/decoupled manner.</span>
 
-<span class="sd">    If you want to layer savers, you&#39;ll have to use the target\\_ parameter, which tells the saver which node to use.</span>
+<span class="sd">    If you want to layer savers, you'll have to use the target\\_ parameter, which tells the saver which node to use.</span>
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        @save_to.json(path=source(&quot;raw_data_path&quot;), output_name_=&quot;data_save_output&quot;, target_=&quot;data&quot;)</span>
-<span class="sd">        @save_to.json(path=source(&quot;raw_data_path2&quot;), output_name_=&quot;data_save_output2&quot;, target_=&quot;data&quot;)</span>
+<span class="sd">        @save_to.json(path=source("raw_data_path"), output_name_="data_save_output", target_="data")</span>
+<span class="sd">        @save_to.json(path=source("raw_data_path2"), output_name_="data_save_output2", target_="data")</span>
 <span class="sd">        def final_output(data: dict, valid_keys: List[str]) -&gt; dict:</span>
 <span class="sd">            return [item for item in data if item in valid_keys]</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">SaveToDecorator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -1215,13 +1215,13 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">decorator_factory</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">savers</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">DataSaver</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">SaveToDecorator</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Effectively a partial function for the load_from decorator. Broken into its own (</span>
+<span class="w">        </span><span class="sd">"""Effectively a partial function for the load_from decorator. Broken into its own (</span>
 <span class="sd">        rather than using functools.partial) as it is a little clearer to parse.</span>
 
 <span class="sd">        :param savers: Candidate data savers</span>
 <span class="sd">        :param loaders: Options of data loader classes to use</span>
 <span class="sd">        :return: The data loader decorator.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">create_decorator</span><span class="p">(</span><span class="n">__savers</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">savers</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">ParametrizedDependency</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">SaveToDecorator</span><span class="p">(</span><span class="n">__savers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -1233,13 +1233,13 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="dataloader">
 <a class="viewcode-back" href="../../../../reference/decorators/dataloader/#hamilton.function_modifiers.dataloader">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">dataloader</span><span class="p">(</span><span class="n">NodeCreator</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Decorator for specifying a data loading function within the Hamilton framework. This decorator</span>
 <span class="sd">    is used to annotate functions that load data, allowing them to be treated specially in the Hamilton</span>
 <span class="sd">    DAG (Directed Acyclic Graph). The decorated function should return a tuple</span>
 <span class="sd">    containing the loaded data and a dictionary of metadata about the loading process.</span>
 
-<span class="sd">    The `dataloader` decorator captures loading data metadata and ensures the function&#39;s return</span>
+<span class="sd">    The `dataloader` decorator captures loading data metadata and ensures the function's return</span>
 <span class="sd">    type is correctly annotated to be a tuple, where the first element is the loaded data and the</span>
 <span class="sd">    second element is a dictionary containing metadata about the data loading process.</span>
 
@@ -1257,59 +1257,59 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="sd">        @dataloader()  # you need ()</span>
-<span class="sd">        def load_json_data(json_path: str = &quot;data/my_data.json&quot;) -&gt; tuple[pd.DataFrame, dict]:</span>
-<span class="sd">            &#39;&#39;&#39;Loads a dataframe from a JSON file.</span>
+<span class="sd">        def load_json_data(json_path: str = "data/my_data.json") -&gt; tuple[pd.DataFrame, dict]:</span>
+<span class="sd">            '''Loads a dataframe from a JSON file.</span>
 
 <span class="sd">            :return: A tuple containing two dictionaries:</span>
 <span class="sd">                - The first dictionary contains the loaded JSON data as a dataframe</span>
 <span class="sd">                - The second dictionary contains metadata about the loading process.</span>
-<span class="sd">            &#39;&#39;&#39;</span>
+<span class="sd">            '''</span>
 <span class="sd">            # Load the data</span>
 <span class="sd">            data = pd.read_json(json_path)</span>
 
 <span class="sd">            # Metadata about the loading process</span>
-<span class="sd">            metadata = {&quot;source&quot;: json_path, &quot;format&quot;: &quot;json&quot;}</span>
+<span class="sd">            metadata = {"source": json_path, "format": "json"}</span>
 
 <span class="sd">            return data, metadata</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="dataloader.validate">
 <a class="viewcode-back" href="../../../../reference/decorators/dataloader/#hamilton.function_modifiers.dataloader.validate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that the output type is correctly annotated.&quot;&quot;&quot;</span>
-        <span class="n">return_annotation</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;return&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Validates that the output type is correctly annotated."""</span>
+        <span class="n">return_annotation</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"return"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">return_annotation</span> <span class="ow">is</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Signature</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must have a return annotation.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must have a return annotation."</span>
             <span class="p">)</span>
         <span class="c1"># check that the type is a tuple[TYPE, dict]:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">typing_inspect</span><span class="o">.</span><span class="n">is_tuple_type</span><span class="p">(</span><span class="n">return_annotation</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must return a tuple.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must return a tuple."</span><span class="p">)</span>
         <span class="c1"># check that there are two</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">typing_inspect</span><span class="o">.</span><span class="n">get_args</span><span class="p">(</span><span class="n">return_annotation</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must return a tuple of length 2.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must return a tuple of length 2."</span>
             <span class="p">)</span>
         <span class="c1"># check that the second is a dict</span>
         <span class="n">second_arg</span> <span class="o">=</span> <span class="n">typing_inspect</span><span class="o">.</span><span class="n">get_args</span><span class="p">(</span><span class="n">return_annotation</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">custom_subclass_check</span><span class="p">(</span><span class="n">second_arg</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must return a tuple of type (SOME_TYPE, dict).&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must return a tuple of type (SOME_TYPE, dict)."</span>
             <span class="p">)</span>
         <span class="n">second_arg_params</span> <span class="o">=</span> <span class="n">typing_inspect</span><span class="o">.</span><span class="n">get_args</span><span class="p">(</span><span class="n">second_arg</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="nb">len</span><span class="p">(</span><span class="n">second_arg_params</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">second_arg_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nb">str</span>
         <span class="p">):</span>  <span class="c1"># metadata must have string keys</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must return a tuple of type (SOME_TYPE, dict[str, ...]). Instead got (SOME_TYPE, dict[</span><span class="si">{</span><span class="n">second_arg_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">, ...]&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must return a tuple of type (SOME_TYPE, dict[str, ...]). Instead got (SOME_TYPE, dict[</span><span class="si">{</span><span class="n">second_arg_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">, ...]"</span>
             <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="dataloader.generate_nodes">
 <a class="viewcode-back" href="../../../../reference/decorators/dataloader/#hamilton.function_modifiers.dataloader.generate_nodes">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates two nodes. We have to add tags appropriately.</span>
+<span class="w">        </span><span class="sd">"""Generates two nodes. We have to add tags appropriately.</span>
 
 <span class="sd">        The first one is just the fn - with a slightly different name.</span>
 <span class="sd">        The second one uses the proper function name, but only returns</span>
@@ -1318,36 +1318,36 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param fn:</span>
 <span class="sd">        :param config:</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">_name</span> <span class="o">=</span> <span class="s2">&quot;loader&quot;</span>
+<span class="sd">        """</span>
+        <span class="n">_name</span> <span class="o">=</span> <span class="s2">"loader"</span>
         <span class="n">og_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="o">.</span><span class="n">from_fn</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_name</span><span class="p">)</span>
         <span class="n">new_tags</span> <span class="o">=</span> <span class="n">og_node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">new_tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="c1"># we need this to be common with the loader tags above.</span>
             <span class="p">{</span>
-                <span class="s2">&quot;hamilton.data_loader&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.has_metadata&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.node&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.classname&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.source&quot;</span><span class="p">:</span> <span class="n">_name</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.has_metadata"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.node"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.classname"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()"</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.source"</span><span class="p">:</span> <span class="n">_name</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">filter_function</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">kwargs</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">kwargs</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2">"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">filter_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>  <span class="c1"># use original function name</span>
             <span class="n">callabl</span><span class="o">=</span><span class="n">filter_function</span><span class="p">,</span>
             <span class="n">typ</span><span class="o">=</span><span class="n">typing_inspect</span><span class="o">.</span><span class="n">get_args</span><span class="p">(</span><span class="n">og_node</span><span class="o">.</span><span class="n">type</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">input_types</span><span class="o">=</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">og_node</span><span class="o">.</span><span class="n">type</span><span class="p">},</span>
+            <span class="n">input_types</span><span class="o">=</span><span class="p">{</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="n">og_node</span><span class="o">.</span><span class="n">type</span><span class="p">},</span>
             <span class="c1"># we need this to be common with the loader tags above.</span>
             <span class="n">tags</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;hamilton.data_loader&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.has_metadata&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.node&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.classname&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_loader.source&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.has_metadata"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.node"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.classname"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()"</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_loader.source"</span><span class="p">:</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">)</span>
 
@@ -1359,13 +1359,13 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="datasaver">
 <a class="viewcode-back" href="../../../../reference/decorators/datasaver/#hamilton.function_modifiers.datasaver">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">datasaver</span><span class="p">(</span><span class="n">NodeCreator</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Decorator for specifying a data saving function within the Hamilton framework. This decorator</span>
 <span class="sd">    is used to annotate functions that save data, allowing them to be treated specially in the Hamilton</span>
 <span class="sd">    DAG (Directed Acyclic Graph). The decorated function should return a dictionary containing metadata</span>
 <span class="sd">    about the saving process.</span>
 
-<span class="sd">    The `datasaver` decorator captures saving data metadata and ensures the function&#39;s return</span>
+<span class="sd">    The `datasaver` decorator captures saving data metadata and ensures the function's return</span>
 <span class="sd">    type is correctly annotated to be a dictionary, where the dictionary contains metadata about</span>
 <span class="sd">    the data saving process, that then is exposed / captures for the Hamilton UI / adapters.</span>
 
@@ -1381,19 +1381,19 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="sd">        @datasaver()  # you need ()</span>
-<span class="sd">        def save_json_data(data: pd.DataFrame, json_path: str = &quot;data/my_saved_data.json&quot;) -&gt; dict:</span>
-<span class="sd">            &#39;&#39;&#39;Saves data to a JSON file and returns metadata about the saving process.</span>
+<span class="sd">        def save_json_data(data: pd.DataFrame, json_path: str = "data/my_saved_data.json") -&gt; dict:</span>
+<span class="sd">            '''Saves data to a JSON file and returns metadata about the saving process.</span>
 
 <span class="sd">            :param data: The data to save.</span>
 <span class="sd">            :param json_path: The path to save the data to.</span>
 <span class="sd">            :return: metadata about what was saved.</span>
-<span class="sd">            &#39;&#39;&#39;</span>
+<span class="sd">            '''</span>
 <span class="sd">            # Save the data</span>
-<span class="sd">            with open(json_path, &quot;w&quot;) as file:</span>
+<span class="sd">            with open(json_path, "w") as file:</span>
 <span class="sd">                data.to_json(json_path)</span>
 
 <span class="sd">            # Metadata about the saving process</span>
-<span class="sd">            metadata = {&quot;destination&quot;: json_path, &quot;format&quot;: &quot;json&quot;}</span>
+<span class="sd">            metadata = {"destination": json_path, "format": "json"}</span>
 
 <span class="sd">            return metadata</span>
 
@@ -1401,38 +1401,38 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    a JSON file. The metadata returned alongside the data can be used for logging, debugging, or</span>
 <span class="sd">    any other purpose that requires information about the data saving process as it can be pulled</span>
 <span class="sd">    out by the Hamilton Tracker for the Hamilton UI or other adapters.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="datasaver.validate">
 <a class="viewcode-back" href="../../../../reference/decorators/datasaver/#hamilton.function_modifiers.datasaver.validate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that the function output is a dict type.&quot;&quot;&quot;</span>
-        <span class="n">return_annotation</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;return&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Validates that the function output is a dict type."""</span>
+        <span class="n">return_annotation</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"return"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">return_annotation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must have a return annotation.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must have a return annotation."</span>
             <span class="p">)</span>
         <span class="n">origin</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_origin</span><span class="p">(</span><span class="n">return_annotation</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">return_annotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">dict</span> <span class="ow">and</span> <span class="n">origin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">dict</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must return a dict.&quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="n">InvalidDecoratorException</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> must return a dict."</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="datasaver.generate_nodes">
 <a class="viewcode-back" href="../../../../reference/decorators/datasaver/#hamilton.function_modifiers.datasaver.generate_nodes">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates same node but all this does is add tags to it.</span>
+<span class="w">        </span><span class="sd">"""Generates same node but all this does is add tags to it.</span>
 <span class="sd">        :param fn:</span>
 <span class="sd">        :param config:</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">og_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="o">.</span><span class="n">from_fn</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
         <span class="n">new_tags</span> <span class="o">=</span> <span class="n">og_node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">new_tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="c1"># we need this to be common with the saver tags above.</span>
             <span class="p">{</span>
-                <span class="s2">&quot;hamilton.data_saver&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_saver.sink&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">og_node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;hamilton.data_saver.classname&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()&quot;</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_saver"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_saver.sink"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">og_node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="s2">"hamilton.data_saver.classname"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()"</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">og_node</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="n">new_tags</span><span class="p">)]</span></div>
@@ -1487,182 +1487,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1707,6 +1542,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1714,7 +1575,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1731,42 +1600,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1789,7 +1716,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1800,12 +1727,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1825,8 +1746,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1838,7 +1759,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1850,9 +1771,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1875,8 +1796,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1886,10 +1810,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1914,10 +1836,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

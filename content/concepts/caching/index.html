@@ -579,11 +579,11 @@ s=d.getElementsByTagName('script')[0];
 <li><p><code class="docutils literal notranslate"><span class="pre">dependencies_data_versions</span></code>: <code class="docutils literal notranslate"><span class="pre">data_version</span></code> of each dependency of the node</p></li>
 </ul>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;node_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;processed_data&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;code_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;c2ccafa54280fbc969870b6baa445211277d7e8cfa98a0821836c175603ffda2&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;dependencies_data_versions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;raw_data&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WgV5-4SfdKTfUY66x-msj_xXsKNPNTP2guRhfw==&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ZWNhd-XNlIF0YV9-2ZXJzaW9u_YGAgKA==&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"node_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"processed_data"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"code_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"c2ccafa54280fbc969870b6baa445211277d7e8cfa98a0821836c175603ffda2"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"dependencies_data_versions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"raw_data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WgV5-4SfdKTfUY66x-msj_xXsKNPNTP2guRhfw=="</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ZWNhd-XNlIF0YV9-2ZXJzaW9u_YGAgKA=="</span><span class="p">,</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -603,7 +603,7 @@ s=d.getElementsByTagName('script')[0];
 <p>To see how the cache works step-by-step, start your code (script, notebook, etc.) by getting the logger and setting the level to <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>. Using <code class="docutils literal notranslate"><span class="pre">INFO</span></code> will be less noisy and only log <code class="docutils literal notranslate"><span class="pre">GET_RESULT</span></code> and <code class="docutils literal notranslate"><span class="pre">EXECUTE_NODE</span></code> events.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;hamilton.caching&quot;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"hamilton.caching"</span><span class="p">)</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>  <span class="c1"># this handler will print to the console</span>
 </pre></div>
@@ -624,7 +624,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="c1"># select the 3rd unique run_id</span>
 <span class="n">run_id_3</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">run_ids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id_3</span><span class="p">,</span> <span class="n">output_file_path</span><span class="o">=</span><span class="s2">&quot;cached_run_3.png&quot;</span><span class="p">)</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">view_run</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id_3</span><span class="p">,</span> <span class="n">output_file_path</span><span class="o">=</span><span class="s2">"cached_run_3.png"</span><span class="p">)</span>
 </pre></div>
 </div>
 <figure class="align-default" id="id1">
@@ -643,22 +643,22 @@ s=d.getElementsByTagName('script')[0];
 <p>Structured logs are stored on the <code class="docutils literal notranslate"><span class="pre">Driver.cache</span></code> and can be inspected programmatically. By setting <code class="docutils literal notranslate"><span class="pre">.with_cache(log_to_file=True)</span></code>, structured logs will also be appended to a <code class="docutils literal notranslate"><span class="pre">.jsonl</span></code> file as they happen; this is ideal for production usage.</p>
 <p>To access log, use <code class="docutils literal notranslate"><span class="pre">Driver.cache.logs()</span></code>. You can <code class="docutils literal notranslate"><span class="pre">.logs(level=...)</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;info&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;debug&quot;</span></code> to view only <code class="docutils literal notranslate"><span class="pre">GET_RESULT</span></code> and <code class="docutils literal notranslate"><span class="pre">EXECUTE_NODE</span></code> or all events. Specifying <code class="docutils literal notranslate"><span class="pre">.logs(run_id=...)</span></code> will return logs from a given run, and leaving it empty will returns logs for all executions of this <code class="docutils literal notranslate"><span class="pre">Driver</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;info&quot;</span><span class="p">)</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"info"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The shape of the returned object is slightly diffrent if specifying a <code class="docutils literal notranslate"><span class="pre">run_id</span></code> or not. Specifying a <code class="docutils literal notranslate"><span class="pre">run_id</span></code> will give <code class="docutils literal notranslate"><span class="pre">{node_name:</span> <span class="pre">List[CachingEvent]}</span></code></p>
 <p>Requesting <code class="docutils literal notranslate"><span class="pre">Driver.cache.logs()</span></code> will return a dictionary with <code class="docutils literal notranslate"><span class="pre">run_id</span></code> as key and list of <code class="docutils literal notranslate"><span class="pre">CachingEvent</span></code> as values <code class="docutils literal notranslate"><span class="pre">{run_id:</span> <span class="pre">List[CachingEvent]}</span></code>. This is useful for comparing run and verify nodes were properly executed or retrieved.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"debug"</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">last_run_id</span><span class="p">)</span>
 <span class="c1"># {</span>
-<span class="c1">#     &#39;raw_data&#39;: [CachingEvent(...), ...],</span>
-<span class="c1">#     &#39;processed_data&#39;: [CachingEvent(...), ...],</span>
-<span class="c1">#     &#39;amount_per_country&#39;: [CachingEvent(...), ...]</span>
+<span class="c1">#     'raw_data': [CachingEvent(...), ...],</span>
+<span class="c1">#     'processed_data': [CachingEvent(...), ...],</span>
+<span class="c1">#     'amount_per_country': [CachingEvent(...), ...]</span>
 <span class="c1"># }</span>
 
-<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"debug"</span><span class="p">)</span>
 <span class="c1"># {</span>
-<span class="c1">#     &#39;run_id_1&#39;: [CachingEvent(...), ...],</span>
-<span class="c1">#     &#39;run_id_2&#39;: [CachingEvent(...), ...]</span>
+<span class="c1">#     'run_id_1': [CachingEvent(...), ...],</span>
+<span class="c1">#     'run_id_2': [CachingEvent(...), ...]</span>
 <span class="c1"># }</span>
 </pre></div>
 </div>
@@ -679,12 +679,12 @@ s=d.getElementsByTagName('script')[0];
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_data</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
-<span class="nd">@cache</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;parquet&quot;</span><span class="p">)</span>
+<span class="nd">@cache</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">"parquet"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">clean_dataset</span><span class="p">(</span><span class="n">raw_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">raw_data</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">raw_data</span>
 
-<span class="nd">@cache</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">)</span>
+<span class="nd">@cache</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">statistics</span><span class="p">(</span><span class="n">clean_dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="o">...</span>
 </pre></div>
@@ -701,9 +701,9 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="c1"># first execution will product a ``parquet`` file for  ``clean_dataset``</span>
 <span class="c1"># and a ``json`` file for ``statistics``</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;statistics&quot;</span><span class="p">])</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"statistics"</span><span class="p">])</span>
 <span class="c1"># second execution will use these parquet and json files when loading results</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;statistics&quot;</span><span class="p">])</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"statistics"</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -744,7 +744,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">cache</span>
 
-<span class="nd">@cache</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s2">&quot;recompute&quot;</span><span class="p">)</span>
+<span class="nd">@cache</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s2">"recompute"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">raw_data</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
@@ -766,7 +766,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_dataflow</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;raw_data&quot;</span><span class="p">])</span>
+    <span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="p">[</span><span class="s2">"raw_data"</span><span class="p">])</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
 </pre></div>
@@ -782,8 +782,8 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_dataflow</span><span class="p">)</span>
     <span class="o">.</span><span class="n">with_cache</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;raw_data&quot;</span><span class="p">,</span> <span class="s2">&quot;statistics&quot;</span><span class="p">],</span>  <span class="c1"># set behavior DEFAULT</span>
-        <span class="n">default_behavior</span><span class="o">=</span><span class="s2">&quot;disable&quot;</span>  <span class="c1"># all other nodes are DISABLE</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s2">"raw_data"</span><span class="p">,</span> <span class="s2">"statistics"</span><span class="p">],</span>  <span class="c1"># set behavior DEFAULT</span>
+        <span class="n">default_behavior</span><span class="o">=</span><span class="s2">"disable"</span>  <span class="c1"># all other nodes are DISABLE</span>
     <span class="p">)</span>
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
@@ -802,7 +802,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">_increment</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
 
-<span class="c1"># foo&#39;s code version: 129064d4496facc003686e0070967051ceb82c354508a58440910eb82af300db</span>
+<span class="c1"># foo's code version: 129064d4496facc003686e0070967051ceb82c354508a58440910eb82af300db</span>
 </pre></div>
 </div>
 <p>Despite editing the nested <code class="docutils literal notranslate"><span class="pre">_increment()</span></code>, we get the same <code class="docutils literal notranslate"><span class="pre">code_version</span></code> because the content of <code class="docutils literal notranslate"><span class="pre">foo()</span></code> hasn’t changed.</p>
@@ -812,7 +812,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">_increment</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
 
-<span class="c1"># foo&#39;s code version: 129064d4496facc003686e0070967051ceb82c354508a58440910eb82af300db</span>
+<span class="c1"># foo's code version: 129064d4496facc003686e0070967051ceb82c354508a58440910eb82af300db</span>
 </pre></div>
 </div>
 <p>In that case, <code class="docutils literal notranslate"><span class="pre">foo()</span></code> should return <code class="docutils literal notranslate"><span class="pre">13</span> <span class="pre">+</span> <span class="pre">2</span></code> instead of <code class="docutils literal notranslate"><span class="pre">13</span> <span class="pre">+</span> <span class="pre">1</span></code>. Unaware of the change in <code class="docutils literal notranslate"><span class="pre">_increment()</span></code>, the cache will find a <code class="docutils literal notranslate"><span class="pre">cache_key</span></code> match and return <code class="docutils literal notranslate"><span class="pre">13</span> <span class="pre">+</span> <span class="pre">1</span></code>.</p>
@@ -821,6 +821,18 @@ s=d.getElementsByTagName('script')[0];
 <section id="data-version">
 <h2>Data version<a class="headerlink" href="#data-version" title="Link to this heading">¶</a></h2>
 <p>Caching requires the ability to uniquely identify data (e.g., create a hash). By default, all Python primitive types (<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code>, etc.) are supported and more types can be added via extensions (e.g., <code class="docutils literal notranslate"><span class="pre">pandas</span></code>). For types not explicitly supported, caching can still function by versioning the object’s internal <code class="docutils literal notranslate"><span class="pre">__dict__</span></code> instead. However, this could be expensive to compute or less reliable than alternatives.</p>
+<section id="hashing-backend">
+<h3>Hashing backend<a class="headerlink" href="#hashing-backend" title="Link to this heading">¶</a></h3>
+<p>By default, hashing uses the standard library’s <code class="docutils literal notranslate"><span class="pre">hashlib.md5</span></code> (chosen for speed, not for cryptographic security). Installing the optional <a class="reference external" href="https://github.com/ifduyue/python-xxhash">xxhash</a> dependency switches the backend to <code class="docutils literal notranslate"><span class="pre">xxhash.xxh3_128</span></code>, which is substantially faster on buffer-bound paths (e.g. numpy arrays, polars DataFrames):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install "apache-hamilton[performance]"</span>
+</pre></div>
+</div>
+<p>Both backends produce a 16-byte digest, so cache keys and <code class="docutils literal notranslate"><span class="pre">data_version</span></code> strings are unaffected in shape. However, the two algorithms produce different digests for the same input, so <strong>installing or removing xxhash changes every ``data_version`` in your dataflow</strong>, invalidating previously persisted caches. Cached results are just recomputed on the next run, at the cost of losing the benefit of the existing cache.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Because the resolved backend is process-wide, keep it consistent across the environments that share a cache (e.g. all workers writing to the same cache store) to avoid needless cache misses.</p>
+</div>
+</section>
 <section id="recursion-depth">
 <h3>Recursion depth<a class="headerlink" href="#recursion-depth" title="Link to this heading">¶</a></h3>
 <p>To version complex objects, we recursively hash its values. For example, versioning an object <code class="docutils literal notranslate"><span class="pre">List[Dict[str,</span> <span class="pre">float]]</span></code> involves hashing all keys and values of all dictionaries. Versioning complex objects with large <code class="docutils literal notranslate"><span class="pre">__dict__</span></code> state can become expensive.</p>
@@ -840,9 +852,9 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># specify the type via the decorator</span>
 <span class="nd">@fingerprinting</span><span class="o">.</span><span class="n">hash_value</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_polars_dataframe</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a polars dataframe to a list of row hashes, then hash the list.</span>
+<span class="w">    </span><span class="sd">"""Convert a polars dataframe to a list of row hashes, then hash the list.</span>
 <span class="sd">    We consider that row order matters.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># obj is of type `pl.DataFrame`</span>
     <span class="n">hash_per_row</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">hash_rows</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># fingerprinting.hash_value(...) will automatically hash primitive Python types</span>
@@ -881,14 +893,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">training</span>
 
-<span class="n">cache_path</span> <span class="o">=</span> <span class="s2">&quot;/path/to/project/hamilton_cache&quot;</span>
+<span class="n">cache_path</span> <span class="o">=</span> <span class="s2">"/path/to/project/hamilton_cache"</span>
 <span class="n">train_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">training</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">cache_path</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 
 <span class="c1"># inference_script.py</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">inference</span>
 
-<span class="n">cache_path</span> <span class="o">=</span> <span class="s2">&quot;/path/to/project/hamilton_cache&quot;</span>
+<span class="n">cache_path</span> <span class="o">=</span> <span class="s2">"/path/to/project/hamilton_cache"</span>
 <span class="n">predict_dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">inference</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">cache_path</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -900,9 +912,9 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_dataflow</span>
 
-<span class="c1"># set the cache under the user&#39;s global directory for any operating system</span>
+<span class="c1"># set the cache under the user's global directory for any operating system</span>
 <span class="c1"># The `Path` is converted to a string.</span>
-<span class="n">cache_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;/.hamilton_cache&quot;</span><span class="p">))</span>
+<span class="n">cache_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">"/.hamilton_cache"</span><span class="p">))</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_module</span><span class="p">(</span><span class="n">my_dataflow</span><span class="p">)</span><span class="o">.</span><span class="n">with_cache</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">cache_path</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -917,8 +929,8 @@ s=d.getElementsByTagName('script')[0];
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamitlon.io.store</span><span class="w"> </span><span class="kn">import</span> <span class="n">SQLiteMetadataStore</span><span class="p">,</span> <span class="n">ShelveResultStore</span>
 
-<span class="n">metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;~/.hamilton_cache&quot;</span><span class="p">)</span>
-<span class="n">result_store</span> <span class="o">=</span> <span class="n">ShelveResultStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/path/to/my/project&quot;</span><span class="p">)</span>
+<span class="n">metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"~/.hamilton_cache"</span><span class="p">)</span>
+<span class="n">result_store</span> <span class="o">=</span> <span class="n">ShelveResultStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"/path/to/my/project"</span><span class="p">)</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
@@ -939,8 +951,8 @@ s=d.getElementsByTagName('script')[0];
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.caching.stores.sqlite</span><span class="w"> </span><span class="kn">import</span> <span class="n">SQLiteMetadataStore</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.caching.stores.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileResultStore</span>
 
-<span class="n">metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;~/.hamilton_cache&quot;</span><span class="p">)</span>
-<span class="n">result_store</span> <span class="o">=</span> <span class="n">FileResultStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/path/to/my/project&quot;</span><span class="p">)</span>
+<span class="n">metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"~/.hamilton_cache"</span><span class="p">)</span>
+<span class="n">result_store</span> <span class="o">=</span> <span class="n">FileResultStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"/path/to/my/project"</span><span class="p">)</span>
 
 <span class="n">metadata_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">context_key</span><span class="o">=...</span><span class="p">)</span>
 <span class="n">result_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_version</span><span class="o">=...</span><span class="p">)</span>
@@ -972,18 +984,18 @@ s=d.getElementsByTagName('script')[0];
     <span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="p">)</span>
 
-<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">])</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"amount_per_country"</span><span class="p">])</span>
 
 <span class="c1"># via `cache.data_versions`; this points to the latest run</span>
-<span class="n">data_version</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="s2">&quot;amount_per_country&quot;</span><span class="p">]</span>
+<span class="n">data_version</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">data_versions</span><span class="p">[</span><span class="s2">"amount_per_country"</span><span class="p">]</span>
 <span class="n">stored_result</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_version</span><span class="p">)</span>
 
 <span class="c1"># via structured logs; this allows to query any run</span>
 <span class="n">run_id</span> <span class="o">=</span> <span class="o">...</span>
-<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;debug&quot;</span><span class="p">)[</span><span class="n">run_id</span><span class="p">]:</span>
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"debug"</span><span class="p">)[</span><span class="n">run_id</span><span class="p">]:</span>
     <span class="k">if</span> <span class="p">(</span>
         <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">CachingEventType</span><span class="o">.</span><span class="n">SET_RESULT</span>
-        <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">node_name</span> <span class="o">==</span> <span class="s2">&quot;amount_per_country&quot;</span>
+        <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">node_name</span> <span class="o">==</span> <span class="s2">"amount_per_country"</span>
     <span class="p">):</span>
         <span class="n">data_version</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">value</span>
         <span class="k">break</span>
@@ -1038,8 +1050,8 @@ s=d.getElementsByTagName('script')[0];
 <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
 <span class="c1"># persist to disk</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">persist_to</span><span class="p">(</span><span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./.hamilton_cache&quot;</span><span class="p">))</span>
-<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">persist_to</span><span class="p">(</span><span class="n">FileResultStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./.hamilton_cache&quot;</span><span class="p">))</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">metadata_store</span><span class="o">.</span><span class="n">persist_to</span><span class="p">(</span><span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"./.hamilton_cache"</span><span class="p">))</span>
+<span class="n">dr</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">result_store</span><span class="o">.</span><span class="n">persist_to</span><span class="p">(</span><span class="n">FileResultStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"./.hamilton_cache"</span><span class="p">))</span>
 </pre></div>
 </div>
 </section>
@@ -1053,8 +1065,8 @@ s=d.getElementsByTagName('script')[0];
 <span class="kn">import</span><span class="w"> </span><span class="nn">my_dataflow</span>
 
 <span class="c1"># create persisted stores</span>
-<span class="n">metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./.hamilton_cache&quot;</span><span class="p">)</span>
-<span class="n">result_store</span> <span class="o">=</span> <span class="n">FileResultStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;./.hamilton_cache&quot;</span><span class="p">)</span>
+<span class="n">metadata_store</span> <span class="o">=</span> <span class="n">SQLiteMetadataStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"./.hamilton_cache"</span><span class="p">)</span>
+<span class="n">result_store</span> <span class="o">=</span> <span class="n">FileResultStore</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"./.hamilton_cache"</span><span class="p">)</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
@@ -1178,6 +1190,7 @@ s=d.getElementsByTagName('script')[0];
 </li>
 <li><a class="reference internal" href="#code-version">Code version</a></li>
 <li><a class="reference internal" href="#data-version">Data version</a><ul>
+<li><a class="reference internal" href="#hashing-backend">Hashing backend</a></li>
 <li><a class="reference internal" href="#recursion-depth">Recursion depth</a></li>
 <li><a class="reference internal" href="#support-additional-types">Support additional types</a></li>
 </ul>

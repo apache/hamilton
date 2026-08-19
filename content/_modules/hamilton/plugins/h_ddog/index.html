@@ -519,14 +519,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
@@ -544,24 +544,24 @@ s=d.getElementsByTagName('script')[0];
     <span class="kn">from</span><span class="w"> </span><span class="nn">ddtrace</span><span class="w"> </span><span class="kn">import</span> <span class="n">tracer</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">ddtrace.trace</span><span class="w"> </span><span class="kn">import</span> <span class="n">Context</span><span class="p">,</span> <span class="n">Span</span>
 <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;ImportError: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"ImportError: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-        <span class="s2">&quot;To use the h_ddog plugin, please install apache-hamilton[datadog] using &quot;</span>
-        <span class="s2">&quot;`pip install apache-hamilton[datadog]` (or use your favorite package manager). &quot;</span>
-        <span class="s2">&quot;Remember to use quotes around the package name if using zsh!&quot;</span>
+        <span class="s2">"To use the h_ddog plugin, please install apache-hamilton[datadog] using "</span>
+        <span class="s2">"`pip install apache-hamilton[datadog]` (or use your favorite package manager). "</span>
+        <span class="s2">"Remember to use quotes around the package name if using zsh!"</span>
     <span class="p">)</span>
     <span class="k">raise</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_DDOGTracerImpl</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation class for DDOGTracer and AsyncDDOGTracer functionality.</span>
+<span class="w">    </span><span class="sd">"""Implementation class for DDOGTracer and AsyncDDOGTracer functionality.</span>
 
-<span class="sd">    This class encapsulates the core logic for Datadog tracing within Hamilton&#39;s lifecycle hooks.</span>
+<span class="sd">    This class encapsulates the core logic for Datadog tracing within Hamilton's lifecycle hooks.</span>
 <span class="sd">    It provides methods to handle the tracing operations required before and after the execution</span>
 <span class="sd">    of graphs, nodes, and tasks. The DDOGTracer and AsyncDDOGTracer classes are composed of this implementation class,</span>
 <span class="sd">    due to the differences in their base lifecycle classes (sync vs async). This class allows sharing logic between the</span>
 <span class="sd">    two without duplicating code or interfering with the base classes they inherit from.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">include_causal_links</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">service</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span> <span class="o">=</span> <span class="n">root_name</span>
@@ -573,34 +573,34 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_serialize_span_dict</span><span class="p">(</span><span class="n">span_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Span</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Serializes to a readable format. We&#39;re not propogating span links (see note above on causal links),</span>
-<span class="sd">        but that&#39;s fine (for now). We have to do this as passing spans back and forth is frowned upon.</span>
+<span class="w">        </span><span class="sd">"""Serializes to a readable format. We're not propogating span links (see note above on causal links),</span>
+<span class="sd">        but that's fine (for now). We have to do this as passing spans back and forth is frowned upon.</span>
 
 <span class="sd">        :param span_dict: A key -&gt; span dictionary</span>
 <span class="sd">        :return: The serialized representation.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># For some reason this doesn&#39;t use the right ser/deser for dask</span>
+<span class="sd">        """</span>
+        <span class="c1"># For some reason this doesn't use the right ser/deser for dask</span>
         <span class="c1"># Or for some reason it has contexts instead of spans. Well, we can serialize them both!</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="n">key</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;trace_id&quot;</span><span class="p">:</span> <span class="n">span</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">trace_id</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">span</span><span class="p">,</span> <span class="n">Span</span><span class="p">)</span> <span class="k">else</span> <span class="n">span</span><span class="o">.</span><span class="n">trace_id</span><span class="p">,</span>
-                <span class="s2">&quot;span_id&quot;</span><span class="p">:</span> <span class="n">span</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">span_id</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">span</span><span class="p">,</span> <span class="n">Span</span><span class="p">)</span> <span class="k">else</span> <span class="n">span</span><span class="o">.</span><span class="n">span_id</span><span class="p">,</span>
+                <span class="s2">"trace_id"</span><span class="p">:</span> <span class="n">span</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">trace_id</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">span</span><span class="p">,</span> <span class="n">Span</span><span class="p">)</span> <span class="k">else</span> <span class="n">span</span><span class="o">.</span><span class="n">trace_id</span><span class="p">,</span>
+                <span class="s2">"span_id"</span><span class="p">:</span> <span class="n">span</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">span_id</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">span</span><span class="p">,</span> <span class="n">Span</span><span class="p">)</span> <span class="k">else</span> <span class="n">span</span><span class="o">.</span><span class="n">span_id</span><span class="p">,</span>
             <span class="p">}</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">span</span> <span class="ow">in</span> <span class="n">span_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
         <span class="p">}</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_deserialize_span_dict</span><span class="p">(</span><span class="n">serialized_repr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Context</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Note that we deserialize as contexts, as passing spans is not supported</span>
+<span class="w">        </span><span class="sd">"""Note that we deserialize as contexts, as passing spans is not supported</span>
 <span class="sd">        (the child should never terminate the parent span).</span>
 
 <span class="sd">        :param span_dict: Dict of str -&gt; dict params for contexts</span>
 <span class="sd">        :return: A dictionary of contexts</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">Context</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">serialized_repr</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the state for serialization&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Gets the state for serialization"""</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">root_trace_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">,</span>
             <span class="n">service</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="p">,</span>
@@ -617,39 +617,39 @@ s=d.getElementsByTagName('script')[0];
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the state for serialization&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;service&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;root_trace_name&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">include_causal_links</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;include_causal_links&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">"""Sets the state for serialization"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"service"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"root_trace_name"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">include_causal_links</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"include_causal_links"</span><span class="p">]</span>
         <span class="c1"># TODO -- move this out/consider doing it to the others</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">run_span_cache</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deserialize_span_dict</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;run_span_cache&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_span_cache</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deserialize_span_dict</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">"run_span_cache"</span><span class="p">])</span>
         <span class="c1"># We only really need this if we log the stuff before submitting...</span>
-        <span class="c1"># This shouldn&#39;t happen but it leaves flexibility for the future</span>
+        <span class="c1"># This shouldn't happen but it leaves flexibility for the future</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_span_cache</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">key</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deserialize_span_dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;task_span_cache&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">"task_span_cache"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_span_cache</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">key</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deserialize_span_dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;node_span_cache&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">"node_span_cache"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
         <span class="p">}</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_sanitize_tags</span><span class="p">(</span><span class="n">tags</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sanitizes tags to be strings, just in case.</span>
+<span class="w">        </span><span class="sd">"""Sanitizes tags to be strings, just in case.</span>
 
 <span class="sd">        :param tags: Node tags.</span>
 <span class="sd">        :return: The string -&gt; string representation of tags</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;hamilton.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sa">f</span><span class="s2">"hamilton.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">run_before_graph_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs before graph execution -- sets the state so future ones can reference it.</span>
+<span class="w">        </span><span class="sd">"""Runs before graph execution -- sets the state so future ones can reference it.</span>
 
 <span class="sd">        :param run_id: ID of the run</span>
 <span class="sd">        :param future_kwargs: reserved for future keyword arguments/backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># This returns None if there&#39;s no active context and works as a no-op, otherwise we tie this span to a parent.</span>
+<span class="sd">        """</span>
+        <span class="c1"># This returns None if there's no active context and works as a no-op, otherwise we tie this span to a parent.</span>
         <span class="n">current_context</span> <span class="o">=</span> <span class="n">tracer</span><span class="o">.</span><span class="n">current_trace_context</span><span class="p">()</span>
         <span class="n">span</span> <span class="o">=</span> <span class="n">tracer</span><span class="o">.</span><span class="n">start_span</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">,</span> <span class="n">child_of</span><span class="o">=</span><span class="n">current_context</span><span class="p">,</span> <span class="n">activate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span>
@@ -668,19 +668,19 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs before a node&#39;s execution. Sets up/stores spans.</span>
+<span class="w">        </span><span class="sd">"""Runs before a node's execution. Sets up/stores spans.</span>
 
 <span class="sd">        :param node_name: Name of the node.</span>
 <span class="sd">        :param node_kwargs: Keyword arguments of the node.</span>
-<span class="sd">        :param node_tags: Tags of the node (they&#39;ll get stored as datadog tags)</span>
+<span class="sd">        :param node_tags: Tags of the node (they'll get stored as datadog tags)</span>
 <span class="sd">        :param task_id: Task ID that spawned the node</span>
 <span class="sd">        :param run_id: ID of the run.</span>
 <span class="sd">        :param future_kwargs: reserved for future keyword arguments/backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># We need to do this on launching tasks and we have not yet exposed it.</span>
         <span class="c1"># TODO -- do pre-task and post-task execution.</span>
         <span class="n">parent_span</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_span_cache</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_span_cache</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span>
-        <span class="n">new_span_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">:&quot;</span> <span class="k">if</span> <span class="n">task_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">new_span_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">:"</span> <span class="k">if</span> <span class="n">task_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">""</span>
         <span class="n">new_span_name</span> <span class="o">+=</span> <span class="n">node_name</span>
         <span class="n">new_span</span> <span class="o">=</span> <span class="n">tracer</span><span class="o">.</span><span class="n">start_span</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">new_span_name</span><span class="p">,</span> <span class="n">child_of</span><span class="o">=</span><span class="n">parent_span</span><span class="p">,</span> <span class="n">activate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span>
@@ -694,11 +694,11 @@ s=d.getElementsByTagName('script')[0];
                     <span class="n">new_span</span><span class="o">.</span><span class="n">link_span</span><span class="p">(</span>
                         <span class="n">context</span><span class="o">=</span><span class="n">span</span><span class="o">.</span><span class="n">context</span><span class="p">,</span>
                         <span class="n">attributes</span><span class="o">=</span><span class="p">{</span>
-                            <span class="s2">&quot;link.name&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">input_node</span><span class="si">}</span><span class="s2">_to_</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                            <span class="s2">"link.name"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">input_node</span><span class="si">}</span><span class="s2">_to_</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                         <span class="p">},</span>
                     <span class="p">)</span>
         <span class="n">tags</span> <span class="o">=</span> <span class="n">node_tags</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">tags</span><span class="p">[</span><span class="s2">&quot;hamilton.node_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_name</span>
+        <span class="n">tags</span><span class="p">[</span><span class="s2">"hamilton.node_name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_name</span>
         <span class="n">new_span</span><span class="o">.</span><span class="n">set_tags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sanitize_tags</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_span_cache</span><span class="p">[</span><span class="n">run_id</span><span class="p">][(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">node_name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">new_span</span>
 
@@ -711,14 +711,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after a node&#39;s execution -- completes the span.</span>
+<span class="w">        </span><span class="sd">"""Runs after a node's execution -- completes the span.</span>
 
 <span class="sd">        :param node_name: Name of the node</span>
 <span class="sd">        :param error: Error that the node raised, if any</span>
 <span class="sd">        :param task_id: Task ID that spawned the node</span>
 <span class="sd">        :param run_id: ID of the run.</span>
 <span class="sd">        :param future_kwargs: reserved for future keyword arguments/backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">span</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_span_cache</span><span class="p">[</span><span class="n">run_id</span><span class="p">][(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">node_name</span><span class="p">)]</span>
         <span class="n">exc_type</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">exc_value</span> <span class="o">=</span> <span class="kc">None</span>
@@ -732,12 +732,12 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">run_after_graph_execution</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after graph execution. Garbage collects + finishes the root span.</span>
+<span class="w">        </span><span class="sd">"""Runs after graph execution. Garbage collects + finishes the root span.</span>
 
 <span class="sd">        :param error: Error the graph raised when running, if any</span>
 <span class="sd">        :param run_id: ID of the run</span>
 <span class="sd">        :param future_kwargs: reserved for future keyword arguments/backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">span</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_span_cache</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span>
         <span class="n">exc_type</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">exc_value</span> <span class="o">=</span> <span class="kc">None</span>
@@ -752,12 +752,12 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_span_cache</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">run_before_task_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs before task execution. Sets up the task span.</span>
+<span class="w">        </span><span class="sd">"""Runs before task execution. Sets up the task span.</span>
 
 <span class="sd">        :param task_id: ID of the task</span>
 <span class="sd">        :param run_id: ID of the run,</span>
 <span class="sd">        :param future_kwargs: reserved for future keyword arguments/backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">parent_span</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_span_cache</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_span_cache</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">task_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">tracer</span><span class="o">.</span><span class="n">start_span</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
@@ -774,13 +774,13 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rusn after task execution. Finishes task-level spans.</span>
+<span class="w">        </span><span class="sd">"""Rusn after task execution. Finishes task-level spans.</span>
 
 <span class="sd">        :param task_id: ID of the task, ID of the run.</span>
 <span class="sd">        :param run_id: ID of the run</span>
 <span class="sd">        :param error: Error the graph raised when running, if any</span>
 <span class="sd">        :param future_kwargs: Future keyword arguments for backwards compatibility</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">span</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_span_cache</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">task_id</span><span class="p">]</span>
         <span class="n">exc_type</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">exc_value</span> <span class="o">=</span> <span class="kc">None</span>
@@ -797,34 +797,34 @@ s=d.getElementsByTagName('script')[0];
 <span class="k">class</span><span class="w"> </span><span class="nc">DDOGTracer</span><span class="p">(</span>
     <span class="n">lifecycle</span><span class="o">.</span><span class="n">NodeExecutionHook</span><span class="p">,</span> <span class="n">lifecycle</span><span class="o">.</span><span class="n">GraphExecutionHook</span><span class="p">,</span> <span class="n">lifecycle</span><span class="o">.</span><span class="n">TaskExecutionHook</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lifecycle adapter to use datadog to run tracing on node execution. This works with the following execution environments:</span>
+<span class="w">    </span><span class="sd">"""Lifecycle adapter to use datadog to run tracing on node execution. This works with the following execution environments:</span>
 <span class="sd">    1. Vanilla Hamilton -- no task-based computation, just nodes</span>
 <span class="sd">    2. Task-based, synchronous</span>
 <span class="sd">    3. Task-based with Multithreading, Ray, and Dask</span>
 <span class="sd">    It will likely work with others, although we have not yet tested them. This does not work with async (yet).</span>
 
-<span class="sd">    Note that this is not a typical use of Datadog if you&#39;re not using hamilton for a microservice. It does work quite nicely, however!</span>
-<span class="sd">    Monitoring ETLs is not a typical datadog case (you can&#39;t see relationships between nodes/tasks or data summaries),</span>
+<span class="sd">    Note that this is not a typical use of Datadog if you're not using hamilton for a microservice. It does work quite nicely, however!</span>
+<span class="sd">    Monitoring ETLs is not a typical datadog case (you can't see relationships between nodes/tasks or data summaries),</span>
 <span class="sd">    but it is easy enough to work with and gives some basic information.</span>
 
 <span class="sd">    This tracer bypasses context management so we can more accurately track relationships between nodes/tags. Also, we plan to</span>
 <span class="sd">    get this working with OpenTelemetry, and use that for datadog integration.</span>
 
-<span class="sd">    To use this, you&#39;ll want to run `pip install apache-hamilton[datadog]` (or `pip install &quot;apache-hamilton[datadog]&quot;` if using zsh)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    To use this, you'll want to run `pip install apache-hamilton[datadog]` (or `pip install "apache-hamilton[datadog]"` if using zsh)</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="DDOGTracer.__init__">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/DDOGTracer/#hamilton.plugins.h_ddog.DDOGTracer.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">include_causal_links</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">service</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a DDOGTracer. This has the option to specify some parameters.</span>
+<span class="w">        </span><span class="sd">"""Creates a DDOGTracer. This has the option to specify some parameters.</span>
 
 <span class="sd">        :param root_name: Name of the root trace/span. Due to the way datadog inherits, this will inherit an active span.</span>
 <span class="sd">        :param include_causal_links: Whether or not to include span causal links. Note that there are some edge-cases here, and</span>
 <span class="sd">            This is in beta for datadog, and actually broken in the current client, but it has been fixed and will be released shortly:</span>
 <span class="sd">            https://github.com/DataDog/dd-trace-py/issues/8049. Furthermore, the query on datadog is slow for displaying causal links.</span>
-<span class="sd">            We&#39;ve disabled this by default, but feel free to test it out -- its likely they&#39;ll be improving the docum</span>
+<span class="sd">            We've disabled this by default, but feel free to test it out -- its likely they'll be improving the docum</span>
 <span class="sd">        :param service: Service name -- will pick it up from the environment through DDOG if not available.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span> <span class="o">=</span> <span class="n">_DDOGTracerImpl</span><span class="p">(</span>
             <span class="n">root_name</span><span class="o">=</span><span class="n">root_name</span><span class="p">,</span> <span class="n">include_causal_links</span><span class="o">=</span><span class="n">include_causal_links</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="n">service</span>
         <span class="p">)</span></div>
@@ -833,11 +833,11 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="DDOGTracer.run_before_graph_execution">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/DDOGTracer/#hamilton.plugins.h_ddog.DDOGTracer.run_before_graph_execution">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run_before_graph_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs before graph execution -- sets the state so future ones can reference it.</span>
+<span class="w">        </span><span class="sd">"""Runs before graph execution -- sets the state so future ones can reference it.</span>
 
 <span class="sd">        :param run_id: ID of the run</span>
 <span class="sd">        :param future_kwargs: reserved for future keyword arguments/backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span><span class="o">.</span><span class="n">run_before_graph_execution</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">)</span></div>
 
 
@@ -853,15 +853,15 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs before a node&#39;s execution. Sets up/stores spans.</span>
+<span class="w">        </span><span class="sd">"""Runs before a node's execution. Sets up/stores spans.</span>
 
 <span class="sd">        :param node_name: Name of the node.</span>
 <span class="sd">        :param node_kwargs: Keyword arguments of the node.</span>
-<span class="sd">        :param node_tags: Tags of the node (they&#39;ll get stored as datadog tags)</span>
+<span class="sd">        :param node_tags: Tags of the node (they'll get stored as datadog tags)</span>
 <span class="sd">        :param task_id: Task ID that spawned the node</span>
 <span class="sd">        :param run_id: ID of the run.</span>
 <span class="sd">        :param future_kwargs: reserved for future keyword arguments/backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span><span class="o">.</span><span class="n">run_before_node_execution</span><span class="p">(</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
             <span class="n">node_kwargs</span><span class="o">=</span><span class="n">node_kwargs</span><span class="p">,</span>
@@ -883,14 +883,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after a node&#39;s execution -- completes the span.</span>
+<span class="w">        </span><span class="sd">"""Runs after a node's execution -- completes the span.</span>
 
 <span class="sd">        :param node_name: Name of the node</span>
 <span class="sd">        :param error: Error that the node raised, if any</span>
 <span class="sd">        :param task_id: Task ID that spawned the node</span>
 <span class="sd">        :param run_id: ID of the run.</span>
 <span class="sd">        :param future_kwargs: reserved for future keyword arguments/backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span><span class="o">.</span><span class="n">run_after_node_execution</span><span class="p">(</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span>
         <span class="p">)</span></div>
@@ -901,24 +901,24 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">run_after_graph_execution</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after graph execution. Garbage collects + finishes the root span.</span>
+<span class="w">        </span><span class="sd">"""Runs after graph execution. Garbage collects + finishes the root span.</span>
 
 <span class="sd">        :param error: Error the graph raised when running, if any</span>
 <span class="sd">        :param run_id: ID of the run</span>
 <span class="sd">        :param future_kwargs: reserved for future keyword arguments/backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span><span class="o">.</span><span class="n">run_after_graph_execution</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DDOGTracer.run_before_task_execution">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/DDOGTracer/#hamilton.plugins.h_ddog.DDOGTracer.run_before_task_execution">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run_before_task_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs before task execution. Sets up the task span.</span>
+<span class="w">        </span><span class="sd">"""Runs before task execution. Sets up the task span.</span>
 
 <span class="sd">        :param task_id: ID of the task</span>
 <span class="sd">        :param run_id: ID of the run,</span>
 <span class="sd">        :param future_kwargs: reserved for future keyword arguments/backwards compatibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span><span class="o">.</span><span class="n">run_before_task_execution</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">)</span></div>
 
 
@@ -932,13 +932,13 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rusn after task execution. Finishes task-level spans.</span>
+<span class="w">        </span><span class="sd">"""Rusn after task execution. Finishes task-level spans.</span>
 
 <span class="sd">        :param task_id: ID of the task, ID of the run.</span>
 <span class="sd">        :param run_id: ID of the run</span>
 <span class="sd">        :param error: Error the graph raised when running, if any</span>
 <span class="sd">        :param future_kwargs: Future keyword arguments for backwards compatibility</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span><span class="o">.</span><span class="n">run_after_task_execution</span><span class="p">(</span>
             <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span>
         <span class="p">)</span></div>
@@ -960,7 +960,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">root_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">include_causal_links</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">service</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a AsyncDDOGTracer, the asyncio-friendly version of DDOGTracer.</span>
+<span class="w">        </span><span class="sd">"""Creates a AsyncDDOGTracer, the asyncio-friendly version of DDOGTracer.</span>
 
 <span class="sd">        This has the option to specify some parameters:</span>
 
@@ -968,9 +968,9 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param include_causal_links: Whether or not to include span causal links. Note that there are some edge-cases here, and</span>
 <span class="sd">            This is in beta for datadog, and actually broken in the current client, but it has been fixed and will be released shortly:</span>
 <span class="sd">            https://github.com/DataDog/dd-trace-py/issues/8049. Furthermore, the query on datadog is slow for displaying causal links.</span>
-<span class="sd">            We&#39;ve disabled this by default, but feel free to test it out -- its likely they&#39;ll be improving the docum</span>
+<span class="sd">            We've disabled this by default, but feel free to test it out -- its likely they'll be improving the docum</span>
 <span class="sd">        :param service: Service name -- will pick it up from the environment through DDOG if not available.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span> <span class="o">=</span> <span class="n">_DDOGTracerImpl</span><span class="p">(</span>
             <span class="n">root_name</span><span class="o">=</span><span class="n">root_name</span><span class="p">,</span> <span class="n">include_causal_links</span><span class="o">=</span><span class="n">include_causal_links</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="n">service</span>
         <span class="p">)</span></div>
@@ -981,12 +981,12 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">post_graph_construct</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">h_graph</span><span class="o">.</span><span class="n">FunctionGraph</span><span class="p">,</span> <span class="n">modules</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ModuleType</span><span class="p">],</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after graph construction. This is a no-op for this plugin.</span>
+<span class="w">        </span><span class="sd">"""Runs after graph construction. This is a no-op for this plugin.</span>
 
 <span class="sd">        :param graph: Graph that has been constructed.</span>
 <span class="sd">        :param modules: Modules passed into the graph</span>
 <span class="sd">        :param config: Config passed into the graph</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">pass</span></div>
 
 
@@ -1000,14 +1000,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">overrides</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs before graph execution -- sets the state so future ones can reference it.</span>
+<span class="w">        </span><span class="sd">"""Runs before graph execution -- sets the state so future ones can reference it.</span>
 
 <span class="sd">        :param run_id: ID of the run, unique in scope of the driver.</span>
 <span class="sd">        :param graph:  Graph that is being executed</span>
 <span class="sd">        :param final_vars: Variables we are extracting from the graph</span>
 <span class="sd">        :param inputs: Inputs to the graph</span>
 <span class="sd">        :param overrides: Overrides to graph execution</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span><span class="o">.</span><span class="n">run_before_graph_execution</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">)</span></div>
 
 
@@ -1016,13 +1016,13 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">pre_node_execute</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs before a node&#39;s execution. Sets up/stores spans.</span>
+<span class="w">        </span><span class="sd">"""Runs before a node's execution. Sets up/stores spans.</span>
 
 <span class="sd">        :param run_id: ID of the run, unique in scope of the driver.</span>
 <span class="sd">        :param node_: Node that is being executed</span>
 <span class="sd">        :param kwargs: Keyword arguments that are being passed into the node</span>
 <span class="sd">        :param task_id: ID of the task, defaults to None if not in a task setting</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span><span class="o">.</span><span class="n">run_before_node_execution</span><span class="p">(</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="n">node_kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
@@ -1044,7 +1044,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after a node&#39;s execution -- completes the span.</span>
+<span class="w">        </span><span class="sd">"""Runs after a node's execution -- completes the span.</span>
 
 <span class="sd">        :param run_id: ID of the run, unique in scope of the driver.</span>
 <span class="sd">        :param node_: Node that is being executed</span>
@@ -1053,7 +1053,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param error: The error that was raised, if any</span>
 <span class="sd">        :param result: The result of the node execution, if no error was raised</span>
 <span class="sd">        :param task_id: ID of the task, defaults to None if not in a task-based execution</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span><span class="o">.</span><span class="n">run_after_node_execution</span><span class="p">(</span>
             <span class="n">node_name</span><span class="o">=</span><span class="n">node_</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span>
         <span class="p">)</span></div>
@@ -1069,14 +1069,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">results</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after graph execution. Garbage collects + finishes the root span.</span>
+<span class="w">        </span><span class="sd">"""Runs after graph execution. Garbage collects + finishes the root span.</span>
 
 <span class="sd">        :param run_id: ID of the run, unique in scope of the driver.</span>
 <span class="sd">        :param graph: Graph that was executed</span>
 <span class="sd">        :param success: Whether or not the graph executed successfully</span>
 <span class="sd">        :param error: Error that was raised, if any</span>
 <span class="sd">        :param results: Results of the graph execution</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_impl</span><span class="o">.</span><span class="n">run_after_graph_execution</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">)</span></div>
 </div>
 
@@ -1129,182 +1129,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1349,6 +1184,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1356,7 +1217,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1373,42 +1242,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1431,7 +1358,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1442,12 +1369,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1467,8 +1388,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1480,7 +1401,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1492,9 +1413,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1517,8 +1438,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1528,10 +1452,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1556,10 +1478,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

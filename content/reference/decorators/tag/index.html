@@ -535,7 +535,7 @@ marking nodes as part of some data product, or for GDPR/privacy purposes.</p>
 <span class="k">def</span><span class="w"> </span><span class="nf">intermediate_column</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
     <span class="k">pass</span>
 
-<span class="nd">@tag</span><span class="p">(</span><span class="n">data_product</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span> <span class="n">pii</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="p">)</span>
+<span class="nd">@tag</span><span class="p">(</span><span class="n">data_product</span><span class="o">=</span><span class="s1">'final'</span><span class="p">,</span> <span class="n">pii</span><span class="o">=</span><span class="s1">'true'</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">final_column</span><span class="p">(</span><span class="n">intermediate_column</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
     <span class="k">pass</span>
 </pre></div>
@@ -548,7 +548,7 @@ available outputs for specific tag matches. E.g.</p>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Driver</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># create driver as required</span>
 <span class="n">all_possible_outputs</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">list_available_variables</span><span class="p">()</span>
 <span class="n">desired_outputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">all_possible_outputs</span>
-                   <span class="k">if</span> <span class="s1">&#39;my_tag_value&#39;</span> <span class="o">==</span> <span class="n">o</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;my_tag_key&#39;</span><span class="p">)]</span>
+                   <span class="k">if</span> <span class="s1">'my_tag_value'</span> <span class="o">==</span> <span class="n">o</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'my_tag_key'</span><span class="p">)]</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">desired_outputs</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -558,9 +558,9 @@ This allows you to show user-friendly names in DAG diagrams while keeping valid 
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">tag</span>
 
-<span class="nd">@tag</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Customer Lifetime Value&quot;</span><span class="p">)</span>
+<span class="nd">@tag</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s2">"Customer Lifetime Value"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">customer_ltv</span><span class="p">(</span><span class="n">purchases</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">tenure</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate customer lifetime value.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Calculate customer lifetime value."""</span>
     <span class="k">return</span> <span class="n">purchases</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="n">tenure</span>
 </pre></div>
 </div>
@@ -582,13 +582,13 @@ Tags can have dots to specify namespaces (keys with dots), but this is usually r
 (E.G. subdecorators) that utilize them. Usually one will pass in tags as kwargs, so we expect tags to
 be un-namespaced in most uses.</p>
 <p>That is using:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag</span><span class="p">(</span><span class="n">my_tag</span><span class="o">=</span><span class="s1">&#39;tag_value&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag</span><span class="p">(</span><span class="n">my_tag</span><span class="o">=</span><span class="s1">'tag_value'</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">...</span><span class="p">:</span>
 </pre></div>
 </div>
 <p>is un-namespaced because you cannot put a <cite>.</cite> in the keyword part (the part before the ‘=’).</p>
 <p>But using:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;my.tag&#39;</span><span class="p">:</span> <span class="s1">&#39;tag_value&#39;</span><span class="p">})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">'my.tag'</span><span class="p">:</span> <span class="s1">'tag_value'</span><span class="p">})</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">...</span><span class="p">:</span>
 </pre></div>
 </div>
@@ -599,7 +599,7 @@ be un-namespaced in most uses.</p>
 * adding purely positional arguments
 * not allowing users to use a certain set of top-level prefixes (E.G. any tag where the top level is one of the     values in RESERVED_TAG_PREFIX).</p>
 <p>Example usage:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">a_tag_key</span><span class="o">=</span><span class="s1">&#39;a_tag_value&#39;</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;namespace.tag_key&#39;</span><span class="p">:</span> <span class="s1">&#39;tag_value&#39;</span><span class="p">})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="s1">'bar'</span><span class="p">,</span> <span class="n">a_tag_key</span><span class="o">=</span><span class="s1">'a_tag_value'</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">'namespace.tag_key'</span><span class="p">:</span> <span class="s1">'tag_value'</span><span class="p">})</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">...</span><span class="p">:</span>
    <span class="o">...</span>
 </pre></div>
@@ -643,10 +643,10 @@ annotate it with the value <cite>Union[str, List[str]]</cite>.</p></li>
 </dd>
 </dl>
 <p>Example usage:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag_output</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;a_tag&#39;</span><span class="p">:</span> <span class="s1">&#39;a_tag_value&#39;</span><span class="p">},</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b_tag&#39;</span><span class="p">:</span> <span class="s1">&#39;b_tag_value&#39;</span><span class="p">}})</span>
-<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tag_output</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">'a'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'a_tag'</span><span class="p">:</span> <span class="s1">'a_tag_value'</span><span class="p">},</span> <span class="s1">'b'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'b_tag'</span><span class="p">:</span> <span class="s1">'b_tag_value'</span><span class="p">}})</span>
+<span class="nd">@extract_columns</span><span class="p">(</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">example_tag_outputs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">]})</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">({</span><span class="s2">"a"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"b"</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">]})</span>
 </pre></div>
 </div>
 </dd></dl>

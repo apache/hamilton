@@ -547,11 +547,11 @@ that can get cumbersome if you have a lot, so this decorator is a good way to he
 <p>Let’s take a look at an example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterized_subdag</span><span class="p">(</span>
     <span class="n">feature_modules</span><span class="p">,</span>
-    <span class="n">from_datasource_1</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inputs&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_1.csv&quot;</span><span class="p">)}},</span>
-    <span class="n">from_datasource_2</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inputs&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_2.csv&quot;</span><span class="p">)}},</span>
+    <span class="n">from_datasource_1</span><span class="o">=</span><span class="p">{</span><span class="s2">"inputs"</span> <span class="p">:</span> <span class="p">{</span><span class="s2">"data"</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">"datasource_1.csv"</span><span class="p">)}},</span>
+    <span class="n">from_datasource_2</span><span class="o">=</span><span class="p">{</span><span class="s2">"inputs"</span> <span class="p">:</span> <span class="p">{</span><span class="s2">"data"</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">"datasource_2.csv"</span><span class="p">)}},</span>
     <span class="n">from_datasource_3</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;inputs&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_3.csv&quot;</span><span class="p">)},</span>
-        <span class="s2">&quot;config&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;filter&quot;</span> <span class="p">:</span> <span class="s2">&quot;only_even_client_ids&quot;</span><span class="p">}</span>
+        <span class="s2">"inputs"</span> <span class="p">:</span> <span class="p">{</span><span class="s2">"data"</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">"datasource_3.csv"</span><span class="p">)},</span>
+        <span class="s2">"config"</span> <span class="p">:</span> <span class="p">{</span><span class="s2">"filter"</span> <span class="p">:</span> <span class="s2">"only_even_client_ids"</span><span class="p">}</span>
     <span class="p">}</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">feature_engineering</span><span class="p">(</span><span class="n">feature_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -564,14 +564,14 @@ pass in inputs/config to the decorator itself, which will be applied to all subd
 <p>This is effectively the same as the example above.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameterized_subdag</span><span class="p">(</span>
     <span class="n">feature_modules</span><span class="p">,</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_1.csv&quot;</span><span class="p">)},</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"data"</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">"datasource_1.csv"</span><span class="p">)},</span>
     <span class="n">from_datasource_1</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">from_datasource_2</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;inputs&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_2.csv&quot;</span><span class="p">)}</span>
+            <span class="s2">"inputs"</span> <span class="p">:</span> <span class="p">{</span><span class="s2">"data"</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">"datasource_2.csv"</span><span class="p">)}</span>
     <span class="p">},</span>
     <span class="n">from_datasource_3</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;inputs&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">&quot;datasource_3.csv&quot;</span><span class="p">)},</span>
-            <span class="s2">&quot;config&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;filter&quot;</span> <span class="p">:</span> <span class="s2">&quot;only_even_client_ids&quot;</span><span class="p">},</span>
+            <span class="s2">"inputs"</span> <span class="p">:</span> <span class="p">{</span><span class="s2">"data"</span> <span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="s2">"datasource_3.csv"</span><span class="p">)},</span>
+            <span class="s2">"config"</span> <span class="p">:</span> <span class="p">{</span><span class="s2">"filter"</span> <span class="p">:</span> <span class="s2">"only_even_client_ids"</span><span class="p">},</span>
     <span class="p">}</span>
 <span class="p">)</span>
 </pre></div>

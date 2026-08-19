@@ -541,7 +541,7 @@ Driver interface is designed:</p>
     <span class="c1"># ...</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">my_execute_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;What actually calls the Hamilton&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""What actually calls the Hamilton"""</span>
         <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Driver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constructor_arg</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">augmetn</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>

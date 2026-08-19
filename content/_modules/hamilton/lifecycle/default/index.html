@@ -519,19 +519,19 @@ s=d.getElementsByTagName('script')[0];
 <span class="c1"># distributed with this work for additional information</span>
 <span class="c1"># regarding copyright ownership.  The ASF licenses this file</span>
 <span class="c1"># to you under the Apache License, Version 2.0 (the</span>
-<span class="c1"># &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="c1"># "License"); you may not use this file except in compliance</span>
 <span class="c1"># with the License.  You may obtain a copy of the License at</span>
 <span class="c1">#</span>
 <span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="c1">#</span>
 <span class="c1"># Unless required by applicable law or agreed to in writing,</span>
 <span class="c1"># software distributed under the License is distributed on an</span>
-<span class="c1"># &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="c1"># "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
 
-<span class="sd">&quot;&quot;&quot;A selection of default lifeycle hooks/methods that come with Hamilton. These carry no additional requirements&quot;&quot;&quot;</span>
+<span class="sd">"""A selection of default lifeycle hooks/methods that come with Hamilton. These carry no additional requirements"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
@@ -575,37 +575,37 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="n">node_name</span> <span class="ow">in</span> <span class="n">node_filter</span>
     <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">node_filter</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">node_filter</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">node_tags</span><span class="p">)</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid node filter: </span><span class="si">{</span><span class="n">node_filter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid node filter: </span><span class="si">{</span><span class="n">node_filter</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="PrintLn">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/PrintLn/#hamilton.lifecycle.default.PrintLn">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PrintLn</span><span class="p">(</span><span class="n">NodeExecutionHook</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Basic hook to print out information before/after node execution.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Basic hook to print out information before/after node execution."""</span>
 
-    <span class="n">NODE_TIME_STATE</span> <span class="o">=</span> <span class="s2">&quot;node_time&quot;</span>
+    <span class="n">NODE_TIME_STATE</span> <span class="o">=</span> <span class="s2">"node_time"</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_format_time_delta</span><span class="p">(</span><span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Formats a time delta into a human-readable string.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Formats a time delta into a human-readable string."""</span>
         <span class="c1"># Determine the appropriate unit and format</span>
         <span class="k">if</span> <span class="n">delta</span> <span class="o">&lt;</span> <span class="mf">0.001</span><span class="p">:</span>  <span class="c1"># Less than 1 millisecond</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">delta</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.3g</span><span class="si">}</span><span class="s2">μs&quot;</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">delta</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.3g</span><span class="si">}</span><span class="s2">μs"</span>
         <span class="k">elif</span> <span class="n">delta</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Less than 1 second</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">delta</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1e3</span><span class="si">:</span><span class="s2">.3g</span><span class="si">}</span><span class="s2">ms&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">delta</span><span class="si">:</span><span class="s2">.3g</span><span class="si">}</span><span class="s2">s&quot;</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">delta</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1e3</span><span class="si">:</span><span class="s2">.3g</span><span class="si">}</span><span class="s2">ms"</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">delta</span><span class="si">:</span><span class="s2">.3g</span><span class="si">}</span><span class="s2">s"</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate_verbosity</span><span class="p">(</span><span class="n">verbosity</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validates that the verbosity is one of [1, 2]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Validates that the verbosity is one of [1, 2]"""</span>
         <span class="k">if</span> <span class="n">verbosity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Verbosity must be one of [1, 2], got </span><span class="si">{</span><span class="n">verbosity</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Verbosity must be one of [1, 2], got </span><span class="si">{</span><span class="n">verbosity</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_format_node_name</span><span class="p">(</span><span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Formats a node name and task id into a unique node name.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Formats a node name and task id into a unique node name."""</span>
         <span class="k">if</span> <span class="n">task_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">return</span> <span class="n">node_name</span>
 
 <div class="viewcode-block" id="PrintLn.__init__">
@@ -616,7 +616,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">print_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="nb">print</span><span class="p">,</span>
         <span class="n">node_filter</span><span class="p">:</span> <span class="n">NodeFilter</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Prints out information before/after node execution.</span>
+<span class="w">        </span><span class="sd">"""Prints out information before/after node execution.</span>
 
 <span class="sd">        :param verbosity: The verbosity level to print out at.</span>
 <span class="sd">            `verbosity=1` Print out just the node name and time it took to execute</span>
@@ -624,7 +624,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param print_fn: A function that takes a string and prints it out -- defaults to print. Pass in a logger function, etc... if you so choose.</span>
 <span class="sd">        :param node_filter: A function that takes a node name and a node tags dict and returns a boolean. If the boolean is True, the node will be printed out.</span>
 <span class="sd">            If False, it will not be printed out.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">PrintLn</span><span class="o">.</span><span class="n">_validate_verbosity</span><span class="p">(</span><span class="n">verbosity</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="n">verbosity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_fn</span> <span class="o">=</span> <span class="n">print_fn</span>
@@ -645,21 +645,21 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs before a node executes. Prints out the node name and inputs if verbosity is 2.</span>
+<span class="w">        </span><span class="sd">"""Runs before a node executes. Prints out the node name and inputs if verbosity is 2.</span>
 
 <span class="sd">        :param node_name: Name of the node</span>
 <span class="sd">        :param node_tags: Tags of the node</span>
 <span class="sd">        :param node_kwargs: Keyword arguments of the node</span>
 <span class="sd">        :param task_id: ID of the task that the node is in, if any</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments that may be passed to the hook yet are ignored for now</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">should_run_node</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">node_tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_filter</span><span class="p">):</span>
             <span class="k">return</span>
         <span class="n">node_unique_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_node_name</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timer_dict</span><span class="p">[</span><span class="n">node_unique_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Executing node: </span><span class="si">{</span><span class="n">node_unique_id</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Executing node: </span><span class="si">{</span><span class="n">node_unique_id</span><span class="si">}</span><span class="s2">."</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; Inputs: </span><span class="se">\n</span><span class="si">{</span><span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">node_kwargs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">" Inputs: </span><span class="se">\n</span><span class="si">{</span><span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">node_kwargs</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_fn</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
@@ -677,7 +677,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs after a node executes. Prints out the node name and time it took, the output if verbosity is 1.</span>
+<span class="w">        </span><span class="sd">"""Runs after a node executes. Prints out the node name and time it took, the output if verbosity is 1.</span>
 
 <span class="sd">        :param node_name: Name of the node</span>
 <span class="sd">        :param node_tags: Tags of the node</span>
@@ -687,18 +687,18 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param success: Whether the node was successful or not</span>
 <span class="sd">        :param task_id: ID of the task that the node is in, if any</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments that may be passed to the hook yet are ignored for now</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">should_run_node</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">node_tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_filter</span><span class="p">):</span>
             <span class="k">return</span>
         <span class="n">node_unique_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_node_name</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="p">)</span>
         <span class="n">time_delta</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer_dict</span><span class="p">[</span><span class="n">node_unique_id</span><span class="p">]</span>
         <span class="n">time_delta_formatted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_time_delta</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Finished debugging node: </span><span class="si">{</span><span class="n">node_unique_id</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">time_delta_formatted</span><span class="si">}</span><span class="s2">. Status: </span><span class="si">{</span><span class="s1">&#39;Success&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Failure&#39;</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Finished debugging node: </span><span class="si">{</span><span class="n">node_unique_id</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">time_delta_formatted</span><span class="si">}</span><span class="s2">. Status: </span><span class="si">{</span><span class="s1">'Success'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'Failure'</span><span class="si">}</span><span class="s2">."</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
-                <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; Result: </span><span class="se">\n</span><span class="si">{</span><span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">" Result: </span><span class="se">\n</span><span class="si">{</span><span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; Error: </span><span class="se">\n</span><span class="si">{</span><span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">" Error: </span><span class="se">\n</span><span class="si">{</span><span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_fn</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer_dict</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span></div>
 </div>
@@ -708,9 +708,9 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="PDBDebugger">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/PDBDebugger/#hamilton.lifecycle.default.PDBDebugger">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PDBDebugger</span><span class="p">(</span><span class="n">NodeExecutionHook</span><span class="p">,</span> <span class="n">NodeExecutionMethod</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to inject a PDB debugger into a node execution. This is still somewhat experimental as it is a debugging utility.</span>
+<span class="w">    </span><span class="sd">"""Class to inject a PDB debugger into a node execution. This is still somewhat experimental as it is a debugging utility.</span>
 <span class="sd">    We reserve the right to change the API and the implementation of this class in the future.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">CONTEXT</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
@@ -723,7 +723,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">during</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">after</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a PDB debugger. This has three possible modes:</span>
+<span class="w">        </span><span class="sd">"""Creates a PDB debugger. This has three possible modes:</span>
 <span class="sd">            1. Before -- places you in a function with (a) node information, and (b) inputs</span>
 <span class="sd">            2. During -- runs the node with pdb.run. Note this may not always work or give what you expect as</span>
 <span class="sd">                node functions are often wrapped in multiple levels of input modifications/whatnot. That said, it should give you something.</span>
@@ -733,9 +733,9 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">        :param node_filter: A function that takes a node name and a node tags dict and returns a boolean. If the boolean is True, the node will be printed out.</span>
 <span class="sd">        :param before: Whether to place you in a PDB debugger before a node executes</span>
-<span class="sd">        :param during: Whether to place you in a PDB debugger during a node&#39;s execution</span>
+<span class="sd">        :param during: Whether to place you in a PDB debugger during a node's execution</span>
 <span class="sd">        :param after: Whether to place you in a PDB debugger after a node executes</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_filter</span> <span class="o">=</span> <span class="n">node_filter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">run_before</span> <span class="o">=</span> <span class="n">before</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">run_during</span> <span class="o">=</span> <span class="n">during</span>
@@ -754,7 +754,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Executes the node with a PDB debugger. This modifies the global PDBDebugger.CONTEXT variable to contain information about the node,</span>
+<span class="w">        </span><span class="sd">"""Executes the node with a PDB debugger. This modifies the global PDBDebugger.CONTEXT variable to contain information about the node,</span>
 <span class="sd">            so you can access it while debugging.</span>
 
 
@@ -765,35 +765,35 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param task_id: ID of the task that the node is in, if any</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments that may be passed to the hook yet are ignored for now</span>
 <span class="sd">        :return: Result of the node</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">should_run_node</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">node_tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_filter</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_during</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">node_callable</span><span class="p">(</span><span class="o">**</span><span class="n">node_kwargs</span><span class="p">)</span>
         <span class="n">PDBDebugger</span><span class="o">.</span><span class="n">CONTEXT</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;node_name&quot;</span><span class="p">:</span> <span class="n">node_name</span><span class="p">,</span>
-            <span class="s2">&quot;node_tags&quot;</span><span class="p">:</span> <span class="n">node_tags</span><span class="p">,</span>
-            <span class="s2">&quot;node_callable&quot;</span><span class="p">:</span> <span class="n">node_callable</span><span class="p">,</span>
-            <span class="s2">&quot;node_kwargs&quot;</span><span class="p">:</span> <span class="n">node_kwargs</span><span class="p">,</span>
-            <span class="s2">&quot;task_id&quot;</span><span class="p">:</span> <span class="n">task_id</span><span class="p">,</span>
-            <span class="s2">&quot;future_kwargs&quot;</span><span class="p">:</span> <span class="n">future_kwargs</span><span class="p">,</span>
+            <span class="s2">"node_name"</span><span class="p">:</span> <span class="n">node_name</span><span class="p">,</span>
+            <span class="s2">"node_tags"</span><span class="p">:</span> <span class="n">node_tags</span><span class="p">,</span>
+            <span class="s2">"node_callable"</span><span class="p">:</span> <span class="n">node_callable</span><span class="p">,</span>
+            <span class="s2">"node_kwargs"</span><span class="p">:</span> <span class="n">node_kwargs</span><span class="p">,</span>
+            <span class="s2">"task_id"</span><span class="p">:</span> <span class="n">task_id</span><span class="p">,</span>
+            <span class="s2">"future_kwargs"</span><span class="p">:</span> <span class="n">future_kwargs</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Placing you in a PDB debugger for node </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">You can access additional node information via PDBDebugger.CONTEXT. Data is:&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_name: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_tags: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_tags</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_callable: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_callable</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_kwargs: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">node_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - task_id: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - future_kwargs: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">future_kwargs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Placing you in a PDB debugger for node </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">."</span>
+            <span class="s2">"</span><span class="se">\n</span><span class="s2">You can access additional node information via PDBDebugger.CONTEXT. Data is:"</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_name: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_tags: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_tags</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_callable: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_callable</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_kwargs: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">node_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span><span class="si">}</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - task_id: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - future_kwargs: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">future_kwargs</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">pdb</span><span class="o">.</span><span class="n">runcall</span><span class="p">(</span><span class="n">node_callable</span><span class="p">,</span> <span class="o">**</span><span class="n">node_kwargs</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished executing node </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Finished executing node </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span></div>
 
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_truncate_repr</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">num_chars</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Truncates the repr of an object to 100 characters.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Truncates the repr of an object to 100 characters."""</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">obj</span><span class="p">[:</span><span class="n">num_chars</span><span class="p">]</span>
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">)[:</span><span class="n">num_chars</span><span class="p">]</span>
@@ -810,7 +810,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Executes before a node executes. Does nothing, just runs pdb.set_trace()</span>
+<span class="w">        </span><span class="sd">"""Executes before a node executes. Does nothing, just runs pdb.set_trace()</span>
 
 <span class="sd">        :param node_name: Name of the node</span>
 <span class="sd">        :param node_tags: Tags of the node</span>
@@ -819,16 +819,16 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param task_id: ID of the task that the node is in, if any</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments that may be passed to the hook yet are ignored for now</span>
 <span class="sd">        :return: Result of the node</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">should_run_node</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">node_tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_filter</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_before</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Placing you in a PDB debugger prior to execution of node: </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">.&quot;</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">You can access additional node information via the following variables:&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_name: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_tags: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_tags</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_kwargs: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">node_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_return_type: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_return_type</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - task_id: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Placing you in a PDB debugger prior to execution of node: </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">."</span>
+                <span class="s2">"</span><span class="se">\n</span><span class="s2">You can access additional node information via the following variables:"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_name: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_tags: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_tags</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_kwargs: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">node_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_return_type: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_return_type</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - task_id: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span></div>
 
@@ -848,7 +848,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Executes after a node, whether or not it was successful. Does nothing, just runs pdb.set_trace().</span>
+<span class="w">        </span><span class="sd">"""Executes after a node, whether or not it was successful. Does nothing, just runs pdb.set_trace().</span>
 
 <span class="sd">        :param node_name: Name of the node</span>
 <span class="sd">        :param node_tags:  Tags of the node</span>
@@ -859,19 +859,19 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        :param success:  Whether the node ran successful or not</span>
 <span class="sd">        :param task_id: Task ID of the node, if any</span>
 <span class="sd">        :param future_kwargs: Additional keyword arguments that may be passed to the hook yet are ignored for now</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">should_run_node</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">node_tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_filter</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_after</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Placing you in a PDB debugger post execution of node: </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">.&quot;</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">You can access additional node information via the following variables:&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_name: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_tags: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_tags</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_kwargs: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">node_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - node_return_type: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_return_type</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - result: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - error: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - success: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">success</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - task_id: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Placing you in a PDB debugger post execution of node: </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2">."</span>
+                <span class="s2">"</span><span class="se">\n</span><span class="s2">You can access additional node information via the following variables:"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_name: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_tags: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_tags</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_kwargs: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">node_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - node_return_type: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">node_return_type</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - result: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - error: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - success: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">success</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> - task_id: </span><span class="si">{</span><span class="n">PDBDebugger</span><span class="o">.</span><span class="n">_truncate_repr</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span></div>
 </div>
@@ -879,28 +879,28 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">CacheAdapter</span><span class="p">(</span><span class="n">NodeExecutionHook</span><span class="p">,</span> <span class="n">NodeExecutionMethod</span><span class="p">,</span> <span class="n">GraphExecutionHook</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to cache node results on disk with a key based on the node code implementation and inputs.</span>
+<span class="w">    </span><span class="sd">"""Class to cache node results on disk with a key based on the node code implementation and inputs.</span>
 <span class="sd">    Following runs with the same key can load node results and skip computation.</span>
 
 <span class="sd">    The cache `_nodes_history` entry returns an append-only list of results added to the cache.</span>
-<span class="sd">    e.g., the last value in the list `cache[&quot;_node_history&quot;][node_name]` is the most recent cached node.</span>
+<span class="sd">    e.g., the last value in the list `cache["_node_history"][node_name]` is the most recent cached node.</span>
 
 <span class="sd">    Notes:</span>
 <span class="sd">        - It uses the stdlib `shelve` module and the pickle format, which makes results dependent</span>
 <span class="sd">        on the Python version. Use materialization for persistent results</span>
-<span class="sd">        - There are no utility to manage cache size so you&#39;ll have to delete it periodically. Look</span>
+<span class="sd">        - There are no utility to manage cache size so you'll have to delete it periodically. Look</span>
 <span class="sd">        at the diskcache plugin for Hamilton `hamilton.plugins.h_diskcache` for better cache management.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">nodes_history_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_nodes_history&quot;</span>
+    <span class="n">nodes_history_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"_nodes_history"</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cache_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;./hamilton-cache&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache_vars</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cache_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"./hamilton-cache"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Initialize the cache</span>
 
 <span class="sd">        :param cache_vars: List of nodes for which to store/load results. Passing None will use the cache</span>
 <span class="sd">        for all nodes. Default is None.</span>
-<span class="sd">        :param cache_path: File path to the cache. The file name doesn&#39;t need an extension.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        :param cache_path: File path to the cache. The file name doesn't need an extension.</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cache_vars</span> <span class="o">=</span> <span class="n">cache_vars</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cache_path</span> <span class="o">=</span> <span class="n">cache_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">shelve</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache_path</span><span class="p">)</span>
@@ -911,14 +911,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-            <span class="s2">&quot;The `CacheAdapter` is deprecated and will be removed in Hamilton 2.0. &quot;</span>
-            <span class="s2">&quot;Consider enabling the core caching feature via `Builder.with_cache()`. &quot;</span>
-            <span class="s2">&quot;This might not be 1-to-1 replacement, so please reach out if there are missing features. &quot;</span>
-            <span class="s2">&quot;See https://hamilton.apache.org/concepts/caching/ to learn more.&quot;</span>
+            <span class="s2">"The `CacheAdapter` is deprecated and will be removed in Hamilton 2.0. "</span>
+            <span class="s2">"Consider enabling the core caching feature via `Builder.with_cache()`. "</span>
+            <span class="s2">"This might not be 1-to-1 replacement, so please reach out if there are missing features. "</span>
+            <span class="s2">"See https://hamilton.apache.org/concepts/caching/ to learn more."</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">run_before_graph_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">HamiltonGraph</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set `cache_vars` to all nodes if received None during `__init__`&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Set `cache_vars` to all nodes if received None during `__init__`"""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">shelve</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache_path</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache_vars</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cache_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">]</span>
@@ -926,14 +926,14 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">run_to_execute_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_callable</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">node_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create cache key based on node callable hash (equiv. to HamiltonNode.version) and</span>
+<span class="w">        </span><span class="sd">"""Create cache key based on node callable hash (equiv. to HamiltonNode.version) and</span>
 <span class="sd">        the node inputs (`node_kwargs`).If key in cache (cache hit), load result; else (cache miss),</span>
 <span class="sd">        compute the node and append node name to `used_nodes_hash`.</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            - the callable hash is stored  in `used_nodes_hash` because it&#39;s required to create the</span>
-<span class="sd">            key in `run_after_node_execution` and the callable won&#39;t be accessible to recompute it</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            - the callable hash is stored  in `used_nodes_hash` because it's required to create the</span>
+<span class="sd">            key in `run_after_node_execution` and the callable won't be accessible to recompute it</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">node_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_vars</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">node_callable</span><span class="p">(</span><span class="o">**</span><span class="n">node_kwargs</span><span class="p">)</span>
 
@@ -954,9 +954,9 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">run_after_node_execution</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">result</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;If `run_to_execute_node` was a cache miss (hash stored in `used_nodes_hash`),</span>
+<span class="w">        </span><span class="sd">"""If `run_to_execute_node` was a cache miss (hash stored in `used_nodes_hash`),</span>
 <span class="sd">        store the computed result in cache</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">node_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_vars</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -968,7 +968,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">run_after_graph_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;After completing execution, overwrite nodes_history_key in cache and close&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""After completing execution, overwrite nodes_history_key in cache and close"""</span>
         <span class="c1"># TODO updating `nodes_history` at graph completion instead of after node execution</span>
         <span class="c1"># means a desync is possible if the graph fails. Could lead to missing keys in</span>
         <span class="c1"># `nodes_history`</span>
@@ -976,12 +976,12 @@ s=d.getElementsByTagName('script')[0];
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">run_before_node_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Placeholder required to subclass `NodeExecutionMethod`&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Placeholder required to subclass `NodeExecutionMethod`"""</span>
         <span class="k">pass</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_key</span><span class="p">(</span><span class="n">node_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pickle objects into bytes then get their hash value&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Pickle objects into bytes then get their hash value"""</span>
         <span class="n">digest</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">()</span>
         <span class="n">digest</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">node_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
 
@@ -999,45 +999,45 @@ s=d.getElementsByTagName('script')[0];
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">SlowDownYouMoveTooFast</span><span class="p">(</span><span class="n">NodeExecutionHook</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This hook makes your DAG run slower. Just pass in a negative value for the sleep time to make it go faster...</span>
+<span class="w">    </span><span class="sd">"""This hook makes your DAG run slower. Just pass in a negative value for the sleep time to make it go faster...</span>
 <span class="sd">    In all seriousness though, there is absolutely no (good) reason to use this hook. Its dumb, and just for testing.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sleep_time_mean</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sleep_time_std</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;In all seriousness, don&#39;t use this</span>
+<span class="w">        </span><span class="sd">"""In all seriousness, don't use this</span>
 
 <span class="sd">        :param sleep_time_mean: Mean of sleep time</span>
 <span class="sd">        :param sleep_time_std: Stddev of sleep time</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sleep_time_mean</span> <span class="o">=</span> <span class="n">sleep_time_mean</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sleep_time_std</span> <span class="o">=</span> <span class="n">sleep_time_std</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">run_before_node_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Waits for a fixed set of time before node execution&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Waits for a fixed set of time before node execution"""</span>
         <span class="n">wait_random</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sleep_time_mean</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sleep_time_std</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">run_after_node_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Does nothing&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Does nothing"""</span>
         <span class="k">pass</span>
 
 
 <div class="viewcode-block" id="FunctionInputOutputTypeChecker">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/FunctionInputOutputTypeChecker/#hamilton.lifecycle.default.FunctionInputOutputTypeChecker">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FunctionInputOutputTypeChecker</span><span class="p">(</span><span class="n">NodeExecutionHook</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This lifecycle hook checks the input and output types of a function.</span>
+<span class="w">    </span><span class="sd">"""This lifecycle hook checks the input and output types of a function.</span>
 
 <span class="sd">    It is a simple, but very strict type check against the declared type with what was actually received.</span>
-<span class="sd">    E.g. if you don&#39;t want to check the types of a dictionary, don&#39;t annotate it with a type.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    E.g. if you don't want to check the types of a dictionary, don't annotate it with a type.</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="FunctionInputOutputTypeChecker.__init__">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/FunctionInputOutputTypeChecker/#hamilton.lifecycle.default.FunctionInputOutputTypeChecker.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_input</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">check_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor.</span>
+<span class="w">        </span><span class="sd">"""Constructor.</span>
 
 <span class="sd">        :param check_input: check inputs to all functions</span>
 <span class="sd">        :param check_output: check outputs to all functions</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_input</span> <span class="o">=</span> <span class="n">check_input</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_output</span> <span class="o">=</span> <span class="n">check_output</span></div>
 
@@ -1055,12 +1055,12 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">node_input_types</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks that the result type matches the expected node return type.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Checks that the result type matches the expected node return type."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_input</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">input_name</span><span class="p">,</span> <span class="n">input_value</span> <span class="ow">in</span> <span class="n">node_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">htypes</span><span class="o">.</span><span class="n">check_instance</span><span class="p">(</span><span class="n">input_value</span><span class="p">,</span> <span class="n">node_input_types</span><span class="p">[</span><span class="n">input_name</span><span class="p">]):</span>
                     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Node </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2"> received an input of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">input_value</span><span class="p">)</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">input_name</span><span class="si">}</span><span class="s2">, expected </span><span class="si">{</span><span class="n">node_input_types</span><span class="p">[</span><span class="n">input_name</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Node </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2"> received an input of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">input_value</span><span class="p">)</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">input_name</span><span class="si">}</span><span class="s2">, expected </span><span class="si">{</span><span class="n">node_input_types</span><span class="p">[</span><span class="n">input_name</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
                     <span class="p">)</span></div>
 
 
@@ -1079,23 +1079,23 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">**</span><span class="n">future_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks that the result type matches the expected node return type.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Checks that the result type matches the expected node return type."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_output</span><span class="p">:</span>
             <span class="c1"># Replace the isinstance check in your code with check_instance</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">htypes</span><span class="o">.</span><span class="n">check_instance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">node_return_type</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Node </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2"> returned a result of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2">, expected </span><span class="si">{</span><span class="n">node_return_type</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Node </span><span class="si">{</span><span class="n">node_name</span><span class="si">}</span><span class="s2"> returned a result of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2">, expected </span><span class="si">{</span><span class="n">node_return_type</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span></div>
 </div>
 
 
 
 <span class="n">SENTINEL_DEFAULT</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># sentinel value -- lazy for now</span>
-<span class="n">INJECTION_ALLOWED</span> <span class="o">=</span> <span class="s2">&quot;injection is requested&quot;</span>
+<span class="n">INJECTION_ALLOWED</span> <span class="o">=</span> <span class="s2">"injection is requested"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">accept_error_sentinels</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tag a function to allow passing in error sentinels.</span>
+<span class="w">    </span><span class="sd">"""Tag a function to allow passing in error sentinels.</span>
 
 <span class="sd">    For use with ``GracefulErrorAdapter``. The standard adapter behavior is to skip a node</span>
 <span class="sd">    when an error sentinel is one of its inputs. This decorator will cause the node to</span>
@@ -1116,10 +1116,10 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        @accept_error_sentinels</span>
 <span class="sd">        def results_gathering(result_1: float, result_2: float) -&gt; dict[str, Any]:</span>
 <span class="sd">            answer = {}</span>
-<span class="sd">            for name, res in zip([&quot;result 1&quot;, &quot;result 2&quot;], [result_1, result_2])</span>
+<span class="sd">            for name, res in zip(["result 1", "result 2"], [result_1, result_2])</span>
 <span class="sd">                answer[name] = res</span>
 <span class="sd">                if res is SENTINEL:</span>
-<span class="sd">                    answer[name] = &quot;Node failure: no result&quot;</span>
+<span class="sd">                    answer[name] = "Node failure: no result"</span>
 <span class="sd">                    # You may want side-effects for a failure.</span>
 <span class="sd">                    _send_text_that_your_runs_errored()</span>
 <span class="sd">            return answer</span>
@@ -1129,14 +1129,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        ...</span>
 
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># This inline import is not ideal -- we have to do this due to a circular reference</span>
     <span class="c1"># See PR + comments here https://github.com/apache/hamilton/pull/1017</span>
     <span class="c1"># TODO -- fix the circular reference -- we should be able to depend on this and no pull in lifecycle methods</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.function_modifiers.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">tag</span>
 
     <span class="n">_the_tag</span> <span class="o">=</span> <span class="n">tag</span><span class="p">(</span>
-        <span class="o">**</span><span class="p">{</span><span class="s2">&quot;hamilton.error_sentinel&quot;</span><span class="p">:</span> <span class="n">INJECTION_ALLOWED</span><span class="p">},</span> <span class="n">bypass_reserved_namespaces_</span><span class="o">=</span><span class="kc">True</span>
+        <span class="o">**</span><span class="p">{</span><span class="s2">"hamilton.error_sentinel"</span><span class="p">:</span> <span class="n">INJECTION_ALLOWED</span><span class="p">},</span> <span class="n">bypass_reserved_namespaces_</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">_the_tag</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
 
@@ -1144,10 +1144,10 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="GracefulErrorAdapter">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/GracefulErrorAdapter/#hamilton.lifecycle.default.GracefulErrorAdapter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GracefulErrorAdapter</span><span class="p">(</span><span class="n">NodeExecutionMethod</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gracefully handles errors in a graph&#39;s execution. This allows you to proceed despite failure,</span>
+<span class="w">    </span><span class="sd">"""Gracefully handles errors in a graph's execution. This allows you to proceed despite failure,</span>
 <span class="sd">    dynamically pruning branches. While it still runs every node, it replaces them with no-ops if any upstream</span>
 <span class="sd">    required dependencies fail (including optional dependencies).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="GracefulErrorAdapter.__init__">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/GracefulErrorAdapter/#hamilton.lifecycle.default.GracefulErrorAdapter.__init__">[docs]</a>
@@ -1158,15 +1158,15 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">try_all_parallel</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">allow_injection</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the adapter. Allows you to customize the error to catch (which exception</span>
+<span class="w">        </span><span class="sd">"""Initializes the adapter. Allows you to customize the error to catch (which exception</span>
 <span class="sd">        your graph will throw to indicate failure), as well as the sentinel value to use in place of</span>
-<span class="sd">        a node&#39;s result if it fails (this defaults to ``None``).</span>
+<span class="sd">        a node's result if it fails (this defaults to ``None``).</span>
 
 <span class="sd">        Note that this is currently only compatible with the dict-based result builder (use at your</span>
 <span class="sd">        own risk with pandas series, etc...).</span>
 
 <span class="sd">        Be careful using ``None`` as the default -- feel free to replace it with a sentinel value</span>
-<span class="sd">        of your choice (this could negatively impact your graph&#39;s execution if you actually *do* intend</span>
+<span class="sd">        of your choice (this could negatively impact your graph's execution if you actually *do* intend</span>
 <span class="sd">        to use ``None`` return values).</span>
 
 <span class="sd">        You can use this as follows:</span>
@@ -1203,17 +1203,17 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">                .build()</span>
 <span class="sd">            )</span>
 <span class="sd">            dr.execute(</span>
-<span class="sd">                [&quot;will_proceed&quot;, &quot;never_reached&quot;]</span>
-<span class="sd">            )  # will return {&#39;will_proceed&#39;: 1, &#39;never_reached&#39;: None}</span>
+<span class="sd">                ["will_proceed", "never_reached"]</span>
+<span class="sd">            )  # will return {'will_proceed': 1, 'never_reached': None}</span>
 
-<span class="sd">        Note you can customize the error you want it to fail on and the sentinel value to use in place of a node&#39;s result if it fails.</span>
+<span class="sd">        Note you can customize the error you want it to fail on and the sentinel value to use in place of a node's result if it fails.</span>
 
 <span class="sd">        For Parallelizable nodes, this adapter will attempt to iterate over the node outputs.</span>
 <span class="sd">        If an error occurs, the sentinel value is returned and no more iterations over the node</span>
 <span class="sd">        will occur. Meaning if item (3) fails out of 1,2,3,4,5, 4/5 will not run. If you set</span>
 <span class="sd">        ``try_all_parallel`` to be False, it only sends one sentinel value into the parallelize sub-dag.</span>
 
-<span class="sd">        Here&#39;s an example for parallelizable to demonstrate try_all_parallel:</span>
+<span class="sd">        Here's an example for parallelizable to demonstrate try_all_parallel:</span>
 
 <span class="sd">        .. code-block:: python</span>
 
@@ -1250,7 +1250,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">                )</span>
 <span class="sd">                .build()</span>
 <span class="sd">            )</span>
-<span class="sd">            dr.execute([&quot;gather&quot;])  # will return {&#39;gather&#39;: [0,1,2,None]}</span>
+<span class="sd">            dr.execute(["gather"])  # will return {'gather': [0,1,2,None]}</span>
 
 <span class="sd">            dr = (</span>
 <span class="sd">                driver.Builder()</span>
@@ -1264,14 +1264,14 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">                )</span>
 <span class="sd">                .build()</span>
 <span class="sd">            )</span>
-<span class="sd">            dr.execute([&quot;gather&quot;])  # will return {&#39;gather&#39;: [None]}</span>
+<span class="sd">            dr.execute(["gather"])  # will return {'gather': [None]}</span>
 
 
 <span class="sd">        :param error_to_catch: The error to catch</span>
-<span class="sd">        :param sentinel_value: The sentinel value to use in place of a node&#39;s result if it fails</span>
+<span class="sd">        :param sentinel_value: The sentinel value to use in place of a node's result if it fails</span>
 <span class="sd">        :param try_all_parallel: Gather parallelizable outputs until a failure, then add a Sentinel.</span>
 <span class="sd">        :param allow_injection: Flag for considering the ``accept_error_sentinels`` tag. Defaults to True.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">error_to_catch</span> <span class="o">=</span> <span class="n">error_to_catch</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_value</span> <span class="o">=</span> <span class="n">sentinel_value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">try_all_parallel</span> <span class="o">=</span> <span class="n">try_all_parallel</span>
@@ -1292,10 +1292,10 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1"># TODO -- if it is parallelizable, run the generator in a special way (E.G. loop through the node callable</span>
         <span class="c1"># and truncate it/provide sentinels for every failure)</span>
         <span class="c1"># TODO -- decide what to do with collect</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Executes a node. If the node fails, returns the sentinel value.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Executes a node. If the node fails, returns the sentinel value."""</span>
         <span class="n">default_return</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sentinel_value</span><span class="p">]</span> <span class="k">if</span> <span class="n">is_expand</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_value</span>
-        <span class="n">_node_tags</span> <span class="o">=</span> <span class="n">future_kwargs</span><span class="p">[</span><span class="s2">&quot;node_tags&quot;</span><span class="p">]</span>
-        <span class="n">can_inject</span> <span class="o">=</span> <span class="n">_node_tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hamilton.error_sentinel&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">INJECTION_ALLOWED</span>
+        <span class="n">_node_tags</span> <span class="o">=</span> <span class="n">future_kwargs</span><span class="p">[</span><span class="s2">"node_tags"</span><span class="p">]</span>
+        <span class="n">can_inject</span> <span class="o">=</span> <span class="n">_node_tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"hamilton.error_sentinel"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="o">==</span> <span class="n">INJECTION_ALLOWED</span>
         <span class="n">can_inject</span> <span class="o">=</span> <span class="n">can_inject</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_injection</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">can_inject</span><span class="p">:</span>
@@ -1313,7 +1313,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">gen_func</span> <span class="o">=</span> <span class="n">node_callable</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Grab the partial-ized function that is a parallelizable.</span>
-            <span class="n">gen_func</span> <span class="o">=</span> <span class="n">node_callable</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s2">&quot;_callable&quot;</span><span class="p">]</span>
+            <span class="n">gen_func</span> <span class="o">=</span> <span class="n">node_callable</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s2">"_callable"</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">gen</span> <span class="o">=</span> <span class="n">gen_func</span><span class="p">(</span><span class="o">**</span><span class="n">node_kwargs</span><span class="p">)</span>
         <span class="k">except</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_to_catch</span><span class="p">:</span>
@@ -1334,7 +1334,7 @@ s=d.getElementsByTagName('script')[0];
 <div class="viewcode-block" id="NoEdgeAndInputTypeChecking">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/NoEdgeAndInputTypeChecking/#hamilton.lifecycle.default.NoEdgeAndInputTypeChecking">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NoEdgeAndInputTypeChecking</span><span class="p">(</span><span class="n">EdgeConnectionHook</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Permissive adapter to help you skip edge and input type checking.</span>
+<span class="w">    </span><span class="sd">"""Permissive adapter to help you skip edge and input type checking.</span>
 
 <span class="sd">    Useful for development.</span>
 
@@ -1348,25 +1348,25 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        # now driver is built without any type checking</span>
 <span class="sd">        dr.execute([...], ...)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="NoEdgeAndInputTypeChecking.check_edge_types_match">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/NoEdgeAndInputTypeChecking/#hamilton.lifecycle.default.NoEdgeAndInputTypeChecking.check_edge_types_match">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_edge_types_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_from</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">type_to</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is run to check if edge types match. Note that this is an OR functionality</span>
+<span class="w">        </span><span class="sd">"""This is run to check if edge types match. Note that this is an OR functionality</span>
 <span class="sd">        -- this is run after we do some default checks, so this can only be permissive.</span>
 <span class="sd">        Return True - always</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
 
 <div class="viewcode-block" id="NoEdgeAndInputTypeChecking.validate_input">
 <a class="viewcode-back" href="../../../../reference/lifecycle-hooks/NoEdgeAndInputTypeChecking/#hamilton.lifecycle.default.NoEdgeAndInputTypeChecking.validate_input">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">input_value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is run to check if the input is valid for the node type. Note that this is an OR functionality</span>
+<span class="w">        </span><span class="sd">"""This is run to check if the input is valid for the node type. Note that this is an OR functionality</span>
 <span class="sd">        -- this is run after we do some default checks, so this can only be permissive.</span>
 <span class="sd">        Returns True - always.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 </div>
 
@@ -1419,182 +1419,17 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
 
 
 
 const initStyles = () => {
     const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
     document.head.appendChild(defaultStyle);
 
     const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
     document.head.appendChild(fullscreenStyle);
 }
 
@@ -1639,6 +1474,32 @@ let darkTheme = isDarkTheme();
 let modal = null;
 let modalContent = null;
 let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
 
 const runMermaid = async (rerun) => {
     console.log("Running mermaid diagrams, rerun =", rerun);
@@ -1646,7 +1507,15 @@ const runMermaid = async (rerun) => {
     let all_mermaids = document.querySelectorAll(".mermaid");
 
     if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
         all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
             if(!el.hasAttribute("data-original-code")) {
                 // store original code
                 // console.log(`Storing original code for first run: `, el.innerHTML);
@@ -1663,42 +1532,100 @@ const runMermaid = async (rerun) => {
                 el.setAttribute('data-original-code', el.innerHTML);
             }
         });
-        await mermaid.run();
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
     }
 
     all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
 
-    if ("False" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
         if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("");
-            if(all_mermaids.length !== mermaids_processed.length) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
                 setTimeout(() => runMermaid(false), 200);
                 return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
             }
+            addZoomToSvgs(svgs);
         }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
+    } else if(mermaids_active.length !== mermaids_processed.length) {
         // Wait for mermaid to process all diagrams
         setTimeout(() => runMermaid(false), 200);
         return;
     }
 
     // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
+    if (!true) return;
 
     if (modal !== null ) {
         // Destroy existing modal
@@ -1721,7 +1648,7 @@ const runMermaid = async (rerun) => {
     modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
-    const closeModal = () => {
+    closeModal = () => {
         modal.classList.remove('active');
         modalContent.innerHTML = '';
         document.body.style.overflow = ''
@@ -1732,12 +1659,6 @@ const runMermaid = async (rerun) => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
     document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
         if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
             mermaidDiv.closest('.mermaid-fullscreen-modal')) {
@@ -1757,8 +1678,8 @@ const runMermaid = async (rerun) => {
         const fullscreenBtn = document.createElement('button');
         fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
         fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
 
         // Calculate dynamic position based on diagram's margin and padding
         const diagramStyle = window.getComputedStyle(mermaidDiv);
@@ -1770,7 +1691,7 @@ const runMermaid = async (rerun) => {
         fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
 
         fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
+            previousScrollOffset = [window.scrollX, window.scrollY];
             const clone = mermaidDiv.cloneNode(true);
             modalContent.innerHTML = '';
             modalContent.appendChild(clone);
@@ -1782,9 +1703,9 @@ const runMermaid = async (rerun) => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
+                svg.style.display = 'block';
 
-                if ("False" === "True") {
+                if (false) {
                     setTimeout(() => {
                         const g = svg.querySelector('g');
                         if (g) {
@@ -1807,8 +1728,11 @@ const runMermaid = async (rerun) => {
     });
 };
 
+
+
 const load = async () => {
     initStyles();
+
 
     await runMermaid(true);
 
@@ -1818,10 +1742,8 @@ const load = async () => {
             darkTheme = newDarkTheme;
             console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
             await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
                 }
             );
             await runMermaid(true);
@@ -1846,10 +1768,8 @@ const load = async () => {
 
 console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
 mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
     }
 );
 

@@ -533,12 +533,12 @@ s=d.getElementsByTagName('script')[0];
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataflows</span>
 
 <span class="c1"># dynamically pull and then copy</span>
-<span class="n">NAME_OF_DATAFLOW</span> <span class="o">=</span> <span class="n">dataflow</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;NAME_OF_DATAFLOW&quot;</span><span class="p">,</span> <span class="s2">&quot;NAME_OF_USER&quot;</span><span class="p">)</span>
-<span class="n">dataflow</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">NAME_OF_DATAFLOW</span><span class="p">,</span> <span class="n">destination_path</span><span class="o">=</span><span class="s2">&quot;PATH_TO_DIRECTORY&quot;</span><span class="p">)</span>
+<span class="n">NAME_OF_DATAFLOW</span> <span class="o">=</span> <span class="n">dataflow</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">"NAME_OF_DATAFLOW"</span><span class="p">,</span> <span class="s2">"NAME_OF_USER"</span><span class="p">)</span>
+<span class="n">dataflow</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">NAME_OF_DATAFLOW</span><span class="p">,</span> <span class="n">destination_path</span><span class="o">=</span><span class="s2">"PATH_TO_DIRECTORY"</span><span class="p">)</span>
 <span class="c1"># copy from the installed library</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.contrib.user.NAME_OF_USER</span><span class="w"> </span><span class="kn">import</span> <span class="n">NAME_OF_DATAFLOW</span>
 
-<span class="n">dataflow</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">NAME_OF_DATAFLOW</span><span class="p">,</span> <span class="n">destination_path</span><span class="o">=</span><span class="s2">&quot;PATH_TO_DIRECTORY&quot;</span><span class="p">)</span>
+<span class="n">dataflow</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">NAME_OF_DATAFLOW</span><span class="p">,</span> <span class="n">destination_path</span><span class="o">=</span><span class="s2">"PATH_TO_DIRECTORY"</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">

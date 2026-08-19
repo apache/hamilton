@@ -546,19 +546,19 @@ your Hamilton DAG to be captured in the Hamilton UI / adapters:</p>
 
 
 <span class="nd">@datasaver</span><span class="p">()</span>  <span class="c1"># you need ()</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">save_json_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">json_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;data/my_saved_data.json&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Saves data to a JSON file and returns metadata about the saving process.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_json_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">json_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"data/my_saved_data.json"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">'''Saves data to a JSON file and returns metadata about the saving process.</span>
 
 <span class="sd">    :param data: The data to save.</span>
 <span class="sd">    :param json_path: The path to save the data to.</span>
 <span class="sd">    :return: metadata about what was saved.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    '''</span>
     <span class="c1"># Save the data</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">data</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span>
 
     <span class="c1"># Metadata about the saving process</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="n">json_path</span><span class="p">,</span> <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">}</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"destination"</span><span class="p">:</span> <span class="n">json_path</span><span class="p">,</span> <span class="s2">"format"</span><span class="p">:</span> <span class="s2">"json"</span><span class="p">}</span>
 
     <span class="k">return</span> <span class="n">metadata</span>
 </pre></div>

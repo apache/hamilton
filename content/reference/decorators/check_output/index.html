@@ -584,7 +584,7 @@ See <a class="reference internal" href="../../drivers/Driver/"><span class="doc"
 <span class="nd">@check_output</span><span class="p">(</span>
     <span class="n">data_type</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
     <span class="n">data_in_range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span>
-    <span class="n">importance</span><span class="o">=</span><span class="s2">&quot;warn&quot;</span><span class="p">,</span>
+    <span class="n">importance</span><span class="o">=</span><span class="s2">"warn"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">some_int_data_between_0_and_100</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
     <span class="o">...</span>
@@ -599,8 +599,8 @@ See <a class="reference internal" href="../../drivers/Driver/"><span class="doc"
 
 <span class="n">schema</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">DataFrameSchema</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
-<span class="nd">@extract_columns</span><span class="p">(</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">)</span>
-<span class="nd">@check_output</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="n">target_</span><span class="o">=</span><span class="s2">&quot;builds_dataframe&quot;</span><span class="p">,</span> <span class="n">importance</span><span class="o">=</span><span class="s2">&quot;fail&quot;</span><span class="p">)</span>
+<span class="nd">@extract_columns</span><span class="p">(</span><span class="s1">'col1'</span><span class="p">,</span> <span class="s1">'col2'</span><span class="p">)</span>
+<span class="nd">@check_output</span><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="n">target_</span><span class="o">=</span><span class="s2">"builds_dataframe"</span><span class="p">,</span> <span class="n">importance</span><span class="o">=</span><span class="s2">"fail"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">builds_dataframe</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="o">...</span>
 </pre></div>
@@ -810,10 +810,10 @@ to be of type pandera.typing.pandas.DataFrame or pandera.typing.pandas.Series, w
 <div class="highlight-python notranslate" id="check-output-with-passed-in-type"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">function_modifiers</span>
 
 <span class="n">schema</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">DataFrameSchema</span><span class="p">({</span>
-    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
-    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">Float</span><span class="p">),</span>
-    <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-    <span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">Float</span><span class="p">),</span>
+    <span class="s2">"a"</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
+    <span class="s2">"b"</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">Float</span><span class="p">),</span>
+    <span class="s2">"c"</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">"d"</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">Float</span><span class="p">),</span>
 <span class="p">})</span>
 
 
@@ -856,7 +856,7 @@ The function output must be declared with a type hint.</p>
 
 <span class="nd">@h_pydantic</span><span class="o">.</span><span class="n">check_output</span><span class="p">()</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">MyModel</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">MyModel</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">MyModel</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"hello"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Alternatively, you can return a dictionary from the function (type checkers will probably
@@ -871,7 +871,7 @@ complain about this):</p>
 
 <span class="nd">@h_pydantic</span><span class="o">.</span><span class="n">check_output</span><span class="p">()</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">MyModel</span><span class="p">:</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="s2">&quot;hello&quot;</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">:</span> <span class="s2">"hello"</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>You can also use pydantic validation through <code class="docutils literal notranslate"><span class="pre">function_modifiers.check_output</span></code> by
@@ -888,7 +888,7 @@ providing the model as an argument:</p>
 
 <span class="nd">@function_modifiers</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">MyModel</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="s2">&quot;hello&quot;</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">:</span> <span class="s2">"hello"</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Note, that because we do not (yet) support modification of the output, the validation is
@@ -902,7 +902,7 @@ following function will <em>fail</em> validation:</p>
 
 <span class="nd">@h_pydantic</span><span class="o">.</span><span class="n">check_output</span><span class="p">()</span>  <span class="c1"># This will fail validation!</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">MyModel</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">MyModel</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>  <span class="c1"># Assigned as a string</span>
+    <span class="k">return</span> <span class="n">MyModel</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s2">"1"</span><span class="p">)</span>  <span class="c1"># Assigned as a string</span>
 </pre></div>
 </div>
 <p>For more information about strict mode see the pydantic docs: <a class="reference external" href="https://docs.pydantic.dev/latest/concepts/strict_mode/">https://docs.pydantic.dev/latest/concepts/strict_mode/</a></p>

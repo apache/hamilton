@@ -573,7 +573,7 @@ script called <cite>run.py</cite>, which imports the pipeline module and execute
 <span class="kn">import</span><span class="w"> </span><span class="nn">pipeline</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
 <span class="n">dr</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span><span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="n">metadata</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s1">&#39;load_data&#39;</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">SomeClient</span><span class="p">()))</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s1">'load_data'</span><span class="p">],</span> <span class="n">inputs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">SomeClient</span><span class="p">()))</span>
 </pre></div>
 </div>
 </section>
@@ -587,19 +587,19 @@ in sequence. The entire pipeline is defined in a module called <cite>example_dag
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
 <span class="n">default_args</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;owner&#39;</span><span class="p">:</span> <span class="s1">&#39;airflow&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;depends_on_past&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s1">&#39;start_date&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-    <span class="s1">&#39;email_on_failure&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s1">&#39;email_on_retry&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s1">&#39;retries&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s1">&#39;retry_delay&#39;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+    <span class="s1">'owner'</span><span class="p">:</span> <span class="s1">'airflow'</span><span class="p">,</span>
+    <span class="s1">'depends_on_past'</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">'start_date'</span><span class="p">:</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="s1">'email_on_failure'</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">'email_on_retry'</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">'retries'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">'retry_delay'</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
 <span class="p">}</span>
 
 <span class="n">dag</span> <span class="o">=</span> <span class="n">DAG</span><span class="p">(</span>
-    <span class="s1">&#39;example_dag&#39;</span><span class="p">,</span>
+    <span class="s1">'example_dag'</span><span class="p">,</span>
     <span class="n">default_args</span><span class="o">=</span><span class="n">default_args</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;A simple DAG&#39;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">'A simple DAG'</span><span class="p">,</span>
     <span class="n">schedule_interval</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
 <span class="p">)</span>
 
@@ -614,22 +614,22 @@ in sequence. The entire pipeline is defined in a module called <cite>example_dag
     <span class="n">client</span><span class="o">.</span><span class="n">send_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
 <span class="n">extract_task</span> <span class="o">=</span> <span class="n">PythonOperator</span><span class="p">(</span>
-    <span class="n">task_id</span><span class="o">=</span><span class="s1">&#39;extract_data&#39;</span><span class="p">,</span>
+    <span class="n">task_id</span><span class="o">=</span><span class="s1">'extract_data'</span><span class="p">,</span>
     <span class="n">python_callable</span><span class="o">=</span><span class="n">extract_data</span><span class="p">,</span>
     <span class="n">dag</span><span class="o">=</span><span class="n">dag</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">transform_task</span> <span class="o">=</span> <span class="n">PythonOperator</span><span class="p">(</span>
-    <span class="n">task_id</span><span class="o">=</span><span class="s1">&#39;transform_data&#39;</span><span class="p">,</span>
+    <span class="n">task_id</span><span class="o">=</span><span class="s1">'transform_data'</span><span class="p">,</span>
     <span class="n">python_callable</span><span class="o">=</span><span class="n">transform_data</span><span class="p">,</span>
-    <span class="n">op_args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;{{ ti.xcom_pull(task_ids=&quot;extract_data&quot;) }}&#39;</span><span class="p">],</span>
+    <span class="n">op_args</span><span class="o">=</span><span class="p">[</span><span class="s1">'{{ ti.xcom_pull(task_ids="extract_data") }}'</span><span class="p">],</span>
     <span class="n">dag</span><span class="o">=</span><span class="n">dag</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">load_task</span> <span class="o">=</span> <span class="n">PythonOperator</span><span class="p">(</span>
-    <span class="n">task_id</span><span class="o">=</span><span class="s1">&#39;load_data&#39;</span><span class="p">,</span>
+    <span class="n">task_id</span><span class="o">=</span><span class="s1">'load_data'</span><span class="p">,</span>
     <span class="n">python_callable</span><span class="o">=</span><span class="n">load_data</span><span class="p">,</span>
-    <span class="n">op_args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;{{ ti.xcom_pull(task_ids=&quot;transform_data&quot;) }}&#39;</span><span class="p">],</span>
+    <span class="n">op_args</span><span class="o">=</span><span class="p">[</span><span class="s1">'{{ ti.xcom_pull(task_ids="transform_data") }}'</span><span class="p">],</span>
     <span class="n">dag</span><span class="o">=</span><span class="n">dag</span><span class="p">,</span>
 <span class="p">)</span>
 
