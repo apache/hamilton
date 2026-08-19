@@ -15,13 +15,14 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from __future__ import annotations
+
 import abc
 import importlib
 import importlib.util
 import json
 import logging
 import operator
-import pathlib
 import sys
 
 # required if we want to run this code stand alone.
@@ -30,26 +31,29 @@ import uuid
 import warnings
 from collections.abc import Callable, Collection, Sequence
 from datetime import datetime
-from types import ModuleType
 from typing import (
+    TYPE_CHECKING,
     Any,
     Literal,
     Optional,
 )
 
-import pandas as pd
 from typing_extensions import Self
 
 from hamilton import common, graph_types, htypes
-from hamilton.caching.adapter import HamiltonCacheAdapter
-from hamilton.caching.stores.base import MetadataStore, ResultStore
 from hamilton.dev_utils import deprecation
 from hamilton.execution import executors, graph_functions, grouping, state
-from hamilton.function_modifiers.validation import DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY
 from hamilton.graph_types import HamiltonNode
-from hamilton.io import materialization
-from hamilton.io.materialization import ExtractorFactory, MaterializerFactory
 from hamilton.lifecycle import base as lifecycle_base
+
+if TYPE_CHECKING:
+    import pathlib
+    from types import ModuleType
+
+    from hamilton.caching.adapter import HamiltonCacheAdapter
+    from hamilton.caching.stores.base import MetadataStore, ResultStore
+    from hamilton.io import materialization
+    from hamilton.io.materialization import ExtractorFactory, MaterializerFactory
 
 SLACK_ERROR_MESSAGE = (
     "-------------------------------------------------------------------\n"
@@ -60,12 +64,67 @@ SLACK_ERROR_MESSAGE = (
 
 if __name__ == "__main__":
     import base
-    import graph
     import node
 else:
-    from . import base, graph, node
+    from . import base, node
 
 logger = logging.getLogger(__name__)
+
+# Keep this mirrored here instead of importing hamilton.function_modifiers.validation at import time.
+DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY = "hamilton.data_quality.disable_checks"
+
+
+class _LazyModule:
+    def __init__(self, module_name: str, global_name: str):
+        self.module_name = module_name
+        self.global_name = global_name
+
+    def _load(self) -> ModuleType:
+        module = importlib.import_module(self.module_name)
+        globals()[self.global_name] = module
+        return module
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._load(), name)
+
+
+graph = _LazyModule("hamilton.graph", "graph")
+
+
+def _get_hamilton_cache_adapter():
+    from hamilton.caching.adapter import HamiltonCacheAdapter
+
+    return HamiltonCacheAdapter
+
+
+def _get_materialization():
+    return importlib.import_module("hamilton.io.materialization")
+
+
+def _get_materializer_types():
+    materialization = _get_materialization()
+    return materialization.MaterializerFactory, materialization.ExtractorFactory
+
+
+_LAZY_IMPORTS = {
+    "HamiltonCacheAdapter": ("hamilton.caching.adapter", "HamiltonCacheAdapter"),
+    "MetadataStore": ("hamilton.caching.stores.base", "MetadataStore"),
+    "ResultStore": ("hamilton.caching.stores.base", "ResultStore"),
+    "ExtractorFactory": ("hamilton.io.materialization", "ExtractorFactory"),
+    "MaterializerFactory": ("hamilton.io.materialization", "MaterializerFactory"),
+    "materialization": ("hamilton.io.materialization", None),
+}
+
+
+def __getattr__(name: str) -> Any:
+    """Lazily expose names that used to be imported at module load."""
+    if name in _LAZY_IMPORTS:
+        module_name, attr_name = _LAZY_IMPORTS[name]
+        module = importlib.import_module(module_name)
+        value = module if attr_name is None else getattr(module, attr_name)
+        globals()[name] = value
+        return value
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 def capture_function_usage(call_fn: Callable) -> Callable:
@@ -401,7 +460,7 @@ class Driver:
         | list[lifecycle_base.LifecycleAdapter]
         | None = None,
         allow_module_overrides: bool = False,
-        _materializers: typing.Sequence[ExtractorFactory | MaterializerFactory] = None,
+        _materializers: typing.Sequence["ExtractorFactory | MaterializerFactory"] | None = None,
         _graph_executor: GraphExecutor = None,
         _use_legacy_adapter: bool = True,
     ):
@@ -441,6 +500,7 @@ class Driver:
                 materializer_factories, extractor_factories = self._process_materializers(
                     _materializers
                 )
+                materialization = _get_materialization()
                 self.graph = materialization.modify_graph(
                     self.graph, materializer_factories, extractor_factories
                 )
@@ -1361,8 +1421,8 @@ class Driver:
             logger.warning(f"Unable to import {e}", exc_info=True)
 
     def _process_materializers(
-        self, materializers: typing.Sequence[MaterializerFactory | ExtractorFactory]
-    ) -> tuple[list[MaterializerFactory], list[ExtractorFactory]]:
+        self, materializers: "typing.Sequence[MaterializerFactory | ExtractorFactory]"
+    ) -> "tuple[list[MaterializerFactory], list[ExtractorFactory]]":
         """Processes materializers, splitting them into materializers and extractors.
         Note that this also sanitizes the variable names in the materializer dependencies,
         so one can pass in functions instead of strings.
@@ -1370,6 +1430,7 @@ class Driver:
         :param materializers: Materializers to process
         :return: Tuple of materializers and extractors
         """
+        MaterializerFactory, ExtractorFactory = _get_materializer_types()
         module_set = {_module.__name__ for _module in self.graph_modules}
         materializer_factories = [
             m.sanitize_dependencies(module_set)
@@ -1382,7 +1443,7 @@ class Driver:
     @capture_function_usage
     def materialize(
         self,
-        *materializers: materialization.MaterializerFactory | materialization.ExtractorFactory,
+        *materializers: "materialization.MaterializerFactory | materialization.ExtractorFactory",
         additional_vars: list[str | Callable | Variable] = None,
         overrides: dict[str, Any] = None,
         inputs: dict[str, Any] = None,
@@ -1560,6 +1621,7 @@ class Driver:
         # This is so the finally logging statement does not accidentally die
         materializer_vars = []
         try:
+            materialization = _get_materialization()
             materializer_factories, extractor_factories = self._process_materializers(materializers)
             if len(materializer_factories) == len(final_vars) == 0:
                 raise ValueError(
@@ -1628,7 +1690,7 @@ class Driver:
     @capture_function_usage
     def visualize_materialization(
         self,
-        *materializers: MaterializerFactory | ExtractorFactory,
+        *materializers: "MaterializerFactory | ExtractorFactory",
         output_file_path: str = None,
         render_kwargs: dict = None,
         additional_vars: list[str | Callable | Variable] = None,
@@ -1669,6 +1731,7 @@ class Driver:
         """
         if additional_vars is None:
             additional_vars = []
+        materialization = _get_materialization()
         materializer_factories, extractor_factories = self._process_materializers(materializers)
         function_graph = materialization.modify_graph(
             self.graph, materializer_factories, extractor_factories
@@ -1715,7 +1778,7 @@ class Driver:
 
     def validate_materialization(
         self,
-        *materializers: materialization.MaterializerFactory,
+        *materializers: "materialization.MaterializerFactory",
         additional_vars: list[str | Callable | Variable] = None,
         overrides: dict[str, Any] = None,
         inputs: dict[str, Any] = None,
@@ -1733,6 +1796,7 @@ class Driver:
             additional_vars = []
         final_vars = self._create_final_vars(additional_vars)
         module_set = {_module.__name__ for _module in self.graph_modules}
+        materialization = _get_materialization()
         materializer_factories, extractor_factories = self._process_materializers(materializers)
         materializer_factories = [
             m.sanitize_dependencies(module_set) for m in materializer_factories
@@ -1751,8 +1815,9 @@ class Driver:
         self.graph_executor.validate(list(all_nodes))
 
     @property
-    def cache(self) -> HamiltonCacheAdapter:
+    def cache(self) -> "HamiltonCacheAdapter":
         """Directly access the cache adapter"""
+        HamiltonCacheAdapter = _get_hamilton_cache_adapter()
         if self.adapter:
             for adapter in self.adapter.adapters:
                 if isinstance(adapter, HamiltonCacheAdapter):
@@ -1849,6 +1914,7 @@ class Builder:
         :param adapter: Adapter to use.
         :return: self
         """
+        HamiltonCacheAdapter = _get_hamilton_cache_adapter()
         if any(isinstance(adapter, HamiltonCacheAdapter) for adapter in adapters):
             self._require_field_unset(
                 "cache", "Cannot use `.with_cache()` or with `.with_adapters(SmartCacheAdapter())`."
@@ -1870,13 +1936,14 @@ class Builder:
 
         return self.with_config({DISABLE_DATA_QUALITY_CHECKS_CONFIG_KEY: True})
 
-    def with_materializers(self, *materializers: ExtractorFactory | MaterializerFactory) -> Self:
+    def with_materializers(self, *materializers: "ExtractorFactory | MaterializerFactory") -> Self:
         """Add materializer nodes to the `Driver`
         The generated nodes can be referenced by name in `.execute()`
 
         :param materializers: materializers to add to the dataflow
         :return: self
         """
+        MaterializerFactory, ExtractorFactory = _get_materializer_types()
         if any(
             m for m in materializers if not isinstance(m, (ExtractorFactory, MaterializerFactory))
         ):
@@ -1895,8 +1962,8 @@ class Builder:
     def with_cache(
         self,
         path: str | pathlib.Path = ".hamilton_cache",
-        metadata_store: MetadataStore | None = None,
-        result_store: ResultStore | None = None,
+        metadata_store: "MetadataStore" | None = None,
+        result_store: "ResultStore" | None = None,
         default: Literal[True] | Sequence[str] | None = None,
         recompute: Literal[True] | Sequence[str] | None = None,
         ignore: Literal[True] | Sequence[str] | None = None,
@@ -1947,6 +2014,7 @@ class Builder:
         self._require_field_unset(
             "cache", "Cannot use `.with_cache()` or with `.with_adapters(SmartCacheAdapter())`."
         )
+        HamiltonCacheAdapter = _get_hamilton_cache_adapter()
         adapter = HamiltonCacheAdapter(
             path=path,
             metadata_store=metadata_store,
@@ -1964,12 +2032,13 @@ class Builder:
         return self
 
     @property
-    def cache(self) -> HamiltonCacheAdapter | None:
+    def cache(self) -> "HamiltonCacheAdapter" | None:
         """Attribute to check if a cache was set, either via `.with_cache()` or
         `.with_adapters(SmartCacheAdapter())`
 
         Required for the check  `._require_field_unset()`
         """
+        HamiltonCacheAdapter = _get_hamilton_cache_adapter()
         if self.adapters:
             for adapter in self.adapters:
                 if isinstance(adapter, HamiltonCacheAdapter):
@@ -2109,6 +2178,8 @@ class Builder:
 if __name__ == "__main__":
     """some example test code"""
     import importlib
+
+    import pandas as pd
 
     formatter = logging.Formatter("[%(levelname)s] %(asctime)s %(name)s(%(lineno)s): %(message)s")
     stream_handler = logging.StreamHandler(sys.stdout)
