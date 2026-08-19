@@ -20,11 +20,26 @@ complex types, many tests are not "true" unit tests. The base cases are
 the original `hash_value()` and the `hash_primitive()` functions.
 """
 
+import functools
+import hashlib
+import importlib
+import sys
+import types
+
 import numpy as np
 import pandas as pd
 import pytest
 
 from hamilton.caching import fingerprinting
+
+
+@pytest.fixture
+def force_md5_backend(monkeypatch):
+    """Force the hashlib.md5 fallback backend, regardless of whether xxhash
+    is installed in the current environment."""
+    monkeypatch.setattr(
+        fingerprinting, "hash_func", functools.partial(hashlib.md5, usedforsecurity=False)
+    )
 
 
 def test_hash_none():
@@ -146,11 +161,11 @@ def test_max_recursion_depth():
 @pytest.mark.parametrize(
     ("obj", "expected_hash"),
     [
-        ("hello-world", "L1Q1Kh6_t1atHO_H8RbBeA=="),
-        (17.31231, "mJPTpPyXDSZgU-u8NuztIQ=="),
-        (16474, "6MgAp1NbMW0ZZpe_8iKVsg=="),
-        (True, "J2eGynSuIpd5bwVQzO9VVg=="),
-        (b"\x951!\x89u=\xe6\xadG\xdf", "d1DufDgRQmqi9Kt4Z2PeUQ=="),
+        ("hello-world", "EXXR8_e47ElS18aP2lThJA=="),
+        (17.31231, "tVUSIslYiBcW52c-7w4gvA=="),
+        (16474, "FAJ-iXM_Hwg9TCRreY8AyA=="),
+        (True, "qkJEg3-XQKmGWk5sWqmonw=="),
+        (b"\x951!\x89u=\xe6\xadG\xdf", "pPTyYkSU_x7NLB1Fp_YTyA=="),
     ],
 )
 def test_hash_primitive(obj, expected_hash):
@@ -161,8 +176,8 @@ def test_hash_primitive(obj, expected_hash):
 @pytest.mark.parametrize(
     ("obj", "expected_hash"),
     [
-        ([0, True, "hello-world"], "mlOjj4yeCrSDFSn5zgdEIg=="),
-        ((17.0, False, "world"), "BcRSGfyKeIOdym9B6TmAyQ=="),
+        ([0, True, "hello-world"], "I98OkNhfxtScJrYNTs4ZfQ=="),
+        ((17.0, False, "world"), "catgOMSnsbQj1_KELNQscw=="),
     ],
 )
 def test_hash_sequence(obj, expected_hash):
@@ -173,7 +188,7 @@ def test_hash_sequence(obj, expected_hash):
 def test_hash_equals_for_different_sequence_types():
     list_obj = [0, True, "hello-world"]
     tuple_obj = (0, True, "hello-world")
-    expected_hash = "mlOjj4yeCrSDFSn5zgdEIg=="
+    expected_hash = "I98OkNhfxtScJrYNTs4ZfQ=="
 
     list_fingerprint = fingerprinting.hash_sequence(list_obj)
     tuple_fingerprint = fingerprinting.hash_sequence(tuple_obj)
@@ -182,7 +197,7 @@ def test_hash_equals_for_different_sequence_types():
 
 def test_hash_ordered_mapping():
     obj = {0: True, "key": "value", 17.0: None}
-    expected_hash = "GyxyI9-pq-EJJvSAIN509g=="
+    expected_hash = "zX6MzhWGAOvxateHIPxOvA=="
     fingerprint = fingerprinting.hash_mapping(obj, ignore_order=False)
     assert fingerprint == expected_hash
 
@@ -197,7 +212,7 @@ def test_hash_mapping_where_order_matters():
 
 def test_hash_unordered_mapping():
     obj = {0: True, "key": "value", 17.0: None}
-    expected_hash = "cDuuL2eA3DaSWlWW3u7o9g=="
+    expected_hash = "4cnTFA4MEEzmBN4a04k6tA=="
     fingerprint = fingerprinting.hash_mapping(obj, ignore_order=True)
     assert fingerprint == expected_hash
 
@@ -212,7 +227,7 @@ def test_hash_mapping_where_order_doesnt_matter():
 
 def test_hash_set():
     obj = {0, True, "key", "value", 17.0, None}
-    expected_hash = "E_f_tjbi6qn7KL3NUCZayg=="
+    expected_hash = "mswHhNBBYN5mv6i-LcEeVw=="
     fingerprint = fingerprinting.hash_set(obj)
     assert fingerprint == expected_hash
 
@@ -221,9 +236,126 @@ def test_hash_numpy():
     # dtype is pinned explicitly so the literal digest is reproducible across
     # platforms (the default integer dtype is platform-dependent).
     array = np.array([[0, 1], [2, 3]], dtype=np.int64)
+    expected_hash = "Y1uek_eQTHejo2YtRvdWPQ=="
+    fingerprint = fingerprinting.hash_value(array)
+    assert fingerprint == expected_hash
+
+
+# ---------------------------------------------------------------------------
+# hashlib.md5 fallback backend
+#
+# These mirror the pinned tests above but force `hash_func` to the hashlib.md5
+# fallback (via the `force_md5_backend` fixture) so the fallback path used
+# when `xxhash` isn't installed is verified regardless of what's installed in
+# the environment running the suite. Expected digests are the pre-xxh3_128
+# values this module used before xxhash became the default backend.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.usefixtures("force_md5_backend")
+@pytest.mark.parametrize(
+    ("obj", "expected_hash"),
+    [
+        ("hello-world", "L1Q1Kh6_t1atHO_H8RbBeA=="),
+        (17.31231, "mJPTpPyXDSZgU-u8NuztIQ=="),
+        (16474, "6MgAp1NbMW0ZZpe_8iKVsg=="),
+        (True, "J2eGynSuIpd5bwVQzO9VVg=="),
+        (b"\x951!\x89u=\xe6\xadG\xdf", "d1DufDgRQmqi9Kt4Z2PeUQ=="),
+    ],
+)
+def test_hash_primitive_md5_fallback(obj, expected_hash):
+    fingerprint = fingerprinting.hash_primitive(obj)
+    assert fingerprint == expected_hash
+
+
+@pytest.mark.usefixtures("force_md5_backend")
+@pytest.mark.parametrize(
+    ("obj", "expected_hash"),
+    [
+        ([0, True, "hello-world"], "mlOjj4yeCrSDFSn5zgdEIg=="),
+        ((17.0, False, "world"), "BcRSGfyKeIOdym9B6TmAyQ=="),
+    ],
+)
+def test_hash_sequence_md5_fallback(obj, expected_hash):
+    fingerprint = fingerprinting.hash_sequence(obj)
+    assert fingerprint == expected_hash
+
+
+@pytest.mark.usefixtures("force_md5_backend")
+def test_hash_ordered_mapping_md5_fallback():
+    obj = {0: True, "key": "value", 17.0: None}
+    expected_hash = "GyxyI9-pq-EJJvSAIN509g=="
+    fingerprint = fingerprinting.hash_mapping(obj, ignore_order=False)
+    assert fingerprint == expected_hash
+
+
+@pytest.mark.usefixtures("force_md5_backend")
+def test_hash_unordered_mapping_md5_fallback():
+    obj = {0: True, "key": "value", 17.0: None}
+    expected_hash = "cDuuL2eA3DaSWlWW3u7o9g=="
+    fingerprint = fingerprinting.hash_mapping(obj, ignore_order=True)
+    assert fingerprint == expected_hash
+
+
+@pytest.mark.usefixtures("force_md5_backend")
+def test_hash_set_md5_fallback():
+    obj = {0, True, "key", "value", 17.0, None}
+    expected_hash = "E_f_tjbi6qn7KL3NUCZayg=="
+    fingerprint = fingerprinting.hash_set(obj)
+    assert fingerprint == expected_hash
+
+
+@pytest.mark.usefixtures("force_md5_backend")
+def test_hash_numpy_md5_fallback():
+    array = np.array([[0, 1], [2, 3]], dtype=np.int64)
     expected_hash = "024zwZIcWy6r4dlX4AMTow=="
     fingerprint = fingerprinting.hash_value(array)
     assert fingerprint == expected_hash
+
+
+def test_hash_bytes_digest_width():
+    """Both backends produce a 16-byte digest (24 base64url chars), so swapping
+    the algorithm doesn't change the shape of cache keys / `data_version` strings.
+    """
+    assert len(fingerprinting._hash_bytes(b"x")) == 24
+
+
+@pytest.mark.usefixtures("force_md5_backend")
+def test_hash_bytes_digest_width_md5_fallback():
+    assert len(fingerprinting._hash_bytes(b"x")) == 24
+
+
+# ---------------------------------------------------------------------------
+# Import-time backend resolution
+#
+# These reload the module to actually exercise the try/except at import time
+# (as opposed to `force_md5_backend`, which only overrides the already-resolved
+# `hash_func`), then restore the module to its real, ambient-environment state
+# so later tests aren't affected.
+# ---------------------------------------------------------------------------
+
+
+def test_falls_back_when_xxhash_not_installed(monkeypatch):
+    """Simulate xxhash being absent: `import xxhash` raises ModuleNotFoundError."""
+    monkeypatch.setitem(sys.modules, "xxhash", None)
+    try:
+        reloaded = importlib.reload(fingerprinting)
+        assert reloaded.hash_func.func is hashlib.md5
+        assert reloaded.hash_func.keywords == {"usedforsecurity": False}
+    finally:
+        importlib.reload(fingerprinting)
+
+
+def test_falls_back_when_xxhash_lacks_xxh3_128(monkeypatch):
+    """Simulate an xxhash older than 0.8.0, which doesn't define xxh3_128."""
+    stub = types.ModuleType("xxhash")
+    monkeypatch.setitem(sys.modules, "xxhash", stub)
+    try:
+        reloaded = importlib.reload(fingerprinting)
+        assert reloaded.hash_func.func is hashlib.md5
+        assert reloaded.hash_func.keywords == {"usedforsecurity": False}
+    finally:
+        importlib.reload(fingerprinting)
 
 
 def test_hash_numpy_different_shapes_differ():

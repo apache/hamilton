@@ -33,13 +33,15 @@ IMPORTANT all container types that make a recursive call to `hash_value` or a sp
 implementation should pass the `depth` parameter to prevent `RecursionError`.
 """
 
+from __future__ import annotations
+
 import base64
 import datetime
 import functools
-import hashlib
 import logging
 import sys
 from collections.abc import Mapping, Sequence, Set
+from typing import TYPE_CHECKING
 
 from hamilton.experimental import h_databackends
 
@@ -49,6 +51,31 @@ try:
 except ImportError:
     NoneType = type(None)
 
+if TYPE_CHECKING:
+    from collections.abc import Buffer, Callable
+    from typing import Protocol
+
+    class Hash(Protocol):
+        def digest(self) -> bytes: ...
+
+
+hash_func: Callable[[str | Buffer], Hash]
+try:
+    # xxh3_128 produces a 16-byte digest (24 base64url chars, the same width as the
+    # md5 it replaces) while running substantially faster on buffer-bound paths.
+    # TODO(2.0): revisit once/if a dependency-free `apache-hamilton-core` package
+    # exists, so this optional performance dependency lands in the right tier.
+    import xxhash
+
+    hash_func = xxhash.xxh3_128
+except (ModuleNotFoundError, AttributeError):
+    # ModuleNotFoundError covers xxhash not being installed; AttributeError
+    # covers an xxhash older than 0.8.0 (which added xxh3_128).
+    # usedforsecurity=False avoids a ValueError on FIPS-mode Python; it
+    # doesn't change the digest.
+    import hashlib
+
+    hash_func = functools.partial(hashlib.md5, usedforsecurity=False)
 
 logger = logging.getLogger("hamilton.caching")
 
@@ -81,8 +108,16 @@ def _hash_bytes(data: bytes) -> str:
 
     All hashing in this module routes through this single helper so the
     underlying hashing algorithm can be changed in exactly one place.
+
+    Uses the non-cryptographic xxh3_128 algorithm when the optional
+    ``xxhash`` package is installed (see the ``performance`` extra),
+    falling back to hashlib's md5 otherwise. Both produce a 16-byte digest
+    (24 base64url chars), so digest width is unaffected either way, but the
+    two algorithms don't produce the same bytes for the same input:
+    fingerprints are stable within an environment, not across installs with
+    a different backend.
     """
-    return _compact_hash(hashlib.md5(data).digest())
+    return _compact_hash(hash_func(data).digest())
 
 
 @functools.singledispatch
