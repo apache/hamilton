@@ -1036,6 +1036,50 @@ def test_inject_multiple_things():
     assert node_(int_value_not_injected=8, three_source=3, six_source=6) == 8 * (8 + 1) // 2
 
 
+def test_inject_above_parameterize_resolves_nodes():
+    @function_modifiers.inject(params=source("my_func__params"))
+    @function_modifiers.parameterize(
+        my_func_a={"date_range": source("my_func_a_date_range")},
+        my_func_b={"date_range": source("my_func_b_date_range")},
+    )
+    def my_func(date_range: tuple[int, int], params: int) -> int:
+        return params + date_range[0] + date_range[1]
+
+    nodes = {node_.name: node_ for node_ in base.resolve_nodes(my_func, {})}
+
+    assert set(nodes) == {"my_func_a", "my_func_b"}
+    assert nodes["my_func_a"].callable(my_func_a_date_range=(2, 10), my_func__params=1) == 13
+    assert nodes["my_func_b"].callable(my_func_b_date_range=(3, 10), my_func__params=1) == 14
+
+
+def test_parameterize_above_inject_resolves_nodes():
+    @function_modifiers.parameterize(
+        my_func_a={"date_range": source("my_func_a_date_range")},
+        my_func_b={"date_range": source("my_func_b_date_range")},
+    )
+    @function_modifiers.inject(params=source("my_func__params"))
+    def my_func(date_range: tuple[int, int], params: int) -> int:
+        return params + date_range[0] + date_range[1]
+
+    nodes = {node_.name: node_ for node_ in base.resolve_nodes(my_func, {})}
+
+    assert set(nodes) == {"my_func_a", "my_func_b"}
+    assert nodes["my_func_a"].callable(my_func_a_date_range=(2, 10), my_func__params=1) == 13
+    assert nodes["my_func_b"].callable(my_func_b_date_range=(3, 10), my_func__params=1) == 14
+
+
+def test_inject_parameterize_overlap_fails():
+    @function_modifiers.inject(date_range=source("injected_date_range"))
+    @function_modifiers.parameterize(
+        my_func_a={"date_range": source("my_func_a_date_range")},
+    )
+    def my_func(date_range: tuple[int, int], params: int) -> int:
+        return params + date_range[0] + date_range[1]
+
+    with pytest.raises(base.InvalidDecoratorException, match="date_range"):
+        base.resolve_nodes(my_func, {})
+
+
 @pytest.mark.parametrize(
     ("annotated_type", "cls", "expected"),
     [

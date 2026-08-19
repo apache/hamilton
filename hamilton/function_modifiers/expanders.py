@@ -1228,3 +1228,7 @@ class inject(parameterize):
             This is the same as the input mapping in `@parameterize`.
         """
         super(inject, self).__init__(**{parameterize.PLACEHOLDER_PARAM_NAME: key_mapping})
+
+    @classmethod
+    def runs_before_regular_expanders(cls) -> bool:
+        return True
