@@ -30,6 +30,7 @@ Apache Hamilton (Incubator Podling) logo
 :hidden: True
 :caption: USER GUIDE
 
+faqs
 get-started/index
 concepts/index
 how-tos/index
