@@ -585,9 +585,24 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
         self.data_queue = asyncio.Queue()
         self.running = True
         self.max_batch_size = 100
+        self.worker_task: asyncio.Task | None = None
 
     async def ainit(self):
-        asyncio.create_task(self.worker())
+        self.worker_task = asyncio.create_task(self.worker())
+
+    async def stop(self):
+        """Signal the worker to flush whatever is buffered and exit.
+
+        Unlike BasicSynchronousHamiltonClient, this is not wired to atexit:
+        the worker is a task on this event loop, and by the time atexit
+        callbacks run at interpreter shutdown the loop may already be
+        closed, so callers must await this explicitly before the loop
+        that owns it stops running.
+        """
+        if self.worker_task is None or self.worker_task.done():
+            return
+        await self.data_queue.put(None)
+        await self.worker_task
 
     async def flush(self, batch):
         """Flush the batch (send it to the backend or process it)."""
@@ -624,7 +639,6 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
             )
             try:
                 item = await asyncio.wait_for(self.data_queue.get(), timeout=self.flush_interval)
-                batch.append(item)
             except asyncio.TimeoutError:
                 # This is fine, we just keep waiting
                 pass
@@ -632,6 +646,7 @@ class BasicAsynchronousHamiltonClient(HamiltonClient):
                 if item is None:
                     await self.flush(batch)
                     return
+                batch.append(item)
 
             # Check if batch is full or flush interval has passed
             if (
