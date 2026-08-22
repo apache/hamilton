@@ -469,6 +469,14 @@ class AsyncHamiltonTracker(
         self.initialized = True
         return self
 
+    async def stop(self):
+        """Flush any buffered tracking data and stop the background worker.
+
+        Call this before your event loop shuts down; nothing else flushes
+        the tracker's queue for you.
+        """
+        await self.client.stop()
+
     async def post_graph_construct(
         self, graph: h_graph.FunctionGraph, modules: list[ModuleType], config: dict[str, Any]
     ):
