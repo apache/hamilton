@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import asyncio
 import os.path
 
 import pytest
@@ -160,6 +161,32 @@ def test_parallel_ray_sample_error():
         dr.execute(final_vars=["statistics_by_city"], inputs={"data_dir": data_dir})
     if shutdown:
         shutdown()
+
+
+def test_async_hamilton_tracker_stop_delegates_to_client():
+    """Regression for #1214: AsyncHamiltonTracker had no way for a caller to
+    flush its client's buffered tracking data before the event loop shuts
+    down. stop() must delegate to the underlying client's stop()."""
+
+    class _FakeAsyncClient:
+        def __init__(self, *args, **kwargs):
+            self.stop_calls = 0
+
+        async def stop(self):
+            self.stop_calls += 1
+
+    async def run():
+        tracker = adapters.AsyncHamiltonTracker(
+            project_id=1,
+            username="test-user",
+            dag_name="test-dag",
+            client_factory=_FakeAsyncClient,
+            api_key="test-key",
+        )
+        await tracker.stop()
+        assert tracker.client.stop_calls == 1
+
+    asyncio.run(run())
 
 
 if __name__ == "__main__":

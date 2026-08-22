@@ -81,3 +81,48 @@ def test_async_flush_succeeds_on_2xx():
             await client.flush(batch)
 
     asyncio.run(run())
+
+
+def test_async_client_stop_flushes_buffered_item_and_exits_worker():
+    """Regression for #1214: worker()'s only exit path waits for a `None`
+    sentinel on data_queue, and nothing ever put one there for the async
+    client, so a buffered item sat unflushed until the flush_interval timer
+    happened to fire, or was lost outright if the process exited first.
+    stop() must send that sentinel and wait for the worker to flush and
+    exit, well before the flush_interval timeout."""
+
+    async def run():
+        client = _make_client()
+        session_cm = _mock_session_with_status(200)
+        with patch("aiohttp.ClientSession", return_value=session_cm):
+            await client.ainit()
+            await client.update_tasks(dag_run_id=1, attributes=[], task_updates=[])
+
+            assert not client.worker_task.done()
+
+            await client.stop()
+
+            assert client.worker_task.done()
+            assert client.data_queue.empty()
+            session_cm.__aenter__.return_value.put.assert_called_once()
+
+    asyncio.run(run())
+
+
+def test_async_client_stop_is_idempotent():
+    async def run():
+        client = _make_client()
+        with patch("aiohttp.ClientSession", return_value=_mock_session_with_status(200)):
+            await client.ainit()
+            await client.stop()
+            await client.stop()  # must not hang or raise
+
+    asyncio.run(run())
+
+
+def test_async_client_stop_before_ainit_is_a_noop():
+    async def run():
+        client = _make_client()
+        await client.stop()  # worker_task is None, must not raise
+
+    asyncio.run(run())
