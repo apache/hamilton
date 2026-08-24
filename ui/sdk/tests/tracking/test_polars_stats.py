@@ -237,24 +237,25 @@ def test_compute_stats_datetime_series_regression():
     json.dumps(actual)
 
 
-def test_compute_stats_time_and_duration_columns_are_json_safe():
+def test_compute_stats_time_and_duration_columns_are_unhandled():
     df = pl.DataFrame(
         {
             "t": pl.Series([time(1, 0), time(2, 0), time(3, 0)]),
             "d": pl.Series([timedelta(days=1), timedelta(days=2), timedelta(days=3)]),
+            "ts": pl.Series([datetime(2021, 1, 1), datetime(2021, 1, 2), datetime(2021, 1, 3)]),
         }
     )
     actual = ps.compute_stats_df(df, "test", {})
     time_stats = actual["observability_value"]["t"]
     duration_stats = actual["observability_value"]["d"]
-    assert time_stats["base_data_type"] == "datetime"
-    assert duration_stats["base_data_type"] == "datetime"
-    assert time_stats["std"] == 0.0
-    assert duration_stats["std"] == 0.0
-    assert isinstance(time_stats["min"], str)
-    assert isinstance(time_stats["max"], str)
-    assert isinstance(time_stats["mean"], str)
-    assert isinstance(duration_stats["min"], str)
-    assert isinstance(duration_stats["max"], str)
-    assert isinstance(duration_stats["mean"], str)
+    datetime_stats = actual["observability_value"]["ts"]
+    assert time_stats["base_data_type"] == "unhandled"
+    assert duration_stats["base_data_type"] == "unhandled"
+    assert "min" not in time_stats
+    assert "max" not in time_stats
+    assert "min" not in duration_stats
+    assert "max" not in duration_stats
+    assert datetime_stats["base_data_type"] == "datetime"
+    assert datetime_stats["min"] == "2021-01-01T00:00:00"
+    assert datetime_stats["max"] == "2021-01-03T00:00:00"
     json.dumps(actual)
