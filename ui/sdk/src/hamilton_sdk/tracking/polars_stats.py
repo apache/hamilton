@@ -58,7 +58,8 @@ def _compute_stats(df: pl.DataFrame) -> dict[str, dict[str, Any]]:
     numeric_types = df.select(selectors.numeric())
     bool_types = df.select([pl.col(pl.Boolean)])
     # df.select([pl.col(pl.Object)])
-    date_types = df.select(selectors.temporal())
+    # Time/Duration are not valid JS Dates in the UI; leave them for unhandled stats.
+    date_types = df.select(selectors.date() | selectors.datetime())
     # get all other columns that have not been selected
     # df.select(
     #     ~cs.by_dtype([pl.Categorical, pl.Utf8, pl.Boolean, pl.Object])
