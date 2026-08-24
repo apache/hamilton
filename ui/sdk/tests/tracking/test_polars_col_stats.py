@@ -17,7 +17,7 @@
 
 """Module for testing pandas column stats."""
 
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime
 
 import polars as pl
 import pytest
@@ -134,15 +134,7 @@ def test_str_len(example_df_string):
     assert pcs.str_len(example_df_string["a"]).to_list() == [1, 1, 1, 1, 1]
 
 
-def test_temporal_to_jsonable():
-    assert pcs._temporal_to_jsonable(datetime(2021, 1, 2, 3, 4, 5)) == "2021-01-02T03:04:05"
-    assert pcs._temporal_to_jsonable(date(2021, 1, 2)) == "2021-01-02"
-    assert pcs._temporal_to_jsonable(time(1, 2, 3)) == "01:02:03"
-    assert pcs._temporal_to_jsonable(timedelta(days=1, hours=2)) == "1 day, 2:00:00"
-    assert pcs._temporal_to_jsonable(3.14) == 3.14
-
-
-def test_datetime_column_stats_serializes_temporal_values():
+def test_datetime_column_stats_serializes_date_and_datetime_values():
     stats = pcs.datetime_column_stats(
         name="ts",
         position=0,
@@ -163,36 +155,21 @@ def test_datetime_column_stats_serializes_temporal_values():
     assert stats.quantiles[0.5] == "2021-01-02T00:00:00"
     assert stats.base_data_type == "datetime"
 
-    time_stats = pcs.datetime_column_stats(
-        name="t",
-        position=1,
-        data_type="Time",
-        count=2,
-        missing=0,
-        zeros=0,
-        min=time(1, 0),
-        max=time(2, 0),
-        mean=time(1, 30),
-        quantiles={0.5: time(2, 0)},
-        histogram={},
-    )
-    assert time_stats.min == "01:00:00"
-    assert time_stats.max == "02:00:00"
-    assert time_stats.mean == "01:30:00"
-
-    duration_stats = pcs.datetime_column_stats(
+    date_stats = pcs.datetime_column_stats(
         name="d",
-        position=2,
-        data_type="Duration(time_unit='us')",
+        position=1,
+        data_type="Date",
         count=2,
         missing=0,
         zeros=0,
-        min=timedelta(days=1),
-        max=timedelta(days=2),
-        mean=timedelta(days=1, hours=12),
-        quantiles={0.5: timedelta(days=2)},
+        min=date(2021, 1, 1),
+        max=date(2021, 1, 3),
+        mean=datetime(2021, 1, 2),
+        quantiles={0.5: date(2021, 1, 2)},
         histogram={},
     )
-    assert duration_stats.min == "1 day, 0:00:00"
-    assert duration_stats.max == "2 days, 0:00:00"
-    assert duration_stats.mean == "1 day, 12:00:00"
+    assert date_stats.min == "2021-01-01"
+    assert date_stats.max == "2021-01-03"
+    assert date_stats.mean == "2021-01-02T00:00:00"
+    assert date_stats.quantiles[0.5] == "2021-01-02"
+    assert date_stats.base_data_type == "datetime"

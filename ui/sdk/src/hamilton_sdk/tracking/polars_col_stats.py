@@ -131,16 +131,6 @@ def numeric_column_stats(
     )
 
 
-def _temporal_to_jsonable(value: object) -> object:
-    # datetime.datetime is a subclass of datetime.date. Time/Duration also arrive via
-    # selectors.temporal() and must be JSON-safe for the UI (same base_data_type="datetime").
-    if isinstance(value, (datetime.date, datetime.time)):
-        return value.isoformat()
-    if isinstance(value, datetime.timedelta):
-        return str(value)
-    return value
-
-
 def datetime_column_stats(
     name: str,
     position: int,
@@ -155,10 +145,13 @@ def datetime_column_stats(
     histogram: dict[str, int],
 ) -> dfs.DatetimeColumnStatistics:
     # TODO: push these conversions into Hamilton functions.
-    min = _temporal_to_jsonable(min)
-    max = _temporal_to_jsonable(max)
-    mean = _temporal_to_jsonable(mean)
-    quantiles = {q: _temporal_to_jsonable(v) for q, v in quantiles.items()}
+    # Note: datetime.datetime is a subclass of datetime.date, so checking datetime.date catches both
+    min = min.isoformat() if isinstance(min, datetime.date) else min
+    max = max.isoformat() if isinstance(max, datetime.date) else max
+    mean = mean.isoformat() if isinstance(mean, datetime.date) else mean
+    quantiles = {
+        q: v.isoformat() if isinstance(v, datetime.date) else v for q, v in quantiles.items()
+    }
     return dfs.DatetimeColumnStatistics(
         name=name,
         pos=position,
