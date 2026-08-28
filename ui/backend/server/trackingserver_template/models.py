@@ -154,6 +154,8 @@ class NodeTemplate(TimeStampedModel):
         data_loader = "data_loader", _("DataLoader")
         input = "input", _("Input")  # input, not actually run
         placeholder = "placeholder", _("Placeholder")
+        # Synthesized by the SDK tracker -- represents the driver's built result, not a DAG node
+        result_builder = "result_builder", _("ResultBuilder")
 
     # Nodes have a unique name (up to 511 chars)
     # In Hamilton's case, this includes a .-separated namespace
