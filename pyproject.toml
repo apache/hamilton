@@ -112,7 +112,7 @@ test = [
   "dlt",
   "fsspec",
   "graphviz",
-  "kaleido; python_version < '3.14'",
+  "kaleido",
   "kedro; python_version < '3.14'",
   "lancedb; python_version < '3.14'",
   "lightgbm; python_version < '3.14'",
@@ -123,7 +123,7 @@ test = [
   "networkx",
   "openpyxl", # for excel data loader
   "pandera[dask]",
-  "plotly; python_version < '3.14'",
+  "plotly",
   "polars; python_version < '3.14'",
   "pyarrow",
   "pydantic >=2.0",

@@ -85,7 +85,6 @@ jobs:
         - name: Test hamilton main package
           run: |
             uv sync --group test
-            uv pip install "kaleido<0.4.0"
             uv run pytest tests/ --cov=hamilton --ignore tests/integrations
 
 
