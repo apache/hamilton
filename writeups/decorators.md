@@ -87,7 +87,7 @@ tuple(Output Name, Documentation string) -> value.
 
 Note that `@parametrized` is deprecated, and we intend for you to use `@parameterize_vales`. We're consolidating
 to make the parameterization decorators more consistent! You have plenty of time to migrate,
-we wont make this a hard change until we have a Apache Hamilton 2.0.0 to release.
+we won't make this a hard change until we have a Apache Hamilton 2.0.0 to release.
 
 
 ## @parameterize_sources (replacing @parameterized_inputs)
@@ -490,7 +490,7 @@ The inputs to the `subdag` decorator takes in a variety of inputs that determine
 
 
 Note that, if you wanted to do this functionality without this decorator, you'd have two options:
-1. Rewrite every function for each scenario -- this is repetetive and doesn't scale
+1. Rewrite every function for each scenario -- this is repetitive and doesn't scale
 2. Utilize the `driver` within the functions -- E.G.
 
 ```python

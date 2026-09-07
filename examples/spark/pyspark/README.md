@@ -196,7 +196,7 @@ import map_transforms # file defined above
 
 @with_columns(
     map_transforms, # Load all the functions we defined above
-    pass_dataframe_as="input_dataframe", #the upstream dataframe, referred to by downstream nodes, will have this parametter name
+    pass_dataframe_as="input_dataframe", #the upstream dataframe, referred to by downstream nodes, will have this parameter name
 )
 def final_result(all_initial_data: ps.DataFrame) -> ps.DataFrame:
     """Gives the final result. This decorator will apply the transformations in the order.

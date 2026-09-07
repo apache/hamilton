@@ -25,7 +25,7 @@ This page gives an introduction to pre-commit hooks and how to use custom hooks 
 ## What are pre-commit hooks?
 A pre-commit hook is a script or command that's executed automatically before making a commit. The goal of these hooks is to standardize code formatting and catch erroneous code before being committed. For example, popular hooks include ensuring files have no syntax errors, sorting imports, and normalizing line breaks.
 
-Note that it's different from testing, which focuses on the behavior of the code. You can think of pre-commit hooks as checks and formatting you would do everytime you save a file.
+Note that it's different from testing, which focuses on the behavior of the code. You can think of pre-commit hooks as checks and formatting you would do every time you save a file.
 
 ## Add pre-commit hooks to your project
 Hooks are a mechanism of the `git` version control system. You can find your project's hooks under the `.git/hooks` directory (it might be hidden by default). There should be many files with the `.sample` extension that serve as example scripts.

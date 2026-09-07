@@ -27,7 +27,7 @@ this can be used when trying to find the most relevant text to pass to an LLM in
 context.
 
 The pipeline we create can be seen in the image below.
-![pipeine](ner_extraction_pipeline.png)
+![pipeline](ner_extraction_pipeline.png)
 
 To run this in a notebook:
 
