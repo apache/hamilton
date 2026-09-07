@@ -126,6 +126,13 @@ class RawFileDataSaverBytes(DataSaver):
 
 @dataclasses.dataclass
 class PickleLoader(DataLoader):
+    """Loads Python pickle files.
+
+    Warning: pickle deserialization can execute arbitrary code. Only load pickle files from
+    sources you trust. Use a non-executable format such as JSON, Parquet, or Arrow when data
+    crosses a trust boundary.
+    """
+
     path: str
 
     @classmethod
