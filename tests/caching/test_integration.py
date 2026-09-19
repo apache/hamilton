@@ -520,12 +520,14 @@ def test_ignore_behavior_from_start(tmp_path):
     check_execution(cache=cache, did=["A", "B"])
     check_metadata_store_size(cache=cache, size=1)
     check_results_exist_in_store(cache, ["B"])
+    assert len([p for p in cache.result_store.path.iterdir() if p.name != "metadata_store.db"]) == 1
 
     # execution 2: A re-executes, B hits cache; metadata store size stays 1
     execute_dataflow(module=module, cache=cache, final_vars=final_vars)
     check_execution(cache=cache, did=["A"], did_not=["B"])
     check_metadata_store_size(cache=cache, size=1)
     check_results_exist_in_store(cache, ["B"])
+    assert len([p for p in cache.result_store.path.iterdir() if p.name != "metadata_store.db"]) == 1
 
 
 def test_result_is_materialized_to_file(tmp_path):
