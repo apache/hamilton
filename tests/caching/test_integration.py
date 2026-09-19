@@ -495,17 +495,37 @@ def test_ignore_behavior(tmp_path):
 
     cache._ignore = ["A"]
     # execution 3: a new key that ignores A will be recomputed for B
-    # A doesn't produce any metadata or result
+    # A doesn't produce any metadata or result, only B adds a metadata entry for its <ignore> key
     execute_dataflow(module=module, cache=cache, final_vars=final_vars)
     check_execution(cache=cache, did=["A", "B"])
-    check_metadata_store_size(cache=cache, size=4)
+    check_metadata_store_size(cache=cache, size=3)
     check_results_exist_in_store(cache, ["A", "B"])
 
     # execution 4: B can be retrieved using its new key that ignores A
+    # A executes but does not produce any metadata, so size remains 3
     execute_dataflow(module=module, cache=cache, final_vars=final_vars)
     check_execution(cache=cache, did=["A"], did_not=["B"])
-    check_metadata_store_size(cache=cache, size=5)
+    check_metadata_store_size(cache=cache, size=3)
     check_results_exist_in_store(cache, ["A", "B"])
+
+
+def test_ignore_behavior_from_start(tmp_path):
+    cache = HamiltonCacheAdapter(path=tmp_path)
+    module = ad_hoc_utils.create_temporary_module(node_A(), node_B_depends_on_A())
+    final_vars = ["B"]
+    cache._ignore = ["A"]
+
+    # execution 1: A executes without caching metadata or result; B executes and is cached with <ignore> key
+    execute_dataflow(module=module, cache=cache, final_vars=final_vars)
+    check_execution(cache=cache, did=["A", "B"])
+    check_metadata_store_size(cache=cache, size=1)
+    check_results_exist_in_store(cache, ["B"])
+
+    # execution 2: A re-executes, B hits cache; metadata store size stays 1
+    execute_dataflow(module=module, cache=cache, final_vars=final_vars)
+    check_execution(cache=cache, did=["A"], did_not=["B"])
+    check_metadata_store_size(cache=cache, size=1)
+    check_results_exist_in_store(cache, ["B"])
 
 
 def test_result_is_materialized_to_file(tmp_path):
