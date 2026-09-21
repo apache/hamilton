@@ -106,13 +106,17 @@ def test_pandas_json(df: pd.DataFrame, tmp_path: pathlib.Path) -> None:
 
 
 @pytest.mark.parametrize(
-    "conn",
+    ("connect", "identified"),
     [
-        sqlite3.connect(":memory:"),
-        create_engine("sqlite://"),
+        (lambda _: sqlite3.connect(":memory:"), False),
+        (lambda _: create_engine("sqlite://"), False),
+        (lambda path: sqlite3.connect(path), True),
+        (lambda path: create_engine(f"sqlite:///{path}"), True),
     ],
 )
-def test_pandas_sql(df: pd.DataFrame, conn: str | sqlite3.Connection) -> None:
+def test_pandas_sql(df: pd.DataFrame, connect, identified: bool, tmp_path) -> None:
+    path = tmp_path / "test.db"
+    conn = connect(path)
     writer = PandasSqlWriter(table_name="bar", db_connection=conn)
     kwargs1 = writer._get_saving_kwargs()
     metadata1 = writer.save_data(df)
@@ -130,9 +134,96 @@ def test_pandas_sql(df: pd.DataFrame, conn: str | sqlite3.Connection) -> None:
     assert metadata1["sql_metadata"]["rows"] == 1
     assert metadata2["sql_metadata"]["rows"] == 1
     assert metadata1["dataframe_metadata"]["datatypes"] == [str(df["foo"].dtype)]
+    assert metadata1["sql_metadata"]["operation"] == "write"
+    assert metadata2["sql_metadata"]["operation"] == "read"
+    assert metadata1["sql_metadata"]["table_name"] == "bar"
+    assert metadata2["sql_metadata"]["query"] == "SELECT foo FROM bar"
+    if identified:
+        expected = {"dialect": "sqlite", "database": str(path.resolve())}
+        assert expected.items() <= metadata1["sql_metadata"]["source"].items()
+        assert metadata1["sql_metadata"]["source"] == metadata2["sql_metadata"]["source"]
+    else:
+        assert metadata1["sql_metadata"]["source"] is None
+        assert metadata2["sql_metadata"]["source"] is None
+        assert metadata1["sql_metadata"]["notes"]
 
     if hasattr(conn, "close"):
         conn.close()
+
+
+def test_pandas_sql_decorators_capture_source(tmp_path) -> None:
+    """@load_from.sql / @save_to.sql carry datasource context with no custom metadata code."""
+    from hamilton import ad_hoc_utils, driver
+    from hamilton.function_modifiers import load_from, save_to, source, value
+
+    sales = sqlite3.connect(tmp_path / "sales.db")
+    pd.DataFrame({"id": [1, 2], "amount": [10.0, 5.0]}).to_sql("orders", sales, index=False)
+    warehouse = create_engine(f"sqlite:///{tmp_path / 'warehouse.db'}")
+
+    @load_from.sql(
+        query_or_table=value("select id, amount from orders"), db_connection=source("sales")
+    )
+    def orders(df: pd.DataFrame) -> pd.DataFrame:
+        return df
+
+    @save_to.sql(
+        table_name=value("revenue"),
+        db_connection=source("warehouse"),
+        if_exists=value("replace"),
+        index=value(False),
+        output_name_="saved",
+    )
+    def revenue(orders: pd.DataFrame) -> pd.DataFrame:
+        return orders.assign(revenue=orders["amount"] * 2)
+
+    module = ad_hoc_utils.create_temporary_module(orders, revenue)
+    dr = driver.Builder().with_modules(module).build()
+    result = dr.execute(
+        ["orders.load_data.df", "saved"], inputs={"sales": sales, "warehouse": warehouse}
+    )
+
+    loaded_df, loaded_metadata = result["orders.load_data.df"]
+    assert loaded_metadata["sql_metadata"]["source"]["database"] == str(
+        (tmp_path / "sales.db").resolve()
+    )
+    assert loaded_metadata["sql_metadata"]["operation"] == "read"
+    saved_metadata = result["saved"]
+    assert saved_metadata["sql_metadata"]["source"]["database"] == str(
+        (tmp_path / "warehouse.db").resolve()
+    )
+    assert saved_metadata["sql_metadata"]["table_name"] == "revenue"
+    assert pd.read_sql("select * from revenue", warehouse)["revenue"].tolist() == [20.0, 10.0]
+    sales.close()
+
+
+def test_pandas_sql_postgres_forms(postgres_schema) -> None:
+    """URL string, Engine and Connection forms all identify server, database and schema."""
+    engine, schema = postgres_schema
+    url = engine.url.render_as_string(hide_password=False)
+    df = pd.DataFrame({"foo": ["bar"]})
+    written = PandasSqlWriter(
+        table_name="orders", db_connection=engine, schema=schema, index=False
+    ).save_data(df)
+    source = written["sql_metadata"]["source"]
+    assert source["dialect"] == "postgresql"
+    assert source["host"] == engine.url.host
+    assert source["port"] == engine.url.port
+    assert source["database"] == engine.url.database
+    assert source["default_schema"]  # verified by SQLAlchemy at connect time, not assumed
+    assert written["sql_metadata"]["schema"] == schema
+
+    query = f"SELECT * FROM {schema}.orders"
+    with engine.connect() as conn:
+        df_conn, via_conn = PandasSqlReader(query_or_table=query, db_connection=conn).load_data(
+            pd.DataFrame
+        )
+    df_url, via_url = PandasSqlReader(query_or_table=query, db_connection=url).load_data(
+        pd.DataFrame
+    )
+    assert df.equals(df_conn) and df.equals(df_url)
+    assert via_conn["sql_metadata"]["source"] == source
+    assert via_url["sql_metadata"]["source"] == {**source, "default_schema": None}
+    assert engine.url.password not in str(via_url)
 
 
 def test_pandas_xml_reader(tmp_path: pathlib.Path) -> None:

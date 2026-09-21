@@ -16,11 +16,13 @@
 # under the License.
 
 import os
+import re
+import sqlite3
 import time
 from datetime import datetime
 from os import PathLike
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 from urllib import parse
 
 import pandas as pd
@@ -28,6 +30,8 @@ import pandas as pd
 DATAFRAME_METADATA = "dataframe_metadata"
 SQL_METADATA = "sql_metadata"
 FILE_METADATA = "file_metadata"
+
+SqlOperation = Literal["read", "write"]
 
 
 def get_file_metadata(path: str | Path | PathLike) -> dict[str, Any]:
@@ -127,7 +131,83 @@ def get_file_and_dataframe_metadata(path: str, df: pd.DataFrame) -> dict[str, An
     return {**get_file_metadata(path), **get_dataframe_metadata(df)}
 
 
-def get_sql_metadata(query_or_table: str, results: int | pd.DataFrame) -> dict[str, Any]:
+def get_sql_source(db_connection: Any) -> tuple[dict[str, Any] | None, str]:
+    """Describes the database a connection points at, without credentials or live objects.
+
+    Supported forms: SQLAlchemy URL strings, ``Engine`` and ``Connection`` objects, and
+    standard-library ``sqlite3`` connections. Inspection is read-only: it reads URL fields
+    that are already in memory and, for a raw sqlite3 connection, runs ``PRAGMA database_list``
+    on that same connection (no transaction is started).
+
+    :return: ``(source, notes)``. ``source`` is ``None`` when the connection cannot be
+        identified, and ``notes`` then says why. When present, ``source`` holds
+        ``dialect`` (SQLAlchemy backend name, e.g. ``postgresql``, ``sqlite``), ``host``,
+        ``port``, ``database`` (the absolute file path for SQLite) and ``default_schema``
+        (the schema the connection resolves unqualified names against, when SQLAlchemy has
+        already fetched it; ``None`` otherwise). Usernames, passwords and URL query
+        parameters are never included.
+    """
+    kind = type(db_connection).__name__
+    try:
+        source = _inspect_sql_source(db_connection)
+    except Exception as e:  # inspection must never break the data operation
+        return None, f"Could not inspect {kind} connection: {type(e).__name__}"
+    if source is None:
+        return None, f"Unsupported connection type for SQL metadata: {kind}"
+    if source["dialect"] == "sqlite" and not source["database"]:
+        return None, "In-memory SQLite database has no stable identity"
+    return source, ""
+
+
+def _inspect_sql_source(db_connection: Any) -> dict[str, Any] | None:
+    if isinstance(db_connection, sqlite3.Connection):
+        # main database file; "" for :memory:
+        path = db_connection.execute("PRAGMA database_list").fetchall()[0][2]
+        return _sql_source("sqlite", None, None, path, None)
+    if isinstance(db_connection, str):
+        from sqlalchemy.engine import make_url
+
+        url = make_url(db_connection)
+        default_schema = None
+    else:
+        engine = getattr(db_connection, "engine", db_connection)  # a Connection knows its Engine
+        url = getattr(engine, "url", None)
+        if url is None:
+            return None
+        default_schema = getattr(
+            getattr(db_connection, "dialect", None), "default_schema_name", None
+        )
+    return _sql_source(url.get_backend_name(), url.host, url.port, url.database, default_schema)
+
+
+def _sql_source(
+    dialect: str,
+    host: str | None,
+    port: int | None,
+    database: str | None,
+    default_schema: str | None,
+) -> dict[str, Any]:
+    if dialect == "sqlite":
+        if database == ":memory:":
+            database = ""  # "sqlite:///:memory:" is in-memory too; leave it unidentified
+        elif database:
+            database = os.path.abspath(database)
+    return {
+        "dialect": dialect,
+        "host": host,
+        "port": port,
+        "database": database,
+        "default_schema": default_schema,
+    }
+
+
+def get_sql_metadata(
+    query_or_table: str,
+    results: int | pd.DataFrame | None,
+    *,
+    db_connection: Any = None,
+    schema: str | None = None,
+) -> dict[str, Any]:
     """Gives metadata from reading a SQL table or writing to SQL db.
 
     Note: we reserve the right to change this schema. So if you're using this come
@@ -138,21 +218,44 @@ def get_sql_metadata(query_or_table: str, results: int | pd.DataFrame) -> dict[s
     - the sql query (e.g., "SELECT foo FROM bar")
     - the table name (e.g., "bar")
     - the current time
+    - with ``db_connection``: the datasource (see :func:`get_sql_source`) and the
+      ``operation`` (``read`` for a query, ``write`` for a table target, ``None`` when
+      the legacy two-argument form is used), so lineage consumers can qualify tables.
+
+    :param query_or_table: the SQL executed, or the bare table name read or written.
+    :param results: the resulting DataFrame, or the row count returned by the write (``None``
+        when the write reports no count, e.g. with a custom pandas ``method``).
+    :param db_connection: the connection the operation ran on. Optional; when omitted the
+        datasource is unknown and ``notes`` says so.
+    :param schema: the schema the table was explicitly written to, when the writer had one.
     """
-    query = query_or_table if "SELECT" in query_or_table else None
-    table_name = query_or_table if "SELECT" not in query_or_table else None
+    # a bare identifier has no whitespace; anything else is a statement
+    is_query = bool(re.search(r"\s", query_or_table.strip()))
     if isinstance(results, int):
         rows = results
     elif isinstance(results, pd.DataFrame):
         rows = len(results)
     else:
         rows = None
+    operation: SqlOperation | None
+    if db_connection is None:
+        source, notes = None, "No connection supplied; SQL datasource is unknown"
+        operation = None
+    else:
+        source, notes = get_sql_source(db_connection)
+        # writers return a row count (or None); readers return a DataFrame or an iterator
+        wrote = results is None or isinstance(results, int)
+        operation = "write" if wrote and not is_query else "read"
     return {
         SQL_METADATA: {
             "rows": rows,
-            "query": query,
-            "table_name": table_name,
+            "query": query_or_table if is_query else None,
+            "table_name": None if is_query else query_or_table,
+            "schema": schema,
+            "operation": operation,
+            "source": source,
+            "notes": notes,
             "timestamp": datetime.now().utcnow().timestamp(),
-            "__version__": "1.0.0",
+            "__version__": "1.1.0",
         }
     }

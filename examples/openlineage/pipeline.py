@@ -15,121 +15,44 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import pickle
+"""Revenue reporting with built-in SQL materializers.
+
+- order_lines reads a query joining orders and customers from the sales database.
+- daily_revenue aggregates in Python.
+- revenue_report writes daily_revenue into the warehouse database.
+
+No custom loader and no hand-written lineage metadata: the SQL materializers record the
+datasource they used, and the OpenLineage adapter names the physical tables from it.
+"""
 
 import pandas as pd
 
-from hamilton.function_modifiers import dataloader, datasaver
-from hamilton.io import utils
+from hamilton.function_modifiers import load_from, save_to, source, value
 
-"""
-Narrative:
- - this is a pipeline that will be used to show open lineage integration
- - one function loads from file
- - another loads from a database
- - one save to a file
- - another saves to a database
- - there are transform functions in between
+REVENUE_QUERY = """
+-- paid order lines with the customer's country
+WITH paid AS (SELECT * FROM orders WHERE status = 'paid')
+SELECT p.order_date, c.country, p.amount
+FROM paid p
+JOIN customers c ON p.customer_id = c.id
 """
 
 
-@dataloader()
-def user_dataset(file_ds_path: str) -> tuple[pd.DataFrame, dict]:
-    df = pd.read_csv(file_ds_path)
-    return df, utils.get_file_and_dataframe_metadata(file_ds_path, df)
+@load_from.sql(query_or_table=value(REVENUE_QUERY), db_connection=source("sales_db"))
+def order_lines(df: pd.DataFrame) -> pd.DataFrame:
+    return df
 
 
-@dataloader()
-def purchase_dataset(db_client: object) -> tuple[pd.DataFrame, dict]:
-    query = "SELECT * FROM purchase_data"
-    df = pd.read_sql(query, con=db_client)
-    metadata = {
-        "sql_metadata": {"query": query, "table_name": "purchase_data", "database": "sqlite"}
-    }
-    metadata.update(utils.get_dataframe_metadata(df))
-    return df, metadata
+def daily_revenue(order_lines: pd.DataFrame) -> pd.DataFrame:
+    return order_lines.groupby(["order_date", "country"], as_index=False)["amount"].sum()
 
 
-def transformed_user_dataset(user_dataset: pd.DataFrame) -> pd.DataFrame:
-    return user_dataset
-
-
-def transformed_purchase_dataset(purchase_dataset: pd.DataFrame) -> pd.DataFrame:
-    return purchase_dataset
-
-
-def joined_dataset(
-    transformed_user_dataset: pd.DataFrame, transformed_purchase_dataset: pd.DataFrame
-) -> pd.DataFrame:
-    joined = pd.merge(
-        transformed_user_dataset, transformed_purchase_dataset, left_on="id", right_on="user_id"
-    )
-    del joined["id_x"]
-    del joined["id_y"]
-    return joined
-
-
-class ModelObject:
-    def __init__(self):
-        pass
-
-    def predict(self, data):
-        return data + 1
-
-
-def fit_model(joined_dataset: pd.DataFrame) -> ModelObject:
-    # model = ...
-    return ModelObject()
-
-
-@datasaver()
-def saved_file(fit_model: ModelObject, file_path: str) -> dict:
-    with open(file_path, "wb") as f:
-        pickle.dump(fit_model, f)
-    return utils.get_file_metadata(file_path)
-
-
-@datasaver()
-def saved_to_db(joined_dataset: pd.DataFrame, db_client: object, joined_table_name: str) -> dict:
-    joined_dataset.to_sql(joined_table_name, con=db_client, index=False, if_exists="replace")
-    # raise ValueError("Hi")
-    metadata = utils.get_sql_metadata(joined_table_name, joined_dataset)
-    metadata.update(utils.get_dataframe_metadata(joined_dataset))
-    return metadata
-
-
-if __name__ == "__main__":
-    import sqlite3
-
-    from openlineage.client import OpenLineageClient
-    from openlineage.client.transport.file import FileConfig, FileTransport
-
-    import __main__ as pipeline
-    from hamilton import driver
-    from hamilton.plugins import h_openlineage
-
-    file_config = FileConfig(
-        log_file_path="pipeline.json",
-        append=True,
-    )
-
-    # client = OpenLineageClient(url="http://localhost:9000")
-    client = OpenLineageClient(transport=FileTransport(file_config))
-
-    ola = h_openlineage.OpenLineageAdapter(client, "demo_namespace", "hamilton_job")
-
-    db_client = sqlite3.connect("purchase_data.db")
-
-    dr = driver.Builder().with_modules(pipeline).with_adapters(ola).build()
-    dr.display_all_functions("graph.png")
-    result = dr.execute(
-        ["saved_file", "saved_to_db"],
-        inputs={
-            "db_client": db_client,
-            "file_ds_path": "data.csv",
-            "file_path": "model.pkl",
-            "joined_table_name": "joined_data",
-        },
-    )
-
-    db_client.close()
+@save_to.sql(
+    table_name=value("daily_revenue"),
+    db_connection=source("warehouse_db"),
+    if_exists=value("replace"),
+    index=value(False),
+    output_name_="saved_revenue",
+)
+def revenue_report(daily_revenue: pd.DataFrame) -> pd.DataFrame:
+    return daily_revenue
