@@ -51,6 +51,21 @@ jobs:
           - '3.14'
     env:
       HAMILTON_TELEMETRY_ENABLED: false
+    services:
+      # disposable server for the SQL lineage tests; they create and drop their own schemas
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: hamilton
+          POSTGRES_PASSWORD: hamilton
+          POSTGRES_DB: sales
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
         - name: Install Graphviz on Linux
@@ -95,6 +110,14 @@ jobs:
           run: |
             uv sync --group test --extra mcp
             uv run pytest tests/plugins/test_h_mcp.py
+
+        - name: Test openlineage
+          env:
+            HAMILTON_TEST_POSTGRES_URL: postgresql+psycopg2://hamilton:hamilton@localhost:5432/sales
+          run: |
+            uv sync --group test --extra openlineage
+            uv pip install psycopg2-binary
+            uv run pytest tests/io/test_utils.py tests/plugins/test_pandas_extensions.py tests/plugins/test_h_openlineage.py
 
         - name: Test pandas
           run: |
