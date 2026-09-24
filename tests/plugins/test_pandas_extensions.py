@@ -129,7 +129,7 @@ def test_pandas_sql(df: pd.DataFrame, conn: str | sqlite3.Connection) -> None:
 
     assert metadata1["sql_metadata"]["rows"] == 1
     assert metadata2["sql_metadata"]["rows"] == 1
-    assert metadata1["dataframe_metadata"]["datatypes"] == ["object"]
+    assert metadata1["dataframe_metadata"]["datatypes"] == [str(df["foo"].dtype)]
 
     if hasattr(conn, "close"):
         conn.close()
@@ -319,6 +319,26 @@ def test_pandas_table_reader(tmp_path: pathlib.Path) -> None:
         "department",
         "email",
     ]
+
+
+def test_pandas_table_reader_translates_delim_whitespace_for_pandas_3(tmp_path) -> None:
+    path = tmp_path / "table.txt"
+    path.write_text("name value\nfoo 1\n")
+
+    reader = PandasTableReader(filepath_or_buffer=path, delim_whitespace=True)
+    df, _ = reader.load_data(pd.DataFrame)
+
+    assert df.to_dict(orient="records") == [{"name": "foo", "value": 1}]
+
+
+def test_pandas_table_reader_rejects_removed_parameter_on_pandas_3() -> None:
+    reader = PandasTableReader(filepath_or_buffer="unused", verbose=True)
+
+    if int(pd.__version__.split(".", maxsplit=1)[0]) >= 3:
+        with pytest.raises(ValueError, match="pandas 3.0 removed.*verbose"):
+            reader._get_loading_kwargs()
+    else:
+        assert reader._get_loading_kwargs()["verbose"] is True
 
 
 @pytest.mark.skipif(sys.version_info >= (3, 14), reason="pyreadstat not available on Python 3.14")

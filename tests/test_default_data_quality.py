@@ -198,7 +198,7 @@ def test_resolve_default_validators_error(output_type, kwargs, importance):
         (
             default_validators.DataTypeValidatorPandasSeries,
             numpy.dtype("object"),
-            pd.Series(["hello", "goodbye"]),
+            pd.Series(["hello", "goodbye"], dtype="object"),
             True,
         ),
         (

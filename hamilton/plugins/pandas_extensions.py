@@ -1640,6 +1640,31 @@ class PandasTableReader(DataLoader):
         # but we send it separately
         del kwargs["filepath_or_buffer"]
 
+        if self.delim_whitespace:
+            if self.sep is not None or self.delimiter is not None:
+                raise ValueError("delim_whitespace cannot be combined with sep or delimiter")
+            kwargs["sep"] = r"\s+"
+            del kwargs["delim_whitespace"]
+
+        if Version(pd.__version__) >= Version("3.0"):
+            removed_parameters = {
+                "verbose": self.verbose,
+                "infer_datetime_format": self.infer_datetime_format or None,
+                "keep_date_col": self.keep_date_col,
+                "date_parser": self.date_parser,
+            }
+            requested_parameters = [
+                name for name, value in removed_parameters.items() if value is not None
+            ]
+            if requested_parameters:
+                raise ValueError(
+                    f"pandas 3.0 removed these read_table parameters: "
+                    f"{', '.join(requested_parameters)}"
+                )
+            for parameter in removed_parameters:
+                del kwargs[parameter]
+            kwargs.pop("delim_whitespace", None)
+
         return kwargs
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
