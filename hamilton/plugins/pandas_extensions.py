@@ -1640,6 +1640,8 @@ class PandasTableReader(DataLoader):
         # but we send it separately
         del kwargs["filepath_or_buffer"]
 
+        # pandas deprecated delim_whitespace in 2.2 and removed it in 3.0. Translate only the
+        # enabled case to its cross-version equivalent; False retains the default parsing behavior.
         if self.delim_whitespace:
             if self.sep is not None or self.delimiter is not None:
                 raise ValueError("delim_whitespace cannot be combined with sep or delimiter")
