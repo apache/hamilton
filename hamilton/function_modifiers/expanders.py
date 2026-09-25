@@ -1168,8 +1168,8 @@ class parameterize_extract_columns(base.NodeExpander):
                 df_out.columns = _output_columns
                 return df_out
 
-            new_node = node_.copy_with(callabl=wrapper_fn)
             fn_to_call = wrapper_fn if self.reassign_columns else fn
+            new_node = node_.copy_with(callabl=fn_to_call)
             # We have to rename the underlying function so that we do not
             # get naming collisions. Using __ is cleaner than using a uuid
             # as it is easier to read/manage and naturally maeks sense.
