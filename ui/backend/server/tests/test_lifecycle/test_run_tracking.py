@@ -342,17 +342,11 @@ async def test_get_latest_dag_runs_without_params_excludes_other_users_runs(
     dag_template_a, _ = await _setup_dag_template(async_client, user_a)
     dag_template_b, _ = await _setup_dag_template(async_client, user_b)
 
-    run_a_id = await _create_dag_run_via_api(
-        async_client, user_a, dag_template_a, {"owner": "a"}
-    )
-    run_b_id = await _create_dag_run_via_api(
-        async_client, user_b, dag_template_b, {"owner": "b"}
-    )
+    run_a_id = await _create_dag_run_via_api(async_client, user_a, dag_template_a, {"owner": "a"})
+    run_b_id = await _create_dag_run_via_api(async_client, user_b, dag_template_b, {"owner": "b"})
 
     # User A asks for latest runs with no filter -- must not see user B's run.
-    response = await async_client.get(
-        "/api/v1/dag_runs/latest/", headers={"test_username": user_a}
-    )
+    response = await async_client.get("/api/v1/dag_runs/latest/", headers={"test_username": user_a})
     assert response.status_code == 200, response.content
     returned_ids = {item["id"] for item in response.json()}
     assert run_a_id in returned_ids
@@ -390,17 +384,13 @@ async def test_get_latest_dag_runs_with_other_users_project_id_is_rejected(
 
 
 @pytest.mark.asyncio
-async def test_get_latest_dag_runs_with_own_project_id_still_works(
-    async_client: AsyncClient, db
-):
+async def test_get_latest_dag_runs_with_own_project_id_still_works(async_client: AsyncClient, db):
     """The legitimate case -- user asking for runs in a project they own --
     must keep returning their runs after the visibility filter is applied.
     """
     user_a = "user_individual@no_team.com"
     dag_template_a, _ = await _setup_dag_template(async_client, user_a)
-    run_id = await _create_dag_run_via_api(
-        async_client, user_a, dag_template_a, {"owner": "a"}
-    )
+    run_id = await _create_dag_run_via_api(async_client, user_a, dag_template_a, {"owner": "a"})
 
     # By dag_template_id.
     response = await async_client.get(
@@ -415,9 +405,7 @@ async def test_get_latest_dag_runs_with_own_project_id_still_works(
     project_a_id, *_ = await _setup_sample_project(async_client, user_a)
     # New template in this project, new run.
     dag_template_a2, _ = await _setup_dag_template(async_client, user_a)
-    run_id_2 = await _create_dag_run_via_api(
-        async_client, user_a, dag_template_a2, {"owner": "a2"}
-    )
+    run_id_2 = await _create_dag_run_via_api(async_client, user_a, dag_template_a2, {"owner": "a2"})
     response = await async_client.get(
         f"/api/v1/dag_runs/latest/?{urlencode({'project_id': project_a_id})}",
         headers={"test_username": user_a},

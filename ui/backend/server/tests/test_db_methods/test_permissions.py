@@ -657,9 +657,7 @@ async def test_visible_project_ids_for_user_only_returns_member_projects(db):
         "user_individual@no_team.com", "write"
     )
     # Project B is accessible by user B only.
-    project_b, user_b = await _setup_project_accessible_only_by(
-        "user_1_team_1@team1.com", "write"
-    )
+    project_b, user_b = await _setup_project_accessible_only_by("user_1_team_1@team1.com", "write")
     request_a = await _get_authenticated_request("user_individual@no_team.com")
     request_b = await _get_authenticated_request("user_1_team_1@team1.com")
     user_a_obj, teams_a = request_a.auth
