@@ -1632,15 +1632,26 @@ class PandasTableReader(DataLoader):
     def applicable_types(cls) -> Collection[type]:
         return [DATAFRAME_TYPE]
 
-    def _get_loading_kwargs(self) -> dict[str, Any]:
-        # Puts kwargs in a dict
-        kwargs = dataclasses.asdict(self)
+def _get_loading_kwargs(self) -> dict[str, Any]:
+    # Puts kwargs in a dict
+    kwargs = dataclasses.asdict(self)
 
-        # filepath_or_buffer corresponds to 'filepath_or_buffer' argument of pandas.read_table,
-        # but we send it separately
-        del kwargs["filepath_or_buffer"]
+    # filepath_or_buffer corresponds to 'filepath_or_buffer' argument of pandas.read_table,
+    # but we send it separately
+    del kwargs["filepath_or_buffer"]
 
-        return kwargs
+    # Remove deprecated arguments for pandas >= 2.2
+    if Version(pd.__version__) >= Version("2.2"):
+        # verbose and keep_date_col were removed in pandas 2.2
+        kwargs.pop("verbose", None)
+        kwargs.pop("keep_date_col", None)
+        # delim_whitespace was removed in pandas 2.2; use sep=r"\s+" instead
+        delim_whitespace = kwargs.pop("delim_whitespace", None)
+        if delim_whitespace and kwargs.get("sep") == "\t":
+            kwargs["sep"] = r"\s+"
+    
+    return kwargs
+
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         # Loads the data and returns the df and metadata of the table
