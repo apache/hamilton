@@ -16,6 +16,7 @@
 # under the License.
 
 import collections
+import collections.abc
 import sys
 import typing
 from typing import Annotated, Any, Union
@@ -335,6 +336,42 @@ def test_check_input_type_parameterized_tuple_wrong_element_type():
 def test_check_input_type_variable_length_tuple():
     assert htypes.check_input_type(tuple[int, ...], (1, 2, 3))
     assert htypes.check_input_type(tuple[int, ...], ())
+
+
+@pytest.mark.parametrize(
+    ("node_type", "input_value"),
+    [
+        (typing.Mapping[str, int], {"a": 1}),
+        (collections.abc.Mapping[str, int], {"a": 1}),
+        (collections.abc.MutableMapping[str, int], {"a": 1}),
+        (dict[str, int], collections.OrderedDict(a=1)),
+        (dict[str, int], collections.defaultdict(int, a=1)),
+        (dict[str, int], collections.Counter(a=1)),
+    ],
+    ids=[
+        "typing-mapping-dict",
+        "abc-mapping-dict",
+        "abc-mutable-mapping-dict",
+        "dict-ordered-dict",
+        "dict-defaultdict",
+        "dict-counter",
+    ],
+)
+def test_check_input_type_generic_accepts_instance_of_origin(node_type, input_value):
+    assert htypes.check_input_type(node_type, input_value) is True
+
+
+@pytest.mark.parametrize(
+    ("node_type", "input_value"),
+    [
+        (typing.Mapping[str, int], ["a", 1]),
+        (collections.abc.Mapping[str, int], 1),
+        (dict[str, int], ["a", 1]),
+    ],
+    ids=["mapping-list", "mapping-int", "dict-list"],
+)
+def test_check_input_type_generic_rejects_non_instance_of_origin(node_type, input_value):
+    assert htypes.check_input_type(node_type, input_value) is False
 
 
 @pytest.mark.skipif(
