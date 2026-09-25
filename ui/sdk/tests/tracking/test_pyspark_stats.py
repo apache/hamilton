@@ -21,6 +21,7 @@ pytest.importorskip("pyspark")
 
 import pandas as pd  # noqa: E402
 import pyspark.sql as ps  # noqa: E402
+
 from hamilton_sdk.tracking import pyspark_stats  # noqa: E402
 
 

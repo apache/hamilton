@@ -27,6 +27,7 @@ Now, it is possible to customize the visualization style based on node attribute
 from hamilton import graph_types
 from typing import Tuple, Optional
 
+
 def custom_style(
     *, node: graph_types.HamiltonNode, node_class: str
 ) -> Tuple[dict, Optional[str], Optional[str]]:
@@ -49,6 +50,7 @@ def custom_style(
         style = ({}, node_class, None)
 
     return style
+
 
 # pass the function to `custom_style_function=`
 dr.visualize_execution(..., custom_style_function=custom_style)

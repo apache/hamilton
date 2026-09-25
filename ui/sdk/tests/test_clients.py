@@ -20,6 +20,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import aiohttp
 import pytest
+
 from hamilton_sdk.api.clients import BasicAsynchronousHamiltonClient
 
 

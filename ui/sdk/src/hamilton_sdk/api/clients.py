@@ -34,15 +34,16 @@ import ssl
 import threading
 import time
 from collections import defaultdict
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 from urllib.parse import urlencode
 
 import aiohttp
 import requests
+from requests import HTTPError
+
 from hamilton_sdk.api.projecttypes import GitInfo
 from hamilton_sdk.tracking.utils import make_json_safe
-from requests import HTTPError
 
 logger = logging.getLogger(__name__)
 

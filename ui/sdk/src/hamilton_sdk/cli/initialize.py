@@ -92,13 +92,15 @@ def fill_and_copy_templates(
         "project_id": project_id,
         "template_name": template_name,
     }
-    executable = [False] * len(TEMPLATE_FILES) + [True] * len(EXECUTABLE_TEMPLATE_FILES)
-    for executable, template_file in zip(executable, TEMPLATE_FILES + EXECUTABLE_TEMPLATE_FILES):
+    executables = [False] * len(TEMPLATE_FILES) + [True] * len(EXECUTABLE_TEMPLATE_FILES)
+    for is_executable, template_file in zip(
+        executables, TEMPLATE_FILES + EXECUTABLE_TEMPLATE_FILES, strict=True
+    ):
         fill_and_copy_template(
             template_args,
             os.path.join(common_template_location, template_file),
             os.path.join(copy_location, template_file.replace(".jinja2", "")),
-            executable=executable,
+            executable=is_executable,
         )
 
 
@@ -131,17 +133,18 @@ def generate_template(
     copy_to_location: str,
     template_locations: str = BASE_TEMPLATES_DIRECTORY,
 ):
-    f"""Generates the directory structure + enough to get started for the project.
+    """Generate the directory structure and starter files for the project.
+
     This is a project with:
-    - {HAMILTON_DIR_LOCATION}/
+    - components/
         - README.md
         - file_1.py
         - file_2.py
         - ...
-    - {CONFIG_DIR_LOCATION}/ (optional)
+    - config/ (optional)
         - README.md
         - [config.py]
-    - {DATA_DIR_LOCATION}/ (optional, if the project needs it)
+    - data/ (optional, if the project needs it)
     - run.py (entrypoint -- dagworks + pure hamilton)
     - requirements.txt
     - README.md

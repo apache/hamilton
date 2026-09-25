@@ -102,7 +102,6 @@ The history resource can be used to load the history of a conversation. By defau
 selected, but you can select only the ones you want using the `selected_channels` attribute.
 
 ```python
-
 source = slack_source(selected_channels=["welcome", "general"])
 ```
 

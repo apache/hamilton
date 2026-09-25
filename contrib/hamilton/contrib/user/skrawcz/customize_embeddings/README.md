@@ -63,7 +63,7 @@ example, if you have multi-class labels you'll have to modify how you generate n
 To execute the DAG, the recommended outputs to grab are:
 
 ```python
-outputs=[
+outputs = [
     "train_accuracy",
     "test_accuracy",
     "embedded_dataset_histogram",

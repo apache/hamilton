@@ -15,13 +15,13 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Optional
+from typing import Any
 
 import pandas as pd
-from hamilton_sdk.tracking import data_observation
-from hamilton_sdk.tracking import pandas_col_stats as pcs
 
 from hamilton import driver
+from hamilton_sdk.tracking import data_observation
+from hamilton_sdk.tracking import pandas_col_stats as pcs
 
 try:
     from hamilton.plugins import h_schema
@@ -117,7 +117,7 @@ def compute_stats_df(
 @data_observation.compute_schema.register
 def compute_schema(
     result: pd.DataFrame, node_name: str, node_tags: dict
-) -> Optional[data_observation.ObservationType]:
+) -> data_observation.ObservationType | None:
     if h_schema is not None:
         schema = h_schema._get_arrow_schema(result)
         schema.with_metadata(dict(name=node_name))
@@ -132,7 +132,7 @@ def compute_schema(
 
 @data_observation.compute_stats.register
 def compute_stats_series(result: pd.Series, node_name: str, node_tags: dict) -> dict[str, Any]:
-    col_name = result.name if result.name else node_name
+    col_name = result.name or node_name
     return {
         "observability_type": "dagworks_describe",
         "observability_value": _compute_stats(pd.DataFrame({col_name: result})),

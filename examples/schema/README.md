@@ -35,9 +35,9 @@ You can play with the arguments `--version [1, 2, 3]` and `--no-check` to update
 ## Output examples
 ### Diff examples
 ```python
-{'col_b': 'added'}
-{'col_a': {'type': 'bool -> double'}}
-{'col_b': 'removed', 'col_a': {'type': 'bool -> double'}}
+{"col_b": "added"}
+{"col_a": {"type": "bool -> double"}}
+{"col_b": "removed", "col_a": {"type": "bool -> double"}}
 ```
 
 ### Default Pyarrow schema display
@@ -67,86 +67,36 @@ version: '7c679d7dbe665b55b8157f3c0a3962ea26aa0a3f6edaea44120374e33c58acb' + 1}
 ### Human-readable and JSON-serializable schema
 ```python
 {
-  "pyarrow_table": {
-    "metadata": {
-      "name": "pyarrow_table",
-      "documentation": "Create a duckdb table in-memory and return it as a PyArrow table",
-      "version": "cc8d5aba6219976c719ef0c7ac78065aef8a6c7612ea1c3ff595d08926603467"
+    "pyarrow_table": {
+        "metadata": {
+            "name": "pyarrow_table",
+            "documentation": "Create a duckdb table in-memory and return it as a PyArrow table",
+            "version": "cc8d5aba6219976c719ef0c7ac78065aef8a6c7612ea1c3ff595d08926603467",
+        },
+        "item": {"name": "item", "type": "string", "nullable": true, "metadata": null},
+        "value": {"name": "value", "type": "decimal128(10, 2)", "nullable": true, "metadata": null},
+        "count": {"name": "count", "type": "int32", "nullable": true, "metadata": null},
     },
-    "item": {
-      "name": "item",
-      "type": "string",
-      "nullable": true,
-      "metadata": null
+    "ibis_rename": {
+        "metadata": {
+            "name": "ibis_rename",
+            "documentation": "Rename the columns",
+            "version": "31a5e44b3b718f994865e589642a555fee5db44ba86eaa3bcc25bc9f42423895",
+        },
+        "object": {"name": "object", "type": "string", "nullable": true, "metadata": null},
+        "price": {"name": "price", "type": "decimal128(10, 2)", "nullable": true, "metadata": null},
+        "number": {"name": "number", "type": "int32", "nullable": true, "metadata": null},
     },
-    "value": {
-      "name": "value",
-      "type": "decimal128(10, 2)",
-      "nullable": true,
-      "metadata": null
+    "pandas_new_col": {
+        "metadata": {
+            "name": "pandas_new_col",
+            "documentation": "Add the column `new_col` of type float",
+            "version": "7c679d7dbe665b55b8157f3c0a3962ea26aa0a3f6edaea44120374e33c58acbd",
+        },
+        "object": {"name": "object", "type": "string", "nullable": true, "metadata": null},
+        "price": {"name": "price", "type": "decimal128(4, 2)", "nullable": true, "metadata": null},
+        "number": {"name": "number", "type": "int32", "nullable": true, "metadata": null},
+        "col_a": {"name": "col_a", "type": "double", "nullable": true, "metadata": null},
     },
-    "count": {
-      "name": "count",
-      "type": "int32",
-      "nullable": true,
-      "metadata": null
-    }
-  },
-  "ibis_rename": {
-    "metadata": {
-      "name": "ibis_rename",
-      "documentation": "Rename the columns",
-      "version": "31a5e44b3b718f994865e589642a555fee5db44ba86eaa3bcc25bc9f42423895"
-    },
-    "object": {
-      "name": "object",
-      "type": "string",
-      "nullable": true,
-      "metadata": null
-    },
-    "price": {
-      "name": "price",
-      "type": "decimal128(10, 2)",
-      "nullable": true,
-      "metadata": null
-    },
-    "number": {
-      "name": "number",
-      "type": "int32",
-      "nullable": true,
-      "metadata": null
-    }
-  },
-  "pandas_new_col": {
-    "metadata": {
-      "name": "pandas_new_col",
-      "documentation": "Add the column `new_col` of type float",
-      "version": "7c679d7dbe665b55b8157f3c0a3962ea26aa0a3f6edaea44120374e33c58acbd"
-    },
-    "object": {
-      "name": "object",
-      "type": "string",
-      "nullable": true,
-      "metadata": null
-    },
-    "price": {
-      "name": "price",
-      "type": "decimal128(4, 2)",
-      "nullable": true,
-      "metadata": null
-    },
-    "number": {
-      "name": "number",
-      "type": "int32",
-      "nullable": true,
-      "metadata": null
-    },
-    "col_a": {
-      "name": "col_a",
-      "type": "double",
-      "nullable": true,
-      "metadata": null
-    }
-  }
 }
 ```

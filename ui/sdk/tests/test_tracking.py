@@ -16,19 +16,19 @@
 # under the License.
 
 import functools
+from collections.abc import Callable
 from datetime import datetime, timezone
 from typing import Any
-from collections.abc import Callable
 
 import pytest
+
+from hamilton import base
+from hamilton.io.materialization import to
 from hamilton_sdk import driver
 from hamilton_sdk.api.clients import HamiltonClient
 from hamilton_sdk.api.projecttypes import GitInfo
 from hamilton_sdk.tracking.runs import TrackingState
 from hamilton_sdk.tracking.trackingtypes import Status, TaskRun
-
-from hamilton import base
-from hamilton.io.materialization import to
 
 import tests.resources.basic_dag_with_config
 
@@ -291,7 +291,7 @@ class NonSerializable:
 
 
 @pytest.mark.parametrize(
-    "config,expected",
+    ("config", "expected"),
     [
         ({"foo": "bar"}, {"foo": "bar"}),
         ({"foo": NonSerializable()}, {"foo": "non-serializable-string-rep"}),

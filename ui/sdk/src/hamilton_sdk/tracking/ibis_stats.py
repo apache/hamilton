@@ -17,11 +17,12 @@
 
 from typing import Any
 
-from hamilton_sdk.tracking import data_observation
 from ibis.expr.datatypes import core
 
 # import ibis.expr.types as ir
 from ibis.expr.types import relations
+
+from hamilton_sdk.tracking import data_observation
 
 """Module that houses functions to introspect an Ibis Table. We don't have expression support yet.
 """
