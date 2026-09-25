@@ -407,6 +407,14 @@ def check_input_type(node_type: type, input_value: Any) -> bool:
             for i in input_value:  # this handles empty input case, e.g. [] or (), set()
                 return check_input_type(typing_inspect.get_args(node_type)[0], i)
         return True
+    # other generics, e.g. Mapping[str, int] given a dict, or dict[str, int] given an
+    # OrderedDict -- accept any instance of the (possibly abstract) origin class.
+    elif (
+        typing_inspect.is_generic_type(node_type)
+        and inspect.isclass(typing_inspect.get_origin(node_type))
+        and isinstance(input_value, typing_inspect.get_origin(node_type))
+    ):
+        return True
 
     return False
 
