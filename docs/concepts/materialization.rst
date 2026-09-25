@@ -194,7 +194,8 @@ connections, yields:
         "__version__": "1.1.0",
     }}
 
-and the OpenLineage adapter reports ``sales.public.orders`` and ``sales.public.customers`` under
+and the OpenLineage adapter, with ``sql_dataset_identity="datasource"`` (see
+:ref:`sql-dataset-identity-change`), reports ``sales.public.orders`` and ``sales.public.customers`` under
 ``postgres://source.example:5432`` as inputs, and ``analytics.reporting.daily_revenue`` under the
 warehouse's namespace as output. The same module produces the same identities whether it runs from
 a script, a notebook or an orchestrator.
@@ -213,9 +214,17 @@ The ``sql_metadata`` entry holds the following keys:
    * - ``rows``
      - Rows read (``len`` of the DataFrame) or the row count the write returned; ``None`` when unknown.
    * - ``query``
-     - The statement executed, or ``None`` when a bare table name was read or written. A string is
-       treated as a statement when it contains whitespace; before 1.1.0 only strings containing the
-       upper-case word ``SELECT`` counted, so a lower-case ``select ...`` was recorded as a table name.
+     - The statement executed, or ``None`` when a bare table name was read or written. As in 1.0.0,
+       a string containing the upper-case text ``SELECT`` anywhere is filed here, and anything else
+       under ``table_name``. Since 1.1.0 a read that starts (after comments) with ``select`` or
+       ``with`` in any case is also filed here; 1.0.0 recorded a lower-case ``select ...`` as a table
+       name. Writes and the two-argument form of :func:`~hamilton.io.utils.get_sql_metadata` keep the
+       1.0.0 rule. Lineage consumers should use ``operation``: the string a write names is the table
+       written, whichever of the two keys holds it (``"USER_SELECTIONS"`` is filed under ``query``).
+       A written name that is not a plain identifier (``daily revenue``, ``SELECT results``) is
+       parsed with ``openlineage-sql``: a statement that names tables contributes the tables it
+       writes (or is left out, with a note, if it writes none), and a string naming no table is the
+       table name. Without ``openlineage-sql``, such a name is left out of lineage with a note.
    * - ``table_name``
      - The bare table name read or written, or ``None`` for a statement.
    * - ``schema``
@@ -229,7 +238,9 @@ The ``sql_metadata`` entry holds the following keys:
        backend name (``postgresql`` or ``sqlite``); ``host``; ``port``; ``database``, which is the
        absolute file path for SQLite; and ``default_schema``, the schema unqualified names resolve
        against. ``default_schema`` is set only when SQLAlchemy already established it on the connection,
-       and is ``None`` otherwise. *New in 1.1.0.*
+       and is ``None`` otherwise. SQLite sources also hold ``attached``, a mapping of attached database
+       name to absolute file path, or ``None`` when the attached databases cannot be known (see
+       below). *New in 1.1.0.*
    * - ``notes``
      - Why ``source`` is ``None``, for example ``"In-memory SQLite database has no stable identity"``
        or ``"Unsupported connection type for SQL metadata: MyConn"``; empty otherwise. *New in 1.1.0.*
@@ -257,10 +268,14 @@ The connection object determines what ``source`` can hold:
      - dialect, host, port, database from the parsed URL; ``default_schema`` is ``None`` because pandas
        discards the temporary engine it built.
    * - Standard-library ``sqlite3.Connection`` on a file
-     - ``dialect="sqlite"``, ``database`` = absolute file path, read with ``PRAGMA database_list`` on
-       that same connection (no transaction is started).
+     - ``dialect="sqlite"``, ``database`` = absolute file path, and ``attached`` = the file of every
+       database attached to it, read with ``PRAGMA database_list`` on that same connection (no
+       transaction is started). Only this connection form can see attached databases; for the others
+       ``attached`` is ``None``.
    * - In-memory SQLite (``:memory:``, ``sqlite://``, ``sqlite:///:memory:``)
-     - ``None`` with a note: two unrelated in-memory databases must not share an identity.
+     - ``None`` with a note: two unrelated in-memory databases must not share an identity. A raw
+       ``sqlite3`` in-memory connection with files attached keeps ``database=""`` and ``attached``, so
+       tables in the attached files can still be named.
    * - Anything else (other DBAPI connections, mocks, and similar objects)
      - ``None`` with a note naming the type. Data loading and saving are unaffected.
 
@@ -276,7 +291,11 @@ Schema precedence and unknown cases
 
 A table referenced by a statement is qualified from, in order: the qualification written in the
 SQL (``sales.public.orders``), the ``schema`` argument given to the writer, then ``source["default_schema"]``.
-For SQLite, a schema names an attached database and the connection default is not used.
+For SQLite, a schema names a database file rather than a namespace inside one: ``main`` (or no
+schema) is the connection's file, and an attached database's tables are named in that file's
+namespace, resolved through ``source["attached"]``. When the attached file cannot be known (a URL
+or SQLAlchemy connection), or the schema is ``temp``, the table is left out rather than
+attributed to the main file.
 The default schema is what SQLAlchemy read from the server, not an assumption that PostgreSQL uses
 ``public``; when the connection's ``search_path`` spans several schemas, qualify table names in
 the SQL to remove the ambiguity. When no schema can be determined, the table is left out of
@@ -296,8 +315,9 @@ Custom ``@dataloader`` / ``@datasaver`` functions can produce the same metadata:
     def orders(sales_db: Engine) -> tuple[pd.DataFrame, dict]:
         query = "SELECT * FROM sales.public.orders"
         df = pd.read_sql(query, sales_db)
-        return df, utils.get_sql_metadata(query, df, db_connection=sales_db)
+        return df, utils.get_sql_metadata(query, df, db_connection=sales_db, operation="read")
 
+Pass ``operation="write"`` from a saver so the table name is never mistaken for a statement.
 The original two-argument call ``get_sql_metadata(query_or_table, results)`` keeps working and
-keeps its keys and row-count semantics; it simply reports ``source=None`` with a note and
+keeps its keys, their values and row-count semantics; it simply reports ``source=None`` with a note and
 ``operation=None``, so consumers diagnose it as incomplete rather than guessing.

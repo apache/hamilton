@@ -57,7 +57,9 @@ if __name__ == "__main__":
     )
     # if you have a running OpenLineage server, e.g. marquez, use this instead:
     # client = OpenLineageClient(url="http://localhost:5000")
-    adapter = h_openlineage.OpenLineageAdapter(client, "demo_namespace", "revenue_job")
+    adapter = h_openlineage.OpenLineageAdapter(
+        client, "demo_namespace", "revenue_job", sql_dataset_identity="datasource"
+    )
 
     sales_db = seed_sales_db(HERE / "sales.db")  # a raw sqlite3 connection ...
     warehouse_db = create_engine(
