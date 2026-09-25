@@ -40,6 +40,7 @@ from trackingserver_base.permissions.permissions import (
     user_can_write_to_dag_template,
     user_can_write_to_project,
     user_project_visibility,
+    visible_project_ids_for_user,
 )
 from trackingserver_projects.models import Project, ProjectTeamMembership, ProjectUserMembership
 from trackingserver_projects.schema import ProjectIn, ProjectUpdate, Visibility
@@ -641,3 +642,41 @@ async def test_user_cannot_get_dag_runs_with_no_access(db, by):
 
     can_do, message = await user_can_get_latest_dag_runs(authenticated_request, **kwargs)
     assert can_do is False, message
+
+
+@pytest.mark.asyncio
+async def test_visible_project_ids_for_user_only_returns_member_projects(db):
+    """visible_project_ids_for_user must only return projects the user has a
+    membership to (directly or via a team). It must never return projects the
+    user has no link to -- that property backs the visibility scoping in the
+    "get latest dag runs" endpoint when neither project_id nor dag_template_id
+    is supplied.
+    """
+    # Project A is accessible by user A only.
+    project_a, user_a = await _setup_project_accessible_only_by(
+        "user_individual@no_team.com", "write"
+    )
+    # Project B is accessible by user B only.
+    project_b, user_b = await _setup_project_accessible_only_by(
+        "user_1_team_1@team1.com", "write"
+    )
+    request_a = await _get_authenticated_request("user_individual@no_team.com")
+    request_b = await _get_authenticated_request("user_1_team_1@team1.com")
+    user_a_obj, teams_a = request_a.auth
+    user_b_obj, teams_b = request_b.auth
+
+    ids_a = await visible_project_ids_for_user(user_a_obj, teams_a)
+    ids_b = await visible_project_ids_for_user(user_b_obj, teams_b)
+    assert project_a.id in ids_a
+    assert project_b.id not in ids_a
+    assert project_b.id in ids_b
+    assert project_a.id not in ids_b
+
+    # A user with no memberships sees no projects.
+    request_stranger = await _get_authenticated_request(
+        "user_with_no_permissions@no_one_invited_me.com"
+    )
+    stranger, stranger_teams = request_stranger.auth
+    ids_stranger = await visible_project_ids_for_user(stranger, stranger_teams)
+    assert project_a.id not in ids_stranger
+    assert project_b.id not in ids_stranger

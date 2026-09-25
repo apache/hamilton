@@ -38,10 +38,18 @@ def test_plotly_static_writer(figure: go.Figure, tmp_path: pathlib.Path) -> None
     file_path = tmp_path / "figure.png"
 
     writer = PlotlyStaticWriter(path=file_path)
+    assert "engine" not in writer._get_saving_kwargs()
+
     metadata = writer.save_data(figure)
 
     assert file_path.exists()
     assert metadata[FILE_METADATA]["path"] == str(file_path)
+
+
+def test_plotly_static_writer_preserves_explicit_engine(tmp_path: pathlib.Path) -> None:
+    writer = PlotlyStaticWriter(path=tmp_path / "figure.png", engine="kaleido")
+
+    assert writer._get_saving_kwargs()["engine"] == "kaleido"
 
 
 def test_plotly_interactive_writer(figure: go.Figure, tmp_path: pathlib.Path) -> None:
