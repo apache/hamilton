@@ -396,6 +396,7 @@ def test_extract_fields_valid_annotations_for_inferred_types(return_type_str, fi
         ("np.ndarray", {"A": int}),
         ("pd.DataFrame", {"A": int}),
         ("MyDictBad", {"A": int}),
+        ("MyDict", (["test", "not_a_field"])),
         ("MyDictInheritanceBadCase", {"A": SomeObject}),
         ("dict", ("A", "B")),
         ("dict", (["A", "B"])),

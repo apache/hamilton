@@ -768,6 +768,7 @@ def _determine_fields_to_extract(
             for field in fields:
                 if field not in typed_dict_fields:
                     errors.append(f"{field} is not a field in the `TypedDict` {output_type}.")
+                    continue
                 reduced_fields[field] = typed_dict_fields[field]
             fields = reduced_fields
         elif isinstance(fields, dict):
