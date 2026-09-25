@@ -646,6 +646,8 @@ class extract_columns(base.SingleNodeNodeTransformer):
         """
         fn = node_.callable
         base_doc = node_.documentation
+        # columns can be passed as (name, doc) tuples -- only the name is a column in the dataframe
+        column_names = [col[0] if isinstance(col, tuple) else col for col in self.columns]
 
         # if fn is an async function
         if inspect.iscoroutinefunction(fn):
@@ -653,7 +655,7 @@ class extract_columns(base.SingleNodeNodeTransformer):
             async def df_generator(*args, **kwargs) -> Any:
                 df_generated = await fn(*args, **kwargs)
                 if self.fill_with is not None:
-                    for col in self.columns:
+                    for col in column_names:
                         if col not in df_generated:
                             registry.fill_with_scalar(df_generated, col, self.fill_with)
                             assert col in df_generated
@@ -664,7 +666,7 @@ class extract_columns(base.SingleNodeNodeTransformer):
             def df_generator(*args, **kwargs) -> Any:
                 df_generated = fn(*args, **kwargs)
                 if self.fill_with is not None:
-                    for col in self.columns:
+                    for col in column_names:
                         if col not in df_generated:
                             registry.fill_with_scalar(df_generated, col, self.fill_with)
                             assert col in df_generated
