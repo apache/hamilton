@@ -19,6 +19,7 @@ import inspect
 import sys
 import typing
 from collections.abc import Iterable
+from types import UnionType
 from typing import Any, Literal, Protocol, TypeVar, Union
 
 import typing_extensions
@@ -423,6 +424,10 @@ def check_instance(obj: Any, type_: Any) -> bool:
     """
     if type_ == Any:
         return True
+    # PEP 604 unions (e.g. list[int] | None) have no __origin__, and isinstance() rejects
+    # them when a member is a parameterized generic, so check each member instead.
+    if isinstance(type_, UnionType):
+        return any(check_instance(obj, t) for t in type_.__args__)
     # Get the origin of the type (i.e., the base class for generic types)
     origin = getattr(type_, "__origin__", None)
 
