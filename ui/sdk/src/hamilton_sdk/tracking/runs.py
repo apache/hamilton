@@ -30,16 +30,15 @@ try:
 except ImportError:
     UTC = timezone.utc
 
-from typing import Any, Optional
 from collections.abc import Callable
-
-from hamilton_sdk.tracking import constants, data_observation
-from hamilton_sdk.tracking.data_observation import ObservationType
-from hamilton_sdk.tracking.trackingtypes import DAGRun, Status, TaskRun
+from typing import Any
 
 from hamilton import node as h_node
 from hamilton.data_quality import base as dq_base
 from hamilton.lifecycle import base as lifecycle_base
+from hamilton_sdk.tracking import constants, data_observation
+from hamilton_sdk.tracking.data_observation import ObservationType
+from hamilton_sdk.tracking.trackingtypes import DAGRun, Status, TaskRun
 
 _modules_to_import = [
     "numpy",
@@ -64,7 +63,7 @@ for module in _modules_to_import:
 
 def process_result(
     result: Any, node: h_node.Node
-) -> tuple[Optional[ObservationType], Optional[ObservationType], list[ObservationType]]:
+) -> tuple[ObservationType | None, ObservationType | None, list[ObservationType]]:
     """Processes result -- this is purely a by-type mapping.
     Note that this doesn't actually do anything yet -- the idea is that we can return DQ
     results, and do other stuff with other results -- E.G. summary stats on dataframes,
@@ -217,7 +216,7 @@ class RunTracker:
         run_id: str,
         node_: h_node.Node,
         kwargs: dict[str, Any],
-        task_id: Optional[str],
+        task_id: str | None,
     ) -> Any:
         """Given a node that represents a hamilton function, execute it.
         Note, in some adapters this might just return some type of "future".

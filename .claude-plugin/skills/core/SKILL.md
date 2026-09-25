@@ -40,8 +40,10 @@ Apache Hamilton is a lightweight Python framework for building Directed Acyclic 
 """
 Module docstring explaining the DAG's purpose.
 """
+
 import pandas as pd
 from hamilton.function_modifiers import extract_columns
+
 
 def raw_data(data_path: str) -> pd.DataFrame:
     """Load raw data from source.
@@ -51,6 +53,7 @@ def raw_data(data_path: str) -> pd.DataFrame:
     """
     return pd.read_csv(data_path)
 
+
 def cleaned_data(raw_data: pd.DataFrame) -> pd.DataFrame:
     """Remove null values and duplicates.
 
@@ -59,13 +62,14 @@ def cleaned_data(raw_data: pd.DataFrame) -> pd.DataFrame:
     """
     return raw_data.dropna().drop_duplicates()
 
+
 def feature_a(cleaned_data: pd.DataFrame) -> pd.Series:
     """Calculate feature A.
 
     :param cleaned_data: Cleaned data
     :return: Feature A values
     """
-    return cleaned_data['column_a'] * 2
+    return cleaned_data["column_a"] * 2
 ```
 
 **Driver Setup:**
@@ -74,10 +78,7 @@ from hamilton import driver
 import my_functions
 
 dr = driver.Driver({}, my_functions)
-results = dr.execute(
-    ['feature_a', 'cleaned_data'],
-    inputs={'data_path': 'data.csv'}
-)
+results = dr.execute(["feature_a", "cleaned_data"], inputs={"data_path": "data.csv"})
 ```
 
 **Best Practices:**
@@ -96,19 +97,24 @@ results = dr.execute(
 ```python
 from hamilton.function_modifiers import config
 
-@config.when(model_type='linear')
+
+@config.when(model_type="linear")
 def predictions(features: pd.DataFrame) -> pd.Series:
     """Linear model predictions."""
     from sklearn.linear_model import LinearRegression
+
     model = LinearRegression()
     return model.fit_predict(features)
 
-@config.when(model_type='tree')
+
+@config.when(model_type="tree")
 def predictions(features: pd.DataFrame) -> pd.Series:
     """Tree model predictions."""
     from sklearn.tree import DecisionTreeRegressor
+
     model = DecisionTreeRegressor()
     return model.fit_predict(features)
+
 
 # Use: driver.Driver({'model_type': 'linear'}, module)
 ```
@@ -117,14 +123,16 @@ def predictions(features: pd.DataFrame) -> pd.Series:
 ```python
 from hamilton.function_modifiers import parameterize
 
+
 @parameterize(
-    rolling_7d={'window': 7},
-    rolling_30d={'window': 30},
-    rolling_90d={'window': 90},
+    rolling_7d={"window": 7},
+    rolling_30d={"window": 30},
+    rolling_90d={"window": 90},
 )
 def rolling_average(spend: pd.Series, window: int) -> pd.Series:
     """Calculate rolling average for different windows."""
     return spend.rolling(window).mean()
+
 
 # Creates 3 nodes: rolling_7d, rolling_30d, rolling_90d
 ```
@@ -133,14 +141,18 @@ def rolling_average(spend: pd.Series, window: int) -> pd.Series:
 ```python
 from hamilton.function_modifiers import extract_columns
 
-@extract_columns('feature_1', 'feature_2', 'feature_3')
+
+@extract_columns("feature_1", "feature_2", "feature_3")
 def features(cleaned_data: pd.DataFrame) -> pd.DataFrame:
     """Generate multiple features."""
-    return pd.DataFrame({
-        'feature_1': cleaned_data['a'] * 2,
-        'feature_2': cleaned_data['b'] ** 2,
-        'feature_3': cleaned_data['a'] + cleaned_data['b'],
-    })
+    return pd.DataFrame(
+        {
+            "feature_1": cleaned_data["a"] * 2,
+            "feature_2": cleaned_data["b"] ** 2,
+            "feature_3": cleaned_data["a"] + cleaned_data["b"],
+        }
+    )
+
 
 # Creates 3 nodes: feature_1, feature_2, feature_3 (each a Series)
 ```
@@ -150,20 +162,15 @@ def features(cleaned_data: pd.DataFrame) -> pd.DataFrame:
 from hamilton.function_modifiers import check_output
 import pandera as pa
 
-@check_output(
-    data_type=float,
-    range=(0, 100),
-    importance="fail"
-)
+
+@check_output(data_type=float, range=(0, 100), importance="fail")
 def revenue_percentage(revenue: float, total: float) -> float:
     """Calculate revenue as percentage."""
     return (revenue / total) * 100
 
+
 # With Pandera schemas
-@check_output(
-    schema=pa.SeriesSchema(float, pa.Check.greater_than(0)),
-    importance="fail"
-)
+@check_output(schema=pa.SeriesSchema(float, pa.Check.greater_than(0)), importance="fail")
 def positive_values(data: pd.Series) -> pd.Series:
     """Ensure all values are positive."""
     return data
@@ -174,12 +181,14 @@ def positive_values(data: pd.Series) -> pd.Series:
 from hamilton.function_modifiers import save_to, load_from
 from hamilton.io.materialization import to
 
+
 @save_to(to.csv(path="output.csv"))
 def final_results(aggregated_data: pd.DataFrame) -> pd.DataFrame:
     """Save final results to CSV."""
     return aggregated_data
 
-@load_from(from_='data.parquet', reader='parquet')
+
+@load_from(from_="data.parquet", reader="parquet")
 def input_data() -> pd.DataFrame:
     """Load data from parquet."""
     pass  # Function body ignored when using @load_from
@@ -191,39 +200,45 @@ def input_data() -> pd.DataFrame:
 ```python
 import pandas as pd
 
-df = pd.read_csv('data.csv')
+df = pd.read_csv("data.csv")
 df = df.dropna()
-df['feature'] = df['col_a'] * 2
-result = df.groupby('category')['feature'].mean()
+df["feature"] = df["col_a"] * 2
+result = df.groupby("category")["feature"].mean()
 print(result)
 ```
 
 **After (Hamilton Module):**
 ```python
 """Data processing DAG."""
+
 import pandas as pd
+
 
 def raw_data(data_path: str) -> pd.DataFrame:
     """Load raw data."""
     return pd.read_csv(data_path)
 
+
 def cleaned_data(raw_data: pd.DataFrame) -> pd.DataFrame:
     """Remove nulls."""
     return raw_data.dropna()
 
+
 def feature(cleaned_data: pd.DataFrame) -> pd.Series:
     """Calculate feature."""
-    return cleaned_data['col_a'] * 2
+    return cleaned_data["col_a"] * 2
+
 
 def data_with_feature(cleaned_data: pd.DataFrame, feature: pd.Series) -> pd.DataFrame:
     """Add feature to dataset."""
     df = cleaned_data.copy()
-    df['feature'] = feature
+    df["feature"] = feature
     return df
+
 
 def result(data_with_feature: pd.DataFrame) -> pd.Series:
     """Aggregate by category."""
-    return data_with_feature.groupby('category')['feature'].mean()
+    return data_with_feature.groupby("category")["feature"].mean()
 ```
 
 **Conversion Guidelines:**
@@ -244,11 +259,9 @@ import my_functions
 dr = driver.Driver({}, my_functions)
 
 # Create visualization
-dr.display_all_functions('dag.png')  # All nodes
+dr.display_all_functions("dag.png")  # All nodes
 dr.visualize_execution(
-    ['final_output'],
-    'execution.png',
-    inputs={'input_data': ...}
+    ["final_output"], "execution.png", inputs={"input_data": ...}
 )  # Execution path only
 ```
 
@@ -274,24 +287,20 @@ import pytest
 import pandas as pd
 from my_functions import cleaned_data, feature
 
+
 def test_cleaned_data():
     """Test data cleaning."""
-    raw = pd.DataFrame({
-        'col_a': [1, 2, None, 4],
-        'col_b': ['a', 'b', 'c', 'd']
-    })
+    raw = pd.DataFrame({"col_a": [1, 2, None, 4], "col_b": ["a", "b", "c", "d"]})
     result = cleaned_data(raw)
     assert len(result) == 3
-    assert result['col_a'].isna().sum() == 0
+    assert result["col_a"].isna().sum() == 0
+
 
 def test_feature():
     """Test feature calculation."""
-    data = pd.DataFrame({'col_a': [1, 2, 3]})
+    data = pd.DataFrame({"col_a": [1, 2, 3]})
     result = feature(data)
-    pd.testing.assert_series_equal(
-        result,
-        pd.Series([2, 4, 6], name='col_a')
-    )
+    pd.testing.assert_series_equal(result, pd.Series([2, 4, 6], name="col_a"))
 ```
 
 **Integration Testing with Driver:**
@@ -302,12 +311,9 @@ def test_full_pipeline():
     import my_functions
 
     dr = driver.Driver({}, my_functions)
-    result = dr.execute(
-        ['result'],
-        inputs={'data_path': 'test_data.csv'}
-    )
-    assert 'result' in result
-    assert result['result'].sum() > 0
+    result = dr.execute(["result"], inputs={"data_path": "test_data.csv"})
+    assert "result" in result
+    assert result["result"].sum() > 0
 ```
 
 ## Common Pitfalls & Solutions
@@ -318,12 +324,15 @@ def test_full_pipeline():
 def a(b: int) -> int:
     return b + 1
 
+
 def b(a: int) -> int:
     return a + 1
+
 
 # ✅ Good - break the cycle
 def a(input_value: int) -> int:
     return input_value + 1
+
 
 def b(a: int) -> int:
     return a + 1
@@ -334,6 +343,7 @@ def b(a: int) -> int:
 # ❌ Bad - no type hints
 def process(data):
     return data * 2
+
 
 # ✅ Good - clear types
 def process(data: pd.Series) -> pd.Series:
@@ -346,6 +356,7 @@ def process(data: pd.Series) -> pd.Series:
 def add_column(df: pd.DataFrame, col_name: str) -> pd.DataFrame:
     df[col_name] = 0  # Modifies original!
     return df
+
 
 # ✅ Good - returns new object
 def add_column(df: pd.DataFrame, col_name: str) -> pd.DataFrame:

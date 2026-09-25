@@ -19,6 +19,7 @@ import datetime
 
 import polars as pl
 from polars.exceptions import InvalidOperationError
+
 from hamilton_sdk.tracking import dataframe_stats as dfs
 
 
@@ -96,7 +97,7 @@ def histogram(col: pl.Series, num_hist_bins: int = 10) -> dict[str, int]:
         # happens for Date data types. TODO: convert them to numeric so we can get a histogram.
         return {}
     # Sort by category to ensure consistent ordering across Python versions
-    result = dict(zip(hist_dict["category"], hist_dict["count"]))
+    result = dict(zip(hist_dict["category"], hist_dict["count"], strict=True))
     return dict(sorted(result.items()))
 
 
@@ -202,7 +203,7 @@ def domain(value_counts: pl.DataFrame) -> dict[str, int]:
     else:
         counter_column = None
     col_name = [k for k in result.keys() if k != counter_column][0]
-    return dict(zip(result[col_name], result.get(counter_column)))
+    return dict(zip(result[col_name], result.get(counter_column), strict=True))
 
 
 def top_value(domain: dict[str, int]) -> str:

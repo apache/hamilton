@@ -29,15 +29,14 @@ try:
 except ImportError:
     UTC = timezone.utc
 
-from types import ModuleType
-from typing import Any, Optional
 from collections.abc import Callable
+from types import ModuleType
+from typing import Any
 
 from hamilton import graph as h_graph
 from hamilton import node
 from hamilton.data_quality import base as dq_base
 from hamilton.lifecycle import base
-
 from hamilton_sdk import driver
 from hamilton_sdk.api import clients, constants
 from hamilton_sdk.tracking import runs
@@ -46,8 +45,11 @@ from hamilton_sdk.tracking.trackingtypes import TaskRun
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_HAMILTON_API_URL = os.environ.get("HAMILTON_API_URL", constants.HAMILTON_API_URL)
+DEFAULT_HAMILTON_UI_URL = os.environ.get("HAMILTON_UI_URL", constants.HAMILTON_UI_URL)
 
-def get_node_name(node_: node.Node, task_id: Optional[str]) -> str:
+
+def get_node_name(node_: node.Node, task_id: str | None) -> str:
     if task_id is not None:
         return f"{task_id}-{node_.name}"
     return node_.name
@@ -73,8 +75,8 @@ class HamiltonTracker(
             [str, str, str, str | bool], clients.HamiltonClient
         ] = clients.BasicSynchronousHamiltonClient,
         api_key: str = None,
-        hamilton_api_url=os.environ.get("HAMILTON_API_URL", constants.HAMILTON_API_URL),
-        hamilton_ui_url=os.environ.get("HAMILTON_UI_URL", constants.HAMILTON_UI_URL),
+        hamilton_api_url=DEFAULT_HAMILTON_API_URL,
+        hamilton_ui_url=DEFAULT_HAMILTON_UI_URL,
         verify: str | bool = True,
     ):
         """This hooks into Hamilton execution to track DAG runs in Hamilton UI.
@@ -196,7 +198,7 @@ class HamiltonTracker(
         return dw_run_id
 
     def pre_node_execute(
-        self, run_id: str, node_: node.Node, kwargs: dict[str, Any], task_id: Optional[str] = None
+        self, run_id: str, node_: node.Node, kwargs: dict[str, Any], task_id: str | None = None
     ):
         """Captures start of node execution."""
         logger.debug("pre_node_execute %s %s", run_id, task_id)
@@ -277,9 +279,9 @@ class HamiltonTracker(
         node_: node.Node,
         kwargs: dict[str, Any],
         success: bool,
-        error: Optional[Exception],
-        result: Optional[Any],
-        task_id: Optional[str] = None,
+        error: Exception | None,
+        result: Any | None,
+        task_id: str | None = None,
     ):
         """Captures end of node execution."""
         logger.debug("post_node_execute %s %s", run_id, task_id)
@@ -368,8 +370,8 @@ class HamiltonTracker(
         run_id: str,
         graph: h_graph.FunctionGraph,
         success: bool,
-        error: Optional[Exception],
-        results: Optional[dict[str, Any]],
+        error: Exception | None,
+        results: dict[str, Any] | None,
     ):
         """Captures end of DAG execution."""
         logger.debug("post_graph_execute %s", run_id)
@@ -383,7 +385,7 @@ class HamiltonTracker(
             tracking_state.status = Status.FAILURE
             # this assumes the task map only has things that have been processed, not
             # nodes that have yet to be computed.
-            for task_name, task_run in tracking_state.task_map.items():
+            for _task_name, task_run in tracking_state.task_map.items():
                 if task_run.status != Status.SUCCESS:
                     task_run.status = Status.FAILURE
                     task_run.end_time = finally_block_time
@@ -421,8 +423,8 @@ class AsyncHamiltonTracker(
             [str, str, str, str | bool], clients.BasicAsynchronousHamiltonClient
         ] = clients.BasicAsynchronousHamiltonClient,
         api_key: str = os.environ.get("HAMILTON_API_KEY", ""),
-        hamilton_api_url=os.environ.get("HAMILTON_API_URL", constants.HAMILTON_API_URL),
-        hamilton_ui_url=os.environ.get("HAMILTON_UI_URL", constants.HAMILTON_UI_URL),
+        hamilton_api_url=DEFAULT_HAMILTON_API_URL,
+        hamilton_ui_url=DEFAULT_HAMILTON_UI_URL,
         verify: str | bool = True,
     ):
         self.project_id = project_id
@@ -525,7 +527,7 @@ class AsyncHamiltonTracker(
         self.task_runs[run_id] = {}
 
     async def pre_node_execute(
-        self, run_id: str, node_: node.Node, kwargs: dict[str, Any], task_id: Optional[str] = None
+        self, run_id: str, node_: node.Node, kwargs: dict[str, Any], task_id: str | None = None
     ):
         logger.debug("pre_node_execute %s", run_id)
         tracking_state = self.tracking_states[run_id]
@@ -558,9 +560,9 @@ class AsyncHamiltonTracker(
         run_id: str,
         node_: node.Node,
         success: bool,
-        error: Optional[Exception],
+        error: Exception | None,
         result: Any,
-        task_id: Optional[str] = None,
+        task_id: str | None = None,
         **future_kwargs,
     ):
         logger.debug("post_node_execute %s", run_id)
@@ -645,8 +647,8 @@ class AsyncHamiltonTracker(
         run_id: str,
         graph: h_graph.FunctionGraph,
         success: bool,
-        error: Optional[Exception],
-        results: Optional[dict[str, Any]],
+        error: Exception | None,
+        results: dict[str, Any] | None,
     ):
         logger.debug("post_graph_execute %s", run_id)
         dw_run_id = self.dw_run_ids[run_id]
@@ -658,7 +660,7 @@ class AsyncHamiltonTracker(
             tracking_state.status = Status.FAILURE
             # this assumes the task map only has things that have been processed, not
             # nodes that have yet to be computed.
-            for task_name, task_run in tracking_state.task_map.items():
+            for _task_name, task_run in tracking_state.task_map.items():
                 if task_run.status != Status.SUCCESS:
                     task_run.status = Status.FAILURE
                     task_run.end_time = finally_block_time

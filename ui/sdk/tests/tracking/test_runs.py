@@ -23,9 +23,9 @@ import numpy as np
 import pandas as pd
 import polars as pl
 import pytest
-from hamilton_sdk.tracking import runs
 
 from hamilton import node
+from hamilton_sdk.tracking import runs
 
 result_base = {
     "observability_type": "REPLACE_ME",
@@ -43,7 +43,7 @@ def create_node(name: str, type_: type) -> node.Node:
 
 
 @pytest.mark.parametrize(
-    "test_result,test_node,observability_type,stats",
+    ("test_result", "test_node", "observability_type", "stats"),
     [
         (
             pd.DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]}),
@@ -538,7 +538,7 @@ def test_process_result_happy(test_result, test_node, observability_type, stats)
     """Tests a happy path for the process result function."""
     stats, schema, additional = runs.process_result(test_result, test_node)
     expected_result = result_base.copy()
-    if observability_type in ["dict"]:
+    if observability_type == "dict":
         expected_result["observability_schema_version"] = "0.0.2"
     if observability_type in ["primitive", "unsupported"]:
         expected_result["observability_schema_version"] = "0.0.1"

@@ -22,10 +22,9 @@ from polars import selectors
 
 if not hasattr(pl, "Series"):
     raise ImportError("Polars is not installed")
+from hamilton import driver
 from hamilton_sdk.tracking import data_observation
 from hamilton_sdk.tracking import polars_col_stats as pls
-
-from hamilton import driver
 
 """Module that houses functions to compute statistics on polars series/dataframes.
 Notes:
@@ -95,7 +94,7 @@ def _compute_stats(df: pl.DataFrame) -> dict[str, dict[str, Any]]:
         stats[col] = execute_col("boolean_column_stats", bool_types[col], col, column_order[col])
     for col in date_types.columns:
         stats[col] = execute_col("datetime_column_stats", date_types[col], col, column_order[col])
-    for col, position in column_order.items():
+    for col, _position in column_order.items():
         if col not in stats:
             stats[col] = execute_col("unhandled_column_stats", df[col], col, column_order[col])
     return stats

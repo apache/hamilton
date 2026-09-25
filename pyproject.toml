@@ -97,7 +97,7 @@ visualization = ["graphviz", "networkx"]
 [dependency-groups]
 dev = [
   "prek",
-  "ruff==0.15.0", # this should match `.pre-commit-config.yaml`
+  "ruff==0.16.9", # this should match `.pre-commit-config.yaml`
 ]
 release = [
   "flit",
@@ -223,7 +223,7 @@ exclude = [
 ]
 
 [tool.ruff.lint]
-extend-select = [
+select = [
     "B",   # flake8-bugbear rules
 #    "C4",  # Helps you write better list/set/dict comprehensions.
     "E",   # pycodestyle errors
@@ -253,17 +253,17 @@ extend-select = [
     "UP045",  # pyupgrade
     "W",   # pycodestyle warnings
 ]
-extend-ignore = [
-    "ISC001", # Checks for implicitly concatenated strings on a single line.
-    "T201",
-    "TRY003",
+ignore = [
     "E203", # whitespace before ':'
     "E402", # module level import not at top of file
     "E501", # line too long
     "E721", # Use `is` and `is not` for type comparisons, or `isinstance()` for isinstance checks
     "F821", # undefined name
+    "ISC001", # Checks for implicitly concatenated strings on a single line.
+    "T201",
+    "TC001", # TYPE_CHECKING block for first-class imports -- this is a bit ugly for the hamilton codebase
+    "TRY003",
     "W605", # invalid escape sequence
-    "TC001" # TYPE_CHECKING block for first-class imports -- this is a bit ugly for the hamilton codebase
 ]
 exclude = [
     "docs/*",

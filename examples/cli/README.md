@@ -166,11 +166,13 @@ def orders_per_distributor(customers_orders_df: pd.DataFrame) -> pd.Series:
     Outputs series indexed by customer_id."""
     return customers_orders_df.groupby("customer_id").size().rename("orders_per_distributor")
 
+
 # added 1 to the return value
 def average_order_by_customer(amount: pd.Series) -> pd.Series:
     """Compute the average order amount per customer.
     Outputs series indexed by customer_id."""
     return 1 + (amount.groupby("customer_id").mean().rename("average_order_by_customer"))
+
 
 # renamed according to `orders_per_distributor`
 def customer_summary_table(
