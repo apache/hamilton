@@ -128,6 +128,31 @@ def test_check_output_custom_node_transform():
     )
 
 
+def test_check_output_custom_only_uses_applicable_validators():
+    applicable_validator = SampleDataValidator1(equal_to=10, importance="warn")
+    incompatible_validator = SampleDataValidator2(dataset_length=1, importance="warn")
+    decorator = check_output_custom(applicable_validator, incompatible_validator)
+
+    def fn(input: int) -> int:
+        return input
+
+    validators = decorator.get_validators(node.Node.from_fn(fn))
+
+    assert validators == [applicable_validator]
+
+
+def test_check_output_custom_uses_no_incompatible_validators():
+    decorator = check_output_custom(
+        SampleDataValidator2(dataset_length=1, importance="warn"),
+        SampleDataValidator3(dtype=np.int64, importance="warn"),
+    )
+
+    def fn(input: int) -> int:
+        return input
+
+    assert decorator.get_validators(node.Node.from_fn(fn)) == []
+
+
 def test_check_output_custom_node_transform_duplicate():
     """You should be able to pass in the same validator twice; IRL it would be different args."""
     decorator = check_output_custom(

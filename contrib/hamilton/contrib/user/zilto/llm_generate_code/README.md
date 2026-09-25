@@ -34,7 +34,7 @@ dr.execute(
     ["execution_output", "execution_error"],
     inputs=dict(
         query="Retrieve the primary type from a `typing.Annotated` object`",
-    )
+    ),
 )
 ```
 

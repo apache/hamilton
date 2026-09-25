@@ -42,7 +42,7 @@ class PlotlyStaticWriter(DataSaver):
     height: int | None = None
     scale: int | float | None = None
     validate: bool = True
-    engine: str = "auto"
+    engine: str | None = None
 
     def _get_saving_kwargs(self) -> dict:
         kwargs = {}

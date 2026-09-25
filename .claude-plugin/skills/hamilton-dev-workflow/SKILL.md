@@ -68,8 +68,10 @@ This step is mechanical and can be automated. For each node:
 **Example:**
 ```python
 """Data processing pipeline."""
+
 from typing import Any
 import pandas as pd
+
 
 def raw_data(data_path: str) -> pd.DataFrame:
     """Load raw data from CSV file.
@@ -79,6 +81,7 @@ def raw_data(data_path: str) -> pd.DataFrame:
     """
     pass
 
+
 def cleaned_data(raw_data: pd.DataFrame) -> pd.DataFrame:
     """Remove null values and duplicates.
 
@@ -87,6 +90,7 @@ def cleaned_data(raw_data: pd.DataFrame) -> pd.DataFrame:
     """
     pass
 
+
 def rolling_7d(cleaned_data: pd.DataFrame) -> pd.Series:
     """Calculate 7-day rolling average of sales.
 
@@ -94,6 +98,7 @@ def rolling_7d(cleaned_data: pd.DataFrame) -> pd.Series:
     :return: 7-day rolling average
     """
     pass
+
 
 def top_10(rolling_7d: pd.Series) -> pd.Series:
     """Get top 10 days by value.
@@ -166,7 +171,8 @@ def test_raw_data(tmp_path):
     # Verify
     assert isinstance(result, pd.DataFrame)
     assert len(result) == 2
-    assert list(result.columns) == ['col_a', 'col_b']
+    assert list(result.columns) == ["col_a", "col_b"]
+
 
 # Implementation
 def raw_data(data_path: str) -> pd.DataFrame:
@@ -179,17 +185,15 @@ def raw_data(data_path: str) -> pd.DataFrame:
 def test_cleaned_data():
     """Test data cleaning."""
     # Setup
-    raw = pd.DataFrame({
-        'col_a': [1, 2, None, 4],
-        'col_b': [1, 1, 2, 2]
-    })
+    raw = pd.DataFrame({"col_a": [1, 2, None, 4], "col_b": [1, 1, 2, 2]})
 
     # Execute
     result = cleaned_data(raw)
 
     # Verify
     assert len(result) == 3  # One null removed
-    assert result['col_a'].isna().sum() == 0
+    assert result["col_a"].isna().sum() == 0
+
 
 # Implementation
 def cleaned_data(raw_data: pd.DataFrame) -> pd.DataFrame:
@@ -214,6 +218,7 @@ Don't spend time guessing types upfront. Instead:
 ```python
 from typing import Any
 
+
 def my_function(input_data: Any) -> Any:
     """Process data."""
     # Implementation here
@@ -225,16 +230,15 @@ def my_function(input_data: Any) -> Any:
 from hamilton import driver
 from hamilton.lifecycle import base
 
+
 # Use an adapter that doesn't validate types
 class NoTypeCheckAdapter(base.BaseDo):
     """Adapter that skips type validation."""
+
     pass
 
-dr = driver.Driver(
-    {},
-    module,
-    adapter=NoTypeCheckAdapter()
-)
+
+dr = driver.Driver({}, module, adapter=NoTypeCheckAdapter())
 ```
 
 **Option C: Run MonkeyType to infer types**
@@ -291,8 +295,10 @@ digraph pipeline {
 **Step 2: Function Signatures**
 ```python
 """Data enrichment pipeline."""
+
 from typing import Any
 import pandas as pd
+
 
 def raw_data(json_path: str) -> pd.DataFrame:
     """Load data from JSON file.
@@ -302,6 +308,7 @@ def raw_data(json_path: str) -> pd.DataFrame:
     """
     pass
 
+
 def active_records(raw_data: pd.DataFrame) -> pd.DataFrame:
     """Filter for active status only.
 
@@ -309,6 +316,7 @@ def active_records(raw_data: pd.DataFrame) -> pd.DataFrame:
     :return: Filtered DataFrame
     """
     pass
+
 
 def enriched_data(active_records: pd.DataFrame, api_endpoint: str) -> pd.DataFrame:
     """Enrich with external API data.
@@ -318,6 +326,7 @@ def enriched_data(active_records: pd.DataFrame, api_endpoint: str) -> pd.DataFra
     :return: Enriched DataFrame
     """
     pass
+
 
 def final_output(enriched_data: pd.DataFrame, output_path: str) -> str:
     """Save to Parquet file.
@@ -355,10 +364,7 @@ def raw_data(json_path: str) -> pd.DataFrame:
 *Test 2:*
 ```python
 def test_active_records():
-    raw = pd.DataFrame([
-        {"id": 1, "status": "active"},
-        {"id": 2, "status": "inactive"}
-    ])
+    raw = pd.DataFrame([{"id": 1, "status": "active"}, {"id": 2, "status": "inactive"}])
     result = active_records(raw)
     assert len(result) == 1
     assert result.iloc[0]["status"] == "active"
@@ -405,10 +411,11 @@ Add decorators in Step 2:
 ```python
 from hamilton.function_modifiers import parameterize
 
+
 @parameterize(
-    rolling_7d={'window': 7},
-    rolling_30d={'window': 30},
-    rolling_90d={'window': 90},
+    rolling_7d={"window": 7},
+    rolling_30d={"window": 30},
+    rolling_90d={"window": 90},
 )
 def rolling_average(data: pd.Series, window: int) -> pd.Series:
     """Calculate rolling average.

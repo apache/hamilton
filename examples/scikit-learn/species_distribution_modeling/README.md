@@ -35,13 +35,8 @@ We have two complimentary decorators that can help with transforming input / out
 ## @pipe_input
 We can directly transform input of a node using `pipe_input` with
 ```python
-
-@pipe_input(
-    step(baz,...),
-    step(qux,...)
-)
-def foo(bar:Any)->Any:
-    ...
+@pipe_input(step(baz, ...), step(qux, ...))
+def foo(bar: Any) -> Any: ...
 ```
 In the above case two nodes `baz` and `qux` get created and are inserted between `bar` and `foo`; thus we get
 ```python
@@ -82,7 +77,6 @@ The original script has been left intact. The only change we made is to add
 if __name__ == "__main__":
     plot_species_distribution()
     plt.show()
-
 ```
 so that it does not run when imported into other scripts.
 

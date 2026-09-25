@@ -141,6 +141,58 @@ def test_max_recursion_depth():
     assert fingerprint1 != fingerprint2
 
 
+def test_unhashable_below_max_depth_does_not_silently_collide():
+    """A value that only diverges below MAX_DEPTH must not produce a stable,
+    normal-looking fingerprint for two otherwise-different objects: UNHASHABLE
+    has to propagate up through nested containers so the caching adapter's
+    ``data_version == fingerprinting.UNHASHABLE`` check can catch it, instead
+    of silently hashing the literal sentinel string as if it were real data.
+    """
+
+    class Wrapper:
+        def __init__(self, obj):
+            self.obj = obj
+
+    def nest(value, levels):
+        for _ in range(levels):
+            value = Wrapper(value)
+        return value
+
+    orig_max_depth = fingerprinting.MAX_DEPTH
+    fingerprinting.set_max_depth(2)
+    try:
+        fingerprint_a = fingerprinting.hash_value(nest(1, 5))
+        fingerprint_b = fingerprinting.hash_value(nest(2, 5))
+    finally:
+        fingerprinting.set_max_depth(orig_max_depth)
+
+    assert fingerprint_a == fingerprint_b
+    assert fingerprint_a == fingerprinting.UNHASHABLE
+
+
+class _NoDict:
+    """Has no __dict__ and no stdlib/datetime match, so hash_value's base
+    case returns UNHASHABLE for it directly (see test_hash_no_dict_attribute).
+    """
+
+    __slots__ = ()
+
+
+def test_hash_sequence_propagates_unhashable_element():
+    fingerprint = fingerprinting.hash_sequence([1, _NoDict(), "x"])
+    assert fingerprint == fingerprinting.UNHASHABLE
+
+
+def test_hash_mapping_ordered_propagates_unhashable_value():
+    fingerprint = fingerprinting.hash_mapping({"a": _NoDict()}, ignore_order=False)
+    assert fingerprint == fingerprinting.UNHASHABLE
+
+
+def test_hash_set_propagates_unhashable_element():
+    fingerprint = fingerprinting.hash_set({1, _NoDict()})
+    assert fingerprint == fingerprinting.UNHASHABLE
+
+
 # ---------------------------------------------------------------------------
 # Portability / algorithm-stability guard
 #

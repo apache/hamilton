@@ -37,8 +37,8 @@ from hamilton.function_modifiers import value, source
 
 
 @parameterize(
-    D_ELECTION_2016_shifted=dict(n_off_date=source('D_ELECTION_2016'), shift_by=value(3)),
-    SOME_OUTPUT_NAME=dict(n_off_date=source('SOME_INPUT_NAME'), shift_by=value(1)),
+    D_ELECTION_2016_shifted=dict(n_off_date=source("D_ELECTION_2016"), shift_by=value(3)),
+    SOME_OUTPUT_NAME=dict(n_off_date=source("SOME_INPUT_NAME"), shift_by=value(1)),
 )
 def date_shifter(n_off_date: pd.Series, shift_by: int = 1) -> pd.Series:
     """{one_off_date} shifted by shift_by to create {output_name}"""
@@ -50,10 +50,16 @@ also pass documentation. If you don't, it will use the parameterized docstring.
 
 ```python
 @parameterize(
-    D_ELECTION_2016_shifted=(dict(n_off_date=source('D_ELECTION_2016'), shift_by=value(3)), "D_ELECTION_2016 shifted by 3"),
-    SOME_OUTPUT_NAME=(dict(n_off_date=source('SOME_INPUT_NAME'), shift_by=value(1)),"SOME_INPUT_NAME shifted by 1")
+    D_ELECTION_2016_shifted=(
+        dict(n_off_date=source("D_ELECTION_2016"), shift_by=value(3)),
+        "D_ELECTION_2016 shifted by 3",
+    ),
+    SOME_OUTPUT_NAME=(
+        dict(n_off_date=source("SOME_INPUT_NAME"), shift_by=value(1)),
+        "SOME_INPUT_NAME shifted by 1",
+    ),
 )
-def date_shifter(n_off_date: pd.Series, shift_by: int=1) -> pd.Series:
+def date_shifter(n_off_date: pd.Series, shift_by: int = 1) -> pd.Series:
     """{one_off_date} shifted by shift_by to create {output_name}"""
     return n_off_date.shift(shift_by)
 ```
@@ -69,12 +75,14 @@ from hamilton.function_modifiers import parameterize_values
 import internal_package_with_logic
 
 ONE_OFF_DATES = {
-     #output name        # doc string               # input value to function
-    ('D_ELECTION_2016', 'US Election 2016 Dummy'): '2016-11-12',
-    ('SOME_OUTPUT_NAME', 'Doc string for this thing'): 'value to pass to function',
+    # output name        # doc string               # input value to function
+    ("D_ELECTION_2016", "US Election 2016 Dummy"): "2016-11-12",
+    ("SOME_OUTPUT_NAME", "Doc string for this thing"): "value to pass to function",
 }
-            # parameter matches the name of the argument in the function below
-@parameterize_values(parameter='one_off_date', assigned_output=ONE_OFF_DATES)
+
+
+# parameter matches the name of the argument in the function below
+@parameterize_values(parameter="one_off_date", assigned_output=ONE_OFF_DATES)
 def create_one_off_dates(date_index: pd.Series, one_off_date: str) -> pd.Series:
     """Given a date index, produces a series where a 1 is placed at the date index that would contain that event."""
     one_off_dates = internal_package_with_logic.get_business_week(one_off_date)
@@ -102,13 +110,12 @@ from hamilton.function_modifiers import parameterize_sources
 
 
 @parameterize_sources(
-    D_ELECTION_2016_shifted=dict(one_off_date='D_ELECTION_2016'),
-    SOME_OUTPUT_NAME=dict(one_off_date='SOME_INPUT_NAME')
+    D_ELECTION_2016_shifted=dict(one_off_date="D_ELECTION_2016"),
+    SOME_OUTPUT_NAME=dict(one_off_date="SOME_INPUT_NAME"),
 )
 def date_shifter(one_off_date: pd.Series) -> pd.Series:
     """{one_off_date} shifted by 1 to create {output_name}"""
     return one_off_date.shift(1)
-
 ```
 We see here that `parameterize_sources` allows you to keep your code DRY by reusing the same function to create multiple
 distinct outputs. The key word arguments passed have to have the following structure:
@@ -125,6 +132,7 @@ To help visualize what the above is doing, it is equivalent to writing the follo
 def D_ELECTION_2016_shifted(D_ELECTION_2016: pd.Series) -> pd.Series:
     """D_ELECTION_2016 shifted by 1 to create D_ELECTION_2016_shifted"""
     return D_ELECTION_2016.shift(1)
+
 
 def SOME_OUTPUT_NAME(SOME_INPUT_NAME: pd.Series) -> pd.Series:
     """SOME_INPUT_NAME shifted by 1 to create SOME_OUTPUT_NAME"""
@@ -161,15 +169,16 @@ available for consumption. So it expands a single function into _n functions_, e
 import pandas as pd
 from hamilton.function_modifiers import extract_columns
 
-@extract_columns('fiscal_date', 'fiscal_week_name', 'fiscal_month', 'fiscal_quarter', 'fiscal_year')
+
+@extract_columns("fiscal_date", "fiscal_week_name", "fiscal_month", "fiscal_quarter", "fiscal_year")
 def fiscal_columns(date_index: pd.Series, fiscal_dates: pd.DataFrame) -> pd.DataFrame:
     """Extracts the fiscal column data.
     We want to ensure that it has the same spine as date_index.
     :param fiscal_dates: the input dataframe to extract.
     :return:
     """
-    df = pd.DataFrame({'date_index': date_index}, index=date_index.index)
-    merged = df.join(fiscal_dates, how='inner')
+    df = pd.DataFrame({"date_index": date_index}, index=date_index.index)
+    merged = df.join(fiscal_dates, how="inner")
     return merged
 ```
 Note: if you have a list of columns to extract, then when you call `@extract_columns` you should call it with an
@@ -196,13 +205,16 @@ functions. Confused? See the examples below.
 import pandas as pd
 from hamilton.function_modifiers import does
 
+
 def _sum_series(**series: pd.Series) -> pd.Series:
     """This function takes any number of inputs and sums them all together."""
     return sum(series)
 
+
 @does(_sum_series)
-def D_XMAS_GC_WEIGHTED_BY_DAY(D_XMAS_GC_WEIGHTED_BY_DAY_1: pd.Series,
-                              D_XMAS_GC_WEIGHTED_BY_DAY_2: pd.Series) -> pd.Series:
+def D_XMAS_GC_WEIGHTED_BY_DAY(
+    D_XMAS_GC_WEIGHTED_BY_DAY_1: pd.Series, D_XMAS_GC_WEIGHTED_BY_DAY_2: pd.Series
+) -> pd.Series:
     """Adds D_XMAS_GC_WEIGHTED_BY_DAY_1 and D_XMAS_GC_WEIGHTED_BY_DAY_2"""
     pass
 ```
@@ -217,16 +229,19 @@ from hamilton.function_modifiers import does
 
 import internal_company_logic
 
+
 def _load_data(db: str, table: str) -> pd.DataFrame:
     """Helper function to load data using your internal company logic"""
     return internal_company_logic.read_table(db=db, table=table)
 
-@does(_load_data, db='marketing_spend_db', table='marketing_spend_table')
+
+@does(_load_data, db="marketing_spend_db", table="marketing_spend_table")
 def marketing_spend_data(marketing_spend_db: str, marketing_spend_table: str) -> pd.Series:
     """Loads marketing spend data from the database"""
     pass
 
-@does(_load_data, db='client_acquisition_db', table='client_acquisition_table')
+
+@does(_load_data, db="client_acquisition_db", table="client_acquisition_table")
 def client_acquisition_data(client_acquisition_db: str, client_acquisition_table: str) -> pd.Series:
     """Loads client acquisition data from the database"""
     pass
@@ -246,34 +261,39 @@ The following use cases are supported:
 1. A column is present for only one value of a config parameter -- in this case, we define a function only once,
    with a `@config.when`
 ```python
-    import pandas as pd
-    from hamilton.function_modifiers import config
+import pandas as pd
+from hamilton.function_modifiers import config
 
-    # signups_parent_before_launch is only present in the kids business line
-    @config.when(business_line='kids')
-    def signups_parent_before_launch(signups_from_existing_womens_tf: pd.Series) -> pd.Series:
-        """TODO:
-        :param signups_from_existing_womens_tf:
-        :return:
-        """
-        return signups_from_existing_womens_tf
+
+# signups_parent_before_launch is only present in the kids business line
+@config.when(business_line="kids")
+def signups_parent_before_launch(signups_from_existing_womens_tf: pd.Series) -> pd.Series:
+    """TODO:
+    :param signups_from_existing_womens_tf:
+    :return:
+    """
+    return signups_from_existing_womens_tf
 ```
 2. A column is implemented differently for different business inputs, e.g. in the case of Stitch Fix gender intent.
 ```python
-    import pandas as pd
-    from hamilton.function_modifiers import config, model
-    import internal_package_with_logic
+import pandas as pd
+from hamilton.function_modifiers import config, model
+import internal_package_with_logic
 
-    # Some 21 day autoship cadence does not exist for kids, so we just return 0s
-    @config.when(gender_intent='kids')
-    def percent_clients_something__kids(date_index: pd.Series) -> pd.Series:
-        return pd.Series(index=date_index.index, data=0.0)
 
-    # In other business lines, we have a model for it
-    @config.when_not(gender_intent='kids')
-    @model(internal_package_with_logic.GLM, 'some_model_name', output_column='percent_clients_something')
-    def percent_clients_something_model() -> pd.Series:
-        pass
+# Some 21 day autoship cadence does not exist for kids, so we just return 0s
+@config.when(gender_intent="kids")
+def percent_clients_something__kids(date_index: pd.Series) -> pd.Series:
+    return pd.Series(index=date_index.index, data=0.0)
+
+
+# In other business lines, we have a model for it
+@config.when_not(gender_intent="kids")
+@model(
+    internal_package_with_logic.GLM, "some_model_name", output_column="percent_clients_something"
+)
+def percent_clients_something_model() -> pd.Series:
+    pass
 ```
 Note the following:
 - The function cannot have the same name in the same file (or python gets unhappy), so we name it with a
@@ -294,9 +314,7 @@ To make this easier, we have a few more `@config` decorators:
 
 To pass in the right value, you would provide `param`, e.g. `gender_intent`, or `business_line`, as a field in the dictionary passed to instantiate the driver. E.g.
 ```python
-config = {
-  "business_line": "kids"
-}
+config = {"business_line": "kids"}
 dr = driver.Driver(config, module1, ...)
 ```
 
@@ -315,10 +333,12 @@ For instance:
 import pandas as pd
 from hamilton.function_modifiers import tag
 
+
 def intermediate_column() -> pd.Series:
     pass
 
-@tag(data_product='final', pii='true')
+
+@tag(data_product="final", pii="true")
 def final_column(intermediate_column: pd.Series) -> pd.Series:
     pass
 ```
@@ -335,13 +355,13 @@ and give different tag values to different outputs:
 import pandas as pd
 from hamilton.function_modifiers import tag_outputs, extract_columns
 
+
 def intermediate_column() -> pd.Series:
     pass
 
-@tag_outputs(
-    public={'column_a' : 'public'},
-    private={'column_b' : 'private'})
-@extract_columns('column_a', 'column_b')
+
+@tag_outputs(public={"column_a": "public"}, private={"column_b": "private"})
+@extract_columns("column_a", "column_b")
 def data_used_in_multiple_ways() -> pd.DataFrame:
     return load_some_data(...)
 ```
@@ -358,14 +378,14 @@ they will be applied in order up from the function. So if you desire to override
 import pandas as pd
 from hamilton.function_modifiers import tag_outputs, tag, extract_columns
 
+
 def intermediate_column() -> pd.Series:
     pass
 
-@tag_outputs(
-    public={'column_a' : 'public'},
-    private={'column_b' : 'private', 'common_tag' : 'bar'})
+
+@tag_outputs(public={"column_a": "public"}, private={"column_b": "private", "common_tag": "bar"})
 @tag(common_tag="foo")
-@extract_columns('column_a', 'column_b')
+@extract_columns("column_a", "column_b")
 def data_used_in_multiple_ways() -> pd.DataFrame:
     return load_some_data(...)
 ```
@@ -379,12 +399,13 @@ Using the `list_available_variables()` capability exposes tags along with their 
 enabling querying of the available outputs for specific tag matches.
 E.g.
 ```python
-
 from hamilton import driver
+
 dr = driver.Driver(...)  # create driver as required
 all_possible_outputs = dr.list_available_variables()
-desired_outputs = [o.name for o in all_possible_outputs
-                   if 'my_tag_value' == o.tags.get('my_tag_key')]
+desired_outputs = [
+    o.name for o in all_possible_outputs if "my_tag_value" == o.tags.get("my_tag_key")
+]
 output = dr.execute(desired_outputs)
 ```
 
@@ -399,9 +420,10 @@ import pandas as pd
 import numpy as np
 from hamilton.function_modifiers import check_output
 
+
 @check_output(
     data_type=np.int64,
-    data_in_range=(0,100),
+    data_in_range=(0, 100),
 )
 def some_int_data_between_0_and_100() -> pd.Series:
     pass
@@ -445,16 +467,20 @@ Let's take a look at a simplified example (in [examples/](examples/reusing_funct
 def website_interactions() -> pd.DataFrame:
     return ...
 
+
 def interactions_filtered(website_interactions: pd.DataFrame, region: str) -> pd.DataFrame:
     """Filters interactions by region -- note this will be run differently depending on the region its in"""
     pass
+
 
 def unique_users(filtered_interactions: pd.DataFrame, grain: str) -> pd.Series:
     """Gives the number of shares traded by the frequency"""
     return ...
 
+
 @subdag(
-    unique_users, interactions_filtered,
+    unique_users,
+    interactions_filtered,
     inputs={"grain": value("day")},
     config={"region": "US"},
 )
@@ -467,7 +493,8 @@ def daily_users_US(unique_users: pd.Series) -> pd.Series:
 
 
 @subdag(
-    unique_users, interactions_filtered,
+    unique_users,
+    interactions_filtered,
     inputs={"grain": value("day")},
     config={"region": "CA"},
 )
@@ -496,7 +523,7 @@ Note that, if you wanted to do this functionality without this decorator, you'd 
 ```python
 def daily_users_CA(unique_users: pd.Series) -> pd.Series:
     """Calculates quarterly data for just canada users"""
-    dr = hamilton.driver.Driver({"region" : "CA"}, unique_users, interactions_filtered)
+    dr = hamilton.driver.Driver({"region": "CA"}, unique_users, interactions_filtered)
     return dr.execute(["unique_users"], inputs={"grain": value("day")})["unique_users"]
 ```
 
@@ -523,6 +550,8 @@ In the following case, we produce four columns, two for each parameterization.
 ```python
 import pandas as pd
 from function_modifiers import parameterize_extract_columns, ParameterizedExtract, source, value
+
+
 @parameterize_extract_columns(
     ParameterizedExtract(
         ("outseries1a", "outseries2a"),
@@ -544,30 +573,30 @@ def fn(input1: pd.Series, input2: pd.Series, input3: float) -> pd.DataFrame:
 
 ```python
 from hamilton.experimental.decorators.parameterize_frame import parameterize_frame
+
 df = pd.DataFrame(
+    [
+        ["outseries1a", "outseries2a", "inseries1a", "inseries2a", 10],
+        ["outseries1b", "outseries2b", "inseries1b", "inseries2b", 100],
+        # ...
+    ],
+    # Have to switch as indices have to be unique
+    columns=[
         [
-            ["outseries1a", "outseries2a", "inseries1a", "inseries2a", 10],
-            ["outseries1b", "outseries2b", "inseries1b", "inseries2b", 100],
-            # ...
-        ],
-        # Have to switch as indices have to be unique
-        columns=[
-            [
-                "output1",
-                "output2",
-                "input1",
-                "input2",
-                "input3",
-            ],  # configure whether column is source or value and also whether it's input ("source", "value") or output ("out")
-            ["out", "out", "source", "source", "value"],
-        ],
-    )
+            "output1",
+            "output2",
+            "input1",
+            "input2",
+            "input3",
+        ],  # configure whether column is source or value and also whether it's input ("source", "value") or output ("out")
+        ["out", "out", "source", "source", "value"],
+    ],
+)
+
 
 @parameterize_frame(df)
 def my_func(input1: pd.Series, input2: pd.Series, input3: float) -> pd.DataFrame:
-    return pd.DataFrame(
-        [input1 * input2 * input3, input1 + input2 + input3]
-    )
+    return pd.DataFrame([input1 * input2 * input3, input1 + input2 + input3])
 ```
 
 Note that we have a double-index. Note that this is still in experimental,
@@ -593,7 +622,8 @@ import pandas as pd
 from hamilton.function_modifiers import model
 import internal_package_with_logic
 
-@model(internal_package_with_logic.GLM, 'model_p_cancel_manual_res')
+
+@model(internal_package_with_logic.GLM, "model_p_cancel_manual_res")
 # This runs a GLM (Generalized Linear Model)
 # The associated configuration parameter is 'model_p_cancel_manual_res',
 # which points to the results of loading the model_p_cancel_manual_res table
@@ -645,6 +675,7 @@ This will only decorate `col1`, `col2`, and `col3`:
 import pandas as pd
 from hamilton.function_modifiers import tag, extract_columns
 
+
 @tag(type="dataframe")
 @extract_columns("col1", "col2", "col3")
 def dataframe() -> pd.DataFrame:
@@ -658,7 +689,8 @@ the dataframe that gets extracted from (that is a node after all).
 import pandas as pd
 from hamilton.function_modifiers import tag, extract_columns
 
-@tag(type="dataframe", target_='original_dataframe')
+
+@tag(type="dataframe", target_="original_dataframe")
 @extract_columns("col1", "col2", "col3")
 def dataframe() -> pd.DataFrame:
     pass
@@ -669,6 +701,7 @@ Whereas the following would tag all the columns we extract:
 ```python
 import pandas as pd
 from hamilton.function_modifiers import tag, extract_columns
+
 
 @tag(type="extracted_column", target_=["col1", "col2", "col3"])
 @extract_columns("col1", "col2", "col3")
@@ -681,6 +714,7 @@ The following would tag *everything*
 ```python
 import pandas as pd
 from hamilton.function_modifiers import tag, extract_columns
+
 
 @tag(type="any_node_created", target_=...)
 @extract_columns("col1", "col2", "col3")

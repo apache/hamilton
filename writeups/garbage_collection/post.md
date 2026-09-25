@@ -85,8 +85,9 @@ def foo_0(memory_size: int = 100_000_000) -> pd.DataFrame:
 
 count = 0
 
+
 @parameterize(
-    **{f"foo_{i}": {"foo_i_minus_one": source(f"foo_{i-1}")} for i in range(1, NUM_ITERS)}
+    **{f"foo_{i}": {"foo_i_minus_one": source(f"foo_{i - 1}")} for i in range(1, NUM_ITERS)}
 )
 def foo_i(foo_i_minus_one: pd.DataFrame) -> pd.DataFrame:
     global count
@@ -156,10 +157,7 @@ It makes use of the `for/break/else` [pattern](https://stackoverflow.com/questio
 for dep in node_.dependencies:
     if dep.name in computed and dep.name not in nodes_to_compute:
         for downstream_node in dep.depended_on_by:
-            if (
-                downstream_node.name not in computed
-                or downstream_node.name in nodes_to_compute
-            ):
+            if downstream_node.name not in computed or downstream_node.name in nodes_to_compute:
                 break
         else:
             del computed[dep.name]

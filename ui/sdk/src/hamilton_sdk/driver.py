@@ -30,17 +30,16 @@ import json
 import logging
 import operator
 import os
-from types import ModuleType
-from typing import Any, Optional
 from collections.abc import Callable
-
-from hamilton_sdk.api.clients import UnauthorizedException
+from types import ModuleType
+from typing import Any
 
 from hamilton import base, driver, graph, node
 from hamilton.driver import Variable
 from hamilton.io import materialization
 from hamilton.lifecycle.base import BaseDoNodeExecute
 from hamilton.node import Node
+from hamilton_sdk.api.clients import UnauthorizedException
 
 try:
     import git
@@ -52,6 +51,9 @@ from hamilton_sdk.api.projecttypes import GitInfo
 from hamilton_sdk.tracking.runs import Status, TrackingState, monkey_patch_adapter
 
 logger = logging.getLogger(__name__)
+
+DEFAULT_DAGWORKS_API_URL = os.environ.get("DAGWORKS_API_URL", constants.HAMILTON_API_URL)
+DEFAULT_DAGWORKS_UI_URL = os.environ.get("DAGWORKS_UI_URL", constants.HAMILTON_UI_URL)
 
 
 def _hash_module(
@@ -98,7 +100,7 @@ def _hash_module(
             return []
 
     # Loop through the module's attributes
-    for name, value in safe_getmembers(module):
+    for _name, value in safe_getmembers(module):
         # Check if the attribute is a module
         if inspect.ismodule(value):
             if value.__package__ is None:
@@ -265,7 +267,7 @@ class DefaultExecutionMethod(BaseDoNodeExecute):
         run_id: str,
         node_: node.Node,
         kwargs: dict[str, Any],
-        task_id: Optional[str] = None,
+        task_id: str | None = None,
     ) -> Any:
         return node_(**kwargs)
 
@@ -284,8 +286,8 @@ class Driver(driver.Driver):
             [str, str, str], clients.HamiltonClient
         ] = clients.BasicSynchronousHamiltonClient,
         adapter: base.HamiltonGraphAdapter = None,
-        dagworks_api_url=os.environ.get("DAGWORKS_API_URL", constants.HAMILTON_API_URL),
-        dagworks_ui_url=os.environ.get("DAGWORKS_UI_URL", constants.HAMILTON_UI_URL),
+        dagworks_api_url=DEFAULT_DAGWORKS_API_URL,
+        dagworks_ui_url=DEFAULT_DAGWORKS_UI_URL,
     ):
         """Instantiates a DAGWorks driver. This:
         1. Requires a project to exist. Create one via https://app.dagworks.io/dashboard/projects.
@@ -849,7 +851,7 @@ class DAGWorksGraphExecutor(driver.GraphExecutor):
                     tracking_state.status = Status.FAILURE
                     # this assumes the task map only has things that have been processed, not
                     # nodes that have yet to be computed.
-                    for task_name, task_run in tracking_state.task_map.items():
+                    for _task_name, task_run in tracking_state.task_map.items():
                         if task_run.status != Status.SUCCESS:
                             task_run.status = Status.FAILURE
                             task_run.end_time = finally_block_time

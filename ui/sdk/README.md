@@ -60,13 +60,13 @@ from hamilton_sdk import adapters
 from hamilton import driver
 
 tracker = adapters.HamiltonTracker(
-   project_id=PROJECT_ID,  # modify this as needed
-   username=YOUR_EMAIL, # modify this as needed
-   dag_name="my_version_of_the_dag",
-   tags={"environment": "DEV", "team": "MY_TEAM", "version": "X"}
+    project_id=PROJECT_ID,  # modify this as needed
+    username=YOUR_EMAIL,  # modify this as needed
+    dag_name="my_version_of_the_dag",
+    tags={"environment": "DEV", "team": "MY_TEAM", "version": "X"},
 )
 dr = (
-  driver.Builder()
+    driver.Builder()
     .with_config(your_config)
     .with_modules(*your_modules)
     .with_adapters(tracker)
