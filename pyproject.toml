@@ -133,7 +133,7 @@ test = [
   "pytest-cov",
   "PyYAML",
   "scikit-learn",
-  "sqlalchemy[asyncio]<2.1",
+  "sqlalchemy[asyncio]>=2.0,<2.1",
   "typer>=0.16.0",
   "xgboost; python_version < '3.14'",
   "xlsx2csv", # for excel data loader

@@ -1600,7 +1600,7 @@ class PandasTableReader(DataLoader):
     verbose: bool | None = None
     skip_blank_lines: bool = True
     parse_dates: list[int | str] | dict[str, list[int | str]] | bool = False
-    infer_datetime_format: bool = False
+    infer_datetime_format: bool | None = None
     keep_date_col: bool | None = None
     date_parser: Callable | None = None
     date_format: str | str | None = None
@@ -1640,8 +1640,8 @@ class PandasTableReader(DataLoader):
         # but we send it separately
         del kwargs["filepath_or_buffer"]
 
-        # pandas deprecated delim_whitespace in 2.2 and removed it in 3.0. Translate only the
-        # enabled case to its cross-version equivalent; False retains the default parsing behavior.
+        # pandas deprecated delim_whitespace in 2.2 and removed it in 3.0. Translate the
+        # enabled case to its cross-version equivalent; explicit False is rejected on pandas 3.
         if self.delim_whitespace:
             if self.sep is not None or self.delimiter is not None:
                 raise ValueError("delim_whitespace cannot be combined with sep or delimiter")
@@ -1651,9 +1651,10 @@ class PandasTableReader(DataLoader):
         if Version(pd.__version__) >= Version("3.0"):
             removed_parameters = {
                 "verbose": self.verbose,
-                "infer_datetime_format": self.infer_datetime_format or None,
+                "infer_datetime_format": self.infer_datetime_format,
                 "keep_date_col": self.keep_date_col,
                 "date_parser": self.date_parser,
+                "delim_whitespace": False if self.delim_whitespace is False else None,
             }
             requested_parameters = [
                 name for name, value in removed_parameters.items() if value is not None
@@ -1664,8 +1665,7 @@ class PandasTableReader(DataLoader):
                     f"{', '.join(requested_parameters)}"
                 )
             for parameter in removed_parameters:
-                del kwargs[parameter]
-            kwargs.pop("delim_whitespace", None)
+                kwargs.pop(parameter, None)
 
         return kwargs
 

@@ -331,14 +331,23 @@ def test_pandas_table_reader_translates_delim_whitespace_for_pandas_3(tmp_path) 
     assert df.to_dict(orient="records") == [{"name": "foo", "value": 1}]
 
 
-def test_pandas_table_reader_rejects_removed_parameter_on_pandas_3() -> None:
-    reader = PandasTableReader(filepath_or_buffer="unused", verbose=True)
+@pytest.mark.parametrize(
+    ("parameter", "value"),
+    [
+        ("verbose", True),
+        ("infer_datetime_format", True),
+        ("infer_datetime_format", False),
+        ("delim_whitespace", False),
+    ],
+)
+def test_pandas_table_reader_rejects_removed_parameter_on_pandas_3(parameter, value) -> None:
+    reader = PandasTableReader(filepath_or_buffer="unused", **{parameter: value})
 
     if int(pd.__version__.split(".", maxsplit=1)[0]) >= 3:
-        with pytest.raises(ValueError, match="pandas 3.0 removed.*verbose"):
+        with pytest.raises(ValueError, match=f"pandas 3.0 removed.*{parameter}"):
             reader._get_loading_kwargs()
     else:
-        assert reader._get_loading_kwargs()["verbose"] is True
+        assert reader._get_loading_kwargs()[parameter] is value
 
 
 @pytest.mark.skipif(sys.version_info >= (3, 14), reason="pyreadstat not available on Python 3.14")
