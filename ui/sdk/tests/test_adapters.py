@@ -18,9 +18,9 @@
 import os.path
 
 import pytest
-from hamilton_sdk import adapters
 
 from hamilton import driver
+from hamilton_sdk import adapters
 
 import tests.resources.basic_dag_with_config
 import tests.resources.parallel_dag

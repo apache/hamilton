@@ -20,6 +20,7 @@ from collections import namedtuple
 from typing import NamedTuple
 
 import pandas as pd
+
 from hamilton_sdk.tracking import data_observation
 
 

@@ -298,7 +298,7 @@ class LoggingAdapter(
             log_func = self.logger.debug if task_id else self.logger.info
             log_func("Finished execution [OK]", extra=extra)
         elif error:
-            self.logger.exception("Encountered error", extra=extra)
+            self.logger.error("Encountered error", extra=extra)
             self._exception_logged = True
 
     @override
@@ -352,7 +352,7 @@ class LoggingAdapter(
             log_func("Task completed [OK]", extra=extra)
         elif error and not self._exception_logged:
             # NOTE: _exception_logged is used to prevent duplicate exception logging
-            self.logger.exception("Task completion failed due to errors", extra=extra)
+            self.logger.error("Task completion failed due to errors", extra=extra)
             self._exception_logged = True
 
     @override

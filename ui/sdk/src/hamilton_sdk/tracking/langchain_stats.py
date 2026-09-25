@@ -21,9 +21,10 @@ Module to pull a few things from langchain objects.
 
 from typing import Any
 
-from hamilton_sdk.tracking import data_observation
 from langchain_core import documents as lc_documents
 from langchain_core import messages as lc_messages
+
+from hamilton_sdk.tracking import data_observation
 
 
 @data_observation.compute_stats.register(lc_messages.BaseMessage)

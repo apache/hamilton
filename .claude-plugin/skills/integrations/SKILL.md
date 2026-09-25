@@ -26,47 +26,44 @@ Hamilton focuses on **dataflow definition**, letting you integrate with:
 
 ```python
 """Hamilton in Airflow DAG."""
+
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 from hamilton import driver
 import my_hamilton_module
 
+
 def run_hamilton_pipeline(**context):
     """Execute Hamilton DAG within Airflow task."""
     dr = driver.Driver({}, my_hamilton_module)
 
     results = dr.execute(
-        ['final_output'],
+        ["final_output"],
         inputs={
-            'data_date': context['ds'],  # Airflow execution date
-            'run_id': context['run_id']
-        }
+            "data_date": context["ds"],  # Airflow execution date
+            "run_id": context["run_id"],
+        },
     )
 
     # Push results to XCom for downstream tasks
-    context['task_instance'].xcom_push(key='results', value=results)
+    context["task_instance"].xcom_push(key="results", value=results)
     return results
 
+
 default_args = {
-    'owner': 'data-team',
-    'depends_on_past': False,
-    'start_date': datetime(2024, 1, 1),
-    'retries': 2,
-    'retry_delay': timedelta(minutes=5)
+    "owner": "data-team",
+    "depends_on_past": False,
+    "start_date": datetime(2024, 1, 1),
+    "retries": 2,
+    "retry_delay": timedelta(minutes=5),
 }
 
 with DAG(
-    'hamilton_etl_pipeline',
-    default_args=default_args,
-    schedule_interval='@daily',
-    catchup=False
+    "hamilton_etl_pipeline", default_args=default_args, schedule_interval="@daily", catchup=False
 ) as dag:
-
     hamilton_task = PythonOperator(
-        task_id='run_hamilton_etl',
-        python_callable=run_hamilton_pipeline,
-        provide_context=True
+        task_id="run_hamilton_etl", python_callable=run_hamilton_pipeline, provide_context=True
     )
 ```
 
@@ -74,31 +71,39 @@ with DAG(
 
 ```python
 """Orchestrate multiple Hamilton pipelines."""
+
+
 def run_data_ingestion(**context):
     """Hamilton pipeline 1: Ingest data."""
     import ingestion_module
+
     dr = driver.Driver({}, ingestion_module)
-    return dr.execute(['ingested_data'], inputs={'date': context['ds']})
+    return dr.execute(["ingested_data"], inputs={"date": context["ds"]})
+
 
 def run_feature_engineering(**context):
     """Hamilton pipeline 2: Feature engineering."""
     import feature_module
+
     # Get data from previous task
-    ingested_data = context['task_instance'].xcom_pull(task_ids='ingest')
+    ingested_data = context["task_instance"].xcom_pull(task_ids="ingest")
     dr = driver.Driver({}, feature_module)
-    return dr.execute(['features'], inputs={'raw_data': ingested_data})
+    return dr.execute(["features"], inputs={"raw_data": ingested_data})
+
 
 def run_model_training(**context):
     """Hamilton pipeline 3: Train model."""
     import training_module
-    features = context['task_instance'].xcom_pull(task_ids='features')
-    dr = driver.Driver({}, training_module)
-    return dr.execute(['trained_model'], inputs={'features': features})
 
-with DAG('ml_pipeline', schedule_interval='@weekly') as dag:
-    ingest = PythonOperator(task_id='ingest', python_callable=run_data_ingestion)
-    features = PythonOperator(task_id='features', python_callable=run_feature_engineering)
-    train = PythonOperator(task_id='train', python_callable=run_model_training)
+    features = context["task_instance"].xcom_pull(task_ids="features")
+    dr = driver.Driver({}, training_module)
+    return dr.execute(["trained_model"], inputs={"features": features})
+
+
+with DAG("ml_pipeline", schedule_interval="@weekly") as dag:
+    ingest = PythonOperator(task_id="ingest", python_callable=run_data_ingestion)
+    features = PythonOperator(task_id="features", python_callable=run_feature_engineering)
+    train = PythonOperator(task_id="train", python_callable=run_model_training)
 
     ingest >> features >> train
 ```
@@ -109,9 +114,11 @@ with DAG('ml_pipeline', schedule_interval='@weekly') as dag:
 
 ```python
 """Hamilton in Dagster."""
+
 from dagster import asset, AssetExecutionContext
 from hamilton import driver
 import my_hamilton_module
+
 
 @asset
 def customer_features(context: AssetExecutionContext) -> dict:
@@ -121,18 +128,18 @@ def customer_features(context: AssetExecutionContext) -> dict:
     context.log.info("Starting Hamilton pipeline")
 
     results = dr.execute(
-        ['customer_segments', 'feature_importance'],
-        inputs={'data_path': '/data/customers.csv'}
+        ["customer_segments", "feature_importance"], inputs={"data_path": "/data/customers.csv"}
     )
 
     context.log.info(f"Generated {len(results['customer_segments'])} segments")
 
     return results
 
+
 @asset(deps=[customer_features])
 def segment_report(context: AssetExecutionContext, customer_features: dict) -> str:
     """Use Hamilton output in downstream Dagster asset."""
-    segments = customer_features['customer_segments']
+    segments = customer_features["customer_segments"]
     # Generate report
     return f"Processed {len(segments)} segments"
 ```
@@ -143,6 +150,7 @@ def segment_report(context: AssetExecutionContext, customer_features: dict) -> s
 
 ```python
 """Hamilton as FastAPI microservice."""
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from hamilton import driver
@@ -153,40 +161,44 @@ app = FastAPI(title="ML Prediction Service")
 # Initialize driver once at startup
 prediction_driver = driver.Driver({}, prediction_module)
 
+
 class PredictionRequest(BaseModel):
     """Request schema."""
+
     user_id: str
     feature_a: float
     feature_b: float
     feature_c: float
 
+
 class PredictionResponse(BaseModel):
     """Response schema."""
+
     user_id: str
     prediction: float
     confidence: float
+
 
 @app.post("/predict", response_model=PredictionResponse)
 def predict(request: PredictionRequest):
     """Stateless prediction endpoint."""
     try:
-        result = prediction_driver.execute(
-            ['prediction', 'confidence'],
-            inputs=request.dict()
-        )
+        result = prediction_driver.execute(["prediction", "confidence"], inputs=request.dict())
 
         return PredictionResponse(
             user_id=request.user_id,
-            prediction=result['prediction'],
-            confidence=result['confidence']
+            prediction=result["prediction"],
+            confidence=result["confidence"],
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/health")
 def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "service": "hamilton-predictor"}
+
 
 # Run with: uvicorn main:app --reload
 ```
@@ -195,6 +207,7 @@ def health_check():
 
 ```python
 """Async Hamilton with FastAPI."""
+
 from fastapi import FastAPI
 from hamilton import async_driver
 import async_prediction_module
@@ -204,22 +217,19 @@ app = FastAPI()
 # Async driver initialization
 prediction_driver = None
 
+
 @app.on_event("startup")
 async def startup():
     """Initialize async driver on startup."""
     global prediction_driver
-    prediction_driver = await async_driver.Builder()\
-        .with_modules(async_prediction_module)\
-        .build()
+    prediction_driver = await async_driver.Builder().with_modules(async_prediction_module).build()
+
 
 @app.post("/predict")
 async def predict(request: PredictionRequest):
     """Async prediction endpoint."""
-    result = await prediction_driver.execute(
-        ['prediction'],
-        inputs=request.dict()
-    )
-    return {"prediction": result['prediction']}
+    result = await prediction_driver.execute(["prediction"], inputs=request.dict())
+    return {"prediction": result["prediction"]}
 ```
 
 ## Streamlit Integration
@@ -228,6 +238,7 @@ async def predict(request: PredictionRequest):
 
 ```python
 """Hamilton-powered Streamlit dashboard."""
+
 import streamlit as st
 from hamilton import driver
 import analytics_module
@@ -242,34 +253,29 @@ segment = st.sidebar.multiselect("Segments", ["new", "returning", "churned"])
 # Execute Hamilton DAG with user inputs
 if st.sidebar.button("Run Analysis"):
     with st.spinner("Running analysis..."):
-        dr = driver.Driver({'metric': metric}, analytics_module)
+        dr = driver.Driver({"metric": metric}, analytics_module)
 
         results = dr.execute(
-            ['daily_metrics', 'segment_breakdown', 'trends'],
-            inputs={
-                'date_range': date_range,
-                'segments': segment
-            }
+            ["daily_metrics", "segment_breakdown", "trends"],
+            inputs={"date_range": date_range, "segments": segment},
         )
 
         # Display results
         st.header("Daily Metrics")
-        st.line_chart(results['daily_metrics'])
+        st.line_chart(results["daily_metrics"])
 
         st.header("Segment Breakdown")
-        st.bar_chart(results['segment_breakdown'])
+        st.bar_chart(results["segment_breakdown"])
 
         st.header("Trends")
-        st.dataframe(results['trends'])
+        st.dataframe(results["trends"])
 
         # Visualize DAG
         st.header("Pipeline Visualization")
         dr.visualize_execution(
-            ['trends'],
-            './pipeline.png',
-            inputs={'date_range': date_range, 'segments': segment}
+            ["trends"], "./pipeline.png", inputs={"date_range": date_range, "segments": segment}
         )
-        st.image('./pipeline.png')
+        st.image("./pipeline.png")
 ```
 
 ## Jupyter Notebook Integration
@@ -310,13 +316,17 @@ def summary_stats(cleaned_data: pd.DataFrame) -> dict:
 
 ```python
 """Hamilton in Jupyter without magic."""
+
+
 # Cell 1: Define Hamilton functions
 # my_functions.py equivalent
 def load_data(data_path: str) -> pd.DataFrame:
     return pd.read_csv(data_path)
 
+
 def process_data(load_data: pd.DataFrame) -> pd.DataFrame:
     return load_data.dropna()
+
 
 # Cell 2: Create driver
 from hamilton import driver
@@ -326,22 +336,16 @@ import sys
 dr = driver.Driver({}, sys.modules[__name__])
 
 # Cell 3: Execute and explore
-results = dr.execute(
-    ['process_data'],
-    inputs={'data_path': 'data.csv'}
-)
+results = dr.execute(["process_data"], inputs={"data_path": "data.csv"})
 
-results['process_data'].head()
+results["process_data"].head()
 
 # Cell 4: Visualize
-dr.visualize_execution(
-    ['process_data'],
-    './notebook_dag.png',
-    inputs={'data_path': 'data.csv'}
-)
+dr.visualize_execution(["process_data"], "./notebook_dag.png", inputs={"data_path": "data.csv"})
 
 from IPython.display import Image
-Image('./notebook_dag.png')
+
+Image("./notebook_dag.png")
 ```
 
 ## MLflow Integration
@@ -350,6 +354,7 @@ Image('./notebook_dag.png')
 
 ```python
 """Hamilton with MLflow tracking."""
+
 from hamilton import driver
 from hamilton.plugins.mlflow_extensions import MLFlowTracker
 import mlflow
@@ -364,30 +369,30 @@ with mlflow.start_run():
     mlflow_tracker = MLFlowTracker(
         experiment_name="customer_churn",
         run_name="baseline_model_v1",
-        tags={"model_type": "random_forest", "version": "1.0"}
+        tags={"model_type": "random_forest", "version": "1.0"},
     )
 
     # Hamilton driver with MLflow tracking
-    dr = driver.Builder()\
-        .with_config({'model_type': 'random_forest'})\
-        .with_modules(training_module)\
-        .with_adapters(mlflow_tracker)\
+    dr = (
+        driver.Builder()
+        .with_config({"model_type": "random_forest"})
+        .with_modules(training_module)
+        .with_adapters(mlflow_tracker)
         .build()
-
-    results = dr.execute(
-        ['trained_model', 'metrics'],
-        inputs={'training_data': train_df}
     )
 
+    results = dr.execute(["trained_model", "metrics"], inputs={"training_data": train_df})
+
     # Log additional metrics
-    mlflow.log_metrics(results['metrics'])
-    mlflow.log_param("features_count", len(results['features']))
+    mlflow.log_metrics(results["metrics"])
+    mlflow.log_param("features_count", len(results["features"]))
 ```
 
 ## Weights & Biases Integration
 
 ```python
 """Hamilton with W&B tracking."""
+
 import wandb
 from hamilton import driver
 import experiment_module
@@ -396,11 +401,7 @@ import experiment_module
 wandb.init(project="ml-experiments", name="experiment-42")
 
 # Configure Hamilton
-config = {
-    'learning_rate': 0.001,
-    'batch_size': 32,
-    'epochs': 10
-}
+config = {"learning_rate": 0.001, "batch_size": 32, "epochs": 10}
 
 # Log config to W&B
 wandb.config.update(config)
@@ -408,15 +409,16 @@ wandb.config.update(config)
 dr = driver.Driver(config, experiment_module)
 
 results = dr.execute(
-    ['trained_model', 'validation_metrics'],
-    inputs={'data_path': '/data/train.csv'}
+    ["trained_model", "validation_metrics"], inputs={"data_path": "/data/train.csv"}
 )
 
 # Log results to W&B
-wandb.log({
-    "val_accuracy": results['validation_metrics']['accuracy'],
-    "val_loss": results['validation_metrics']['loss']
-})
+wandb.log(
+    {
+        "val_accuracy": results["validation_metrics"]["accuracy"],
+        "val_loss": results["validation_metrics"]["loss"],
+    }
+)
 
 wandb.finish()
 ```
@@ -425,6 +427,7 @@ wandb.finish()
 
 ```python
 """Hamilton with Flask."""
+
 from flask import Flask, request, jsonify
 from hamilton import driver
 import service_module
@@ -432,26 +435,26 @@ import service_module
 app = Flask(__name__)
 service_driver = driver.Driver({}, service_module)
 
-@app.route('/api/process', methods=['POST'])
+
+@app.route("/api/process", methods=["POST"])
 def process_data():
     """Process data endpoint."""
     data = request.get_json()
 
     try:
-        results = service_driver.execute(
-            ['processed_result'],
-            inputs=data
-        )
+        results = service_driver.execute(["processed_result"], inputs=data)
         return jsonify(results)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
-@app.route('/health')
+
+@app.route("/health")
 def health():
-    return jsonify({'status': 'healthy'})
+    return jsonify({"status": "healthy"})
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
 ```
 
 ## dbt Integration
@@ -460,18 +463,22 @@ if __name__ == '__main__':
 
 ```python
 """Hamilton after dbt transformations."""
+
 import subprocess
 from hamilton import driver
 import post_dbt_module
 
+
 def run_dbt() -> dict:
     """Run dbt pipeline."""
-    result = subprocess.run(['dbt', 'run'], capture_output=True)
-    return {'status': 'success' if result.returncode == 0 else 'failed'}
+    result = subprocess.run(["dbt", "run"], capture_output=True)
+    return {"status": "success" if result.returncode == 0 else "failed"}
+
 
 def dbt_output_path(run_dbt: dict) -> str:
     """Get dbt output location."""
-    return './target/output.csv'
+    return "./target/output.csv"
+
 
 # Rest of Hamilton DAG uses dbt output
 def post_dbt_analysis(dbt_output_path: str) -> pd.DataFrame:
@@ -483,24 +490,29 @@ def post_dbt_analysis(dbt_output_path: str) -> pd.DataFrame:
 
 ```python
 """Use Hamilton within Kedro pipelines."""
+
 from kedro.pipeline import Pipeline, node
 from hamilton import driver
 import hamilton_transformations
 
+
 def run_hamilton_node(**inputs):
     """Execute Hamilton as Kedro node."""
     dr = driver.Driver({}, hamilton_transformations)
-    return dr.execute(['output'], inputs=inputs)
+    return dr.execute(["output"], inputs=inputs)
+
 
 def create_pipeline(**kwargs) -> Pipeline:
-    return Pipeline([
-        node(
-            func=run_hamilton_node,
-            inputs=["raw_data", "parameters"],
-            outputs="hamilton_results",
-            name="hamilton_transformation"
-        )
-    ])
+    return Pipeline(
+        [
+            node(
+                func=run_hamilton_node,
+                inputs=["raw_data", "parameters"],
+                outputs="hamilton_results",
+                name="hamilton_transformation",
+            )
+        ]
+    )
 ```
 
 ## Best Practices

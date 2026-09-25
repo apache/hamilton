@@ -15,8 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from hamilton_sdk.tracking import pydantic_stats
 from pydantic import BaseModel
+
+from hamilton_sdk.tracking import pydantic_stats
 
 
 class ModelTest(BaseModel):

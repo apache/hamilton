@@ -27,9 +27,10 @@ import pandas as pd
 import numpy as np
 from hamilton.function_modifiers import check_output
 
+
 @check_output(
     data_type=np.int64,
-    range=(0,100),
+    range=(0, 100),
     importance="warn",
 )
 def some_int_data_between_0_and_100() -> pd.Series:
@@ -130,6 +131,7 @@ To add a custom validator, you need to implement the class `DataValidator`. You 
 import pandas as pd
 import numpy as np
 
+
 @check_output_custom(AllPrimeValidator(...))
 def prime_number_generator(number_of_primes_to_generate: int) -> pd.Series:
     pass
@@ -145,6 +147,7 @@ the `AsyncDriver` and allow `async def validate()` methods.
 
 ```python
 from hamilton.data_quality.base import AsyncDataValidator, ValidationResult
+
 
 class AsyncDBValidator(AsyncDataValidator):
     def __init__(self, importance: str):
@@ -174,6 +177,7 @@ For validators that follow the single-argument pattern used by `@check_output`, 
 ```python
 from hamilton.data_quality.base import AsyncBaseDefaultValidator, ValidationResult
 
+
 class AsyncRangeValidator(AsyncBaseDefaultValidator):
     def __init__(self, range: tuple, importance: str):
         super().__init__(importance=importance)
@@ -188,7 +192,9 @@ class AsyncRangeValidator(AsyncBaseDefaultValidator):
 
     async def validate(self, data: float) -> ValidationResult:
         passes = self.range[0] <= data <= self.range[1]
-        return ValidationResult(passes=passes, message=f"Value {data} in range {self.range}: {passes}")
+        return ValidationResult(
+            passes=passes, message=f"Value {data} in range {self.range}: {passes}"
+        )
 
     @classmethod
     def arg(cls) -> str:
@@ -202,6 +208,7 @@ wrapper will automatically be created as an `async def` when an async validator 
 
 ```python
 from hamilton.function_modifiers import check_output_custom
+
 
 @check_output_custom(AsyncDBValidator(importance="fail"))
 async def fetch_data(query: str) -> dict:

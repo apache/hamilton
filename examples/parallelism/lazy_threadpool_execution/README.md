@@ -60,13 +60,7 @@ import my_functions
 adapter = h_threadpool.FutureAdapter()
 
 # Create a driver
-dr = (
-    driver.Builder()
-    .with_modules(my_functions)
-    .with_adapters(adapter)
-    .build()
-)
+dr = driver.Builder().with_modules(my_functions).with_adapters(adapter).build()
 # execute
-dr.execute(["s", "x", "a"]) # if the DAG can be parallelized it will be
-
+dr.execute(["s", "x", "a"])  # if the DAG can be parallelized it will be
 ```

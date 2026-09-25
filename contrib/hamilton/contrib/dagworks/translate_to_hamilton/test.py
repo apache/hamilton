@@ -47,13 +47,15 @@ This Hamilton setup assumes that `b` and `c` are provided to the framework as in
 '''
     expected = [
         'def a(b: float, c: float) -> float:\n    """Adds b and c to get a."""\n    return b + c\n',
-        "from hamilton import driver\n"
-        "import functions\n"
-        "\n"
-        "dr = driver.Driver(config={}, module=functions)\n"
-        'result = dr.execute(["a"], inputs={"b": 1, "c": 2})  # assuming you\'re '
-        "providing b=1, c=2 as inputs\n"
-        "print(result['a'])  # This will print 3, the result of addition\n",
+        (
+            "from hamilton import driver\n"
+            "import functions\n"
+            "\n"
+            "dr = driver.Driver(config={}, module=functions)\n"
+            'result = dr.execute(["a"], inputs={"b": 1, "c": 2})  # assuming you\'re '
+            "providing b=1, c=2 as inputs\n"
+            "print(result['a'])  # This will print 3, the result of addition\n"
+        ),
     ]
     actual = translate_to_hamilton.code_segments(response)
     assert actual == expected
