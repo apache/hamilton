@@ -5,7 +5,10 @@ plugins.h_openlineage.OpenLineageAdapter
 Install with ``pip install "apache-hamilton[openlineage]"``. The extra brings ``openlineage-python``
 (the client) and, on Linux and macOS, ``openlineage-sql`` (the parser used to find the tables a
 query reads). ``openlineage-sql`` publishes no Windows wheel, so the extra skips it there and SQL
-queries are reported without table datasets on Windows.
+queries, and written table names that are not plain identifiers, are reported without table
+datasets on Windows. The parser is used only with
+``sql_dataset_identity="datasource"``; the default identity needs neither it nor anything else
+beyond the client.
 
 .. autoclass:: hamilton.plugins.h_openlineage.OpenLineageAdapter
    :special-members: __init__
@@ -16,9 +19,25 @@ SQL datasets
 ------------
 
 SQL loaders and savers (``@load_from.sql``, ``@save_to.sql`` and the pandas SQL materializers) record
-the datasource they used (see :ref:`sql-metadata-and-lineage`). The adapter turns that into
-OpenLineage datasets named after the datasource, following the `OpenLineage naming conventions
-<https://openlineage.io/docs/spec/naming/>`_, and reports every physical table a query reads:
+the datasource they used (see :ref:`sql-metadata-and-lineage`). How the adapter names their datasets
+is set by ``sql_dataset_identity``:
+
+- ``"legacy"``, the default: datasets are named as in earlier Hamilton releases, under the adapter's
+  *job* namespace with the bare ``table_name``. As before, a query read containing ``SELECT``
+  produces a dataset with no name and the query in the job's ``sql`` facet, and other strings are
+  used as the dataset name. Leaving the option unset warns once per adapter (a
+  ``FutureWarning``) because the default will change; pass ``"legacy"`` explicitly to keep these names
+  without the warning.
+- ``"datasource"``: datasets are named after the datasource, following the `OpenLineage naming
+  conventions <https://openlineage.io/docs/spec/naming/>`_, and every physical table a query reads is
+  reported. A report written by one job and read by another then resolves to the same dataset, and
+  two tables with the same name in different databases stay distinct.
+
+.. code-block:: python
+
+    adapter = OpenLineageAdapter(client, "my_namespace", "my_job", sql_dataset_identity="datasource")
+
+The rest of this section describes the ``"datasource"`` identity:
 
 .. list-table::
    :header-rows: 1
@@ -32,12 +51,19 @@ OpenLineage datasets named after the datasource, following the `OpenLineage nami
      - ``{database}.{schema}.{table}``; unquoted identifiers are folded to lower case, as the server does
    * - SQLite
      - ``sqlite://{absolute file path}``
-     - ``{table}``, or ``{schema}.{table}`` when the SQL or the writer names an attached database
-       (no convention exists upstream; Hamilton defines this one)
+     - ``{table}``. A table in an attached database (``reporting.orders`` in the SQL, or the writer's
+       ``schema``) is named in the attached file's namespace, which is known only for a
+       standard-library ``sqlite3`` connection; otherwise it is left out.
 
 Aliases and common table expressions are not reported as tables. Each dataset carries a
-``dataSource`` facet with the namespace; the ``schema`` facet from ``dataframe_metadata`` is attached
-only when the node maps to a single table. The job keeps the ``sql`` facet with the query text.
+``dataSource`` facet with the namespace; the ``schema`` facet from ``dataframe_metadata`` is
+attached only when the node maps to a single table. The job keeps the ``sql`` facet with the
+statement's text; a node that read or wrote a table by name has no statement to report. The
+exception is a table read by a name that the metadata files as a query (one containing
+``SELECT``, or whose first word is ``select`` or ``with``, such as ``SELECT_LOG`` or
+``select-log``): it can't be told apart from a statement, so the name is reported as the job's
+SQL and no input dataset is emitted for it. Give such tables plain names, or read them with a
+query.
 
 Whatever cannot be fully identified is left out and logged as a warning from the
 ``hamilton.plugins.h_openlineage`` logger, never guessed. The following cases are left out:
@@ -53,16 +79,32 @@ emitted without datasets. The node itself has already succeeded and is never fai
 
 .. _sql-dataset-identity-change:
 
-Dataset identity change
-~~~~~~~~~~~~~~~~~~~~~~~
+Migrating to the datasource identity
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Before the datasource metadata existed, SQL datasets were emitted under the adapter's *job*
-namespace with the bare ``table_name`` (queries produced a dataset with no name). Since metadata
-version ``1.1.0``, they are emitted under the datasource namespace with a qualified name, so a lineage backend will show the
-new datasets as different from the historical ones; no history is rewritten. Loaders and savers
-whose metadata has no ``source`` (custom functions using the two-argument helper, in-memory
-databases) no longer emit a job-scoped dataset. To keep the previous identities, pin the previous
-Hamilton version.
+The default stays ``"legacy"`` for now and will become ``"datasource"`` in a future major release.
+Switching changes every SQL dataset's namespace and name (for example from ``my_namespace`` +
+``daily_revenue`` to ``postgres://warehouse.example:5432`` + ``analytics.reporting.daily_revenue``).
+A lineage backend shows the new names as new datasets: history recorded under the old names does
+not connect to them, and nothing is rewritten automatically. Some datasets also stop appearing:
+
+- loaders and savers whose metadata has no ``source`` (custom functions using the two-argument
+  helper, in-memory databases)
+- any of the unidentifiable cases above, including every SQL query and every written table name
+  that is not a plain identifier on Windows, where ``openlineage-sql`` is not installed
+
+To migrate:
+
+1. Install ``openlineage-sql`` where you run Hamilton. ``apache-hamilton[openlineage]`` includes it
+   everywhere except Windows. Pin it in locked environments.
+2. Run the pipeline once with ``sql_dataset_identity="datasource"`` against a test backend, or read
+   the events with ``FileTransport``, and note the new namespace and name of each dataset. Check the
+   ``hamilton.plugins.h_openlineage`` warnings for anything left out.
+3. In your lineage backend, move what is keyed to the old names (ownership, tags, alerts, policies,
+   saved queries) to the new ones, or link old and new datasets where the backend supports it.
+4. Pass ``sql_dataset_identity="datasource"`` in production.
+
+To stay on the current names, pass ``sql_dataset_identity="legacy"``. It silences the warning.
 
 Reuse the conversion
 --------------------

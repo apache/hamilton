@@ -37,8 +37,9 @@ job and read by another were two unrelated datasets. Getting real lineage meant 
 loader that duplicated connection details.
 
 The built-in `@load_from.sql` / `@save_to.sql` (and `from_.sql` / `to.sql`) materializers record
-the datasource they used, and the adapter names the physical tables from it. `pipeline.py` is
-ordinary Hamilton code:
+the datasource they used, and the adapter, created with `sql_dataset_identity="datasource"`, names
+the physical tables from it (the default still uses the earlier names; see the adapter reference
+below). `pipeline.py` is ordinary Hamilton code:
 
 ```python
 @load_from.sql(query_or_table=value(REVENUE_QUERY), db_connection=source("sales_db"))
@@ -90,5 +91,5 @@ documents the fields, supported connections and what happens when a datasource c
 identified (in-memory SQLite, unknown connection objects): the data still loads, and the adapter
 logs why the dataset was left out. The
 [adapter reference](https://hamilton.apache.org/reference/lifecycle-hooks/OpenLineageAdapter/)
-covers dataset naming, the identity change from earlier versions, and `sql_datasets()`, which other
+covers dataset naming, how to migrate from the default identity, and `sql_datasets()`, which other
 integrations can call on the same metadata without emitting events.

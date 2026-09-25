@@ -18,6 +18,7 @@
 import json
 import logging
 import sqlite3
+import warnings
 
 import pandas as pd
 import pytest
@@ -118,10 +119,58 @@ def test_sql_datasets_writer_schema_applies_to_every_dialect(tmp_path):
     assert identities(h_openlineage.sql_datasets(postgres).outputs) == [
         ("postgres://source.example:5432", "sales.reporting.daily_revenue")
     ]
-    sqlite = sqlite_metadata(tmp_path / "a.db", "daily_revenue", results=1, schema="reporting")
+    conn = sqlite3.connect(tmp_path / "a.db")
+    conn.execute(f"ATTACH DATABASE '{tmp_path / 'reporting.db'}' AS reporting")
+    sqlite = utils.get_sql_metadata(
+        "daily_revenue", 1, db_connection=conn, schema="reporting", operation="write"
+    )
     assert identities(h_openlineage.sql_datasets(sqlite).outputs) == [
-        (f"sqlite://{(tmp_path / 'a.db').resolve()}", "reporting.daily_revenue")
+        (f"sqlite://{(tmp_path / 'reporting.db').resolve()}", "daily_revenue")
     ]
+
+
+def test_sql_datasets_sqlite_attached_databases(tmp_path):
+    main_path, other_path = tmp_path / "main.db", tmp_path / "other.db"
+    conn = sqlite3.connect(main_path)
+    conn.execute(f"ATTACH DATABASE '{other_path}' AS Reporting")
+    query = "SELECT * FROM reporting.orders JOIN main.customers ON 1=1 JOIN regions ON 1=1"
+    metadata = utils.get_sql_metadata(query, pd.DataFrame(), db_connection=conn)
+    result = h_openlineage.sql_datasets(metadata)
+    main_ns, other_ns = f"sqlite://{main_path.resolve()}", f"sqlite://{other_path.resolve()}"
+    assert identities(result.inputs) == [
+        (main_ns, "customers"),
+        (main_ns, "regions"),
+        (other_ns, "orders"),
+    ]
+    assert result.notes == []
+
+    # a URL names only the main file: attached tables are left out, never put in main's namespace
+    via_url = utils.get_sql_metadata(query, pd.DataFrame(), db_connection=f"sqlite:///{main_path}")
+    result = h_openlineage.sql_datasets(via_url)
+    assert identities(result.inputs) == [(main_ns, "customers"), (main_ns, "regions")]
+    assert any("Cannot tell which file SQLite database 'reporting'" in n for n in result.notes)
+
+    upper = utils.get_sql_metadata(
+        "SELECT * FROM MAIN.customers", pd.DataFrame(), db_connection=conn
+    )
+    assert identities(h_openlineage.sql_datasets(upper).inputs) == [(main_ns, "customers")]
+
+    memory = sqlite3.connect(":memory:")
+    memory.execute(f"ATTACH DATABASE '{other_path}' AS reporting")
+    query = "SELECT * FROM reporting.orders JOIN scratch ON 1=1"
+    result = h_openlineage.sql_datasets(
+        utils.get_sql_metadata(query, pd.DataFrame(), db_connection=memory)
+    )
+    assert identities(result.inputs) == [(other_ns, "orders")]
+    assert any("in-memory database" in n for n in result.notes)
+
+    for query, note in [
+        ("SELECT * FROM temp.scratch", "temporary database"),
+        ("SELECT * FROM missing.orders", "'missing' for table 'orders' is not attached"),
+    ]:
+        metadata = utils.get_sql_metadata(query, pd.DataFrame(), db_connection=conn)
+        result = h_openlineage.sql_datasets(metadata)
+        assert result.inputs == [] and any(note in n for n in result.notes), result.notes
 
 
 def test_sql_datasets_identity_agreement_and_distinction(tmp_path):
@@ -203,6 +252,7 @@ def test_sql_datasets_parser_unavailable_or_failing(tmp_path, monkeypatch):
     monkeypatch.setitem(__import__("sys").modules, "openlineage_sql", None)
     missing = h_openlineage.sql_datasets(metadata)
     assert missing.inputs == [] and "openlineage-sql is not installed" in missing.notes[0]
+    assert missing.query == "SELECT * FROM orders"  # recorded as a read query: still the job's SQL
     monkeypatch.undo()
 
     import openlineage_sql
@@ -213,6 +263,12 @@ def test_sql_datasets_parser_unavailable_or_failing(tmp_path, monkeypatch):
     monkeypatch.setattr(openlineage_sql, "parse", boom)
     failed = h_openlineage.sql_datasets(metadata)
     assert failed.inputs == [] and failed.notes == ["SQL parsing failed: RuntimeError"]
+    assert failed.query == "SELECT * FROM orders"
+
+
+def test_sql_datasets_recorded_read_query_naming_no_table_keeps_its_statement(tmp_path):
+    result = h_openlineage.sql_datasets(sqlite_metadata(tmp_path / "a.db", "SELECT 1"))
+    assert result.inputs == [] and result.query == "SELECT 1"
 
 
 def revenue_module(query=REVENUE_QUERY):
@@ -253,14 +309,16 @@ def seed_sales(connection, schema=None):
     return prefix
 
 
-def run_with_lineage(tmp_path, namespace, inputs):
+def run_with_lineage(
+    tmp_path, namespace, inputs, module=None, final_vars=("saved_revenue",), **adapter_kwargs
+):
     events_path = tmp_path / f"events-{namespace}.json"
     client = OpenLineageClient(
         transport=FileTransport(FileConfig(log_file_path=str(events_path), append=True))
     )
-    adapter = h_openlineage.OpenLineageAdapter(client, namespace, "revenue_job")
-    dr = driver.Builder().with_modules(revenue_module()).with_adapters(adapter).build()
-    result = dr.execute(["saved_revenue"], inputs=inputs)
+    adapter = h_openlineage.OpenLineageAdapter(client, namespace, "revenue_job", **adapter_kwargs)
+    dr = driver.Builder().with_modules(module or revenue_module()).with_adapters(adapter).build()
+    result = dr.execute(list(final_vars), inputs=inputs)
     events = [json.loads(line) for line in events_path.read_text().splitlines() if line.strip()]
     return result, events
 
@@ -280,7 +338,9 @@ def test_revenue_flow_sqlite_emits_datasource_lineage(tmp_path):
         "revenue_table": "daily_revenue",
         "revenue_schema": None,
     }
-    result, events = run_with_lineage(tmp_path, "demo_namespace", inputs)
+    result, events = run_with_lineage(
+        tmp_path, "demo_namespace", inputs, sql_dataset_identity="datasource"
+    )
 
     written = pd.read_sql("SELECT * FROM daily_revenue", warehouse)
     assert written["amount"].tolist() == [15.0]
@@ -301,7 +361,9 @@ def test_revenue_flow_sqlite_emits_datasource_lineage(tmp_path):
     assert output["facets"]["dataSource"]["uri"] == output["namespace"]
 
     # dataset identity comes from the datasource, not the job namespace
-    _, other_events = run_with_lineage(tmp_path, "another_namespace", inputs)
+    _, other_events = run_with_lineage(
+        tmp_path, "another_namespace", inputs, sql_dataset_identity="datasource"
+    )
     assert dataset_ids(other_events, "inputs") == dataset_ids(events, "inputs")
     assert dataset_ids(other_events, "outputs") == dataset_ids(events, "outputs")
     assert {e["job"]["namespace"] for e in other_events} == {"another_namespace"}
@@ -324,7 +386,7 @@ def test_lineage_failures_do_not_interrupt_data_work(tmp_path, monkeypatch, capl
 
     monkeypatch.setattr(h_openlineage, "sql_datasets", boom)
     with caplog.at_level(logging.WARNING, logger="hamilton.plugins.h_openlineage"):
-        result, events = run_with_lineage(tmp_path, "ns", inputs)
+        result, events = run_with_lineage(tmp_path, "ns", inputs, sql_dataset_identity="datasource")
     assert result["saved_revenue"]["sql_metadata"]["rows"] == 1
     assert pd.read_sql("SELECT * FROM r", warehouse)["amount"].tolist() == [15.0]
     assert [e["eventType"] for e in events] == ["START", "RUNNING", "RUNNING", "COMPLETE"]
@@ -335,7 +397,9 @@ def test_lineage_failures_do_not_interrupt_data_work(tmp_path, monkeypatch, capl
     # producer boundary: connection inspection fails, data still flows, notes are logged
     monkeypatch.setattr(utils, "_inspect_sql_source", boom)
     with caplog.at_level(logging.WARNING, logger="hamilton.plugins.h_openlineage"):
-        result, events = run_with_lineage(tmp_path, "ns2", inputs)
+        result, events = run_with_lineage(
+            tmp_path, "ns2", inputs, sql_dataset_identity="datasource"
+        )
     assert result["saved_revenue"]["sql_metadata"]["source"] is None
     assert "Could not inspect" in result["saved_revenue"]["sql_metadata"]["notes"]
     assert "s3cret" not in json.dumps(result["saved_revenue"]) + caplog.text
@@ -362,7 +426,9 @@ def test_revenue_flow_postgres_names_server_database_schema(tmp_path, postgres_s
         client = OpenLineageClient(
             transport=FileTransport(FileConfig(log_file_path=str(events_path), append=True))
         )
-        adapter = h_openlineage.OpenLineageAdapter(client, "job_ns", "revenue_job")
+        adapter = h_openlineage.OpenLineageAdapter(
+            client, "job_ns", "revenue_job", sql_dataset_identity="datasource"
+        )
         dr = driver.Builder().with_modules(module).with_adapters(adapter).build()
         with engine.connect() as warehouse_conn:
             dr.execute(
@@ -386,7 +452,9 @@ def test_revenue_flow_postgres_names_server_database_schema(tmp_path, postgres_s
         assert dataset_ids(events, "outputs") == [
             (namespace, f"{db}.{schema}_reporting.daily_revenue")
         ]
-        assert engine.url.password not in events_text
+        # the password may be an ordinary word found in event tags, so look for it as a credential
+        assert f":{engine.url.password}@" not in events_text
+        assert engine.url.render_as_string(hide_password=False) not in events_text
         assert "job_ns" not in json.dumps(dataset_ids(events, "inputs"))
 
         # a later read of the report resolves to the identity it was written under
@@ -408,3 +476,326 @@ def test_revenue_flow_postgres_names_server_database_schema(tmp_path, postgres_s
     finally:
         with engine.begin() as conn:
             conn.execute(text(f"DROP SCHEMA {schema}_reporting CASCADE"))
+
+
+def legacy_inputs(tmp_path):
+    sales = sqlite3.connect(tmp_path / "sales.db")
+    seed_sales(sales)
+    return {
+        "sales_db": sales,
+        "warehouse_db": create_engine(f"sqlite:///{tmp_path / 'warehouse.db'}"),
+        "revenue_table": "daily_revenue",
+        "revenue_schema": None,
+    }
+
+
+# string columns are "str" on pandas 3 and "object" before it; the facet records what pandas reports
+STRING_DTYPE = str(pd.Series(["x"]).dtype)
+REVENUE_FIELDS = [
+    {"fields": [], "name": "order_date", "type": STRING_DTYPE},
+    {"fields": [], "name": "country", "type": STRING_DTYPE},
+    {"fields": [], "name": "amount", "type": "float64"},
+]
+
+
+def strip_private(value):
+    """Drops the client-generated ``_producer``/``_schemaURL`` keys from an event fragment."""
+    if isinstance(value, dict):
+        return {k: strip_private(v) for k, v in value.items() if not k.startswith("_")}
+    if isinstance(value, list):
+        return [strip_private(v) for v in value]
+    return value
+
+
+def test_default_adapter_keeps_legacy_sql_identity(tmp_path, monkeypatch):
+    """Pinned against the apache/main adapter: job namespace, bare table name, SQL job facet."""
+    monkeypatch.setitem(__import__("sys").modules, "openlineage_sql", None)  # not needed
+    with pytest.warns(FutureWarning, match="sql_dataset_identity='datasource'"):
+        _, events = run_with_lineage(tmp_path, "demo_namespace", legacy_inputs(tmp_path))
+    read, write = (strip_private(e) for e in events if e["eventType"] == "RUNNING")
+    # a query read had no table name in metadata 1.0.0, so the dataset has none
+    assert read["inputs"] == [
+        {
+            "namespace": "demo_namespace",
+            "facets": {"schema": {"fields": REVENUE_FIELDS}},
+            "inputFacets": {},
+        }
+    ]
+    assert read["job"]["facets"] == {"sql": {"query": REVENUE_QUERY}}
+    assert write["outputs"] == [
+        {
+            "namespace": "demo_namespace",
+            "name": "daily_revenue",
+            "facets": {"schema": {"fields": REVENUE_FIELDS}},
+            "outputFacets": {},
+        }
+    ]
+    assert write["job"]["facets"] == {}
+
+
+def test_default_adapter_keeps_legacy_names_for_unusual_sql_strings(tmp_path):
+    """Pinned against the apache/main adapter, which filed names by ``"SELECT" in text``."""
+
+    @load_from.sql(query_or_table=value("select * from orders"), db_connection=source("sales_db"))
+    def lower_query(df: pd.DataFrame) -> pd.DataFrame:
+        return df
+
+    @save_to.sql(
+        table_name=value("USER_SELECTIONS"),
+        db_connection=source("warehouse_db"),
+        if_exists=value("replace"),
+        index=value(False),
+        output_name_="saved_selections",
+    )
+    def selections(lower_query: pd.DataFrame) -> pd.DataFrame:
+        return lower_query
+
+    module = ad_hoc_utils.create_temporary_module(lower_query, selections)
+    with pytest.warns(FutureWarning):
+        _, events = run_with_lineage(
+            tmp_path,
+            "demo_namespace",
+            legacy_inputs(tmp_path),
+            module=module,
+            final_vars=["saved_selections"],
+        )
+    read, write = (strip_private(e) for e in events if e["eventType"] == "RUNNING")
+    assert [(d["namespace"], d.get("name")) for d in read["inputs"]] == [
+        ("demo_namespace", "select * from orders")
+    ]
+    assert read["job"]["facets"] == {"sql": {}}
+    # 1.0.0 filed a name containing SELECT as a query, so the legacy dataset has no name
+    assert [(d["namespace"], d.get("name")) for d in write["outputs"]] == [("demo_namespace", None)]
+
+
+@pytest.mark.parametrize(
+    ("sql_metadata", "name", "query"),
+    [
+        # hand-built by custom loaders (as in earlier versions of examples/openlineage)
+        (
+            {"query": "SELECT * FROM orders", "table_name": "orders"},
+            "orders",
+            "SELECT * FROM orders",
+        ),
+        ({"query": None, "table_name": "SELECT_LOG"}, "SELECT_LOG", None),
+        ({"query": "SELECT * FROM orders", "table_name": None}, None, "SELECT * FROM orders"),
+        ({"query": "select * from orders", "table_name": None}, None, "select * from orders"),
+        # 1.1.0 filing of a lower-case read; 1.0.0 filed (and named) it as a table
+        (
+            {"query": "select * from orders", "table_name": None, "__version__": "1.1.0"},
+            "select * from orders",
+            None,
+        ),
+    ],
+)
+def test_legacy_dataset_helpers_match_1_0_0(sql_metadata, name, query):
+    """Pinned against apache/main's create_input_dataset / create_output_dataset."""
+    metadata = {"sql_metadata": sql_metadata}
+    inputs, sql_facet = h_openlineage.create_input_dataset("ns", metadata, None)
+    (output,) = h_openlineage.create_output_dataset("ns", metadata, None)
+    assert [(d.namespace, d.name) for d in inputs] == [("ns", name)]
+    assert (output.namespace, output.name) == ("ns", name)
+    assert sql_facet.query == query
+
+
+def test_default_adapter_legacy_table_read(tmp_path):
+    @load_from.sql(query_or_table=value("customers"), db_connection=source("sales_url"))
+    def customers(df: pd.DataFrame) -> pd.DataFrame:
+        return df
+
+    seed_sales(sqlite3.connect(tmp_path / "sales.db"))
+    module = ad_hoc_utils.create_temporary_module(customers)
+    events_path = tmp_path / "events.json"
+    client = OpenLineageClient(
+        transport=FileTransport(FileConfig(log_file_path=str(events_path), append=True))
+    )
+    adapter = h_openlineage.OpenLineageAdapter(client, "demo_namespace", "job")
+    dr = driver.Builder().with_modules(module).with_adapters(adapter).build()
+    with pytest.warns(FutureWarning):
+        dr.execute(["customers"], inputs={"sales_url": f"sqlite:///{tmp_path / 'sales.db'}"})
+    events = [json.loads(line) for line in events_path.read_text().splitlines()]
+    (read,) = (strip_private(e) for e in events if e["eventType"] == "RUNNING")
+    assert [(d["namespace"], d["name"]) for d in read["inputs"]] == [
+        ("demo_namespace", "customers")
+    ]
+    assert read["job"]["facets"] == {"sql": {}}  # the 1.0.0 facet for a table read has no query
+
+
+def test_legacy_identity_warning_fires_once_and_only_by_default(tmp_path, recwarn):
+    run_with_lineage(tmp_path, "ns_default", legacy_inputs(tmp_path))
+    identity_warnings = [w for w in recwarn.list if "sql_dataset_identity" in str(w.message)]
+    assert [w.category for w in identity_warnings] == [FutureWarning]  # two SQL nodes, one warning
+    message = str(identity_warnings[0].message)
+    assert "sql_dataset_identity='legacy'" in message and "OpenLineageAdapter/" in message
+    recwarn.clear()
+    for identity in ("legacy", "datasource"):
+        run_with_lineage(
+            tmp_path, f"ns_{identity}", legacy_inputs(tmp_path), sql_dataset_identity=identity
+        )
+    assert not [w for w in recwarn.list if "sql_dataset_identity" in str(w.message)]
+
+
+def test_legacy_identity_warning_as_error_does_not_fail_the_node(tmp_path, caplog):
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", FutureWarning)
+        with caplog.at_level(logging.WARNING, logger="hamilton.plugins.h_openlineage"):
+            result, events = run_with_lineage(tmp_path, "ns", legacy_inputs(tmp_path))
+    assert result["saved_revenue"]["sql_metadata"]["rows"] == 1
+    assert dataset_ids(events, "outputs") == [("ns", "daily_revenue")]
+    assert "legacy identity" in caplog.text
+
+
+def test_legacy_identity_conversion_failure_does_not_fail_the_node(tmp_path, monkeypatch, caplog):
+    def boom(*args, **kwargs):
+        raise RuntimeError("legacy conversion exploded")
+
+    monkeypatch.setattr(h_openlineage, "create_output_dataset", boom)
+    with caplog.at_level(logging.WARNING, logger="hamilton.plugins.h_openlineage"):
+        result, events = run_with_lineage(
+            tmp_path, "ns", legacy_inputs(tmp_path), sql_dataset_identity="legacy"
+        )
+    assert result["saved_revenue"]["sql_metadata"]["rows"] == 1
+    assert dataset_ids(events, "outputs") == []
+    assert "conversion failed" in caplog.text
+
+
+def test_invalid_sql_dataset_identity_fails_at_construction():
+    with pytest.raises(ValueError, match="sql_dataset_identity must be one of"):
+        h_openlineage.OpenLineageAdapter(None, "ns", "job", sql_dataset_identity="qualified")
+
+
+@pytest.mark.parametrize(
+    ("table", "query", "table_name"),
+    [
+        ("daily revenue", None, "daily revenue"),
+        ("SELECTED_ROWS", "SELECTED_ROWS", None),
+        ("SELECT results", "SELECT results", None),
+    ],
+)
+def test_written_table_names_are_emitted_as_tables(tmp_path, table, query, table_name):
+    inputs = {**legacy_inputs(tmp_path), "revenue_table": table}
+    result, events = run_with_lineage(tmp_path, "ns", inputs, sql_dataset_identity="datasource")
+    metadata = result["saved_revenue"]["sql_metadata"]
+    # the 1.0.0 query/table_name filing is kept; operation marks the name as the table written
+    assert (metadata["query"], metadata["table_name"], metadata["operation"]) == (
+        query,
+        table_name,
+        "write",
+    )
+    assert dataset_ids(events, "outputs") == [
+        (f"sqlite://{(tmp_path / 'warehouse.db').resolve()}", table)
+    ]
+    (write,) = (e for e in events if e["eventType"] == "RUNNING" and e.get("outputs"))
+    assert "sql" not in write["job"]["facets"]  # a table name is not the job's SQL
+
+
+def test_read_by_a_non_plain_table_name_reports_no_statement(tmp_path):
+    engine = create_engine(f"sqlite:///{tmp_path / 'a.db'}")
+    pd.DataFrame({"x": [1]}).to_sql("daily revenue", engine, index=False)
+    metadata = utils.get_sql_metadata(
+        "daily revenue", pd.DataFrame(), db_connection=engine, operation="read"
+    )
+    result = h_openlineage.sql_datasets(metadata)
+    assert result.inputs == [] and result.notes  # not guessed
+    assert result.query is None  # a table name is not the job's SQL
+
+
+@pytest.mark.parametrize("parser", ["missing", "failing"])
+def test_sql_datasets_written_name_without_parser(tmp_path, monkeypatch, parser):
+    if parser == "missing":
+        monkeypatch.setitem(__import__("sys").modules, "openlineage_sql", None)
+    else:
+        import openlineage_sql
+
+        def boom(*args, **kwargs):
+            raise RuntimeError("parser exploded")
+
+        monkeypatch.setattr(openlineage_sql, "parse", boom)
+    conn = sqlite3.connect(tmp_path / "a.db")
+
+    def written(name):
+        metadata = utils.get_sql_metadata(name, 3, db_connection=conn, operation="write")
+        return h_openlineage.sql_datasets(metadata)
+
+    assert identities(written("USER_SELECTIONS").outputs) == [
+        (f"sqlite://{(tmp_path / 'a.db').resolve()}", "USER_SELECTIONS")
+    ]
+    # a table name and a statement can't be told apart without a parse: left out, explained
+    for ambiguous in (
+        "SELECT results",
+        "daily revenue",
+        "INSERT INTO t SELECT * FROM s",
+        "TRUNCATE t; INSERT INTO t SELECT * FROM s",
+        "(SELECT * FROM s)",
+    ):
+        result = written(ambiguous)
+        assert result.outputs == [] and result.notes, ambiguous
+
+
+@pytest.mark.parametrize(
+    ("statement", "inputs", "outputs"),
+    [
+        ("INSERT INTO t SELECT * FROM s", ["s"], ["t"]),
+        ("CREATE TABLE t AS SELECT a FROM s", ["s"], ["t"]),
+        ("TRUNCATE t; INSERT INTO t SELECT * FROM s", ["s"], ["t"]),
+        ("insert into t select * from s", ["s"], ["t"]),  # filed under table_name
+    ],
+)
+def test_sql_datasets_write_statements_are_parsed(tmp_path, statement, inputs, outputs):
+    """A custom saver recording the statement it ran gets the tables, not the SQL as a name."""
+    metadata = sqlite_metadata(tmp_path / "a.db", statement, results=3)
+    ns = f"sqlite://{(tmp_path / 'a.db').resolve()}"
+    result = h_openlineage.sql_datasets(metadata, operation="write")
+    assert identities(result.outputs) == [(ns, t) for t in outputs]
+    assert identities(result.inputs) == [(ns, t) for t in inputs]
+    assert result.query == statement
+
+
+def test_sql_datasets_write_of_a_pure_query_is_left_out(tmp_path):
+    metadata = sqlite_metadata(tmp_path / "a.db", "SELECT * FROM s", results=3)
+    result = h_openlineage.sql_datasets(metadata, operation="write")
+    assert result.outputs == [] and result.inputs == []
+    assert result.notes == ["Write metadata holds a statement that writes no table"]
+
+
+@pytest.mark.parametrize(
+    ("query", "tables"),
+    [("(select * from orders)", ["orders"]), ("pragma table_info(orders)", [])],
+)
+def test_read_strings_that_are_not_names_are_parsed_not_named(tmp_path, query, tables):
+    """1.0.0 files these under table_name; they must not become a dataset named after the SQL."""
+    metadata = sqlite_metadata(tmp_path / "a.db", query, results=pd.DataFrame())
+    assert metadata["sql_metadata"]["table_name"] == query
+    result = h_openlineage.sql_datasets(metadata)
+    # reported as the job's SQL only when the parse shows it is a statement naming tables
+    assert result.query == (query if tables else None)
+    assert identities(result.inputs) == [
+        (f"sqlite://{(tmp_path / 'a.db').resolve()}", t) for t in tables
+    ]
+    assert tables or result.notes
+
+
+def test_attached_sqlite_database_is_attributed_to_its_own_file(tmp_path):
+    main_path, other_path = tmp_path / "main.db", tmp_path / "other.db"
+    seed_sales(sqlite3.connect(other_path))
+    conn = sqlite3.connect(main_path)
+    conn.execute(f"ATTACH DATABASE '{other_path}' AS reporting")
+
+    @load_from.sql(
+        query_or_table=value("SELECT * FROM reporting.orders"), db_connection=source("db")
+    )
+    def orders(df: pd.DataFrame) -> pd.DataFrame:
+        return df
+
+    events_path = tmp_path / "events.json"
+    client = OpenLineageClient(
+        transport=FileTransport(FileConfig(log_file_path=str(events_path), append=True))
+    )
+    adapter = h_openlineage.OpenLineageAdapter(
+        client, "ns", "job", sql_dataset_identity="datasource"
+    )
+    module = ad_hoc_utils.create_temporary_module(orders)
+    dr = driver.Builder().with_modules(module).with_adapters(adapter).build()
+    dr.execute(["orders"], inputs={"db": conn})
+    events = [json.loads(line) for line in events_path.read_text().splitlines()]
+    assert dataset_ids(events, "inputs") == [(f"sqlite://{other_path.resolve()}", "orders")]
