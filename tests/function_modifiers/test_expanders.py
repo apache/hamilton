@@ -950,6 +950,25 @@ def test_parameterized_extract_columns():
     assert nodes_by_name["outseries2b"](fn__1=pd.DataFrame({"outseries2b": [40]}))[0] == 40
 
 
+def test_parameterized_extract_columns_no_reassign_columns():
+    """With reassign_columns=False the columns keep their names, so they are extracted by name."""
+    annotation = function_modifiers.parameterize_extract_columns(
+        function_modifiers.ParameterizedExtract(("y", "x"), {"k": value(1)}),
+        reassign_columns=False,
+    )
+
+    def fn(k: int) -> pd.DataFrame:
+        return pd.DataFrame({"x": [k], "y": [k * 100]})
+
+    nodes_by_name = {
+        node_.name: node_ for node_ in annotation.expand_node(node.Node.from_fn(fn), {}, fn)
+    }
+    df = nodes_by_name["fn__0"]()
+    pd.testing.assert_frame_equal(df, pd.DataFrame({"x": [1], "y": [100]}))
+    assert nodes_by_name["x"](fn__0=df)[0] == 1
+    assert nodes_by_name["y"](fn__0=df)[0] == 100
+
+
 def test_parametrized_full_replace_groups_with_literal():
     def add_n(grouped_parameter: list[int]) -> int:
         return sum(grouped_parameter)
