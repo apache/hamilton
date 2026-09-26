@@ -409,12 +409,15 @@ def check_input_type(node_type: type, input_value: Any) -> bool:
         return True
     # other generics, e.g. Mapping[str, int] given a dict, or dict[str, int] given an
     # OrderedDict -- accept any instance of the (possibly abstract) origin class.
-    elif (
-        typing_inspect.is_generic_type(node_type)
-        and inspect.isclass(typing_inspect.get_origin(node_type))
-        and isinstance(input_value, typing_inspect.get_origin(node_type))
+    elif typing_inspect.is_generic_type(node_type) and inspect.isclass(
+        typing_inspect.get_origin(node_type)
     ):
-        return True
+        try:
+            return isinstance(input_value, typing_inspect.get_origin(node_type))
+        except TypeError:
+            # origins that reject runtime checks, e.g. a Protocol that is not
+            # @runtime_checkable (Parallelizable[...], Collect[...]), are not matched.
+            return False
 
     return False
 

@@ -374,6 +374,23 @@ def test_check_input_type_generic_rejects_non_instance_of_origin(node_type, inpu
     assert htypes.check_input_type(node_type, input_value) is False
 
 
+_ProtocolElement = typing.TypeVar("_ProtocolElement")
+
+
+class _NotRuntimeCheckable(typing.Protocol[_ProtocolElement]):
+    def method(self) -> _ProtocolElement: ...
+
+
+@pytest.mark.parametrize(
+    "node_type",
+    [htypes.Parallelizable[int], htypes.Collect[int], _NotRuntimeCheckable[int]],
+    ids=["parallelizable", "collect", "user-protocol"],
+)
+def test_check_input_type_generic_non_runtime_checkable_protocol(node_type):
+    # isinstance() raises TypeError for these origins; the check must return False, not raise.
+    assert htypes.check_input_type(node_type, [1]) is False
+
+
 @pytest.mark.skipif(
     sys.version_info < (3, 12), reason="PEP 695 `type X = ...` syntax requires Python 3.12+"
 )
