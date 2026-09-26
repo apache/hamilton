@@ -539,6 +539,12 @@ these should be human-readable and familiar to you. Then you’ll want to look a
 to figure out which is the best for your case (the object you want to load from or save to).</p>
 <p>Finally, look up the adapter params to see what parameters you can pass to the data adapters.
 The optional params come with their default value specified.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Python pickle deserialization can execute arbitrary code. Only use the <code class="docutils literal notranslate"><span class="pre">pickle</span></code> data loader
+with files from sources you trust. When data crosses a trust boundary, prefer a non-executable
+interchange format such as JSON, Parquet, or Arrow.</p>
+</div>
 <p>If you want more information, click on the <cite>module</cite>, it will send you to the code that implements
 it to see how the parameters are used.</p>
 <p>As an example, say we wanted to save a pandas dataframe to a CSV file. We would first find the

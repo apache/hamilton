@@ -1843,10 +1843,7 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">node_kwargs</span><span class="o">=</span><span class="n">node_kwargs</span><span class="p">,</span>
                 <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">behaviors</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">node_name</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span>
-                <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">RECOMPUTE</span><span class="p">,</span>
-                <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">IGNORE</span><span class="p">,</span>
-            <span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">behaviors</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">node_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">RECOMPUTE</span><span class="p">:</span>
                 <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cache_key</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span>
 
                 <span class="c1"># nodes collected in `._data_loaders` return tuples of (result, metadata)</span>
@@ -1999,7 +1996,6 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">behaviors</span><span class="p">[</span><span class="n">run_id</span><span class="p">][</span><span class="n">node_name</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span>
             <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">DEFAULT</span><span class="p">,</span>
             <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">RECOMPUTE</span><span class="p">,</span>
-            <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">IGNORE</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cache_key</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span>
             <span class="n">data_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_version</span><span class="p">(</span>

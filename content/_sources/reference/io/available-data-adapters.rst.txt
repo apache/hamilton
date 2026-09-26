@@ -17,6 +17,12 @@ to figure out which is the best for your case (the object you want to load from 
 Finally, look up the adapter params to see what parameters you can pass to the data adapters.
 The optional params come with their default value specified.
 
+.. warning::
+
+    Python pickle deserialization can execute arbitrary code. Only use the ``pickle`` data loader
+    with files from sources you trust. When data crosses a trust boundary, prefer a non-executable
+    interchange format such as JSON, Parquet, or Arrow.
+
 If you want more information, click on the `module`, it will send you to the code that implements
 it to see how the parameters are used.
 

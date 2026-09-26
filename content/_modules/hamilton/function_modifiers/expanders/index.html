@@ -1185,6 +1185,8 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        """</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">callable</span>
         <span class="n">base_doc</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">documentation</span>
+        <span class="c1"># columns can be passed as (name, doc) tuples -- only the name is a column in the dataframe</span>
+        <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
 
         <span class="c1"># if fn is an async function</span>
         <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">iscoroutinefunction</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
@@ -1192,7 +1194,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">df_generator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
                 <span class="n">df_generated</span> <span class="o">=</span> <span class="k">await</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fill_with</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_generated</span><span class="p">:</span>
                             <span class="n">registry</span><span class="o">.</span><span class="n">fill_with_scalar</span><span class="p">(</span><span class="n">df_generated</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fill_with</span><span class="p">)</span>
                             <span class="k">assert</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_generated</span>
@@ -1203,7 +1205,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">def</span><span class="w"> </span><span class="nf">df_generator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
                 <span class="n">df_generated</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fill_with</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_generated</span><span class="p">:</span>
                             <span class="n">registry</span><span class="o">.</span><span class="n">fill_with_scalar</span><span class="p">(</span><span class="n">df_generated</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fill_with</span><span class="p">)</span>
                             <span class="k">assert</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_generated</span>
@@ -1308,6 +1310,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">typed_dict_fields</span><span class="p">:</span>
                     <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> is not a field in the `TypedDict` </span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+                    <span class="k">continue</span>
                 <span class="n">reduced_fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">typed_dict_fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
             <span class="n">fields</span> <span class="o">=</span> <span class="n">reduced_fields</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -1728,8 +1731,8 @@ s=d.getElementsByTagName('script')[0];
                 <span class="n">df_out</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">_output_columns</span>
                 <span class="k">return</span> <span class="n">df_out</span>
 
-            <span class="n">new_node</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">callabl</span><span class="o">=</span><span class="n">wrapper_fn</span><span class="p">)</span>
             <span class="n">fn_to_call</span> <span class="o">=</span> <span class="n">wrapper_fn</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reassign_columns</span> <span class="k">else</span> <span class="n">fn</span>
+            <span class="n">new_node</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">copy_with</span><span class="p">(</span><span class="n">callabl</span><span class="o">=</span><span class="n">fn_to_call</span><span class="p">)</span>
             <span class="c1"># We have to rename the underlying function so that we do not</span>
             <span class="c1"># get naming collisions. Using __ is cleaner than using a uuid</span>
             <span class="c1"># as it is easier to read/manage and naturally maeks sense.</span>
