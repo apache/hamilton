@@ -15,7 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import os
 import sys
+import uuid
+
+import pytest
 
 # Skip tests that require packages not yet available on Python 3.14
 collect_ignore = []
@@ -48,3 +52,26 @@ def pytest_sessionfinish(session, exitstatus):
     if exitstatus == 5:  # pytest.ExitCode.NO_TESTS_COLLECTED
         if sys.version_info >= (3, 14):
             session.exitstatus = 0
+
+
+@pytest.fixture
+def postgres_schema():
+    """A throwaway schema on the PostgreSQL server named by ``HAMILTON_TEST_POSTGRES_URL``.
+
+    Yields ``(engine, schema_name)``; skips when the variable is unset. Only that schema is
+    created and it is dropped afterwards, so any server the variable points at stays clean.
+    """
+    url = os.environ.get("HAMILTON_TEST_POSTGRES_URL")
+    if not url:
+        pytest.skip("HAMILTON_TEST_POSTGRES_URL not set")
+    sqlalchemy = pytest.importorskip("sqlalchemy")
+    engine = sqlalchemy.create_engine(url)
+    schema = f"lineage_{uuid.uuid4().hex[:8]}"
+    with engine.begin() as conn:
+        conn.execute(sqlalchemy.text(f"CREATE SCHEMA {schema}"))
+    try:
+        yield engine, schema
+    finally:
+        with engine.begin() as conn:
+            conn.execute(sqlalchemy.text(f"DROP SCHEMA {schema} CASCADE"))
+        engine.dispose()

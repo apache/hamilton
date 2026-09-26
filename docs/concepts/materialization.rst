@@ -146,3 +146,178 @@ Here are simplified snippets for saving and loading an XGBoost model to/from JSO
    +----------------------------------------------+-----------------------------------------------+
 
 To define your own DataSaver and DataLoader, the Apache Hamilton `XGBoost extension <https://github.com/apache/hamilton/blob/main/hamilton/plugins/xgboost_extensions.py>`_ provides a good example
+
+
+.. _sql-metadata-and-lineage:
+
+SQL metadata and lineage
+------------------------
+
+The built-in SQL materializers (``@load_from.sql``, ``@save_to.sql``, ``from_.sql``, ``to.sql`` and the
+``PandasSqlReader`` / ``PandasSqlWriter`` behind them) return ``sql_metadata`` describing what was read
+or written. Since version ``1.1.0`` of that metadata, they also record *where*: the database the
+connection points at. Lineage consumers such as the :doc:`OpenLineage adapter
+<../reference/lifecycle-hooks/OpenLineageAdapter>` use this to name the physical tables a query
+reads, without any custom loader or hand-maintained mapping.
+
+Take a graph that reads a query joining ``orders`` and ``customers`` from a sales database,
+aggregates daily revenue in Python, and writes ``daily_revenue`` to a reporting database:
+
+.. code-block:: python
+
+    @load_from.sql(query_or_table=value(REVENUE_QUERY), db_connection=source("sales_db"))
+    def order_lines(df: pd.DataFrame) -> pd.DataFrame:
+        return df
+
+    @save_to.sql(table_name=value("daily_revenue"), schema=value("reporting"),
+                 db_connection=source("warehouse_db"), output_name_="saved_revenue")
+    def daily_revenue(order_lines: pd.DataFrame) -> pd.DataFrame:
+        ...
+
+With metadata version ``1.0.0``, the loader's metadata was ``{"rows": 3, "query": "...", "table_name": None}``: no table, no
+server, no database. A join reported no inputs at all, and the saver's ``daily_revenue`` could not
+be told apart from a table of the same name elsewhere. With version ``1.1.0``, the same code, with the same
+connections, yields:
+
+.. code-block:: python
+
+    {"sql_metadata": {
+        "rows": 3,
+        "query": "WITH paid AS (...) SELECT ... FROM paid p JOIN customers c ON ...",
+        "table_name": None,
+        "schema": None,
+        "operation": "read",
+        "source": {"dialect": "postgresql", "host": "source.example", "port": 5432,
+                   "database": "sales", "default_schema": "public"},
+        "notes": "",
+        "timestamp": 1758470400.0,
+        "__version__": "1.1.0",
+    }}
+
+and the OpenLineage adapter, with ``sql_dataset_identity="datasource"`` (see
+:ref:`sql-dataset-identity-change`), reports ``sales.public.orders`` and ``sales.public.customers`` under
+``postgres://source.example:5432`` as inputs, and ``analytics.reporting.daily_revenue`` under the
+warehouse's namespace as output. The same module produces the same identities whether it runs from
+a script, a notebook or an orchestrator.
+
+Fields
+~~~~~~
+
+The ``sql_metadata`` entry holds the following keys:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 82
+
+   * - Key
+     - Meaning
+   * - ``rows``
+     - Rows read (``len`` of the DataFrame) or the row count the write returned; ``None`` when unknown.
+   * - ``query``
+     - The statement executed, or ``None`` when a bare table name was read or written. As in 1.0.0,
+       a string containing the upper-case text ``SELECT`` anywhere is filed here, and anything else
+       under ``table_name``. Since 1.1.0 a read that starts (after comments) with ``select`` or
+       ``with`` in any case is also filed here; 1.0.0 recorded a lower-case ``select ...`` as a table
+       name. Writes and the two-argument form of :func:`~hamilton.io.utils.get_sql_metadata` keep the
+       1.0.0 rule. Lineage consumers should use ``operation``: the string a write names is the table
+       written, whichever of the two keys holds it (``"USER_SELECTIONS"`` is filed under ``query``).
+       A written name that is not a plain identifier (``daily revenue``, ``SELECT results``) is
+       parsed with ``openlineage-sql``: a statement that names tables contributes the tables it
+       writes (or is left out, with a note, if it writes none), and a string naming no table is the
+       table name. Without ``openlineage-sql``, such a name is left out of lineage with a note.
+   * - ``table_name``
+     - The bare table name read or written, or ``None`` for a statement.
+   * - ``schema``
+     - The schema explicitly passed to the writer (``PandasSqlWriter(schema=...)``), else ``None``.
+       *New in 1.1.0.*
+   * - ``operation``
+     - ``"read"`` or ``"write"``; ``None`` when the helper was called in its original two-argument
+       form and the direction is unknown. *New in 1.1.0.*
+   * - ``source``
+     - The datasource, or ``None`` when it could not be identified. It holds ``dialect``, the SQLAlchemy
+       backend name (``postgresql`` or ``sqlite``); ``host``; ``port``; ``database``, which is the
+       absolute file path for SQLite; and ``default_schema``, the schema unqualified names resolve
+       against. ``default_schema`` is set only when SQLAlchemy already established it on the connection,
+       and is ``None`` otherwise. SQLite sources also hold ``attached``, a mapping of attached database
+       name to absolute file path, or ``None`` when the attached databases cannot be known (see
+       below). *New in 1.1.0.*
+   * - ``notes``
+     - Why ``source`` is ``None``, for example ``"In-memory SQLite database has no stable identity"``
+       or ``"Unsupported connection type for SQL metadata: MyConn"``; empty otherwise. *New in 1.1.0.*
+   * - ``timestamp``
+     - When the metadata was produced (POSIX seconds).
+   * - ``__version__``
+     - ``"1.1.0"``. Added keys bump the minor version; a change to an existing key's meaning bumps the
+       major version.
+
+Supported connections
+~~~~~~~~~~~~~~~~~~~~~
+
+The connection object determines what ``source`` can hold:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Connection passed as ``db_connection``
+     - What ``source`` holds
+   * - SQLAlchemy ``Engine`` or ``Connection`` (PostgreSQL, SQLite)
+     - dialect, host, port, database from the URL; ``default_schema`` as SQLAlchemy determined it on
+       connect (PostgreSQL ``current_schema()``).
+   * - SQLAlchemy URL string (``"postgresql+psycopg2://..."``, ``"sqlite:///path.db"``)
+     - dialect, host, port, database from the parsed URL; ``default_schema`` is ``None`` because pandas
+       discards the temporary engine it built.
+   * - Standard-library ``sqlite3.Connection`` on a file
+     - ``dialect="sqlite"``, ``database`` = absolute file path, and ``attached`` = the file of every
+       database attached to it, read with ``PRAGMA database_list`` on that same connection (no
+       transaction is started). Only this connection form can see attached databases; for the others
+       ``attached`` is ``None``.
+   * - In-memory SQLite (``:memory:``, ``sqlite://``, ``sqlite:///:memory:``)
+     - ``None`` with a note: two unrelated in-memory databases must not share an identity. A raw
+       ``sqlite3`` in-memory connection with files attached keeps ``database=""`` and ``attached``, so
+       tables in the attached files can still be named.
+   * - Anything else (other DBAPI connections, mocks, and similar objects)
+     - ``None`` with a note naming the type. Data loading and saving are unaffected.
+
+Inspection never opens a connection, runs a write, commits, rolls back, or changes session settings,
+and never raises: a failure during inspection becomes a ``notes`` entry naming the exception type
+only. ``source`` holds scalars, never the connection object or the URL string, so it serializes
+with ``json.dumps`` and cannot carry a username, password or URL query parameter. The ``query``
+field is the SQL text you supplied, as before: keep secrets out of literals or strip them
+downstream.
+
+Schema precedence and unknown cases
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A table referenced by a statement is qualified from, in order: the qualification written in the
+SQL (``sales.public.orders``), the ``schema`` argument given to the writer, then ``source["default_schema"]``.
+For SQLite, a schema names a database file rather than a namespace inside one: ``main`` (or no
+schema) is the connection's file, and an attached database's tables are named in that file's
+namespace, resolved through ``source["attached"]``. When the attached file cannot be known (a URL
+or SQLAlchemy connection), or the schema is ``temp``, the table is left out rather than
+attributed to the main file.
+The default schema is what SQLAlchemy read from the server, not an assumption that PostgreSQL uses
+``public``; when the connection's ``search_path`` spans several schemas, qualify table names in
+the SQL to remove the ambiguity. When no schema can be determined, the table is left out of
+lineage and the reason is reported. Only ``SELECT``-style statements pandas can execute are in
+scope; SQL run inside ordinary Python functions is not observed.
+
+Call the helper yourself
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Custom ``@dataloader`` / ``@datasaver`` functions can produce the same metadata:
+
+.. code-block:: python
+
+    from hamilton.io import utils
+
+    @dataloader()
+    def orders(sales_db: Engine) -> tuple[pd.DataFrame, dict]:
+        query = "SELECT * FROM sales.public.orders"
+        df = pd.read_sql(query, sales_db)
+        return df, utils.get_sql_metadata(query, df, db_connection=sales_db, operation="read")
+
+Pass ``operation="write"`` from a saver so the table name is never mistaken for a statement.
+The original two-argument call ``get_sql_metadata(query_or_table, results)`` keeps working and
+keeps its keys, their values and row-count semantics; it simply reports ``source=None`` with a note and
+``operation=None``, so consumers diagnose it as incomplete rather than guessing.

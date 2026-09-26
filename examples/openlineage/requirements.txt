@@ -1,2 +1,2 @@
-apache-hamilton
-openlineage-python
+apache-hamilton[openlineage]
+sqlalchemy

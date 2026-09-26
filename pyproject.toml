@@ -68,7 +68,11 @@ experiments = [
   "uvicorn",
 ]
 lsp = ["apache-hamilton-lsp"]
-openlineage = ["openlineage-python"]
+openlineage = [
+    "openlineage-python",
+    # SQL table resolution; no Windows wheel is published, the adapter degrades without it
+    "openlineage-sql; sys_platform != 'win32'",
+]
 pandera = ["pandera"]
 performance = [
     # Internal performance boosters go here
