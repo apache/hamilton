@@ -16,27 +16,43 @@
 # under the License.
 
 """This module contains base constructs for executing a hamilton graph.
-It should only import hamilton.node, numpy, pandas.
+It should keep imports light and defer pandas/numpy until result builders need them.
 It cannot import hamilton.graph, or hamilton.driver.
 """
 
+from __future__ import annotations
+
 import abc
 import collections
+import importlib
 import logging
-from typing import Any
+from functools import cache
+from typing import TYPE_CHECKING, Any
 
-import numpy as np
-import pandas as pd
-from pandas.core.indexes import extension as pd_extension
+if TYPE_CHECKING:
+    import numpy as np
+    import pandas as pd
+
+    try:
+        from . import node
+    except ImportError:
+        import node
 
 from hamilton.lifecycle import api as lifecycle_api
 
 try:
-    from . import htypes, node
+    from . import htypes
 except ImportError:
-    import node
+    import htypes
 
 logger = logging.getLogger(__name__)
+
+
+@cache
+def _lazy_import(module: str, attr: str | None = None) -> Any:
+    """Lazy import a module. Cached after 1st call."""
+    mod = importlib.import_module(module)
+    return mod if attr is None else getattr(mod, attr)
 
 
 class ResultMixin(lifecycle_api.LegacyResultMixin):
@@ -123,6 +139,8 @@ class PandasDataFrameResult(ResultMixin):
         all_index_types = collections.defaultdict(list)
         time_indexes = collections.defaultdict(list)
         no_indexes = collections.defaultdict(list)
+        pd = _lazy_import("pandas")
+        pd_extension = _lazy_import("pandas.core.indexes.extension")
 
         def index_key_name(pd_object: pd.DataFrame | pd.Series) -> str:
             """Creates a string helping identify the index and it's type.
@@ -221,6 +239,7 @@ class PandasDataFrameResult(ResultMixin):
         :param outputs: the outputs to build a dataframe from.
         """
         # TODO check inputs are pd.Series, arrays, or scalars -- else error
+        pd = _lazy_import("pandas")
         output_index_type_tuple = PandasDataFrameResult.pandas_index_types(outputs)
         # this next line just log warnings
         # we don't actually care about the result since this is the current default behavior.
@@ -255,6 +274,7 @@ class PandasDataFrameResult(ResultMixin):
         :param outputs: The outputs to build the dataframe from.
         :return: A dataframe with the outputs.
         """
+        pd = _lazy_import("pandas")
 
         def get_output_name(output_name: str, column_name: str) -> str:
             """Add function prefix to columns.
@@ -300,7 +320,7 @@ class PandasDataFrameResult(ResultMixin):
         return [Any]
 
     def output_type(self) -> type:
-        return pd.DataFrame
+        return _lazy_import("pandas", "DataFrame")
 
 
 class StrictIndexTypePandasDataFrameResult(PandasDataFrameResult):
@@ -366,6 +386,7 @@ class NumpyMatrixResult(ResultMixin):
         :return: numpy matrix
         """
         # TODO check inputs are all numpy arrays/array like things -- else error
+        np = _lazy_import("numpy")
         num_rows = -1
         columns_with_lengths = collections.OrderedDict()
         for col, val in outputs.items():  # assumption is fixed order
@@ -402,7 +423,7 @@ class NumpyMatrixResult(ResultMixin):
         return [Any]  # Typing
 
     def output_type(self) -> type:
-        return pd.DataFrame
+        return _lazy_import("pandas", "DataFrame")
 
 
 class HamiltonGraphAdapter(lifecycle_api.GraphAdapter, abc.ABC):
