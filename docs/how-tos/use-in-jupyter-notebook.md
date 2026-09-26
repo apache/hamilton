@@ -108,7 +108,7 @@ def log_avg_3wk_spend(avg_3wk_spend: pd.Series) -> pd.Series:
 We then have to create a "temporary python module" to house it in. We do this by importing `ad_hoc_utils` and then calling the `create_temporary_module` function, passing in the functions we want, and providing a name for the module we're creating.
 
 ```python
-# Step 2 - create a temporary modeul to house all notebook functions
+# Step 2 - create a temporary module to house all notebook functions
 from hamilton import ad_hoc_utils
 temp_module = ad_hoc_utils.create_temporary_module(
      log_avg_3wk_spend, module_name='function_example')

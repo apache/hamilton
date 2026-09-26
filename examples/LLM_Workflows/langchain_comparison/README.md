@@ -34,7 +34,7 @@ Files prefixed with `hamilton_` are the Apache Hamilton equivalent of the exampl
 As you browse the files you'll see that:
 
 1. LangChain's focus is on hiding details and making code terse.
-2. Apache Hamilton's focus instead is on making code more readable, maintainable, and importantly customizeable.
+2. Apache Hamilton's focus instead is on making code more readable, maintainable, and importantly customizable.
 
 ## Implications
 Don't be surprised that Apache Hamilton's code is "longer" - that's by design. There is

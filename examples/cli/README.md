@@ -37,7 +37,7 @@ Test the installation with
 - `validate`: calls `Driver.validate_execution()` for a set of `inputs` and `overrides` passed through the `--context` option.
 - `view`: calls `dr.display_all_functions()` on the built `Driver`
 - `version`: generates node hashes based on their source code, and a dataflow hash from the collection of node hashes.
-- `diff`: get a diff of added/deleted/edited nodes between the current version of Python modules and another git reference (`default=HEAD`, i.e., the last commited version). You can get a visualization of the diffs
+- `diff`: get a diff of added/deleted/edited nodes between the current version of Python modules and another git reference (`default=HEAD`, i.e., the last committed version). You can get a visualization of the diffs
 
 ## Options
 - all commands receive `MODULES` which is a list of path to Python modules to assembled as a single dataflow

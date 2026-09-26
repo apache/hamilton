@@ -32,7 +32,7 @@ ready to be used in your own projects. They are user-contributed and maintained,
 the goal of making it easier for you to get started with Apache Hamilton.
 
 We expect this collection to grow over time, so check back often! As dataflows become mature we
-will move them into the official sub-package of the respository and become maintained by the
+will move them into the official sub-package of the repository and become maintained by the
 Apache Hamilton team.
 
 ### Usage
@@ -143,7 +143,7 @@ Standards:
 
 To get started with development, you'll want to first fork the hamilton repository from the github UI.
 
-Then, clone it locally and install the package in editable mode, ensuring you install any dependencies required for the initilization script
+Then, clone it locally and install the package in editable mode, ensuring you install any dependencies required for the initialization script
 ```bash
 cd hamilton # Your fork
 pip install -e "./contrib[contribute]" # Note that this package lives under the `contrib` folder

@@ -64,7 +64,7 @@ Not having lineage or visibility into what data is being used for what purpose c
 
 
 ## Deployment: Offline vs online vs streaming needs
-This is a big topic. We wont do it justice here, but let's try to give a brief overview of two main problems:
+This is a big topic. We won't do it justice here, but let's try to give a brief overview of two main problems:
 
 (1) There are a lot of different deployment needs when you get something to production. For example, you might want to:
    - run a batch job to generate features for a model
@@ -151,7 +151,7 @@ Jump into each directory and read the README, it'll explain how the example is s
 # What are extensions/uses not shown here but we know you can do them
 Here are two ideas that come to mind:
 
-1. Streaming settings. Given the examples, it should be clear how to make it possbile to use Apache Hamilton in a streaming setting.
+1. Streaming settings. Given the examples, it should be clear how to make it possible to use Apache Hamilton in a streaming setting.
 2. How to ask Apache Hamilton what features are needed as input to know what to request from the feature store. With tags, and
 querying the DAG at the start of the app, you could dynamically ask Apache Hamilton what's required and then only go to the
 feature store for that data. If this type of example would be of interest, let us know.
