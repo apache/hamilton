@@ -152,7 +152,7 @@ def test_result_builder_task_run_carries_a_result_summary():
 def test_result_builder_task_run_not_emitted_on_failure():
     """A failed run gets no result-builder task, so the UI shows not-executed."""
     client = RecordingClient()
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError, match="This is a test"):
         _run_and_record(["c"], {"a": 1, "should_fail": True}, client)
 
     assert not _emitted_result_builder_tasks(client)
