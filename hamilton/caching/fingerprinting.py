@@ -211,7 +211,13 @@ def hash_sequence(obj, *args, depth: int = 0, **kwargs) -> str:
 
     Orders matters for the hash since orders matters in a sequence.
     """
-    buffer = b"".join(hash_value(elem, depth=depth + 1).encode() for elem in obj)
+    hashed_elems = [hash_value(elem, depth=depth + 1) for elem in obj]
+    # An UNHASHABLE element must not fold into a structural hash: two sequences
+    # differing only in the part that couldn't be hashed would then produce the
+    # same, normal-looking fingerprint.
+    if UNHASHABLE in hashed_elems:
+        return UNHASHABLE
+    buffer = b"".join(elem.encode() for elem in hashed_elems)
     return _hash_bytes(buffer)
 
 
@@ -230,7 +236,14 @@ def hash_unordered_mapping(obj, *args, depth: int = 0, **kwargs) -> str:
 
     hashed_mapping: dict[str, str] = {}
     for key, value in obj.items():
-        hashed_mapping[hash_value(key, depth=depth + 1)] = hash_value(value, depth=depth + 1)
+        key_hash = hash_value(key, depth=depth + 1)
+        value_hash = hash_value(value, depth=depth + 1)
+        # See hash_sequence: an unhashable key or value must not be folded into
+        # this mapping's structural hash, or the result silently collides with
+        # any other mapping that hits the same unhashable entry.
+        if key_hash == UNHASHABLE or value_hash == UNHASHABLE:
+            return UNHASHABLE
+        hashed_mapping[key_hash] = value_hash
 
     buffer = b"".join(
         key.encode() + value.encode() for key, value in sorted(hashed_mapping.items())
@@ -261,11 +274,14 @@ def hash_mapping(obj, *, ignore_order: bool = True, depth: int = 0, **kwargs) ->
         # use the same depth because we're simply dispatching to another implementation
         return hash_unordered_mapping(obj, depth=depth)
 
-    buffer = b"".join(
-        hash_value(key, depth=depth + 1).encode() + hash_value(value, depth=depth + 1).encode()
-        for key, value in obj.items()
-    )
-    return _hash_bytes(buffer)
+    parts = []
+    for key, value in obj.items():
+        key_hash = hash_value(key, depth=depth + 1)
+        value_hash = hash_value(value, depth=depth + 1)
+        if key_hash == UNHASHABLE or value_hash == UNHASHABLE:
+            return UNHASHABLE
+        parts.append(key_hash.encode() + value_hash.encode())
+    return _hash_bytes(b"".join(parts))
 
 
 @hash_value.register(Set)
@@ -276,7 +292,10 @@ def hash_set(obj, *args, depth: int = 0, **kwargs) -> str:
     For the same objects in the set, the hashes will be the
     same.
     """
-    sorted_hashes = sorted(hash_value(elem, depth=depth + 1) for elem in obj)
+    hashed_elems = [hash_value(elem, depth=depth + 1) for elem in obj]
+    if UNHASHABLE in hashed_elems:
+        return UNHASHABLE
+    sorted_hashes = sorted(hashed_elems)
     buffer = b"".join(hash.encode() for hash in sorted_hashes)
     return _hash_bytes(buffer)
 

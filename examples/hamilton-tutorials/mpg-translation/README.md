@@ -38,7 +38,7 @@ To get set up:
 2. Go into the `examples/hamilton-tutorials/mpg-translation` directory.
 2. Install Apache Hamilton. `pip install - requirements.txt`
 3. Write code.
-4. Excute via notebook or command line.
+4. Execute via notebook or command line.
 
 Or run it in Google Colab:
 

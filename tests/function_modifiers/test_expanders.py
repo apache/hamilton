@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import asyncio
 import sys
 from typing import Any, TypedDict
 
@@ -292,6 +293,37 @@ def test_column_extractor_fill_with():
     pd.testing.assert_series_equal(
         original_df["col_3"], pd.Series([0, 0, 0, 0]), check_names=False
     )  # it has to be in there now
+
+
+def test_column_extractor_fill_with_documented_columns():
+    def dummy_df() -> pd.DataFrame:
+        """dummy doc"""
+        return pd.DataFrame({"col_1": [1, 2, 3, 4]})
+
+    annotation = function_modifiers.extract_columns(
+        ("col_1", "col_1 doc"), ("col_3", "col_3 doc"), fill_with=0
+    )
+    original_node, _, col_3_node = annotation.transform_node(
+        node.Node.from_fn(dummy_df), {}, dummy_df
+    )
+    original_df = original_node.callable()
+    assert list(original_df.columns) == ["col_1", "col_3"]
+    pd.testing.assert_series_equal(
+        col_3_node.callable(dummy_df=original_df), pd.Series([0, 0, 0, 0]), check_names=False
+    )
+
+
+def test_column_extractor_fill_with_documented_columns_async():
+    async def dummy_df() -> pd.DataFrame:
+        """dummy doc"""
+        return pd.DataFrame({"col_1": [1, 2, 3, 4]})
+
+    annotation = function_modifiers.extract_columns(
+        ("col_1", "col_1 doc"), ("col_3", "col_3 doc"), fill_with=0
+    )
+    original_node, _, _ = annotation.transform_node(node.Node.from_fn(dummy_df), {}, dummy_df)
+    original_df = asyncio.run(original_node.callable())
+    assert list(original_df.columns) == ["col_1", "col_3"]
 
 
 def test_column_extractor_no_fill_with():
@@ -916,6 +948,25 @@ def test_parameterized_extract_columns():
     assert nodes_by_name["outseries2a"](fn__0=pd.DataFrame({"outseries2a": [20]}))[0] == 20
     assert nodes_by_name["outseries1b"](fn__1=pd.DataFrame({"outseries1b": [30]}))[0] == 30
     assert nodes_by_name["outseries2b"](fn__1=pd.DataFrame({"outseries2b": [40]}))[0] == 40
+
+
+def test_parameterized_extract_columns_no_reassign_columns():
+    """With reassign_columns=False the columns keep their names, so they are extracted by name."""
+    annotation = function_modifiers.parameterize_extract_columns(
+        function_modifiers.ParameterizedExtract(("y", "x"), {"k": value(1)}),
+        reassign_columns=False,
+    )
+
+    def fn(k: int) -> pd.DataFrame:
+        return pd.DataFrame({"x": [k], "y": [k * 100]})
+
+    nodes_by_name = {
+        node_.name: node_ for node_ in annotation.expand_node(node.Node.from_fn(fn), {}, fn)
+    }
+    df = nodes_by_name["fn__0"]()
+    pd.testing.assert_frame_equal(df, pd.DataFrame({"x": [1], "y": [100]}))
+    assert nodes_by_name["x"](fn__0=df)[0] == 1
+    assert nodes_by_name["y"](fn__0=df)[0] == 100
 
 
 def test_parametrized_full_replace_groups_with_literal():

@@ -32,7 +32,7 @@ ready to be used in your own projects. They are user-contributed and maintained,
 the goal of making it easier for you to get started with Apache Hamilton.
 
 We expect this collection to grow over time, so check back often! As dataflows become mature we
-will move them into the official sub-package of the respository and become maintained by the
+will move them into the official sub-package of the repository and become maintained by the
 Apache Hamilton team.
 
 ### Usage
@@ -57,6 +57,7 @@ Things you need to know:
 2. The name of the dataflow.
 ```python
 from hamilton import driver
+
 # from hamilton.contrib.dagworks import NAME_OF_DATAFLOW
 from hamilton.contrib.user.NAME_OF_USER import NAME_OF_DATAFLOW
 
@@ -69,7 +70,7 @@ dr = (
 # execute the dataflow, specifying what you want back. Will return a dictionary.
 result = dr.execute(
     [NAME_OF_DATAFLOW.FUNCTION_NAME, ...],  # this specifies what you want back
-    inputs={...}  # pass in inputs as appropriate
+    inputs={...},  # pass in inputs as appropriate
 )
 ```
 To find an example [go to the hub](https://hub.dagworks.io/docs/).
@@ -85,15 +86,15 @@ from hamilton import dataflows, driver
 # NAME_OF_DATAFLOW = dataflows.import_module("NAME_OF_DATAFLOW") # if using official DAGWorks dataflow
 NAME_OF_DATAFLOW = dataflows.import_module("NAME_OF_DATAFLOW", "NAME_OF_USER")
 dr = (
-  driver.Builder()
-  .with_config({})  # replace with configuration as appropriate
-  .with_modules(NAME_OF_DATAFLOW)
-  .build()
+    driver.Builder()
+    .with_config({})  # replace with configuration as appropriate
+    .with_modules(NAME_OF_DATAFLOW)
+    .build()
 )
 # execute the dataflow, specifying what you want back. Will return a dictionary.
 result = dr.execute(
-  [NAME_OF_DATAFLOW.FUNCTION_NAME, ...],  # this specifies what you want back
-  inputs={...}  # pass in inputs as appropriate
+    [NAME_OF_DATAFLOW.FUNCTION_NAME, ...],  # this specifies what you want back
+    inputs={...},  # pass in inputs as appropriate
 )
 ```
 To find an example [go to the hub](https://hub.dagworks.io/docs/).
@@ -112,6 +113,7 @@ NAME_OF_DATAFLOW = dataflows.import_module("NAME_OF_DATAFLOW", "NAME_OF_USER")
 dataflows.copy(NAME_OF_DATAFLOW, destination_path="PATH_TO_DIRECTORY")
 # copy from the installed library
 from hamilton.contrib.user.NAME_OF_USER import NAME_OF_DATAFLOW
+
 dataflows.copy(NAME_OF_DATAFLOW, destination_path="PATH_TO_DIRECTORY")
 ```
 You can then modify/import the code as you see fit. See [copy()](https://hamilton.apache.org/reference/dataflows/copy/)
@@ -141,7 +143,7 @@ Standards:
 
 To get started with development, you'll want to first fork the hamilton repository from the github UI.
 
-Then, clone it locally and install the package in editable mode, ensuring you install any dependencies required for the initilization script
+Then, clone it locally and install the package in editable mode, ensuring you install any dependencies required for the initialization script
 ```bash
 cd hamilton # Your fork
 pip install -e "./contrib[contribute]" # Note that this package lives under the `contrib` folder

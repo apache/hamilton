@@ -70,7 +70,7 @@ pip install apache-hamilton[ui]
 hamilton ui
 ```
 
-This assumes a project (1) exists -- if you want a different one you can go the the UI and create one and/or set it in the code.
+This assumes a project (1) exists -- if you want a different one you can go to the UI and create one and/or set it in the code.
 
 
 ## How it works

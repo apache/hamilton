@@ -73,12 +73,7 @@ tracker_hook = h_experiments.ExperimentTracker(
 )
 
 # 2. create driver with modules and hook
-dr = (
-    driver.Builder()
-    .with_modules(my_functions)
-    .with_adapters(tracker_hook)
-    .build()
-)
+dr = driver.Builder().with_modules(my_functions).with_adapters(tracker_hook).build()
 
 # 3. define materializers (absolute or relative path)
 materializers = [

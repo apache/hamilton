@@ -34,7 +34,7 @@ dr.execute(
     ["execution_output", "execution_error"],
     inputs=dict(
         query="Retrieve the primary type from a `typing.Annotated` object`",
-    )
+    ),
 )
 ```
 
@@ -45,7 +45,7 @@ This module doesn't receive configurations.
 ### Inputs
 - `query`: The query for which you want code generated.
 - `api_key`: Set the OpenAI API key to use. If None, read the environment variable `OPENAI_API_KEY`
-- `code_language`: Set the code language to generate the reponse in. Defaults to `python`
+- `code_language`: Set the code language to generate the response in. Defaults to `python`
 
 ### Overrides
 - `prompt_template_to_generate_code`: Create a new prompt template with the fields `query` and `code_language`.

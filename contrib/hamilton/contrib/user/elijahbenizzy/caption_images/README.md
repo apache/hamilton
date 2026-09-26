@@ -46,7 +46,7 @@ This also accepts the following overrides:
 
 Note that this has two modes:
 
-1. (`include_embeddings=False`, or not specified) Just quries the caption for the image. You can request `generated_caption`, which will give embeddings for the caption.
+1. (`include_embeddings=False`, or not specified) Just queries the caption for the image. You can request `generated_caption`, which will give embeddings for the caption.
 2. (`include_embeddings=True`): also gets the caption for the image, and the embeddings the caption. This requires `caption_embeddings` to be one of the variables called.
 
 If you want all the metadata about this run wrapped up in a dictionary (say, to save externally), you can request `metadata` which will return a dict with the following keys:

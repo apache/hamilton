@@ -64,6 +64,7 @@ you can add adapters that will do this automatically for you, e.g. like we have 
 # import the module
 from hamilton import driver
 from hamilton import lifecycle
+
 dr = (
     driver.Builder()
     .with_modules(conversational_rag)
@@ -81,7 +82,7 @@ result = dr.execute(
             "stefan worked at Stitch Fix",
         ],
         "question": "where did stefan work?",
-        "chat_history": []
+        "chat_history": [],
     },
 )
 print(result)
@@ -96,10 +97,7 @@ result = dr.execute(
             "stefan worked at Stitch Fix",
         ],
         "question": "where did he work?",
-        "chat_history": [
-            "Human: Who wrote this example?",
-            "AI: Stefan"
-        ]
+        "chat_history": ["Human: Who wrote this example?", "AI: Stefan"],
     },
 )
 print(result)
@@ -110,6 +108,7 @@ print(result)
 Set `MINIMAX_API_KEY` in your environment, then pass `{"provider": "minimax"}` in the config:
 ```python
 from hamilton import driver, lifecycle
+
 dr = (
     driver.Builder()
     .with_modules(conversational_rag)
@@ -125,7 +124,7 @@ result = dr.execute(
             "stefan worked at Stitch Fix",
         ],
         "question": "where did stefan work?",
-        "chat_history": []
+        "chat_history": [],
     },
 )
 print(result)

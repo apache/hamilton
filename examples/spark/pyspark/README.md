@@ -111,11 +111,14 @@ Case 2: define columnar operations in a DAG:
 ```python
 import pandas as pd
 
+
 def column_3(column_1_from_dataframe: pd.Series) -> pd.Series:
     return _some_transform(column_1_from_dataframe)
 
+
 def column_4(column_2_from_dataframe: pd.Series) -> pd.Series:
     return _some_other_transform(column_2_from_dataframe)
+
 
 def column_5(column_3: pd.Series, column_4: pd.Series) -> pd.Series:
     return _yet_another_transform(column_3, column_4)
@@ -127,11 +130,11 @@ Finally, we combine them together with a call to `with_column`:
 from hamilton.plugins.h_spark import with_columns
 
 import pyspark.sql as ps
-import map_transforms # file defined above
+import map_transforms  # file defined above
+
 
 @with_columns(
-    map_transforms,
-    columns_to_pass=["column_1_from_dataframe", "column_2_from_dataframe"]
+    map_transforms, columns_to_pass=["column_1_from_dataframe", "column_2_from_dataframe"]
 )
 def final_result(all_initial_data: ps.DataFrame) -> ps.DataFrame:
     """Gives the final result. This decorator will apply the transformations in the order specified in the DAG.
@@ -171,19 +174,24 @@ You have two options when presenting the initial dataframe/how to read it. Each 
 ```python
 import pandas as pd, pyspark.sql as ps
 
-#map_transforms.py
+# map_transforms.py
+
 
 def colums_1_from_dataframe(input_dataframe: ps.DataFrame) -> ps.Column:
     return input_dataframe.column_1_from_dataframe
 
+
 def column_2_from_dataframe(input_dataframe: ps.DataFrame) -> ps.Column:
     return input_dataframe.column_2_from_dataframe
+
 
 def column_3(column_1_from_dataframe: pd.Series) -> pd.Series:
     return _some_transform(column_1_from_dataframe)
 
+
 def column_4(column_2_from_dataframe: pd.Series) -> pd.Series:
     return _some_other_transform(column_2_from_dataframe)
+
 
 def column_5(column_3: pd.Series, column_4: pd.Series) -> pd.Series:
     return _yet_another_transform(column_3, column_4)
@@ -192,11 +200,12 @@ def column_5(column_3: pd.Series, column_4: pd.Series) -> pd.Series:
 ```python
 from hamilton.experimental.h_spark import with_columns
 import pyspark.sql as ps
-import map_transforms # file defined above
+import map_transforms  # file defined above
+
 
 @with_columns(
-    map_transforms, # Load all the functions we defined above
-    pass_dataframe_as="input_dataframe", #the upstream dataframe, referred to by downstream nodes, will have this parametter name
+    map_transforms,  # Load all the functions we defined above
+    pass_dataframe_as="input_dataframe",  # the upstream dataframe, referred to by downstream nodes, will have this parameter name
 )
 def final_result(all_initial_data: ps.DataFrame) -> ps.DataFrame:
     """Gives the final result. This decorator will apply the transformations in the order.
@@ -216,6 +225,7 @@ These are functions of series:
 
 ```python
 from hamilton import htypes
+
 
 def foo(bar: pd.Series, baz: pd.Series) -> htypes.column[pd.Series, int]:
     return bar + 1
@@ -257,7 +267,7 @@ import h_spark
 
 @h_spark.require_columns("bar", "baz")
 def foo(bar_baz: ps.DataFrame) -> ps.Column:
-   return df["bar"] + 1
+    return df["bar"] + 1
 ```
 
 In this case we are only allowed a single dataframe dependency, and the parameter name does not matter.
@@ -280,7 +290,7 @@ import h_spark
 
 @h_spark.require_columns("bar", "baz")
 def foo(df: ps.DataFrame) -> ps.DataFrame:
-   return df.withColumn("bar", df["bar"] + 1)
+    return df.withColumn("bar", df["bar"] + 1)
 ```
 
 Note that this is isomorphic to the column-flavor in which you (not the framework) are responsible for calling `withColumn`.

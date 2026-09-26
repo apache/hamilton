@@ -49,12 +49,7 @@ from hamilton import driver
 from hamilton.plugins import h_diskcache
 import functions
 
-dr = (
-    driver.Builder()
-    .with_modules(functions)
-    .with_adapters(h_diskcache.DiskCacheAdapter())
-    .build()
-)
+dr = driver.Builder().with_modules(functions).with_adapters(h_diskcache.DiskCacheAdapter()).build()
 ```
 
 ## Inspect the hook
@@ -77,12 +72,7 @@ from hamilton import driver
 from hamilton.plugins import h_diskcache
 import functions
 
-dr = (
-    driver.Builder()
-    .with_modules(functions)
-    .with_adapters(h_diskcache.DiskCacheAdapter())
-    .build()
-)
+dr = driver.Builder().with_modules(functions).with_adapters(h_diskcache.DiskCacheAdapter()).build()
 h_diskcache.evict_all_except_driver(dr)
 ```
 

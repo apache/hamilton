@@ -95,14 +95,13 @@ source = slack_source()
 source.access_logs.selected = True
 ```
 
-The conversations resource can be used to load the list of available conversations and will allways bring all
+The conversations resource can be used to load the list of available conversations and will always bring all
 the available conversations.
 
 The history resource can be used to load the history of a conversation. By default all the conversations will be
 selected, but you can select only the ones you want using the `selected_channels` attribute.
 
 ```python
-
 source = slack_source(selected_channels=["welcome", "general"])
 ```
 

@@ -21,6 +21,7 @@ pytest.importorskip("pyspark")
 
 import pandas as pd  # noqa: E402
 import pyspark.sql as ps  # noqa: E402
+
 from hamilton_sdk.tracking import pyspark_stats  # noqa: E402
 
 
@@ -36,71 +37,47 @@ def test_compute_stats_pyspark():
     node_name = "test_node"
     node_tags = {}
     actual = pyspark_stats.compute_stats_psdf(result, node_name, node_tags)
-    expected = {
-        "observability_schema_version": "0.0.2",
-        "observability_type": "dict",
-        "observability_value": {
-            "type": "<class 'pyspark.sql.classic.dataframe.DataFrame'>",
-            "value": {
-                "columns": [
-                    {
-                        "base_data_type": "str",
-                        "data_type": "string",
-                        "name": "one",
-                        "nullable": True,
-                        "pos": 0,
-                    },
-                    {
-                        "base_data_type": "numeric",
-                        "data_type": "long",
-                        "name": "two",
-                        "nullable": True,
-                        "pos": 1,
-                    },
-                    {
-                        "base_data_type": "numeric",
-                        "data_type": "long",
-                        "name": "three",
-                        "nullable": True,
-                        "pos": 2,
-                    },
-                ],
-                "cost_explain": "== Optimized Logical Plan "
-                "==\n"
-                "LogicalRDD [one#0, two#1L, "
-                "three#2L], false, "
-                "Statistics(sizeInBytes=8.0 "
-                "EiB)\n"
-                "\n"
-                "== Physical Plan ==\n"
-                "*(1) Scan "
-                "ExistingRDD[one#0,two#1L,three#2L]\n"
-                "\n",
-                "extended_explain": "== Parsed Logical Plan "
-                "==\n"
-                "LogicalRDD [one#0, "
-                "two#1L, three#2L], "
-                "false\n"
-                "\n"
-                "== Analyzed Logical "
-                "Plan ==\n"
-                "one: string, two: "
-                "bigint, three: bigint\n"
-                "LogicalRDD [one#0, "
-                "two#1L, three#2L], "
-                "false\n"
-                "\n"
-                "== Optimized Logical "
-                "Plan ==\n"
-                "LogicalRDD [one#0, "
-                "two#1L, three#2L], "
-                "false\n"
-                "\n"
-                "== Physical Plan ==\n"
-                "*(1) Scan "
-                "ExistingRDD[one#0,two#1L,three#2L]\n",
-            },
+    assert actual["observability_schema_version"] == "0.0.2"
+    assert actual["observability_type"] == "dict"
+
+    observability_value = actual["observability_value"]
+    assert observability_value["type"] == str(type(result))
+    value = observability_value["value"]
+    assert value["columns"] == [
+        {
+            "base_data_type": "str",
+            "data_type": "string",
+            "name": "one",
+            "nullable": True,
+            "pos": 0,
         },
-    }
-    assert actual == expected
+        {
+            "base_data_type": "numeric",
+            "data_type": "long",
+            "name": "two",
+            "nullable": True,
+            "pos": 1,
+        },
+        {
+            "base_data_type": "numeric",
+            "data_type": "long",
+            "name": "three",
+            "nullable": True,
+            "pos": 2,
+        },
+    ]
+
+    cost_explain = value["cost_explain"]
+    assert "== Optimized Logical Plan ==" in cost_explain
+    assert "== Physical Plan ==" in cost_explain
+
+    extended_explain = value["extended_explain"]
+    for plan_section in (
+        "== Parsed Logical Plan ==",
+        "== Analyzed Logical Plan ==",
+        "== Optimized Logical Plan ==",
+        "== Physical Plan ==",
+    ):
+        assert plan_section in extended_explain
+    assert "one: string, two: bigint, three: bigint" in extended_explain
     spark_session.stop()

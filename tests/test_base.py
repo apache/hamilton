@@ -311,7 +311,11 @@ PD_VERSION = version.parse(pd.__version__)
         (
             {
                 "b": pd.Series(
-                    [3, 4, 5], index=pd.DatetimeIndex(["2022-01", "2022-02", "2022-03"], freq="MS")
+                    [3, 4, 5],
+                    index=pd.DatetimeIndex(
+                        np.array(["2022-01", "2022-02", "2022-03"], dtype="datetime64[ns]"),
+                        freq="MS",
+                    ),
                 )
             },
             (
@@ -326,7 +330,11 @@ PD_VERSION = version.parse(pd.__version__)
                 "a": pd.Series([1, 2, 3]),
                 "b": 1,
                 "c": pd.Series(
-                    [3, 4, 5], index=pd.DatetimeIndex(["2022-01", "2022-02", "2022-03"], freq="MS")
+                    [3, 4, 5],
+                    index=pd.DatetimeIndex(
+                        np.array(["2022-01", "2022-02", "2022-03"], dtype="datetime64[ns]"),
+                        freq="MS",
+                    ),
                 ),
             },
             (
