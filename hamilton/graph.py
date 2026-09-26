@@ -356,6 +356,10 @@ def create_graphviz_graph(
         else:
             return "function"
 
+    def _is_async_node(n: node.Node) -> bool:
+        """Returns whether a DAG node is backed by an async callable."""
+        return n.callable is not None and inspect.iscoroutinefunction(n.callable)
+
     def _get_node_style(node_type: str) -> dict[str, str]:
         """Get the style of a node type.
         Graphviz needs values to be strings.
@@ -408,6 +412,8 @@ def create_graphviz_graph(
             modifier_style = dict(style="filled,diagonals")
         elif modifier == "materializer":
             modifier_style = dict(shape="cylinder")
+        elif modifier == "async":
+            modifier_style = dict(fillcolor="#CDB4DB", style="rounded,filled,bold")
         elif modifier == "field":
             modifier_style = dict(fillcolor="#c8dae0", fontname="Courier")
         elif modifier == "cluster":
@@ -464,6 +470,7 @@ def create_graphviz_graph(
             "config",
             "input",
             "function",
+            "async",
             "cluster",
             "field",
             "output",
@@ -571,6 +578,11 @@ def create_graphviz_graph(
             modifier_style = _get_function_modifier_style("materializer")
             node_style.update(**modifier_style)
             seen_node_types.add("materializer")
+
+        if _is_async_node(n):
+            modifier_style = _get_function_modifier_style("async")
+            node_style.update(**modifier_style)
+            seen_node_types.add("async")
 
         # apply custom styles before node modifiers
         seen_node_type = None
