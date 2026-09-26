@@ -707,7 +707,11 @@ s=d.getElementsByTagName('script')[0];
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_validators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_to_validate</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">dq_base</span><span class="o">.</span><span class="n">DataValidator</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">validators</span></div>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">validator</span>
+            <span class="k">for</span> <span class="n">validator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">validators</span>
+            <span class="k">if</span> <span class="n">validator</span><span class="o">.</span><span class="n">applies_to</span><span class="p">(</span><span class="n">node_to_validate</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+        <span class="p">]</span></div>
 
 
 
@@ -871,6 +875,8 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
 
 
 

@@ -747,7 +747,13 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="sd">    Orders matters for the hash since orders matters in a sequence.</span>
 <span class="sd">    """</span>
-    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hash_value</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="n">hashed_elems</span> <span class="o">=</span> <span class="p">[</span><span class="n">hash_value</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
+    <span class="c1"># An UNHASHABLE element must not fold into a structural hash: two sequences</span>
+    <span class="c1"># differing only in the part that couldn't be hashed would then produce the</span>
+    <span class="c1"># same, normal-looking fingerprint.</span>
+    <span class="k">if</span> <span class="n">UNHASHABLE</span> <span class="ow">in</span> <span class="n">hashed_elems</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">UNHASHABLE</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">hashed_elems</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
 
 
@@ -769,7 +775,14 @@ s=d.getElementsByTagName('script')[0];
 
     <span class="n">hashed_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">hashed_mapping</span><span class="p">[</span><span class="n">hash_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">hash_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">key_hash</span> <span class="o">=</span> <span class="n">hash_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">value_hash</span> <span class="o">=</span> <span class="n">hash_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># See hash_sequence: an unhashable key or value must not be folded into</span>
+        <span class="c1"># this mapping's structural hash, or the result silently collides with</span>
+        <span class="c1"># any other mapping that hits the same unhashable entry.</span>
+        <span class="k">if</span> <span class="n">key_hash</span> <span class="o">==</span> <span class="n">UNHASHABLE</span> <span class="ow">or</span> <span class="n">value_hash</span> <span class="o">==</span> <span class="n">UNHASHABLE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">UNHASHABLE</span>
+        <span class="n">hashed_mapping</span><span class="p">[</span><span class="n">key_hash</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_hash</span>
 
     <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="n">key</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">value</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hashed_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
@@ -803,11 +816,14 @@ s=d.getElementsByTagName('script')[0];
         <span class="c1"># use the same depth because we're simply dispatching to another implementation</span>
         <span class="k">return</span> <span class="n">hash_unordered_mapping</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">)</span>
 
-    <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="n">hash_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">hash_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">key_hash</span> <span class="o">=</span> <span class="n">hash_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">value_hash</span> <span class="o">=</span> <span class="n">hash_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key_hash</span> <span class="o">==</span> <span class="n">UNHASHABLE</span> <span class="ow">or</span> <span class="n">value_hash</span> <span class="o">==</span> <span class="n">UNHASHABLE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">UNHASHABLE</span>
+        <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">value_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span></div>
 
 
 
@@ -821,7 +837,10 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    For the same objects in the set, the hashes will be the</span>
 <span class="sd">    same.</span>
 <span class="sd">    """</span>
-    <span class="n">sorted_hashes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hash_value</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="n">hashed_elems</span> <span class="o">=</span> <span class="p">[</span><span class="n">hash_value</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">UNHASHABLE</span> <span class="ow">in</span> <span class="n">hashed_elems</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">UNHASHABLE</span>
+    <span class="n">sorted_hashes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hashed_elems</span><span class="p">)</span>
     <span class="n">buffer</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">hash</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="k">for</span> <span class="nb">hash</span> <span class="ow">in</span> <span class="n">sorted_hashes</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_hash_bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span></div>
 
@@ -946,6 +965,8 @@ s=d.getElementsByTagName('script')[0];
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
 
 
 

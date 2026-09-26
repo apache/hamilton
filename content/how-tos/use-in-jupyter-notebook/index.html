@@ -619,7 +619,7 @@ Once you’re then happy, it’s easy to then write out a module with the functi
 </pre></div>
 </div>
 <p>We then have to create a “temporary python module” to house it in. We do this by importing <code class="docutils literal notranslate"><span class="pre">ad_hoc_utils</span></code> and then calling the <code class="docutils literal notranslate"><span class="pre">create_temporary_module</span></code> function, passing in the functions we want, and providing a name for the module we’re creating.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 2 - create a temporary modeul to house all notebook functions</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Step 2 - create a temporary module to house all notebook functions</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">ad_hoc_utils</span>
 <span class="n">temp_module</span> <span class="o">=</span> <span class="n">ad_hoc_utils</span><span class="o">.</span><span class="n">create_temporary_module</span><span class="p">(</span>
      <span class="n">log_avg_3wk_spend</span><span class="p">,</span> <span class="n">module_name</span><span class="o">=</span><span class="s1">'function_example'</span><span class="p">)</span>
