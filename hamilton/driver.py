@@ -40,7 +40,7 @@ from typing import (
 import pandas as pd
 from typing_extensions import Self
 
-from hamilton import common, graph_types, htypes
+from hamilton import common, graph_types, htypes, packaging
 from hamilton.caching.adapter import HamiltonCacheAdapter
 from hamilton.caching.stores.base import MetadataStore, ResultStore
 from hamilton.dev_utils import deprecation
@@ -393,6 +393,22 @@ class Driver:
                 )
                 raise lifecycle_base.ValidationException(error_str)
 
+    @staticmethod
+    def _enforce_node_packages(
+        graph: graph.FunctionGraph,
+        node_packages: typing.Sequence["packaging.NodePackage"],
+    ):
+        """Validates the constructed graph against each supplied node package.
+
+        :param graph: Graph to validate against.
+        :param node_packages: Packages the driver should be compatible with.
+        :raises PackageValidationError: If a package is incompatible with the graph.
+        """
+        for node_package in node_packages:
+            report = packaging.validate_package(node_package, graph)
+            if not report.is_valid:
+                raise packaging.PackageValidationError(report)
+
     def __init__(
         self,
         config: dict[str, Any],
@@ -404,6 +420,7 @@ class Driver:
         _materializers: typing.Sequence[ExtractorFactory | MaterializerFactory] = None,
         _graph_executor: GraphExecutor = None,
         _use_legacy_adapter: bool = True,
+        _node_packages: typing.Sequence["packaging.NodePackage"] = None,
     ):
         """Constructor: creates a DAG given the configuration & modules to crawl.
 
@@ -422,6 +439,7 @@ class Driver:
         :param _use_legacy_adapter: Not public facing, do not use this parameter.
             This represents whether or not to use the legacy adapter. Defaults to True, as this should be
             backwards compatible. In Hamilton 2.0.0, this will be removed.
+        :param _node_packages: Not public facing, do not use this parameter. This is injected by the builder.
 
         """
 
@@ -445,6 +463,8 @@ class Driver:
                     self.graph, materializer_factories, extractor_factories
                 )
             Driver._perform_graph_validations(adapter, graph=self.graph, graph_modules=modules)
+            self._node_packages = list(_node_packages) if _node_packages else []
+            Driver._enforce_node_packages(self.graph, self._node_packages)
             if adapter.does_hook("post_graph_construct", is_async=False):
                 adapter.call_all_lifecycle_hooks_sync(
                     "post_graph_construct", graph=self.graph, modules=modules, config=config
@@ -792,6 +812,27 @@ class Driver:
         else:
             results = [Variable.from_node(n) for n in all_nodes]
         return results
+
+    def list_packages(self) -> list["packaging.NodePackage"]:
+        """Returns the node packages this driver was built with.
+
+        :return: The packages supplied via ``Builder.with_packages`` (empty if none).
+        """
+        return list(self._node_packages)
+
+    def validate_packages(self) -> list["packaging.ValidationReport"]:
+        """Validates each of this driver's node packages against its built graph.
+
+        Since a driver only builds when its packages are compatible, this returns
+        problem-free reports for a successfully built driver. It is primarily useful
+        for inspecting the per-package validation result programmatically.
+
+        :return: One report per package, in the order the packages were supplied.
+        """
+        return [
+            packaging.validate_package(node_package, self.graph)
+            for node_package in self._node_packages
+        ]
 
     def get_variable(self, name: str) -> Variable:
         """Returns a variable by name.
@@ -1773,6 +1814,7 @@ class Builder:
         self.config = {}
         self.modules = []
         self.materializers = []
+        self.node_packages = []
 
         # Allow later modules to override nodes of the same name
         self._allow_module_overrides = False
@@ -1890,6 +1932,29 @@ class Builder:
                 )
 
         self.materializers.extend(materializers)
+        return self
+
+    def with_packages(self, *node_packages: "packaging.NodePackage") -> Self:
+        """Declares node packages the built dataflow must be compatible with.
+
+        Each package is validated against the driver's built graph when the driver is
+        built; building fails with a ``PackageValidationError`` if a package is
+        incompatible.
+
+        :param node_packages: packages the dataflow should satisfy
+        :return: self
+        """
+        if any(not isinstance(p, packaging.NodePackage) for p in node_packages):
+            if len(node_packages) == 1 and isinstance(node_packages[0], Sequence):
+                raise ValueError(
+                    "`.with_packages()` received a sequence. Unpack it by prepending `*` e.g., `*[package_a, package_b]`"
+                )
+            else:
+                raise ValueError(
+                    f"`.with_packages()` only accepts packages. Received instead: {node_packages}"
+                )
+
+        self.node_packages.extend(node_packages)
         return self
 
     def with_cache(
@@ -2085,6 +2150,7 @@ class Builder:
             _graph_executor=graph_executor,
             _use_legacy_adapter=False,
             allow_module_overrides=self._allow_module_overrides,
+            _node_packages=self.node_packages,
         )
 
     def copy(self) -> "Builder":
@@ -2099,6 +2165,7 @@ class Builder:
         new_builder.legacy_graph_adapter = self.legacy_graph_adapter
         new_builder.adapters = self.adapters.copy()
         new_builder.materializers = self.materializers.copy()
+        new_builder.node_packages = self.node_packages.copy()
         new_builder.execution_manager = self.execution_manager
         new_builder.local_executor = self.local_executor
         new_builder.remote_executor = self.remote_executor
