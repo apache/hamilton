@@ -28,7 +28,7 @@ TL;DR
       - DIY or in tandem with Dagster, Airflow, Prefect, Metaflow, etc.
       - Includes: manual, schedules, sensors, conditional execution
     * - Micro orchestration (i.e., ``dbt``, ``LangChain``)
-      - Can run anywhere (locally, notebook, macro orchestrator, `FastAPI <https://hamilton.apache.org/integrations/fastapi/>`_, `Streamlit <https://hamilton.apache.org/integrations/streamlit/>`_, pyodide, etc.)
+      - Can run anywhere (locally, notebook, macro orchestrator, :doc:`FastAPI <../cookbook/fastapi>`, :doc:`Streamlit <../cookbook/streamlit>`, pyodide, etc.)
       - ❌
     * - Code structure
       - Since it's micro, there are no restrictions.
@@ -73,7 +73,7 @@ TL;DR
       - `Lifecycle hooks <https://hamilton.apache.org/reference/lifecycle-hooks/>`_ (easier to extend)
       - `Op Hooks <https://docs.dagster.io/concepts/ops-jobs-graphs/op-hooks#op-hooks>`_
     * - Plugins
-      - `Spark <https://blog.dagworks.io/p/expressing-pyspark-transformations>`_, Dask, Ray, `Datadog <https://hamilton.apache.org/reference/lifecycle-hooks/DDOGTracer/>`_, polars, pandera, and more (Apache Hamilton is less restrictive and easier to extend)
+      - `Spark <https://blog.dagworks.io/p/expressing-pyspark-transformations>`_, Dask, Ray, :doc:`Datadog <../reference/plugins/DDOGTracer>`, polars, pandera, and more (Apache Hamilton is less restrictive and easier to extend)
       - `Spark, Dask, polars, pandera, Databricks, Snowflake, Great Expections, and more <https://docs.dagster.io/integrations>`_  (Dagster integrations are more involved to develop)
     * - Interactive Development
       - `Jupyter Magic <https://hamilton.apache.org/how-tos/use-in-jupyter-notebook/#use-hamilton-jupyter-magic>`_, `VSCode extension <https://marketplace.visualstudio.com/items?itemName=ThierryJean.hamilton>`_
@@ -159,4 +159,3 @@ More information
 For a full side-by-side example of Dagster and Apache Hamilton, visit `this GitHub repository <https://github.com/apache/hamilton/tree/main/examples/dagster>`_
 
 For more questions, join our `Slack Channel <https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g>`_!
-    

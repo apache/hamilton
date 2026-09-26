@@ -53,5 +53,5 @@ Follow these steps to get the example working:
 
 
 # Resources
-- [Learn more about Apache Hamilton + Ibis](https://hamilton.apache.org/integrations/ibis/)
+- [Learn more about Apache Hamilton + Ibis](https://hamilton.apache.org/plugins/ibis/)
 - [Ibis documentation](https://ibis-project.org/)
