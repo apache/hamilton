@@ -70,8 +70,8 @@ experiments = [
 lsp = ["apache-hamilton-lsp"]
 openlineage = [
     "openlineage-python",
-    # SQL table resolution; no Windows wheel is published, the adapter degrades without it
-    "openlineage-sql; sys_platform != 'win32'",
+    # SQL table resolution; no Windows wheel is published, so pip builds it there (needs Rust)
+    "openlineage-sql",
 ]
 pandera = ["pandera"]
 performance = [

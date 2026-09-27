@@ -3,10 +3,10 @@ plugins.h_openlineage.OpenLineageAdapter
 ========================================
 
 Install with ``pip install "apache-hamilton[openlineage]"``. The extra brings ``openlineage-python``
-(the client) and, on Linux and macOS, ``openlineage-sql`` (the parser used to find the tables a
-query reads). ``openlineage-sql`` publishes no Windows wheel, so the extra skips it there and SQL
-queries, and written table names that are not plain identifiers, are reported without table
-datasets on Windows. The parser is used only with
+(the client) and ``openlineage-sql`` (the parser used to find the tables a query reads).
+``openlineage-sql`` publishes no Windows wheel, so on Windows it is built from source during the
+install, which needs a `Rust toolchain <https://rustup.rs/>`_. Without the parser, SQL queries, and
+table names that are not plain identifiers, are reported without table datasets. The parser is used only with
 ``sql_dataset_identity="datasource"``; the default identity needs neither it nor anything else
 beyond the client.
 
@@ -93,12 +93,12 @@ not connect to them, and nothing is rewritten automatically. Some datasets also 
 - loaders and savers whose metadata has no ``source`` (custom functions using the two-argument
   helper, in-memory databases)
 - any of the unidentifiable cases above, including every SQL query and every table name read or
-  written that is not a plain identifier on Windows, where ``openlineage-sql`` is not installed
+  written that is not a plain identifier wherever ``openlineage-sql`` is not installed
 
 To migrate:
 
-1. Install ``openlineage-sql`` where you run Hamilton. ``apache-hamilton[openlineage]`` includes it
-   everywhere except Windows. Pin it in locked environments.
+1. Install ``openlineage-sql`` where you run Hamilton. ``apache-hamilton[openlineage]`` includes it;
+   on Windows it is built from source, which needs a Rust toolchain. Pin it in locked environments.
 2. Run the pipeline once with ``sql_dataset_identity="datasource"`` against a test backend, or read
    the events with ``FileTransport``, and note the new namespace and name of each dataset. Check the
    ``hamilton.plugins.h_openlineage`` warnings for anything left out.

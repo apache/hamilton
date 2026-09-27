@@ -56,7 +56,7 @@ only for a string the metadata recorded as a read query, or one whose parse name
 ## Consequences
 
 - No dataset is ever named after SQL text, and table names are not reported as the job's SQL.
-- On Windows (no `openlineage-sql`), a name read or written that is not a plain identifier is left out of lineage with a note. This is documented, and it only affects datasource mode.
+- Without `openlineage-sql` (e.g. on Windows without a Rust toolchain, since no Windows wheel is published), a name read or written that is not a plain identifier is left out of lineage with a note. This is documented, and it only affects datasource mode.
 - The read discriminator fails closed. Unlike the rejected keyword list, which turned unrecognised statements into names, the `table` guard only leaves a table literally named `table …` out of lineage, and an unexpected parser message leaves the read out with a note rather than naming a dataset.
 - Known limitation: a table *read* by a name the metadata files as a query (`SELECT_LOG`,
   `select-log`) cannot be told apart from a statement. The name is reported as the job's SQL and

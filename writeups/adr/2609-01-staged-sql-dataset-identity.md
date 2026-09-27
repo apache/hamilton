@@ -32,7 +32,7 @@ to the job that reads it.
 Switching names changes the identity of every existing SQL dataset. Lineage history stops
 connecting, and anything keyed to the old names in a lineage backend (ownership, tags, alerts,
 policies) silently stops matching. Datasource naming also needs `openlineage-sql`, which has no
-Windows wheel, and it leaves out datasets it cannot identify instead of guessing. So an upgrade
+Windows wheel (it builds from source there, with a Rust toolchain), and it leaves out datasets it cannot identify instead of guessing. So an upgrade
 alone would make some datasets disappear.
 
 ## Decision
