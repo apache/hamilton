@@ -48,8 +48,7 @@ For a write (`operation="write"`), take the string from either key:
 3. Without a parse (parser missing or raising), a non-plain string is left out with a note. A name
    and a statement cannot be told apart then.
 
-For a read, a `table_name` that is not a plain identifier is parsed as SQL rather than used as a
-name.
+For a read, a `table_name` that is not a plain identifier is parsed. It is the table read only when the parser reports that no statement starts at its first character (`daily revenue`): the read succeeded, so pandas found it as a table. A quoted name (`"daily revenue"`) never gets this far, because pandas' `has_table` misses it and running it as SQL fails. Anything else stays SQL: a parse that names tables, a clean parse naming none (`values (1)`), an error further in (`pragma table_info(t)`), or no parse at all. A string whose first word is `table` is never a name, because Postgres' `TABLE t` is a row-returning statement the parser rejects at its first word.
 
 The job's `sql` facet comes from `SqlDatasets.query`, the statement actually resolved. It is set
 only for a string the metadata recorded as a read query, or one whose parse names tables.
@@ -57,8 +56,8 @@ only for a string the metadata recorded as a read query, or one whose parse name
 ## Consequences
 
 - No dataset is ever named after SQL text, and table names are not reported as the job's SQL.
-- On Windows (no `openlineage-sql`), a written name that is not a plain identifier is left out of
-  lineage with a note. This is documented, and it only affects datasource mode.
+- On Windows (no `openlineage-sql`), a name read or written that is not a plain identifier is left out of lineage with a note. This is documented, and it only affects datasource mode.
+- The read discriminator fails closed. Unlike the rejected keyword list, which turned unrecognised statements into names, the `table` guard only leaves a table literally named `table …` out of lineage, and an unexpected parser message leaves the read out with a note rather than naming a dataset.
 - Known limitation: a table *read* by a name the metadata files as a query (`SELECT_LOG`,
   `select-log`) cannot be told apart from a statement. The name is reported as the job's SQL and
   no input dataset is emitted. For upper-case `SELECT` names, the previous adapter did the same.

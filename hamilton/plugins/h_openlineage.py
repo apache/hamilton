@@ -137,7 +137,8 @@ def sql_datasets(
     unless given here. What a write names is its table when it is a plain identifier; otherwise it
     is parsed, and is the table written unless it parses as a statement that names tables (then the
     tables it writes are used, if any). Without a parse it is left out. A read string that is not a
-    plain name is parsed as SQL rather than used as one. Schema precedence: explicit in the SQL,
+    plain name is parsed too, and is the table read only when no statement starts at it (``daily
+    revenue``); otherwise it is SQL, and without a parse it is left out. Schema precedence: explicit in the SQL,
     then the writer's ``schema``, then the connection's default schema. Anything that cannot be
     fully identified is left out and explained in ``notes`` rather than guessed — an unknown datasource, an unsupported
     dialect, a missing schema, a parse error or a missing ``openlineage-sql`` install.
@@ -162,9 +163,15 @@ def sql_datasets(
         query, table_name = None, write_target
     elif write_target:
         query, table_name = write_target, None
-    elif operation == "read" and table_name and not _PLAIN_NAME.fullmatch(table_name):
-        # a read string that is not a plain name is SQL, whichever key it was filed under
-        query, table_name = table_name, None
+    parsed, note = None, ""
+    if operation == "read" and table_name and not _PLAIN_NAME.fullmatch(table_name):
+        # a read string that is not a plain name is SQL, whichever key it was filed under, unless
+        # no statement starts at it: pandas then read it as a table (``daily revenue``)
+        parsed, note = _parse(table_name, dialect)
+        if _is_read_table_name(parsed, table_name):
+            parsed, note = None, ""  # a table name: a query beside it is parsed on its own
+        else:
+            query, table_name = table_name, None
 
     def to_datasets(
         tables: list[tuple[str | None, str | None, str, bool]],
@@ -179,17 +186,8 @@ def sql_datasets(
         return datasets
 
     if query:
-        try:
-            import openlineage_sql
-        except ImportError:
-            openlineage_sql = None
-            note = "openlineage-sql is not installed; install apache-hamilton[openlineage] to resolve tables from SQL"
-        parsed = None
-        if openlineage_sql:
-            try:
-                parsed = openlineage_sql.parse([query], dialect=dialect.parser)
-            except Exception as e:
-                note = f"SQL parsing failed: {type(e).__name__}"
+        if parsed is None and not note:  # not already parsed as a read name
+            parsed, note = _parse(query, dialect)
         # a statement, not a table name: filed as a read query, or parsed as naming tables
         recorded_as_query = not write_target and md.get("query") == query
         if recorded_as_query or (parsed and (parsed.out_tables or parsed.in_tables)):
@@ -221,6 +219,42 @@ def sql_datasets(
     else:
         result.notes.append("SQL metadata has neither a query nor a table name")
     return result
+
+
+def _parse(sql: str, dialect: _Dialect) -> tuple[Any, str]:
+    """Parses ``sql`` with ``openlineage-sql``; returns (parse, "") or (None, why not)."""
+    try:
+        import openlineage_sql
+    except ImportError:
+        return None, (
+            "openlineage-sql is not installed; install apache-hamilton[openlineage] to resolve "
+            "tables from SQL"
+        )
+    try:
+        return openlineage_sql.parse([sql], dialect=dialect.parser), ""
+    except Exception as e:
+        return None, f"SQL parsing failed: {type(e).__name__}"
+
+
+# openlineage-sql's error when no statement starts at the very beginning of the input
+_NO_STATEMENT = re.compile(r"Expected: an SQL statement, found: .* at Line: 1, Column: 1")
+
+
+def _is_read_table_name(parsed: Any, read: str) -> bool:
+    """Whether a string a read was filed under ``table_name`` for names a table, not a statement.
+
+    The read succeeded, so the database accepted the string: one no statement starts at is a name
+    pandas found as a table (``daily revenue``). Anything else, including a failed or missing parse
+    and a parse error further in, stays a statement. Postgres' ``TABLE t`` is a statement the
+    parser does not know, so a string starting with ``table`` is never a name.
+    """
+    return bool(
+        parsed
+        and not (parsed.in_tables or parsed.out_tables)
+        and parsed.errors
+        and _NO_STATEMENT.fullmatch(parsed.errors[0].message)
+        and read.split(maxsplit=1)[0].lower() != "table"
+    )
 
 
 def _parsed_tables(

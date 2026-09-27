@@ -34,6 +34,7 @@ from openlineage.client import OpenLineageClient  # noqa: E402
 from openlineage.client.transport.file import FileConfig, FileTransport  # noqa: E402
 
 from hamilton.plugins import h_openlineage  # noqa: E402
+from hamilton.plugins.pandas_extensions import PandasSqlReader  # noqa: E402
 
 REVENUE_QUERY = """
 -- daily revenue per customer country
@@ -689,15 +690,53 @@ def test_written_table_names_are_emitted_as_tables(tmp_path, table, query, table
     assert "sql" not in write["job"]["facets"]  # a table name is not the job's SQL
 
 
-def test_read_by_a_non_plain_table_name_reports_no_statement(tmp_path):
+def test_read_by_a_non_plain_table_name_is_emitted_as_the_table(tmp_path):
     engine = create_engine(f"sqlite:///{tmp_path / 'a.db'}")
     pd.DataFrame({"x": [1]}).to_sql("daily revenue", engine, index=False)
-    metadata = utils.get_sql_metadata(
-        "daily revenue", pd.DataFrame(), db_connection=engine, operation="read"
+    df, metadata = PandasSqlReader("daily revenue", engine).load_data(pd.DataFrame)
+    assert len(df) == 1
+    assert (metadata["sql_metadata"]["query"], metadata["sql_metadata"]["table_name"]) == (
+        None,
+        "daily revenue",
     )
     result = h_openlineage.sql_datasets(metadata)
-    assert result.inputs == [] and result.notes  # not guessed
+    assert identities(result.inputs) == [
+        (f"sqlite://{(tmp_path / 'a.db').resolve()}", "daily revenue")
+    ]
+    assert result.notes == []
     assert result.query is None  # a table name is not the job's SQL
+
+
+@pytest.mark.parametrize(
+    ("statement", "inputs"),
+    [
+        ("(select * from t)", ["t"]),
+        ("values (1)", []),
+        ("explain select * from t", []),
+        ("pragma table_info(t)", []),
+        ("table t", []),  # a Postgres statement the parser does not know
+        ("TABLE t", []),
+    ],
+)
+@pytest.mark.parametrize("db", ["sqlite", "postgresql"])
+def test_read_statements_filed_as_a_table_name_are_not_named_as_tables(
+    tmp_path, db, statement, inputs
+):
+    """Read SQL that metadata files under ``table_name`` is never taken as the table's name."""
+    metadata = sqlite_metadata(tmp_path / "a.db", statement, results=pd.DataFrame())
+    assert metadata["sql_metadata"]["table_name"] == statement
+    if db == "postgresql":
+        metadata["sql_metadata"]["source"] = POSTGRES_SOURCE
+    result = h_openlineage.sql_datasets(metadata)
+    assert [d.name.rsplit(".", 1)[-1] for d in result.inputs] == inputs
+    assert result.outputs == []
+
+
+def test_read_by_a_non_plain_table_name_without_parser_is_left_out(tmp_path, monkeypatch):
+    monkeypatch.setitem(__import__("sys").modules, "openlineage_sql", None)
+    metadata = sqlite_metadata(tmp_path / "a.db", "daily revenue", results=pd.DataFrame())
+    result = h_openlineage.sql_datasets(metadata, operation="read")
+    assert result.inputs == [] and result.notes  # a name and a statement can't be told apart
 
 
 @pytest.mark.parametrize("parser", ["missing", "failing"])

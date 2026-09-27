@@ -63,7 +63,9 @@ exception is a table read by a name that the metadata files as a query (one cont
 ``SELECT``, or whose first word is ``select`` or ``with``, such as ``SELECT_LOG`` or
 ``select-log``): it can't be told apart from a statement, so the name is reported as the job's
 SQL and no input dataset is emitted for it. Give such tables plain names, or read them with a
-query.
+query. A read by another name that is not a plain identifier (``daily revenue``) is emitted as
+that table when no SQL statement starts at it; one starting with ``table`` is left out, since
+Postgres' ``TABLE t`` is a statement ``openlineage-sql`` does not know.
 
 Whatever cannot be fully identified is left out and logged as a warning from the
 ``hamilton.plugins.h_openlineage`` logger, never guessed. The following cases are left out:
@@ -90,8 +92,8 @@ not connect to them, and nothing is rewritten automatically. Some datasets also 
 
 - loaders and savers whose metadata has no ``source`` (custom functions using the two-argument
   helper, in-memory databases)
-- any of the unidentifiable cases above, including every SQL query and every written table name
-  that is not a plain identifier on Windows, where ``openlineage-sql`` is not installed
+- any of the unidentifiable cases above, including every SQL query and every table name read or
+  written that is not a plain identifier on Windows, where ``openlineage-sql`` is not installed
 
 To migrate:
 
