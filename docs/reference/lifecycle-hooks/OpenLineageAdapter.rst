@@ -50,7 +50,8 @@ The rest of this section describes the ``"datasource"`` identity:
      - ``postgres://{host}:{port}`` (port defaults to 5432)
      - ``{database}.{schema}.{table}``; unquoted identifiers are folded to lower case, as the server does
    * - SQLite
-     - ``sqlite://{absolute file path}``
+     - ``sqlite://{absolute file path}``, with forward slashes on every platform
+       (``sqlite://C:/data/sales.db`` on Windows)
      - ``{table}``. A table in an attached database (``reporting.orders`` in the SQL, or the writer's
        ``schema``) is named in the attached file's namespace, which is known only for a
        standard-library ``sqlite3`` connection; otherwise it is left out.

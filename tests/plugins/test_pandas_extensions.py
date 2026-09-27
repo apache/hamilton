@@ -139,7 +139,7 @@ def test_pandas_sql(df: pd.DataFrame, connect, identified: bool, tmp_path) -> No
     assert metadata1["sql_metadata"]["table_name"] == "bar"
     assert metadata2["sql_metadata"]["query"] == "SELECT foo FROM bar"
     if identified:
-        expected = {"dialect": "sqlite", "database": str(path.resolve())}
+        expected = {"dialect": "sqlite", "database": path.resolve().as_posix()}
         assert expected.items() <= metadata1["sql_metadata"]["source"].items()
         assert metadata1["sql_metadata"]["source"] == metadata2["sql_metadata"]["source"]
     else:
@@ -183,13 +183,13 @@ def test_pandas_sql_decorators_capture_source(tmp_path) -> None:
     )
 
     loaded_df, loaded_metadata = result["orders.load_data.df"]
-    assert loaded_metadata["sql_metadata"]["source"]["database"] == str(
-        (tmp_path / "sales.db").resolve()
+    assert loaded_metadata["sql_metadata"]["source"]["database"] == (
+        (tmp_path / "sales.db").resolve().as_posix()
     )
     assert loaded_metadata["sql_metadata"]["operation"] == "read"
     saved_metadata = result["saved"]
-    assert saved_metadata["sql_metadata"]["source"]["database"] == str(
-        (tmp_path / "warehouse.db").resolve()
+    assert saved_metadata["sql_metadata"]["source"]["database"] == (
+        (tmp_path / "warehouse.db").resolve().as_posix()
     )
     assert saved_metadata["sql_metadata"]["table_name"] == "revenue"
     assert pd.read_sql("select * from revenue", warehouse)["revenue"].tolist() == [20.0, 10.0]

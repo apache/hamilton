@@ -108,7 +108,7 @@ def test_get_sql_metadata_sqlite_connections(tmp_path: pathlib.Path):
         "dialect": "sqlite",
         "host": None,
         "port": None,
-        "database": str(path.resolve()),
+        "database": path.resolve().as_posix(),
         "default_schema": None,
         "attached": {},
     }
@@ -120,23 +120,24 @@ def test_get_sql_metadata_sqlite_connections(tmp_path: pathlib.Path):
     conn.execute(f"ATTACH DATABASE '{other}' AS reporting")
     conn.execute("ATTACH DATABASE ':memory:' AS scratch")
     source = get_sql_metadata("orders", 3, db_connection=conn)[SQL_METADATA]["source"]
-    assert source["attached"] == {"reporting": str(other.resolve())}
+    assert source["attached"] == {"reporting": other.resolve().as_posix()}
     memory = sqlite3.connect(":memory:")
     memory.execute(f"ATTACH DATABASE '{other}' AS reporting")
     in_memory, notes = get_sql_source(memory)
     assert (in_memory["database"], in_memory["attached"], notes) == (
         "",
-        {"reporting": str(other.resolve())},
+        {"reporting": other.resolve().as_posix()},
         "",
     )
-    assert source["database"] == str(path.resolve())
+    assert source["database"] == path.resolve().as_posix()
+    assert "\\" not in source["database"] + source["attached"]["reporting"]  # same form on Windows
     assert get_sql_source(f"sqlite:///{path}")[0]["attached"] is None
 
     engine = create_engine(f"sqlite:///{path}")
     with engine.connect() as sa_conn:
         read = get_sql_metadata("SELECT * FROM orders", pd.DataFrame(), db_connection=sa_conn)
     assert read[SQL_METADATA]["operation"] == "read"
-    assert read[SQL_METADATA]["source"]["database"] == str(path.resolve())
+    assert read[SQL_METADATA]["source"]["database"] == path.resolve().as_posix()
     assert (
         get_sql_metadata("orders", 3, db_connection=engine)[SQL_METADATA]["source"]["dialect"]
         == "sqlite"

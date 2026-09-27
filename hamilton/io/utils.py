@@ -174,7 +174,7 @@ def get_sql_source(db_connection: Any) -> tuple[dict[str, Any] | None, str]:
     :return: ``(source, notes)``. ``source`` is ``None`` when the connection cannot be
         identified, and ``notes`` then says why. When present, ``source`` holds
         ``dialect`` (SQLAlchemy backend name, e.g. ``postgresql``, ``sqlite``), ``host``,
-        ``port``, ``database`` (the absolute file path for SQLite) and ``default_schema``
+        ``port``, ``database`` (the absolute file path for SQLite, with forward slashes on every platform) and ``default_schema``
         (the schema the connection resolves unqualified names against, when SQLAlchemy has
         already fetched it; ``None`` otherwise). SQLite sources also hold ``attached``: a
         mapping of attached database name to absolute file path for a raw sqlite3
@@ -200,7 +200,7 @@ def _inspect_sql_source(db_connection: Any) -> dict[str, Any] | None:
         path = next(file for _, name, file in databases if name == "main")
         source = _sql_source("sqlite", None, None, path, None)
         source["attached"] = {
-            name: os.path.abspath(file)
+            name: _absolute_path(file)
             for _, name, file in databases
             if name not in ("main", "temp") and file
         }
@@ -221,6 +221,11 @@ def _inspect_sql_source(db_connection: Any) -> dict[str, Any] | None:
     return _sql_source(url.get_backend_name(), url.host, url.port, url.database, default_schema)
 
 
+def _absolute_path(path: str) -> str:
+    """An absolute SQLite file path with forward slashes, the same form on every platform."""
+    return Path(os.path.abspath(path)).as_posix()
+
+
 def _sql_source(
     dialect: str,
     host: str | None,
@@ -232,7 +237,7 @@ def _sql_source(
         if database == ":memory:":
             database = ""  # "sqlite:///:memory:" is in-memory too; leave it unidentified
         elif database:
-            database = os.path.abspath(database)
+            database = _absolute_path(database)
     return {
         "dialect": dialect,
         "host": host,

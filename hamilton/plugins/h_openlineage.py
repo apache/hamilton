@@ -127,9 +127,10 @@ def sql_datasets(
 
     - PostgreSQL: namespace ``postgres://{host}:{port}``, name ``{database}.{schema}.{table}``.
       Unquoted identifiers are folded to lower case, as the server does.
-    - SQLite: namespace ``sqlite://{absolute file path}``, name ``{table}``. A table in an
-      attached database (``{schema}.{table}`` in the SQL, or the writer's ``schema``) is named
-      in the attached file's namespace; it is left out when that file cannot be known.
+    - SQLite: namespace ``sqlite://{absolute file path}`` (forward slashes on every platform),
+      name ``{table}``. A table in an attached database (``{schema}.{table}`` in the SQL, or the
+      writer's ``schema``) is named in the attached file's namespace; it is left out when that
+      file cannot be known.
 
     Queries are parsed with ``openlineage-sql``; every physical table read appears in ``inputs``
     and every table written in ``outputs`` (aliases and common table expressions are not tables).

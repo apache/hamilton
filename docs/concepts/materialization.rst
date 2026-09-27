@@ -236,10 +236,10 @@ The ``sql_metadata`` entry holds the following keys:
    * - ``source``
      - The datasource, or ``None`` when it could not be identified. It holds ``dialect``, the SQLAlchemy
        backend name (``postgresql`` or ``sqlite``); ``host``; ``port``; ``database``, which is the
-       absolute file path for SQLite; and ``default_schema``, the schema unqualified names resolve
+       absolute file path for SQLite, with forward slashes on every platform (``C:/data/sales.db``); and ``default_schema``, the schema unqualified names resolve
        against. ``default_schema`` is set only when SQLAlchemy already established it on the connection,
        and is ``None`` otherwise. SQLite sources also hold ``attached``, a mapping of attached database
-       name to absolute file path, or ``None`` when the attached databases cannot be known (see
+       name to absolute file path in the same form, or ``None`` when the attached databases cannot be known (see
        below). *New in 1.1.0.*
    * - ``notes``
      - Why ``source`` is ``None``, for example ``"In-memory SQLite database has no stable identity"``

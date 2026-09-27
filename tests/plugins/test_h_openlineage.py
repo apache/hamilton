@@ -69,7 +69,9 @@ def test_sql_datasets_sqlite_queries(tmp_path, query, tables):
     result = h_openlineage.sql_datasets(sqlite_metadata(path, query))
     assert result.notes == []
     assert result.outputs == []
-    assert identities(result.inputs) == [(f"sqlite://{path.resolve()}", t) for t in tables]
+    assert identities(result.inputs) == [
+        (f"sqlite://{path.resolve().as_posix()}", t) for t in tables
+    ]
     assert all(d.facets["dataSource"].uri == d.namespace for d in result.inputs)
 
 
@@ -126,7 +128,7 @@ def test_sql_datasets_writer_schema_applies_to_every_dialect(tmp_path):
         "daily_revenue", 1, db_connection=conn, schema="reporting", operation="write"
     )
     assert identities(h_openlineage.sql_datasets(sqlite).outputs) == [
-        (f"sqlite://{(tmp_path / 'reporting.db').resolve()}", "daily_revenue")
+        (f"sqlite://{(tmp_path / 'reporting.db').resolve().as_posix()}", "daily_revenue")
     ]
 
 
@@ -137,7 +139,10 @@ def test_sql_datasets_sqlite_attached_databases(tmp_path):
     query = "SELECT * FROM reporting.orders JOIN main.customers ON 1=1 JOIN regions ON 1=1"
     metadata = utils.get_sql_metadata(query, pd.DataFrame(), db_connection=conn)
     result = h_openlineage.sql_datasets(metadata)
-    main_ns, other_ns = f"sqlite://{main_path.resolve()}", f"sqlite://{other_path.resolve()}"
+    main_ns, other_ns = (
+        f"sqlite://{main_path.resolve().as_posix()}",
+        f"sqlite://{other_path.resolve().as_posix()}",
+    )
     assert identities(result.inputs) == [
         (main_ns, "customers"),
         (main_ns, "regions"),
@@ -347,10 +352,10 @@ def test_revenue_flow_sqlite_emits_datasource_lineage(tmp_path):
     assert written["amount"].tolist() == [15.0]
     assert result["saved_revenue"]["sql_metadata"]["rows"] == 1
 
-    sales_ns = f"sqlite://{sales_path.resolve()}"
+    sales_ns = f"sqlite://{sales_path.resolve().as_posix()}"
     assert dataset_ids(events, "inputs") == [(sales_ns, "customers"), (sales_ns, "orders")]
     assert dataset_ids(events, "outputs") == [
-        (f"sqlite://{warehouse_path.resolve()}", "daily_revenue")
+        (f"sqlite://{warehouse_path.resolve().as_posix()}", "daily_revenue")
     ]
     assert {e["job"]["namespace"] for e in events} == {"demo_namespace"}
     assert {e["job"]["name"] for e in events} == {"revenue_job"}
@@ -684,7 +689,7 @@ def test_written_table_names_are_emitted_as_tables(tmp_path, table, query, table
         "write",
     )
     assert dataset_ids(events, "outputs") == [
-        (f"sqlite://{(tmp_path / 'warehouse.db').resolve()}", table)
+        (f"sqlite://{(tmp_path / 'warehouse.db').resolve().as_posix()}", table)
     ]
     (write,) = (e for e in events if e["eventType"] == "RUNNING" and e.get("outputs"))
     assert "sql" not in write["job"]["facets"]  # a table name is not the job's SQL
@@ -701,7 +706,7 @@ def test_read_by_a_non_plain_table_name_is_emitted_as_the_table(tmp_path):
     )
     result = h_openlineage.sql_datasets(metadata)
     assert identities(result.inputs) == [
-        (f"sqlite://{(tmp_path / 'a.db').resolve()}", "daily revenue")
+        (f"sqlite://{(tmp_path / 'a.db').resolve().as_posix()}", "daily revenue")
     ]
     assert result.notes == []
     assert result.query is None  # a table name is not the job's SQL
@@ -757,7 +762,7 @@ def test_sql_datasets_written_name_without_parser(tmp_path, monkeypatch, parser)
         return h_openlineage.sql_datasets(metadata)
 
     assert identities(written("USER_SELECTIONS").outputs) == [
-        (f"sqlite://{(tmp_path / 'a.db').resolve()}", "USER_SELECTIONS")
+        (f"sqlite://{(tmp_path / 'a.db').resolve().as_posix()}", "USER_SELECTIONS")
     ]
     # a table name and a statement can't be told apart without a parse: left out, explained
     for ambiguous in (
@@ -783,7 +788,7 @@ def test_sql_datasets_written_name_without_parser(tmp_path, monkeypatch, parser)
 def test_sql_datasets_write_statements_are_parsed(tmp_path, statement, inputs, outputs):
     """A custom saver recording the statement it ran gets the tables, not the SQL as a name."""
     metadata = sqlite_metadata(tmp_path / "a.db", statement, results=3)
-    ns = f"sqlite://{(tmp_path / 'a.db').resolve()}"
+    ns = f"sqlite://{(tmp_path / 'a.db').resolve().as_posix()}"
     result = h_openlineage.sql_datasets(metadata, operation="write")
     assert identities(result.outputs) == [(ns, t) for t in outputs]
     assert identities(result.inputs) == [(ns, t) for t in inputs]
@@ -809,7 +814,7 @@ def test_read_strings_that_are_not_names_are_parsed_not_named(tmp_path, query, t
     # reported as the job's SQL only when the parse shows it is a statement naming tables
     assert result.query == (query if tables else None)
     assert identities(result.inputs) == [
-        (f"sqlite://{(tmp_path / 'a.db').resolve()}", t) for t in tables
+        (f"sqlite://{(tmp_path / 'a.db').resolve().as_posix()}", t) for t in tables
     ]
     assert tables or result.notes
 
@@ -837,4 +842,6 @@ def test_attached_sqlite_database_is_attributed_to_its_own_file(tmp_path):
     dr = driver.Builder().with_modules(module).with_adapters(adapter).build()
     dr.execute(["orders"], inputs={"db": conn})
     events = [json.loads(line) for line in events_path.read_text().splitlines()]
-    assert dataset_ids(events, "inputs") == [(f"sqlite://{other_path.resolve()}", "orders")]
+    assert dataset_ids(events, "inputs") == [
+        (f"sqlite://{other_path.resolve().as_posix()}", "orders")
+    ]
