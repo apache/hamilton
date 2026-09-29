@@ -20,7 +20,12 @@ import logging
 from types import ModuleType
 from unittest.mock import mock_open, patch
 
-from hamilton_sdk.driver import _hash_module
+from hamilton_sdk.driver import (
+    RESULT_BUILDER_NODE_NAME,
+    _extract_node_templates_from_function_graph,
+    _hash_module,
+    hash_dag,
+)
 
 
 @patch("builtins.open", new_callable=mock_open, read_data=b"print('hello world')\n")
@@ -112,3 +117,74 @@ def test_hash_module_file_is_none(caplog):
 
     assert "Skipping hash" in caplog.text
     assert result.hexdigest() == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+
+def _basic_function_graph():
+    from hamilton import graph
+
+    from tests.resources import basic_dag_with_config
+
+    return graph.FunctionGraph.from_modules(basic_dag_with_config, config={"foo": "bar"})
+
+
+def _function_graph_with_a_colliding_node():
+    """A graph containing a real node named ``_result_builder``, via an external input."""
+    from hamilton import graph
+
+    from tests.resources import dag_with_reserved_node_name
+
+    return graph.FunctionGraph.from_modules(dag_with_reserved_node_name, config={})
+
+
+def test_extract_node_templates_appends_result_builder():
+    """The synthetic result builder node is appended when the caller asks for it."""
+    fg = _basic_function_graph()
+    templates = _extract_node_templates_from_function_graph(fg, include_result_builder=True)
+
+    assert len(templates) == len(fg.nodes) + 1
+    result_builder = templates[-1]
+    assert result_builder["name"] == RESULT_BUILDER_NODE_NAME
+    assert result_builder["classifications"] == ["result_builder"]
+    # Deps are per-run (the requested outputs), so the template carries none.
+    assert result_builder["dependencies"] == []
+    assert result_builder["code_artifact_pointers"] == []
+    assert result_builder["output"] == {"type_name": "typing.Any"}
+    # It must not shadow a real node.
+    assert RESULT_BUILDER_NODE_NAME not in fg.nodes
+
+
+def test_extract_node_templates_omits_result_builder_by_default():
+    """Only callers that also emit a task run should register the node.
+
+    The legacy ``hamilton_sdk.driver.Driver`` shares this function but emits no task run, so
+    registering the node there would leave every run rendering a node that never executes.
+    """
+    fg = _basic_function_graph()
+    templates = _extract_node_templates_from_function_graph(fg)
+
+    assert len(templates) == len(fg.nodes)
+    assert RESULT_BUILDER_NODE_NAME not in {t["name"] for t in templates}
+
+
+def test_result_builder_node_is_skipped_when_the_name_is_taken(caplog):
+    """A second template of the same name would fail registration, so the node is dropped."""
+    fg = _function_graph_with_a_colliding_node()
+    assert RESULT_BUILDER_NODE_NAME in fg.nodes, "test graph does not reproduce the collision"
+
+    templates = _extract_node_templates_from_function_graph(fg, include_result_builder=True)
+
+    assert len(templates) == len(fg.nodes)
+    assert len([t for t in templates if t["name"] == RESULT_BUILDER_NODE_NAME]) == 1
+    assert "Not registering the synthetic _result_builder node" in caplog.text
+
+
+def test_result_builder_node_changes_the_dag_hash():
+    """The hash identifies the template, so it has to move when the node set does."""
+    fg = _basic_function_graph()
+    assert hash_dag(fg, include_result_builder=True) != hash_dag(fg)
+
+
+def test_dag_hash_is_unchanged_when_the_name_is_taken():
+    """No node registered means no new template -- the three uses have to agree."""
+    fg = _function_graph_with_a_colliding_node()
+    assert hash_dag(fg, include_result_builder=True) == hash_dag(fg)
