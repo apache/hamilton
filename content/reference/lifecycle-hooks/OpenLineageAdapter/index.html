@@ -526,9 +526,16 @@ s=d.getElementsByTagName('script')[0];
         <article role="main" id="furo-main-content">
           <section id="plugins-h-openlineage-openlineageadapter">
 <h1>plugins.h_openlineage.OpenLineageAdapter<a class="headerlink" href="#plugins-h-openlineage-openlineageadapter" title="Link to this heading">¶</a></h1>
+<p>Install with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;apache-hamilton[openlineage]&quot;</span></code>. The extra brings <code class="docutils literal notranslate"><span class="pre">openlineage-python</span></code>
+(the client) and <code class="docutils literal notranslate"><span class="pre">openlineage-sql</span></code> (the parser used to find the tables a query reads).
+<code class="docutils literal notranslate"><span class="pre">openlineage-sql</span></code> publishes no Windows wheel, so on Windows it is built from source during the
+install, which needs a <a class="reference external" href="https://rustup.rs/">Rust toolchain</a>. Without the parser, SQL queries, and
+table names that are not plain identifiers, are reported without table datasets. The parser is used only with
+<code class="docutils literal notranslate"><span class="pre">sql_dataset_identity=&quot;datasource&quot;</span></code>; the default identity needs neither it nor anything else
+beyond the client.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hamilton.plugins.h_openlineage.OpenLineageAdapter">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_openlineage.</span></span><span class="sig-name descname"><span class="pre">OpenLineageAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">OpenLineageClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hamilton/plugins/h_openlineage/#OpenLineageAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.plugins.h_openlineage.OpenLineageAdapter" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_openlineage.</span></span><span class="sig-name descname"><span class="pre">OpenLineageAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">OpenLineageClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_dataset_identity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'legacy'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'datasource'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hamilton/plugins/h_openlineage/#OpenLineageAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.plugins.h_openlineage.OpenLineageAdapter" title="Link to this definition">¶</a></dt>
 <dd><p>This adapter emits OpenLineage events.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create the openlineage client</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">openlineage.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenLineageClient</span>
@@ -562,7 +569,7 @@ and data loaders via <cite>.with_materializers()</cite> on the Driver Builder, o
 on the driver object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hamilton.plugins.h_openlineage.OpenLineageAdapter.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">OpenLineageClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hamilton/plugins/h_openlineage/#OpenLineageAdapter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.plugins.h_openlineage.OpenLineageAdapter.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">OpenLineageClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_dataset_identity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'legacy'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'datasource'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hamilton/plugins/h_openlineage/#OpenLineageAdapter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.plugins.h_openlineage.OpenLineageAdapter.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Constructor. You pass in the OLClient.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -571,6 +578,12 @@ on the driver object.</p>
 <li><p><strong>client</strong></p></li>
 <li><p><strong>namespace</strong></p></li>
 <li><p><strong>job_name</strong></p></li>
+<li><p><strong>sql_dataset_identity</strong> – how SQL loader/saver datasets are identified.
+<code class="docutils literal notranslate"><span class="pre">&quot;legacy&quot;</span></code> (the current default) names them <code class="docutils literal notranslate"><span class="pre">namespace</span></code> + bare table name, as
+earlier releases did. <code class="docutils literal notranslate"><span class="pre">&quot;datasource&quot;</span></code> names them after the database they live in,
+per the OpenLineage naming conventions (see <a class="reference internal" href="#hamilton.plugins.h_openlineage.sql_datasets" title="hamilton.plugins.h_openlineage.sql_datasets"><code class="xref py py-func docutils literal notranslate"><span class="pre">sql_datasets()</span></code></a>), so lineage
+connects across jobs. Leaving it unset uses <code class="docutils literal notranslate"><span class="pre">&quot;legacy&quot;</span></code> and warns once, since the
+default will change to <code class="docutils literal notranslate"><span class="pre">&quot;datasource&quot;</span></code> in a future major release.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -661,6 +674,158 @@ Emits a Job Event with the sourceCode Facet for the entire DAG as the job.</p>
 
 </dd></dl>
 
+<section id="sql-datasets">
+<h2>SQL datasets<a class="headerlink" href="#sql-datasets" title="Link to this heading">¶</a></h2>
+<p>SQL loaders and savers (<code class="docutils literal notranslate"><span class="pre">&#64;load_from.sql</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;save_to.sql</span></code> and the pandas SQL materializers) record
+the datasource they used (see <a class="reference internal" href="../../../concepts/materialization/#sql-metadata-and-lineage"><span class="std std-ref">SQL metadata and lineage</span></a>). How the adapter names their datasets
+is set by <code class="docutils literal notranslate"><span class="pre">sql_dataset_identity</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;legacy&quot;</span></code>, the default: datasets are named as in earlier Hamilton releases, under the adapter’s
+<em>job</em> namespace with the bare <code class="docutils literal notranslate"><span class="pre">table_name</span></code>. As before, a query read containing <code class="docutils literal notranslate"><span class="pre">SELECT</span></code>
+produces a dataset with no name and the query in the job’s <code class="docutils literal notranslate"><span class="pre">sql</span></code> facet, and other strings are
+used as the dataset name. Leaving the option unset warns once per adapter (a
+<code class="docutils literal notranslate"><span class="pre">FutureWarning</span></code>) because the default will change; pass <code class="docutils literal notranslate"><span class="pre">&quot;legacy&quot;</span></code> explicitly to keep these names
+without the warning.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;datasource&quot;</span></code>: datasets are named after the datasource, following the <a class="reference external" href="https://openlineage.io/docs/spec/naming/">OpenLineage naming
+conventions</a>, and every physical table a query reads is
+reported. A report written by one job and read by another then resolves to the same dataset, and
+two tables with the same name in different databases stay distinct.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">adapter</span> <span class="o">=</span> <span class="n">OpenLineageAdapter</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">"my_namespace"</span><span class="p">,</span> <span class="s2">"my_job"</span><span class="p">,</span> <span class="n">sql_dataset_identity</span><span class="o">=</span><span class="s2">"datasource"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The rest of this section describes the <code class="docutils literal notranslate"><span class="pre">&quot;datasource&quot;</span></code> identity:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 35.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dialect</p></th>
+<th class="head"><p>Namespace</p></th>
+<th class="head"><p>Name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PostgreSQL</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">postgres://{host}:{port}</span></code> (port defaults to 5432)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{database}.{schema}.{table}</span></code>; unquoted identifiers are folded to lower case, as the server does</p></td>
+</tr>
+<tr class="row-odd"><td><p>SQLite</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sqlite://{absolute</span> <span class="pre">file</span> <span class="pre">path}</span></code>, with forward slashes on every platform
+(<code class="docutils literal notranslate"><span class="pre">sqlite://C:/data/sales.db</span></code> on Windows)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{table}</span></code>. A table in an attached database (<code class="docutils literal notranslate"><span class="pre">reporting.orders</span></code> in the SQL, or the writer’s
+<code class="docutils literal notranslate"><span class="pre">schema</span></code>) is named in the attached file’s namespace, which is known only for a
+standard-library <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code> connection; otherwise it is left out.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Aliases and common table expressions are not reported as tables. Each dataset carries a
+<code class="docutils literal notranslate"><span class="pre">dataSource</span></code> facet with the namespace; the <code class="docutils literal notranslate"><span class="pre">schema</span></code> facet from <code class="docutils literal notranslate"><span class="pre">dataframe_metadata</span></code> is
+attached only when the node maps to a single table. The job keeps the <code class="docutils literal notranslate"><span class="pre">sql</span></code> facet with the
+statement’s text; a node that read or wrote a table by name has no statement to report. The
+exception is a table read by a name that the metadata files as a query (one containing
+<code class="docutils literal notranslate"><span class="pre">SELECT</span></code>, or whose first word is <code class="docutils literal notranslate"><span class="pre">select</span></code> or <code class="docutils literal notranslate"><span class="pre">with</span></code>, such as <code class="docutils literal notranslate"><span class="pre">SELECT_LOG</span></code> or
+<code class="docutils literal notranslate"><span class="pre">select-log</span></code>): it can’t be told apart from a statement, so the name is reported as the job’s
+SQL and no input dataset is emitted for it. Give such tables plain names, or read them with a
+query. A read by another name that is not a plain identifier (<code class="docutils literal notranslate"><span class="pre">daily</span> <span class="pre">revenue</span></code>) is emitted as
+that table when no SQL statement starts at it; one starting with <code class="docutils literal notranslate"><span class="pre">table</span></code> is left out, since
+Postgres’ <code class="docutils literal notranslate"><span class="pre">TABLE</span> <span class="pre">t</span></code> is a statement <code class="docutils literal notranslate"><span class="pre">openlineage-sql</span></code> does not know.</p>
+<p>Whatever cannot be fully identified is left out and logged as a warning from the
+<code class="docutils literal notranslate"><span class="pre">hamilton.plugins.h_openlineage</span></code> logger, never guessed. The following cases are left out:</p>
+<ul class="simple">
+<li><p>an unknown datasource (in-memory SQLite, an unsupported connection object, legacy two-argument metadata)</p></li>
+<li><p>an unsupported dialect</p></li>
+<li><p>a table whose schema cannot be determined</p></li>
+<li><p>a statement <code class="docutils literal notranslate"><span class="pre">openlineage-sql</span></code> cannot parse</p></li>
+<li><p>a missing <code class="docutils literal notranslate"><span class="pre">openlineage-sql</span></code> install</p></li>
+</ul>
+<p>A failure inside the conversion is logged with its exception type and the run event is still
+emitted without datasets. The node itself has already succeeded and is never failed by lineage.</p>
+<section id="migrating-to-the-datasource-identity">
+<span id="sql-dataset-identity-change"></span><h3>Migrating to the datasource identity<a class="headerlink" href="#migrating-to-the-datasource-identity" title="Link to this heading">¶</a></h3>
+<p>The default stays <code class="docutils literal notranslate"><span class="pre">&quot;legacy&quot;</span></code> for now and will become <code class="docutils literal notranslate"><span class="pre">&quot;datasource&quot;</span></code> in a future major release.
+Switching changes every SQL dataset’s namespace and name (for example from <code class="docutils literal notranslate"><span class="pre">my_namespace</span></code> +
+<code class="docutils literal notranslate"><span class="pre">daily_revenue</span></code> to <code class="docutils literal notranslate"><span class="pre">postgres://warehouse.example:5432</span></code> + <code class="docutils literal notranslate"><span class="pre">analytics.reporting.daily_revenue</span></code>).
+A lineage backend shows the new names as new datasets: history recorded under the old names does
+not connect to them, and nothing is rewritten automatically. Some datasets also stop appearing:</p>
+<ul class="simple">
+<li><p>loaders and savers whose metadata has no <code class="docutils literal notranslate"><span class="pre">source</span></code> (custom functions using the two-argument
+helper, in-memory databases)</p></li>
+<li><p>any of the unidentifiable cases above, including every SQL query and every table name read or
+written that is not a plain identifier wherever <code class="docutils literal notranslate"><span class="pre">openlineage-sql</span></code> is not installed</p></li>
+</ul>
+<p>To migrate:</p>
+<ol class="arabic simple">
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">openlineage-sql</span></code> where you run Hamilton. <code class="docutils literal notranslate"><span class="pre">apache-hamilton[openlineage]</span></code> includes it;
+on Windows it is built from source, which needs a Rust toolchain. Pin it in locked environments.</p></li>
+<li><p>Run the pipeline once with <code class="docutils literal notranslate"><span class="pre">sql_dataset_identity=&quot;datasource&quot;</span></code> against a test backend, or read
+the events with <code class="docutils literal notranslate"><span class="pre">FileTransport</span></code>, and note the new namespace and name of each dataset. Check the
+<code class="docutils literal notranslate"><span class="pre">hamilton.plugins.h_openlineage</span></code> warnings for anything left out.</p></li>
+<li><p>In your lineage backend, move what is keyed to the old names (ownership, tags, alerts, policies,
+saved queries) to the new ones, or link old and new datasets where the backend supports it.</p></li>
+<li><p>Pass <code class="docutils literal notranslate"><span class="pre">sql_dataset_identity=&quot;datasource&quot;</span></code> in production.</p></li>
+</ol>
+<p>To stay on the current names, pass <code class="docutils literal notranslate"><span class="pre">sql_dataset_identity=&quot;legacy&quot;</span></code>. It silences the warning.</p>
+</section>
+</section>
+<section id="reuse-the-conversion">
+<h2>Reuse the conversion<a class="headerlink" href="#reuse-the-conversion" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="#hamilton.plugins.h_openlineage.sql_datasets" title="hamilton.plugins.h_openlineage.sql_datasets"><code class="xref py py-func docutils literal notranslate"><span class="pre">sql_datasets()</span></code></a> is the boundary another integration (an
+orchestrator provider, a custom adapter) can call on metadata Hamilton produced, with no
+<code class="docutils literal notranslate"><span class="pre">OpenLineageClient</span></code>, <code class="docutils literal notranslate"><span class="pre">Driver</span></code> or database connection involved:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.plugins.h_openlineage</span><span class="w"> </span><span class="kn">import</span> <span class="n">sql_datasets</span>
+
+<span class="n">lineage</span> <span class="o">=</span> <span class="n">sql_datasets</span><span class="p">(</span><span class="n">node_result_metadata</span><span class="p">)</span>   <span class="c1"># the dict a SQL loader/saver returned</span>
+<span class="n">lineage</span><span class="o">.</span><span class="n">inputs</span>    <span class="c1"># list[openlineage.client.event_v2.Dataset]</span>
+<span class="n">lineage</span><span class="o">.</span><span class="n">outputs</span>
+<span class="n">lineage</span><span class="o">.</span><span class="n">notes</span>     <span class="c1"># why anything was left out</span>
+</pre></div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="hamilton.plugins.h_openlineage.sql_datasets">
+<span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_openlineage.</span></span><span class="sig-name descname"><span class="pre">sql_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'read'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'write'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hamilton.plugins.h_openlineage.SqlDatasets" title="hamilton.plugins.h_openlineage.SqlDatasets"><span class="pre">SqlDatasets</span></a></span></span><a class="reference internal" href="../../../_modules/hamilton/plugins/h_openlineage/#sql_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.plugins.h_openlineage.sql_datasets" title="Link to this definition">¶</a></dt>
+<dd><p>Converts Hamilton SQL metadata into OpenLineage datasets. Emits nothing, opens nothing.</p>
+<p>This is the reusable boundary for other integrations (e.g. an orchestrator provider):
+feed it the <code class="docutils literal notranslate"><span class="pre">sql_metadata</span></code> produced by <code class="xref py py-func docutils literal notranslate"><span class="pre">hamilton.io.utils.get_sql_metadata()</span></code> (either
+the whole metadata dict or its <code class="docutils literal notranslate"><span class="pre">sql_metadata</span></code> entry) and get datasets named per the
+<a class="reference external" href="https://openlineage.io/docs/spec/naming/">OpenLineage naming conventions</a>:</p>
+<ul class="simple">
+<li><p>PostgreSQL: namespace <code class="docutils literal notranslate"><span class="pre">postgres://{host}:{port}</span></code>, name <code class="docutils literal notranslate"><span class="pre">{database}.{schema}.{table}</span></code>.
+Unquoted identifiers are folded to lower case, as the server does.</p></li>
+<li><p>SQLite: namespace <code class="docutils literal notranslate"><span class="pre">sqlite://{absolute</span> <span class="pre">file</span> <span class="pre">path}</span></code> (forward slashes on every platform),
+name <code class="docutils literal notranslate"><span class="pre">{table}</span></code>. A table in an attached database (<code class="docutils literal notranslate"><span class="pre">{schema}.{table}</span></code> in the SQL, or the
+writer’s <code class="docutils literal notranslate"><span class="pre">schema</span></code>) is named in the attached file’s namespace; it is left out when that
+file cannot be known.</p></li>
+</ul>
+<p>Queries are parsed with <code class="docutils literal notranslate"><span class="pre">openlineage-sql</span></code>; every physical table read appears in <code class="docutils literal notranslate"><span class="pre">inputs</span></code>
+and every table written in <code class="docutils literal notranslate"><span class="pre">outputs</span></code> (aliases and common table expressions are not tables).
+A bare table name is placed by <code class="docutils literal notranslate"><span class="pre">operation</span></code> (<code class="docutils literal notranslate"><span class="pre">read</span></code>/<code class="docutils literal notranslate"><span class="pre">write</span></code>), taken from the metadata
+unless given here. What a write names is its table when it is a plain identifier; otherwise it
+is parsed, and is the table written unless it parses as a statement that names tables (then the
+tables it writes are used, if any). Without a parse it is left out. A read string that is not a
+plain name is parsed too, and is the table read only when no statement starts at it (<code class="docutils literal notranslate"><span class="pre">daily</span>
+<span class="pre">revenue</span></code>); otherwise it is SQL, and without a parse it is left out. Schema precedence: explicit in the SQL,
+then the writer’s <code class="docutils literal notranslate"><span class="pre">schema</span></code>, then the connection’s default schema. Anything that cannot be
+fully identified is left out and explained in <code class="docutils literal notranslate"><span class="pre">notes</span></code> rather than guessed — an unknown datasource, an unsupported
+dialect, a missing schema, a parse error or a missing <code class="docutils literal notranslate"><span class="pre">openlineage-sql</span></code> install.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hamilton.plugins.h_openlineage.SqlDatasets">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hamilton.plugins.h_openlineage.</span></span><span class="sig-name descname"><span class="pre">SqlDatasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Dataset</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Dataset</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hamilton/plugins/h_openlineage/#SqlDatasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hamilton.plugins.h_openlineage.SqlDatasets" title="Link to this definition">¶</a></dt>
+<dd><p>Datasets resolved from Hamilton SQL metadata. <code class="docutils literal notranslate"><span class="pre">notes</span></code> explains anything left out.</p>
+<p><code class="docutils literal notranslate"><span class="pre">query</span></code> is the SQL statement the metadata recorded, or <code class="docutils literal notranslate"><span class="pre">None</span></code> when it named a table (a
+written name may be filed under the metadata’s <code class="docutils literal notranslate"><span class="pre">query</span></code>) or cannot be told apart from one. A
+table read by a name the metadata files as a query (one containing <code class="docutils literal notranslate"><span class="pre">SELECT</span></code>, or whose first
+word after comments is <code class="docutils literal notranslate"><span class="pre">select</span></code> or <code class="docutils literal notranslate"><span class="pre">with</span></code> in any case) cannot be told apart from a
+statement, so its name is reported here and no input dataset is emitted for it.</p>
+</dd></dl>
+
+</section>
 </section>
 
         </article>
@@ -738,6 +903,15 @@ Emits a Job Event with the sourceCode Facet for the entire DAG as the job.</p>
 <li><a class="reference internal" href="#hamilton.plugins.h_openlineage.OpenLineageAdapter.post_node_execute"><code class="docutils literal notranslate"><span class="pre">OpenLineageAdapter.post_node_execute()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.plugins.h_openlineage.OpenLineageAdapter.pre_graph_execute"><code class="docutils literal notranslate"><span class="pre">OpenLineageAdapter.pre_graph_execute()</span></code></a></li>
 <li><a class="reference internal" href="#hamilton.plugins.h_openlineage.OpenLineageAdapter.pre_node_execute"><code class="docutils literal notranslate"><span class="pre">OpenLineageAdapter.pre_node_execute()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sql-datasets">SQL datasets</a><ul>
+<li><a class="reference internal" href="#migrating-to-the-datasource-identity">Migrating to the datasource identity</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reuse-the-conversion">Reuse the conversion</a><ul>
+<li><a class="reference internal" href="#hamilton.plugins.h_openlineage.sql_datasets"><code class="docutils literal notranslate"><span class="pre">sql_datasets()</span></code></a></li>
+<li><a class="reference internal" href="#hamilton.plugins.h_openlineage.SqlDatasets"><code class="docutils literal notranslate"><span class="pre">SqlDatasets</span></code></a></li>
 </ul>
 </li>
 </ul>

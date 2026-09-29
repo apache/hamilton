@@ -1796,7 +1796,11 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">            This is the same as the input mapping in `@parameterize`.</span>
 <span class="sd">        """</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">inject</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">parameterize</span><span class="o">.</span><span class="n">PLACEHOLDER_PARAM_NAME</span><span class="p">:</span> <span class="n">key_mapping</span><span class="p">})</span></div>
-</div>
+
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">runs_before_regular_expanders</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 </pre></div>
         </article>

@@ -2157,6 +2157,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="n">final_vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_final_vars</span><span class="p">(</span><span class="n">additional_vars</span><span class="p">)</span>
         <span class="c1"># This is so the finally logging statement does not accidentally die</span>
         <span class="n">materializer_vars</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">function_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">materializer_factories</span><span class="p">,</span> <span class="n">extractor_factories</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_materializers</span><span class="p">(</span><span class="n">materializers</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">materializer_factories</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">final_vars</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
