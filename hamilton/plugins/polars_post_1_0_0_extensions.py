@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import csv
 import dataclasses
 from collections.abc import Collection, Mapping, Sequence
 from io import BytesIO, IOBase, TextIOWrapper
@@ -807,7 +808,14 @@ class PolarsDatabaseReader(DataLoader):
             connection=self.connection,
             **self._get_loading_kwargs(),
         )
-        metadata = utils.get_file_and_dataframe_metadata(self.query, df)
+        # with iter_batches=True, pl.read_database returns a generator, so there is no row count
+        rows = len(df) if isinstance(df, pl.DataFrame) else None
+        metadata = {
+            **utils.get_file_and_dataframe_metadata(self.query, df),
+            **utils.get_sql_metadata(
+                self.query, rows, db_connection=self.connection, operation="read"
+            ),
+        }
         return df, metadata
 
     @classmethod
@@ -842,12 +850,26 @@ class PolarsDatabaseWriter(DataSaver):
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
 
-        data.write_database(
+        rows = data.write_database(
             table_name=self.table_name,
             connection=self.connection,
             **self._get_saving_kwargs(),
         )
-        return utils.get_file_and_dataframe_metadata(self.table_name, data)
+        # polars unpacks table_name as [[catalog.]schema.]table, honouring quotes; lineage wants
+        # the schema recorded apart, and the connection already identifies the catalog
+        components = next(csv.reader([self.table_name], delimiter="."))
+        table = components[-1]
+        schema = components[-2] if len(components) > 1 else None
+        return {
+            **utils.get_file_and_dataframe_metadata(self.table_name, data),
+            **utils.get_sql_metadata(
+                table,
+                rows,
+                db_connection=self.connection,
+                schema=schema or None,
+                operation="write",
+            ),
+        }
 
     @classmethod
     def name(cls) -> str:
