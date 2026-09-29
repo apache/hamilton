@@ -68,7 +68,11 @@ experiments = [
   "uvicorn",
 ]
 lsp = ["apache-hamilton-lsp"]
-openlineage = ["openlineage-python"]
+openlineage = [
+    "openlineage-python",
+    # SQL table resolution; no Windows wheel is published, so pip builds it there (needs Rust)
+    "openlineage-sql",
+]
 pandera = ["pandera"]
 performance = [
     # Internal performance boosters go here
