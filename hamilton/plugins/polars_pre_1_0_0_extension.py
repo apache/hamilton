@@ -47,6 +47,7 @@ if has_alias and hasattr(pl.type_aliases, "CsvEncoding"):
     from polars.type_aliases import CsvEncoding, SchemaDefinition
 else:
     CsvEncoding = type
+    SchemaDefinition = type
 if has_alias and hasattr(pl.type_aliases, "CsvQuoteStyle"):
     from polars.type_aliases import CsvQuoteStyle
 else:

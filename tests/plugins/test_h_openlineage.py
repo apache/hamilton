@@ -18,6 +18,7 @@
 import json
 import logging
 import sqlite3
+import typing
 import warnings
 
 import pandas as pd
@@ -857,24 +858,48 @@ def test_attached_sqlite_database_is_attributed_to_its_own_file(tmp_path):
 requires_polars = pytest.mark.skipif(pl is None, reason="polars is not installed")
 
 
+class SubscriptableStandIn:
+    """Stands in for a name a type alias refers to when sqlalchemy has no class of that name."""
+
+    def __class_getitem__(cls, item):
+        return cls
+
+
+def sqlalchemy_class(name):
+    """The sqlalchemy class polars' alias means by ``name`` (or ``Alchemy<name>``), if any."""
+    import sqlalchemy
+    import sqlalchemy.orm
+
+    modules = [sqlalchemy, sqlalchemy.orm]
+    try:
+        import sqlalchemy.ext.asyncio
+
+        modules.append(sqlalchemy.ext.asyncio)
+    except ImportError:  # the asyncio extension needs greenlet
+        pass
+    for candidate in (name, name.removeprefix("Alchemy")):
+        for module in modules:
+            if hasattr(module, candidate):
+                return getattr(module, candidate)
+    return SubscriptableStandIn
+
+
 @pytest.fixture
 def polars_connection_type_hints(monkeypatch):
     """Resolves the names polars' ``ConnectionOrCursor`` alias only imports for type checking.
 
     Hamilton reads the database classes' type hints to build ``@load_from.database`` and
-    ``@save_to.database``, which fails on those unresolved names; this supplies them for the test.
+    ``@save_to.database``, which fails on those unresolved names. They differ between polars
+    versions, so each one that is missing is bound to the sqlalchemy class it means.
     """
-    from sqlalchemy import Connection, Engine
-    from sqlalchemy.ext import asyncio as sa_asyncio
-    from sqlalchemy.orm import Session
-
-    from hamilton.plugins import polars_post_1_0_0_extensions
-
-    names = {"Connection": Connection, "Engine": Engine, "Session": Session}
-    for name in ("AsyncConnection", "AsyncEngine", "AsyncSession", "async_sessionmaker"):
-        names[name] = getattr(sa_asyncio, name)
-    for name, value_ in names.items():
-        monkeypatch.setattr(polars_post_1_0_0_extensions, name, value_, raising=False)
+    for _ in range(50):
+        try:
+            typing.get_type_hints(polars_post.PolarsDatabaseReader)
+            typing.get_type_hints(polars_post.PolarsDatabaseWriter)
+            return
+        except NameError as e:
+            monkeypatch.setattr(polars_post, e.name, sqlalchemy_class(e.name), raising=False)
+    raise AssertionError("polars database type hints still do not resolve")
 
 
 def polars_database_modules():
