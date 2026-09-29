@@ -773,7 +773,7 @@ class Driver:
             is non-empty we will return all nodes with that tag and that value.
         :return: list of available variables (i.e. outputs).
         """
-        all_nodes = self.graph.get_nodes()
+        all_nodes = self.graph.get_nodes_in_topological_order()
         if tag_filter:
             valid_filter_values = all(
                 map(
