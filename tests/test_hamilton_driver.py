@@ -16,9 +16,11 @@
 # under the License.
 
 
+import collections.abc
+
 import pytest
 
-from hamilton import base, node
+from hamilton import ad_hoc_utils, base, node
 from hamilton.caching.adapter import HamiltonCacheAdapter
 from hamilton.driver import (
     Builder,
@@ -88,6 +90,15 @@ def test_driver_validate_runtime_input_types(driver_factory):
     dr = driver_factory()
     results = dr.raw_execute(["b"], inputs={"a": 1})
     assert results == {"b": 1}
+
+
+def test_driver_accepts_dict_input_for_mapping_parameter():
+    def total(weights: collections.abc.Mapping[str, int]) -> int:
+        return sum(weights.values())
+
+    module = ad_hoc_utils.create_temporary_module(total)
+    dr = Builder().with_modules(module).build()
+    assert dr.execute(["total"], inputs={"weights": {"a": 1, "b": 2}}) == {"total": 3}
 
 
 @pytest.mark.parametrize(
