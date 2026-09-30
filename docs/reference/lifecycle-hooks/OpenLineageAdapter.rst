@@ -73,6 +73,11 @@ query. A read by another name that is not a plain identifier (``daily revenue``)
 that table when no SQL statement starts at it; one starting with ``table`` is left out, since
 Postgres' ``TABLE t`` is a statement ``openlineage-sql`` does not know.
 
+A write is handled alike, for the pandas and Polars writers: a table name that is not a plain identifier is
+parsed, and is the table written unless it parses as a statement that names tables, such as a table literally
+called ``INSERT INTO orders SELECT * FROM customers``. The tables that statement writes are emitted instead, or
+none when it only reads. Give such tables plain names.
+
 Whatever cannot be fully identified is left out and logged as a warning from the
 ``hamilton.plugins.h_openlineage`` logger, never guessed. The following cases are left out:
 
