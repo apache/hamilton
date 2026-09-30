@@ -47,6 +47,7 @@ if has_alias and hasattr(pl.type_aliases, "CsvEncoding"):
     from polars.type_aliases import CsvEncoding, SchemaDefinition
 else:
     CsvEncoding = type
+    SchemaDefinition = type
 if has_alias and hasattr(pl.type_aliases, "CsvQuoteStyle"):
     from polars.type_aliases import CsvQuoteStyle
 else:
@@ -729,6 +730,17 @@ class PolarsSpreadsheetWriter(DataSaver):
         return "spreadsheet"
 
 
+def _sql_metadata_without_datasource(
+    query_or_table: str, rows: int | None, operation: Literal["read", "write"]
+) -> dict[str, Any]:
+    """``sql_metadata`` for database I/O, whose datasource polars<1.0 cannot be asked for."""
+    metadata = utils.get_sql_metadata(query_or_table, rows, operation=operation)
+    metadata["sql_metadata"]["notes"] = (
+        "Datasource lineage for Polars database I/O requires polars>=1.0; upgrade polars"
+    )
+    return metadata
+
+
 @dataclasses.dataclass
 class PolarsDatabaseReader(DataLoader):
     """
@@ -768,7 +780,12 @@ class PolarsDatabaseReader(DataLoader):
             connection=self.connection,
             **self._get_loading_kwargs(),
         )
-        metadata = utils.get_file_and_dataframe_metadata(self.query, df)
+        # with iter_batches=True, pl.read_database returns a generator, so there is no row count
+        rows = len(df) if isinstance(df, pl.DataFrame) else None
+        metadata = {
+            **utils.get_file_and_dataframe_metadata(self.query, df),
+            **_sql_metadata_without_datasource(self.query, rows, "read"),
+        }
         return df, metadata
 
     @classmethod
@@ -803,12 +820,15 @@ class PolarsDatabaseWriter(DataSaver):
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
 
-        data.write_database(
+        rows = data.write_database(
             table_name=self.table_name,
             connection=self.connection,
             **self._get_saving_kwargs(),
         )
-        return utils.get_file_and_dataframe_metadata(self.table_name, data)
+        return {
+            **utils.get_file_and_dataframe_metadata(self.table_name, data),
+            **_sql_metadata_without_datasource(self.table_name, rows, "write"),
+        }
 
     @classmethod
     def name(cls) -> str:

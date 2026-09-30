@@ -18,16 +18,18 @@ beyond the client.
 SQL datasets
 ------------
 
-SQL loaders and savers (``@load_from.sql``, ``@save_to.sql`` and the pandas SQL materializers) record
-the datasource they used (see :ref:`sql-metadata-and-lineage`). How the adapter names their datasets
-is set by ``sql_dataset_identity``:
+SQL loaders and savers (``@load_from.sql``, ``@save_to.sql``, the pandas SQL materializers and the
+Polars database materializers) record the datasource they used (see :ref:`sql-metadata-and-lineage`).
+How the adapter names their datasets is set by ``sql_dataset_identity``:
 
 - ``"legacy"``, the default: datasets are named as in earlier Hamilton releases, under the adapter's
   *job* namespace with the bare ``table_name``. As before, a query read containing ``SELECT``
   produces a dataset with no name and the query in the job's ``sql`` facet, and other strings are
   used as the dataset name. Leaving the option unset warns once per adapter (a
   ``FutureWarning``) because the default will change; pass ``"legacy"`` explicitly to keep these names
-  without the warning.
+  without the warning. The Polars database materializers keep their earlier names too: the read is a
+  dataset named after the loader node, with the query as its ``dataSource`` URI, and the write is
+  named after the table. Unlike the pandas query read above, the read has no ``sql`` job facet.
 - ``"datasource"``: datasets are named after the datasource, following the `OpenLineage naming
   conventions <https://openlineage.io/docs/spec/naming/>`_, and every physical table a query reads is
   reported. A report written by one job and read by another then resolves to the same dataset, and
@@ -36,6 +38,9 @@ is set by ``sql_dataset_identity``:
 .. code-block:: python
 
     adapter = OpenLineageAdapter(client, "my_namespace", "my_job", sql_dataset_identity="datasource")
+
+Datasource mode for the Polars database materializers requires ``polars>=1.0``. With an older
+Polars they log a warning asking you to upgrade and emit no dataset.
 
 The rest of this section describes the ``"datasource"`` identity:
 
@@ -67,6 +72,11 @@ SQL and no input dataset is emitted for it. Give such tables plain names, or rea
 query. A read by another name that is not a plain identifier (``daily revenue``) is emitted as
 that table when no SQL statement starts at it; one starting with ``table`` is left out, since
 Postgres' ``TABLE t`` is a statement ``openlineage-sql`` does not know.
+
+A write is handled alike, for the pandas and Polars writers: a table name that is not a plain identifier is
+parsed, and is the table written unless it parses as a statement that names tables, such as a table literally
+called ``INSERT INTO orders SELECT * FROM customers``. The tables that statement writes are emitted instead, or
+none when it only reads. Give such tables plain names.
 
 Whatever cannot be fully identified is left out and logged as a warning from the
 ``hamilton.plugins.h_openlineage`` logger, never guessed. The following cases are left out:
