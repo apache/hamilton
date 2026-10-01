@@ -342,7 +342,8 @@ def create_graphviz_graph(
         """Get the node type of a DAG node.
 
         Input: is external, doesn't originate from a function, functions depend on it
-        Config: is external, doesn't originate from a function, no function depedends on it
+        Config: is external, doesn't originate from a function, no function depends on it
+        Output: has originating functions but no functions depend on it (terminal node)
         Function: others
         """
         if n._node_source == node.NodeType.EXTERNAL and n._depended_on_by:
@@ -353,6 +354,8 @@ def create_graphviz_graph(
             and not n._depended_on_by
         ):
             return "config"
+        elif n._originating_functions and not n._depended_on_by:
+            return "output"
         else:
             return "function"
 
@@ -382,7 +385,7 @@ def create_graphviz_graph(
                 margin="0.15,0.1",
                 fontname=fontname,
             )
-        else:  # this is a function or else
+        else:  # this is a function, output, or else
             node_style = dict(
                 shape="rectangle",
                 margin="0.15",
@@ -526,6 +529,13 @@ def create_graphviz_graph(
         label = _get_node_label(n)
         node_type = _get_node_type(n)
         if node_type == "input":
+            # apply custom styles for input nodes
+            if custom_style_function:
+                custom_style, base_type, legend_name = custom_style_function(
+                    node=graph_types.HamiltonNode.from_node(n), node_class=node_type
+                )
+                if legend_name:
+                    extra_legend_nodes[(base_type, legend_name)] = custom_style
             seen_node_types.add(node_type)
             continue
         # config nodes are handled separately;
