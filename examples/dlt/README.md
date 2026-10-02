@@ -19,7 +19,7 @@ under the License.
 
 # dlt
 
-This example shows dlt + Apache Hamilton can help you cover the full ELT cycle using portable Python code. It is a companion to this [documentation page](https://hamilton.apache.org/integrations/dlt/).
+This example shows dlt + Apache Hamilton can help you cover the full ELT cycle using portable Python code. It is a companion to this [documentation page](https://hamilton.apache.org/plugins/dlt/).
 
 # Content
 It includes a pipeline to ingest messages from Slack channels and generate threads summaries.

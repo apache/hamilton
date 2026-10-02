@@ -157,7 +157,7 @@ The built-in SQL materializers (``@load_from.sql``, ``@save_to.sql``, ``from_.sq
 ``PandasSqlReader`` / ``PandasSqlWriter`` behind them) return ``sql_metadata`` describing what was read
 or written. Since version ``1.1.0`` of that metadata, they also record *where*: the database the
 connection points at. Lineage consumers such as the :doc:`OpenLineage adapter
-<../reference/lifecycle-hooks/OpenLineageAdapter>` use this to name the physical tables a query
+<../reference/plugins/OpenLineageAdapter>` use this to name the physical tables a query
 reads, without any custom loader or hand-maintained mapping.
 
 Take a graph that reads a query joining ``orders`` and ``customers`` from a sales database,
