@@ -37,7 +37,7 @@ Test the installation with
 - `validate`: calls `Driver.validate_execution()` for a set of `inputs` and `overrides` passed through the `--context` option.
 - `view`: calls `dr.display_all_functions()` on the built `Driver`
 - `version`: generates node hashes based on their source code, and a dataflow hash from the collection of node hashes.
-- `diff`: get a diff of added/deleted/edited nodes between the current version of Python modules and another git reference (`default=HEAD`, i.e., the last commited version). You can get a visualization of the diffs
+- `diff`: get a diff of added/deleted/edited nodes between the current version of Python modules and another git reference (`default=HEAD`, i.e., the last committed version). You can get a visualization of the diffs
 
 ## Options
 - all commands receive `MODULES` which is a list of path to Python modules to assembled as a single dataflow
@@ -166,11 +166,13 @@ def orders_per_distributor(customers_orders_df: pd.DataFrame) -> pd.Series:
     Outputs series indexed by customer_id."""
     return customers_orders_df.groupby("customer_id").size().rename("orders_per_distributor")
 
+
 # added 1 to the return value
 def average_order_by_customer(amount: pd.Series) -> pd.Series:
     """Compute the average order amount per customer.
     Outputs series indexed by customer_id."""
     return 1 + (amount.groupby("customer_id").mean().rename("average_order_by_customer"))
+
 
 # renamed according to `orders_per_distributor`
 def customer_summary_table(

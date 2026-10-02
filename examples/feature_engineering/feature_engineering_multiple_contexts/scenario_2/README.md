@@ -49,7 +49,7 @@ dataquality checks using Pandera.
 
 Important not, there are two aggregations features defined: `age_mean` and `age_std_dev`, that are computed on the
 `age` column. These make sense to compute in an offline setting as you have all the data, but in an online setting where
-you'd be performing inference, that doesn't makse sense. So for the online case, in this example, they are "omitted" from
+you'd be performing inference, that doesn't make sense. So for the online case, in this example, they are "omitted" from
 being nodes in the online context via `@config.when_not_in`. Instead, they are populated via the `online_loader.py` which
 goes to the feature store for them. `fastapi_server.py` then is a little simpler than in Scenario (1), as it just
 delegates all work to Apache Hamilton for getting features.
@@ -72,7 +72,7 @@ Note, `age_mean` and `age_std_dev` are pushed to the feature store in this examp
 
 ## named_model_feature_sets.py
 Rather than hardcoding what features the model should have in two places, we define
-it in a single place and import it where needed; this is simple if you can share the code eaisly.
+it in a single place and import it where needed; this is simple if you can share the code easily.
 However, this is something you'll have to determine how to best do in your set up. There are many ways to do this,
 come ask in the [slack channel](https://join.slack.com/t/hamilton-opensource/shared_invite/zt-2niepkra8-DGKGf_tTYhXuJWBTXtIs4g)
 if you need help.

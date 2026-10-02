@@ -20,6 +20,7 @@ import pytest
 ibis = pytest.importorskip("ibis")
 
 import pandas as pd  # noqa: E402
+
 from hamilton_sdk.tracking import ibis_stats  # noqa: E402
 
 

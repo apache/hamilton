@@ -186,7 +186,11 @@ class check_output_custom(BaseDataValidationDecorator):
         self.validators = list(validators)
 
     def get_validators(self, node_to_validate: node.Node) -> list[dq_base.DataValidator]:
-        return self.validators
+        return [
+            validator
+            for validator in self.validators
+            if validator.applies_to(node_to_validate.type)
+        ]
 
 
 class check_output(BaseDataValidationDecorator):

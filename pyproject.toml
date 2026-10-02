@@ -68,8 +68,16 @@ experiments = [
   "uvicorn",
 ]
 lsp = ["apache-hamilton-lsp"]
-openlineage = ["openlineage-python"]
+openlineage = [
+    "openlineage-python",
+    # SQL table resolution; no Windows wheel is published, so pip builds it there (needs Rust)
+    "openlineage-sql",
+]
 pandera = ["pandera"]
+performance = [
+    # Internal performance boosters go here
+    "xxhash>=0.8.0",
+]
 pydantic = ["pydantic>=2.0"]
 pyspark = [
   # we have to run these dependencies because Spark does not check to ensure the right target was called
@@ -93,7 +101,7 @@ visualization = ["graphviz", "networkx"]
 [dependency-groups]
 dev = [
   "prek",
-  "ruff==0.15.0", # this should match `.pre-commit-config.yaml`
+  "ruff==0.16.9", # this should match `.pre-commit-config.yaml`
 ]
 release = [
   "flit",
@@ -108,7 +116,7 @@ test = [
   "dlt",
   "fsspec",
   "graphviz",
-  "kaleido; python_version < '3.14'",
+  "kaleido",
   "kedro; python_version < '3.14'",
   "lancedb; python_version < '3.14'",
   "lightgbm; python_version < '3.14'",
@@ -119,7 +127,7 @@ test = [
   "networkx",
   "openpyxl", # for excel data loader
   "pandera[dask]",
-  "plotly; python_version < '3.14'",
+  "plotly",
   "polars; python_version < '3.14'",
   "pyarrow",
   "pydantic >=2.0",
@@ -129,11 +137,12 @@ test = [
   "pytest-cov",
   "PyYAML",
   "scikit-learn",
-  "sqlalchemy[asyncio]",
+  "sqlalchemy[asyncio]>=2.0,<2.1",
   "typer>=0.16.0",
   "xgboost; python_version < '3.14'",
   "xlsx2csv", # for excel data loader
   "xlsxwriter",  # Excel export requires 'xlsxwriter'
+  "xxhash>=0.8.0", # exercises the high-performance fingerprinting path in tests
 ]
 docs = [
   {include-group = "dev"},
@@ -218,7 +227,7 @@ exclude = [
 ]
 
 [tool.ruff.lint]
-extend-select = [
+select = [
     "B",   # flake8-bugbear rules
 #    "C4",  # Helps you write better list/set/dict comprehensions.
     "E",   # pycodestyle errors
@@ -248,17 +257,17 @@ extend-select = [
     "UP045",  # pyupgrade
     "W",   # pycodestyle warnings
 ]
-extend-ignore = [
-    "ISC001", # Checks for implicitly concatenated strings on a single line.
-    "T201",
-    "TRY003",
+ignore = [
     "E203", # whitespace before ':'
     "E402", # module level import not at top of file
     "E501", # line too long
     "E721", # Use `is` and `is not` for type comparisons, or `isinstance()` for isinstance checks
     "F821", # undefined name
+    "ISC001", # Checks for implicitly concatenated strings on a single line.
+    "T201",
+    "TC001", # TYPE_CHECKING block for first-class imports -- this is a bit ugly for the hamilton codebase
+    "TRY003",
     "W605", # invalid escape sequence
-    "TC001" # TYPE_CHECKING block for first-class imports -- this is a bit ugly for the hamilton codebase
 ]
 exclude = [
     "docs/*",

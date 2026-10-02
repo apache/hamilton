@@ -66,15 +66,9 @@ e.g. you should be able to do `json.load(f)` and it would return a list of dicti
 
 ```python
 [
-    {
-        "question": "What is the meaning of life?",
-        "reply": "42"
-    },
-    {
-        "question": "What is Apache Hamilton?",
-        "reply": "..."
-    },
-    ...
+    {"question": "What is the meaning of life?", "reply": "42"},
+    {"question": "What is Apache Hamilton?", "reply": "..."},
+    ...,
 ]
 ```
 
@@ -87,17 +81,17 @@ that the transformers library supports for `AutoModelForSeq2SeqLM` models.
 ```python
 # instantiate the driver with this module however you want
 result = dr.execute(
-    [ # some suggested outputs -- see the visualization/code to understand what these are
+    [  # some suggested outputs -- see the visualization/code to understand what these are
         "save_best_models",
         "hold_out_set_predictions",
         "training_and_validation_set_metrics",
         "finetuned_model_on_validation_set",
     ],
     inputs={
-        "model_id": "google/flan-t5-small", # the base model you want to fine-tune
-        "data_path": "example-support-dataset.json", # the path to your dataset
+        "model_id": "google/flan-t5-small",  # the base model you want to fine-tune
+        "data_path": "example-support-dataset.json",  # the path to your dataset
         "input_text_key": "question",  # the key in the json object that has the input text
-        "output_text_key": "gpt4_replies_target", # the key in the json object that has the target output text
+        "output_text_key": "gpt4_replies_target",  # the key in the json object that has the target output text
     },
 )
 ```

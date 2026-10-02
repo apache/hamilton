@@ -15,8 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
-line-length = 100
+extend = "../../pyproject.toml"
 
+line-length = 100
 
 [lint.per-file-ignores]
 # skip line length for API client files.

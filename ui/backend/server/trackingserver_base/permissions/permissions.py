@@ -18,8 +18,9 @@
 import typing
 
 from common.django_utils import amap
+from django.db.models import Q
 from ninja.errors import HttpError
-from trackingserver_auth.models import APIKey, Team
+from trackingserver_auth.models import APIKey, Team, User
 from trackingserver_base.permissions.base import allowed
 from trackingserver_projects.models import Project, ProjectTeamMembership, ProjectUserMembership
 from trackingserver_projects.schema import ProjectIn, ProjectUpdate, Visibility
@@ -119,6 +120,31 @@ async def user_project_visibility(request, project: Project) -> str | None:
     if "read" in team_memberships or "read" in user_memberships:
         return "read"
     return None
+
+
+async def visible_project_ids_for_user(user: User, organizations: list[Team]) -> list[int]:
+    """Returns the ids of all projects the user has visibility to.
+
+    Mirrors the membership lookup used by the projects listing endpoint, but only
+    returns identifiers so it can be cheaply joined into other queries (e.g. the
+    "latest dag runs" filter). Includes both direct user memberships and team
+    memberships (including the "Public" team if applicable).
+
+    @param user: The authenticated user
+    @param organizations: Teams the user belongs to (from request.auth[1])
+    @return: A list of project IDs the user can read or write
+    """
+    public_team = await Team.objects.aget(name="Public")
+    team_ids = [org.id for org in organizations] + [public_team.id]
+    return [
+        project_id
+        async for project_id in Project.objects.filter(
+            Q(projectusermembership__user_id=user.id)
+            | Q(projectteammembership__team_id__in=team_ids)
+        )
+        .distinct()
+        .values_list("id", flat=True)
+    ]
 
 
 async def user_can_get_project_by_id(request, project_id: int) -> tuple[bool, str]:
@@ -281,13 +307,16 @@ async def user_can_get_latest_dag_runs(
     project_id: int = None,
     dag_template_id: int = None,
 ):
-    """Tells whether or not the user can get a list of latest DAG runs. This is true
-    if the user can get the associated project, project version, or DAG template
-    (the one that is specified by the request).
+    """Tells whether or not the user can get a list of latest DAG runs.
+
+    When a specific ``project_id`` or ``dag_template_id`` is supplied we verify
+    the caller can read it. When neither is supplied this returns ``(True, "")``
+    and the endpoint MUST scope the query to the caller's visible projects (see
+    the visibility contract in the module docstring above). The endpoint body
+    relies on ``visible_project_ids_for_user`` for that scoping.
 
     @param request: Django request
     @param project_id: Project ID in question
-    @param project_version_id: Project version ID in question
     @param dag_template_id: DAG template ID in question
     @return: Tuple of (can_get, error_message)
     """

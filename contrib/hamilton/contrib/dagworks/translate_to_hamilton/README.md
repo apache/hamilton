@@ -28,17 +28,12 @@ your existing procedural code into code written in the Apache Hamilton style.
 
 from hamilton import driver
 
-dr = (
-    driver.Builder()
-        .with_config({})
-        .with_modules(translate_to_hamilton)
-        .build()
-)
+dr = driver.Builder().with_config({}).with_modules(translate_to_hamilton).build()
 
 user_code = "a = b + c"  # replace with your code here
 result = dr.execute(
-    ["code_segments", "translated_code_response"], # request these as outputs
-    inputs={"user_code": user_code, "model_name": "gpt-4-1106-preview"}
+    ["code_segments", "translated_code_response"],  # request these as outputs
+    inputs={"user_code": user_code, "model_name": "gpt-4-1106-preview"},
 )
 print(result["code_segments"])
 ```

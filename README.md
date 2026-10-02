@@ -145,17 +145,17 @@ You can track the execution of your Apache Hamilton DAG in the [Apache Hamilton 
 
    # use your `username` and `project_id`
    tracker = HamiltonTracker(
-      username="my_username",
-      project_id=1,
-      dag_name="hello_world",
+       username="my_username",
+       project_id=1,
+       dag_name="hello_world",
    )
 
    # adding the tracker to the `Builder` will add the DAG to the catalog
    dr = (
-      driver.Builder()
-      .with_modules(my_dag)
-      .with_adapters(tracker)  # add your tracker here
-      .build()
+       driver.Builder()
+       .with_modules(my_dag)
+       .with_adapters(tracker)  # add your tracker here
+       .build()
    )
 
    # executing the `Driver` will track results

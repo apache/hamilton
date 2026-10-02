@@ -403,6 +403,15 @@ def test_check_instance_with_union_type():
     assert not check_instance({"key1": 1, "key2": 2}, Union[int, str])
 
 
+def test_check_instance_with_pep604_union_of_generics():
+    assert check_instance([1, 2], list[int] | None)
+    assert check_instance(None, list[int] | None)
+    assert not check_instance([1, "2"], list[int] | None)
+    assert not check_instance("12", list[int] | None)
+    assert check_instance({"a": 1}, dict[str, int] | list[int])
+    assert not check_instance({"a": "1"}, dict[str, int] | list[int])
+
+
 def test_check_instance_with_union_type_and_literal():
     from typing import Literal
 

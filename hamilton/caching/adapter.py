@@ -1278,10 +1278,7 @@ class HamiltonCacheAdapter(
                 node_kwargs=node_kwargs,
                 task_id=task_id,
             )
-            if self.behaviors[run_id][node_name] in (
-                CachingBehavior.RECOMPUTE,
-                CachingBehavior.IGNORE,
-            ):
+            if self.behaviors[run_id][node_name] == CachingBehavior.RECOMPUTE:
                 cache_key = self.get_cache_key(run_id=run_id, node_name=node_name, task_id=task_id)
 
                 # nodes collected in `._data_loaders` return tuples of (result, metadata)
@@ -1431,7 +1428,6 @@ class HamiltonCacheAdapter(
         if self.behaviors[run_id][node_name] in (
             CachingBehavior.DEFAULT,
             CachingBehavior.RECOMPUTE,
-            CachingBehavior.IGNORE,
         ):
             cache_key = self.get_cache_key(run_id=run_id, node_name=node_name, task_id=task_id)
             data_version = self.get_data_version(

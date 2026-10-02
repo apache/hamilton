@@ -42,7 +42,6 @@ try:
 except ImportError:
     FILESYSTEM_TYPE = type | None
 
-from sqlite3 import Connection
 
 from pandas._typing import NpDtype
 from pandas.core.dtypes.dtypes import ExtensionDtype
@@ -708,7 +707,7 @@ class PandasSqlReader(DataLoader):
     """
 
     query_or_table: str
-    db_connection: str | Connection  # can pass in SQLAlchemy engine/connection
+    db_connection: Any  # SQLAlchemy URL string, Engine or Connection, or a DBAPI connection
     # kwarg
     chunksize: int | None = None
     coerce_float: bool = True
@@ -745,7 +744,9 @@ class PandasSqlReader(DataLoader):
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pd.read_sql(self.query_or_table, self.db_connection, **self._get_loading_kwargs())
-        sql_metadata = utils.get_sql_metadata(self.query_or_table, df)
+        sql_metadata = utils.get_sql_metadata(
+            self.query_or_table, df, db_connection=self.db_connection, operation="read"
+        )
         df_metadata = utils.get_dataframe_metadata(df)
         return df, {**sql_metadata, **df_metadata}
 
@@ -801,7 +802,13 @@ class PandasSqlWriter(DataSaver):
 
     def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
         results = data.to_sql(self.table_name, self.db_connection, **self._get_saving_kwargs())
-        sql_metadata = utils.get_sql_metadata(self.table_name, results)
+        sql_metadata = utils.get_sql_metadata(
+            self.table_name,
+            results,
+            db_connection=self.db_connection,
+            schema=self.schema,
+            operation="write",
+        )
         df_metadata = utils.get_dataframe_metadata(data)
         return {**sql_metadata, **df_metadata}
 
@@ -1600,7 +1607,7 @@ class PandasTableReader(DataLoader):
     verbose: bool | None = None
     skip_blank_lines: bool = True
     parse_dates: list[int | str] | dict[str, list[int | str]] | bool = False
-    infer_datetime_format: bool = False
+    infer_datetime_format: bool | None = None
     keep_date_col: bool | None = None
     date_parser: Callable | None = None
     date_format: str | str | None = None
@@ -1639,6 +1646,33 @@ class PandasTableReader(DataLoader):
         # filepath_or_buffer corresponds to 'filepath_or_buffer' argument of pandas.read_table,
         # but we send it separately
         del kwargs["filepath_or_buffer"]
+
+        # pandas deprecated delim_whitespace in 2.2 and removed it in 3.0. Translate the
+        # enabled case to its cross-version equivalent; explicit False is rejected on pandas 3.
+        if self.delim_whitespace:
+            if self.sep is not None or self.delimiter is not None:
+                raise ValueError("delim_whitespace cannot be combined with sep or delimiter")
+            kwargs["sep"] = r"\s+"
+            del kwargs["delim_whitespace"]
+
+        if Version(pd.__version__) >= Version("3.0"):
+            removed_parameters = {
+                "verbose": self.verbose,
+                "infer_datetime_format": self.infer_datetime_format,
+                "keep_date_col": self.keep_date_col,
+                "date_parser": self.date_parser,
+                "delim_whitespace": False if self.delim_whitespace is False else None,
+            }
+            requested_parameters = [
+                name for name, value in removed_parameters.items() if value is not None
+            ]
+            if requested_parameters:
+                raise ValueError(
+                    f"pandas 3.0 removed these read_table parameters: "
+                    f"{', '.join(requested_parameters)}"
+                )
+            for parameter in removed_parameters:
+                kwargs.pop(parameter, None)
 
         return kwargs
 

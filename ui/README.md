@@ -125,7 +125,7 @@ This:
 3. Publishes to the [apache-hamilton-ui](https://pypi.org/project/apache-hamilton-ui/) package on pypi
 
 Then you'll run it with `hamilton ui` after installing `apache-hamilton[ui]`. Note to
-talk to it you'll need the hamilton_sdk pacakge which can be installed with `pip install apache-hamilton[sdk]`.
+talk to it you'll need the hamilton_sdk package which can be installed with `pip install apache-hamilton[sdk]`.
 
 
 ## Building docker

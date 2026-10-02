@@ -21,7 +21,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "apache-hamilton-ui"
-version = "0.0.17"
+version = "0.0.18"
 description = "Apache Hamilton UI tracking server for dataflow visualization and monitoring."
 readme = {file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.10.1, <4"

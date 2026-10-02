@@ -17,8 +17,11 @@
 
 """Module for testing pandas column stats."""
 
+from datetime import date, datetime
+
 import polars as pl
 import pytest
+
 from hamilton_sdk.tracking import polars_col_stats as pcs
 
 
@@ -129,3 +132,44 @@ def test_max_string(example_df_string):
 
 def test_str_len(example_df_string):
     assert pcs.str_len(example_df_string["a"]).to_list() == [1, 1, 1, 1, 1]
+
+
+def test_datetime_column_stats_serializes_date_and_datetime_values():
+    stats = pcs.datetime_column_stats(
+        name="ts",
+        position=0,
+        data_type="Datetime(time_unit='us', time_zone=None)",
+        count=3,
+        missing=0,
+        zeros=0,
+        min=datetime(2021, 1, 1),
+        max=datetime(2021, 1, 3),
+        mean=datetime(2021, 1, 2),
+        quantiles={0.5: datetime(2021, 1, 2)},
+        histogram={},
+    )
+    assert stats.min == "2021-01-01T00:00:00"
+    assert stats.max == "2021-01-03T00:00:00"
+    assert stats.mean == "2021-01-02T00:00:00"
+    assert stats.std == 0.0
+    assert stats.quantiles[0.5] == "2021-01-02T00:00:00"
+    assert stats.base_data_type == "datetime"
+
+    date_stats = pcs.datetime_column_stats(
+        name="d",
+        position=1,
+        data_type="Date",
+        count=2,
+        missing=0,
+        zeros=0,
+        min=date(2021, 1, 1),
+        max=date(2021, 1, 3),
+        mean=datetime(2021, 1, 2),
+        quantiles={0.5: date(2021, 1, 2)},
+        histogram={},
+    )
+    assert date_stats.min == "2021-01-01"
+    assert date_stats.max == "2021-01-03"
+    assert date_stats.mean == "2021-01-02T00:00:00"
+    assert date_stats.quantiles[0.5] == "2021-01-02"
+    assert date_stats.base_data_type == "datetime"

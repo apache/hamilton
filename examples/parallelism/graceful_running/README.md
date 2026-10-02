@@ -23,7 +23,7 @@ under the License.
 
 This is a simple example of using the `GracefulErrorAdapter` in a parallelism example, where we might expect some component of an analysis to fail, but we'd still like to get as much data back as we can.
 
-This example divides a large dataframe into smaller frames, and runs the same analysis on each of those frames. It then gathers the results at the end into a single frame. Any errors inside the paralellism block do not halt the total operation of the driver.
+This example divides a large dataframe into smaller frames, and runs the same analysis on each of those frames. It then gathers the results at the end into a single frame. Any errors inside the parallelism block do not halt the total operation of the driver.
 
 The user can define custom data splitting functions to process in the same sub-dag. In some ways, this is an example of how to do `@subdag` with `Parallelizable`.
 

@@ -19,6 +19,7 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+
 from hamilton_sdk.tracking import data_observation, pandas_stats
 
 """Module that houses functions to compute statistics on numpy objects

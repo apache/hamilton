@@ -171,14 +171,15 @@ def fit_random_forest(
     X_train: pd.DataFrame,
     y_train: pd.Series,
 ) -> base.ClassifierMixin:
-  """Returns a fit RF model."""
-  # ... contents of function not important ... code skipped for brevity
+    """Returns a fit RF model."""
+    # ... contents of function not important ... code skipped for brevity
 ```
 (3) Instantiate a Apache Hamilton Driver and ask questions of it.
 ```python
 from hamilton import base
 from hamilton import driver
-import data_loading, features, model_pipeline, sets # import modules
+import data_loading, features, model_pipeline, sets  # import modules
+
 config = {}  # This example has no configuration.
 # instantiate the driver
 adapter = base.DefaultAdapter()
@@ -193,9 +194,7 @@ inputs = {
     "max_depth": None,
     "validation_size_fraction": 0.33,
 }
-dr.visualize_execution(
-    [features.encoders], "encoder_lineage", {"format": "png"}, inputs=inputs
-)
+dr.visualize_execution([features.encoders], "encoder_lineage", {"format": "png"}, inputs=inputs)
 # what is upstream of the fit_random_forest node?
 upstream_nodes = dr.what_is_upstream_of("fit_random_forest")
 # can now filter the nodes by tags, and pull that information out...
@@ -205,8 +204,7 @@ downstream_nodes = dr.what_is_downstream_of("titanic_data")
 # can now filter the nodes by tags, and pull that information out...
 
 # what nodes are PII?
-pii_nodes = [n for n in dr.list_available_variables()
-             if n.tags.get("PII") == "true"]
+pii_nodes = [n for n in dr.list_available_variables() if n.tags.get("PII") == "true"]
 
 # what nodes are called between "age" and "fit_random_forest"?
 nodes_in_path = dr.what_is_the_path_between("age", "fit_random_forest")

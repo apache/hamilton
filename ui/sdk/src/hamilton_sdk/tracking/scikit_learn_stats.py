@@ -16,8 +16,9 @@
 # under the License.
 
 
-from hamilton_sdk.tracking import data_observation
 from sklearn.base import BaseEstimator
+
+from hamilton_sdk.tracking import data_observation
 
 """Module that houses functions to compute statistics on numpy objects"""
 

@@ -65,15 +65,15 @@ from hamilton import dataflow, driver
 # NAME_OF_DATAFLOW = dataflow.import_module("NAME_OF_DATAFLOW") # if official dataflow
 NAME_OF_DATAFLOW = dataflow.import_module("NAME_OF_DATAFLOW", "NAME_OF_USER")
 dr = (
-  driver.Builder()
-  .with_config({})  # replace with configuration as appropriate
-  .with_modules(NAME_OF_DATAFLOW)
-  .build()
+    driver.Builder()
+    .with_config({})  # replace with configuration as appropriate
+    .with_modules(NAME_OF_DATAFLOW)
+    .build()
 )
 # execute the dataflow, specifying what you want back. Will return a dictionary.
 result = dr.execute(
-  [NAME_OF_DATAFLOW.FUNCTION_NAME, ...],  # this specifies what you want back
-  inputs={...}  # pass in inputs as appropriate
+    [NAME_OF_DATAFLOW.FUNCTION_NAME, ...],  # this specifies what you want back
+    inputs={...},  # pass in inputs as appropriate
 )
 ```
 See [this notebook for an example](https://github.com/apache/hamilton/tree/main/examples/contrib/notebook.ipynb).
@@ -95,6 +95,7 @@ Things you need to know:
 2. The name of the dataflow.
 ```python
 from hamilton import driver
+
 # from hamilton.contrib.dagworks import NAME_OF_DATAFLOW
 from hamilton.contrib.user.NAME_OF_USER import NAME_OF_DATAFLOW
 
@@ -107,7 +108,7 @@ dr = (
 # execute the dataflow, specifying what you want back. Will return a dictionary.
 result = dr.execute(
     [NAME_OF_DATAFLOW.FUNCTION_NAME, ...],  # this specifies what you want back
-    inputs={...}  # pass in inputs as appropriate
+    inputs={...},  # pass in inputs as appropriate
 )
 ```
 
@@ -125,6 +126,7 @@ NAME_OF_DATAFLOW = dataflows.import_module("NAME_OF_DATAFLOW", "NAME_OF_USER")
 dataflows.copy(NAME_OF_DATAFLOW, destination_path="PATH_TO_DIRECTORY")
 # copy from the installed library
 from hamilton.contrib.user.NAME_OF_USER import NAME_OF_DATAFLOW
+
 dataflows.copy(NAME_OF_DATAFLOW, destination_path="PATH_TO_DIRECTORY")
 ```
 You can then modify/import the code as you see fit. See [copy()](https://hamilton.apache.org/reference/dataflows/copy/)

@@ -26,7 +26,7 @@ This project is adapted from the official [Dagster tutorial](https://docs.dagste
 - `pyproject.toml` and `setup.py` define how to install the `tutorial/` Dagster project.
 - `tutorial/assets.py` defines the data assets to compute and materialize.
 - `tutorial/__init__.py` register the data assets, jobs, and resources for the orchestrator.
-- `tutorial/resources/` contains informations to connect to external resources and API.
+- `tutorial/resources/` contains information to connect to external resources and API.
 
 ## Instructions
 1. Install the Dagster project as a Python module

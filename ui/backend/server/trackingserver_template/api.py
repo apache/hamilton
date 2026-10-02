@@ -373,7 +373,7 @@ async def get_full_dag_templates(request, dag_template_ids: str) -> list[DAGTemp
             item for item in all_dag_templates_retrieved if item.id == dag_template_id
         ]
         if len(relevant_dag_templates) == 0:
-            logger.exception(f"No DAG template with ID: {dag_template_id}")
+            logger.error(f"No DAG template with ID: {dag_template_id}")
             raise HttpError(status_code=404, message=f"No DAG template with ID: {dag_template_id}")
         (dag_template_retrieved,) = relevant_dag_templates
         user, orgs = request.auth

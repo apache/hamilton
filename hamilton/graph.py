@@ -437,6 +437,13 @@ def create_graphviz_graph(
 
         return edge_style
 
+    def _is_collect_dependency_edge(dependency_node: node.Node, target_node: node.Node) -> bool:
+        """Returns true for the edge that feeds a Collect[...] dependency."""
+        return (
+            target_node.node_role == node.NodeType.COLLECT
+            and dependency_node.name == target_node.collect_dependency
+        )
+
     def _get_legend(
         node_types: set[str], extra_legend_nodes: dict[tuple[str, str], dict[str, str]]
     ):
@@ -648,7 +655,6 @@ def create_graphviz_graph(
     # create edges
     input_sets = dict()
     for n in nodes:
-        to_type = "collect" if n.node_role == node.NodeType.COLLECT else ""
         to_modifiers = node_modifiers.get(n.name, set())
 
         input_nodes = set()
@@ -664,6 +670,7 @@ def create_graphviz_graph(
                 continue
 
             from_type = "expand" if d.node_role == node.NodeType.EXPAND else ""
+            to_type = "collect" if _is_collect_dependency_edge(d, n) else ""
             dependency_modifiers = node_modifiers.get(d.name, set())
             edge_style = _get_edge_style(from_type, to_type)
             if (

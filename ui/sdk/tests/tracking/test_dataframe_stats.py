@@ -19,8 +19,9 @@ import math
 
 import numpy as np
 import pandas as pd
-from hamilton_sdk.tracking import dataframe_stats
 from pytest import mark, param
+
+from hamilton_sdk.tracking import dataframe_stats
 
 skip_NAN_on_numpy_v2 = mark.skipif(
     not hasattr(np, "NAN"),
@@ -30,7 +31,7 @@ skip_NAN_on_numpy_v2 = mark.skipif(
 
 # Tests the type converter
 @mark.parametrize(
-    "input, expected",
+    ("input", "expected"),
     [
         (1, 1),
         ("1", "1"),

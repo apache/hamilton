@@ -18,7 +18,6 @@
 import dataclasses
 import enum
 from datetime import datetime
-from typing import Optional
 
 
 class Status(enum.Enum):
@@ -32,12 +31,12 @@ class Status(enum.Enum):
 class TaskRun:
     node_name: str
     status: Status = dataclasses.field(default_factory=lambda: Status.UNINITIALIZED)
-    start_time: Optional[datetime] = None
-    end_time: Optional[datetime] = None
-    result_type: Optional[type[type]] = None
+    start_time: datetime | None = None
+    end_time: datetime | None = None
+    result_type: type[type] | None = None
     # TODO -- determine the best kind of result data here
-    result_summary: Optional[dict] = None
-    error: Optional[list[str]] = None  # Serialization of error, broken into lines...
+    result_summary: dict | None = None
+    error: list[str] | None = None  # Serialization of error, broken into lines...
     is_in_sample: bool = True  # this isn't sent anywhere; so it's not in to_dict().
 
     def to_dict(self):

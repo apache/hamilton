@@ -16,9 +16,10 @@
 # under the License.
 
 import functools
-from typing import Any, Optional
+from typing import Any
 
 import pyspark.sql as ps
+
 from hamilton_sdk.tracking import data_observation
 from hamilton_sdk.tracking.data_observation import ObservationType
 
@@ -112,7 +113,7 @@ def compute_stats_psdf(result: ps.DataFrame, node_name: str, node_tags: dict) ->
 @data_observation.compute_schema.register
 def compute_schema_psdf(
     result: ps.DataFrame, node_name: str, node_tags: dict
-) -> Optional[ObservationType]:
+) -> ObservationType | None:
     if h_schema is not None:
         schema = h_schema._get_arrow_schema(result)
         schema.with_metadata(dict(name=node_name))

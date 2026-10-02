@@ -687,3 +687,54 @@ def test_columns_and_subdag_nodes_do_not_clash():
 
     assert not with_columns_base.contains_duplicates([node_a, node_c])
     assert with_columns_base.contains_duplicates([node_a, node_b, node_c])
+
+
+class _BaseValidationSub(with_columns_base):
+    """Minimal concrete subclass used to exercise `with_columns_base.__init__`-time
+    validation. The abstract methods are trivially stubbed because no test in this
+    block invokes them.
+    """
+
+    def get_initial_nodes(self, fn, params):
+        return "", []
+
+    def get_subdag_nodes(self, fn, config):
+        return []
+
+    def chain_subdag_nodes(self, fn, inject_parameter, generated_nodes):
+        return None
+
+    def validate(self, fn):
+        pass
+
+
+def _dummy_subdag_fn() -> int:
+    return 0
+
+
+def test_with_columns_base_raises_when_no_mutex_arg_set():
+    with pytest.raises(ValueError, match="exactly one of"):
+        _BaseValidationSub(_dummy_subdag_fn, select=["x"])
+
+
+def test_with_columns_base_raises_when_two_mutex_args_set():
+    with pytest.raises(ValueError, match="exactly one of"):
+        _BaseValidationSub(_dummy_subdag_fn, columns_to_pass=["a"], on_input="b", select=["x"])
+
+
+def test_with_columns_base_raises_when_all_three_mutex_args_set():
+    with pytest.raises(ValueError, match="exactly one of"):
+        _BaseValidationSub(
+            _dummy_subdag_fn,
+            columns_to_pass=["a"],
+            pass_dataframe_as="b",
+            on_input="c",
+            select=["x"],
+        )
+
+
+def test_with_columns_base_accepts_exactly_one_mutex_arg():
+    # Each of the three single-set cases must instantiate cleanly.
+    _BaseValidationSub(_dummy_subdag_fn, columns_to_pass=["a"], select=["x"], dataframe_type=object)
+    _BaseValidationSub(_dummy_subdag_fn, pass_dataframe_as="b", select=["x"], dataframe_type=object)
+    _BaseValidationSub(_dummy_subdag_fn, on_input="c", select=["x"], dataframe_type=object)

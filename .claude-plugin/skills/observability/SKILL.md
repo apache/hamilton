@@ -42,6 +42,7 @@ hamilton ui
 
 ```python
 """Add HamiltonTracker to your driver."""
+
 from hamilton_sdk import adapters
 from hamilton import driver
 
@@ -50,18 +51,20 @@ tracker = adapters.HamiltonTracker(
     project_id=1,  # Your project ID from UI
     username="your.email@example.com",
     dag_name="my_pipeline",
-    tags={"environment": "dev", "team": "data-science"}
+    tags={"environment": "dev", "team": "data-science"},
 )
 
 # Build driver with tracker
-dr = driver.Builder()\
-    .with_config(your_config)\
-    .with_modules(*your_modules)\
-    .with_adapters(tracker)\
+dr = (
+    driver.Builder()
+    .with_config(your_config)
+    .with_modules(*your_modules)
+    .with_adapters(tracker)
     .build()
+)
 
 # Execute as normal - runs are automatically tracked!
-results = dr.execute(['final_output'], inputs={'data_path': 'data.csv'})
+results = dr.execute(["final_output"], inputs={"data_path": "data.csv"})
 ```
 
 ### 4. View in UI
@@ -78,12 +81,11 @@ Open http://localhost:8241 and see:
 
 ```python
 """Minimal tracking setup."""
+
 from hamilton_sdk import adapters
 
 tracker = adapters.HamiltonTracker(
-    project_id=1,
-    username="user@example.com",
-    dag_name="etl_pipeline"
+    project_id=1, username="user@example.com", dag_name="etl_pipeline"
 )
 
 # Attach to driver
@@ -94,6 +96,7 @@ dr = driver.Builder().with_adapters(tracker).build()
 
 ```python
 """Use tags for filtering and organization."""
+
 tracker = adapters.HamiltonTracker(
     project_id=1,
     username="user@example.com",
@@ -102,8 +105,8 @@ tracker = adapters.HamiltonTracker(
         "environment": "production",
         "model_version": "v2.1",
         "team": "ml-platform",
-        "experiment_id": "exp_123"
-    }
+        "experiment_id": "exp_123",
+    },
 )
 
 # Tags appear in UI for filtering and search
@@ -113,21 +116,17 @@ tracker = adapters.HamiltonTracker(
 
 ```python
 """Track async workflows."""
+
 from hamilton import async_driver
 from hamilton_sdk import adapters
 
 tracker = adapters.AsyncHamiltonTracker(
-    project_id=1,
-    username="user@example.com",
-    dag_name="async_rag_pipeline"
+    project_id=1, username="user@example.com", dag_name="async_rag_pipeline"
 )
 
-dr = await async_driver.Builder()\
-    .with_modules(async_module)\
-    .with_adapters(tracker)\
-    .build()
+dr = await async_driver.Builder().with_modules(async_module).with_adapters(tracker).build()
 
-result = await dr.execute(['llm_response'], inputs={'query': 'test'})
+result = await dr.execute(["llm_response"], inputs={"query": "test"})
 ```
 
 ## Project Organization
@@ -156,12 +155,13 @@ project_id = response.json()['id']
 
 ```python
 """Organize DAGs by team and environment."""
+
 # Team A - Development
 tracker_team_a_dev = adapters.HamiltonTracker(
     project_id=1,  # "Team A Analytics" project
     username="user@example.com",
     dag_name="user_segmentation",
-    tags={"team": "team-a", "env": "dev"}
+    tags={"team": "team-a", "env": "dev"},
 )
 
 # Team A - Production
@@ -169,7 +169,7 @@ tracker_team_a_prod = adapters.HamiltonTracker(
     project_id=1,
     username="user@example.com",
     dag_name="user_segmentation",
-    tags={"team": "team-a", "env": "prod"}
+    tags={"team": "team-a", "env": "prod"},
 )
 
 # Team B - Different project
@@ -177,7 +177,7 @@ tracker_team_b = adapters.HamiltonTracker(
     project_id=2,  # "Team B ML" project
     username="user@example.com",
     dag_name="recommendation_model",
-    tags={"team": "team-b", "env": "dev"}
+    tags={"team": "team-b", "env": "dev"},
 )
 ```
 
@@ -243,12 +243,13 @@ Hamilton UI automatically tracks:
 
 ```python
 """Track lineage across training and inference."""
+
 # Training pipeline
 training_tracker = adapters.HamiltonTracker(
     project_id=1,
     username="user@example.com",
     dag_name="model_training",
-    tags={"stage": "training", "model_version": "v2.1"}
+    tags={"stage": "training", "model_version": "v2.1"},
 )
 
 # Inference pipeline (same project)
@@ -256,7 +257,7 @@ inference_tracker = adapters.HamiltonTracker(
     project_id=1,
     username="user@example.com",
     dag_name="model_inference",
-    tags={"stage": "inference", "model_version": "v2.1"}
+    tags={"stage": "inference", "model_version": "v2.1"},
 )
 
 # In UI: Filter by model_version="v2.1" to see both pipelines
@@ -268,6 +269,7 @@ inference_tracker = adapters.HamiltonTracker(
 
 ```python
 """Track production metrics."""
+
 tracker = adapters.HamiltonTracker(
     project_id=1,
     username="service@example.com",
@@ -276,8 +278,8 @@ tracker = adapters.HamiltonTracker(
         "environment": "production",
         "service": "data-pipeline",
         "version": os.getenv("SERVICE_VERSION", "unknown"),
-        "host": os.getenv("HOSTNAME", "unknown")
-    }
+        "host": os.getenv("HOSTNAME", "unknown"),
+    },
 )
 
 # Monitor in UI:
@@ -325,19 +327,16 @@ Track performance over time:
 
 ```python
 """Track both Hamilton and MLflow."""
+
 from hamilton_sdk import adapters
 import mlflow
 
 hamilton_tracker = adapters.HamiltonTracker(
-    project_id=1,
-    username="user@example.com",
-    dag_name="ml_training"
+    project_id=1, username="user@example.com", dag_name="ml_training"
 )
 
 # Use both adapters
-dr = driver.Builder()\
-    .with_adapters(hamilton_tracker, mlflow_tracker)\
-    .build()
+dr = driver.Builder().with_adapters(hamilton_tracker, mlflow_tracker).build()
 
 # Results tracked in both Hamilton UI and MLflow
 ```
@@ -346,9 +345,11 @@ dr = driver.Builder()\
 
 ```python
 """Track Hamilton DAGs in Airflow tasks."""
+
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from hamilton_sdk import adapters
+
 
 def run_hamilton_pipeline(**context):
     """Execute Hamilton with tracking."""
@@ -357,24 +358,19 @@ def run_hamilton_pipeline(**context):
         username="airflow@example.com",
         dag_name="airflow_etl",
         tags={
-            "airflow_dag": context['dag'].dag_id,
-            "airflow_run": context['run_id'],
-            "task": context['task_instance'].task_id
-        }
+            "airflow_dag": context["dag"].dag_id,
+            "airflow_run": context["run_id"],
+            "task": context["task_instance"].task_id,
+        },
     )
 
-    dr = driver.Builder()\
-        .with_modules(my_module)\
-        .with_adapters(tracker)\
-        .build()
+    dr = driver.Builder().with_modules(my_module).with_adapters(tracker).build()
 
-    return dr.execute(['output'], inputs=context['params'])
+    return dr.execute(["output"], inputs=context["params"])
 
-with DAG('my_dag', schedule_interval='@daily') as dag:
-    task = PythonOperator(
-        task_id='hamilton_pipeline',
-        python_callable=run_hamilton_pipeline
-    )
+
+with DAG("my_dag", schedule_interval="@daily") as dag:
+    task = PythonOperator(task_id="hamilton_pipeline", python_callable=run_hamilton_pipeline)
 ```
 
 ## SDK Advanced Usage
@@ -383,20 +379,14 @@ with DAG('my_dag', schedule_interval='@daily') as dag:
 
 ```python
 """Query Hamilton UI via SDK."""
+
 from hamilton_sdk import client
 
 # Connect to Hamilton UI
-hc = client.HamiltonClient(
-    base_url="http://localhost:8241",
-    username="user@example.com"
-)
+hc = client.HamiltonClient(base_url="http://localhost:8241", username="user@example.com")
 
 # Get recent runs
-runs = hc.get_runs(
-    project_id=1,
-    dag_name="my_pipeline",
-    limit=10
-)
+runs = hc.get_runs(project_id=1, dag_name="my_pipeline", limit=10)
 
 for run in runs:
     print(f"Run {run.id}: {run.status} in {run.duration}s")
@@ -411,16 +401,19 @@ print(f"Outputs: {run_detail.outputs}")
 
 ```python
 """Add custom metadata to runs."""
+
 tracker = adapters.HamiltonTracker(
     project_id=1,
     username="user@example.com",
     dag_name="my_pipeline",
     tags={
-        "git_commit": subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip(),
-        "git_branch": subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode().strip(),
+        "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip(),
+        "git_branch": subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+        .decode()
+        .strip(),
         "dataset_version": "v2024.01",
-        "experiment_name": "baseline_v2"
-    }
+        "experiment_name": "baseline_v2",
+    },
 )
 
 # All metadata searchable in UI
@@ -457,6 +450,7 @@ tracker = adapters.HamiltonTracker(
 
 ```python
 """Optimize tracking for large DAGs."""
+
 tracker = adapters.HamiltonTracker(
     project_id=1,
     username="user@example.com",

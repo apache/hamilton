@@ -29,6 +29,16 @@ We currently only support the latest version of Apache Hamilton that's been rele
 | ------- | ------------------ |
 | Latest  | :white_check_mark: |
 
+## Security Model
+
+Apache Hamilton executes user-authored Python functions in the host process. Dataflows, extensions,
+and adapters therefore run with the same privileges as the Python process and must come from trusted
+sources.
+
+Hamilton also provides an explicit loader for Python pickle files. Pickle deserialization can execute
+arbitrary code, so `@load_from.pickle` and `PickleLoader` must only be used with files from trusted
+sources. When data crosses a trust boundary, use a non-executable interchange format such as JSON,
+Parquet, or Arrow instead.
 
 This is a project of the [Apache Software Foundation](https://apache.org) and follows the ASF [vulnerability handling process](https://apache.org/security/#vulnerability-handling).
 

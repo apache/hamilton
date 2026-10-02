@@ -55,13 +55,14 @@ def _sum(*vars):
     """
     return sum(vars)
 
+
 def sum_a_b(a: int, b: int) -> int:
     """Adds a and b together
     :param a: The first number to add
     :param b: The second number to add
     :return: The sum of a and b
     """
-    return _sum(a,b) # Delegates to a helper function
+    return _sum(a, b)  # Delegates to a helper function
 ```
 
 While this looks like a simple python function, there are a few components to note:
@@ -113,11 +114,14 @@ At a high level, the driver code does two things:
 1. Create a Directed Acyclic Graph (DAG) from functions you define.
    ```python
    from hamilton import driver
+
    dr = driver.Driver(config, *modules_to_load)  # this creates the DAG from the modules you pass in.
    ```
 2. It orchestrates execution given expected output and provided input.
    ```python
-   df = dr.execute(final_vars, overrides, display_graph)  # this executes the DAG appropriately to create the dataframe.
+   df = dr.execute(
+       final_vars, overrides, display_graph
+   )  # this executes the DAG appropriately to create the dataframe.
    ```
 
 The driver object also has a few other methods, e.g. `display_all_functions()`, `list_available_variables()`, but they're

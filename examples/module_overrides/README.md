@@ -26,10 +26,7 @@ from hamilton import driver
 import module_A
 import module_B
 
-dr = (
-    driver.Builder()
-    .with_modules(module_A, module_B)
-)
+dr = driver.Builder().with_modules(module_A, module_B)
 ```
 
 Now, it can happen that ``module_A`` and ``module_B`` both have a python function with the same name but performing different things:
@@ -38,15 +35,17 @@ Now, it can happen that ``module_A`` and ``module_B`` both have a python functio
 # module_A
 import pandas as pd
 
-def weighted_average(data:pd.Series, weight:int)->pd.Series:
-    return weight*data.mean()
+
+def weighted_average(data: pd.Series, weight: int) -> pd.Series:
+    return weight * data.mean()
 ```
 
 ```python
 # module_B
 import pandas as pd
 
-def weighted_average(data:pd.Series, weight:int)->pd.Series:
+
+def weighted_average(data: pd.Series, weight: int) -> pd.Series:
     return data.mean() / weight
 ```
 
@@ -56,11 +55,7 @@ In this case Apache Hamilton will raise an error since we cannot have two same n
 We have a handy flag for you to allow the later imported module to overwrite the previous same-named functions:
 
 ```python
-dr = (
-    driver.Builder()
-    .with_modules(module_A, module_B)
-    .allow_module_overrides()
-)
+dr = driver.Builder().with_modules(module_A, module_B).allow_module_overrides()
 ```
 
 which will tell Apache Hamilton to use ``module_B.weighted_average()`` for the node and ignore the same-named function from ``module_A``.

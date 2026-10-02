@@ -19,9 +19,10 @@ import pytest
 
 pytest.importorskip("langchain_core")
 
-from hamilton_sdk.tracking import langchain_stats  # noqa: E402
 from langchain_core import documents as lc_documents  # noqa: E402
 from langchain_core import messages as lc_messages  # noqa: E402
+
+from hamilton_sdk.tracking import langchain_stats  # noqa: E402
 
 
 def test_compute_stats_lc_docs():

@@ -15,7 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from datetime import date
+import json
+from datetime import date, datetime, time, timedelta
 
 import polars as pl
 
@@ -213,3 +214,48 @@ def test_compute_stats_df():
         actual["observability_value"][col].pop("quantiles", None)
         expected_stats["observability_value"][col].pop("quantiles", None)
     assert actual == expected_stats
+
+
+def test_compute_stats_datetime_series_regression():
+    # Regression for #1127: Datetime columns must not error via std() and must stay trackable.
+    series = pl.Series(
+        "timestamp",
+        [
+            datetime(2021, 1, 1),
+            datetime(2021, 1, 2),
+            datetime(2021, 1, 3),
+        ],
+    )
+    actual = ps.compute_stats_series(series, "df", {})
+    column_stats = actual["observability_value"]["df"]
+    assert column_stats["base_data_type"] == "datetime"
+    assert column_stats["data_type"].startswith("Datetime")
+    assert column_stats["std"] == 0.0
+    assert column_stats["min"] == "2021-01-01T00:00:00"
+    assert column_stats["max"] == "2021-01-03T00:00:00"
+    assert column_stats["mean"] == "2021-01-02T00:00:00"
+    json.dumps(actual)
+
+
+def test_compute_stats_time_and_duration_columns_are_unhandled():
+    df = pl.DataFrame(
+        {
+            "t": pl.Series([time(1, 0), time(2, 0), time(3, 0)]),
+            "d": pl.Series([timedelta(days=1), timedelta(days=2), timedelta(days=3)]),
+            "ts": pl.Series([datetime(2021, 1, 1), datetime(2021, 1, 2), datetime(2021, 1, 3)]),
+        }
+    )
+    actual = ps.compute_stats_df(df, "test", {})
+    time_stats = actual["observability_value"]["t"]
+    duration_stats = actual["observability_value"]["d"]
+    datetime_stats = actual["observability_value"]["ts"]
+    assert time_stats["base_data_type"] == "unhandled"
+    assert duration_stats["base_data_type"] == "unhandled"
+    assert "min" not in time_stats
+    assert "max" not in time_stats
+    assert "min" not in duration_stats
+    assert "max" not in duration_stats
+    assert datetime_stats["base_data_type"] == "datetime"
+    assert datetime_stats["min"] == "2021-01-01T00:00:00"
+    assert datetime_stats["max"] == "2021-01-03T00:00:00"
+    json.dumps(actual)

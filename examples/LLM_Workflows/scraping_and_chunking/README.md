@@ -55,7 +55,6 @@ coupling to a specific execution system.
 
 To start, we can "unravel" `some_func` above into a DAG of operations (a simple linear chain here):
 ```python
-
 def article_regex() -> str:
     """This assumes you're using the furo theme for sphinx"""
     return r'<article role="main" id="furo-main-content">(.*?)</article>'
@@ -74,6 +73,7 @@ def article_text(url: str, article_regex: str) -> str:
         raise ValueError(f"No article found in {url}")
     text = article[0].strip()
     return text
+
 
 def processed_article(article_text: str) -> list:
     """Processes the article text.
@@ -96,8 +96,10 @@ def url(urls_from_sitemap: list[str], max_urls: int = 1000) -> Parallelizable[st
     for url in urls_from_sitemap[0:max_urls]:
         yield url
 
+
 # The previous Apache Hamilton code could live here, or if in another module, Apache Hamilton
 # would stitch the graph together correctly.
+
 
 def collect_processed_articles(processed_article: Collect[list]) -> list:
     """Function to collect the results from parallel processing.

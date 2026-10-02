@@ -72,7 +72,7 @@ To change embedding service, you can use the following:
 
 To change vector database you need to pass a JSON config argument:
 - LanceDB: `--vector_db=lancedb --vector_db_config='{"uri": "data/lancedb"}'`
-- Weaviate: `--vector_db=weaviate --vector_db_config='{"url": "http://locahost:8080/"}'`
+- Weaviate: `--vector_db=weaviate --vector_db_config='{"url": "http://localhost:8080/"}'`
 - Pinecone: `--vector_db=pinecone --vector_db_config='{"environment": "ENVIRONMENT", "api_key": "API_KEY"}'`
 - Marqo: `--vector_db=marqo --vector_db_config='{"url":"http://localhost:8882"}' --other_input_kwargs '{"index_name":"hamilton"}'`
 - Qdrant: `--vector_db=qdrant --vector_db_config='{"url":"http://localhost:6333"}'`

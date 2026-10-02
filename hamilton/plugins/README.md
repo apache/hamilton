@@ -20,7 +20,7 @@ under the License.
 # Plugins
 
 Apache Hamilton enables plugins -- the requirement is that the core library according to the plugin is installed, and the plugin will be registered automatically.
-It is up to the user to install the plugin via the target, E.G. `hamilton[pyspark]`, which will install the correct depdendencies.
+It is up to the user to install the plugin via the target, E.G. `hamilton[pyspark]`, which will install the correct dependencies.
 
 
 ## Structure

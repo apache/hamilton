@@ -59,6 +59,7 @@ The core `apache-hamilton` package must be released first. The other four packag
 |---|---|
 | `scripts/apache_release_helper.py` | Build artifacts, sign, tag, upload RC to SVN, generate vote email |
 | `scripts/promote_rc.sh` | Move a voted RC from SVN dev to SVN release |
+| `scripts/tag_release.sh` | Create the final (non-RC) `-incubating` release tag on the merge commit |
 | `scripts/verify_apache_artifacts.py` | Verify GPG signatures, checksums, and license headers |
 | `scripts/verification-script.sh` | End-to-end RC validation (download, verify, build, test, examples) |
 | `scripts/generate_announce_email.py` | Generate vote result, announcement email, and Slack message |
@@ -224,6 +225,39 @@ git checkout main
 git merge --squash release/hamilton/${VERSION}
 git commit -m "Release apache-hamilton ${VERSION}"
 git push origin main
+```
+
+#### 7. Create the final (non-RC) release tag
+
+The RC build created an `-incubating-RC${RC}` tag pointing at the commit the
+artifacts were built from (typically on the release branch). After the vote
+passes and the release branch is squash-merged to main (step 6), create a
+clean, RC-less release tag on the merge commit. This keeps the release tag
+reachable from `main` and gives GitHub release pages a sensible name --
+ASF mentors flag `-RC`-suffixed tags as poor release names.
+
+`scripts/tag_release.sh` creates an annotated `<package>-v<version>-incubating`
+tag on the target commit (default: current `HEAD`, i.e. the squash-merge
+commit on main). The original `-RC` tag is left intact as the record of
+exactly what was voted on.
+
+```bash
+# On main, at the squash-merge commit from step 6:
+scripts/tag_release.sh --push ${PACKAGE} ${VERSION}
+
+# Or tag a specific commit / hold off on pushing:
+scripts/tag_release.sh --commit <sha> ${PACKAGE} ${VERSION}   # creates locally
+git push origin refs/tags/${PACKAGE}-v${VERSION}-incubating   # push when ready
+```
+
+For a multi-package release (e.g. the apache-hamilton-{sdk,lsp,ui,contrib}
+sub-packages), run it once per package against the same merge commit:
+
+```bash
+scripts/tag_release.sh --push apache-hamilton-sdk     0.9.0
+scripts/tag_release.sh --push apache-hamilton-lsp     0.2.0
+scripts/tag_release.sh --push apache-hamilton-ui      0.0.18
+scripts/tag_release.sh --push apache-hamilton-contrib 0.0.9
 ```
 
 # For Voters: Verifying a Release

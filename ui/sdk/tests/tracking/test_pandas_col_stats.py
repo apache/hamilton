@@ -19,6 +19,7 @@
 
 import pandas as pd
 import pytest
+
 from hamilton_sdk.tracking import pandas_col_stats as pcs
 
 

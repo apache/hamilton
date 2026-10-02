@@ -37,7 +37,7 @@ This module doesn't receive configurations.
 
 ## Overrides
 - `base_models`: Create a list of sklearn-compatible models to fit and evaluate ([docs](https://nixtla.github.io/statsforecast/src/core/models.html))
-- `lag_transforms` and `date_features`: Should be overriden to pass values relevant to your dataset
+- `lag_transforms` and `date_features`: Should be overridden to pass values relevant to your dataset
 - `evaluation_metrics`: Set the list of Nixtla-compatible metrics to use during cross-validation ([examples](https://github.com/Nixtla/utilsforecast/blob/main/utilsforecast/losses.py))
 
 

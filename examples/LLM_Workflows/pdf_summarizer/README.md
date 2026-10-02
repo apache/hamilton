@@ -18,7 +18,7 @@ under the License.
 -->
 
 # (Yet another) LLM PDF Summarizer 📝
-Here's an extensible and production-ready PDF summarizer that you can run anywhere! The frontend uses streamlit, which communicates with a FastAPI backend powered by Apache Hamilton. You give it a PDF file via the browser app and it returns you a text summary using the OpenAI API. If you want, you skip the browser inteface and directly access the `/summarize` endpoint with your document! Everything is containerized using Docker, so you should be able to run it where you please 🏃.
+Here's an extensible and production-ready PDF summarizer that you can run anywhere! The frontend uses streamlit, which communicates with a FastAPI backend powered by Apache Hamilton. You give it a PDF file via the browser app and it returns you a text summary using the OpenAI API. If you want, you skip the browser interface and directly access the `/summarize` endpoint with your document! Everything is containerized using Docker, so you should be able to run it where you please 🏃.
 
 ## Why build this project?
 This project shows how easy it is to productionize Apache Hamilton. Its function-centric declarative approach makes the code easy to read and extend. We invite you to clone the repo and customize to your needs! We are happy to help you via [Slack](https://hamilton-opensource.slack.com/join/shared_invite/zt-1bjs72asx-wcUTgH7q7QX1igiQ5bbdcg) and are excited to see what you build 😁
