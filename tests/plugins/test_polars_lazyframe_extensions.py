@@ -113,6 +113,47 @@ def test_lazy_polars_feather(tmp_path: pathlib.Path) -> None:
     assert metadata["dataframe_metadata"]["datatypes"] == ["String", "Int64", "String"]
 
 
+def test_lazy_polars_csv_reader_options(tmp_path: pathlib.Path) -> None:
+    file = tmp_path / "test.csv"
+    file.write_text("a,b\n# comment\n1,\n2,y\n")
+
+    reader = PolarsScanCSVReader(
+        file=file,
+        comment_char="#",
+        dtypes={"a": pl.Float64},
+        missing_utf8_is_empty_string=True,
+        row_count_name="idx",
+        row_count_offset=1,
+    )
+    df, _ = reader.load_data(pl.LazyFrame)
+    df = df.collect()
+
+    assert df.columns == ["idx", "a", "b"]
+    assert df["idx"].to_list() == [1, 2]
+    assert df.schema["a"] == pl.Float64
+    assert df["b"].to_list() == ["", "y"]
+
+
+@pytest.mark.parametrize(
+    ("writer_class", "reader_class", "path_field"),
+    [
+        (PolarsParquetWriter, PolarsScanParquetReader, "file"),
+        (PolarsFeatherWriter, PolarsScanFeatherReader, "source"),
+    ],
+)
+def test_lazy_polars_reader_row_count_options(
+    df: pl.LazyFrame, tmp_path: pathlib.Path, writer_class, reader_class, path_field
+) -> None:
+    file = tmp_path / "test_data"
+    writer_class(file=file).save_data(df)
+
+    reader = reader_class(**{path_field: file}, row_count_name="idx", row_count_offset=1)
+    df2, _ = reader.load_data(pl.LazyFrame)
+
+    assert df2.collect().columns == ["idx", "a", "b"]
+    assert df2.collect()["idx"].to_list() == [1, 2]
+
+
 def test_lazy_polars_avro(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:
     file = tmp_path / "test.avro"
 
