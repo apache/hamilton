@@ -16,51 +16,43 @@
 // under the License.
 
 import * as vscode from "vscode";
-import { execSync } from "child_process";
 import { DataflowWebviewFeature } from "./features/dataflowWebviewFeature";
 import { LSPClientFeature } from "./features/lspClientFeature";
 import { SupportLinksFeature } from "./features/supportLinksFeature";
+import { checkPythonDependencies, installPythonDependency } from "./pythonExecution";
+import type { PythonExecCommand } from "./pythonExecution";
 
+function installDependenciesMessage(pythonCommand: readonly string[]) {
+  const installLSP = "Install apache-hamilton[lsp]";
 
-const checkPythonDependencies = (pythonPath: string) => {
-  try{
-    execSync(`${pythonPath} -c "import hamilton_lsp"`)
-    return true
-  } catch (error) {
-    return false
-  }
+  vscode.window.showInformationMessage("Missing the Hamilton language server.", installLSP).then((selection) => {
+    if (selection === installLSP) {
+      installPythonDependency(pythonCommand);
+      vscode.commands.executeCommand("workbench.action.reloadWindow");
+    }
+  });
 }
 
-function installDependenciesMessage(pythonPath: string) {
-  let installLSP = "Install apache-hamilton[lsp]"
-
-  vscode.window.showInformationMessage("Missing the Hamilton language server.", installLSP)
-    .then(selection => {
-      if (selection === installLSP) {
-        execSync(`${pythonPath} -m pip install 'apache-hamilton-lsp'`)
-        vscode.commands.executeCommand("workbench.action.reloadWindow")
-      }
-    })
-}
-
-
-
-let extensionFeatures: any[];
+let extensionFeatures: vscode.Disposable[] = [];
 
 export async function activate(context: vscode.ExtensionContext) {
   const pythonExtension = vscode.extensions.getExtension("ms-python.python");
-  const pythonPath = pythonExtension?.exports.settings.getExecutionDetails().execCommand?.join("");
+  const pythonCommand: PythonExecCommand = pythonExtension?.exports?.settings?.getExecutionDetails?.()?.execCommand;
+  if (!pythonCommand?.length) {
+    vscode.window.showInformationMessage("Select a Python interpreter to activate the Hamilton language server.");
+    return;
+  }
 
-  const available = checkPythonDependencies(pythonPath)
+  const available = checkPythonDependencies(pythonCommand);
   if (available === false) {
-    installDependenciesMessage(pythonPath)
-    return
+    installDependenciesMessage(pythonCommand);
+    return;
   }
 
   extensionFeatures = [
-    new LSPClientFeature(context, pythonPath),
+    new LSPClientFeature(context, pythonCommand),
     new DataflowWebviewFeature(context),
-    new SupportLinksFeature()
+    new SupportLinksFeature(),
   ];
 }
 
