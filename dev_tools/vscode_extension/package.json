@@ -162,7 +162,8 @@
   "scripts": {
     "compile": "NODE_ENV=production node ./esbuild.js",
     "watch": "node ./esbuild.js --watch",
-    "pretty": "prettier --write \"src/**/*.ts\""
+    "pretty": "prettier --write \"src/**/*.ts\"",
+    "test": "mocha test/**/*.test.cjs"
   },
   "devDependencies": {
     "@githubocto/tailwind-vscode": "^1.0.5",
