@@ -1,2 +1,2 @@
 # Additional requirements on top of hamilton...pandera
-pandera[dask]
+pandera[dask]>=0.23

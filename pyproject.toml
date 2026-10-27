@@ -73,7 +73,7 @@ openlineage = [
     # SQL table resolution; no Windows wheel is published, so pip builds it there (needs Rust)
     "openlineage-sql",
 ]
-pandera = ["pandera"]
+pandera = ["pandera>=0.23"]
 performance = [
     # Internal performance boosters go here
     "xxhash>=0.8.0",
@@ -126,7 +126,7 @@ test = [
   "mlflow; python_version <= '3.13'",
   "networkx",
   "openpyxl", # for excel data loader
-  "pandera[dask]",
+  "pandera[dask]>=0.23",
   "plotly",
   "polars; python_version < '3.14'",
   "pyarrow",
@@ -166,7 +166,7 @@ docs = [
   "narwhals",
   "numpy",
   "packaging",
-  "pandera",
+  "pandera>=0.23",
   "pillow",
   "polars",
   "pyarrow >= 1.0.0",

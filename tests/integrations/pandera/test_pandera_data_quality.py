@@ -214,9 +214,6 @@ def test_pandera_decorator_dask_df():
     assert not result_success.passes
 
 
-@pytest.mark.xfail(
-    reason="some weird import issue leads to key error in pandera, can't recreate outside of the series decorator"
-)
 def test_pandera_decorator_dask_series():
     """Validates that the function can be annotated with a dask series type it'll work appropriately.
     Install dask if this fails.
@@ -246,3 +243,15 @@ def test_pandera_decorator_dask_series():
     assert result_success.passes
     result_success = validator.validate(n(True))  # should fail
     assert not result_success.passes
+
+
+def test_pandera_series_validator_checks_every_dask_partition():
+    schema = pa.SeriesSchema(str, checks=[pa.Check(lambda s: s.str.startswith("foo"))])
+    validator = pandera_validators.PanderaSeriesSchemaValidator(schema=schema, importance="warn")
+    passing = dd.from_pandas(pd.Series(["foo1", "foo2", "foo3", "foo4"]), npartitions=2)
+    assert validator.validate(passing).passes
+    # Only the last partition breaks the schema.
+    failing = dd.from_pandas(pd.Series(["foo1", "foo2", "foo3", "bar4"]), npartitions=2)
+    validation_result = validator.validate(failing)
+    assert not validation_result.passes
+    assert len(validation_result.diagnostics["schema_errors"]) == 1
