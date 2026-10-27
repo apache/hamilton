@@ -68,3 +68,20 @@ def test_function_input_output_type_checker_rejects_wrong_pep604_union_result():
     )
     with pytest.raises(TypeError, match="Node evens returned a result"):
         dr.execute(["evens"], inputs={"n": 3})
+
+
+def test_function_input_output_type_checker_accepts_fixed_length_tuple():
+    def produce_tuple(n: int) -> tuple[int, str]:
+        return (n, "hello")
+
+    def consume_tuple(produce_tuple: tuple[int, str]) -> str:
+        return f"{produce_tuple[0]} {produce_tuple[1]}"
+
+    dr = (
+        driver.Builder()
+        .with_modules(ad_hoc_utils.create_temporary_module(produce_tuple, consume_tuple))
+        .with_adapters(default.FunctionInputOutputTypeChecker())
+        .build()
+    )
+
+    assert dr.execute(["consume_tuple"], inputs={"n": 5}) == {"consume_tuple": "5 hello"}
