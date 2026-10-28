@@ -16,9 +16,11 @@
 # under the License.
 
 
+from typing import Any
+
 import pytest
 
-from hamilton import base, node
+from hamilton import ad_hoc_utils, base, node
 from hamilton.caching.adapter import HamiltonCacheAdapter
 from hamilton.driver import (
     Builder,
@@ -580,3 +582,40 @@ def test_driver_setstate_getstate():
         inputs={"drivers": drivers, "inputs": inputs, "final_vars": ["double"]},
     )
     assert r == {"reducer": [{"double": 0}, {"double": 2}, {"double": 4}, {"double": 6}]}
+
+
+@pytest.mark.parametrize("dynamic", [False, True])
+def test_input_type_error_shows_consumer_annotations(dynamic):
+    class Record:
+        pass
+
+    calls = []
+
+    def needs_record(shared: Record) -> int:
+        calls.append("needs_record")
+        return 1
+
+    def works_with_anything(shared: Any) -> int:
+        calls.append("works_with_anything")
+        return 2
+
+    def total(needs_record: int, works_with_anything: int) -> int:
+        return needs_record + works_with_anything
+
+    module = ad_hoc_utils.create_temporary_module(needs_record, works_with_anything, total)
+    builder = Builder().with_modules(module)
+    if dynamic:
+        builder = builder.enable_dynamic_execution(allow_experimental_mode=True)
+    dr = builder.build()
+
+    with pytest.raises(ValueError) as exc:
+        dr.execute(["total"], inputs={"shared": 31})
+
+    message = str(exc.value)
+    assert "Type requirement mismatch" in message
+    assert f"needs_record.shared: {Record}" in message
+    assert "works_with_anything.shared: typing.Any" in message
+    assert calls == []
+
+    assert dr.execute(["total"], inputs={"shared": Record()}) == {"total": 3}
+    assert sorted(calls) == ["needs_record", "works_with_anything"]
