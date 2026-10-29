@@ -15,13 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import gc
 import inspect
+import warnings
 
 import numpy as np
 import pandas as pd
 import pytest
 
-from hamilton import node
+from hamilton import ad_hoc_utils, driver, node
 from hamilton.data_quality.base import DataValidationError, ValidationResult
 from hamilton.function_modifiers import (
     DATA_VALIDATOR_ORIGINAL_OUTPUT_TAG,
@@ -404,3 +406,20 @@ def test_sync_wrapper_guards_against_unawaited_coroutine():
     # Instead, test the guard directly by simulating a sync call to an async validate.
     validator_node = subdag_as_dict["fn_async_dummy_data_validator"]
     assert inspect.iscoroutinefunction(validator_node.callable)
+
+
+@pytest.mark.parametrize("importance", ["warn", "fail"])
+def test_sync_driver_with_async_validator_raises_type_error(importance):
+    """The sync Driver should raise the documented TypeError for an async validator."""
+
+    @check_output_custom(AsyncSampleDataValidator(equal_to=10, importance=importance))
+    def fn(input: int) -> int:
+        return input
+
+    dr = driver.Builder().with_modules(ad_hoc_utils.create_temporary_module(fn)).build()
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        with pytest.raises(TypeError, match="AsyncDriver"):
+            dr.execute(["fn"], inputs={"input": 5})
+        gc.collect()
+    assert not [w for w in caught if "never awaited" in str(w.message)]
