@@ -53,7 +53,7 @@ else:
     Selector = type
 
 # for polars 0.18.0 we need to check what to do.
-from polars._typing import CsvEncoding, SchemaDefinition
+from polars._typing import CsvEncoding
 
 CsvQuoteStyle = type
 
@@ -506,8 +506,8 @@ class PolarsJSONReader(DataLoader):
     """
 
     source: str | Path | IOBase | bytes
-    schema: SchemaDefinition = None
-    schema_overrides: SchemaDefinition = None
+    schema: Mapping[str, Any] | Sequence[str | tuple[str, Any]] | None = None
+    schema_overrides: Mapping[str, Any] | Sequence[str | tuple[str, Any]] | None = None
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
@@ -564,8 +564,8 @@ class PolarsNDJSONReader(DataLoader):
     """
 
     source: str | Path | IOBase | bytes
-    schema: SchemaDefinition = None
-    schema_overrides: SchemaDefinition = None
+    schema: Mapping[str, Any] | Sequence[str | tuple[str, Any]] | None = None
+    schema_overrides: Mapping[str, Any] | Sequence[str | tuple[str, Any]] | None = None
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
