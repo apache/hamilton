@@ -27,7 +27,7 @@ import pytest
 
 import hamilton.graph_utils
 import hamilton.htypes
-from hamilton import ad_hoc_utils, base, graph, node
+from hamilton import ad_hoc_utils, base, driver, graph, node
 from hamilton import function_modifiers as fm
 from hamilton.execution import graph_functions
 from hamilton.function_modifiers import schema
@@ -641,6 +641,30 @@ def test_get_upstream_nodes_large_chain_no_recursion_error():
     assert len(nodes) == chain_size
     assert len(user_nodes) == 0
     assert all(fg.nodes[f"node_{i}"] in nodes for i in range(chain_size))
+
+
+def test_execute_and_nodes_between_large_chain_no_recursion_error(monkeypatch):
+    """Regression test for https://github.com/apache/hamilton/issues/1760.
+
+    Driver.execute (via execute_subdag) and nodes_between must not recurse once per
+    dependency level, so a chain deeper than the recursion limit has to work.
+    """
+    chain_size = 1200
+    assert chain_size > sys.getrecursionlimit()
+    module = ModuleType("large_exec_chain")
+    src = ["def node_0() -> float:\n    return 1.0\n"]
+    for i in range(1, chain_size):
+        src.append(f"def node_{i}(node_{i - 1}: float) -> float:\n    return node_{i - 1} + 1\n")
+    exec("\n".join(src), module.__dict__)
+    monkeypatch.setitem(sys.modules, module.__name__, module)
+    last = f"node_{chain_size - 1}"
+
+    dr = driver.Builder().with_modules(module).build()
+
+    assert dr.execute([last]) == {last: 1200.0}
+    assert dr.graph.nodes_between("node_0", last) == {
+        dr.graph.nodes[f"node_{i}"] for i in range(chain_size)
+    }
 
 
 def test_get_upstream_nodes_diamond_dag():
