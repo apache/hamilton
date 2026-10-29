@@ -147,6 +147,24 @@ def test_polars_ndjson(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
     polars.testing.assert_frame_equal(df, df2)
 
 
+@pytest.mark.parametrize(
+    ("writer_cls", "reader_cls"),
+    [(PolarsJSONWriter, PolarsJSONReader), (PolarsNDJSONWriter, PolarsNDJSONReader)],
+)
+def test_polars_json_file_objects(df: pl.DataFrame, writer_cls, reader_cls) -> None:
+    buffer = io.BytesIO()
+    write_metadata = writer_cls(file=buffer).save_data(df)
+
+    df2, read_metadata = reader_cls(source=io.BytesIO(buffer.getvalue())).load_data(pl.DataFrame)
+    _, bytes_metadata = reader_cls(source=buffer.getvalue()).load_data(pl.DataFrame)
+
+    polars.testing.assert_frame_equal(df, df2)
+    for metadata in (write_metadata, read_metadata, bytes_metadata):
+        assert "file_metadata" not in metadata
+        assert metadata["dataframe_metadata"]["rows"] == 2
+        assert metadata["dataframe_metadata"]["column_names"] == ["a", "b"]
+
+
 def test_polars_avro(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
     file = tmp_path / "test.avro"
 
