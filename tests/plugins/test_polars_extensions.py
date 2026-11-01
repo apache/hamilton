@@ -17,6 +17,7 @@
 
 import io
 import pathlib
+import sqlite3
 import sys
 import typing
 
@@ -221,3 +222,104 @@ def test_getting_type_hints_spreadsheetwriter():
     """Tests that types can be resolved at run time."""
     type_hints = typing.get_type_hints(PolarsSpreadsheetWriter)
     assert type_hints["workbook"] == typing.Union[Workbook, io.BytesIO, pathlib.Path, str]
+
+
+def test_polars_database_records_row_counts(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
+    connector = create_engine(f"sqlite:///{tmp_path}/rows.db")
+    writer = PolarsDatabaseWriter(
+        table_name="rows_table", connection=connector, if_table_exists="replace"
+    )
+    write_metadata = writer.save_data(df)
+    assert write_metadata["sql_metadata"]["rows"] == 2
+    assert write_metadata["sql_metadata"]["table_name"] == "rows_table"
+    assert write_metadata["sql_metadata"]["operation"] == "write"
+
+    reader = PolarsDatabaseReader(query="SELECT * FROM rows_table", connection=connector)
+    _, read_metadata = reader.load_data(pl.DataFrame)
+    assert read_metadata["sql_metadata"]["rows"] == 2
+    assert read_metadata["sql_metadata"]["operation"] == "read"
+    assert read_metadata["sql_metadata"]["query"] == "SELECT * FROM rows_table"
+
+
+def test_polars_database_batched_read_records_no_row_count(
+    df: pl.DataFrame, tmp_path: pathlib.Path
+) -> None:
+    connector = create_engine(f"sqlite:///{tmp_path}/batched.db")
+    PolarsDatabaseWriter(
+        table_name="batched", connection=connector, if_table_exists="replace"
+    ).save_data(df)
+
+    reader = PolarsDatabaseReader(
+        query="SELECT * FROM batched", connection=connector, iter_batches=True, batch_size=1
+    )
+    batches, metadata = reader.load_data(pl.DataFrame)
+
+    assert metadata["sql_metadata"]["rows"] is None
+    assert metadata["sql_metadata"]["source"]["dialect"] == "sqlite"
+    assert sum(len(batch) for batch in batches) == 2
+
+
+def test_polars_database_keeps_file_metadata(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
+    connector = create_engine(f"sqlite:///{tmp_path}/legacy.db")
+    write_metadata = PolarsDatabaseWriter(
+        table_name="legacy", connection=connector, if_table_exists="replace"
+    ).save_data(df)
+    _, read_metadata = PolarsDatabaseReader(
+        query="SELECT * FROM legacy", connection=connector
+    ).load_data(pl.DataFrame)
+
+    assert write_metadata["file_metadata"]["path"] == "legacy"
+    assert read_metadata["file_metadata"]["path"] == "SELECT * FROM legacy"
+    assert "dataframe_metadata" in write_metadata and "dataframe_metadata" in read_metadata
+
+
+@pytest.mark.parametrize(
+    ("table_name", "expected_table", "expected_schema"),
+    [
+        ("orders", "orders", None),
+        ("main.orders", "orders", "main"),
+        ('"my-tbl"', "my-tbl", None),
+        ('main."my-tbl"', "my-tbl", "main"),
+        ('"main".orders', "orders", "main"),
+        ('"a.b"', "a.b", None),
+    ],
+)
+def test_polars_database_writer_records_the_table_and_schema_as_polars_unpacks_them(
+    df: pl.DataFrame,
+    tmp_path: pathlib.Path,
+    table_name: str,
+    expected_table: str,
+    expected_schema: str | None,
+) -> None:
+    connector = create_engine(f"sqlite:///{tmp_path}/qualified.db")
+    metadata = PolarsDatabaseWriter(
+        table_name=table_name, connection=connector, if_table_exists="replace"
+    ).save_data(df)
+
+    assert metadata["sql_metadata"]["table_name"] == expected_table
+    assert metadata["sql_metadata"]["schema"] == expected_schema
+    assert metadata["file_metadata"]["path"] == table_name
+
+
+def test_pre_1_0_polars_database_records_row_counts(
+    df: pl.DataFrame, tmp_path: pathlib.Path
+) -> None:
+    from hamilton.plugins import polars_pre_1_0_0_extension as pre_1_0
+
+    url = f"sqlite:///{tmp_path}/pre.db"
+    write_metadata = pre_1_0.PolarsDatabaseWriter(
+        table_name="pre", connection=url, if_table_exists="replace"
+    ).save_data(df)
+    assert write_metadata["sql_metadata"]["rows"] == 2
+
+    connection = sqlite3.connect(tmp_path / "pre.db")
+    _, read_metadata = pre_1_0.PolarsDatabaseReader(
+        query="SELECT * FROM pre", connection=connection
+    ).load_data(pl.DataFrame)
+    assert read_metadata["sql_metadata"]["rows"] == 2
+
+    batches, batched_metadata = pre_1_0.PolarsDatabaseReader(
+        query="SELECT * FROM pre", connection=connection, iter_batches=True, batch_size=1
+    ).load_data(pl.DataFrame)
+    assert batched_metadata["sql_metadata"]["rows"] is None
+    assert sum(len(batch) for batch in batches) == 2
