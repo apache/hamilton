@@ -16,11 +16,62 @@
 # under the License.
 
 import hashlib
+import inspect
 import logging
+from pathlib import Path
 from types import ModuleType
 from unittest.mock import mock_open, patch
 
-from hamilton_sdk.driver import _hash_module
+from hamilton import driver as hamilton_driver
+from hamilton_sdk.api.projecttypes import GitInfo
+from hamilton_sdk.driver import (
+    _extract_node_templates_from_function_graph,
+    _get_fully_qualified_function_path,
+    _hash_module,
+    extract_code_artifacts_from_function_graph,
+)
+
+from tests.resources import pipe_source_tracking
+
+
+def test_pipe_step_code_artifacts():
+    dr = hamilton_driver.Builder().with_modules(pipe_source_tracking).build()
+    assert dr.execute(["input_pipe", "output_pipe", "mutated"], inputs={"value": 1}) == {
+        "input_pipe": 4,
+        "output_pipe": 3,
+        "mutated": 3,
+    }
+    templates = {
+        item["name"]: item for item in _extract_node_templates_from_function_graph(dr.graph)
+    }
+    repo_base_path = str(Path(pipe_source_tracking.__file__).parent)
+    vcs_info = GitInfo(
+        "main", "test-commit", True, "https://github.com/apache/hamilton", repo_base_path
+    )
+    artifacts = extract_code_artifacts_from_function_graph(dr.graph, vcs_info, repo_base_path)
+
+    for node_name, function in {
+        "input_pipe.increment": pipe_source_tracking._increment,
+        "output_pipe.increment": pipe_source_tracking._increment,
+        "mutated.with_mutator": pipe_source_tracking._mutator,
+    }.items():
+        function_name = _get_fully_qualified_function_path(function)
+        assert templates[node_name]["code_artifact_pointers"][0] == function_name
+        matching_artifacts = [
+            artifact for artifact in artifacts if artifact["name"] == function_name
+        ]
+        assert len(matching_artifacts) == 1
+        artifact = matching_artifacts[0]
+        source_lines, start = inspect.getsourcelines(function)
+        assert artifact["path"] == "pipe_source_tracking.py"
+        assert artifact["start"] == start - 1
+        assert artifact["end"] == start - 1 + len(source_lines)
+
+    for name in ["input_pipe", "output_pipe", "mutated"]:
+        assert templates[name]["code_artifact_pointers"] == [
+            _get_fully_qualified_function_path(getattr(pipe_source_tracking, name))
+        ]
+    assert len(artifacts) == 5
 
 
 @patch("builtins.open", new_callable=mock_open, read_data=b"print('hello world')\n")

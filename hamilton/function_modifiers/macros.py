@@ -1340,7 +1340,11 @@ class pipe_output(base.NodeTransformer):
         if len(nodes) == 1:
             return [node_]
 
-        last_node = nodes[-1].copy_with(name=f"{node_.name}", typ=nodes[-2].type)
+        last_node = nodes[-1].copy_with(
+            name=f"{node_.name}",
+            typ=nodes[-2].type,
+            originating_functions=node_.originating_functions,
+        )
 
         out = [original_node]
         out.extend(nodes[:-1])
@@ -1409,7 +1413,11 @@ def chain_transforms(
                 f"with{('_' if not fn_name.startswith('_') else '') + fn_name}{postfix}",
             )
             node_namespace = applicable.resolve_namespace(fn.__name__)
-            raw_node = raw_node.copy_with(namespace=node_namespace, name=node_name)
+            raw_node = raw_node.copy_with(
+                namespace=node_namespace,
+                name=node_name,
+                originating_functions=(applicable.fn,),
+            )
             # TODO -- validate that the first parameter is the right type/all the same
             fn_count[fn_name] += 1
             upstream_inputs, literal_inputs = applicable.bind_function_args(target_arg)
