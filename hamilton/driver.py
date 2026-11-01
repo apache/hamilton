@@ -519,9 +519,16 @@ class Driver:
                 else:
                     valid |= htypes.check_input_type(user_node.type, all_inputs[user_node.name])
                 if not valid:
+                    annotations = "; ".join(
+                        f"{consumer.name}.{user_node.name}: {consumer.input_types[user_node.name][0]}"
+                        for consumer in sorted(user_node.depended_on_by, key=lambda n: n.name)
+                        if user_node.name in consumer.input_types
+                    )
+                    context = f" Input annotations: {annotations}." if annotations else ""
                     errors.append(
                         f"Error: Type requirement mismatch. Expected {user_node.name}:{user_node.type} "  # noqa: E231
                         f"got {all_inputs[user_node.name]}:{type(all_inputs[user_node.name])} instead."  # noqa: E231
+                        f"{context}"
                     )
         if errors:
             errors.sort()
