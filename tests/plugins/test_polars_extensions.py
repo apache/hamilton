@@ -26,6 +26,9 @@ from sqlalchemy import create_engine
 import polars as pl  # isort: skip
 import pytest  # isort: skip
 
+from hamilton import ad_hoc_utils, driver  # isort: skip
+from hamilton.function_modifiers import load_from, source, value  # isort: skip
+from hamilton.io.materialization import from_  # isort: skip
 from hamilton.plugins.polars_post_1_0_0_extensions import (  # isort: skip
     PolarsAvroReader,
     PolarsAvroWriter,
@@ -145,6 +148,46 @@ def test_polars_ndjson(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
     assert df2.shape == (2, 2)
     assert "schema" not in kwargs2
     polars.testing.assert_frame_equal(df, df2)
+
+
+@pytest.mark.parametrize("reader", [PolarsJSONReader, PolarsNDJSONReader])
+def test_getting_type_hints_json_readers(reader) -> None:
+    """Tests that types can be resolved at run time, which loaders and materializers rely on."""
+    typing.get_type_hints(reader)
+    assert set(reader.get_required_arguments()) == {"source"}
+    assert set(reader.get_optional_arguments()) == {"schema", "schema_overrides"}
+
+
+@pytest.mark.parametrize(
+    ("name", "writer"), [("json", PolarsJSONWriter), ("ndjson", PolarsNDJSONWriter)]
+)
+def test_polars_json_readers_materialize(
+    name: str, writer, df: pl.DataFrame, tmp_path: pathlib.Path
+) -> None:
+    file = tmp_path / f"test.{name}"
+    writer(file=file).save_data(df)
+
+    def height(raw: pl.DataFrame) -> int:
+        return raw.height
+
+    dr = driver.Builder().with_modules(ad_hoc_utils.create_temporary_module(height)).build()
+    _, result = dr.materialize(
+        getattr(from_, name)(target="raw", source=str(file)), additional_vars=["height"]
+    )
+    assert result["height"] == 2
+
+
+def test_polars_ndjson_load_from(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
+    file = tmp_path / "test.ndjson"
+    PolarsNDJSONWriter(file=file).save_data(df)
+
+    @load_from.ndjson(source=source("path"), schema_overrides=value({"a": pl.Float64}))
+    def raw(df: pl.DataFrame) -> pl.DataFrame:
+        return df
+
+    dr = driver.Builder().with_modules(ad_hoc_utils.create_temporary_module(raw)).build()
+    result = dr.execute(["raw"], inputs={"path": str(file)})
+    assert result["raw"].schema == pl.Schema({"a": pl.Float64, "b": pl.Int64})
 
 
 def test_polars_avro(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
