@@ -70,7 +70,7 @@ Apache Hamilton brings modularity and structure to any Python application moving
 
 # Installation
 
-Apache Hamilton supports Python 3.8+. We include the optional `visualization` dependency to display our Apache Hamilton DAG. For visualizations, [Graphviz](https://graphviz.org/download/) needs to be installed on your system separately.
+Apache Hamilton supports Python 3.11+. We include the optional `visualization` dependency to display our Apache Hamilton DAG. For visualizations, [Graphviz](https://graphviz.org/download/) needs to be installed on your system separately.
 
 ```bash
 pip install "apache-hamilton[visualization]"
