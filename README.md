@@ -22,7 +22,7 @@ under the License.
    <a href='https://hamilton.apache.org/?badge=latest'>
       <img src='https://readthedocs.org/projects/hamilton/badge/?version=latest' alt='Documentation Status' />
    </a><a href="https://www.python.org/downloads/" target="_blank">
-      <img src="https://img.shields.io/badge/python-3.10%20|%203.11%20|%203.12%20|%203.13%20|%203.14-blue.svg" alt="Python supported"/>
+      <img src="https://img.shields.io/badge/python-3.11%20|%203.12%20|%203.13%20|%203.14-blue.svg" alt="Python supported"/>
    </a>
    <a href="https://pypi.org/project/apache-hamilton/" target="_blank">
       <img src="https://badge.fury.io/py/apache-hamilton.svg" alt="PyPi Version"/>
