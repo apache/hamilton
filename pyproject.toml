@@ -26,7 +26,7 @@ version = "1.90.0"  # NOTE: keep this in sync with hamilton/version.py
 # dynamic = ["version"]
 description = "Apache Hamilton (incubating) is a lightweight Python library for directed acyclic graphs (DAGs) of transformations. Your DAG is **portable**; it runs anywhere Python runs, whether it's a script, notebook, Airflow pipeline, FastAPI server, etc. Your DAG is **expressive**; Apache Hamilton has extensive features to define and modify the execution of a DAG (e.g., data validation, experiment tracking, remote execution)."
 readme = "README.md"
-requires-python = ">=3.10.1, <4"
+requires-python = ">=3.11, <4"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE", "DISCLAIMER"]
 keywords = ["hamilton"]
@@ -39,7 +39,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -92,9 +91,9 @@ mcp = ["fastmcp>=3.0.0,<4"]
 tqdm = ["tqdm"]
 ui = ["apache-hamilton-ui"]
 
-# vaex -- on >=py3.11 only core part available https://github.com/vaexio/vaex/pull/2331#issuecomment-2437198176
+# vaex 4.19 supports py<=3.12 https://github.com/vaexio/vaex/pull/2449
 vaex = [
-  "vaex; python_version == '3.10'"
+  "vaex; python_version < '3.13'"
   ]
 visualization = ["graphviz", "networkx"]
 
@@ -218,7 +217,7 @@ markers = [
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"  # Must include only the earliest supported version
+target-version = "py311"  # Must include only the earliest supported version
 
 [tool.ruff.format]
 docstring-code-format = false
