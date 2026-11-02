@@ -24,7 +24,7 @@ name = "apache-hamilton-ui"
 version = "0.0.18"
 description = "Apache Hamilton UI tracking server for dataflow visualization and monitoring."
 readme = {file = "README.md", content-type = "text/markdown"}
-requires-python = ">=3.10.1, <4"
+requires-python = ">=3.11, <4"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE", "DISCLAIMER"]
 keywords = ["hamilton", "ui", "tracking", "visualization"]
@@ -37,7 +37,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",

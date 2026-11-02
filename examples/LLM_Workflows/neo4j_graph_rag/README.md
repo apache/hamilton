@@ -131,7 +131,7 @@ Dataset: 4,803 movies · 56,603 persons · 106,257 ACTED_IN · 5,166 DIRECTED ·
 ## Prerequisites
 
 - Docker
-- Python 3.10+
+- Python 3.11+
 - OpenAI API key (`gpt-4o` access)
 - TMDB dataset (see `data/README.md`)
 
