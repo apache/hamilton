@@ -523,8 +523,9 @@ class PolarsJSONReader(DataLoader):
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_json(self.source, **self._get_loading_kwargs())
-        metadata = utils.get_file_metadata(self.source)
-        return df, metadata
+        if isinstance(self.source, (str, Path)):
+            return df, utils.get_file_metadata(self.source)
+        return df, utils.get_dataframe_metadata(df)
 
     @classmethod
     def name(cls) -> str:
@@ -549,7 +550,9 @@ class PolarsJSONWriter(DataSaver):
             data = data.collect()
 
         data.write_json(self.file)
-        return utils.get_file_and_dataframe_metadata(self.file, data)
+        if isinstance(self.file, (str, Path)):
+            return utils.get_file_and_dataframe_metadata(self.file, data)
+        return utils.get_dataframe_metadata(data)
 
     @classmethod
     def name(cls) -> str:
@@ -581,8 +584,9 @@ class PolarsNDJSONReader(DataLoader):
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_ndjson(self.source, **self._get_loading_kwargs())
-        metadata = utils.get_file_metadata(self.source)
-        return df, metadata
+        if isinstance(self.source, (str, Path)):
+            return df, utils.get_file_metadata(self.source)
+        return df, utils.get_dataframe_metadata(df)
 
     @classmethod
     def name(cls) -> str:
@@ -607,7 +611,9 @@ class PolarsNDJSONWriter(DataSaver):
             data = data.collect()
 
         data.write_ndjson(self.file)
-        return utils.get_file_and_dataframe_metadata(self.file, data)
+        if isinstance(self.file, (str, Path)):
+            return utils.get_file_and_dataframe_metadata(self.file, data)
+        return utils.get_dataframe_metadata(data)
 
     @classmethod
     def name(cls) -> str:
