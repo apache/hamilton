@@ -53,6 +53,45 @@ under the License.
 
 Apache Hamilton (incubating) is a lightweight Python library for directed acyclic graphs (DAGs) of data transformations. Your DAG is **portable**; it runs anywhere Python runs, whether it's a script, notebook, Airflow pipeline, FastAPI server, etc. Your DAG is **expressive**; Apache Hamilton has extensive features to define and modify the execution of a DAG (e.g., data validation, experiment tracking, remote execution).
 
+## Quick Start (2 minutes)
+
+Get started with Apache Hamilton in just a few lines of code:
+
+```python
+# Step 1: Install (run in terminal)
+# pip install sf-hamilton
+
+from hamilton import driver, ad_hoc_utils
+
+def A() -> int:
+    return 1
+
+def B(A: int) -> int:
+    return A + 1
+
+# create a temporary module natively (ensures it works in REPL and notebooks)
+module = ad_hoc_utils.create_temporary_module(A, B)
+
+# builder pattern
+dr = (
+    driver.Builder()
+    .with_modules(module)
+    .build()
+)
+
+print(dr.execute(["B"]))
+
+# Expected output: {'B': 2}
+```
+
+### What’s happening?
+
+Each function becomes a node in the DAG
+Dependencies are defined through function parameters
+Hamilton automatically builds and executes the dependency graph
+
+This is the simplest possible pipeline — from here, you can scale to ML workflows, ETL pipelines, LLM workflows, and production data systems.
+
 To create a DAG, write regular Python functions that specify their dependencies with their parameters. As shown below, it results in readable code that can always be visualized. Apache Hamilton loads that definition and automatically builds the DAG for you!
 
 <div align="center">
@@ -70,19 +109,26 @@ Apache Hamilton brings modularity and structure to any Python application moving
 
 # Installation
 
-Apache Hamilton supports Python 3.8+. We include the optional `visualization` dependency to display our Apache Hamilton DAG. For visualizations, [Graphviz](https://graphviz.org/download/) needs to be installed on your system separately.
+Apache Hamilton supports Python 3.9+. We include the optional visualization dependency to display our Apache Hamilton DAG. For visualizations, Graphviz needs to be installed on your system separately.
 
-```bash
-pip install "apache-hamilton[visualization]"
-```
+pip install "sf-hamilton[visualization]"
+📦 Install Graphviz (required for visualization)
 
-To use the Apache Hamilton UI, install the `ui` and `sdk` dependencies.
+If you want to visualize DAGs, ensure Graphviz is installed on your system:
 
-```bash
-pip install "apache-hamilton[ui,sdk]"
-```
+Mac : brew install graphviz
 
-To try Apache Hamilton in the browser, visit [www.tryhamilton.dev](https://www.tryhamilton.dev/?utm_source=README)
+Ubuntu : sudo apt-get install graphviz
+
+Windows : Download and install from: https://graphviz.org/download/
+
+⚠️ Make sure Graphviz is added to your system PATH.
+
+To use the Apache Hamilton UI, install the ui and sdk dependencies:
+
+pip install "sf-hamilton[ui,sdk]"
+
+To try Apache Hamilton in the browser, visit [Try Hamilton](https://www.tryhamilton.dev/?utm_source=README)
 
 # Why use Apache Hamilton?
 
