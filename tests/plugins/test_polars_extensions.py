@@ -21,6 +21,7 @@ import sys
 import typing
 
 import polars.testing
+from packaging import version
 from sqlalchemy import create_engine
 
 import polars as pl  # isort: skip
@@ -29,6 +30,7 @@ import pytest  # isort: skip
 from hamilton import ad_hoc_utils, driver  # isort: skip
 from hamilton.function_modifiers import load_from, source, value  # isort: skip
 from hamilton.io.materialization import from_  # isort: skip
+from hamilton.plugins import polars_post_2_0_0_extensions  # isort: skip
 from hamilton.plugins.polars_post_1_0_0_extensions import (  # isort: skip
     PolarsAvroReader,
     PolarsAvroWriter,
@@ -52,6 +54,8 @@ try:
     from xlsxwriter.workbook import Workbook
 except ImportError:
     Workbook = type
+
+polars_1 = version.Version(pl.__version__) < version.Version("2.0.0")
 
 
 @pytest.fixture
@@ -150,7 +154,13 @@ def test_polars_ndjson(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
     polars.testing.assert_frame_equal(df, df2)
 
 
-@pytest.mark.parametrize("reader", [PolarsJSONReader, PolarsNDJSONReader])
+@pytest.mark.parametrize(
+    "reader",
+    [
+        polars_post_2_0_0_extensions.PolarsJSONReader,
+        polars_post_2_0_0_extensions.PolarsNDJSONReader,
+    ],
+)
 def test_getting_type_hints_json_readers(reader) -> None:
     """Tests that types can be resolved at run time, which loaders and materializers rely on."""
     typing.get_type_hints(reader)
@@ -158,6 +168,7 @@ def test_getting_type_hints_json_readers(reader) -> None:
     assert set(reader.get_optional_arguments()) == {"schema", "schema_overrides"}
 
 
+@pytest.mark.skipif(polars_1, reason="polars 1.x registers the post-1.0.0 JSON readers")
 @pytest.mark.parametrize(
     ("name", "writer"), [("json", PolarsJSONWriter), ("ndjson", PolarsNDJSONWriter)]
 )
@@ -177,6 +188,7 @@ def test_polars_json_readers_materialize(
     assert result["height"] == 2
 
 
+@pytest.mark.skipif(polars_1, reason="polars 1.x registers the post-1.0.0 JSON readers")
 def test_polars_ndjson_load_from(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
     file = tmp_path / "test.ndjson"
     PolarsNDJSONWriter(file=file).save_data(df)
