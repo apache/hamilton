@@ -188,7 +188,7 @@ The skill includes additional reference files:
 
 - **Claude Code CLI** - Install from https://code.claude.com
 - **Apache Hamilton** - The skill works with any version, but references Hamilton 1.x+ patterns
-- **Python 3.9+** - For running generated Apache Hamilton code
+- **Python 3.11+** - For running generated Apache Hamilton code
 
 ## Contributing
 

@@ -75,7 +75,7 @@ We recommend using [uv](https://docs.astral.sh/uv/) for Python environment manag
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.11+
 - `uv` ([install guide](https://docs.astral.sh/uv/getting-started/installation/))
 - `flit` for building
 - `twine` for package validation

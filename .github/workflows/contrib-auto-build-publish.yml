@@ -26,7 +26,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10' # Set up your required Python version
+        python-version: '3.11' # Set up your required Python version
 
       # Check current published version
     - name: Check if version is greater than the one on PyPI
