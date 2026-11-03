@@ -21,7 +21,7 @@ import pandas as pd
 import pytest
 
 import hamilton.function_modifiers
-from hamilton import async_driver, base, driver, function_modifiers, models, node
+from hamilton import async_driver, base, driver, function_modifiers, graph_types, models, node
 from hamilton.function_modifiers import does
 from hamilton.function_modifiers.dependencies import source, value
 from hamilton.function_modifiers.macros import (
@@ -40,6 +40,30 @@ import tests.resources.mutate_async
 import tests.resources.pipe_async
 import tests.resources.pipe_input
 import tests.resources.pipe_output
+
+
+@pytest.mark.parametrize("decorator", ["pipe_input", "pipe_output", "mutate"])
+def test_pipe_step_source_tracking(decorator):
+    def target(data: int) -> int:
+        return data * 2
+
+    def transform(value: int) -> int:
+        return value + 1
+
+    if decorator == "mutate":
+        mutate(apply_to(target).named("transform"))(transform)
+    else:
+        modifier = pipe_input if decorator == "pipe_input" else pipe_output
+        target = modifier(step(transform).named("transform"))(target)
+
+    resolved = function_modifiers.base.resolve_nodes(target, {})
+    step_node = next(n for n in resolved if n.name.endswith(".transform"))
+    assert step_node.originating_functions == (transform, target)
+    assert graph_types.HamiltonNode.from_node(step_node).as_dict()["source"] == inspect.getsource(
+        transform
+    )
+    target_node = next(n for n in resolved if n.name == "target")
+    assert target_node.originating_functions == (target,)
 
 
 def test_no_code_validator():
