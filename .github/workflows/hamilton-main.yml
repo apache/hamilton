@@ -30,7 +30,8 @@ on:
 jobs:
   static-checks:
     name: "Static Checks"
-    # A fork's scheduled run would spend runner time daily with no one to report to.
+    # Every job in this workflow needs this guard: a fork's scheduled run would spend runner
+    # time daily with no one to report to.
     if: github.event_name != 'schedule' || github.repository == 'apache/hamilton'
     runs-on: ubuntu-latest
     steps:
@@ -52,7 +53,8 @@ jobs:
 
   test:
     name: "Unit Tests"
-    # A fork's scheduled run would spend runner time daily with no one to report to.
+    # Every job in this workflow needs this guard: a fork's scheduled run would spend runner
+    # time daily with no one to report to.
     if: github.event_name != 'schedule' || github.repository == 'apache/hamilton'
     runs-on: ${{ matrix.os }}
     strategy:
@@ -201,7 +203,7 @@ jobs:
     needs: [static-checks, test]
     # Posts only in apache/hamilton, which holds the webhook secret: once for a first-attempt
     # scheduled run in which a job failed or hit its time limit (such a job ends cancelled while
-    # the run does not), and once for a manual run with notify-slack on, whatever its outcome.
+    # the run does not), and once for a manual run with notify-slack on, whether it passed or failed.
     # `!cancelled()` stops GitHub from adding its implicit `success()`, which would skip this job
     # whenever a job it needs failed.
     if: >-
@@ -223,7 +225,7 @@ jobs:
             RUN_ID: ${{ github.run_id }}
             RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
             EVENT: ${{ github.event_name }}
-            RESULTS: ${{ join(needs.*.result, ' ') }}
+            OUTCOME: ${{ (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')) && 'failed' || 'passed' }}
           run: |
             # One line per failed or timed-out step, as "job: step"; a failed job with no failed
             # step (one that died while setting up) is listed by its name alone. `$job` is jq's.
@@ -239,11 +241,7 @@ jobs:
             if [[ "$EVENT" == schedule ]]; then
               header="Hamilton latest-dependency CI failed:"
             else
-              case " $RESULTS " in
-                *" failure "* | *" cancelled "*) outcome=failed ;;
-                *) outcome=passed ;;
-              esac
-              header="Test of Hamilton's CI Slack notification path from a manual run, which $outcome."
+              header="Test of Hamilton's CI Slack notification path from a manual run, which $OUTCOME."
             fi
             text=$(printf '%s\n' "$header" ${failed:+"$failed"} "$RUN_URL")
             echo "payload=$(jq --compact-output --null-input --arg text "$text" '{text: $text}')" >> "$GITHUB_OUTPUT"
