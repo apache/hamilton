@@ -15,9 +15,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import typing
+
+import pandas as pd
 import pytest
 
-from hamilton import ad_hoc_utils, driver
+from hamilton import ad_hoc_utils, driver, htypes
 from hamilton.lifecycle import default
 
 from tests.resources import mismatched_types
@@ -68,3 +71,43 @@ def test_function_input_output_type_checker_rejects_wrong_pep604_union_result():
     )
     with pytest.raises(TypeError, match="Node evens returned a result"):
         dr.execute(["evens"], inputs={"n": 3})
+
+
+def test_function_input_output_type_checker_handles_other_parameterized_generics():
+    def make_adder(step: int) -> typing.Callable[[int], int]:
+        return lambda x: x + step
+
+    def labels() -> frozenset[str]:
+        return frozenset({"a", "b"})
+
+    def spend() -> htypes.column[pd.Series, float]:
+        return pd.Series([1.0, 2.0])
+
+    def summary(
+        make_adder: typing.Callable[[int], int],
+        labels: frozenset[str],
+        spend: htypes.column[pd.Series, float],
+    ) -> str:
+        return f"{make_adder(1)} {sorted(labels)} {spend.sum()}"
+
+    dr = (
+        driver.Builder()
+        .with_modules(ad_hoc_utils.create_temporary_module(make_adder, labels, spend, summary))
+        .with_adapters(default.FunctionInputOutputTypeChecker())
+        .build()
+    )
+    assert dr.execute(["summary"], inputs={"step": 2}) == {"summary": "3 ['a', 'b'] 3.0"}
+
+
+def test_function_input_output_type_checker_rejects_wrong_origin_for_parameterized_generic():
+    def labels() -> frozenset[str]:
+        return ["a", "b"]
+
+    dr = (
+        driver.Builder()
+        .with_modules(ad_hoc_utils.create_temporary_module(labels))
+        .with_adapters(default.FunctionInputOutputTypeChecker())
+        .build()
+    )
+    with pytest.raises(TypeError, match="Node labels returned a result"):
+        dr.execute(["labels"])
