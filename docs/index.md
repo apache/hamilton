@@ -71,6 +71,7 @@ tryhamilton.dev <https://www.tryhamilton.dev/>
 reference/decorators/index
 reference/drivers/index
 reference/caching/index
+reference/packaging/index
 reference/graph-adapters/index
 reference/lifecycle-hooks/index
 reference/result-builders/index
