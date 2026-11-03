@@ -19,7 +19,6 @@ import os
 import re
 import sqlite3
 import time
-from datetime import datetime
 from os import PathLike
 from pathlib import Path
 from typing import Any, Literal
@@ -84,7 +83,7 @@ def get_file_metadata(path: str | Path | PathLike) -> dict[str, Any]:
     size = None
     scheme = parsed.scheme
     last_modified = time.time()
-    timestamp = datetime.now().utcnow().timestamp()
+    timestamp = time.time()
     notes = f"File metadata is unsupported for scheme: {scheme} or path: {path} does not exist."
 
     # Check if the path is a local file path (Windows drive can be listed as a scheme)
@@ -307,7 +306,7 @@ def get_sql_metadata(
             "operation": operation,
             "source": source,
             "notes": notes,
-            "timestamp": datetime.now().utcnow().timestamp(),
+            "timestamp": time.time(),
             "__version__": "1.1.0",
         }
     }

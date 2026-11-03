@@ -212,6 +212,30 @@ def test_get_file_metadata(tmp_path: pathlib.Path):
     assert metadata["file_metadata"]["timestamp"] is not None
 
 
+@pytest.fixture
+def local_timezone_behind_utc(monkeypatch):
+    # time.tzset() only exists on POSIX; elsewhere the test uses the machine's own timezone.
+    if hasattr(time, "tzset"):
+        monkeypatch.setenv("TZ", "EST+05")
+        time.tzset()
+    yield
+    if hasattr(time, "tzset"):
+        monkeypatch.undo()
+        time.tzset()
+
+
+def test_metadata_timestamps_are_current_epoch_seconds(
+    tmp_path: pathlib.Path, local_timezone_behind_utc
+):
+    before = time.time()
+    file_metadata = get_file_metadata(tmp_path / "test.txt")["file_metadata"]
+    sql_metadata = get_sql_metadata("foo", 1)[SQL_METADATA]
+    after = time.time()
+
+    assert before <= file_metadata["timestamp"] <= after
+    assert before <= sql_metadata["timestamp"] <= after
+
+
 def test_get_file_metadata_url_schema():
     url = "s3://bucket/key"
     metadata = get_file_metadata(url)
