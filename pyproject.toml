@@ -42,7 +42,8 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14"
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15"
 ]
 dependencies = [
     "numpy",
@@ -85,7 +86,7 @@ pyspark = [
   # 3.1 removed; lift once a pyspark release supports pandas 3.1.
   "pandas<3.1",
 ]
-ray = ["ray>=2.0.0; python_version < '3.14'", "pyarrow"]
+ray = ["ray>=2.0.0; python_version < '3.15'", "pyarrow"]  # ray has no cp315 wheels yet
 rich = ["rich"]
 sdk = ["apache-hamilton-sdk"]
 slack = ["slack-sdk"]
@@ -125,13 +126,14 @@ test = [
   "lxml",
   "lz4",
   "matplotlib",
-  "mlflow; python_version <= '3.13'",
+  "mlflow>=3; python_version <= '3.13'", # stops uv backtracking to mlflow 1.x, which fails to import, to satisfy the pyarrow floor below
   "networkx",
   "openpyxl", # for excel data loader
   "pandera[dask]",
   "plotly",
-  "polars<2.0.0; python_version < '3.14'", # Polars 2.0 removed reader arguments Hamilton passes; lift once apache/hamilton#1784 lands
+  "polars",
   "pyarrow",
+  "pyarrow>=26; python_version >= '3.15'", # first release with 3.15 wheels; without it, uv's universal resolution applies mlflow's pyarrow<26 to every Python
   "pydantic >=2.0",
   "pyreadstat; python_version < '3.14'", # for SPSS data loader
   "pytest",
@@ -170,14 +172,14 @@ docs = [
   "packaging",
   "pandera",
   "pillow",
-  "polars<2.0.0", # see the test group
+  "polars",
   "pyarrow >= 1.0.0",
   "pydantic >= 2.0",
   "pyspark",
   "pandas<3.1", # pyspark.pandas fails on pandas 3.1; see the pyspark extra
   "openlineage-python",
   "PyYAML",
-  "ray; python_version < '3.14'",
+  "ray; python_version < '3.15'",
   "readthedocs-sphinx-ext",
   "recommonmark",
   "scikit-learn",

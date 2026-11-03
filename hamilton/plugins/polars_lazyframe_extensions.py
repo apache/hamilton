@@ -86,6 +86,9 @@ register_types()
 class PolarsScanCSVReader(DataLoader):
     """Class specifically to handle loading CSV files with Polars.
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_csv.html
+
+    With polars 2.0 or later, ``rechunk`` has no effect: polars removed it from ``scan_csv``. Call
+    ``rechunk()`` on the collected DataFrame for contiguous memory.
     """
 
     file: str | TextIO | BytesIO | Path | BinaryIO | bytes
@@ -129,13 +132,15 @@ class PolarsScanCSVReader(DataLoader):
         if self.separator is not None:
             kwargs["separator"] = self.separator
         if self.comment_char is not None:
-            kwargs["comment_prefix"] = self.comment_char
+            kwargs["comment_prefix" if "comment_prefix" in accepted else "comment_char"] = (
+                self.comment_char
+            )
         if self.quote_char is not None:
             kwargs["quote_char"] = self.quote_char
         if self.skip_rows is not None:
             kwargs["skip_rows"] = self.skip_rows
         if self.dtypes is not None:
-            kwargs["schema_overrides"] = self.dtypes
+            kwargs["schema_overrides" if "schema_overrides" in accepted else "dtypes"] = self.dtypes
         if self.null_values is not None:
             kwargs["null_values"] = self.null_values
         if self.missing_utf8_is_empty_string is not None:
@@ -147,7 +152,7 @@ class PolarsScanCSVReader(DataLoader):
             kwargs["ignore_errors"] = self.ignore_errors
         if self.try_parse_dates is not None:
             kwargs["try_parse_dates"] = self.try_parse_dates
-        if self.n_threads is not None and "n_threads" in accepted:
+        if self.n_threads is not None and utils.accepts_field(self, pl.scan_csv, "n_threads"):
             kwargs["n_threads"] = self.n_threads
         if self.infer_schema_length is not None:
             kwargs["infer_schema_length"] = self.infer_schema_length
@@ -164,9 +169,13 @@ class PolarsScanCSVReader(DataLoader):
         if self.skip_rows_after_header is not None:
             kwargs["skip_rows_after_header"] = self.skip_rows_after_header
         if self.row_count_name is not None:
-            kwargs["row_index_name"] = self.row_count_name
+            kwargs["row_index_name" if "row_index_name" in accepted else "row_count_name"] = (
+                self.row_count_name
+            )
         if self.row_count_offset is not None:
-            kwargs["row_index_offset"] = self.row_count_offset
+            kwargs["row_index_offset" if "row_index_offset" in accepted else "row_count_offset"] = (
+                self.row_count_offset
+            )
         if self.eol_char is not None:
             kwargs["eol_char"] = self.eol_char
         if self.raise_if_empty is not None:
@@ -192,6 +201,9 @@ class PolarsScanCSVReader(DataLoader):
 class PolarsScanParquetReader(DataLoader):
     """Class specifically to handle loading parquet files with polars
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_parquet.html
+
+    With polars 2.0 or later, ``rechunk`` has no effect: polars removed it from ``scan_parquet``. Call
+    ``rechunk()`` on the collected DataFrame for contiguous memory.
     """
 
     file: str | TextIO | BytesIO | Path | BinaryIO | bytes
@@ -224,9 +236,13 @@ class PolarsScanParquetReader(DataLoader):
         if self.parallel is not None:
             kwargs["parallel"] = self.parallel
         if self.row_count_name is not None:
-            kwargs["row_index_name"] = self.row_count_name
+            kwargs["row_index_name" if "row_index_name" in accepted else "row_count_name"] = (
+                self.row_count_name
+            )
         if self.row_count_offset is not None:
-            kwargs["row_index_offset"] = self.row_count_offset
+            kwargs["row_index_offset" if "row_index_offset" in accepted else "row_count_offset"] = (
+                self.row_count_offset
+            )
         if self.low_memory is not None:
             kwargs["low_memory"] = self.low_memory
         if self.use_statistics is not None:
@@ -250,6 +266,9 @@ class PolarsScanFeatherReader(DataLoader):
     """
     Class specifically to handle loading Feather/Arrow IPC files with Polars.
     Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_ipc.html
+
+    With polars 2.0 or later, ``rechunk`` has no effect: polars removed it from ``scan_ipc``. Call
+    ``rechunk()`` on the collected DataFrame for contiguous memory.
     """
 
     source: str | BinaryIO | BytesIO | Path | bytes
@@ -274,14 +293,18 @@ class PolarsScanFeatherReader(DataLoader):
             kwargs["columns"] = self.columns
         if self.n_rows is not None:
             kwargs["n_rows"] = self.n_rows
-        if self.memory_map is not None and "memory_map" in accepted:
+        if self.memory_map is not None and utils.accepts_field(self, pl.scan_ipc, "memory_map"):
             kwargs["memory_map"] = self.memory_map
         if self.storage_options is not None:
             kwargs["storage_options"] = self.storage_options
         if self.row_count_name is not None:
-            kwargs["row_index_name"] = self.row_count_name
+            kwargs["row_index_name" if "row_index_name" in accepted else "row_count_name"] = (
+                self.row_count_name
+            )
         if self.row_count_offset is not None:
-            kwargs["row_index_offset"] = self.row_count_offset
+            kwargs["row_index_offset" if "row_index_offset" in accepted else "row_count_offset"] = (
+                self.row_count_offset
+            )
         if self.rechunk is not None and "rechunk" in accepted:
             kwargs["rechunk"] = self.rechunk
         return kwargs

@@ -15,8 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import inspect
 import pathlib
 import sys
+import warnings
 
 import polars as pl
 import pytest
@@ -152,6 +154,98 @@ def test_lazy_polars_reader_row_count_options(
 
     assert df2.collect().columns == ["idx", "a", "b"]
     assert df2.collect()["idx"].to_list() == [1, 2]
+
+
+@pytest.mark.parametrize(
+    ("writer_class", "reader_class", "path_field", "polars_function", "option", "value"),
+    [
+        (PolarsCSVWriter, PolarsScanCSVReader, "file", pl.scan_csv, "n_threads", 1),
+        (PolarsFeatherWriter, PolarsScanFeatherReader, "source", pl.scan_ipc, "memory_map", False),
+    ],
+)
+def test_lazy_polars_reader_option_removed_from_polars(
+    df: pl.LazyFrame,
+    tmp_path: pathlib.Path,
+    writer_class,
+    reader_class,
+    path_field,
+    polars_function,
+    option,
+    value,
+) -> None:
+    """An option the installed polars does not accept warns instead of being dropped silently."""
+    file = tmp_path / "test_data"
+    writer_class(file=file).save_data(df)
+    reader = reader_class(**{path_field: file, option: value})
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        loaded, _ = reader.load_data(pl.LazyFrame)
+
+    no_effect = [w for w in caught if "has no effect" in str(w.message)]
+    if option in inspect.signature(polars_function).parameters:
+        assert no_effect == []
+    else:
+        assert len(no_effect) == 1
+        assert f"{reader_class.__name__}({option}={value!r})" in str(no_effect[0].message)
+    assert_frame_equal(loaded.collect(), df.collect())
+
+
+def _legacy_scan(received: dict):
+    """A polars scan_* function with the keyword names polars used before renaming them."""
+
+    def scan(
+        source, *, comment_char=None, dtypes=None, row_count_name=None, row_count_offset=0, **_
+    ):
+        received.update(
+            comment_char=comment_char,
+            dtypes=dtypes,
+            row_count_name=row_count_name,
+            row_count_offset=row_count_offset,
+        )
+        return pl.LazyFrame({"a": [1]})
+
+    return scan
+
+
+@pytest.mark.parametrize(
+    ("polars_function", "reader_class", "path_field", "options"),
+    [
+        (
+            "scan_csv",
+            PolarsScanCSVReader,
+            "file",
+            {"comment_char": "#", "dtypes": {"a": pl.Float64}},
+        ),
+        ("scan_parquet", PolarsScanParquetReader, "file", {}),
+        ("scan_ipc", PolarsScanFeatherReader, "source", {}),
+    ],
+)
+def test_lazy_polars_reader_with_pre_rename_polars(
+    tmp_path: pathlib.Path,
+    monkeypatch: pytest.MonkeyPatch,
+    polars_function,
+    reader_class,
+    path_field,
+    options,
+) -> None:
+    """Older polars took ``comment_char`` (before 0.19.15), ``row_count_*`` (before 0.20.4) and
+    ``dtypes`` (before 0.20.31) where current polars takes ``comment_prefix``, ``row_index_*`` and
+    ``schema_overrides``."""
+    file = tmp_path / "test_data"
+    file.write_text("a\n1\n")
+    received = {}
+    monkeypatch.setattr(pl, polars_function, _legacy_scan(received))
+
+    reader = reader_class(**{path_field: file}, row_count_name="idx", row_count_offset=1, **options)
+    reader.load_data(pl.LazyFrame)
+
+    assert received == {
+        "comment_char": options.get("comment_char"),
+        "dtypes": options.get("dtypes"),
+        "row_count_name": "idx",
+        "row_count_offset": 1,
+    }
 
 
 def test_lazy_polars_avro(df: pl.LazyFrame, tmp_path: pathlib.Path) -> None:

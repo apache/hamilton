@@ -139,11 +139,11 @@ class PolarsCSVReader(DataLoader):
             kwargs["ignore_errors"] = self.ignore_errors
         if self.try_parse_dates is not None:
             kwargs["try_parse_dates"] = self.try_parse_dates
-        if self.n_threads is not None and "n_threads" in accepted:
+        if self.n_threads is not None and utils.accepts_field(self, pl.read_csv, "n_threads"):
             kwargs["n_threads"] = self.n_threads
         if self.infer_schema_length is not None:
             kwargs["infer_schema_length"] = self.infer_schema_length
-        if self.batch_size is not None and "batch_size" in accepted:
+        if self.batch_size is not None and utils.accepts_field(self, pl.read_csv, "batch_size"):
             kwargs["batch_size"] = self.batch_size
         if self.n_rows is not None:
             kwargs["n_rows"] = self.n_rows
@@ -171,6 +171,8 @@ class PolarsCSVReader(DataLoader):
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_csv(self.file, **self._get_loading_kwargs())
+        if self.rechunk and "rechunk" not in inspect.signature(pl.read_csv).parameters:
+            df = df.rechunk()  # polars 2.0 removed the keyword in favour of this call
 
         metadata = utils.get_file_and_dataframe_metadata(self.file, df)
         return df, metadata
@@ -299,6 +301,8 @@ class PolarsParquetReader(DataLoader):
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_parquet(self.file, **self._get_loading_kwargs())
+        if self.rechunk and "rechunk" not in inspect.signature(pl.read_parquet).parameters:
+            df = df.rechunk()  # polars 2.0 removed the keyword in favour of this call
         metadata = utils.get_file_and_dataframe_metadata(self.file, df)
         return df, metadata
 
@@ -386,7 +390,7 @@ class PolarsFeatherReader(DataLoader):
             kwargs["n_rows"] = self.n_rows
         if self.use_pyarrow is not None:
             kwargs["use_pyarrow"] = self.use_pyarrow
-        if self.memory_map is not None and "memory_map" in accepted:
+        if self.memory_map is not None and utils.accepts_field(self, pl.read_ipc, "memory_map"):
             kwargs["memory_map"] = self.memory_map
         if self.storage_options is not None:
             kwargs["storage_options"] = self.storage_options
@@ -400,6 +404,8 @@ class PolarsFeatherReader(DataLoader):
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_ipc(self.source, **self._get_loading_kwargs())
+        if self.rechunk and "rechunk" not in inspect.signature(pl.read_ipc).parameters:
+            df = df.rechunk()  # polars 2.0 removed the keyword in favour of this call
         metadata = utils.get_file_metadata(self.source)
         return df, metadata
 
