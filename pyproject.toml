@@ -82,6 +82,9 @@ pydantic = ["pydantic>=2.0"]
 pyspark = [
   # we have to run these dependencies because Spark does not check to ensure the right target was called
   "pyspark[pandas_on_spark,sql] >= 4.0.0",
+  # pyspark.pandas (<= 4.3.0) imports DateOffset from pandas.tseries.frequencies, which pandas
+  # 3.1 removed; lift once a pyspark release supports pandas 3.1.
+  "pandas<3.1",
 ]
 ray = ["ray>=2.0.0; python_version < '3.14'", "pyarrow"]
 rich = ["rich"]
