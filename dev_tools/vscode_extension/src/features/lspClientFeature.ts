@@ -21,15 +21,16 @@ import { LanguageClient, LanguageClientOptions, ServerOptions } from "vscode-lan
 export class LSPClientFeature implements vscode.Disposable {
   private client: LanguageClient;
 
-  constructor(context: vscode.ExtensionContext, pythonPath: string) {
+  constructor(context: vscode.ExtensionContext, pythonCommand: readonly string[]) {
     const outputChannel = vscode.window.createOutputChannel("Hamilton Language Server", { log: true });
+    const [pythonExecutable, ...pythonArgs] = pythonCommand;
 
-    outputChannel.info("Python interpreter:", `"${pythonPath}"`);
+    outputChannel.info("Python interpreter:", `"${pythonExecutable}"`);
     outputChannel.info("Extension context path:", `"${context.asAbsolutePath("")}"`);
 
     const serverOptions: ServerOptions = {
-      command: pythonPath,
-      args: ["-m", "hamilton_lsp"],
+      command: pythonExecutable,
+      args: [...pythonArgs, "-m", "hamilton_lsp"],
       options: { cwd: context.asAbsolutePath("") },
     };
 
