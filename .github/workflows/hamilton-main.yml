@@ -1,7 +1,20 @@
 name: Unit Tests
 
 on:
+  # No lockfile pins Hamilton's dependencies, so every run tests their newest releases. The daily
+  # run tests `main` against them when nobody opens a pull request, and the notify-slack job
+  # reports what broke. The minute is off the hour because GitHub delays or drops scheduled runs
+  # at the top of the hour, when most schedules start.
+  schedule:
+    - cron: '17 4 * * *'
+
+  # To check the Slack webhook, run this workflow by hand on `main` with notify-slack on.
   workflow_dispatch:
+    inputs:
+      notify-slack:
+        description: 'Send a test Slack message with this run''s outcome (apache/hamilton only)'
+        type: boolean
+        default: false
 
   pull_request:
     branches:
@@ -17,6 +30,9 @@ on:
 jobs:
   static-checks:
     name: "Static Checks"
+    # Every job in this workflow needs this guard: a fork's scheduled run would spend runner
+    # time daily with no one to report to.
+    if: github.event_name != 'schedule' || github.repository == 'apache/hamilton'
     runs-on: ubuntu-latest
     steps:
         - name: Checkout repository
@@ -37,6 +53,9 @@ jobs:
 
   test:
     name: "Unit Tests"
+    # Every job in this workflow needs this guard: a fork's scheduled run would spend runner
+    # time daily with no one to report to.
+    if: github.event_name != 'schedule' || github.repository == 'apache/hamilton'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false # want to see for each version if fails are different
@@ -178,3 +197,59 @@ jobs:
             uv sync --group test
             uv pip install "vaex>=4.19"
             uv run --no-sync pytest plugin_tests/h_vaex
+
+  notify-slack:
+    name: "Notify Slack"
+    needs: [static-checks, test]
+    # Posts only in apache/hamilton, which holds the webhook secret: once for a first-attempt
+    # scheduled run in which a job failed or hit its time limit (such a job ends cancelled while
+    # the run does not), and once for a manual run with notify-slack on, whether it passed or failed.
+    # `!cancelled()` stops GitHub from adding its implicit `success()`, which would skip this job
+    # whenever a job it needs failed.
+    if: >-
+      !cancelled() && github.repository == 'apache/hamilton' && (
+        (github.event_name == 'schedule' && github.run_attempt == 1 &&
+          (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))) ||
+        (github.event_name == 'workflow_dispatch' && inputs.notify-slack))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read
+    steps:
+        - name: Compose the message
+          id: message
+          env:
+            GH_TOKEN: ${{ github.token }}
+            API_URL: ${{ github.api_url }}
+            REPO: ${{ github.repository }}
+            RUN_ID: ${{ github.run_id }}
+            RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            EVENT: ${{ github.event_name }}
+            OUTCOME: ${{ (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')) && 'failed' || 'passed' }}
+          run: |
+            # One line per failed or timed-out step, as "job: step"; a failed job with no failed
+            # step (one that died while setting up) is listed by its name alone. `$job` is jq's.
+            # shellcheck disable=SC2016
+            filter='def broken: .conclusion | IN("failure", "cancelled", "timed_out");
+              .jobs[] | select(broken) | .name as $job
+              | [.steps[]? | select(broken) | "\($job): \(.name)"]
+              | if length > 0 then .[] else $job end'
+            if ! failed=$(gh api "$API_URL/repos/$REPO/actions/runs/$RUN_ID/jobs" --paginate --jq "$filter"); then
+              echo "::warning::Could not list the failed steps; the message links to the run instead."
+              failed="(failed steps unavailable)"
+            fi
+            if [[ "$EVENT" == schedule ]]; then
+              header="Hamilton latest-dependency CI failed:"
+            else
+              header="Test of Hamilton's CI Slack notification path from a manual run, which $OUTCOME."
+            fi
+            text=$(printf '%s\n' "$header" ${failed:+"$failed"} "$RUN_URL")
+            echo "payload=$(jq --compact-output --null-input --arg text "$text" '{text: $text}')" >> "$GITHUB_OUTPUT"
+
+        - name: Post to Slack
+          uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
+          with:
+            webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+            webhook-type: incoming-webhook
+            errors: true
+            payload: ${{ steps.message.outputs.payload }}
