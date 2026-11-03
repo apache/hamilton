@@ -44,9 +44,12 @@ if hasattr(pl, "type_aliases"):
 
 # for polars 0.18.0 we need to check what to do.
 if has_alias and hasattr(pl.type_aliases, "CsvEncoding"):
-    from polars.type_aliases import CsvEncoding, SchemaDefinition
+    from polars.type_aliases import CsvEncoding
+
+    SchemaDefinition = type
 else:
     CsvEncoding = type
+    SchemaDefinition = type
 if has_alias and hasattr(pl.type_aliases, "CsvQuoteStyle"):
     from polars.type_aliases import CsvQuoteStyle
 else:
@@ -206,7 +209,7 @@ class PolarsCSVWriter(DataSaver):
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
-        return [DATAFRAME_TYPE, pl.LazyFrame]
+        return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
         kwargs = {}
@@ -327,7 +330,7 @@ class PolarsParquetWriter(DataSaver):
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
-        return [DATAFRAME_TYPE, pl.LazyFrame]
+        return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
         kwargs = {}
@@ -348,7 +351,6 @@ class PolarsParquetWriter(DataSaver):
     def save_data(self, data: DATAFRAME_TYPE | pl.LazyFrame) -> dict[str, Any]:
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
-
         data.write_parquet(self.file, **self._get_saving_kwargs())
 
         return utils.get_file_and_dataframe_metadata(self.file, data)
@@ -423,7 +425,7 @@ class PolarsFeatherWriter(DataSaver):
 
     @classmethod
     def applicable_types(cls) -> Collection[type]:
-        return [DATAFRAME_TYPE, pl.LazyFrame]
+        return [DATAFRAME_TYPE]
 
     def _get_saving_kwargs(self):
         kwargs = {}
