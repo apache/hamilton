@@ -423,6 +423,25 @@ def test_pandas_table_reader_translates_delim_whitespace_for_pandas_3(tmp_path) 
 
 
 @pytest.mark.parametrize(
+    ("separator_kwargs", "text"),
+    [
+        ({"sep": ";"}, "name;value\nfoo;1\n"),
+        ({"delimiter": ";"}, "name;value\nfoo;1\n"),
+        ({}, "name,value\nfoo,1\n"),  # sep=None sniffs the separator; omitting sep means tab
+    ],
+    ids=["sep", "delimiter", "sniffed"],
+)
+def test_pandas_table_reader_passes_one_separator(tmp_path, separator_kwargs, text) -> None:
+    path = tmp_path / "table.txt"
+    path.write_text(text)
+
+    reader = PandasTableReader(filepath_or_buffer=path, **separator_kwargs)
+    df, _ = reader.load_data(pd.DataFrame)
+
+    assert df.to_dict(orient="records") == [{"name": "foo", "value": 1}]
+
+
+@pytest.mark.parametrize(
     ("parameter", "value"),
     [
         ("verbose", True),

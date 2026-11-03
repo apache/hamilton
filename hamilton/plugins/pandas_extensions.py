@@ -1655,6 +1655,14 @@ class PandasTableReader(DataLoader):
             kwargs["sep"] = r"\s+"
             del kwargs["delim_whitespace"]
 
+        # delimiter is an alias of sep, and pandas raises when both are passed (since 3.1 even
+        # delimiter=None counts as passed). Send only the one in use. sep=None stays when
+        # delimiter is unset: it asks pandas to sniff the separator, unlike omitting sep ("\t").
+        if self.delimiter is None:
+            del kwargs["delimiter"]
+        elif self.sep is None:
+            del kwargs["sep"]
+
         if Version(pd.__version__) >= Version("3.0"):
             removed_parameters = {
                 "verbose": self.verbose,
