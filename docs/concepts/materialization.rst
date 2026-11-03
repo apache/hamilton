@@ -154,8 +154,10 @@ SQL metadata and lineage
 ------------------------
 
 The built-in SQL materializers (``@load_from.sql``, ``@save_to.sql``, ``from_.sql``, ``to.sql`` and the
-``PandasSqlReader`` / ``PandasSqlWriter`` behind them) return ``sql_metadata`` describing what was read
-or written. Since version ``1.1.0`` of that metadata, they also record *where*: the database the
+``PandasSqlReader`` / ``PandasSqlWriter`` behind them) and the Polars database materializers
+(``@load_from.database``, ``@save_to.database``, ``from_.database`` and ``to.database`` on Polars
+DataFrames, backed by ``PolarsDatabaseReader`` / ``PolarsDatabaseWriter``) return ``sql_metadata``
+describing what was read or written. Since version ``1.1.0`` of that metadata, they also record *where*: the database the
 connection points at. Lineage consumers such as the :doc:`OpenLineage adapter
 <../reference/lifecycle-hooks/OpenLineageAdapter>` use this to name the physical tables a query
 reads, without any custom loader or hand-maintained mapping.
@@ -228,8 +230,10 @@ The ``sql_metadata`` entry holds the following keys:
    * - ``table_name``
      - The bare table name read or written, or ``None`` for a statement.
    * - ``schema``
-     - The schema explicitly passed to the writer (``PandasSqlWriter(schema=...)``), else ``None``.
-       *New in 1.1.0.*
+     - The schema explicitly passed to the writer (``PandasSqlWriter(schema=...)``). The Polars
+       writer takes no ``schema`` argument and derives it from a qualified ``table_name`` the way
+       Polars splits it: ``reporting.daily_revenue`` records ``schema="reporting"`` and
+       ``table_name="daily_revenue"``. ``None`` otherwise. *New in 1.1.0.*
    * - ``operation``
      - ``"read"`` or ``"write"``; ``None`` when the helper was called in its original two-argument
        form and the direction is unknown. *New in 1.1.0.*
@@ -278,6 +282,21 @@ The connection object determines what ``source`` can hold:
        tables in the attached files can still be named.
    * - Anything else (other DBAPI connections, mocks, and similar objects)
      - ``None`` with a note naming the type. Data loading and saving are unaffected.
+
+The Polars database materializers pass their ``connection`` to Polars, which hands it to a database
+engine of its own choosing, so ``source`` is recorded only where that engine opens the database
+the table above describes:
+
+- Identified: a SQLAlchemy ``Engine`` or ``Connection``, sync or async; a URL string written through
+  SQLAlchemy (the writer's default ``engine="sqlalchemy"``, or ``"auto"``, where Polars hands a
+  string to SQLAlchemy); a ``sqlite3.Connection`` on a file, for reads.
+- Not identified, recorded as ``source=None`` with a note: a URL string written with
+  ``engine="adbc"`` (ADBC reads URLs differently from SQLAlchemy, so ``sqlite://sub/x.db`` is a
+  different file to each); an ODBC connection string, the only string Polars reads; ADBC
+  connections; SQLAlchemy sessions and session factories, sync or async (``Session``,
+  ``AsyncSession``, ``async_sessionmaker``); cursors; and other DBAPI connections.
+- With Polars below 1.0, Hamilton's deprecated integration records no datasource and its note asks
+  you to upgrade Polars.
 
 Inspection never opens a connection, runs a write, commits, rolls back, or changes session settings,
 and never raises: a failure during inspection becomes a ``notes`` entry naming the exception type
