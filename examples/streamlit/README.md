@@ -19,7 +19,7 @@ under the License.
 
 # Streamlit + Apache Hamilton
 
-> This example accompanies the documentation page for [Streamlit](https://hamilton.apache.org/integrations/streamlit/) integration.
+> This example accompanies the [Streamlit cookbook page](https://hamilton.apache.org/cookbook/streamlit/).
 
 Streamlit is an open-source Python library to create web applications with minimal effort. It's an effective solution to create simple dashboards, interactive data visualizations, and proof-of-concepts for data science, machine learning, and LLM applications.
 
