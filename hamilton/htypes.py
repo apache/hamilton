@@ -443,9 +443,14 @@ def check_instance(obj: Any, type_: Any) -> bool:
             return False
 
         # If the type has arguments (i.e., it's a parameterized generic type like List[int])
-        if hasattr(type_, "__args__"):
+        if hasattr(type_, "__args__") and type_.__args__ is not None:
             # Get the element type(s) of the generic type
             element_type = type_.__args__
+
+            if origin is tuple and not (len(element_type) == 2 and element_type[1] is Ellipsis):
+                if not isinstance(obj, tuple) or len(obj) != len(element_type):
+                    return False
+                return all(check_instance(v, t) for v, t in zip(obj, element_type, strict=True))
 
             # If the object is a dictionary
             if isinstance(obj, dict):
