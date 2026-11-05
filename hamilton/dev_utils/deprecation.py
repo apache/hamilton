@@ -26,14 +26,11 @@ from hamilton import version
 logger = logging.getLogger(__name__)
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(order=True)
 class Version:
     major: int
     minor: int
     patch: int
-
-    def __gt__(self, other: "Version"):
-        return (self.major, self.minor, self.patch) > (other.major, other.minor, other.patch)
 
     @staticmethod
     def from_version_tuple(version_tuple: tuple[int | str, ...]) -> "Version":
@@ -71,6 +68,11 @@ class deprecated:
     )
     class parameterized(...):
        ...
+
+    Calling the decorated API warns from the ``warn_starting`` version and fails from the ``fail_starting``
+    version, both inclusive: with ``fail_starting=(2,0,0)``, release 2.0.0 is the first that fails. A
+    pre-release counts as its release, so 2.0.0rc1 fails too.
+
     Note this locks into a future contract (although it *can* be changed), so if you promise to deprecate something by X.0, then do it!
 
     """
@@ -163,10 +165,10 @@ class deprecated:
             self.warn_action(warn_message)
 
     def _should_warn(self) -> bool:
-        return self.current_version > self.warn_starting
+        return self.current_version >= self.warn_starting
 
     def _should_fail(self) -> bool:
-        return self.current_version > self.fail_starting
+        return self.current_version >= self.fail_starting
 
     def __call__(self, fn: Callable):
         """Decorates the function with the deprecated decorator.
