@@ -278,7 +278,7 @@ The plugin has deep knowledge of Hamilton:
 - **Column extraction**: @extract_columns, @extract_fields
 - **Data quality**: @check_output, @check_output_custom, @schema
 - **I/O**: @save_to, @load_from, @dataloader, @datasaver
-- **Transformation**: @pipe, @does, @mutate, @step
+- **Transformation**: @pipe_input, @does, @mutate, @step
 - **Advanced**: @subdag, @resolve, @cache
 
 ### Integration Patterns
