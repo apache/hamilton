@@ -256,8 +256,8 @@ def get_default_tags(fn: Callable) -> dict[str, str]:
     warn_starting=(1, 20, 0),
     fail_starting=(2, 0, 0),
     use_this=delayed_resolve,
-    explanation="dynamic_transform has been replaced with @resolve -- a cleaner way"
-    "to utilize config for resolving decorators. Note this allows you to use any"
+    explanation="dynamic_transform has been replaced with @resolve -- a cleaner way "
+    "to utilize config for resolving decorators. Note this allows you to use any "
     "existing decorators.",
     migration_guide="https://hamilton.apache.org/reference/decorators/",
 )
@@ -1093,7 +1093,7 @@ class pipe_input(base.NodeInjector):
     fail_starting=(2, 0, 0),
     use_this=pipe_input,
     explanation="pipe has been replaced with pipe_input -- a clearer name since "
-    "we also added pipe_output with complimentary functionality.",
+    "we also added pipe_output with complementary functionality.",
     migration_guide="https://hamilton.apache.org/reference/decorators/",
 )
 class pipe(pipe_input):
