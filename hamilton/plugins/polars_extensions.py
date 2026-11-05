@@ -42,8 +42,10 @@ if pl_version < version.Version("1.0.0"):
         "Using pre-1.0.0 Polars integration -- we will stop supporting this in Hamilton 2.0, so please upgrade your version of polars! "
         f"Current version: {pl_version}, minimum required version: 1.0.0."
     )
-else:
+elif pl_version < version.Version("2.0.0"):
     from hamilton.plugins.polars_post_1_0_0_extensions import register_data_loaders
+else:
+    from hamilton.plugins.polars_post_2_0_0_extensions import register_data_loaders
 
 register_data_loaders()
 
