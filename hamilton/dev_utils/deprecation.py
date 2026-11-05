@@ -95,10 +95,6 @@ class deprecated:
     )
 
     @staticmethod
-    def _raise_failure(message: str):
-        raise DeprecationError(message)
-
-    @staticmethod
     def _ensure_version_type(version_spec: tuple[int, int, int] | Version) -> Version:
         if isinstance(version_spec, tuple):
             return Version(*version_spec)
