@@ -311,3 +311,54 @@ def test_deprecation_boundaries_are_inclusive(
     actual = "fail" if failures else "warn" if warnings else "none"
     assert actual == expected
     assert len(warnings) + len(failures) <= 1
+
+
+def _replacement() -> bool:
+    return True
+
+
+@pytest.mark.parametrize(
+    ("use_this", "migration_guide", "current_version", "expected_warning", "expected_failure"),
+    [
+        pytest.param(
+            _replacement,
+            None,
+            (1, 0, 1),
+            "test_deprecation_messages.<locals>.fn will be deprecated by hamilton version: 2.0.0. Use the new one."
+            " Instead, you should be using: _replacement. This is a drop-in replacement.",
+            None,
+            id="warn-drop-in",
+        ),
+        pytest.param(
+            None,
+            "https://example.com/guide",
+            (2, 0, 1),
+            None,
+            "test_deprecation_messages.<locals>.fn has been deprecated, as of hamilton version: 2.0.0. Use the new one."
+            " For migration, see: https://example.com/guide.",
+            id="fail-with-guide",
+        ),
+    ],
+)
+def test_deprecation_messages(
+    use_this, migration_guide, current_version, expected_warning, expected_failure
+):
+    warnings, failures = [], []
+
+    @deprecated(
+        warn_starting=(1, 0, 0),
+        fail_starting=(2, 0, 0),
+        use_this=use_this,
+        explanation="Use the new one.",
+        migration_guide=migration_guide,
+        current_version=current_version,
+        warn_action=warnings.append,
+        fail_action=failures.append,
+    )
+    def fn():
+        pass
+
+    fn()
+
+    assert warnings == ([expected_warning] if expected_warning else [])
+    assert failures == ([expected_failure] if expected_failure else [])

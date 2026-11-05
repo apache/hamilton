@@ -124,41 +124,27 @@ class deprecated:
 
     def _do_deprecation_action(self, fn: Callable):
         if self._should_fail():
-            failure_message = " ".join(
-                [
-                    f"{fn.__qualname__} has been deprecated, as of hamilton version: {self.fail_starting}.",
-                    f"{self.explanation}",
-                ]
-                + (
-                    [f"Instead, you should be using: {self.use_this.__qualname__}."]
-                    if self.use_this is not None
-                    else []
-                )
-                + (
-                    [f"For migration, see: {self.migration_guide}."]
-                    if self.migration_guide is not None
-                    else ["This is a drop-in replacement."]
+            self.fail_action(
+                self._message(
+                    f"{fn.__qualname__} has been deprecated, as of hamilton version: {self.fail_starting}."
                 )
             )
-            self.fail_action(failure_message)
         elif self._should_warn():
-            warn_message = " ".join(
-                [
-                    f"{fn.__qualname__} will be deprecated by hamilton version: {self.fail_starting}.",
-                    f"{self.explanation}",
-                ]
-                + (
-                    [f"Instead, you should be using: {self.use_this.__qualname__}."]
-                    if self.use_this is not None
-                    else []
-                )
-                + (
-                    [f"For migration, see: {self.migration_guide}."]
-                    if self.migration_guide is not None
-                    else ["This is a drop-in replacement."]
+            self.warn_action(
+                self._message(
+                    f"{fn.__qualname__} will be deprecated by hamilton version: {self.fail_starting}."
                 )
             )
-            self.warn_action(warn_message)
+
+    def _message(self, lead: str) -> str:
+        parts = [lead, self.explanation]
+        if self.use_this is not None:
+            parts.append(f"Instead, you should be using: {self.use_this.__qualname__}.")
+        if self.migration_guide is not None:
+            parts.append(f"For migration, see: {self.migration_guide}.")
+        else:
+            parts.append("This is a drop-in replacement.")
+        return " ".join(parts)
 
     def _should_warn(self) -> bool:
         return self.current_version >= self.warn_starting
