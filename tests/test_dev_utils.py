@@ -199,7 +199,7 @@ def test_call_function_class_not_deprecated_yet():
         def __call__(self):
             return False
 
-    deprecated_function()
+    deprecated_function()()
     assert not warned
 
 
