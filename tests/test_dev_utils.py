@@ -385,3 +385,26 @@ def test_current_version_names_the_file_holding_a_malformed_version(monkeypatch)
     monkeypatch.setattr(deprecation.version, "VERSION", (2, 0, "0rc1"))
     with pytest.raises(ValueError, match="hamilton/version.py"):
         Version.current()
+
+
+def test_deprecated_class_passes_keyword_arguments_through():
+    warnings = []
+
+    @deprecated(
+        warn_starting=(1, 0, 0),
+        fail_starting=(2, 0, 0),
+        use_this=None,
+        explanation="something",
+        migration_guide="https://github.com/apache/hamilton",
+        current_version=(1, 0, 1),
+        warn_action=warnings.append,
+    )
+    class DeprecatedDecorator:
+        def __call__(self, fn, deprecator=None):
+            return fn, deprecator
+
+    def decorated() -> None:
+        pass
+
+    assert DeprecatedDecorator()(fn=decorated, deprecator="mine") == (decorated, "mine")
+    assert len(warnings) == 1

@@ -177,13 +177,15 @@ class deprecated:
 
             return new_fn
 
-        # Otherwise we assume that this is a class object
-        # We have to store the former __call__
-        fn.__old_call__ = fn.__call__
+        # Otherwise we assume that this is a class object, and wrap its __call__.
+        # The wrapper reads the deprecator and the original __call__ from this closure rather than
+        # from keyword defaults, so a caller's own keyword arguments always reach the original.
+        deprecator = self
+        old_call = fn.__call__
 
-        def new__call__(self, *args, deprecator=self, fn=fn, **kwargs):
+        def new__call__(instance, *args, **kwargs):
             deprecator._do_deprecation_action(fn)
-            return fn.__old_call__(self, *args, **kwargs)
+            return old_call(instance, *args, **kwargs)
 
         # This works as we're assigning it to the entire class...
         # This also means we can't decorate it with 2 deprecation functions, but, hey,
