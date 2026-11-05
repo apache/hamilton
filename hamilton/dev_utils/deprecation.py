@@ -59,11 +59,26 @@ class DeprecationError(Exception):
 
 
 def _warn_of_deprecation(message: str) -> None:
-    """Default ``warn_action``: a ``FutureWarning``, which Python shows by default and which users can
-    filter, or turn into an error, with the standard ``warnings`` machinery."""
+    """Default ``warn_action``; see the ``deprecated`` docstring."""
     # stacklevel=4 attributes the warning to the code that called the deprecated API. Between it and
     # this function sit _do_deprecation_action and the wrapper deprecated.__call__ installed.
     warnings.warn(message, FutureWarning, stacklevel=4)
+
+
+# Mark the __call__ wrapper deprecated installs on a class: one names that class, so a subclass's own
+# deprecation can take precedence; the other holds the deprecated instance that applies to it, so tests
+# can set the version it checks against.
+_DEPRECATED_CLASS_ATTR = "__hamilton_deprecated_class__"
+_DEPRECATION_ATTR = "__hamilton_deprecation__"
+
+
+def _nearest_deprecated_class(instance: object) -> type | None:
+    """The closest class in the instance's MRO whose own __call__ is a deprecation wrapper, if any."""
+    for cls in type(instance).__mro__:
+        deprecated_class = getattr(vars(cls).get("__call__"), _DEPRECATED_CLASS_ATTR, None)
+        if deprecated_class is not None:
+            return deprecated_class
+    return None
 
 
 @dataclasses.dataclass
@@ -87,7 +102,8 @@ class deprecated:
 
     By default a deprecated API warns with a ``FutureWarning`` attributed to the calling code, so users can
     silence it or turn it into an error with the standard ``warnings`` filters (for example
-    ``python -W error::FutureWarning``).
+    ``python -W error::FutureWarning``). A subclass of a deprecated class warns under its parent's name,
+    unless the subclass is deprecated itself, in which case it warns once, under its own.
     """
 
     warn_starting: tuple[int, int, int] | Version
@@ -193,8 +209,14 @@ class deprecated:
         old_call = fn.__call__
 
         def new__call__(instance, *args, **kwargs):
-            deprecator._do_deprecation_action(fn)
+            # A subclass inherits this wrapper. When the subclass is deprecated in its own right, its
+            # own wrapper reports the deprecation under its own name, so this one stays quiet.
+            if _nearest_deprecated_class(instance) is fn:
+                deprecator._do_deprecation_action(fn)
             return old_call(instance, *args, **kwargs)
+
+        setattr(new__call__, _DEPRECATED_CLASS_ATTR, fn)
+        setattr(new__call__, _DEPRECATION_ATTR, self)
 
         # This works as we're assigning it to the entire class...
         # This also means we can't decorate it with 2 deprecation functions, but, hey,

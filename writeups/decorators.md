@@ -604,7 +604,9 @@ and has the possibility of being changed; we'd love feedback on this
 API if you end up using it!
 
 
-## @model
+## @model (deprecated)
+`@model` is deprecated: it warns from 1.20.0 and fails from 2.0.0. Use `@resolve` instead.
+
 `@model` allows you to abstract a function that is a model. You will need to implement models that make sense for
 your business case. Reach out if you need examples.
 
