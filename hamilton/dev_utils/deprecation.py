@@ -34,15 +34,19 @@ class Version:
 
     @staticmethod
     def from_version_tuple(version_tuple: tuple[int | str, ...]) -> "Version":
-        version_ = version_tuple
-        if len(version_) > 3:  # This means we have an RC
-            version_ = version_tuple[0:3]  # Then let's ignore it
-        return Version(*version_)  # TODO, add some validation
+        release = version_tuple[0:3]  # A fourth part marks a pre-release, such as an RC; ignore it
+        if len(release) != 3 or not all(isinstance(part, int) for part in release):
+            raise ValueError(
+                f"Expected a version tuple starting with three integers, got {version_tuple}."
+            )
+        return Version(*release)
 
     @staticmethod
     def current() -> "Version":
-        current_version = version.VERSION
-        return Version.from_version_tuple(current_version)
+        try:
+            return Version.from_version_tuple(version.VERSION)
+        except ValueError as e:
+            raise ValueError(f"hamilton/version.py holds a malformed VERSION: {e}") from e
 
     def __repr__(self):
         return ".".join(map(str, [self.major, self.minor, self.patch]))

@@ -19,6 +19,7 @@ import operator
 
 import pytest
 
+from hamilton.dev_utils import deprecation
 from hamilton.dev_utils.deprecation import DeprecationError, Version, deprecated
 
 
@@ -362,3 +363,25 @@ def test_deprecation_messages(
 
     assert warnings == ([expected_warning] if expected_warning else [])
     assert failures == ([expected_failure] if expected_failure else [])
+
+
+@pytest.mark.parametrize(
+    "version_tuple",
+    [
+        pytest.param((2, 0, "0rc1"), id="non-integer-part"),
+        pytest.param((1, 2), id="too-few-parts"),
+    ],
+)
+def test_from_version_tuple_rejects_malformed_tuples(version_tuple):
+    with pytest.raises(ValueError, match="three integers"):
+        Version.from_version_tuple(version_tuple)
+
+
+def test_from_version_tuple_ignores_a_pre_release_part():
+    assert Version.from_version_tuple((2, 0, 0, "rc1")) == Version(2, 0, 0)
+
+
+def test_current_version_names_the_file_holding_a_malformed_version(monkeypatch):
+    monkeypatch.setattr(deprecation.version, "VERSION", (2, 0, "0rc1"))
+    with pytest.raises(ValueError, match="hamilton/version.py"):
+        Version.current()
