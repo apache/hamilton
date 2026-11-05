@@ -59,12 +59,12 @@ class DeprecationError(Exception):
 @dataclasses.dataclass
 class deprecated:
     """Deprecation decorator -- use judiciously! For example:
-    @deprecate(
-        warn_starting=(1,10,0)
+    @deprecated(
+        warn_starting=(1,10,0),
         fail_starting=(2,0,0),
         use_this=parameterize_values,
-        explanation='We have redefined the parameterization decorators to consist of `parametrize`, `parametrize_inputs`, and `parametrize_values`
-        migration_guide="https://github.com/apache/hamilton/..."
+        explanation="We have redefined the parameterization decorators to consist of `parametrize`, `parametrize_inputs`, and `parametrize_values`",
+        migration_guide="https://github.com/apache/hamilton/...",
     )
     class parameterized(...):
        ...
@@ -108,7 +108,7 @@ class deprecated:
         if self.use_this is None:
             if self.migration_guide is None:
                 raise ValueError(
-                    "@deprecate must include a migration guide if there is no replacement."
+                    "@deprecated must include a migration guide if there is no replacement."
                 )
         self.warn_starting = deprecated._ensure_version_type(self.warn_starting)
         self.fail_starting = deprecated._ensure_version_type(self.fail_starting)
