@@ -22,6 +22,7 @@ import sys
 import typing
 
 import polars.testing
+from packaging import version
 from sqlalchemy import create_engine
 
 from hamilton import ad_hoc_utils, driver
@@ -35,21 +36,32 @@ import pytest  # isort: skip
 from hamilton.plugins.polars_post_1_0_0_extensions import (  # isort: skip
     PolarsAvroReader,
     PolarsAvroWriter,
-    PolarsCSVReader,
     PolarsCSVWriter,
     PolarsDatabaseReader,
     PolarsDatabaseWriter,
-    PolarsFeatherReader,
     PolarsFeatherWriter,
     PolarsJSONReader,
     PolarsJSONWriter,
     PolarsNDJSONReader,
     PolarsNDJSONWriter,
-    PolarsParquetReader,
     PolarsParquetWriter,
     PolarsSpreadsheetReader,
     PolarsSpreadsheetWriter,
 )
+
+polars_1 = version.Version(pl.__version__) < version.Version("2.0.0")
+if polars_1:
+    from hamilton.plugins.polars_post_1_0_0_extensions import (
+        PolarsCSVReader,
+        PolarsFeatherReader,
+        PolarsParquetReader,
+    )
+else:
+    from hamilton.plugins.polars_post_2_0_0_extensions import (
+        PolarsCSVReader,
+        PolarsFeatherReader,
+        PolarsParquetReader,
+    )
 
 try:
     from xlsxwriter.workbook import Workbook
@@ -119,6 +131,81 @@ def test_polars_feather(tmp_path: pathlib.Path) -> None:
     assert metadata["file_metadata"]["path"] == str(file_path)
     assert metadata["dataframe_metadata"]["column_names"] == ["animal", "points", "environment"]
     assert metadata["dataframe_metadata"]["datatypes"] == ["String", "Int64", "String"]
+
+
+def test_polars_csv_reader_options(tmp_path: pathlib.Path) -> None:
+    file = tmp_path / "test.csv"
+    file.write_text("a,b\n1,\n2,y\n")
+
+    reader = PolarsCSVReader(
+        file=file,
+        dtypes={"a": pl.Float64},
+        missing_utf8_is_empty_string=True,
+        row_count_name="idx",
+        row_count_offset=1,
+    )
+    df, _ = reader.load_data(pl.DataFrame)
+
+    assert df.columns == ["idx", "a", "b"]
+    assert df["idx"].to_list() == [1, 2]
+    assert df.schema["a"] == pl.Float64
+    assert df["b"].to_list() == ["", "y"]
+
+
+@pytest.mark.parametrize(
+    ("writer_class", "reader_class", "path_field"),
+    [
+        (PolarsParquetWriter, PolarsParquetReader, "file"),
+        (PolarsFeatherWriter, PolarsFeatherReader, "source"),
+    ],
+)
+def test_polars_reader_row_count_options(
+    df: pl.DataFrame, tmp_path: pathlib.Path, writer_class, reader_class, path_field
+) -> None:
+    file = tmp_path / "test_data"
+    writer_class(file=file).save_data(df)
+
+    reader = reader_class(**{path_field: file}, row_count_name="idx", row_count_offset=1)
+    df2, _ = reader.load_data(pl.DataFrame)
+
+    assert df2.columns == ["idx", "a", "b"]
+    assert df2["idx"].to_list() == [1, 2]
+
+
+@pytest.mark.skipif(
+    polars_1, reason="the polars 1.x CSV reader passes comment_char, which polars 1.x rejects"
+)
+def test_polars_csv_reader_comment_char(tmp_path: pathlib.Path) -> None:
+    file = tmp_path / "test.csv"
+    file.write_text("a\n# comment\n1\n")
+
+    df, _ = PolarsCSVReader(file=file, comment_char="#").load_data(pl.DataFrame)
+
+    assert df["a"].to_list() == [1]
+
+
+@pytest.mark.parametrize(
+    ("name", "writer", "path_field"),
+    [
+        ("csv", PolarsCSVWriter, "file"),
+        ("parquet", PolarsParquetWriter, "file"),
+        ("feather", PolarsFeatherWriter, "source"),
+    ],
+)
+def test_polars_readers_materialize(
+    name: str, writer, path_field: str, df: pl.DataFrame, tmp_path: pathlib.Path
+) -> None:
+    file = tmp_path / f"test.{name}"
+    writer(file=file).save_data(df)
+
+    def height(raw: pl.DataFrame) -> int:
+        return raw.height
+
+    dr = driver.Builder().with_modules(ad_hoc_utils.create_temporary_module(height)).build()
+    _, result = dr.materialize(
+        getattr(from_, name)(target="raw", **{path_field: str(file)}), additional_vars=["height"]
+    )
+    assert result["height"] == 2
 
 
 def test_polars_json(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
