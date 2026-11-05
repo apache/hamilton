@@ -21,6 +21,8 @@ import ast
 import dataclasses
 import inspect
 import pathlib
+import subprocess
+import sys
 import warnings
 
 import pandas as pd
@@ -291,3 +293,41 @@ def test_deprecated_subclass_of_a_deprecated_class_warns_once_under_its_own_name
 
     assert Child()() == "result"
     assert [message.split(" ")[0] for message in messages] == [Child.__qualname__]
+
+
+@pytest.mark.parametrize(
+    "module",
+    [
+        "hamilton.function_modifiers_base",
+        "hamilton.experimental.h_async",
+        "hamilton.experimental.h_cache",
+    ],
+)
+def test_deprecated_module_warns_at_the_importing_line(module):
+    # A fresh interpreter, so the module is imported, and warns, here and not earlier in the session.
+    result = subprocess.run(
+        [sys.executable, "-W", "always::FutureWarning", "-c", f"import {module}"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    # The warning names the line that imported the module: line 1 of the -c program.
+    assert "<string>:1: FutureWarning: " in result.stderr
+
+
+def test_deprecated_cache_adapter_warns_at_the_constructing_line(tmp_path):
+    from hamilton.lifecycle.default import CacheAdapter
+
+    with pytest.warns(FutureWarning, match="CacheAdapter") as record:
+        constructing_line = inspect.currentframe().f_lineno + 1
+        CacheAdapter(cache_path=str(tmp_path / "cache"))
+    assert (record[0].filename, record[0].lineno) == (__file__, constructing_line)
+
+
+def test_deprecated_disk_cache_adapter_warns_at_the_constructing_line(tmp_path):
+    h_diskcache = pytest.importorskip("hamilton.plugins.h_diskcache")
+
+    with pytest.warns(FutureWarning, match="DiskCacheAdapter") as record:
+        constructing_line = inspect.currentframe().f_lineno + 1
+        h_diskcache.DiskCacheAdapter(cache_path=str(tmp_path / "cache"))
+    assert (record[0].filename, record[0].lineno) == (__file__, constructing_line)
