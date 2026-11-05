@@ -130,7 +130,7 @@ test = [
   "openpyxl", # for excel data loader
   "pandera[dask]",
   "plotly",
-  "polars<2.0.0; python_version < '3.14'", # Polars 2.0 removed reader arguments Hamilton passes; lift once apache/hamilton#1784 lands
+  "polars; python_version < '3.14'",
   "pyarrow",
   "pydantic >=2.0",
   "pyreadstat; python_version < '3.14'", # for SPSS data loader
@@ -170,7 +170,7 @@ docs = [
   "packaging",
   "pandera",
   "pillow",
-  "polars<2.0.0", # see the test group
+  "polars",
   "pyarrow >= 1.0.0",
   "pydantic >= 2.0",
   "pyspark",
