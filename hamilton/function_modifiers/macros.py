@@ -259,7 +259,7 @@ def get_default_tags(fn: Callable) -> dict[str, str]:
     explanation="dynamic_transform has been replaced with @resolve -- a cleaner way "
     "to utilize config for resolving decorators. Note this allows you to use any "
     "existing decorators.",
-    migration_guide="https://hamilton.apache.org/reference/decorators/",
+    migration_guide="https://hamilton.apache.org/reference/decorators/resolve/",
 )
 class dynamic_transform(base.NodeCreator):
     def __init__(
@@ -326,7 +326,7 @@ class dynamic_transform(base.NodeCreator):
     fail_starting=(2, 0, 0),
     use_this=delayed_resolve,
     explanation="model is dynamic_transform under another name, so @resolve replaces it too.",
-    migration_guide="https://hamilton.apache.org/reference/decorators/",
+    migration_guide="https://hamilton.apache.org/reference/decorators/resolve/",
 )
 class model(dynamic_transform):
     """Model, same as a dynamic transform"""
@@ -1094,7 +1094,7 @@ class pipe_input(base.NodeInjector):
     use_this=pipe_input,
     explanation="pipe has been replaced with pipe_input -- a clearer name since "
     "we also added pipe_output with complementary functionality.",
-    migration_guide="https://hamilton.apache.org/reference/decorators/",
+    migration_guide="https://hamilton.apache.org/reference/decorators/pipe/",
 )
 class pipe(pipe_input):
     def __init__(
