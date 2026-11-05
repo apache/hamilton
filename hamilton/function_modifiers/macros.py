@@ -1109,8 +1109,8 @@ class pipe(pipe_input):
             *transforms,
             namespace=namespace,
             on_input=on_input,
-            collapse=False,
-            _chain=False,
+            collapse=collapse,
+            _chain=_chain,
         )
 
 
