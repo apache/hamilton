@@ -19,6 +19,7 @@ import json
 import logging
 import os
 import pickle
+import warnings
 from collections.abc import Callable
 from functools import singledispatch
 from typing import Any
@@ -31,12 +32,14 @@ from hamilton.node import Node
 logger = logging.getLogger(__name__)
 
 
-logger.warning(
-    "The module `hamilton.experimental.h_cache` and the class `CachingGraphAdapter `"
+warnings.warn(
+    "The module `hamilton.experimental.h_cache` and the class `CachingGraphAdapter` "
     "are deprecated and will be removed in Hamilton 2.0. "
     "Consider enabling the core caching feature via `Builder.with_cache()`. "
     "This might not be 1-to-1 replacement, so please reach out if there are missing features. "
-    "See https://hamilton.apache.org/concepts/caching/ to learn more."
+    "See https://hamilton.apache.org/concepts/caching/ to learn more.",
+    FutureWarning,
+    stacklevel=2,
 )
 
 
