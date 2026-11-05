@@ -325,7 +325,7 @@ def _replacement() -> bool:
             _replacement,
             None,
             (1, 0, 1),
-            "test_deprecation_messages.<locals>.fn will be deprecated by hamilton version: 2.0.0. Use the new one."
+            "test_deprecation_messages.<locals>.fn is deprecated and will stop working in hamilton version: 2.0.0. Use the new one."
             " Instead, you should be using: _replacement. This is a drop-in replacement.",
             None,
             id="warn-drop-in",

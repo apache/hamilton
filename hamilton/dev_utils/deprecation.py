@@ -136,7 +136,7 @@ class deprecated:
         elif self._should_warn():
             self.warn_action(
                 self._message(
-                    f"{fn.__qualname__} will be deprecated by hamilton version: {self.fail_starting}."
+                    f"{fn.__qualname__} is deprecated and will stop working in hamilton version: {self.fail_starting}."
                 )
             )
 
