@@ -108,3 +108,102 @@ def test_diff_node_versions():
     assert diff["reference_only"] == ["orders_per_customer"]
     assert diff["current_only"] == ["orders_per_distributor"]
     assert diff["edit"] == ["average_order_by_customer", "customer_summary_table"]
+
+
+HAMILTON_MODULE_SOURCE = """import pandas as pd
+
+
+def spend_per_signup(spend: pd.Series, signups: pd.Series) -> pd.Series:
+    \"\"\"The cost per signup in relation to spend.\"\"\"
+    return spend / signups
+
+
+def total(spend: pd.Series) -> float:
+    \"\"\"Total spend.\"\"\"
+    return spend.sum()
+"""
+
+
+def test_create_test_stubs_generates_stubs(tmp_path):
+    module_file = tmp_path / "business_logic.py"
+    module_file.write_text(HAMILTON_MODULE_SOURCE)
+
+    out_file, created, skipped = logic.create_test_stubs(module_file)
+
+    assert out_file == tmp_path / "test_business_logic.py"
+    assert created == ["test_spend_per_signup", "test_total"]
+    assert skipped == []
+
+    text = out_file.read_text()
+    assert "import pandas as pd" in text
+    assert "import business_logic" in text
+    assert "def test_spend_per_signup():" in text
+    assert "spend: pd.Series = pd.Series([])  # TODO: fill in" in text
+    assert "actual = business_logic.spend_per_signup(spend, signups)" in text
+    assert "pd.testing.assert_series_equal(actual, expected)" in text
+    assert "def test_total():" in text
+    # total() returns float, so it gets a plain assert even though its param is pandas
+    total_stub = text.split("def test_total():")[1]
+    assert "assert actual == expected" in total_stub
+    assert "pd.testing" not in total_stub
+
+
+def test_create_test_stubs_skips_existing_and_appends(tmp_path):
+    module_file = tmp_path / "business_logic.py"
+    module_file.write_text(HAMILTON_MODULE_SOURCE)
+    existing = tmp_path / "test_business_logic.py"
+    existing.write_text(
+        "import business_logic\n\n\ndef test_spend_per_signup():\n    assert True\n"
+    )
+
+    out_file, created, skipped = logic.create_test_stubs(module_file)
+
+    assert out_file == existing
+    assert created == ["test_total"]
+    assert skipped == ["test_spend_per_signup"]
+
+    text = existing.read_text()
+    assert text.count("def test_spend_per_signup():") == 1
+    assert "def test_total():" in text
+    # original content preserved at the top
+    assert text.startswith("import business_logic")
+
+
+def test_create_test_stubs_custom_output_path(tmp_path):
+    module_file = tmp_path / "business_logic.py"
+    module_file.write_text(HAMILTON_MODULE_SOURCE)
+    custom_out = tmp_path / "custom_tests.py"
+
+    out_file, created, skipped = logic.create_test_stubs(module_file, output_file=custom_out)
+
+    assert out_file == custom_out
+    assert custom_out.exists()
+    assert created == ["test_spend_per_signup", "test_total"]
+
+
+def test_create_test_stubs_non_pandas_functions_use_plain_assert(tmp_path):
+    module_file = tmp_path / "strings.py"
+    module_file.write_text(
+        "def shout(word: str) -> str:\n    return word.upper()\n"
+    )
+
+    out_file, created, _ = logic.create_test_stubs(module_file)
+
+    text = out_file.read_text()
+    assert "import pandas" not in text
+    assert "word: str = None  # TODO: fill in" in text
+    assert "assert actual == expected" in text
+
+
+def test_create_test_stubs_resolves_sibling_imports(tmp_path):
+    (tmp_path / "helpers.py").write_text("def double(x):\n    return x * 2\n")
+    module_file = tmp_path / "uses_sibling.py"
+    module_file.write_text(
+        "from helpers import double\n\n\ndef doubled_value(x: int) -> int:\n    return double(x)\n"
+    )
+
+    out_file, created, skipped = logic.create_test_stubs(module_file)
+
+    assert created == ["test_doubled_value"]
+    text = out_file.read_text()
+    assert "def test_doubled_value():" in text
