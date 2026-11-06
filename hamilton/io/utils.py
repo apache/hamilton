@@ -15,10 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import dataclasses
+import inspect
 import os
 import re
 import sqlite3
+import sys
 import time
+import warnings
+from collections.abc import Callable
 from datetime import datetime
 from os import PathLike
 from pathlib import Path
@@ -64,6 +69,30 @@ def _is_query(query_or_table: str, operation: SqlOperation | None, legacy: bool)
     if "SELECT" in query_or_table:
         return True
     return not legacy and operation != "write" and _starts_with_select(query_or_table)
+
+
+def accepts_field(loader: Any, function: Callable, field: str) -> bool:
+    """Whether ``function`` accepts the keyword ``field`` that the dataclass ``loader`` passes to it.
+
+    A library can remove a keyword that a loader field maps to. When ``function`` does not accept
+    it and ``loader`` sets ``field`` to anything other than its default, this warns that the
+    setting has no effect, naming the library version, so the caller's choice is not ignored
+    silently. The caller then leaves the keyword out.
+    """
+    if field in inspect.signature(function).parameters:
+        return True
+    value = getattr(loader, field)
+    default = next(f.default for f in dataclasses.fields(loader) if f.name == field)
+    if value != default:
+        library = function.__module__.split(".")[0]
+        version = getattr(sys.modules.get(library), "__version__", "")
+        warnings.warn(
+            f"{type(loader).__name__}({field}={value!r}) has no effect: "
+            f"{library} {version} {function.__name__}() does not accept {field!r}.",
+            UserWarning,
+            stacklevel=2,
+        )
+    return False
 
 
 def get_file_metadata(path: str | Path | PathLike) -> dict[str, Any]:

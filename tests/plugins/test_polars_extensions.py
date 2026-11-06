@@ -15,10 +15,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import inspect
 import io
 import pathlib
 import sys
 import typing
+import warnings
 
 import polars.testing
 from sqlalchemy import create_engine
@@ -118,6 +120,46 @@ def test_polars_feather(tmp_path: pathlib.Path) -> None:
     assert metadata["dataframe_metadata"]["datatypes"] == ["String", "Int64", "String"]
 
 
+def test_polars_csv_reader_options(tmp_path: pathlib.Path) -> None:
+    file = tmp_path / "test.csv"
+    file.write_text("a,b\n# comment\n1,\n2,y\n")
+
+    reader = PolarsCSVReader(
+        file=file,
+        comment_char="#",
+        dtypes={"a": pl.Float64},
+        missing_utf8_is_empty_string=True,
+        row_count_name="idx",
+        row_count_offset=1,
+    )
+    df, _ = reader.load_data(pl.DataFrame)
+
+    assert df.columns == ["idx", "a", "b"]
+    assert df["idx"].to_list() == [1, 2]
+    assert df.schema["a"] == pl.Float64
+    assert df["b"].to_list() == ["", "y"]
+
+
+@pytest.mark.parametrize(
+    ("writer_class", "reader_class", "path_field"),
+    [
+        (PolarsParquetWriter, PolarsParquetReader, "file"),
+        (PolarsFeatherWriter, PolarsFeatherReader, "source"),
+    ],
+)
+def test_polars_reader_row_count_options(
+    df: pl.DataFrame, tmp_path: pathlib.Path, writer_class, reader_class, path_field
+) -> None:
+    file = tmp_path / "test_data"
+    writer_class(file=file).save_data(df)
+
+    reader = reader_class(**{path_field: file}, row_count_name="idx", row_count_offset=1)
+    df2, _ = reader.load_data(pl.DataFrame)
+
+    assert df2.columns == ["idx", "a", "b"]
+    assert df2["idx"].to_list() == [1, 2]
+
+
 def test_polars_json(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
     file = tmp_path / "test.json"
     writer = PolarsJSONWriter(file=file)
@@ -188,6 +230,67 @@ def test_polars_ndjson_load_from(df: pl.DataFrame, tmp_path: pathlib.Path) -> No
     dr = driver.Builder().with_modules(ad_hoc_utils.create_temporary_module(raw)).build()
     result = dr.execute(["raw"], inputs={"path": str(file)})
     assert result["raw"].schema == pl.Schema({"a": pl.Float64, "b": pl.Int64})
+
+
+@pytest.mark.parametrize(
+    ("writer_class", "reader_class", "path_field", "polars_function", "option", "value"),
+    [
+        (PolarsCSVWriter, PolarsCSVReader, "file", pl.read_csv, "n_threads", 1),
+        (PolarsCSVWriter, PolarsCSVReader, "file", pl.read_csv, "batch_size", 1),
+        (PolarsFeatherWriter, PolarsFeatherReader, "source", pl.read_ipc, "memory_map", False),
+    ],
+)
+def test_polars_reader_option_removed_from_polars(
+    df: pl.DataFrame,
+    tmp_path: pathlib.Path,
+    writer_class,
+    reader_class,
+    path_field,
+    polars_function,
+    option,
+    value,
+) -> None:
+    """An option the installed polars no longer accepts warns instead of being dropped silently."""
+    file = tmp_path / "test_data"
+    writer_class(file=file).save_data(df)
+    reader = reader_class(**{path_field: file, option: value})
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        loaded, _ = reader.load_data(pl.DataFrame)
+
+    no_effect = [w for w in caught if "has no effect" in str(w.message)]
+    if option in inspect.signature(polars_function).parameters:
+        assert no_effect == []
+    else:
+        assert len(no_effect) == 1
+        assert f"{reader_class.__name__}({option}={value!r})" in str(no_effect[0].message)
+    polars.testing.assert_frame_equal(loaded, df)
+
+
+@pytest.mark.parametrize(
+    ("writer_class", "reader_class", "path_field"),
+    [
+        (PolarsCSVWriter, PolarsCSVReader, "file"),
+        (PolarsParquetWriter, PolarsParquetReader, "file"),
+        (PolarsFeatherWriter, PolarsFeatherReader, "source"),
+    ],
+)
+def test_polars_reader_defaults(
+    df: pl.DataFrame, tmp_path: pathlib.Path, writer_class, reader_class, path_field
+) -> None:
+    """Default options load without a warning, and ``rechunk=True`` returns a single chunk."""
+    for part in range(2):
+        writer_class(file=tmp_path / f"part{part}").save_data(df)
+    reader = reader_class(**{path_field: str(tmp_path / "part*")})
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        loaded, _ = reader.load_data(pl.DataFrame)
+
+    assert [w for w in caught if "has no effect" in str(w.message)] == []
+    assert loaded.n_chunks() == 1
+    polars.testing.assert_frame_equal(loaded, pl.concat([df, df]))
 
 
 def test_polars_avro(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
