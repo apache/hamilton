@@ -19,6 +19,7 @@ import operator
 
 import pytest
 
+from hamilton.dev_utils import deprecation
 from hamilton.dev_utils.deprecation import DeprecationError, Version, deprecated
 
 
@@ -199,7 +200,7 @@ def test_call_function_class_not_deprecated_yet():
         def __call__(self):
             return False
 
-    deprecated_function()
+    deprecated_function()()
     assert not warned
 
 
@@ -311,3 +312,99 @@ def test_deprecation_boundaries_are_inclusive(
     actual = "fail" if failures else "warn" if warnings else "none"
     assert actual == expected
     assert len(warnings) + len(failures) <= 1
+
+
+def _replacement() -> bool:
+    return True
+
+
+@pytest.mark.parametrize(
+    ("use_this", "migration_guide", "current_version", "expected_warning", "expected_failure"),
+    [
+        pytest.param(
+            _replacement,
+            None,
+            (1, 0, 1),
+            "test_deprecation_messages.<locals>.fn is deprecated and will stop working in hamilton version: 2.0.0. Use the new one."
+            " Instead, you should be using: _replacement. This is a drop-in replacement.",
+            None,
+            id="warn-drop-in",
+        ),
+        pytest.param(
+            None,
+            "https://example.com/guide",
+            (2, 0, 1),
+            None,
+            "test_deprecation_messages.<locals>.fn has been deprecated, as of hamilton version: 2.0.0. Use the new one."
+            " For migration, see: https://example.com/guide.",
+            id="fail-with-guide",
+        ),
+    ],
+)
+def test_deprecation_messages(
+    use_this, migration_guide, current_version, expected_warning, expected_failure
+):
+    warnings, failures = [], []
+
+    @deprecated(
+        warn_starting=(1, 0, 0),
+        fail_starting=(2, 0, 0),
+        use_this=use_this,
+        explanation="Use the new one.",
+        migration_guide=migration_guide,
+        current_version=current_version,
+        warn_action=warnings.append,
+        fail_action=failures.append,
+    )
+    def fn():
+        pass
+
+    fn()
+
+    assert warnings == ([expected_warning] if expected_warning else [])
+    assert failures == ([expected_failure] if expected_failure else [])
+
+
+@pytest.mark.parametrize(
+    "version_tuple",
+    [
+        pytest.param((2, 0, "0rc1"), id="non-integer-part"),
+        pytest.param((1, 2), id="too-few-parts"),
+    ],
+)
+def test_from_version_tuple_rejects_malformed_tuples(version_tuple):
+    with pytest.raises(ValueError, match="three integers"):
+        Version.from_version_tuple(version_tuple)
+
+
+def test_from_version_tuple_ignores_a_pre_release_part():
+    assert Version.from_version_tuple((2, 0, 0, "rc1")) == Version(2, 0, 0)
+
+
+def test_current_version_names_the_file_holding_a_malformed_version(monkeypatch):
+    monkeypatch.setattr(deprecation.version, "VERSION", (2, 0, "0rc1"))
+    with pytest.raises(ValueError, match="hamilton/version.py"):
+        Version.current()
+
+
+def test_deprecated_class_passes_keyword_arguments_through():
+    warnings = []
+
+    @deprecated(
+        warn_starting=(1, 0, 0),
+        fail_starting=(2, 0, 0),
+        use_this=None,
+        explanation="something",
+        migration_guide="https://github.com/apache/hamilton",
+        current_version=(1, 0, 1),
+        warn_action=warnings.append,
+    )
+    class DeprecatedDecorator:
+        def __call__(self, fn, deprecator=None):
+            return fn, deprecator
+
+    def decorated() -> None:
+        pass
+
+    assert DeprecatedDecorator()(fn=decorated, deprecator="mine") == (decorated, "mine")
+    assert len(warnings) == 1

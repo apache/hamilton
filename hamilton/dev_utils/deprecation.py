@@ -34,15 +34,19 @@ class Version:
 
     @staticmethod
     def from_version_tuple(version_tuple: tuple[int | str, ...]) -> "Version":
-        version_ = version_tuple
-        if len(version_) > 3:  # This means we have an RC
-            version_ = version_tuple[0:3]  # Then let's ignore it
-        return Version(*version_)  # TODO, add some validation
+        release = version_tuple[0:3]  # A fourth part marks a pre-release, such as an RC; ignore it
+        if len(release) != 3 or not all(isinstance(part, int) for part in release):
+            raise ValueError(
+                f"Expected a version tuple starting with three integers, got {version_tuple}."
+            )
+        return Version(*release)
 
     @staticmethod
     def current() -> "Version":
-        current_version = version.VERSION
-        return Version.from_version_tuple(current_version)
+        try:
+            return Version.from_version_tuple(version.VERSION)
+        except ValueError as e:
+            raise ValueError(f"hamilton/version.py holds a malformed VERSION: {e}") from e
 
     def __repr__(self):
         return ".".join(map(str, [self.major, self.minor, self.patch]))
@@ -95,10 +99,6 @@ class deprecated:
     )
 
     @staticmethod
-    def _raise_failure(message: str):
-        raise DeprecationError(message)
-
-    @staticmethod
     def _ensure_version_type(version_spec: tuple[int, int, int] | Version) -> Version:
         if isinstance(version_spec, tuple):
             return Version(*version_spec)
@@ -128,41 +128,27 @@ class deprecated:
 
     def _do_deprecation_action(self, fn: Callable):
         if self._should_fail():
-            failure_message = " ".join(
-                [
-                    f"{fn.__qualname__} has been deprecated, as of hamilton version: {self.fail_starting}.",
-                    f"{self.explanation}",
-                ]
-                + (
-                    [f"Instead, you should be using: {self.use_this.__qualname__}."]
-                    if self.use_this is not None
-                    else []
-                )
-                + (
-                    [f"For migration, see: {self.migration_guide}."]
-                    if self.migration_guide is not None
-                    else ["This is a drop-in replacement."]
+            self.fail_action(
+                self._message(
+                    f"{fn.__qualname__} has been deprecated, as of hamilton version: {self.fail_starting}."
                 )
             )
-            self.fail_action(failure_message)
         elif self._should_warn():
-            warn_message = " ".join(
-                [
-                    f"{fn.__qualname__} will be deprecated by hamilton version: {self.fail_starting}.",
-                    f"{self.explanation}",
-                ]
-                + (
-                    [f"Instead, you should be using: {self.use_this.__qualname__}."]
-                    if self.use_this is not None
-                    else []
-                )
-                + (
-                    [f"For migration, see: {self.migration_guide}."]
-                    if self.migration_guide is not None
-                    else ["This is a drop-in replacement."]
+            self.warn_action(
+                self._message(
+                    f"{fn.__qualname__} is deprecated and will stop working in hamilton version: {self.fail_starting}."
                 )
             )
-            self.warn_action(warn_message)
+
+    def _message(self, lead: str) -> str:
+        parts = [lead, self.explanation]
+        if self.use_this is not None:
+            parts.append(f"Instead, you should be using: {self.use_this.__qualname__}.")
+        if self.migration_guide is not None:
+            parts.append(f"For migration, see: {self.migration_guide}.")
+        else:
+            parts.append("This is a drop-in replacement.")
+        return " ".join(parts)
 
     def _should_warn(self) -> bool:
         return self.current_version >= self.warn_starting
@@ -191,13 +177,15 @@ class deprecated:
 
             return new_fn
 
-        # Otherwise we assume that this is a class object
-        # We have to store the former __call__
-        fn.__old_call__ = fn.__call__
+        # Otherwise we assume that this is a class object, and wrap its __call__.
+        # The wrapper reads the deprecator and the original __call__ from this closure rather than
+        # from keyword defaults, so a caller's own keyword arguments always reach the original.
+        deprecator = self
+        old_call = fn.__call__
 
-        def new__call__(self, *args, deprecator=self, fn=fn, **kwargs):
+        def new__call__(instance, *args, **kwargs):
             deprecator._do_deprecation_action(fn)
-            return fn.__old_call__(self, *args, **kwargs)
+            return old_call(instance, *args, **kwargs)
 
         # This works as we're assigning it to the entire class...
         # This also means we can't decorate it with 2 deprecation functions, but, hey,
