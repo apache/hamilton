@@ -15,11 +15,13 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import csv
 import dataclasses
 from collections.abc import Collection, Mapping, Sequence
 from io import BytesIO, IOBase, TextIOWrapper
 from pathlib import Path
 from typing import (
+    TYPE_CHECKING,
     Any,
     BinaryIO,
     Literal,
@@ -32,13 +34,18 @@ except ImportError:
     Workbook = type
 
 import polars as pl
-from polars._typing import ConnectionOrCursor
 
-# for polars <0.16.0 we need to determine whether type_aliases exist.
-has_alias = False
-if hasattr(pl, "type_aliases"):
-    has_alias = True
+if TYPE_CHECKING:
+    from typing import TypeAlias
 
+    from polars._typing import ConnectionOrCursor
+
+    DatabaseConnection: TypeAlias = ConnectionOrCursor | str
+else:
+    # Polars' ConnectionOrCursor names classes it only imports for type checking, so it cannot
+    # be resolved at runtime, where Hamilton reads the database classes' type hints to type their
+    # `connection` dependency. Polars validates the connection itself when it reads or writes.
+    DatabaseConnection = Any
 
 import polars.selectors
 
@@ -768,6 +775,44 @@ class PolarsSpreadsheetWriter(DataSaver):
         return "spreadsheet"
 
 
+def _schema_and_table(table_name: str) -> tuple[str | None, str]:
+    """The schema and table polars writes ``table_name`` to.
+
+    Mirrors the ``unpack_table_name`` helper nested in polars' ``DataFrame.write_database``,
+    which splits ``[[catalog.]schema.]table`` on dots outside double quotes; keep the two in
+    step. The catalog is dropped: polars' SQLAlchemy engine rejects a three-part name before
+    writing, and an ADBC write records no datasource. An empty schema (``.orders``) is ``None``,
+    as polars treats it.
+    """
+    components = next(csv.reader([table_name], delimiter="."))
+    schema = components[-2] if len(components) > 1 else None
+    return schema or None, components[-1]
+
+
+def _sql_metadata(
+    query_or_table: str,
+    rows: int | None,
+    connection: DatabaseConnection,
+    unidentified_because: str | None,
+    *,
+    operation: utils.SqlOperation,
+    schema: str | None = None,
+) -> dict[str, Any]:
+    """``sql_metadata`` naming the database ``connection`` points at.
+
+    When polars hands ``connection`` to an engine that reads it differently from
+    :func:`hamilton.io.utils.get_sql_source`, the datasource would be a guess, so it is left out
+    and ``unidentified_because`` becomes the ``notes``.
+    """
+    if unidentified_because is None:
+        return utils.get_sql_metadata(
+            query_or_table, rows, db_connection=connection, schema=schema, operation=operation
+        )
+    metadata = utils.get_sql_metadata(query_or_table, rows, schema=schema, operation=operation)
+    metadata["sql_metadata"]["notes"] = unidentified_because
+    return metadata
+
+
 @dataclasses.dataclass
 class PolarsDatabaseReader(DataLoader):
     """
@@ -775,7 +820,7 @@ class PolarsDatabaseReader(DataLoader):
     """
 
     query: str
-    connection: ConnectionOrCursor | str
+    connection: DatabaseConnection
     # kwargs:
     iter_batches: bool = False
     batch_size: int | None = None
@@ -807,7 +852,19 @@ class PolarsDatabaseReader(DataLoader):
             connection=self.connection,
             **self._get_loading_kwargs(),
         )
-        metadata = utils.get_file_and_dataframe_metadata(self.query, df)
+        # with iter_batches=True, pl.read_database returns a generator, so there is no row count
+        rows = len(df) if isinstance(df, pl.DataFrame) else None
+        unidentified_because = (
+            "Polars reads a connection string through ODBC; its datasource is not identified"
+            if isinstance(self.connection, str)
+            else None
+        )
+        metadata = {
+            **utils.get_file_and_dataframe_metadata(self.query, df),
+            **_sql_metadata(
+                self.query, rows, self.connection, unidentified_because, operation="read"
+            ),
+        }
         return df, metadata
 
     @classmethod
@@ -819,10 +876,13 @@ class PolarsDatabaseReader(DataLoader):
 class PolarsDatabaseWriter(DataSaver):
     """
     Class specifically to handle saving DataFrame to a database.
+
+    ``engine`` is passed to ``DataFrame.write_database``; ``"auto"`` lets polars choose
+    (SQLAlchemy for a connection string or SQLAlchemy object, ADBC for an ADBC connection).
     """
 
     table_name: str
-    connection: ConnectionOrCursor | str
+    connection: DatabaseConnection
     if_table_exists: Literal["fail", "replace", "append"] = "fail"
     engine: Literal["auto", "sqlalchemy", "adbc"] = "sqlalchemy"
 
@@ -834,7 +894,8 @@ class PolarsDatabaseWriter(DataSaver):
         kwargs = {}
         if self.if_table_exists is not None:
             kwargs["if_table_exists"] = self.if_table_exists
-        if self.engine is not None:
+        # polars has no "auto" engine: it picks the engine itself when none is passed
+        if self.engine not in (None, "auto"):
             kwargs["engine"] = self.engine
         return kwargs
 
@@ -842,12 +903,31 @@ class PolarsDatabaseWriter(DataSaver):
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
 
-        data.write_database(
+        reported = data.write_database(
             table_name=self.table_name,
             connection=self.connection,
             **self._get_saving_kwargs(),
         )
-        return utils.get_file_and_dataframe_metadata(self.table_name, data)
+        # a driver that reports no row count makes write_database return -1 (DBAPI's rowcount)
+        rows = reported if isinstance(reported, int) and reported >= 0 else None
+        schema, table = _schema_and_table(self.table_name)
+        unidentified_because = (
+            "Polars writes a connection string through ADBC, which reads URLs differently from"
+            " SQLAlchemy; its datasource is not identified"
+            if self.engine == "adbc" and isinstance(self.connection, str)
+            else None
+        )
+        return {
+            **utils.get_file_and_dataframe_metadata(self.table_name, data),
+            **_sql_metadata(
+                table,
+                rows,
+                self.connection,
+                unidentified_because,
+                schema=schema,
+                operation="write",
+            ),
+        }
 
     @classmethod
     def name(cls) -> str:

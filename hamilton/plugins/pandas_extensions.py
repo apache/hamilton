@@ -801,10 +801,12 @@ class PandasSqlWriter(DataSaver):
         return kwargs
 
     def save_data(self, data: DATAFRAME_TYPE) -> dict[str, Any]:
-        results = data.to_sql(self.table_name, self.db_connection, **self._get_saving_kwargs())
+        reported = data.to_sql(self.table_name, self.db_connection, **self._get_saving_kwargs())
+        # a driver that reports no row count makes to_sql return -1 (DBAPI's rowcount)
+        rows = reported if isinstance(reported, int) and reported >= 0 else None
         sql_metadata = utils.get_sql_metadata(
             self.table_name,
-            results,
+            rows,
             db_connection=self.db_connection,
             schema=self.schema,
             operation="write",
