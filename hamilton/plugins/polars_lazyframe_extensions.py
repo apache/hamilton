@@ -25,6 +25,8 @@ from typing import (
     TextIO,
 )
 
+from packaging import version
+
 try:
     import polars as pl
 except ImportError as e:
@@ -299,4 +301,9 @@ def register_data_loaders():
         registry.register_adapter(loader)
 
 
-register_data_loaders()
+if version.Version(pl.__version__) < version.Version("2.0.0"):
+    register_data_loaders()
+else:
+    from hamilton.plugins import polars_lazyframe_post_2_0_0_extensions
+
+    polars_lazyframe_post_2_0_0_extensions.register_data_loaders()
