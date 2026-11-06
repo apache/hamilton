@@ -470,3 +470,21 @@ def test_with_random_object():
     assert not check_instance(
         RandomObject(), Union[int, str, list, dict, None, float, bool, bytes, complex, type(None)]
     )
+
+
+def test_check_instance_with_fixed_length_tuple():
+    assert check_instance((1, "hello"), tuple[int, str])
+    assert not check_instance((1,), tuple[int, str])
+    assert not check_instance((1, "hello", 3), tuple[int, str])
+    assert not check_instance(("hello", 1), tuple[int, str])
+
+
+def test_check_instance_with_variadic_tuple():
+    assert check_instance((1, 2, 3), tuple[int, ...])
+    assert check_instance((), tuple[int, ...])
+    assert not check_instance((1, "hello"), tuple[int, ...])
+
+
+def test_check_instance_with_empty_tuple():
+    assert check_instance((), tuple[()])
+    assert not check_instance((1,), tuple[()])
