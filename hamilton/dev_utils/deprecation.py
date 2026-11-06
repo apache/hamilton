@@ -17,13 +17,11 @@
 
 import dataclasses
 import functools
-import logging
 import types
+import warnings
 from collections.abc import Callable
 
 from hamilton import version
-
-logger = logging.getLogger(__name__)
 
 
 @dataclasses.dataclass(order=True)
@@ -56,6 +54,29 @@ class DeprecationError(Exception):
         raise self
 
 
+def _warn_of_deprecation(message: str) -> None:
+    """Default ``warn_action``; see the ``deprecated`` docstring."""
+    # stacklevel=4 attributes the warning to the code that called the deprecated API. Between it and
+    # this function sit _do_deprecation_action and the wrapper deprecated.__call__ installed.
+    warnings.warn(message, FutureWarning, stacklevel=4)
+
+
+# Mark the __call__ wrapper deprecated installs on a class: one names that class, so a subclass's own
+# deprecation can take precedence; the other holds the deprecated instance that applies to it, so tests
+# can set the version it checks against.
+_DEPRECATED_CLASS_ATTR = "__hamilton_deprecated_class__"
+_DEPRECATION_ATTR = "__hamilton_deprecation__"
+
+
+def _nearest_deprecated_class(instance: object) -> type | None:
+    """The closest class in the instance's MRO whose own __call__ is a deprecation wrapper, if any."""
+    for cls in type(instance).__mro__:
+        deprecated_class = getattr(vars(cls).get("__call__"), _DEPRECATED_CLASS_ATTR, None)
+        if deprecated_class is not None:
+            return deprecated_class
+    return None
+
+
 @dataclasses.dataclass
 class deprecated:
     """Deprecation decorator -- use judiciously! For example:
@@ -75,6 +96,10 @@ class deprecated:
 
     Note this locks into a future contract (although it *can* be changed), so if you promise to deprecate something by X.0, then do it!
 
+    By default a deprecated API warns with a ``FutureWarning`` attributed to the calling code, so users can
+    silence it or turn it into an error with the standard ``warnings`` filters (for example
+    ``python -W error::FutureWarning``). A subclass of a deprecated class warns under its parent's name,
+    unless the subclass is deprecated itself, in which case it warns once, under its own.
     """
 
     warn_starting: tuple[int, int, int] | Version
@@ -89,7 +114,7 @@ class deprecated:
     current_version: tuple[int, int, int] | Version = dataclasses.field(
         default_factory=lambda: CURRENT_VERSION
     )
-    warn_action: Callable[[str], None] = dataclasses.field(default=logger.warning)
+    warn_action: Callable[[str], None] = dataclasses.field(default=_warn_of_deprecation)
     fail_action: Callable[[str], None] = dataclasses.field(
         default=lambda message: DeprecationError(message).raise_()
     )
@@ -196,8 +221,14 @@ class deprecated:
         fn.__old_call__ = fn.__call__
 
         def new__call__(self, *args, deprecator=self, fn=fn, **kwargs):
-            deprecator._do_deprecation_action(fn)
+            # A subclass inherits this wrapper. When the subclass is deprecated in its own right, its
+            # own wrapper reports the deprecation under its own name, so this one stays quiet.
+            if _nearest_deprecated_class(self) is fn:
+                deprecator._do_deprecation_action(fn)
             return fn.__old_call__(self, *args, **kwargs)
+
+        setattr(new__call__, _DEPRECATED_CLASS_ATTR, fn)
+        setattr(new__call__, _DEPRECATION_ATTR, self)
 
         # This works as we're assigning it to the entire class...
         # This also means we can't decorate it with 2 deprecation functions, but, hey,

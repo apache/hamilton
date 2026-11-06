@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import logging
+import warnings
 
 from hamilton.plugins.h_spark import (
     KoalasDataFrameResult,
@@ -23,10 +23,11 @@ from hamilton.plugins.h_spark import (
     SparkKoalasGraphAdapter,
 )
 
-logger = logging.getLogger(__name__)
-logger.warning(
+warnings.warn(
     "Importing from this module is deprecated. We have moved these features out of experimental!"
-    " Please use hamilton.plugins.h_spark instead."
+    " Please use hamilton.plugins.h_spark instead.",
+    FutureWarning,
+    stacklevel=2,
 )
 
 __all__ = ["KoalasDataFrameResult", "SparkKoalasGraphAdapter", "PySparkUDFGraphAdapter"]

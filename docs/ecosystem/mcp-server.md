@@ -280,7 +280,7 @@ Get Hamilton documentation for a specific topic.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `topic` | `str` | Yes | One of: `overview`, `decorators`, `driver`, `builder`, or any decorator name (`parameterize`, `extract_columns`, `config`, `check_output`, `tag`, `pipe`, `does`, `subdag`, etc.) |
+| `topic` | `str` | Yes | One of: `overview`, `decorators`, `driver`, `builder`, or any decorator name (`parameterize`, `extract_columns`, `config`, `check_output`, `tag`, `pipe_input`, `does`, `subdag`, etc.) |
 
 **Returns:** A string containing the requested documentation.
 

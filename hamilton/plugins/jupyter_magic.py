@@ -422,7 +422,7 @@ class HamiltonMagics(Magics):
                 inputs=inputs,
                 overrides=overrides,
             )
-            # normalize variable names that contain a `.` character like @pipe(step())
+            # normalize variable names that contain a `.` character like @pipe_input(step())
             results = {_normalize_result_names(name): value for name, value in results.items()}
             self.shell.push(results)
 

@@ -256,11 +256,10 @@ def get_default_tags(fn: Callable) -> dict[str, str]:
     warn_starting=(1, 20, 0),
     fail_starting=(2, 0, 0),
     use_this=delayed_resolve,
-    explanation="dynamic_transform has been replaced with @resolve -- a cleaner way"
-    "to utilize config for resolving decorators. Note this allows you to use any"
+    explanation="dynamic_transform has been replaced with @resolve -- a cleaner way "
+    "to utilize config for resolving decorators. Note this allows you to use any "
     "existing decorators.",
-    current_version=(1, 19, 0),
-    migration_guide="https://hamilton.apache.org/reference/decorators/",
+    migration_guide="https://hamilton.apache.org/reference/decorators/resolve/",
 )
 class dynamic_transform(base.NodeCreator):
     def __init__(
@@ -322,6 +321,13 @@ class dynamic_transform(base.NodeCreator):
         return [self.config_param]
 
 
+@deprecated(
+    warn_starting=(1, 20, 0),
+    fail_starting=(2, 0, 0),
+    use_this=delayed_resolve,
+    explanation="model is dynamic_transform under another name, so @resolve replaces it too.",
+    migration_guide="https://hamilton.apache.org/reference/decorators/resolve/",
+)
 class model(dynamic_transform):
     """Model, same as a dynamic transform"""
 
@@ -594,7 +600,7 @@ class Applicable:
         if self.namespace is not ... and not allow_custom_namespace:
             raise base.InvalidDecoratorException(
                 "Currently, setting namespace globally inside "
-                "pipe(...)/flow(...) is not compatible with setting namespace "
+                "pipe_input(...)/pipe_output(...) is not compatible with setting namespace "
                 "for a step(...) call."
             )
         try:
@@ -602,7 +608,7 @@ class Applicable:
         except ValueError as e:
             raise base.InvalidDecoratorException(
                 f"Function: {self.fn.__name__} cannot be applied with the following args: {self.args} "
-                f"and the following kwargs: {self.kwargs}. See documentation on pipe(), the function "
+                f"and the following kwargs: {self.kwargs}. See documentation on pipe_input() and pipe_output(), the function "
                 "shapes are currently restrictive to anything with named kwargs (either kwarg-only or positional/kwarg arguments), "
                 "and must be typed. If you need functions that don't have these requirements, please reach out to the Hamilton team."
                 "Current workarounds are to define a wrapper function that assigns types with the proper keyword-friendly arguments."
@@ -654,7 +660,7 @@ class Applicable:
 
 def step(fn, *args: SingleDependency | Any, **kwargs: SingleDependency | Any) -> Applicable:
     """Applies a function to for a node (or a subcomponent of a node).
-    See documentation for `pipe` to see how this is used.
+    See documentation for `pipe_input` to see how this is used.
 
     :param fn: Function to use. Must be validly called as f(**kwargs), and have a 1:1 mapping of kwargs to parameters.
     :param args: Args to pass to the function -- although these cannot be variable/position-only arguments, they can be
@@ -981,7 +987,7 @@ class pipe_input(base.NodeInjector):
             if first_parameter not in params:
                 raise base.InvalidDecoratorException(
                     f"Function: {fn.__name__} has a first parameter that is not a dependency. "
-                    f"@pipe requires the parameter names to match the function parameters. "
+                    f"@pipe_input requires the parameter names to match the function parameters. "
                     f"Thus it might not be compatible with some other decorators"
                 )
             mapping[first_parameter] = self.transforms
@@ -1026,7 +1032,7 @@ class pipe_input(base.NodeInjector):
     def inject_nodes(
         self, params: dict[str, type[type]], config: dict[str, Any], fn: Callable
     ) -> tuple[list[node.Node], dict[str, str]]:
-        """Injects nodes into the graph. This creates a node for each pipe() step,
+        """Injects nodes into the graph. This creates a node for each pipe_input() step,
         then reassigns the inputs to pass it in."""
 
         parameters_transforms_mapping = self._distribute_transforms_to_parameters(params=params)
@@ -1087,9 +1093,8 @@ class pipe_input(base.NodeInjector):
     fail_starting=(2, 0, 0),
     use_this=pipe_input,
     explanation="pipe has been replaced with pipe_input -- a clearer name since "
-    "we also added pipe_output with complimentary functionality.",
-    current_version=(1, 77, 0),
-    migration_guide="https://hamilton.apache.org/reference/decorators/",
+    "we also added pipe_output with complementary functionality.",
+    migration_guide="https://hamilton.apache.org/reference/decorators/pipe/",
 )
 class pipe(pipe_input):
     def __init__(
@@ -1104,8 +1109,8 @@ class pipe(pipe_input):
             *transforms,
             namespace=namespace,
             on_input=on_input,
-            collapse=False,
-            _chain=False,
+            collapse=collapse,
+            _chain=_chain,
         )
 
 
@@ -1265,7 +1270,7 @@ class pipe_output(base.NodeTransformer):
 
         if self.collapse:
             raise NotImplementedError(
-                "Collapsing step() functions as one node is not yet implemented for pipe(). Please reach out if you want this feature."
+                "Collapsing step() functions as one node is not yet implemented for pipe_output(). Please reach out if you want this feature."
             )
 
         if self.chain:
