@@ -173,7 +173,7 @@ scripts/promote_rc.sh ${PACKAGE} ${VERSION} ${RC}
 
 ```bash
 PACKAGE_UNDERSCORE=$(echo ${PACKAGE} | tr '-' '_')
-twine upload dist/${PACKAGE_UNDERSCORE}-${VERSION}-py3-none-any.whl dist/${PACKAGE}-${VERSION}-incubating-src.tar.gz
+uv run twine upload dist/${PACKAGE_UNDERSCORE}-${VERSION}-py3-none-any.whl dist/${PACKAGE}-${VERSION}-incubating-src.tar.gz
 ```
 
 #### 3. Build and upload the redirect package
@@ -186,7 +186,7 @@ Each redirect's directory, `${REDIRECT}-redirect/`, contains a `pyproject.toml.t
 uv run ${REDIRECT}-redirect/build.sh ${VERSION}
 
 # Upload
-twine upload ${REDIRECT}-redirect/dist/$(echo ${REDIRECT} | tr '-' '_')-${VERSION}*
+uv run twine upload ${REDIRECT}-redirect/dist/$(echo ${REDIRECT} | tr '-' '_')-${VERSION}*
 ```
 
 #### 4. Sanity check the PyPI uploads
@@ -210,7 +210,7 @@ python -c "import hamilton; import graphviz; print('OK')"
 #### 5. Send announcement emails
 
 ```bash
-python scripts/generate_announce_email.py \
+uv run python scripts/generate_announce_email.py \
     --package ${PACKAGE_KEY} --version ${VERSION} --rc ${RC} \
     --tag ${TAG} \
     --binding-votes 3 --nonbinding-votes 1
