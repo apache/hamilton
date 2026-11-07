@@ -22,34 +22,4 @@
 #   ./build.sh <version>
 #   ./build.sh 0.2.0
 
-set -euo pipefail
-
-if [ $# -ne 1 ]; then
-    echo "Usage: $0 <version>"
-    echo "Example: $0 0.2.0"
-    exit 1
-fi
-
-VERSION="$1"
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-
-echo "Building sf-hamilton-lsp redirect package for version ${VERSION}..."
-
-# Render pyproject.toml from the template and the package this one redirects to
-python "${SCRIPT_DIR}/../scripts/render_redirect_pyproject.py" "${SCRIPT_DIR}" "${VERSION}"
-
-# Clean previous build
-rm -rf "${SCRIPT_DIR}/dist" "${SCRIPT_DIR}/build" "${SCRIPT_DIR}"/*.egg-info
-
-# Build
-cd "${SCRIPT_DIR}"
-python -m build
-
-# Validate
-twine check dist/*
-
-echo ""
-echo "Build complete. Artifacts:"
-ls -la dist/
-echo ""
-echo "To upload: twine upload dist/sf_hamilton_lsp-${VERSION}*"
+exec "$(dirname "$0")/../scripts/build_redirect.sh" "$(dirname "$0")" "$@"
