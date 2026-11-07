@@ -6,23 +6,29 @@ on:
       - main  # or any specific branches you want to include
     paths:
       - 'ui/backend/**'
+      - '.github/workflows/hamilton-ui-backend.yml'
 
   pull_request:
     branches:
       - main
     paths:
       - 'ui/backend/**'
+      - '.github/workflows/hamilton-ui-backend.yml'
 
 
 jobs:
   test-backend:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         testdir: [test_lifecycle, test_db_methods]  # Specify your test directories
+        # the oldest and newest Python apache-hamilton-ui supports
+        python-version: ['3.11', '3.15']
     services:
       postgres:
-        image: postgres:14
+        # Django 6, which pip resolves on Python 3.12+, needs PostgreSQL 15 or later
+        image: postgres:17
         env:
           POSTGRES_USER: postgres
           POSTGRES_DB: circleci_test
@@ -39,7 +45,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
           cd ui/backend/server
@@ -83,3 +89,11 @@ jobs:
         run: |
           cd ui/backend/server
           python -m pytest tests/${{ matrix.testdir }} -vvvvv
+      - name: Install the apache-hamilton-ui package
+        # in a fresh venv, so only the dependencies its pyproject.toml declares are installed
+        if: matrix.testdir == 'test_lifecycle'
+        run: |
+          python -m venv "$RUNNER_TEMP/ui-package"
+          "$RUNNER_TEMP/ui-package/bin/pip" install ./ui/backend
+          cd "$RUNNER_TEMP"
+          ui-package/bin/python -c "import hamilton_ui.commands"
