@@ -676,16 +676,18 @@ Emits a Job Event with the sourceCode Facet for the entire DAG as the job.</p>
 
 <section id="sql-datasets">
 <h2>SQL datasets<a class="headerlink" href="#sql-datasets" title="Link to this heading">¶</a></h2>
-<p>SQL loaders and savers (<code class="docutils literal notranslate"><span class="pre">&#64;load_from.sql</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;save_to.sql</span></code> and the pandas SQL materializers) record
-the datasource they used (see <a class="reference internal" href="../../../concepts/materialization/#sql-metadata-and-lineage"><span class="std std-ref">SQL metadata and lineage</span></a>). How the adapter names their datasets
-is set by <code class="docutils literal notranslate"><span class="pre">sql_dataset_identity</span></code>:</p>
+<p>SQL loaders and savers (<code class="docutils literal notranslate"><span class="pre">&#64;load_from.sql</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;save_to.sql</span></code>, the pandas SQL materializers and the
+Polars database materializers) record the datasource they used (see <a class="reference internal" href="../../../concepts/materialization/#sql-metadata-and-lineage"><span class="std std-ref">SQL metadata and lineage</span></a>).
+How the adapter names their datasets is set by <code class="docutils literal notranslate"><span class="pre">sql_dataset_identity</span></code>:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;legacy&quot;</span></code>, the default: datasets are named as in earlier Hamilton releases, under the adapter’s
 <em>job</em> namespace with the bare <code class="docutils literal notranslate"><span class="pre">table_name</span></code>. As before, a query read containing <code class="docutils literal notranslate"><span class="pre">SELECT</span></code>
 produces a dataset with no name and the query in the job’s <code class="docutils literal notranslate"><span class="pre">sql</span></code> facet, and other strings are
 used as the dataset name. Leaving the option unset warns once per adapter (a
 <code class="docutils literal notranslate"><span class="pre">FutureWarning</span></code>) because the default will change; pass <code class="docutils literal notranslate"><span class="pre">&quot;legacy&quot;</span></code> explicitly to keep these names
-without the warning.</p></li>
+without the warning. The Polars database materializers keep their earlier names too: the read is a
+dataset named after the loader node, with the query as its <code class="docutils literal notranslate"><span class="pre">dataSource</span></code> URI, and the write is
+named after the table. Unlike the pandas query read above, the read has no <code class="docutils literal notranslate"><span class="pre">sql</span></code> job facet.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;datasource&quot;</span></code>: datasets are named after the datasource, following the <a class="reference external" href="https://openlineage.io/docs/spec/naming/">OpenLineage naming
 conventions</a>, and every physical table a query reads is
 reported. A report written by one job and read by another then resolves to the same dataset, and
@@ -694,6 +696,13 @@ two tables with the same name in different databases stay distinct.</p></li>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">adapter</span> <span class="o">=</span> <span class="n">OpenLineageAdapter</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">"my_namespace"</span><span class="p">,</span> <span class="s2">"my_job"</span><span class="p">,</span> <span class="n">sql_dataset_identity</span><span class="o">=</span><span class="s2">"datasource"</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>For the Polars database materializers, datasource mode names a dataset only when Polars reaches the
+database through a connection Hamilton can identify (see <a class="reference internal" href="../../../concepts/materialization/#sql-metadata-and-lineage"><span class="std std-ref">SQL metadata and lineage</span></a>). It emits
+no dataset, and logs why, for a URL string written with <code class="docutils literal notranslate"><span class="pre">engine=&quot;adbc&quot;</span></code>, an ODBC connection
+string, ADBC connections, SQLAlchemy sessions and session factories (sync or async), cursors and
+other DBAPI connections. Hamilton’s deprecated integration for Polars below 1.0 supports legacy
+names only: in datasource mode its database materializers log a warning asking you to upgrade Polars
+and emit no dataset.</p>
 <p>The rest of this section describes the <code class="docutils literal notranslate"><span class="pre">&quot;datasource&quot;</span></code> identity:</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -734,6 +743,10 @@ SQL and no input dataset is emitted for it. Give such tables plain names, or rea
 query. A read by another name that is not a plain identifier (<code class="docutils literal notranslate"><span class="pre">daily</span> <span class="pre">revenue</span></code>) is emitted as
 that table when no SQL statement starts at it; one starting with <code class="docutils literal notranslate"><span class="pre">table</span></code> is left out, since
 Postgres’ <code class="docutils literal notranslate"><span class="pre">TABLE</span> <span class="pre">t</span></code> is a statement <code class="docutils literal notranslate"><span class="pre">openlineage-sql</span></code> does not know.</p>
+<p>A write is handled alike, for the pandas and Polars writers: a table name that is not a plain identifier is
+parsed, and is the table written unless it parses as a statement that names tables, such as a table literally
+called <code class="docutils literal notranslate"><span class="pre">INSERT</span> <span class="pre">INTO</span> <span class="pre">orders</span> <span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">customers</span></code>. The tables that statement writes are emitted instead, or
+none when it only reads. Give such tables plain names.</p>
 <p>Whatever cannot be fully identified is left out and logged as a warning from the
 <code class="docutils literal notranslate"><span class="pre">hamilton.plugins.h_openlineage</span></code> logger, never guessed. The following cases are left out:</p>
 <ul class="simple">

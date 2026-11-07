@@ -1004,8 +1004,10 @@ was read and written.</p>
 <section id="sql-metadata-and-lineage">
 <span id="id1"></span><h2>SQL metadata and lineage<a class="headerlink" href="#sql-metadata-and-lineage" title="Link to this heading">¶</a></h2>
 <p>The built-in SQL materializers (<code class="docutils literal notranslate"><span class="pre">&#64;load_from.sql</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;save_to.sql</span></code>, <code class="docutils literal notranslate"><span class="pre">from_.sql</span></code>, <code class="docutils literal notranslate"><span class="pre">to.sql</span></code> and the
-<code class="docutils literal notranslate"><span class="pre">PandasSqlReader</span></code> / <code class="docutils literal notranslate"><span class="pre">PandasSqlWriter</span></code> behind them) return <code class="docutils literal notranslate"><span class="pre">sql_metadata</span></code> describing what was read
-or written. Since version <code class="docutils literal notranslate"><span class="pre">1.1.0</span></code> of that metadata, they also record <em>where</em>: the database the
+<code class="docutils literal notranslate"><span class="pre">PandasSqlReader</span></code> / <code class="docutils literal notranslate"><span class="pre">PandasSqlWriter</span></code> behind them) and the Polars database materializers
+(<code class="docutils literal notranslate"><span class="pre">&#64;load_from.database</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;save_to.database</span></code>, <code class="docutils literal notranslate"><span class="pre">from_.database</span></code> and <code class="docutils literal notranslate"><span class="pre">to.database</span></code> on Polars
+DataFrames, backed by <code class="docutils literal notranslate"><span class="pre">PolarsDatabaseReader</span></code> / <code class="docutils literal notranslate"><span class="pre">PolarsDatabaseWriter</span></code>) return <code class="docutils literal notranslate"><span class="pre">sql_metadata</span></code>
+describing what was read or written. Since version <code class="docutils literal notranslate"><span class="pre">1.1.0</span></code> of that metadata, they also record <em>where</em>: the database the
 connection points at. Lineage consumers such as the <a class="reference internal" href="../../reference/lifecycle-hooks/OpenLineageAdapter/"><span class="doc">OpenLineage adapter</span></a> use this to name the physical tables a query
 reads, without any custom loader or hand-maintained mapping.</p>
 <p>Take a graph that reads a query joining <code class="docutils literal notranslate"><span class="pre">orders</span></code> and <code class="docutils literal notranslate"><span class="pre">customers</span></code> from a sales database,
@@ -1078,8 +1080,10 @@ table name. Without <code class="docutils literal notranslate"><span class="pre"
 <td><p>The bare table name read or written, or <code class="docutils literal notranslate"><span class="pre">None</span></code> for a statement.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">schema</span></code></p></td>
-<td><p>The schema explicitly passed to the writer (<code class="docutils literal notranslate"><span class="pre">PandasSqlWriter(schema=...)</span></code>), else <code class="docutils literal notranslate"><span class="pre">None</span></code>.
-<em>New in 1.1.0.</em></p></td>
+<td><p>The schema explicitly passed to the writer (<code class="docutils literal notranslate"><span class="pre">PandasSqlWriter(schema=...)</span></code>). The Polars
+writer takes no <code class="docutils literal notranslate"><span class="pre">schema</span></code> argument and derives it from a qualified <code class="docutils literal notranslate"><span class="pre">table_name</span></code> the way
+Polars splits it: <code class="docutils literal notranslate"><span class="pre">reporting.daily_revenue</span></code> records <code class="docutils literal notranslate"><span class="pre">schema=&quot;reporting&quot;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">table_name=&quot;daily_revenue&quot;</span></code>. <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise. <em>New in 1.1.0.</em></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">operation</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;read&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;write&quot;</span></code>; <code class="docutils literal notranslate"><span class="pre">None</span></code> when the helper was called in its original two-argument
@@ -1149,6 +1153,21 @@ tables in the attached files can still be named.</p></td>
 </tbody>
 </table>
 </div>
+<p>The Polars database materializers pass their <code class="docutils literal notranslate"><span class="pre">connection</span></code> to Polars, which hands it to a database
+engine of its own choosing, so <code class="docutils literal notranslate"><span class="pre">source</span></code> is recorded only where that engine opens the database
+the table above describes:</p>
+<ul class="simple">
+<li><p>Identified: a SQLAlchemy <code class="docutils literal notranslate"><span class="pre">Engine</span></code> or <code class="docutils literal notranslate"><span class="pre">Connection</span></code>, sync or async; a URL string written through
+SQLAlchemy (the writer’s default <code class="docutils literal notranslate"><span class="pre">engine=&quot;sqlalchemy&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>, where Polars hands a
+string to SQLAlchemy); a <code class="docutils literal notranslate"><span class="pre">sqlite3.Connection</span></code> on a file, for reads.</p></li>
+<li><p>Not identified, recorded as <code class="docutils literal notranslate"><span class="pre">source=None</span></code> with a note: a URL string written with
+<code class="docutils literal notranslate"><span class="pre">engine=&quot;adbc&quot;</span></code> (ADBC reads URLs differently from SQLAlchemy, so <code class="docutils literal notranslate"><span class="pre">sqlite://sub/x.db</span></code> is a
+different file to each); an ODBC connection string, the only string Polars reads; ADBC
+connections; SQLAlchemy sessions and session factories, sync or async (<code class="docutils literal notranslate"><span class="pre">Session</span></code>,
+<code class="docutils literal notranslate"><span class="pre">AsyncSession</span></code>, <code class="docutils literal notranslate"><span class="pre">async_sessionmaker</span></code>); cursors; and other DBAPI connections.</p></li>
+<li><p>With Polars below 1.0, Hamilton’s deprecated integration records no datasource and its note asks
+you to upgrade Polars.</p></li>
+</ul>
 <p>Inspection never opens a connection, runs a write, commits, rolls back, or changes session settings,
 and never raises: a failure during inspection becomes a <code class="docutils literal notranslate"><span class="pre">notes</span></code> entry naming the exception type
 only. <code class="docutils literal notranslate"><span class="pre">source</span></code> holds scalars, never the connection object or the URL string, so it serializes
