@@ -132,11 +132,13 @@ test = [
   "lz4",
   "matplotlib",
   "mlflow>=3; python_version <= '3.13'", # stops uv backtracking to mlflow 1.x, which fails to import, to satisfy the pyarrow floor below
+  "narwhals",
   "networkx",
   "openpyxl", # for excel data loader
   "pandera[dask]",
   "plotly",
   "polars",
+  "psycopg2-binary", # the openlineage tests' PostgreSQL driver
   "pyarrow",
   "pyarrow>=26; python_version >= '3.15'", # first release with 3.15 wheels; without it, uv's universal resolution applies mlflow's pyarrow<26 to every Python
   "pydantic >=2.0",
@@ -152,6 +154,14 @@ test = [
   "xlsx2csv", # for excel data loader
   "xlsxwriter",  # Excel export requires 'xlsxwriter'
   "xxhash>=0.8.0", # exercises the high-performance fingerprinting path in tests
+]
+test-polars = [
+  "polars",
+]
+test-pyspark = [
+  "grpcio",
+  "grpcio-status>=1.48.1",
+  "pyspark[connect]",
 ]
 docs = [
   {include-group = "dev"},
@@ -306,6 +316,8 @@ exclude = ["*tests*"]
 [tool.setuptools.package-data]
 hamilton = ["*.json", "*.md", "*.txt"]
 
+# Each path's pyproject.toml is also in the pull_request paths of .github/workflows/hamilton-main.yml,
+# since uv.lock resolves these packages from it.
 [tool.uv.sources]
 apache-hamilton-lsp = { path = "dev_tools/language_server", editable = true }
 apache-hamilton-sdk = { path = "ui/sdk", editable = true }

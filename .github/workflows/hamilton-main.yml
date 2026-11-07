@@ -1,10 +1,11 @@
 name: Unit Tests
 
 on:
-  # No lockfile pins Hamilton's dependencies, so every run tests their newest releases. The daily
-  # run tests `main` against them when nobody opens a pull request, and the notify-slack job
-  # reports what broke. The minute is off the hour because GitHub delays or drops scheduled runs
-  # at the top of the hour, when most schedules start.
+  # Pull requests install the dependency versions committed in `uv.lock`. Scheduled and manual runs
+  # re-resolve the lock to the newest releases first, so the daily run tests `main` against what
+  # Hamilton's users install, and the notify-slack job reports what broke. The minute is off the
+  # hour because GitHub delays or drops scheduled runs at the top of the hour, when most schedules
+  # start.
   schedule:
     - cron: '17 4 * * *'
 
@@ -29,6 +30,18 @@ on:
         # tests/test_redirect_packages.py renders every redirect package from these
         - 'scripts/render_redirect_pyproject.py'
         - 'sf-hamilton*-redirect/**'
+        - 'uv.lock'
+        # `uv.lock` also pins these packages, which pyproject.toml installs from their paths
+        - 'dev_tools/language_server/pyproject.toml'
+        - 'ui/backend/pyproject.toml'
+        - 'ui/sdk/pyproject.toml'
+
+# `uv sync` and `uv run` fail when uv.lock disagrees with pyproject.toml. To fix that failure, run
+# `uv lock` and commit the updated uv.lock.
+env:
+  UV_LOCKED: 1
+  # Keep the resolver reproducible on PRs; the canary also exercises new uv releases.
+  UV_INSTALLER_URL: ${{ github.event_name == 'pull_request' && 'https://astral.sh/uv/0.13.7/install.sh' || 'https://astral.sh/uv/install.sh' }}
 
 jobs:
   static-checks:
@@ -42,7 +55,7 @@ jobs:
           uses: actions/checkout@v4
 
         - name: Install uv
-          run: curl -LsSf https://astral.sh/uv/install.sh | sh
+          run: curl -LsSf "$UV_INSTALLER_URL" | sh
 
         - name: Set up Python
           uses: actions/setup-python@v5
@@ -60,6 +73,9 @@ jobs:
     # time daily with no one to report to.
     if: github.event_name != 'schedule' || github.repository == 'apache/hamilton'
     runs-on: ${{ matrix.os }}
+    # A healthy leg takes up to about 30 minutes; a hung test would otherwise hold it for GitHub's
+    # 6-hour default and delay the canary's Slack report.
+    timeout-minutes: 60
     strategy:
       fail-fast: false # want to see for each version if fails are different
       matrix:
@@ -90,31 +106,26 @@ jobs:
           --health-retries 5
 
     steps:
-        - name: Install Graphviz on Linux
-          if: runner.os == 'Linux'
+        - name: Install Graphviz
           run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends graphviz
-
-        - name: Install Graphviz on Windows
-          if: runner.os == 'Windows'
-          run: choco install graphviz
-          shell: powershell
-
-        - name: Install Graphviz on macOS
-          if: runner.os == 'macOS'
-          run: |
-            brew install graphviz
-            brew install libomp
 
         - name: Checkout repository
           uses: actions/checkout@v4
 
         - name: Install uv
-          run: curl -LsSf https://astral.sh/uv/install.sh | sh
+          run: curl -LsSf "$UV_INSTALLER_URL" | sh
 
         - name: Set up Python
           uses: actions/setup-python@v5
           with:
             python-version: ${{ matrix.python-version }}
+
+        # The canary's re-resolve: later steps install the re-resolved lock; nothing commits it back.
+        - name: Resolve the newest releases
+          if: github.event_name != 'pull_request'
+          env:
+            UV_LOCKED: 0
+          run: uv lock --upgrade
 
         - name: Test hamilton main package
           run: |
@@ -125,7 +136,6 @@ jobs:
         - name: Test integrations
           run: |
             uv sync --group test --extra pandera
-            uv pip install -r tests/integrations/pandera/requirements.txt
             uv run pytest tests/integrations
 
         - name: Test MCP
@@ -138,7 +148,6 @@ jobs:
             HAMILTON_TEST_POSTGRES_URL: postgresql+psycopg2://hamilton:hamilton@localhost:5432/sales
           run: |
             uv sync --group test --extra openlineage
-            uv pip install psycopg2-binary
             uv run pytest tests/io/test_utils.py tests/plugins/test_pandas_extensions.py tests/plugins/test_h_openlineage.py
 
         - name: Test pandas
@@ -148,8 +157,7 @@ jobs:
 
         - name: Test polars
           run: |
-            uv sync --group test
-            uv pip install polars
+            uv sync --group test --group test-polars
             uv run pytest plugin_tests/h_polars
 
         # The test group resolves polars 2.x, so the readers Hamilton registers for polars 1.x are
@@ -163,8 +171,7 @@ jobs:
 
         - name: Test narwhals
           run: |
-            uv sync --group test
-            uv pip install polars pandas narwhals
+            uv sync --group test --group test-polars
             uv run pytest plugin_tests/h_narwhals
 
         - name: Test dask
@@ -182,29 +189,18 @@ jobs:
             uv run pytest plugin_tests/h_ray
 
         - name: Test pyspark
-          if: ${{ runner.os == 'Linux' }}
           env:
             PYSPARK_SUBMIT_ARGS: "--conf spark.sql.ansi.enabled=false pyspark-shell"
           run: |
             sudo apt-get install --no-install-recommends --yes default-jre
-            uv sync --group test --extra pyspark
-            uv pip install 'pyspark[connect]' 'grpcio'
-            uv pip install --no-cache --reinstall --strict 'grpcio-status >= 1.48.1'
+            uv sync --group test --group test-pyspark --extra pyspark
             uv run pytest plugin_tests/h_spark
 
-        - name: Test pyspark
-          if: ${{ runner.os != 'Linux' }}
-          env:
-            PYSPARK_SUBMIT_ARGS: "--conf spark.sql.ansi.enabled=false pyspark-shell"
-          run: |
-            uv sync --group test --extra pyspark
-            uv pip install 'pyspark[connect]' 'grpcio'
-            uv pip install --no-cache --reinstall --strict 'grpcio-status >= 1.48.1'
-            uv run pytest plugin_tests/h_spark
-
-        # Vaex 4.19 only ships wheels for py<=3.12 and pins dask<2024.9 / pandas<3, which conflicts
-        # with the test group. Install it on top of the synced env rather than through the lock, otherwise
-        # the universal resolution falls back to vaex 4.17 which has no wheels for py>=3.11.
+        # Vaex 4.19 only ships wheels for py<=3.12 and pins
+        # dask<2024.9 / pandas<3, which conflicts with the test group. Install it on top of the synced
+        # env rather than through the lock: the universal resolution falls back to vaex 4.17, which has
+        # no wheels for py>=3.11, and a vaex group declared as conflicting would pull pandas below 3
+        # for every other step.
         - name: Test vaex
           if: ${{ matrix.python-version == '3.11' || matrix.python-version == '3.12' }}
           run: |
