@@ -19,7 +19,7 @@
 # scripts/render_redirect_pyproject.py, which fills in the placeholders and the extras.
 
 [build-system]
-requires = ["setuptools>=64"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
