@@ -148,6 +148,15 @@ jobs:
             uv pip install polars
             uv run pytest plugin_tests/h_polars
 
+        # The test group resolves polars 2.x, so the readers Hamilton registers for polars 1.x are
+        # only exercised here. `--no-sync` keeps `uv run` from reinstalling the locked polars 2.x.
+        - name: Test polars 1.x readers
+          run: |
+            uv sync --group test
+            uv pip install 'polars<2'
+            uv run --no-sync python -c "import polars; assert polars.__version__.startswith('1.'), polars.__version__; print('polars', polars.__version__)"
+            uv run --no-sync pytest tests/plugins/test_polars_extensions.py tests/plugins/test_polars_lazyframe_extensions.py
+
         - name: Test narwhals
           run: |
             uv sync --group test

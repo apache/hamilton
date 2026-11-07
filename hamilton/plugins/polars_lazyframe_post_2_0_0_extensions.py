@@ -16,233 +16,134 @@
 # under the License.
 
 """Polars >= 2.0.0 LazyFrame data loaders. polars_lazyframe_extensions registers these instead of
-its own scan readers, whose polars arguments were renamed or removed in polars 2.0.0. The readers
-keep the fields of the polars_lazyframe_extensions readers."""
+the polars_lazyframe_pre_2_0_0_extensions readers, which they subclass to pass on their fields under
+the argument names polars 2.0.0 uses. The fields stay the same; those polars 2.0.0 removed default to
+None and warn when set."""
 
 import dataclasses
-from collections.abc import Collection, Mapping, Sequence
-from io import BytesIO
-from pathlib import Path
-from typing import (
-    Any,
-    BinaryIO,
-    TextIO,
-)
+from collections.abc import Sequence
+from typing import Any
 
 import polars as pl
-from polars._typing import CsvEncoding
 
 from hamilton import registry
 from hamilton.io import utils
-from hamilton.io.data_adapters import DataLoader
+from hamilton.plugins import polars_lazyframe_pre_2_0_0_extensions as pre_2
+from hamilton.plugins.polars_post_2_0_0_extensions import _to_polars_2_kwargs, _warn_ignored_fields
 
 DATAFRAME_TYPE = pl.LazyFrame
 
 
+def _select_columns(
+    df: pl.LazyFrame, columns: Sequence[int] | Sequence[str] | None, row_index_name: str | None
+) -> pl.LazyFrame:
+    """Selects ``columns`` after a scan, since the ``scan_*`` functions do not take ``columns``.
+
+    Matches ``read_*(columns=...)``: a single name selects that column, column positions count
+    from the file's columns (negative ones from its end), and the row index column, when there is
+    one, stays first.
+    """
+    if columns is None:
+        return df
+    if isinstance(columns, str):
+        columns = [columns]
+    if all(isinstance(column, int) for column in columns):
+        offset = 0 if row_index_name is None else 1
+        selected = pl.nth(
+            *(position + offset if position >= 0 else position for position in columns)
+        )
+    else:
+        selected = pl.col(*columns)
+    if row_index_name is None:
+        return df.select(selected)
+    return df.select(pl.col(row_index_name), selected)
+
+
 @dataclasses.dataclass
-class PolarsScanCSVReader(DataLoader):
+class PolarsScanCSVReader(pre_2.PolarsScanCSVReader):
     """Class specifically to handle loading CSV files with Polars.
-    Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_csv.html
+    Should map to https://docs.pola.rs/api/python/stable/reference/api/polars.scan_csv.html
 
-    polars 2.0.0 removed `rechunk`, so it is not passed on.
+    `columns` is selected after the scan. `n_threads`, `batch_size` and `rechunk` have no effect,
+    so setting any of them warns.
     """
 
-    file: str | TextIO | BytesIO | Path | BinaryIO | bytes
-    # kwargs:
-    has_header: bool = True
-    columns: Sequence[int] | Sequence[str] = None
-    new_columns: Sequence[str] = None
-    separator: str = ","
-    comment_char: str = None
-    quote_char: str = '"'
-    skip_rows: int = 0
-    dtypes: Mapping[str, Any] | Sequence[Any] = None
-    null_values: str | Sequence[str] | dict[str, str] = None
-    missing_utf8_is_empty_string: bool = False
-    ignore_errors: bool = False
-    try_parse_dates: bool = False
-    n_threads: int = None
-    infer_schema_length: int = 100
-    batch_size: int = 8192
-    n_rows: int = None
-    encoding: CsvEncoding | str = "utf8"
-    low_memory: bool = False
-    rechunk: bool = True
-    use_pyarrow: bool = False
-    storage_options: dict[str, Any] = None
-    skip_rows_after_header: int = 0
-    row_count_name: str = None
-    row_count_offset: int = 0
-    eol_char: str = "\n"
-    raise_if_empty: bool = True
+    n_threads: int | None = None
+    batch_size: int | None = None
+    rechunk: bool | None = None
+
+    def __post_init__(self):
+        _warn_ignored_fields(self, ("n_threads", "batch_size", "rechunk"))
 
     def _get_loading_kwargs(self):
-        kwargs = {}
-        if self.has_header is not None:
-            kwargs["has_header"] = self.has_header
-        if self.columns is not None:
-            kwargs["columns"] = self.columns
-        if self.new_columns is not None:
-            kwargs["new_columns"] = self.new_columns
-        if self.separator is not None:
-            kwargs["separator"] = self.separator
-        if self.comment_char is not None:
-            kwargs["comment_prefix"] = self.comment_char
-        if self.quote_char is not None:
-            kwargs["quote_char"] = self.quote_char
-        if self.skip_rows is not None:
-            kwargs["skip_rows"] = self.skip_rows
-        if self.dtypes is not None:
-            kwargs["schema_overrides"] = self.dtypes
-        if self.null_values is not None:
-            kwargs["null_values"] = self.null_values
-        if self.missing_utf8_is_empty_string is not None:
-            kwargs["empty_string_is_null"] = not self.missing_utf8_is_empty_string
-        if self.ignore_errors is not None:
-            kwargs["ignore_errors"] = self.ignore_errors
-        if self.try_parse_dates is not None:
-            kwargs["try_parse_dates"] = self.try_parse_dates
-        if self.n_threads is not None:
-            kwargs["n_threads"] = self.n_threads
-        if self.infer_schema_length is not None:
-            kwargs["infer_schema_length"] = self.infer_schema_length
-        if self.n_rows is not None:
-            kwargs["n_rows"] = self.n_rows
-        if self.encoding is not None:
-            kwargs["encoding"] = self.encoding
-        if self.low_memory is not None:
-            kwargs["low_memory"] = self.low_memory
-        if self.storage_options is not None:
-            kwargs["storage_options"] = self.storage_options
-        if self.skip_rows_after_header is not None:
-            kwargs["skip_rows_after_header"] = self.skip_rows_after_header
-        if self.row_count_name is not None:
-            kwargs["row_index_name"] = self.row_count_name
-        if self.row_count_offset is not None:
-            kwargs["row_index_offset"] = self.row_count_offset
-        if self.eol_char is not None:
-            kwargs["eol_char"] = self.eol_char
-        if self.raise_if_empty is not None:
-            kwargs["raise_if_empty"] = self.raise_if_empty
-        return kwargs
-
-    @classmethod
-    def applicable_types(cls) -> Collection[type]:
-        return [DATAFRAME_TYPE]
+        return _to_polars_2_kwargs(
+            super()._get_loading_kwargs(), ("columns", "n_threads", "rechunk")
+        )
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
-        df = pl.scan_csv(self.file, **self._get_loading_kwargs())
-
+        df = _select_columns(
+            pl.scan_csv(self.file, **self._get_loading_kwargs()), self.columns, self.row_count_name
+        )
         metadata = utils.get_file_and_dataframe_metadata(self.file, df)
         return df, metadata
 
-    @classmethod
-    def name(cls) -> str:
-        return "csv"
-
 
 @dataclasses.dataclass
-class PolarsScanParquetReader(DataLoader):
+class PolarsScanParquetReader(pre_2.PolarsScanParquetReader):
     """Class specifically to handle loading parquet files with polars
-    Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_parquet.html
+    Should map to https://docs.pola.rs/api/python/stable/reference/api/polars.scan_parquet.html
 
-    polars 2.0.0 removed `rechunk`, so it is not passed on.
+    `columns` is selected after the scan. `rechunk` has no effect with polars 2.0.0, so setting it
+    warns.
     """
 
-    file: str | TextIO | BytesIO | Path | BinaryIO | bytes
-    # kwargs:
-    columns: list[int] | list[str] = None
-    n_rows: int = None
-    use_pyarrow: bool = False
-    memory_map: bool = True
-    storage_options: dict[str, Any] = None
-    parallel: Any = "auto"
-    row_count_name: str = None
-    row_count_offset: int = 0
-    low_memory: bool = False
-    use_statistics: bool = True
-    rechunk: bool = True
+    rechunk: bool | None = None
 
-    @classmethod
-    def applicable_types(cls) -> Collection[type]:
-        return [DATAFRAME_TYPE]
+    def __post_init__(self):
+        _warn_ignored_fields(self, ("rechunk",))
 
     def _get_loading_kwargs(self):
-        kwargs = {}
-        if self.columns is not None:
-            kwargs["columns"] = self.columns
-        if self.n_rows is not None:
-            kwargs["n_rows"] = self.n_rows
-        if self.storage_options is not None:
-            kwargs["storage_options"] = self.storage_options
-        if self.parallel is not None:
-            kwargs["parallel"] = self.parallel
-        if self.row_count_name is not None:
-            kwargs["row_index_name"] = self.row_count_name
-        if self.row_count_offset is not None:
-            kwargs["row_index_offset"] = self.row_count_offset
-        if self.low_memory is not None:
-            kwargs["low_memory"] = self.low_memory
-        if self.use_statistics is not None:
-            kwargs["use_statistics"] = self.use_statistics
-        return kwargs
+        return _to_polars_2_kwargs(super()._get_loading_kwargs(), ("columns", "rechunk"))
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
-        df = pl.scan_parquet(self.file, **self._get_loading_kwargs())
+        df = _select_columns(
+            pl.scan_parquet(self.file, **self._get_loading_kwargs()),
+            self.columns,
+            self.row_count_name,
+        )
         metadata = utils.get_file_and_dataframe_metadata(self.file, df)
         return df, metadata
 
-    @classmethod
-    def name(cls) -> str:
-        return "parquet"
-
 
 @dataclasses.dataclass
-class PolarsScanFeatherReader(DataLoader):
+class PolarsScanFeatherReader(pre_2.PolarsScanFeatherReader):
     """
     Class specifically to handle loading Feather/Arrow IPC files with Polars.
-    Should map to https://pola-rs.github.io/polars/py-polars/html/reference/api/polars.read_ipc.html
+    Should map to https://docs.pola.rs/api/python/stable/reference/api/polars.scan_ipc.html
 
-    polars 2.0.0 removed `memory_map` and `rechunk`, so they are not passed on.
+    `columns` is selected after the scan. `memory_map` and `rechunk` have no effect with polars
+    2.0.0, so setting either warns.
     """
 
-    source: str | BinaryIO | BytesIO | Path | bytes
-    # kwargs:
-    columns: list[str] | list[int] | None = None
-    n_rows: int | None = None
-    use_pyarrow: bool = False
-    memory_map: bool = True
-    storage_options: dict[str, Any] | None = None
-    row_count_name: str | None = None
-    row_count_offset: int = 0
-    rechunk: bool = True
+    memory_map: bool | None = None
+    rechunk: bool | None = None
 
-    @classmethod
-    def applicable_types(cls) -> Collection[type]:
-        return [DATAFRAME_TYPE]
+    def __post_init__(self):
+        _warn_ignored_fields(self, ("memory_map", "rechunk"))
 
     def _get_loading_kwargs(self):
-        kwargs = {}
-        if self.columns is not None:
-            kwargs["columns"] = self.columns
-        if self.n_rows is not None:
-            kwargs["n_rows"] = self.n_rows
-        if self.storage_options is not None:
-            kwargs["storage_options"] = self.storage_options
-        if self.row_count_name is not None:
-            kwargs["row_index_name"] = self.row_count_name
-        if self.row_count_offset is not None:
-            kwargs["row_index_offset"] = self.row_count_offset
-        return kwargs
+        return _to_polars_2_kwargs(
+            super()._get_loading_kwargs(), ("columns", "memory_map", "rechunk")
+        )
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
-        df = pl.scan_ipc(self.source, **self._get_loading_kwargs())
+        df = _select_columns(
+            pl.scan_ipc(self.source, **self._get_loading_kwargs()),
+            self.columns,
+            self.row_count_name,
+        )
         metadata = utils.get_file_metadata(self.source)
         return df, metadata
-
-    @classmethod
-    def name(cls) -> str:
-        return "feather"
 
 
 def register_data_loaders():
