@@ -154,7 +154,8 @@ export APACHE_ID=your_apache_id
 Derived variables used below:
 
 ```bash
-export PACKAGE=apache-${PACKAGE_KEY}  # e.g., apache-hamilton
+# apache-hamilton, or apache-hamilton-<key> for the others (e.g., apache-hamilton-sdk)
+if [ "${PACKAGE_KEY}" = hamilton ]; then export PACKAGE=apache-hamilton; else export PACKAGE=apache-hamilton-${PACKAGE_KEY}; fi
 export REDIRECT=sf-${PACKAGE#apache-}  # e.g., sf-hamilton, sf-hamilton-sdk
 export TAG="${PACKAGE}-v${VERSION}-incubating-RC${RC}"
 ```
@@ -170,6 +171,8 @@ scripts/promote_rc.sh ${PACKAGE} ${VERSION} ${RC}
 ```
 
 #### 2. Upload to PyPI
+
+For a package other than `hamilton`, the release script wrote its artifacts to `dist/` under the package's own directory (its `working_dir` in `scripts/apache_release_helper.py`): run this from there, then go back to the repository root, where every other step runs.
 
 ```bash
 PACKAGE_UNDERSCORE=$(echo ${PACKAGE} | tr '-' '_')
