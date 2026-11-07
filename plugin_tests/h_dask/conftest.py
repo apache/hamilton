@@ -22,9 +22,3 @@ if sys.version_info < (3, 10):
     import dask
 
     dask.config.set({"dataframe.query-planning": False})
-
-
-def pytest_sessionfinish(session, exitstatus):
-    if exitstatus == 5:  # pytest.ExitCode.NO_TESTS_COLLECTED
-        if sys.version_info >= (3, 14):
-            session.exitstatus = 0

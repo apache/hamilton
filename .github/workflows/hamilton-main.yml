@@ -70,6 +70,7 @@ jobs:
           - '3.12'
           - '3.13'
           - '3.14'
+          - '3.15'
     env:
       HAMILTON_TELEMETRY_ENABLED: false
     services:
@@ -171,8 +172,9 @@ jobs:
             uv sync --group test --extra dask
             uv run pytest plugin_tests/h_dask
 
+        # the `ray` extra in pyproject.toml installs ray only on Python < 3.15
         - name: Test ray
-          if: ${{ matrix.python-version != '3.14' }}
+          if: ${{ matrix.python-version == '3.11' || matrix.python-version == '3.12' || matrix.python-version == '3.13' || matrix.python-version == '3.14' }}
           env:
             RAY_ENABLE_UV_RUN_RUNTIME_ENV: 0 # https://github.com/ray-project/ray/issues/53848
           run: |
