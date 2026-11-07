@@ -203,7 +203,7 @@ pip install ${REDIRECT}==${VERSION}
 python -c "from importlib.metadata import version; assert version('${PACKAGE}') == '${VERSION}', version('${PACKAGE}')"
 
 # When PACKAGE_KEY is hamilton: an extra goes through the redirect
-pip install sf-hamilton[visualization]==${VERSION}
+pip install "sf-hamilton[visualization]==${VERSION}"
 python -c "import hamilton; import graphviz; print('OK')"
 ```
 
