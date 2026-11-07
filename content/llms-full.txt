@@ -2690,7 +2690,7 @@ Nonetheless, there exists higher level abstractions for power users that *may* b
 
 This page assumes an advanced understanding of Apache Hamilton and will cover:
 
-- @pipe
+- @pipe_input
 - @subdag
 - @parameterize_subdag
 - @resolve
@@ -12603,7 +12603,7 @@ The plugin has deep knowledge of Hamilton:
 - **Column extraction**: @extract_columns, @extract_fields
 - **Data quality**: @check_output, @check_output_custom, @schema
 - **I/O**: @save_to, @load_from, @dataloader, @datasaver
-- **Transformation**: @pipe, @does, @mutate, @step
+- **Transformation**: @pipe_input, @does, @mutate, @step
 - **Advanced**: @subdag, @resolve, @cache
 
 ### Integration Patterns
@@ -13013,7 +13013,7 @@ Get Hamilton documentation for a specific topic.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `topic` | `str` | Yes | One of: `overview`, `decorators`, `driver`, `builder`, or any decorator name (`parameterize`, `extract_columns`, `config`, `check_output`, `tag`, `pipe`, `does`, `subdag`, etc.) |
+| `topic` | `str` | Yes | One of: `overview`, `decorators`, `driver`, `builder`, or any decorator name (`parameterize`, `extract_columns`, `config`, `check_output`, `tag`, `pipe_input`, `does`, `subdag`, etc.) |
 
 **Returns:** A string containing the requested documentation.
 
@@ -13805,7 +13805,7 @@ do this, this presents an easier way to do this, especially in a chain.
 
 pipe
 -----------------------------------------------------------------------
-**DeprecationWarning from 2.0.0: use pipe_input instead**
+**Deprecated: warns from 1.20.0 and fails from 2.0.0. Use pipe_input instead.**
 
 .. autoclass:: hamilton.function_modifiers.macros.pipe
    :special-members: __init__

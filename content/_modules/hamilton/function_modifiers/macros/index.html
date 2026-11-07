@@ -778,11 +778,10 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">warn_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">fail_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">use_this</span><span class="o">=</span><span class="n">delayed_resolve</span><span class="p">,</span>
-    <span class="n">explanation</span><span class="o">=</span><span class="s2">"dynamic_transform has been replaced with @resolve -- a cleaner way"</span>
-    <span class="s2">"to utilize config for resolving decorators. Note this allows you to use any"</span>
+    <span class="n">explanation</span><span class="o">=</span><span class="s2">"dynamic_transform has been replaced with @resolve -- a cleaner way "</span>
+    <span class="s2">"to utilize config for resolving decorators. Note this allows you to use any "</span>
     <span class="s2">"existing decorators."</span><span class="p">,</span>
-    <span class="n">current_version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">"https://hamilton.apache.org/reference/decorators/"</span><span class="p">,</span>
+    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">"https://hamilton.apache.org/reference/decorators/resolve/"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">dynamic_transform</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">NodeCreator</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -844,6 +843,13 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">config_param</span><span class="p">]</span>
 
 
+<span class="nd">@deprecated</span><span class="p">(</span>
+    <span class="n">warn_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">fail_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">use_this</span><span class="o">=</span><span class="n">delayed_resolve</span><span class="p">,</span>
+    <span class="n">explanation</span><span class="o">=</span><span class="s2">"model is dynamic_transform under another name, so @resolve replaces it too."</span><span class="p">,</span>
+    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">"https://hamilton.apache.org/reference/decorators/resolve/"</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">model</span><span class="p">(</span><span class="n">dynamic_transform</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Model, same as a dynamic transform"""</span>
 
@@ -1116,7 +1122,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="o">...</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">allow_custom_namespace</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
                 <span class="s2">"Currently, setting namespace globally inside "</span>
-                <span class="s2">"pipe(...)/flow(...) is not compatible with setting namespace "</span>
+                <span class="s2">"pipe_input(...)/pipe_output(...) is not compatible with setting namespace "</span>
                 <span class="s2">"for a step(...) call."</span>
             <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1124,7 +1130,7 @@ s=d.getElementsByTagName('script')[0];
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> cannot be applied with the following args: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2"> "</span>
-                <span class="sa">f</span><span class="s2">"and the following kwargs: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">. See documentation on pipe(), the function "</span>
+                <span class="sa">f</span><span class="s2">"and the following kwargs: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">. See documentation on pipe_input() and pipe_output(), the function "</span>
                 <span class="s2">"shapes are currently restrictive to anything with named kwargs (either kwarg-only or positional/kwarg arguments), "</span>
                 <span class="s2">"and must be typed. If you need functions that don't have these requirements, please reach out to the Hamilton team."</span>
                 <span class="s2">"Current workarounds are to define a wrapper function that assigns types with the proper keyword-friendly arguments."</span>
@@ -1176,7 +1182,7 @@ s=d.getElementsByTagName('script')[0];
 
 <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">SingleDependency</span> <span class="o">|</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">SingleDependency</span> <span class="o">|</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Applicable</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Applies a function to for a node (or a subcomponent of a node).</span>
-<span class="sd">    See documentation for `pipe` to see how this is used.</span>
+<span class="sd">    See documentation for `pipe_input` to see how this is used.</span>
 
 <span class="sd">    :param fn: Function to use. Must be validly called as f(**kwargs), and have a 1:1 mapping of kwargs to parameters.</span>
 <span class="sd">    :param args: Args to pass to the function -- although these cannot be variable/position-only arguments, they can be</span>
@@ -1508,7 +1514,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="k">if</span> <span class="n">first_parameter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">base</span><span class="o">.</span><span class="n">InvalidDecoratorException</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">"Function: </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has a first parameter that is not a dependency. "</span>
-                    <span class="sa">f</span><span class="s2">"@pipe requires the parameter names to match the function parameters. "</span>
+                    <span class="sa">f</span><span class="s2">"@pipe_input requires the parameter names to match the function parameters. "</span>
                     <span class="sa">f</span><span class="s2">"Thus it might not be compatible with some other decorators"</span>
                 <span class="p">)</span>
             <span class="n">mapping</span><span class="p">[</span><span class="n">first_parameter</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span>
@@ -1553,7 +1559,7 @@ s=d.getElementsByTagName('script')[0];
     <span class="k">def</span><span class="w"> </span><span class="nf">inject_nodes</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="nb">type</span><span class="p">]],</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">"""Injects nodes into the graph. This creates a node for each pipe() step,</span>
+<span class="w">        </span><span class="sd">"""Injects nodes into the graph. This creates a node for each pipe_input() step,</span>
 <span class="sd">        then reassigns the inputs to pass it in."""</span>
 
         <span class="n">parameters_transforms_mapping</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distribute_transforms_to_parameters</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
@@ -1617,9 +1623,8 @@ s=d.getElementsByTagName('script')[0];
     <span class="n">fail_starting</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
     <span class="n">use_this</span><span class="o">=</span><span class="n">pipe_input</span><span class="p">,</span>
     <span class="n">explanation</span><span class="o">=</span><span class="s2">"pipe has been replaced with pipe_input -- a clearer name since "</span>
-    <span class="s2">"we also added pipe_output with complimentary functionality."</span><span class="p">,</span>
-    <span class="n">current_version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">"https://hamilton.apache.org/reference/decorators/"</span><span class="p">,</span>
+    <span class="s2">"we also added pipe_output with complementary functionality."</span><span class="p">,</span>
+    <span class="n">migration_guide</span><span class="o">=</span><span class="s2">"https://hamilton.apache.org/reference/decorators/pipe/"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">pipe</span><span class="p">(</span><span class="n">pipe_input</span><span class="p">):</span>
 <div class="viewcode-block" id="pipe.__init__">
@@ -1636,8 +1641,8 @@ s=d.getElementsByTagName('script')[0];
             <span class="o">*</span><span class="n">transforms</span><span class="p">,</span>
             <span class="n">namespace</span><span class="o">=</span><span class="n">namespace</span><span class="p">,</span>
             <span class="n">on_input</span><span class="o">=</span><span class="n">on_input</span><span class="p">,</span>
-            <span class="n">collapse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">_chain</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">collapse</span><span class="o">=</span><span class="n">collapse</span><span class="p">,</span>
+            <span class="n">_chain</span><span class="o">=</span><span class="n">_chain</span><span class="p">,</span>
         <span class="p">)</span></div>
 </div>
 
@@ -1803,7 +1808,7 @@ s=d.getElementsByTagName('script')[0];
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">collapse</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                <span class="s2">"Collapsing step() functions as one node is not yet implemented for pipe(). Please reach out if you want this feature."</span>
+                <span class="s2">"Collapsing step() functions as one node is not yet implemented for pipe_output(). Please reach out if you want this feature."</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">:</span>
