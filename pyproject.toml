@@ -108,6 +108,7 @@ visualization = ["graphviz", "networkx"]
 
 [dependency-groups]
 dev = [
+  "nbformat",
   "prek",
   "ruff==0.16.9", # this should match `.pre-commit-config.yaml`
 ]
@@ -133,11 +134,13 @@ test = [
   "lz4",
   "matplotlib",
   "mlflow>=3; python_version <= '3.13'", # stops uv backtracking to mlflow 1.x, which fails to import, to satisfy the pyarrow floor below
+  "narwhals",
   "networkx",
   "openpyxl", # for excel data loader
   "pandera[dask]",
   "plotly",
-  "polars",
+  "polars>=2",
+  "psycopg2-binary", # the openlineage tests' PostgreSQL driver
   "pyarrow",
   "pyarrow>=26; python_version >= '3.15'", # first release with 3.15 wheels; without it, uv's universal resolution applies mlflow's pyarrow<26 to every Python
   "pydantic >=2.0",
@@ -153,6 +156,11 @@ test = [
   "xlsx2csv", # for excel data loader
   "xlsxwriter",  # Excel export requires 'xlsxwriter'
   "xxhash>=0.8.0", # exercises the high-performance fingerprinting path in tests
+]
+test-pyspark = [
+  "grpcio",
+  "grpcio-status>=1.48.1",
+  "pyspark[connect]",
 ]
 docs = [
   {include-group = "dev"},
@@ -307,6 +315,8 @@ exclude = ["*tests*"]
 [tool.setuptools.package-data]
 hamilton = ["*.json", "*.md", "*.txt"]
 
+# The pull_request and push path filters in .github/workflows/hamilton-main.yml include these
+# packages' pyproject.toml files because uv.lock resolves the packages from them.
 [tool.uv.sources]
 apache-hamilton-lsp = { path = "dev_tools/language_server", editable = true }
 apache-hamilton-sdk = { path = "ui/sdk", editable = true }

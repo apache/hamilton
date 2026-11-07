@@ -53,6 +53,29 @@ the given style files. Basically, you should mimic the styles and patterns in th
 
 In terms of getting setup to develop, we invite you to read our [developer setup guide](developer_setup.md).
 
+## Working with CI dependency locks
+
+Install the uv version in `UV_VERSION` in [the Unit Tests workflow](.github/workflows/hamilton-main.yml)
+(`uv --version` shows the installed version). Pull request CI uses this version and the committed
+locks. Use `uv sync --locked --group test` for the main test environment and
+`uv run --locked prek install` to set up the Git hooks.
+
+After changing dependency metadata, refresh and check the affected locks from the repository root.
+
+```sh
+uv lock
+uv lock --check
+uv lock --project .github/ci/polars1
+uv lock --check --project .github/ci/polars1
+uv lock --project .github/ci/vaex
+uv lock --check --project .github/ci/vaex
+```
+
+Commit any changed lock alongside its metadata. To update the CI uv version, change `UV_VERSION`
+and the three platform checksums from the [uv release](https://github.com/astral-sh/uv/releases)
+in the workflow, then refresh and verify all three locks with that version. Scheduled and manual
+canary runs use the latest uv and refresh their copies of the locks.
+
 ## Using circleci CLI to run tests locally
 
 1. Install the [circleci CLI](https://circleci.com/docs/2.0/local-cli/).
