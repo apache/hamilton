@@ -40,7 +40,8 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14"
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15"
 ]
 dependencies = [
     "aiohttp",
@@ -101,5 +102,5 @@ test = [
     "pydantic",
     "pyspark",
     "pytest",
-    "ray; python_version < '3.14'",
+    "ray; python_version < '3.15'",
 ]

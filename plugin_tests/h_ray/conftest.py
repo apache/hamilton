@@ -17,12 +17,12 @@
 
 import sys
 
-# Skip tests that require packages not yet available on Python 3.14
+# Skip tests that require packages not yet available on Python 3.15
 collect_ignore = []
-if sys.version_info >= (3, 14):
+if sys.version_info >= (3, 15):
     collect_ignore.extend(
         [
-            # ray - no Python 3.14 support yet
+            # ray - no Python 3.15 wheels yet
             "test_h_ray.py",
             "test_parse_ray_remote_options_from_tags.py",
         ]
