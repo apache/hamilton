@@ -156,3 +156,6 @@ examples/**/hamilton-env
 # hamilton default caching directory
 **/.hamilton_cache/
 *.local.*
+
+# rendered by each redirect package's build.sh from its pyproject.toml.template
+sf-hamilton*-redirect/pyproject.toml

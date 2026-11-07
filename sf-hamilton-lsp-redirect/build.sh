@@ -35,8 +35,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "Building sf-hamilton-lsp redirect package for version ${VERSION}..."
 
-# Stamp version into pyproject.toml from template
-sed "s/VERSION/${VERSION}/g" "${SCRIPT_DIR}/pyproject.toml.template" > "${SCRIPT_DIR}/pyproject.toml"
+# Render pyproject.toml from the template and the package this one redirects to
+python "${SCRIPT_DIR}/../scripts/render_redirect_pyproject.py" "${SCRIPT_DIR}" "${VERSION}"
 
 # Clean previous build
 rm -rf "${SCRIPT_DIR}/dist" "${SCRIPT_DIR}/build" "${SCRIPT_DIR}"/*.egg-info

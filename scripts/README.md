@@ -65,7 +65,7 @@ The core `apache-hamilton` package must be released first. The other four packag
 | `scripts/generate_announce_email.py` | Generate vote result, announcement email, and Slack message |
 | `scripts/qualify.sh` | Run a sampling of examples for quick qualification |
 | `scripts/setup_keys.sh` | Set up GPG keys for signing |
-| `sf-hamilton-redirect/build.sh` | Build the `sf-hamilton` redirect package for a given version |
+| `sf-hamilton*-redirect/build.sh` | Build the `sf-hamilton*` redirect package for its `apache-hamilton*` package at a given version |
 
 # Release Process
 
@@ -77,8 +77,7 @@ We recommend using [uv](https://docs.astral.sh/uv/) for Python environment manag
 
 - Python 3.11+
 - `uv` ([install guide](https://docs.astral.sh/uv/getting-started/installation/))
-- `flit` for building
-- `twine` for package validation
+- The build and upload tools in the `release` dependency group of `pyproject.toml`, installed below with `uv sync --group release`
 - GPG key configured for signing
 - Node.js + npm for UI builds (only needed for the `ui` package)
 - Apache RAT jar for license checking (optional, for verification)
@@ -156,6 +155,7 @@ Derived variables used below:
 
 ```bash
 export PACKAGE=apache-${PACKAGE_KEY}  # e.g., apache-hamilton
+export REDIRECT=sf-${PACKAGE#apache-}  # e.g., sf-hamilton, sf-hamilton-sdk
 export TAG="${PACKAGE}-v${VERSION}-incubating-RC${RC}"
 ```
 
@@ -176,30 +176,33 @@ PACKAGE_UNDERSCORE=$(echo ${PACKAGE} | tr '-' '_')
 twine upload dist/${PACKAGE_UNDERSCORE}-${VERSION}-py3-none-any.whl dist/${PACKAGE}-${VERSION}-incubating-src.tar.gz
 ```
 
-#### 3. Build and upload the sf-hamilton redirect package
+#### 3. Build and upload the redirect package
 
-The `sf-hamilton` package on PyPI is a thin redirect that depends on `apache-hamilton`.
-This ensures existing users who `pip install sf-hamilton` get the new release, and that
-all extras (e.g., `sf-hamilton[dask]`, `sf-hamilton[mcp]`) continue to work.
+Each `apache-hamilton*` package keeps its old `sf-hamilton*` name on PyPI as a thin redirect that depends on it at the same version: `sf-hamilton`, `sf-hamilton-sdk`, `sf-hamilton-lsp`, `sf-hamilton-contrib` and `sf-hamilton-ui`. Releasing a package means releasing its redirect too, so existing users who `pip install ${REDIRECT}` get the new release, and its extras (e.g., `sf-hamilton[dask]`, `sf-hamilton-contrib[visualization]`) keep working.
 
-The `sf-hamilton-redirect/` directory contains a `pyproject.toml.template` with `VERSION`
-as a placeholder. The build script stamps in the real version, builds, and validates:
+Each redirect's directory, `${REDIRECT}-redirect/`, contains a `pyproject.toml.template` with placeholders for the version, the supported Python versions and the name of the package it redirects to. Its build script renders `pyproject.toml` from it with `scripts/render_redirect_pyproject.py`, which fills in the version you pass and copies the supported Python versions and every extra from `${PACKAGE}`'s `pyproject.toml`. It stops if that version is not the one `${PACKAGE}`'s `pyproject.toml` declares, so build it from the release's checkout. It then builds and validates the package:
 
 ```bash
-sf-hamilton-redirect/build.sh ${VERSION}
+uv run ${REDIRECT}-redirect/build.sh ${VERSION}
 
 # Upload
-twine upload sf-hamilton-redirect/dist/sf_hamilton-${VERSION}*
+twine upload ${REDIRECT}-redirect/dist/$(echo ${REDIRECT} | tr '-' '_')-${VERSION}*
 ```
 
 #### 4. Sanity check the PyPI uploads
 
-```bash
-# Test apache-hamilton in a fresh env
-pip install apache-hamilton==${VERSION}
-python -c "import hamilton; print(hamilton.version.VERSION)"
+Check each in its own fresh environment, so the redirect has to pull in the release itself:
 
-# Test sf-hamilton redirect (base + an extra)
+```bash
+# The package itself
+pip install ${PACKAGE}==${VERSION}
+python -c "from importlib.metadata import version; assert version('${PACKAGE}') == '${VERSION}', version('${PACKAGE}')"
+
+# Its redirect installs the same release
+pip install ${REDIRECT}==${VERSION}
+python -c "from importlib.metadata import version; assert version('${PACKAGE}') == '${VERSION}', version('${PACKAGE}')"
+
+# When PACKAGE_KEY is hamilton: an extra goes through the redirect
 pip install sf-hamilton[visualization]==${VERSION}
 python -c "import hamilton; import graphviz; print('OK')"
 ```

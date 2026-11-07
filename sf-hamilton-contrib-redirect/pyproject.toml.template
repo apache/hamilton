@@ -15,6 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
+# build.sh renders the redirect's pyproject.toml from pyproject.toml.template with
+# scripts/render_redirect_pyproject.py, which fills in the placeholders and the extras.
+
 [build-system]
 requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
@@ -22,11 +25,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sf-hamilton-contrib"
 version = "VERSION"
-description = "This package has moved to apache-hamilton-contrib. Install apache-hamilton-contrib instead."
+description = "This package has moved to SOURCE_NAME. Install SOURCE_NAME instead."
 readme = "README.md"
-requires-python = ">=3.10, <4"
+requires-python = "REQUIRES_PYTHON"
 license = "Apache-2.0"
-dependencies = ["apache-hamilton-contrib==VERSION"]
+dependencies = ["SOURCE_NAME==VERSION"]
 
 [project.urls]
 Homepage = "https://github.com/apache/hamilton"
