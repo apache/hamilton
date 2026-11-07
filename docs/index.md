@@ -35,7 +35,8 @@ concepts/index
 how-tos/index
 hamilton-ui/index
 hamilton-vscode/index
-integrations/index
+plugins/index
+cookbook/index
 code-comparisons/index
 ```
 
@@ -73,6 +74,7 @@ reference/drivers/index
 reference/caching/index
 reference/graph-adapters/index
 reference/lifecycle-hooks/index
+reference/plugins/index
 reference/result-builders/index
 reference/io/index
 reference/dataflows/index

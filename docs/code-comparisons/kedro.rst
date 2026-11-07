@@ -73,7 +73,7 @@ These benefits of ``Apache Hamilton`` encourage developers to write smaller func
 
 The primary way to execute ``Kedro`` pipelines is to use the command line tool with ``kedro run --pipeline=my_pipeline``. Pipelines are typically designed for all nodes to be executed while reading data and writing results while going through nodes. It is closer to macro-orchestration frameworks like Airflow in spirit.
 
-On the opposite, ``Apache Hamilton`` dataflows are primarily meant to be executed programmatically (i.e., via Python code) and return results in-memory. This makes it easy to use ``Apache Hamilton`` within a :doc:`FastAPI service <../integrations/fastapi>` service or to power an LLM application.
+On the opposite, ``Apache Hamilton`` dataflows are primarily meant to be executed programmatically (i.e., via Python code) and return results in-memory. This makes it easy to use ``Apache Hamilton`` within a :doc:`FastAPI service <../cookbook/fastapi>` service or to power an LLM application.
 
 For comparable side-by-side code, we can dig into ``Kedro`` and use the ``SequentialRunner`` programmatically. To return pipeline results in-memory we would need to hack further with ``kedro.io.MemoryDataset``.
 
