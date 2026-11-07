@@ -15,17 +15,20 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import dataclasses
+import inspect
 import io
 import pathlib
 import sqlite3
 import sys
 import typing
+import warnings
 
 import polars.testing
 from packaging import version
 from sqlalchemy import create_engine
 
-from hamilton import ad_hoc_utils, driver
+from hamilton import ad_hoc_utils, driver, registry
 from hamilton.function_modifiers import load_from, save_to, source, value
 from hamilton.io import utils
 from hamilton.io.materialization import from_, to
@@ -33,6 +36,7 @@ from hamilton.io.materialization import from_, to
 import polars as pl  # isort: skip
 import pytest  # isort: skip
 
+from hamilton.plugins import polars_extensions  # noqa: F401  # isort: skip -- registers the readers
 from hamilton.plugins.polars_post_1_0_0_extensions import (  # isort: skip
     PolarsAvroReader,
     PolarsAvroWriter,
@@ -172,8 +176,11 @@ def test_polars_reader_row_count_options(
     assert df2["idx"].to_list() == [1, 2]
 
 
-@pytest.mark.skipif(
-    polars_1, reason="the polars 1.x CSV reader passes comment_char, which polars 1.x rejects"
+@pytest.mark.xfail(
+    polars_1,
+    raises=TypeError,
+    strict=True,
+    reason="the polars 1.x CSV reader passes comment_char, which polars 1.x rejects",
 )
 def test_polars_csv_reader_comment_char(tmp_path: pathlib.Path) -> None:
     file = tmp_path / "test.csv"
@@ -182,6 +189,111 @@ def test_polars_csv_reader_comment_char(tmp_path: pathlib.Path) -> None:
     df, _ = PolarsCSVReader(file=file, comment_char="#").load_data(pl.DataFrame)
 
     assert df["a"].to_list() == [1]
+
+
+# polars 1.x still accepts these old argument names through deprecation wrappers, which
+# inspect.signature does not show.
+POLARS_1_RENAMED_ARGUMENTS = (
+    {"dtypes", "missing_utf8_is_empty_string", "row_count_name", "row_count_offset"}
+    if polars_1
+    else set()
+)
+
+
+@pytest.mark.parametrize(
+    ("name", "polars_function"),
+    [
+        pytest.param(
+            "csv",
+            pl.read_csv,
+            marks=pytest.mark.xfail(
+                polars_1,
+                strict=True,
+                reason="the polars 1.x CSV reader passes comment_char, which polars 1.x rejects",
+            ),
+        ),
+        ("parquet", pl.read_parquet),
+        ("feather", pl.read_ipc),
+    ],
+)
+def test_polars_reader_kwargs_are_accepted_by_polars(name: str, polars_function) -> None:
+    readers = [
+        loader
+        for loader in registry.LOADER_REGISTRY[name]
+        if pl.DataFrame in loader.applicable_types()
+    ]
+    accepted = set(inspect.signature(polars_function).parameters) | POLARS_1_RENAMED_ARGUMENTS
+
+    assert readers
+    for reader in readers:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            every_field_set = reader(
+                **{field.name: object() for field in dataclasses.fields(reader)}
+            )
+        assert set(every_field_set._get_loading_kwargs()) <= accepted, reader
+
+
+@pytest.mark.skipif(polars_1, reason="polars 1.x accepts these fields")
+@pytest.mark.parametrize(
+    ("reader_class", "path_field", "field"),
+    [
+        (PolarsCSVReader, "file", "n_threads"),
+        (PolarsCSVReader, "file", "batch_size"),
+        (PolarsFeatherReader, "source", "memory_map"),
+    ],
+)
+def test_polars_reader_warns_on_fields_polars_2_ignores(
+    reader_class, path_field: str, field: str
+) -> None:
+    with pytest.warns(
+        UserWarning, match=f"{reader_class.__name__}.{field} has no effect"
+    ) as record:
+        reader_class(**{path_field: "unused", field: 2})
+
+    assert len(record) == 1
+    assert record[0].filename == __file__
+
+
+@pytest.mark.parametrize(
+    ("reader_class", "path_field"),
+    [(PolarsCSVReader, "file"), (PolarsParquetReader, "file"), (PolarsFeatherReader, "source")],
+)
+def test_polars_reader_defaults_do_not_warn(reader_class, path_field: str) -> None:
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        reader_class(**{path_field: "unused"})
+
+
+@pytest.mark.parametrize(
+    ("writer_class", "reader_class", "path_field", "suffix"),
+    [
+        (PolarsCSVWriter, PolarsCSVReader, "file", "csv"),
+        (PolarsParquetWriter, PolarsParquetReader, "file", "parquet"),
+        (PolarsFeatherWriter, PolarsFeatherReader, "source", "feather"),
+    ],
+)
+# A two-file glob loads as two chunks unless rechunked, so rechunk=False also pins that polars
+# behaviour, which the case relies on.
+@pytest.mark.parametrize(("rechunk", "n_chunks"), [(True, 1), (False, 2)])
+def test_polars_reader_rechunk(
+    df: pl.DataFrame,
+    tmp_path: pathlib.Path,
+    writer_class,
+    reader_class,
+    path_field: str,
+    suffix: str,
+    rechunk: bool,
+    n_chunks: int,
+) -> None:
+    for part in range(2):
+        writer_class(file=tmp_path / f"part{part}.{suffix}").save_data(df)
+
+    reader = reader_class(**{path_field: str(tmp_path / f"part*.{suffix}")}, rechunk=rechunk)
+    loaded, _ = reader.load_data(pl.DataFrame)
+
+    assert loaded.height == 2 * df.height
+    assert loaded.n_chunks() == n_chunks
 
 
 @pytest.mark.parametrize(
