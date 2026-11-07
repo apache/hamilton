@@ -164,7 +164,7 @@ export TAG="${PACKAGE}-v${VERSION}-incubating-RC${RC}"
 
 ```bash
 # Dry run first to verify
-scripts/promote_rc.sh --no-sign ${PACKAGE} ${VERSION} ${RC}
+scripts/promote_rc.sh --dry-run ${PACKAGE} ${VERSION} ${RC}
 
 # Then promote for real
 scripts/promote_rc.sh ${PACKAGE} ${VERSION} ${RC}
