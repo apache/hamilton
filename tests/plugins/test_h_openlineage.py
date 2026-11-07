@@ -25,7 +25,7 @@ import pytest
 from sqlalchemy import create_engine, text
 
 from hamilton import ad_hoc_utils, driver
-from hamilton.function_modifiers import load_from, save_to, source, value
+from hamilton.function_modifiers import dataloader, load_from, save_to, source, value
 from hamilton.io import utils
 
 pytest.importorskip("openlineage.client")
@@ -35,6 +35,13 @@ from openlineage.client.transport.file import FileConfig, FileTransport  # noqa:
 
 from hamilton.plugins import h_openlineage  # noqa: E402
 from hamilton.plugins.pandas_extensions import PandasSqlReader  # noqa: E402
+
+try:
+    import polars as pl
+
+    from hamilton.plugins import polars_post_1_0_0_extensions as polars_post
+except ImportError:  # pragma: no cover - polars is optional
+    pl = None
 
 REVENUE_QUERY = """
 -- daily revenue per customer country
@@ -845,3 +852,196 @@ def test_attached_sqlite_database_is_attributed_to_its_own_file(tmp_path):
     assert dataset_ids(events, "inputs") == [
         (f"sqlite://{other_path.resolve().as_posix()}", "orders")
     ]
+
+
+requires_polars = pytest.mark.skipif(pl is None, reason="polars is not installed")
+
+
+def polars_database_modules():
+    @save_to.database(
+        table_name=value("orders"),
+        connection=source("engine"),
+        if_table_exists=value("replace"),
+        output_name_="saved_orders",
+    )
+    def orders_to_save(raw_orders: pl.DataFrame) -> pl.DataFrame:
+        return raw_orders
+
+    @load_from.database(query=value("SELECT * FROM orders"), connection=source("engine"))
+    def orders_read(orders_df: pl.DataFrame) -> pl.DataFrame:
+        return orders_df
+
+    return (
+        ad_hoc_utils.create_temporary_module(orders_to_save),
+        ad_hoc_utils.create_temporary_module(orders_read),
+    )
+
+
+def run_polars_database_flow(tmp_path, namespace, **adapter_kwargs):
+    """Writes ``orders`` then reads it back through Polars' database materializers."""
+    db_path = tmp_path / "shop.db"
+    inputs = {
+        "engine": create_engine(f"sqlite:///{db_path}"),
+        "raw_orders": pl.DataFrame({"id": [1, 2, 3], "amount": [10.0, 5.0, 7.0]}),
+    }
+    writer, reader = polars_database_modules()
+    run_with_lineage(
+        tmp_path, namespace, inputs, module=writer, final_vars=("saved_orders",), **adapter_kwargs
+    )
+    result, events = run_with_lineage(
+        tmp_path, namespace, inputs, module=reader, final_vars=("orders_read",), **adapter_kwargs
+    )
+    return db_path, result, [strip_private(e) for e in events if e["eventType"] == "RUNNING"]
+
+
+@requires_polars
+def test_polars_database_datasource_identity_names_the_sqlite_table(tmp_path):
+    db_path, _, (write, read) = run_polars_database_flow(
+        tmp_path, "polars_ns", sql_dataset_identity="datasource"
+    )
+    namespace = f"sqlite://{db_path.resolve().as_posix()}"
+    assert [(d["namespace"], d["name"]) for d in write["outputs"]] == [(namespace, "orders")]
+    assert [(d["namespace"], d["name"]) for d in read["inputs"]] == [(namespace, "orders")]
+    assert read["job"]["facets"]["sql"]["query"] == "SELECT * FROM orders"
+    for dataset in write["outputs"] + read["inputs"]:
+        facets = dataset.get("facets", {})
+        assert "storage" not in facets
+
+
+@requires_polars
+def test_polars_database_default_identity_keeps_legacy_datasets(tmp_path):
+    """Pinned to ``main``'s datasets: file metadata still wins over the SQL metadata.
+
+    Only the ``FutureWarning`` is new, since the metadata now carries ``sql_metadata``.
+    """
+    with pytest.warns(FutureWarning, match="sql_dataset_identity='datasource'"):
+        _, _, (write, read) = run_polars_database_flow(tmp_path, "polars_legacy_ns")
+    assert (read["inputs"][0]["namespace"], read["inputs"][0]["name"]) == (
+        "polars_legacy_ns",
+        "orders_read.load_data.orders_df",
+    )
+    assert set(read["inputs"][0]["facets"]) == {"storage", "dataSource", "schema"}
+    assert read["inputs"][0]["facets"]["storage"]["storageLayer"] == "FileSystem"
+    assert read["inputs"][0]["facets"]["dataSource"]["uri"] == "SELECT * FROM orders"
+    assert "sql" not in read["job"]["facets"]
+    assert (write["outputs"][0]["namespace"], write["outputs"][0]["name"]) == (
+        "polars_legacy_ns",
+        "orders",
+    )
+    assert set(write["outputs"][0]["facets"]) == {"storage", "dataSource", "schema"}
+    assert write["outputs"][0]["facets"]["storage"]["storageLayer"] == "FileSystem"
+    assert write["outputs"][0]["facets"]["dataSource"]["uri"] == "orders"
+
+
+@requires_polars
+def test_polars_database_write_through_adbc_emits_no_dataset_and_says_why(
+    tmp_path, monkeypatch, caplog
+):
+    """A connection string Polars writes through ADBC is not identified rather than guessed."""
+    monkeypatch.setattr(pl.DataFrame, "write_database", lambda self, *args, **kwargs: 2)
+
+    @save_to.database(
+        table_name=value("orders"),
+        connection=value("sqlite://sub/x.db"),
+        engine=value("adbc"),
+        output_name_="saved_orders",
+    )
+    def orders_to_save(raw_orders: pl.DataFrame) -> pl.DataFrame:
+        return raw_orders
+
+    with caplog.at_level(logging.WARNING, logger="hamilton.plugins.h_openlineage"):
+        _, events = run_with_lineage(
+            tmp_path,
+            "adbc_ns",
+            {"raw_orders": pl.DataFrame({"id": [1, 2]})},
+            module=ad_hoc_utils.create_temporary_module(orders_to_save),
+            final_vars=("saved_orders",),
+            sql_dataset_identity="datasource",
+        )
+
+    assert dataset_ids(events, "outputs") == []
+    assert "through ADBC" in caplog.text
+
+
+@requires_polars
+def test_pre_1_0_polars_database_asks_datasource_users_to_upgrade(tmp_path):
+    """The pre-1.0 classes keep file metadata and add a connection-less ``sql_metadata``."""
+    from hamilton.plugins import polars_pre_1_0_0_extension as pre_1_0
+
+    connection = sqlite3.connect(tmp_path / "old.db")
+    frame = pl.DataFrame({"id": [1, 2]})
+    write_metadata = pre_1_0.PolarsDatabaseWriter(
+        table_name="orders",
+        connection=f"sqlite:///{tmp_path / 'old.db'}",
+        if_table_exists="replace",
+    ).save_data(frame)
+    _, read_metadata = pre_1_0.PolarsDatabaseReader(
+        query="SELECT * FROM orders", connection=connection
+    ).load_data(pl.DataFrame)
+
+    for metadata, operation in ((write_metadata, "write"), (read_metadata, "read")):
+        assert metadata["file_metadata"]["path"] == (
+            "orders" if operation == "write" else "SELECT * FROM orders"
+        )
+        assert metadata["sql_metadata"]["source"] is None
+        assert metadata["sql_metadata"]["operation"] == operation
+        datasets = h_openlineage.sql_datasets(metadata)
+        assert datasets.inputs == [] and datasets.outputs == []
+        assert any("requires polars>=1.0" in note for note in datasets.notes)
+
+
+@requires_polars
+def test_pre_1_0_polars_database_read_logs_the_upgrade_note_through_the_adapter(tmp_path, caplog):
+    """In datasource mode the adapter emits no dataset for a pre-1.0 read and logs its note."""
+    from hamilton.plugins import polars_pre_1_0_0_extension as pre_1_0
+
+    db_path = tmp_path / "old.db"
+    pl.DataFrame({"id": [1, 2]}).write_database(
+        "orders", f"sqlite:///{db_path}", if_table_exists="replace"
+    )
+
+    @dataloader()
+    def orders() -> tuple[pl.DataFrame, dict]:
+        return pre_1_0.PolarsDatabaseReader(
+            query="SELECT * FROM orders", connection=sqlite3.connect(db_path)
+        ).load_data(pl.DataFrame)
+
+    with caplog.at_level(logging.WARNING, logger="hamilton.plugins.h_openlineage"):
+        _, events = run_with_lineage(
+            tmp_path,
+            "pre_1_0_ns",
+            {},
+            module=ad_hoc_utils.create_temporary_module(orders),
+            final_vars=("orders",),
+            sql_dataset_identity="datasource",
+        )
+
+    assert dataset_ids(events, "inputs") == []
+    assert "requires polars>=1.0" in caplog.text
+
+
+@requires_polars
+@pytest.mark.parametrize(
+    ("table_name", "query", "name"),
+    [
+        ("main.orders", "SELECT * FROM main.orders", "orders"),
+        ('"my-tbl"', 'SELECT * FROM "my-tbl"', "my-tbl"),
+        ('main."my-tbl"', 'SELECT * FROM main."my-tbl"', "my-tbl"),
+    ],
+)
+def test_polars_database_write_resolves_to_the_table_a_query_reads(
+    tmp_path, table_name, query, name
+):
+    path = tmp_path / "qualified.db"
+    engine = create_engine(f"sqlite:///{path}")
+    written = polars_post.PolarsDatabaseWriter(
+        table_name=table_name, connection=engine, if_table_exists="replace"
+    ).save_data(pl.DataFrame({"id": [1, 2]}))
+    _, read = polars_post.PolarsDatabaseReader(query=query, connection=engine).load_data(
+        pl.DataFrame
+    )
+
+    output = h_openlineage.sql_datasets(written).outputs
+    input_ = h_openlineage.sql_datasets(read).inputs
+    assert identities(output) == identities(input_)
+    assert identities(output) == [(f"sqlite://{path.resolve().as_posix()}", name)]

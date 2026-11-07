@@ -16,6 +16,7 @@
 # under the License.
 
 import dataclasses
+import typing
 from collections import Counter
 from collections.abc import Collection
 from typing import Any
@@ -40,7 +41,7 @@ from hamilton.function_modifiers.base import DefaultNodeCreator
 from hamilton.htypes import custom_subclass_check
 from hamilton.io.data_adapters import DataLoader, DataSaver
 from hamilton.io.default_data_loaders import JSONDataSaver
-from hamilton.registry import LOADER_REGISTRY
+from hamilton.registry import LOADER_REGISTRY, SAVER_REGISTRY
 
 
 def test_default_adapters_are_available():
@@ -60,6 +61,25 @@ def test_default_adapters_are_registered_once():
                 f"Adapter for {key} registered multiple times for {impl}. This should not"
                 f" happen, as items should just be registered once."
             )
+
+
+def test_registered_adapters_have_runtime_resolvable_type_hints():
+    """``@load_from``, ``@save_to``, ``from_`` and ``to`` type each adapter argument from
+    ``typing.get_type_hints()``, so a hint naming a class imported only under ``TYPE_CHECKING``
+    breaks every decorator and materializer built on that adapter."""
+    adapters = {
+        cls
+        for registry in (LOADER_REGISTRY, SAVER_REGISTRY)
+        for classes in registry.values()
+        for cls in classes
+    }
+    unresolved = set()
+    for cls in adapters:
+        try:
+            typing.get_type_hints(cls)
+        except NameError:
+            unresolved.add(f"{cls.__module__}.{cls.__qualname__}")
+    assert unresolved == set()
 
 
 @dataclasses.dataclass

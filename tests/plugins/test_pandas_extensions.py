@@ -151,6 +151,18 @@ def test_pandas_sql(df: pd.DataFrame, connect, identified: bool, tmp_path) -> No
         conn.close()
 
 
+def test_pandas_sql_writer_records_an_unreported_row_count_as_unknown(
+    df: pd.DataFrame, tmp_path, monkeypatch
+) -> None:
+    """A driver that reports no row count makes ``to_sql`` return -1 (DBAPI's rowcount)."""
+    monkeypatch.setattr(pd.DataFrame, "to_sql", lambda self, *args, **kwargs: -1)
+    metadata = PandasSqlWriter(
+        table_name="bar", db_connection=create_engine(f"sqlite:///{tmp_path}/rows.db")
+    ).save_data(df)
+
+    assert metadata["sql_metadata"]["rows"] is None
+
+
 def test_pandas_sql_decorators_capture_source(tmp_path) -> None:
     """@load_from.sql / @save_to.sql carry datasource context with no custom metadata code."""
     from hamilton import ad_hoc_utils, driver
