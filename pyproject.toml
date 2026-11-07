@@ -106,6 +106,7 @@ dev = [
   "ruff==0.16.9", # this should match `.pre-commit-config.yaml`
 ]
 release = [
+  "build", # the sf-hamilton*-redirect packages' build.sh
   "flit",
   "twine",
 ]
