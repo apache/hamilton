@@ -277,7 +277,7 @@ def signups_parent_before_launch(signups_from_existing_womens_tf: pd.Series) -> 
 2. A column is implemented differently for different business inputs, e.g. in the case of Stitch Fix gender intent.
 ```python
 import pandas as pd
-from hamilton.function_modifiers import config, model
+from hamilton.function_modifiers import config
 import internal_package_with_logic
 
 
@@ -289,11 +289,8 @@ def percent_clients_something__kids(date_index: pd.Series) -> pd.Series:
 
 # In other business lines, we have a model for it
 @config.when_not(gender_intent="kids")
-@model(
-    internal_package_with_logic.GLM, "some_model_name", output_column="percent_clients_something"
-)
-def percent_clients_something_model() -> pd.Series:
-    pass
+def percent_clients_something__model(date_index: pd.Series) -> pd.Series:
+    return internal_package_with_logic.predict_percent_clients_something(date_index)
 ```
 Note the following:
 - The function cannot have the same name in the same file (or python gets unhappy), so we name it with a
@@ -604,7 +601,9 @@ and has the possibility of being changed; we'd love feedback on this
 API if you end up using it!
 
 
-## @model
+## @model (deprecated)
+`@model` is deprecated: it warns from 1.20.0 and fails from 2.0.0. Use `@resolve` instead.
+
 `@model` allows you to abstract a function that is a model. You will need to implement models that make sense for
 your business case. Reach out if you need examples.
 

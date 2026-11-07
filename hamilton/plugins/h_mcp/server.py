@@ -208,7 +208,7 @@ def hamilton_get_docs(topic: str) -> str:
 
     Supported topics: ``overview``, ``decorators``, ``driver``, ``builder``,
     or any decorator name such as ``parameterize``, ``extract_columns``,
-    ``config``, ``check_output``, ``tag``, ``pipe``, ``does``, ``subdag``, etc.
+    ``config``, ``check_output``, ``tag``, ``pipe_input``, ``does``, ``subdag``, etc.
     """
     topic = topic.strip().lower()
 
@@ -234,7 +234,7 @@ def hamilton_get_docs(topic: str) -> str:
                    results = dr.execute(["output_node"], inputs={...})
 
             Key decorators: @parameterize, @extract_columns, @config.when,
-            @check_output, @tag, @pipe, @does, @subdag
+            @check_output, @tag, @pipe_input, @does, @subdag
         """)
 
     if topic == "decorators":
@@ -250,7 +250,7 @@ def hamilton_get_docs(topic: str) -> str:
             "check_output": "Attach data quality validators to a node's output.",
             "tag": "Add metadata tags to a node.",
             "tag_outputs": "Tag specific outputs of a multi-output function.",
-            "pipe": "Chain transforms: pass a node's output through a pipeline.",
+            "pipe_input": "Chain transforms: pass a node's input through a pipeline.",
             "does": "Replace function body with another callable.",
             "subdag": "Include an entire sub-DAG as a namespace.",
             "inject": "Inject specific values or sources into function parameters.",
@@ -289,7 +289,7 @@ def hamilton_get_docs(topic: str) -> str:
         f"Unknown topic '{topic}'. "
         "Supported: overview, decorators, driver, builder, "
         "or any decorator name (parameterize, extract_columns, config, "
-        "check_output, tag, pipe, does, subdag, etc.)"
+        "check_output, tag, pipe_input, does, subdag, etc.)"
     )
 
 

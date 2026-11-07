@@ -29,6 +29,7 @@ from hamilton.function_modifiers.macros import (
     apply_to,
     ensure_function_empty,
     mutate,
+    pipe,
     pipe_input,
     pipe_output,
     step,
@@ -1226,3 +1227,9 @@ async def test_async_mutate_end_to_end():
     results = await dr.execute(final_vars=["data_mutate"], inputs=inputs)
 
     pd.testing.assert_frame_equal(group_by_b, results["data_mutate"])
+
+
+def test_pipe_passes_collapse_to_pipe_input():
+    """pipe, the deprecated name of pipe_input, used to drop collapse=True without a word."""
+    with pytest.raises(NotImplementedError):
+        pipe(step(_test_apply_function, bar=value(1)), collapse=True)

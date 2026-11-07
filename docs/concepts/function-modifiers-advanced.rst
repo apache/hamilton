@@ -12,7 +12,7 @@ Nonetheless, there exists higher level abstractions for power users that *may* b
 
 This page assumes an advanced understanding of Apache Hamilton and will cover:
 
-- @pipe
+- @pipe_input
 - @subdag
 - @parameterize_subdag
 - @resolve

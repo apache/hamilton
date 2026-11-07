@@ -21,7 +21,14 @@ import pandas
 import pandas as pd
 from pandas import DataFrame, Series
 
-from hamilton.function_modifiers import extract_columns, extract_fields, inject, pipe, source, step
+from hamilton.function_modifiers import (
+    extract_columns,
+    extract_fields,
+    inject,
+    pipe_input,
+    source,
+    step,
+)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Tax calculation private functions
@@ -86,7 +93,7 @@ def split_dataframe(input: DataFrame) -> dict[str, DataFrame]:
     }
 
 
-@pipe(
+@pipe_input(
     step(_tax_rate, tax_rates=source("tax_rates")),  # apply the _tax_rate step
     step(_tax_credit, tax_credits=source("tax_credits")),  # apply the _tax_credit step
 )
@@ -100,7 +107,7 @@ def under_100k_tax(under_100k: DataFrame) -> DataFrame:
     return under_100k
 
 
-@pipe(
+@pipe_input(
     step(_tax_rate, tax_rates=source("tax_rates")),  # apply the _tax_rate step
 )
 # Step 2: DataFrame for Income over 100k applies a tax calculation pipeline

@@ -28,7 +28,8 @@ class DynamicTransformBase(abc.ABC):
     2. What the transform does
 
     Paired with the decorator @dynamic_transform(CLS, config_item, **extra_params) one can write incredibly powerful
-    DAGs that depend on dynamic transform configs.
+    DAGs that depend on dynamic transform configs. That decorator, and @model with it, is deprecated: it warns from
+    1.20.0 and fails from 2.0.0. Use @resolve instead.
     """
 
     def __init__(self, config_parameters: Any, name: str):
@@ -72,7 +73,9 @@ class BaseModel(DynamicTransformBase, abc.ABC):
     def my_column():
         #column that is some combinations of other columns using some previously trained model
 
-    Note that the model-training is not yet in scope."""
+    Note that the model-training is not yet in scope.
+
+    @model is deprecated: it warns from 1.20.0 and fails from 2.0.0. Use @resolve instead."""
 
     def compute(self, **inputs: Any) -> Any:
         """Delegates to predict function to compute this model's return.
