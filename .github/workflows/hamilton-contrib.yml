@@ -1,0 +1,43 @@
+name: Contrib Test Workflow
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'contrib/**'
+      - 'hamilton/**'
+      - 'pyproject.toml'
+      - '.github/workflows/hamilton-contrib.yml'
+
+  pull_request:
+    paths:
+      - 'contrib/**'
+      - 'hamilton/**'
+      - 'pyproject.toml'
+      - '.github/workflows/hamilton-contrib.yml'
+
+
+jobs:
+  contrib-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13', '3.14', '3.15']
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install apache-hamilton and apache-hamilton-contrib
+      run: |
+        python -m pip install --upgrade pip
+        pip install . ./contrib pytest
+    - name: Import the contrib namespace
+      # from outside the checkout, so the installed packages are imported
+      working-directory: ${{ runner.temp }}
+      run: python -c "import hamilton.contrib.dagworks, hamilton.contrib.user.zilto"
+    - name: Run unit tests
+      run: pytest contrib/tests
