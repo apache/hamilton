@@ -60,7 +60,11 @@ dask-array = ["dask[array]"]
 dask-dataframe = ["dask[dataframe]"]
 dask-diagnostics = ["dask[diagnostics]"]
 dask-distributed = ["dask[distributed]"]
-datadog = ["ddtrace>=4.0,<5.0"]
+datadog = [
+  "ddtrace>=4.0,<5.0; python_version < '3.15'",
+  # 4.17 is the first ddtrace that allows Python 3.15; drop the pre-release once 4.17.0 is out
+  "ddtrace>=4.17.0rc2,<5.0; python_version >= '3.15'",
+]
 diskcache = ["diskcache"]
 experiments = [
   "fastapi",

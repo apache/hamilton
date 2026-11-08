@@ -48,7 +48,9 @@ dependencies = [
     "aiohttp>=3.13.0",
     "click",
     "colorlog",
-    "ddtrace>=2.21.0",
+    "ddtrace>=2.21.0; python_version < '3.15'",
+    # 4.17 is the first ddtrace that allows Python 3.15; drop the pre-release once 4.17.0 is out
+    "ddtrace>=4.17.0rc2; python_version >= '3.15'",
     "django>=4.2.0",
     "django-extensions",
     "django-ninja>=1.1.0",
