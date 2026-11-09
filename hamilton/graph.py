@@ -276,6 +276,19 @@ def create_graphviz_graph(
             "If you're seeing this error, you're likely using a non-public API."
         )
 
+    def _get_display_name(n: node.Node) -> str:
+        """Return the node's 'display_name' tag if set, else the node name.
+
+        See: https://github.com/apache/hamilton/issues/1413
+        """
+        display_name = n.tags.get("display_name")
+        if not display_name:
+            return n.name
+        # Handle case where display_name is a list (use first element)
+        if isinstance(display_name, list):
+            return display_name[0]
+        return display_name
+
     def _get_node_label(
         n: node.Node,
         name: str | None = None,
@@ -293,15 +306,7 @@ def create_graphviz_graph(
         ref: https://graphviz.org/doc/info/shapes.html#html
         """
         # Determine display name: explicit name param > display_name tag > node.name
-        if name is not None:
-            display_name = name
-        elif n.tags.get("display_name"):
-            display_name = n.tags["display_name"]
-            # Handle case where display_name is a list (use first element)
-            if isinstance(display_name, list):
-                display_name = display_name[0] if display_name else n.name
-        else:
-            display_name = n.name
+        display_name = name if name is not None else _get_display_name(n)
 
         if type_string is None:
             type_string = get_type_as_string(n.type) or ""
@@ -537,7 +542,7 @@ def create_graphviz_graph(
         config_key = n.tags.get("hamilton.config", None)
         if config_key:
             seen_node_types.add("config")
-            label = _get_node_label(n, name=f"{n.name}: {config_key}")
+            label = _get_node_label(n, name=f"{_get_display_name(n)}: {config_key}")
 
         node_style = _get_node_style(node_type)
 
