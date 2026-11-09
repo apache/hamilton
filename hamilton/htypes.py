@@ -473,5 +473,9 @@ def check_instance(obj: Any, type_: Any) -> bool:
                         return False
                 return True
 
+        # Other parameterized generics (e.g. Callable[[int], int], type[int], frozenset[str],
+        # column[pd.Series, float]) matched their origin above; isinstance() rejects them.
+        return True
+
     # If the type is not a generic type, just use isinstance
     return isinstance(obj, type_)

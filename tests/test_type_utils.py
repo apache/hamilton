@@ -412,6 +412,22 @@ def test_check_instance_with_pep604_union_of_generics():
     assert not check_instance({"a": "1"}, dict[str, int] | list[int])
 
 
+def test_check_instance_with_other_parameterized_generics():
+    def add_one(x: int) -> int:
+        return x + 1
+
+    assert check_instance(add_one, typing.Callable[[int], int])
+    assert check_instance(int, type[int])
+    assert check_instance(frozenset({"a"}), frozenset[str])
+    assert check_instance(iter([1]), typing.Iterator[int])
+    assert check_instance(range(3), typing.Sequence[int])
+    assert check_instance(pd.Series([1.0]), htypes.column[pd.Series, float])
+    # the origin is still checked
+    assert not check_instance(1, typing.Callable[[int], int])
+    assert not check_instance([1], frozenset[int])
+    assert not check_instance([1.0], htypes.column[pd.Series, float])
+
+
 def test_check_instance_with_union_type_and_literal():
     from typing import Literal
 
