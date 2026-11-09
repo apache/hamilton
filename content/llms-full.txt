@@ -1080,7 +1080,7 @@ Compatibility Matrix
      - ✅ but you need to setup kubernetes to run an image that can run python code - e.g. see `Running a python application on kubernetes <https://medium.com/avmconsulting-blog/running-a-python-application-on-kubernetes-aws-56609e7cd88c>`_
    * - `docker <https://www.docker.com>`_
      - ✅ but you need to setup a docker image that can execute python code.
-   * - ... in general if it runs python 3.7+ ...
+   * - ... in general, anywhere a Python version Hamilton supports runs (see :doc:`/get-started/install`) ...
      - ✅
 
 ETL Recipe
