@@ -26,6 +26,9 @@ on:
         - 'plugin_tests/**'
         - 'tests/**'
         - 'pyproject.toml'
+        # tests/test_redirect_packages.py renders every redirect package from these
+        - 'scripts/render_redirect_pyproject.py'
+        - 'sf-hamilton*-redirect/**'
 
 jobs:
   static-checks:

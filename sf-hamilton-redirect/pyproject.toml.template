@@ -15,43 +15,21 @@
 # specific language governing permissions and limitations
 # under the License.
 
+# build.sh renders the redirect's pyproject.toml from pyproject.toml.template with
+# scripts/render_redirect_pyproject.py, which fills in the placeholders and the extras.
+
 [build-system]
-requires = ["setuptools>=64"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "sf-hamilton"
 version = "VERSION"
-description = "This package has moved to apache-hamilton. Install apache-hamilton instead."
+description = "This package has moved to SOURCE_NAME. Install SOURCE_NAME instead."
 readme = "README.md"
-requires-python = ">=3.10.1, <4"
+requires-python = "REQUIRES_PYTHON"
 license = "Apache-2.0"
-dependencies = ["apache-hamilton==VERSION"]
-
-[project.optional-dependencies]
-cli = ["apache-hamilton[cli]==VERSION"]
-dask = ["apache-hamilton[dask]==VERSION"]
-dask-array = ["apache-hamilton[dask-array]==VERSION"]
-dask-dataframe = ["apache-hamilton[dask-dataframe]==VERSION"]
-dask-diagnostics = ["apache-hamilton[dask-diagnostics]==VERSION"]
-dask-distributed = ["apache-hamilton[dask-distributed]==VERSION"]
-datadog = ["apache-hamilton[datadog]==VERSION"]
-diskcache = ["apache-hamilton[diskcache]==VERSION"]
-experiments = ["apache-hamilton[experiments]==VERSION"]
-lsp = ["apache-hamilton[lsp]==VERSION"]
-mcp = ["apache-hamilton[mcp]==VERSION"]
-openlineage = ["apache-hamilton[openlineage]==VERSION"]
-pandera = ["apache-hamilton[pandera]==VERSION"]
-pydantic = ["apache-hamilton[pydantic]==VERSION"]
-pyspark = ["apache-hamilton[pyspark]==VERSION"]
-ray = ["apache-hamilton[ray]==VERSION"]
-rich = ["apache-hamilton[rich]==VERSION"]
-sdk = ["apache-hamilton[sdk]==VERSION"]
-slack = ["apache-hamilton[slack]==VERSION"]
-tqdm = ["apache-hamilton[tqdm]==VERSION"]
-ui = ["apache-hamilton[ui]==VERSION"]
-vaex = ["apache-hamilton[vaex]==VERSION"]
-visualization = ["apache-hamilton[visualization]==VERSION"]
+dependencies = ["SOURCE_NAME==VERSION"]
 
 [project.urls]
 Homepage = "https://github.com/apache/hamilton"
