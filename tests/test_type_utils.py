@@ -470,3 +470,59 @@ def test_with_random_object():
     assert not check_instance(
         RandomObject(), Union[int, str, list, dict, None, float, bool, bytes, complex, type(None)]
     )
+
+
+def test_check_instance_with_fixed_length_tuple():
+    # 1. Correct fixed-length tuple
+    assert check_instance((1, "a"), tuple[int, str])
+    assert check_instance((1, "a", True), tuple[int, str, bool])
+    assert check_instance((42,), tuple[int])
+    assert check_instance((1.0, 2.0, 3.0), typing.Tuple[float, float, float])
+
+    # 2. Wrong-length tuple
+    assert not check_instance((1,), tuple[int, str])
+    assert not check_instance((1, "a", True), tuple[int, str])
+    assert not check_instance((), tuple[int, str])
+    assert not check_instance((1, 2), tuple[int])
+    assert not check_instance((1.0, 2.0), typing.Tuple[float, float, float])
+
+    # 3. Tuple with incorrect types in one or more positions
+    assert not check_instance(("a", 1), tuple[int, str])
+    assert not check_instance((1, 2), tuple[int, str])
+    assert not check_instance(("a", "b"), tuple[int, str])
+    assert not check_instance((1, "a", 3), tuple[int, str, bool])
+
+    # Value not a tuple
+    assert not check_instance([1, "a"], tuple[int, str])
+
+
+def test_check_instance_with_empty_tuple_type():
+    # 4. tuple[()] and typing.Tuple[()]
+    assert check_instance((), tuple[()])
+    assert check_instance((), typing.Tuple[()])
+    assert not check_instance((1,), tuple[()])
+    assert not check_instance((1,), typing.Tuple[()])
+    assert not check_instance((1, 2), tuple[()])
+    assert not check_instance([], tuple[()])
+    assert not check_instance(None, tuple[()])
+
+
+def test_check_instance_with_variadic_tuple():
+    # 5. Existing variadic tuple behavior
+    assert check_instance((1, 2, 3), tuple[int, ...])
+    assert check_instance((), tuple[int, ...])
+    assert check_instance((1,), tuple[int, ...])
+    assert not check_instance((1, "a"), tuple[int, ...])
+    assert not check_instance([1, 2, 3], tuple[int, ...])
+
+    assert check_instance(("x", "y"), typing.Tuple[str, ...])
+    assert not check_instance(("x", 1), typing.Tuple[str, ...])
+
+
+def test_check_instance_with_nested_and_unsubscripted_tuple():
+    assert check_instance((1, 2), typing.Tuple)
+    assert not check_instance([1, 2], typing.Tuple)
+    assert check_instance([(1, "a"), (2, "b")], list[tuple[int, str]])
+    assert not check_instance([(1, "a"), (2, 2)], list[tuple[int, str]])
+    assert check_instance(([1, 2], "ok"), tuple[list[int], str])
+    assert not check_instance((["not", "int"], "ok"), tuple[list[int], str])
