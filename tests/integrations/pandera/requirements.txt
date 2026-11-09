@@ -1,2 +1,2 @@
 # Additional requirements on top of hamilton...pandera
-pandera[dask]>=0.23
+pandera[dask,pandas]>=0.27
