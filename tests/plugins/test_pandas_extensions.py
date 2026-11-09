@@ -151,6 +151,18 @@ def test_pandas_sql(df: pd.DataFrame, connect, identified: bool, tmp_path) -> No
         conn.close()
 
 
+def test_pandas_sql_writer_records_an_unreported_row_count_as_unknown(
+    df: pd.DataFrame, tmp_path, monkeypatch
+) -> None:
+    """A driver that reports no row count makes ``to_sql`` return -1 (DBAPI's rowcount)."""
+    monkeypatch.setattr(pd.DataFrame, "to_sql", lambda self, *args, **kwargs: -1)
+    metadata = PandasSqlWriter(
+        table_name="bar", db_connection=create_engine(f"sqlite:///{tmp_path}/rows.db")
+    ).save_data(df)
+
+    assert metadata["sql_metadata"]["rows"] is None
+
+
 def test_pandas_sql_decorators_capture_source(tmp_path) -> None:
     """@load_from.sql / @save_to.sql carry datasource context with no custom metadata code."""
     from hamilton import ad_hoc_utils, driver
@@ -417,6 +429,25 @@ def test_pandas_table_reader_translates_delim_whitespace_for_pandas_3(tmp_path) 
     path.write_text("name value\nfoo 1\n")
 
     reader = PandasTableReader(filepath_or_buffer=path, delim_whitespace=True)
+    df, _ = reader.load_data(pd.DataFrame)
+
+    assert df.to_dict(orient="records") == [{"name": "foo", "value": 1}]
+
+
+@pytest.mark.parametrize(
+    ("separator_kwargs", "text"),
+    [
+        ({"sep": ";"}, "name;value\nfoo;1\n"),
+        ({"delimiter": ";"}, "name;value\nfoo;1\n"),
+        ({}, "name,value\nfoo,1\n"),  # sep=None sniffs the separator; omitting sep means tab
+    ],
+    ids=["sep", "delimiter", "sniffed"],
+)
+def test_pandas_table_reader_passes_one_separator(tmp_path, separator_kwargs, text) -> None:
+    path = tmp_path / "table.txt"
+    path.write_text(text)
+
+    reader = PandasTableReader(filepath_or_buffer=path, **separator_kwargs)
     df, _ = reader.load_data(pd.DataFrame)
 
     assert df.to_dict(orient="records") == [{"name": "foo", "value": 1}]

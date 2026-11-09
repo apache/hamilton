@@ -7,4 +7,4 @@ pyarrow_hotfix
 pydantic
 pyspark
 pytest
-ray; python_version < "3.14"
+ray; python_version < "3.15"

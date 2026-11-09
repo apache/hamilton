@@ -110,7 +110,7 @@ def fetch_articles(url, cutoff_date):
         text = anchor.get_text()
 
         date_str = time_el["datetime"]
-        article_date = datetime.fromisoformat(date_str.replace("Z", "+00:00")).date()
+        article_date = datetime.fromisoformat(date_str).date()
         if article_date >= cutoff_date:
             articles.append((link, text, article_date))
 

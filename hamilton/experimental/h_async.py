@@ -15,15 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import logging
+import warnings
 
 import hamilton.async_driver
 
-logger = logging.getLogger(__name__)
-
-logger.warning(
-    "This module is deprecated and will be removed in Hamilton 2.0 "
-    "Please use `hamilton.async_driver` instead. "
+warnings.warn(
+    "This module is deprecated and will be removed in Hamilton 2.0. "
+    "Please use `hamilton.async_driver` instead. ",
+    FutureWarning,
+    stacklevel=2,
 )
 
 AsyncDriver = hamilton.async_driver.AsyncDriver

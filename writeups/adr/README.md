@@ -34,3 +34,4 @@ threads that produced them, so a later change can tell a deliberate choice from 
 | [2609-02](2609-02-sql-metadata-keeps-1-0-0-filing.md) | SQL metadata keeps the 1.0.0 query/table_name filing; intent travels in `operation` |
 | [2609-03](2609-03-resolving-sql-writes-and-statements.md) | How datasource-mode lineage resolves what a SQL write names |
 | [2609-04](2609-04-sqlite-attached-databases.md) | SQLite attached databases are named by their own file |
+| [2611-01](2611-01-polars-database-sql-metadata.md) | Polars database I/O records `sql_metadata` beside `file_metadata`; the pre-1.0 integration stays legacy-only |

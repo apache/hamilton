@@ -24,7 +24,7 @@ name = "apache-hamilton-sdk"
 version = "0.9.0"
 description = "Apache Hamilton SDK for reading and writing to the Apache Hamilton backend APIs that support the UI."
 readme = "README.md"
-requires-python = ">=3.10, <4"
+requires-python = ">=3.11, <4"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE", "DISCLAIMER"]
 keywords = ["hamilton", "dagworks", "observability"]
@@ -37,11 +37,11 @@ classifiers = [
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14"
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15"
 ]
 dependencies = [
     "aiohttp",
@@ -102,5 +102,5 @@ test = [
     "pydantic",
     "pyspark",
     "pytest",
-    "ray; python_version < '3.14'",
+    "ray; python_version < '3.15'",
 ]

@@ -15,11 +15,14 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import logging
+import warnings
 
 from hamilton.plugins.h_polars import PolarsDataFrameResult
 
-logger = logging.getLogger(__name__)
-logger.warning("This module is deprecated. Please use hamilton.plugins.h_polars instead.")
+warnings.warn(
+    "This module is deprecated. Please use hamilton.plugins.h_polars instead.",
+    FutureWarning,
+    stacklevel=2,
+)
 
 __all__ = ["PolarsDataFrameResult"]

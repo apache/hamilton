@@ -26,7 +26,7 @@ do this, this presents an easier way to do this, especially in a chain.
 
 pipe
 -----------------------------------------------------------------------
-**DeprecationWarning from 2.0.0: use pipe_input instead**
+**Deprecated: warns from 1.20.0 and fails from 2.0.0. Use pipe_input instead.**
 
 .. autoclass:: hamilton.function_modifiers.macros.pipe
    :special-members: __init__

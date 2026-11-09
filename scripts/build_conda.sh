@@ -22,7 +22,7 @@ CONDA_HOME=$HOME/anaconda3
 # conda activate && anaconda login
 pkg='apache-hamilton'
 # adjust the Python versions you would like to build
-array=(3.10 3.11 3.12 3.13)
+array=(3.11 3.12 3.13 3.14 3.15)
 echo "Building conda package ..."
 cd ~
 # this will create a ~/apache-hamilton directory with metadata to build the package.

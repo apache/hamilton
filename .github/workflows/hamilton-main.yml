@@ -1,7 +1,20 @@
 name: Unit Tests
 
 on:
+  # No lockfile pins Hamilton's dependencies, so every run tests their newest releases. The daily
+  # run tests `main` against them when nobody opens a pull request, and the notify-slack job
+  # reports what broke. The minute is off the hour because GitHub delays or drops scheduled runs
+  # at the top of the hour, when most schedules start.
+  schedule:
+    - cron: '17 4 * * *'
+
+  # To check the Slack webhook, run this workflow by hand on `main` with notify-slack on.
   workflow_dispatch:
+    inputs:
+      notify-slack:
+        description: 'Send a test Slack message with this run''s outcome (apache/hamilton only)'
+        type: boolean
+        default: false
 
   pull_request:
     branches:
@@ -13,10 +26,16 @@ on:
         - 'plugin_tests/**'
         - 'tests/**'
         - 'pyproject.toml'
+        # tests/test_redirect_packages.py renders every redirect package from these
+        - 'scripts/render_redirect_pyproject.py'
+        - 'sf-hamilton*-redirect/**'
 
 jobs:
   static-checks:
     name: "Static Checks"
+    # Every job in this workflow needs this guard: a fork's scheduled run would spend runner
+    # time daily with no one to report to.
+    if: github.event_name != 'schedule' || github.repository == 'apache/hamilton'
     runs-on: ubuntu-latest
     steps:
         - name: Checkout repository
@@ -28,7 +47,7 @@ jobs:
         - name: Set up Python
           uses: actions/setup-python@v5
           with:
-            python-version: '3.10'
+            python-version: '3.11'
 
         - name: Check linting with prek
           run: |
@@ -37,6 +56,9 @@ jobs:
 
   test:
     name: "Unit Tests"
+    # Every job in this workflow needs this guard: a fork's scheduled run would spend runner
+    # time daily with no one to report to.
+    if: github.event_name != 'schedule' || github.repository == 'apache/hamilton'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false # want to see for each version if fails are different
@@ -44,11 +66,11 @@ jobs:
         os:
           - ubuntu-latest
         python-version:
-          - '3.10'
           - '3.11'
           - '3.12'
           - '3.13'
           - '3.14'
+          - '3.15'
     env:
       HAMILTON_TELEMETRY_ENABLED: false
     services:
@@ -130,6 +152,15 @@ jobs:
             uv pip install polars
             uv run pytest plugin_tests/h_polars
 
+        # The test group resolves polars 2.x, so the readers Hamilton registers for polars 1.x are
+        # only exercised here. `--no-sync` keeps `uv run` from reinstalling the locked polars 2.x.
+        - name: Test polars 1.x readers
+          run: |
+            uv sync --group test
+            uv pip install 'polars<2'
+            uv run --no-sync python -c "import polars; assert polars.__version__.startswith('1.'), polars.__version__; print('polars', polars.__version__)"
+            uv run --no-sync pytest tests/plugins/test_polars_extensions.py tests/plugins/test_polars_lazyframe_extensions.py
+
         - name: Test narwhals
           run: |
             uv sync --group test
@@ -141,8 +172,9 @@ jobs:
             uv sync --group test --extra dask
             uv run pytest plugin_tests/h_dask
 
+        # the `ray` extra in pyproject.toml installs ray only on Python < 3.15
         - name: Test ray
-          if: ${{ matrix.python-version != '3.14' }}
+          if: ${{ matrix.python-version == '3.11' || matrix.python-version == '3.12' || matrix.python-version == '3.13' || matrix.python-version == '3.14' }}
           env:
             RAY_ENABLE_UV_RUN_RUNTIME_ENV: 0 # https://github.com/ray-project/ray/issues/53848
           run: |
@@ -170,19 +202,68 @@ jobs:
             uv pip install --no-cache --reinstall --strict 'grpcio-status >= 1.48.1'
             uv run pytest plugin_tests/h_spark
 
-        # Vaex 4.19 supports py<=3.12 and numpy>2 (https://github.com/vaexio/vaex/pull/2449) but limited by dask<2024.9
-        # For now the test matrix is py3.10 and numpy<2
+        # Vaex 4.19 only ships wheels for py<=3.12 and pins dask<2024.9 / pandas<3, which conflicts
+        # with the test group. Install it on top of the synced env rather than through the lock, otherwise
+        # the universal resolution falls back to vaex 4.17 which has no wheels for py>=3.11.
         - name: Test vaex
-          if: ${{ runner.os == 'Linux' && matrix.python-version == '3.10' }}
+          if: ${{ matrix.python-version == '3.11' || matrix.python-version == '3.12' }}
           run: |
-            sudo apt-get install --no-install-recommends --yes libpcre3-dev cargo
-            uv sync --group test --extra vaex
-            uv pip install "numpy<2"
+            uv sync --group test
+            uv pip install "vaex>=4.19"
             uv run --no-sync pytest plugin_tests/h_vaex
 
-        - name: Test vaex
-          if: ${{ runner.os != 'Linux' && matrix.python-version == '3.10' }}
+  notify-slack:
+    name: "Notify Slack"
+    needs: [static-checks, test]
+    # Posts only in apache/hamilton, which holds the webhook secret: once for a first-attempt
+    # scheduled run in which a job failed or hit its time limit (such a job ends cancelled while
+    # the run does not), and once for a manual run with notify-slack on, whether it passed or failed.
+    # `!cancelled()` stops GitHub from adding its implicit `success()`, which would skip this job
+    # whenever a job it needs failed.
+    if: >-
+      !cancelled() && github.repository == 'apache/hamilton' && (
+        (github.event_name == 'schedule' && github.run_attempt == 1 &&
+          (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))) ||
+        (github.event_name == 'workflow_dispatch' && inputs.notify-slack))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read
+    steps:
+        - name: Compose the message
+          id: message
+          env:
+            GH_TOKEN: ${{ github.token }}
+            API_URL: ${{ github.api_url }}
+            REPO: ${{ github.repository }}
+            RUN_ID: ${{ github.run_id }}
+            RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            EVENT: ${{ github.event_name }}
+            OUTCOME: ${{ (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')) && 'failed' || 'passed' }}
           run: |
-            uv sync --group test --extra vaex
-            uv pip install "numpy<2"
-            uv run --no-sync pytest plugin_tests/h_vaex
+            # One line per failed or timed-out step, as "job: step"; a failed job with no failed
+            # step (one that died while setting up) is listed by its name alone. `$job` is jq's.
+            # shellcheck disable=SC2016
+            filter='def broken: .conclusion | IN("failure", "cancelled", "timed_out");
+              .jobs[] | select(broken) | .name as $job
+              | [.steps[]? | select(broken) | "\($job): \(.name)"]
+              | if length > 0 then .[] else $job end'
+            if ! failed=$(gh api "$API_URL/repos/$REPO/actions/runs/$RUN_ID/jobs" --paginate --jq "$filter"); then
+              echo "::warning::Could not list the failed steps; the message links to the run instead."
+              failed="(failed steps unavailable)"
+            fi
+            if [[ "$EVENT" == schedule ]]; then
+              header="Hamilton latest-dependency CI failed:"
+            else
+              header="Test of Hamilton's CI Slack notification path from a manual run, which $OUTCOME."
+            fi
+            text=$(printf '%s\n' "$header" ${failed:+"$failed"} "$RUN_URL")
+            echo "payload=$(jq --compact-output --null-input --arg text "$text" '{text: $text}')" >> "$GITHUB_OUTPUT"
+
+        - name: Post to Slack
+          uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
+          with:
+            webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+            webhook-type: incoming-webhook
+            errors: true
+            payload: ${{ steps.message.outputs.payload }}

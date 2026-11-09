@@ -37,16 +37,18 @@ except ImportError as e:
     raise NotImplementedError("Polars is not installed.") from e
 
 
-# for polars <0.16.0 we need to determine whether type_aliases exist.
+# `polars.type_aliases` is missing before polars 0.16, gained aliases over the 0.x releases, and was
+# removed in polars 2.0, so each alias import is guarded; the `type` fallbacks keep this module
+# importable wherever an alias is missing, including under polars>=1.0, where the tests import it.
 has_alias = False
 if hasattr(pl, "type_aliases"):
     has_alias = True
 
-# for polars 0.18.0 we need to check what to do.
 if has_alias and hasattr(pl.type_aliases, "CsvEncoding"):
     from polars.type_aliases import CsvEncoding, SchemaDefinition
 else:
     CsvEncoding = type
+    SchemaDefinition = type
 if has_alias and hasattr(pl.type_aliases, "CsvQuoteStyle"):
     from polars.type_aliases import CsvQuoteStyle
 else:
@@ -55,6 +57,10 @@ if has_alias and hasattr(pl.type_aliases, "IpcCompression"):
     from polars.type_aliases import IpcCompression
 else:
     IpcCompression = type
+if has_alias and hasattr(pl.type_aliases, "ColumnTotalsDefinition"):
+    from polars.type_aliases import ColumnTotalsDefinition, RowTotalsDefinition
+else:
+    ColumnTotalsDefinition = RowTotalsDefinition = type
 
 from hamilton import registry
 from hamilton.io import utils
@@ -635,7 +641,6 @@ class PolarsSpreadsheetWriter(DataSaver):
     # but yeah the polars type aliases weren't resolving well in python 3.9
     # so stripped/reduced them appropriately.
     from polars.datatypes import DataType, DataTypeClass
-    from polars.type_aliases import ColumnTotalsDefinition, RowTotalsDefinition
 
     workbook: Workbook | BytesIO | Path | str
     worksheet: str | None = None
@@ -729,6 +734,18 @@ class PolarsSpreadsheetWriter(DataSaver):
         return "spreadsheet"
 
 
+def _sql_metadata_without_datasource(
+    query_or_table: str, rows: int | None, operation: Literal["read", "write"]
+) -> dict[str, Any]:
+    """``sql_metadata`` without a datasource: this deprecated pre-1.0 integration supports only
+    legacy lineage, and its note asks datasource-mode users to upgrade polars."""
+    metadata = utils.get_sql_metadata(query_or_table, rows, operation=operation)
+    metadata["sql_metadata"]["notes"] = (
+        "Datasource lineage for Polars database I/O requires polars>=1.0; upgrade polars"
+    )
+    return metadata
+
+
 @dataclasses.dataclass
 class PolarsDatabaseReader(DataLoader):
     """
@@ -768,7 +785,12 @@ class PolarsDatabaseReader(DataLoader):
             connection=self.connection,
             **self._get_loading_kwargs(),
         )
-        metadata = utils.get_file_and_dataframe_metadata(self.query, df)
+        # with iter_batches=True, pl.read_database returns a generator, so there is no row count
+        rows = len(df) if isinstance(df, pl.DataFrame) else None
+        metadata = {
+            **utils.get_file_and_dataframe_metadata(self.query, df),
+            **_sql_metadata_without_datasource(self.query, rows, "read"),
+        }
         return df, metadata
 
     @classmethod
@@ -795,7 +817,8 @@ class PolarsDatabaseWriter(DataSaver):
         kwargs = {}
         if self.if_table_exists is not None:
             kwargs["if_table_exists"] = self.if_table_exists
-        if self.engine is not None:
+        # polars has no "auto" engine: it picks the engine itself when none is passed
+        if self.engine not in (None, "auto"):
             kwargs["engine"] = self.engine
         return kwargs
 
@@ -803,12 +826,17 @@ class PolarsDatabaseWriter(DataSaver):
         if isinstance(data, pl.LazyFrame):
             data = data.collect()
 
-        data.write_database(
+        reported = data.write_database(
             table_name=self.table_name,
             connection=self.connection,
             **self._get_saving_kwargs(),
         )
-        return utils.get_file_and_dataframe_metadata(self.table_name, data)
+        # a driver that reports no row count makes write_database return -1 (DBAPI's rowcount)
+        rows = reported if isinstance(reported, int) and reported >= 0 else None
+        return {
+            **utils.get_file_and_dataframe_metadata(self.table_name, data),
+            **_sql_metadata_without_datasource(self.table_name, rows, "write"),
+        }
 
     @classmethod
     def name(cls) -> str:

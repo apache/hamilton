@@ -22,7 +22,7 @@ import ibis
 import ibis.expr.types as ir
 import openai
 
-from hamilton.function_modifiers import pipe, source, step
+from hamilton.function_modifiers import pipe_input, source, step
 from hamilton.htypes import Collect, Parallelizable
 
 
@@ -188,8 +188,8 @@ def _summary(threads: ir.Table, prompt: str) -> ir.Table:
     return threads.mutate(summary=_openai_completion_udf(threads.thread, prompt))
 
 
-# @pipe operator facilitates managing the function/node namespace
-@pipe(
+# @pipe_input operator facilitates managing the function/node namespace
+@pipe_input(
     step(_format_messages), step(_aggregate_thread), step(_summary, prompt=source("summary_prompt"))
 )
 def threads(channels_collection: ir.Table) -> ir.Table:

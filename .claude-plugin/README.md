@@ -101,7 +101,7 @@ You can explicitly invoke the skill using the `/hamilton` command:
 This skill has deep knowledge of:
 
 - **Core Apache Hamilton concepts**: Drivers, DAGs, nodes, function-based definitions
-- **Function modifiers**: All decorators (@parameterize, @config.when, @extract_columns, @check_output, @save_to, @load_from, @cache, @pipe, @does, @mutate, @step, etc.)
+- **Function modifiers**: All decorators (@parameterize, @config.when, @extract_columns, @check_output, @save_to, @load_from, @cache, @pipe_input, @does, @mutate, @step, etc.)
 - **Execution patterns**: Sequential, parallel, distributed (Ray, Dask, Spark)
 - **Data quality**: Validation, schema checking, data quality pipelines
 - **I/O patterns**: Materialization, data loaders, result adapters
@@ -188,7 +188,7 @@ The skill includes additional reference files:
 
 - **Claude Code CLI** - Install from https://code.claude.com
 - **Apache Hamilton** - The skill works with any version, but references Hamilton 1.x+ patterns
-- **Python 3.9+** - For running generated Apache Hamilton code
+- **Python 3.11+** - For running generated Apache Hamilton code
 
 ## Contributing
 

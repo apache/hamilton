@@ -39,18 +39,18 @@ def test_cli_build_success():
     assert message["success"] is True
 
 
-def test_cli_view_default(tmp_path: pathlib.Path):
+def test_cli_view_default(tmp_path: pathlib.Path, monkeypatch):
     module_path = inspect.getfile(example_module)
     inputs = ["--json-out", "view", module_path]
-    # output_file_path = tmp_path / "dag.png"  # default file name
+    # `view` writes to the working directory by default
+    monkeypatch.chdir(tmp_path)
 
     result = runner.invoke(cli, inputs)
 
     assert result.exit_code == 0
     message = json.loads(result.stdout)
     assert message["success"] is True
-    # TODO difficult to assert the output file path from test
-    # assert output_file_path.exists()
+    assert (tmp_path / "dag_example_module.png").exists()
 
 
 # def test_cli_view_output_arg(tmp_path: pathlib.Path):

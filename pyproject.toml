@@ -26,7 +26,7 @@ version = "1.90.0"  # NOTE: keep this in sync with hamilton/version.py
 # dynamic = ["version"]
 description = "Apache Hamilton (incubating) is a lightweight Python library for directed acyclic graphs (DAGs) of transformations. Your DAG is **portable**; it runs anywhere Python runs, whether it's a script, notebook, Airflow pipeline, FastAPI server, etc. Your DAG is **expressive**; Apache Hamilton has extensive features to define and modify the execution of a DAG (e.g., data validation, experiment tracking, remote execution)."
 readme = "README.md"
-requires-python = ">=3.10.1, <4"
+requires-python = ">=3.11, <4"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE", "DISCLAIMER"]
 keywords = ["hamilton"]
@@ -39,11 +39,11 @@ classifiers = [
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14"
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15"
 ]
 dependencies = [
     "numpy",
@@ -60,7 +60,11 @@ dask-array = ["dask[array]"]
 dask-dataframe = ["dask[dataframe]"]
 dask-diagnostics = ["dask[diagnostics]"]
 dask-distributed = ["dask[distributed]"]
-datadog = ["ddtrace>=4.0,<5.0"]
+datadog = [
+  "ddtrace>=4.0,<5.0; python_version < '3.15'",
+  # 4.17 is the first ddtrace that allows Python 3.15; drop the pre-release once 4.17.0 is out
+  "ddtrace>=4.17.0rc2,<5.0; python_version >= '3.15'",
+]
 diskcache = ["diskcache"]
 experiments = [
   "fastapi",
@@ -82,8 +86,11 @@ pydantic = ["pydantic>=2.0"]
 pyspark = [
   # we have to run these dependencies because Spark does not check to ensure the right target was called
   "pyspark[pandas_on_spark,sql] >= 4.0.0",
+  # pyspark.pandas (<= 4.3.0) imports DateOffset from pandas.tseries.frequencies, which pandas
+  # 3.1 removed; lift once a pyspark release supports pandas 3.1.
+  "pandas<3.1",
 ]
-ray = ["ray>=2.0.0; python_version < '3.14'", "pyarrow"]
+ray = ["ray>=2.0.0; python_version < '3.15'", "pyarrow"]  # ray has no cp315 wheels yet
 rich = ["rich"]
 sdk = ["apache-hamilton-sdk"]
 slack = ["slack-sdk"]
@@ -92,9 +99,9 @@ mcp = ["fastmcp>=3.0.0,<4"]
 tqdm = ["tqdm"]
 ui = ["apache-hamilton-ui"]
 
-# vaex -- on >=py3.11 only core part available https://github.com/vaexio/vaex/pull/2331#issuecomment-2437198176
+# vaex 4.19 supports py<=3.12 https://github.com/vaexio/vaex/pull/2449
 vaex = [
-  "vaex; python_version == '3.10'"
+  "vaex; python_version < '3.13'"
   ]
 visualization = ["graphviz", "networkx"]
 
@@ -104,6 +111,7 @@ dev = [
   "ruff==0.16.9", # this should match `.pre-commit-config.yaml`
 ]
 release = [
+  "build", # the sf-hamilton*-redirect packages' build.sh
   "flit",
   "twine",
 ]
@@ -123,13 +131,14 @@ test = [
   "lxml",
   "lz4",
   "matplotlib",
-  "mlflow; python_version <= '3.13'",
+  "mlflow>=3; python_version <= '3.13'", # stops uv backtracking to mlflow 1.x, which fails to import, to satisfy the pyarrow floor below
   "networkx",
   "openpyxl", # for excel data loader
   "pandera[dask]>=0.23",
   "plotly",
-  "polars; python_version < '3.14'",
+  "polars",
   "pyarrow",
+  "pyarrow>=26; python_version >= '3.15'", # first release with 3.15 wheels; without it, uv's universal resolution applies mlflow's pyarrow<26 to every Python
   "pydantic >=2.0",
   "pyreadstat; python_version < '3.14'", # for SPSS data loader
   "pytest",
@@ -172,9 +181,10 @@ docs = [
   "pyarrow >= 1.0.0",
   "pydantic >= 2.0",
   "pyspark",
+  "pandas<3.1", # pyspark.pandas fails on pandas 3.1; see the pyspark extra
   "openlineage-python",
   "PyYAML",
-  "ray; python_version < '3.14'",
+  "ray; python_version < '3.15'",
   "readthedocs-sphinx-ext",
   "recommonmark",
   "scikit-learn",
@@ -218,7 +228,7 @@ markers = [
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"  # Must include only the earliest supported version
+target-version = "py311"  # Must include only the earliest supported version
 
 [tool.ruff.format]
 docstring-code-format = false

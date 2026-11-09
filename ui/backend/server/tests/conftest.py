@@ -23,9 +23,10 @@ from trackingserver_base.auth.testing import TEST_USERS, TestAPIAuthenticator
 
 @pytest.fixture(scope="session")
 def event_loop():
-    loop = asyncio.get_event_loop()
+    # Python 3.14 made get_event_loop() raise when no loop is set, so create one.
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     yield loop
-    # yield loop
     loop.close()
 
 
