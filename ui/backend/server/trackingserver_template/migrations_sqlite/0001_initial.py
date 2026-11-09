@@ -170,6 +170,7 @@ class Migration(migrations.Migration):
                                 ("data_loader", "DataLoader"),
                                 ("input", "Input"),
                                 ("placeholder", "Placeholder"),
+                                ("result_builder", "ResultBuilder"),
                             ]
                         )
                     ),
