@@ -22,7 +22,9 @@ import functools
 import hashlib
 import inspect
 import logging
+import types
 import typing
+import weakref
 from dataclasses import dataclass
 
 from hamilton import htypes, node
@@ -109,6 +111,37 @@ def hash_source_code(source: str | typing.Callable, strip: bool = False) -> str:
             pass
 
     return hashlib.sha256(source.encode()).hexdigest()
+
+
+# Source hashes of node functions, keyed by function object, so that they outlive the new
+# HamiltonNode objects that lifecycle hooks build on every execution. Each entry keeps the
+# code object it was computed from, so code replaced in place (e.g. by IPython's autoreload)
+# is hashed again. Entries are dropped when their function is garbage collected.
+_source_hash_cache: weakref.WeakKeyDictionary[typing.Callable, tuple[types.CodeType, str]] = (
+    weakref.WeakKeyDictionary()
+)
+
+
+def _hash_function_source(fn: typing.Callable) -> str:
+    """Returns `hash_source_code(fn, strip=True)`, reusing the result for as long as `fn`
+    keeps the same code object.
+
+    :param fn: The originating function of a node.
+    :return: The SHA-256 hex digest of the function's source, ignoring docstring and comments.
+    """
+    # `inspect.getsource` reads the source of the innermost `__wrapped__` function
+    code = getattr(inspect.unwrap(fn), "__code__", None)
+    if code is None:
+        return hash_source_code(fn, strip=True)
+    try:
+        cached = _source_hash_cache.get(fn)
+    except TypeError:  # not hashable or not weak-referenceable
+        return hash_source_code(fn, strip=True)
+    if cached is not None and cached[0] is code:
+        return cached[1]
+    source_hash = hash_source_code(fn, strip=True)
+    _source_hash_cache[fn] = (code, source_hash)
+    return source_hash
 
 
 @dataclass
@@ -199,7 +232,7 @@ class HamiltonNode:
             return None  # this shouldn't happen often.
         try:
             # return hash of first function. It could be that others are Hamilton framework code.
-            return hash_source_code(self.originating_functions[0], strip=True)
+            return _hash_function_source(self.originating_functions[0])
         except OSError:  # TODO -- ensure we can get the node hash in a databricks environment when using jupyter magic
             logger.warning(
                 f"Failed to hash source code for node {self.name}. Certain environments (such as databricks) do not allow it."
