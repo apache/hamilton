@@ -124,3 +124,8 @@ def version(dr: driver.Driver) -> dict:
 def view(dr: driver.Driver, output_file_path: Path = Path("dag.png")) -> None:
     """Display all functions of the instantiated Driver"""
     dr.display_all_functions(output_file_path)
+
+
+def create_tests(module_path: Path, output_path: Path | None = None) -> tuple[Path, list, list]:
+    """Generate pytest-style unit test stubs for Hamilton functions in the target module"""
+    return logic.create_test_stubs(module_path=module_path, output_file=output_path)
