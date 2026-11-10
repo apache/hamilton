@@ -56,3 +56,4 @@ In terms of getting set up to develop, we invite you to read our [developer setu
 ## Finding your way around
 
 - [`CONTEXT.md`](CONTEXT.md) is a glossary of the words that mean something specific in Apache Hamilton, such as the three different things called an "adapter". Read it before naming something new.
+- [`writeups/adr/`](writeups/adr/README.md) holds the project's decision records: why its foundations were built the way they are. Read the one that covers what you are changing before you change it.
