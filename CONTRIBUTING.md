@@ -56,4 +56,5 @@ In terms of getting set up to develop, we invite you to read our [developer setu
 ## Finding your way around
 
 - [`CONTEXT.md`](CONTEXT.md) is a glossary of the words that mean something specific in Apache Hamilton, such as the three different things called an "adapter". Read it before naming something new.
+- [`scripts/verify`](scripts/verify) runs the checks that continuous integration (CI) runs, one recipe per area: `scripts/verify affected` names the recipes your change touches, and `scripts/verify drive <recipe>` runs one. It is optional, needs Node 22.18 or newer, and CI does not use it; [`verification/harness.md`](verification/harness.md) says what it assumes.
 - [`writeups/adr/`](writeups/adr/README.md) holds the project's decision records: why its foundations were built the way they are. Read the one that covers what you are changing before you change it.
