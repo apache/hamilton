@@ -36,9 +36,12 @@ different destination file.
 If the existing file cannot be parsed as Python, the command reports an error
 and leaves it untouched rather than appending to it.
 
-Imports are added when the new stubs need them. The generator binds `pd` and the
-imported module itself, so a file that only had `from pandas import Series` gains
-`import pandas as pd`.
+Imports are added when the new stubs need them, above the first line of code in
+the file. The stubs call `pd.*` and `<module>.function(...)`, so the generator
+adds exactly what binds those names: a file that only had
+`from pandas import Series` or `import pandas as pandas_alias` gains
+`import pandas as pd`, and a file that imported the module under another alias
+gets `import pkg.mod` as well.
 
 Signatures are read from the module's source with `ast`, so generating stubs
 never imports the module and no top-level code of it runs at generation time.
@@ -47,10 +50,14 @@ top-level code runs then as it would for any test.) Modules that use
 package-relative imports are fine too: a module inside a regular package (a
 directory with an `__init__.py`) is imported by its dotted path, so
 `pkg/orders.py` generates `import pkg.orders` and calls
-`pkg.orders.total_spend(...)`. Namespace packages are not detected.
+`pkg.orders.total_spend(...)`. Only that layout is detected: namespace packages
+are not, and the generated import is relative to the package root, so run the
+tests from a checkout that has that root on `sys.path`.
 
-Generated calls keep each parameter's kind, so calling them means what the
-original signature means:
+Generated calls keep each parameter's kind, and every parameter is passed, so
+the stub always runs the function with the values written above it. It is a
+stub: a parameter whose default is omitted on purpose in the real call is still
+passed here, so the default is not exercised until you edit the stub.
 
 ```python
 # business_logic.py

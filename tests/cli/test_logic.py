@@ -496,3 +496,30 @@ def test_create_test_stubs_does_not_duplicate_equivalent_imports(tmp_path):
     assert text.count("from pandas import Series") == 1
     compile(text, str(existing), "exec")
     _import_file(existing, tmp_path)
+
+
+def test_create_test_stubs_inserts_imports_above_executable_code(tmp_path):
+    module_file = tmp_path / "business_logic.py"
+    module_file.write_text(HAMILTON_MODULE_SOURCE)
+    existing = tmp_path / "test_business_logic.py"
+    existing.write_text(
+        "def helper():\n"
+        "    return 1\n"
+        "\n"
+        "\n"
+        "HELPER = helper()\n"
+        "import business_logic\n"
+        "\n"
+        "\n"
+        "def test_spend_per_signup():\n"
+        "    assert True\n"
+    )
+
+    _, created, _ = logic.create_test_stubs(module_file)
+
+    text = existing.read_text()
+    assert created == ["test_total"]
+    # HELPER = helper() runs before the existing import, so the new imports must go above it
+    assert text.index("import pandas as pd") < text.index("HELPER = helper()")
+    assert text.index("import pandas as pd") < text.index("import business_logic")
+    compile(text, str(existing), "exec")

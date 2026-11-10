@@ -546,7 +546,15 @@ def _import_insertion_index(text: str) -> int:
     except (SyntaxError, ValueError):
         return 0
 
-    top_level_imports = [n for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))]
+    # only the leading block of imports, never after executable top-level code
+    top_level_imports = []
+    for node in tree.body:
+        if isinstance(node, (ast.Import, ast.ImportFrom)):
+            top_level_imports.append(node)
+        elif isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant):
+            continue  # module docstring
+        else:
+            break
     if top_level_imports:
         return max(node.end_lineno for node in top_level_imports)
 
