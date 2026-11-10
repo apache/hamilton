@@ -15,7 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import functools
 import inspect
+import sys
+from collections.abc import Callable
+from decimal import Decimal
 from typing import Any, Literal, TypeVar
 
 import numpy as np
@@ -26,7 +30,11 @@ from packaging.version import Version
 from hamilton import node
 from hamilton.node import DependencyType, Node, matches_query
 
-from tests.resources import nodes_with_future_annotation
+from tests.resources import (
+    nodes_behind_wrappers,
+    nodes_with_future_annotation,
+    wrappers_from_another_module,
+)
 
 
 def test_node_from_fn_happy():
@@ -186,6 +194,103 @@ def test_node_from_future_annotation_standard():
 def test_node_from_future_annotation_collected():
     collected = nodes_with_future_annotation.collected
     assert node.Node.from_fn(collected).node_role == node.NodeType.COLLECT
+
+
+# Tests hint resolution for functions with postponed annotations behind a wrapper that another
+# module defines. The annotations name `Decimal`, which only the decorated functions' module
+# imports, so resolving them against the wrapper's module raises NameError.
+@pytest.mark.parametrize(
+    ("function_name", "expected_input_types"),
+    [
+        pytest.param("price", {"amount": Decimal}, id="undecorated"),
+        pytest.param(
+            "price_with_tax", {"price": Decimal, "tax_rate": Decimal}, id="functools.wraps"
+        ),
+        pytest.param("price_rounded", {"price_with_tax": Decimal}, id="two-wrapper-layers"),
+        pytest.param(
+            "price_discounted", {"price_rounded": Decimal}, id="wrapper-hides-a-parameter"
+        ),
+        pytest.param(
+            "price_total",
+            {"price_discounted": Decimal, "factor": int},
+            id="wrapper-adds-a-parameter-and-its-annotation",
+        ),
+    ],
+)
+def test_node_from_future_annotation_behind_wrapper_from_another_module(
+    function_name: str, expected_input_types: dict[str, type]
+):
+    fn = getattr(nodes_behind_wrappers, function_name)
+
+    node_ = Node.from_fn(fn)
+
+    assert node_.type is Decimal
+    assert node_.input_types == {
+        name: (type_, DependencyType.REQUIRED) for name, type_ in expected_input_types.items()
+    }
+
+
+def test_node_from_wrapper_without_wraps_resolves_against_the_wrapper_module():
+    """Without ``functools.wraps`` the wrapper's own annotations are the node's types."""
+    fn = wrappers_from_another_module.typed_without_wraps(nodes_behind_wrappers.price)
+
+    node_ = Node.from_fn(fn)
+
+    wrapper_type = wrappers_from_another_module.DefinedOnlyInWrapperModule
+    assert node_.type is wrapper_type
+    assert node_.input_types == {"value": (wrapper_type, DependencyType.REQUIRED)}
+
+
+def test_node_from_wrapper_without_wraps_or_annotations_is_rejected():
+    fn = wrappers_from_another_module.untyped_without_wraps(nodes_behind_wrappers.price)
+
+    with pytest.raises(ValueError, match="Missing type hint for return value"):
+        Node.from_fn(fn)
+
+
+def test_node_from_bound_method_of_callable_object_with_future_annotation():
+    converter = nodes_behind_wrappers.Converter(rate=Decimal(2))
+
+    node_ = Node.from_fn(converter.__call__, name="price_converted")
+
+    assert node_.type is Decimal
+    assert node_.input_types == {"price": (Decimal, DependencyType.REQUIRED)}
+    assert node_(price=Decimal("1.5")) == Decimal(3)
+
+
+def test_node_from_partial_of_wrapped_function_with_given_input_types():
+    """A ``functools.partial`` carries no annotations; the caller states the remaining inputs."""
+    callabl = functools.partial(nodes_behind_wrappers.price_with_tax, tax_rate=Decimal("0.5"))
+
+    node_ = Node("price_with_tax", Decimal, callabl=callabl, input_types={"price": Decimal})
+
+    assert node_.input_types == {"price": (Decimal, DependencyType.REQUIRED)}
+    assert node_(price=Decimal(10)) == Decimal(15)
+
+
+@pytest.mark.parametrize(
+    "callabl",
+    [
+        pytest.param(
+            functools.partial(nodes_behind_wrappers.price_with_tax, tax_rate=Decimal("0.5")),
+            id="functools.partial",
+        ),
+        pytest.param(nodes_behind_wrappers.Converter(rate=Decimal(2)), id="callable-object"),
+    ],
+)
+def test_node_from_callable_without_annotations_reports_the_missing_hints(callabl: Callable):
+    """Neither a partial nor an instance carries annotations, so its inputs cannot be inferred.
+
+    Python 3.11 to 3.13 reject such an object in ``typing.get_type_hints`` with a TypeError that
+    names it; 3.14 and newer return no hints, and Hamilton reports the first parameter without
+    one. Neither is an AttributeError about a missing ``__globals__``.
+    """
+    if sys.version_info >= (3, 14):
+        expected = pytest.raises(ValueError, match="Missing type hint for price in function")
+    else:
+        expected = pytest.raises(TypeError, match="is not a module, class, method, or function")
+    with expected:
+        Node("price_converted", Decimal, callabl=callabl)
 
 
 def test_reassign_inputs():
