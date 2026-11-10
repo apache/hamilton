@@ -1,7 +1,8 @@
 # Generating unit test stubs with `hamilton create-tests`
 
 This example shows the `create-tests` CLI command, which generates
-pytest-style unit test stubs for the Hamilton functions in a module.
+pytest-style unit test stubs for the synchronous Hamilton functions in a
+module.
 
 ## Steps
 
@@ -12,7 +13,7 @@ hamilton create-tests business_logic.py
 ```
 
 This writes `test_business_logic.py` next to the module with one stub per
-Hamilton function:
+synchronous module-level function:
 
 ```python
 import pandas as pd
