@@ -29,10 +29,51 @@ def test_spend_per_signup():
 ...
 ```
 
-Running the command again skips functions that already have a test and
-appends stubs for new functions to the existing file. Use `--output/-o` to
-choose a different destination file.
+Running the command again skips functions that already have a test and appends
+stubs for new functions to the existing file. Use `--output/-o` to choose a
+different destination file.
 
-Run the command from an environment where the module's imports resolve; the
-module's own directory is added to `sys.path` during generation so sibling
-imports work.
+If the existing file cannot be parsed as Python, the command reports an error
+and leaves it untouched rather than appending to it.
+
+Imports are added when the new stubs need them. The generator binds `pd` and the
+imported module itself, so a file that only had `from pandas import Series` gains
+`import pandas as pd`.
+
+Signatures are read from the module's source with `ast`, so generating stubs
+never imports the module and no top-level code of it runs at generation time.
+(The generated test file does import it later, when the tests run, so its
+top-level code runs then as it would for any test.) Modules that use
+package-relative imports are fine too: a module inside a regular package (a
+directory with an `__init__.py`) is imported by its dotted path, so
+`pkg/orders.py` generates `import pkg.orders` and calls
+`pkg.orders.total_spend(...)`. Namespace packages are not detected.
+
+Generated calls keep each parameter's kind, so calling them means what the
+original signature means:
+
+```python
+# business_logic.py
+def total_spend(period: str, /, *, include_tax: bool = False, **filters):
+    ...
+
+# generated stub
+def test_total_spend():
+    period = None  # TODO: fill in
+    include_tax = False  # TODO: fill in
+    filters = {}  # TODO: fill in
+    actual = business_logic.total_spend(period, include_tax=include_tax, **filters)
+```
+
+If a default is not something the stub can carry in-line, such as
+`def bump(level=DEFAULT_LEVEL)`, the stub leaves the original in the comment
+instead of writing a name it has not imported:
+
+```python
+    level = None  # TODO: fill in (default is DEFAULT_LEVEL)
+```
+
+The same rule applies to annotations the generated file cannot resolve, such as
+one that needs `typing`; it becomes part of the comment and the parameter is left
+unannotated. Only synchronous module-level functions get stubs: an `async def`
+would need a test that awaits it, which the command does not assume.
