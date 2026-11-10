@@ -125,6 +125,8 @@ Some tests need more than Python packages:
 - The graph-rendering tests in `tests/test_graph.py` run Graphviz's `dot` program. Install Graphviz with your system's package manager (CI runs `apt-get install graphviz` on Linux).
 - Some tests in `tests/plugins/test_h_openlineage.py` and `tests/plugins/test_pandas_extensions.py` need a PostgreSQL server named by the `HAMILTON_TEST_POSTGRES_URL` environment variable. They are skipped when it is not set (`tests/conftest.py`).
 
+On Linux and macOS, you can use [`scripts/verify`](../scripts/verify) to run the same commands CI runs, one recipe per area. It needs Node 22.18 or newer. `scripts/verify affected` names the checks your change touches. See [`verification/harness.md`](../verification/harness.md) for prerequisites.
+
 ### Using PyCharm to execute & debug unit tests
 
 You can debug and execute unit tests in PyCharm. To set it up, hit `Edit configurations` and then add New > Python Tests > pytest. Specify the `tests/` folder under `Script path`, and make sure the Python interpreter is the one in `.venv`. If you add `-v` to the additional arguments, you'll get verbose diffs if any tests fail.

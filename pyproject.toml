@@ -351,4 +351,10 @@ exclude = [
     "ui/**",
     "contrib/**",
     "dev_tools/**",
+    # scripts/verify reads verification/ and .github/, which the sdist leaves out; the release
+    # scripts beside it that share its prefix (verify_apache_artifacts.py and others) stay in.
+    # `scripts/verify drive verify-tool sdist` checks both.
+    "scripts/verify",
+    "scripts/verify.mts",
+    "scripts/verify.test.mts",
 ]
