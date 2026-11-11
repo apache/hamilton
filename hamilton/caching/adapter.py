@@ -612,9 +612,11 @@ class HamiltonCacheAdapter(
         ):
             self.cache_keys[run_id][node_name] = cache_key
         elif node_role == NodeRoleInTaskExecution.INSIDE:
-            if self.cache_keys[run_id].get(node_name, SENTINEL) is SENTINEL:
-                self.cache_keys[run_id][node_name] = {}
-            self.cache_keys[run_id][node_name][task_id] = cache_key  # type: ignore ; we just initialized the nested dict
+            # Tasks of a mapped block may run on threads that share this adapter. `.setdefault()`
+            # is a single atomic step, so two tasks can't both find the nested dict missing
+            # and each create one, which would drop the entry of the task that wrote first.
+            tasks_cache_keys = self.cache_keys[run_id].setdefault(node_name, {})
+            tasks_cache_keys[task_id] = cache_key  # type: ignore ; `INSIDE` nodes hold a nested dict
         else:
             raise ValueError(
                 f"Received `{node_role}`. Unhandled `NodeRoleInTaskExecution`, please report this bug."
@@ -750,9 +752,9 @@ class HamiltonCacheAdapter(
         elif node_role == NodeRoleInTaskExecution.EXPAND:
             self.data_versions[run_id][node_name] = {}
         elif node_role == NodeRoleInTaskExecution.INSIDE:
-            if self.data_versions[run_id].get(node_name, SENTINEL) is SENTINEL:
-                self.data_versions[run_id][node_name] = {}
-            self.data_versions[run_id][node_name][task_id] = data_version  # type: ignore ; we just initialized the nested dict
+            # see `._set_cache_key()` for why this is `.setdefault()` and not check-then-create
+            tasks_data_versions = self.data_versions[run_id].setdefault(node_name, {})
+            tasks_data_versions[task_id] = data_version  # type: ignore ; `INSIDE` nodes hold a nested dict
         else:
             raise ValueError(
                 f"Received `{node_role}`. Unhandled `NodeRoleInTaskExecution`, please report this bug."
