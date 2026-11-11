@@ -20,6 +20,7 @@ import json
 import math
 import sys
 from collections.abc import Callable
+from decimal import Decimal
 from typing import Any
 
 import pandas as pd
@@ -35,6 +36,7 @@ from hamilton.io.materialization import from_, to
 import tests.resources.data_quality
 import tests.resources.dynamic_config
 import tests.resources.example_module
+import tests.resources.nodes_behind_wrappers
 import tests.resources.overrides
 import tests.resources.overrides_from_module
 import tests.resources.test_for_materialization
@@ -675,3 +677,25 @@ def test_disable_data_quality_checks_config_key_works_directly():
         var for var in all_vars if var.tags.get("hamilton.data_quality.contains_dq_results", False)
     ]
     assert len(dq_nodes) == 0
+
+
+def test_driver_runs_future_annotation_functions_behind_wrappers_from_another_module():
+    """All nodes but the first sit behind a wrapper that another module defines.
+
+    10 with 17.5% tax is 11.75; less the 25% discount the wrapper fills in, 8.8125; times the
+    factor the last wrapper adds, 17.625.
+    """
+    dr = (
+        driver.Builder()
+        .with_modules(tests.resources.nodes_behind_wrappers)
+        .with_adapters(base.DictResult())
+        .build()
+    )
+
+    result = dr.execute(
+        ["price_rounded", "price_total"],
+        inputs={"amount": Decimal(10), "tax_rate": Decimal("0.175"), "factor": 2},
+    )
+
+    assert result["price_rounded"] == Decimal("11.75")
+    assert result["price_total"] == Decimal("17.625")
