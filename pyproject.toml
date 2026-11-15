@@ -82,6 +82,7 @@ performance = [
     # Internal performance boosters go here
     "xxhash>=0.8.0",
 ]
+plotly-static = ["plotly", "kaleido!=1.5.1"]
 pydantic = ["pydantic>=2.0"]
 pyspark = [
   # we have to run these dependencies because Spark does not check to ensure the right target was called
@@ -124,7 +125,7 @@ test = [
   "dlt",
   "fsspec",
   "graphviz",
-  "kaleido",
+  "kaleido!=1.5.1", # https://github.com/plotly/Kaleido/issues/487
   "kedro; python_version < '3.14'",
   "lancedb; python_version < '3.14'",
   "lightgbm; python_version < '3.14'",
