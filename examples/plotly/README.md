@@ -21,6 +21,8 @@ under the License.
 
 By importing `hamilton.plugins.plotly_extensions`, you can register two additional materializers for Plotly figures. The `to.plotly()` creates static image files ([docs](https://plotly.com/python/static-image-export/)) and the `to.html()` outputs interactive HTML files ([docs](https://plotly.com/python/interactive-html-export/)).
 
+For static image export, install `apache-hamilton[plotly-static]`. Kaleido also requires Chrome or Chromium; see the [Plotly installation guide](https://plotly.com/python/static-image-export/).
+
 ## How to
 You need to install `plotly` (low-level API) to annotate your function with `plotly.graph_objects.Figure` even if you are using `plotly_express` (high-level API) to generate figures.
 ```python
