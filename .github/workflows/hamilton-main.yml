@@ -128,6 +128,14 @@ jobs:
             uv pip install -r tests/integrations/pandera/requirements.txt
             uv run pytest tests/integrations
 
+        # The step above resolves the newest pandera, so the floor in pyproject.toml is only
+        # exercised here; keep the two equal. `--no-sync` keeps `uv run` from reinstalling it.
+        - name: Test integrations with the lowest supported pandera
+          run: |
+            uv pip install 'pandera[dask,pandas]==0.27.0'
+            uv run --no-sync python -c "import pandera; assert pandera.__version__ == '0.27.0', pandera.__version__; print('pandera', pandera.__version__)"
+            uv run --no-sync pytest tests/integrations
+
         - name: Test MCP
           run: |
             uv sync --group test --extra mcp
