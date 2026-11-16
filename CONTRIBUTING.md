@@ -51,7 +51,7 @@ Additionally, the code should follow any stylistic and architectural guidelines
 prescribed by the project. For us here, this means you install a pre-commit hook and use
 the given style files. Basically, you should mimic the styles and patterns in the Apache Hamilton code-base.
 
-In terms of getting setup to develop, we invite you to read our [developer setup guide](developer_setup.md).
+In terms of getting setup to develop, we invite you to read our [developer setup guide](writeups/developer_setup.md).
 
 ## Using circleci CLI to run tests locally
 
