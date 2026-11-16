@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import inspect
 import os
 import re
 import subprocess
@@ -22,6 +23,7 @@ import sys
 
 # required to get reference documentation to be built
 sys.path.insert(0, os.path.abspath(".."))
+REPO_ROOT = os.path.abspath("..")
 
 apache_footer = """
 <div class="apache-footer">
@@ -72,7 +74,7 @@ html_css_files = [
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
-    "sphinx.ext.viewcode",
+    "sphinx.ext.linkcode",
     "myst_nb",
     "sphinx_llms_txt",
     "sphinx_sitemap",
@@ -126,4 +128,56 @@ if current_branch == "main":
 else:
     html_baseurl = "https://hamilton.staged.apache.org/"
 html_extra_path = ["robots.txt"]
+# ---
+
+# for the linkcode extension ---
+# Adds a "[source]" link to each documented object in the API reference that
+# points directly at the corresponding file/line on GitHub (see
+# https://github.com/apache/hamilton/issues/572). When building from a
+# tagged release, link to that tag; otherwise link to the exact commit so
+# line numbers always match the rendered source.
+if re.match(r"^apache-hamilton-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$", current_tag):
+    linkcode_revision = current_tag
+else:
+    try:
+        linkcode_revision = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip()
+    except subprocess.CalledProcessError:
+        linkcode_revision = "main"
+
+
+def linkcode_resolve(domain, info):
+    """Map a documented Python object to its source URL on GitHub.
+
+    Called by sphinx.ext.linkcode for every object in the API reference.
+    """
+    if domain != "py" or not info["module"]:
+        return None
+
+    obj = sys.modules.get(info["module"])
+    for part in info["fullname"].split("."):
+        if obj is None:
+            return None
+        obj = getattr(obj, part, None)
+    if obj is None:
+        return None
+
+    # Unwrap decorators/properties/etc. to get to the underlying function
+    # or class so we point at its actual definition.
+    obj = inspect.unwrap(getattr(obj, "__func__", obj))
+
+    try:
+        filename = inspect.getsourcefile(obj)
+        _, lineno = inspect.getsourcelines(obj)
+    except (TypeError, OSError):
+        return None
+    if not filename:
+        return None
+
+    relative_path = os.path.relpath(filename, start=REPO_ROOT).replace(os.sep, "/")
+    if relative_path.startswith(".."):
+        # Object is defined outside the Hamilton repo (e.g. a third-party
+        # base class) -- nothing sensible to link to.
+        return None
+
+    return f"https://github.com/apache/hamilton/blob/{linkcode_revision}/{relative_path}#L{lineno}"
 # ---
