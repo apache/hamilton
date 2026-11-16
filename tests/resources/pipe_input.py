@@ -110,53 +110,52 @@ def chain_1_not_using_pipe_input_target_global(
     return v + e * 10
 
 
-# TODO: for tests in case of multiple target parameters
-# @pipe_input(
-#     step(_add_one).on_input(["v", "w"]).named("a"),
-#     step(_add_two).on_input("v").named("b"),
-#     step(_add_n, n=3).on_input("w").named("c").when(calc_c=True),
-#     step(_add_n, n=source("input_1")).on_input("v").named("d"),
-#     step(_multiply_n, n=source("input_2")).on_input("w").named("e"),
-#     namespace="local",
-# )
-# def chain_1_using_pipe_input_target_local(v: int, w: int) -> int:
-#     return v + w * 10
+@pipe_input(
+    step(_add_one).on_input(["v", "w"]).named("a"),
+    step(_add_two).on_input("v").named("b"),
+    step(_add_n, n=3).on_input("w").named("c").when(calc_c=True),
+    step(_add_n, n=source("input_1")).on_input("v").named("d"),
+    step(_multiply_n, n=source("input_2")).on_input("w").named("e"),
+    namespace="local",
+)
+def chain_1_using_pipe_input_target_local(v: int, w: int) -> int:
+    return v + w * 10
 
 
-# def chain_1_not_using_pipe_input_target_local(
-#     v: int, w: int, input_1: int, input_2: int, calc_c: bool = False
-# ) -> int:
-#     av = _add_one(v)
-#     aw = _add_one(w)
-#     bv = _add_two(av)
-#     cw = _add_n(aw, n=3) if calc_c else aw
-#     dv = _add_n(bv, n=input_1)
-#     ew = _multiply_n(cw, n=input_2)
-#     return dv + ew * 10
+def chain_1_not_using_pipe_input_target_local(
+    v: int, w: int, input_1: int, input_2: int, calc_c: bool = False
+) -> int:
+    av = _add_one(v)
+    aw = _add_one(w)
+    bv = _add_two(av)
+    cw = _add_n(aw, n=3) if calc_c else aw
+    dv = _add_n(bv, n=input_1)
+    ew = _multiply_n(cw, n=input_2)
+    return dv + ew * 10
 
 
-# @pipe_input(
-#     step(_add_one).on_input("w").named("a"),
-#     step(_add_two).named("b"),
-#     step(_add_n, n=3).on_input("w").named("c").when(calc_c=True),
-#     step(_add_n, n=source("input_1")).named("d"),
-#     step(_multiply_n, n=source("input_2")).on_input("w").named("e"),
-#     namespace="mixed",
-#     on_input="v",
-# )
-# def chain_1_using_pipe_input_target_mixed(v: int, w: int) -> int:
-#     return v + w * 10
+@pipe_input(
+    step(_add_one).on_input("w").named("a"),
+    step(_add_two).named("b"),
+    step(_add_n, n=3).on_input("w").named("c").when(calc_c=True),
+    step(_add_n, n=source("input_1")).named("d"),
+    step(_multiply_n, n=source("input_2")).on_input("w").named("e"),
+    namespace="mixed",
+    on_input="v",
+)
+def chain_1_using_pipe_input_target_mixed(v: int, w: int) -> int:
+    return v + w * 10
 
 
-# def chain_1_not_using_pipe_input_target_mixed(
-#     v: int, w: int, input_1: int, input_2: int, calc_c: bool = False
-# ) -> int:
-#     av = _add_one(v)
-#     aw = _add_one(w)
-#     bv = _add_two(av)
-#     cv = _add_n(bv, n=3) if calc_c else bv
-#     cw = _add_n(aw, n=3) if calc_c else aw
-#     dv = _add_n(cv, n=input_1)
-#     ev = _multiply_n(dv, n=input_2)
-#     ew = _multiply_n(cw, n=input_2)
-#     return ev + ew * 10
+def chain_1_not_using_pipe_input_target_mixed(
+    v: int, w: int, input_1: int, input_2: int, calc_c: bool = False
+) -> int:
+    av = _add_one(v)
+    aw = _add_one(w)
+    bv = _add_two(av)
+    cv = _add_n(bv, n=3) if calc_c else bv
+    cw = _add_n(aw, n=3) if calc_c else aw
+    dv = _add_n(cv, n=input_1)
+    ev = _multiply_n(dv, n=input_2)
+    ew = _multiply_n(cw, n=input_2)
+    return ev + ew * 10
