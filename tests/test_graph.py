@@ -1685,3 +1685,36 @@ def test_display_name_list_value_uses_first_element():
     assert "First Name" in dot_string
     # The function name should NOT appear since display_name is set
     assert "<b>node_with_list_display_name</b>" not in dot_string
+
+
+def test_create_graphviz_graph_display_name_on_config_nodes():
+    """Tests that display_name is used for config-decorated nodes, keeping the config suffix."""
+
+    @fm.tag(display_name="Pretty A")
+    @fm.config.when(mode="x")
+    def a__x(b: int) -> int:
+        return b
+
+    @fm.config.when_not(mode="y")
+    @fm.tag(display_name="Pretty C")
+    def c(a: int) -> int:
+        return a
+
+    config = {"mode": "x"}
+    fg = graph.FunctionGraph.from_modules(
+        ad_hoc_utils.create_temporary_module(a__x, c), config=config
+    )
+    digraph = graph.create_graphviz_graph(
+        set(fg.get_nodes()),
+        "Display Name Config Test\n",
+        graphviz_kwargs={},
+        node_modifiers={},
+        strictly_display_only_nodes_passed_in=False,
+        config=config,
+    )
+    dot_string = digraph.source
+
+    assert "<b>Pretty A: mode</b>" in dot_string
+    assert "<b>Pretty C: mode</b>" in dot_string
+    assert "<b>a: mode</b>" not in dot_string
+    assert "<b>c: mode</b>" not in dot_string
