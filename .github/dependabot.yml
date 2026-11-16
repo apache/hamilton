@@ -1,0 +1,17 @@
+version: 2
+updates:
+  # Moves uv.lock, which pull requests install from, to the newest releases once a week, in one
+  # pull request. The cooldown leaves a broken release a few days to be yanked or fixed first.
+  # `lockfile-only` changes uv.lock alone: the version ranges in pyproject.toml are what Hamilton's
+  # users install against, so widening or raising them stays a maintainer's decision.
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 4
+    versioning-strategy: lockfile-only
+    groups:
+      uv:
+        patterns:
+          - "*"
