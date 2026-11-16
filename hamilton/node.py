@@ -17,7 +17,6 @@
 
 import builtins
 import inspect
-import sys
 import typing
 from collections.abc import Callable
 from enum import Enum
@@ -120,10 +119,10 @@ class Node:
                 # assume optional values passed
                 self._default_parameter_values = optional_values or {}
             else:
-                type_hint_kwargs: dict[str, Any] = {"include_extras": True}
-                if sys.version_info >= (3, 13):
-                    type_hint_kwargs["globalns"] = callabl.__globals__
-                input_types = typing.get_type_hints(callabl, **type_hint_kwargs)
+                # No `globalns`: `get_type_hints` then follows `__wrapped__` to the namespace of
+                # the function the annotations were written in. `callabl.__globals__` is the
+                # namespace of the outermost wrapper, which cannot resolve them.
+                input_types = typing.get_type_hints(callabl, include_extras=True)
                 signature = inspect.signature(callabl)
                 for key, value in signature.parameters.items():
                     if key not in input_types:

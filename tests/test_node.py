@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import functools
 import inspect
 from typing import Any, Literal, TypeVar
 
@@ -186,6 +187,28 @@ def test_node_from_future_annotation_standard():
 def test_node_from_future_annotation_collected():
     collected = nodes_with_future_annotation.collected
     assert node.Node.from_fn(collected).node_role == node.NodeType.COLLECT
+
+
+def test_node_from_future_annotation_behind_wrapper_from_another_module():
+    """A functools.wraps wrapper defined outside the function's module (e.g. pandera.check_input)."""
+    # Imported here, not at module level: this module plays the third-party library, so it must
+    # not be able to resolve the names in the wrapped function's annotations.
+    from hamilton.htypes import Collect
+
+    def third_party_wrapper(fn):
+        @functools.wraps(fn)
+        def wrapper(*args, **kwargs):
+            return fn(*args, **kwargs)
+
+        return wrapper
+
+    fn = third_party_wrapper(nodes_with_future_annotation.collected)
+    assert "Collect" not in fn.__globals__
+
+    node_ = Node.from_fn(fn)
+
+    assert node_.type is int
+    assert node_.input_types == {"standard": (Collect[int], DependencyType.REQUIRED)}
 
 
 def test_reassign_inputs():
