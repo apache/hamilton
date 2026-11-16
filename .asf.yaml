@@ -76,6 +76,14 @@ github:
         dismiss_stale_reviews: false
         require_code_owner_reviews: false
         required_approving_review_count: 1
+    # the integration branch for the 2.0 release, protected like main
+    dev/2.0:
+      required_status_checks:
+        strict: false
+      required_pull_request_reviews:
+        dismiss_stale_reviews: false
+        require_code_owner_reviews: false
+        required_approving_review_count: 1
   collaborators:
     - Dev-iL
 
