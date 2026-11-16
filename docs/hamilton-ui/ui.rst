@@ -248,6 +248,43 @@ View a history of runs, telemetry on runs/comparison, and data for specific runs
 .. image:: ../_static/run_data.png
     :alt: Run Data
 
+The result builder node
+-----------------------
+
+The combined result your driver returns is assembled by a
+:doc:`result builder </reference/result-builders/index>` once the last node has finished. That
+happens outside the dataflow, so there was no node to attach a data summary to, and what a run
+actually produced did not show up in the UI.
+
+The tracker synthesizes a node named `_result_builder` to stand in for it. You don't write this
+node and it is not part of your dataflow -- the tracker adds it to the DAG it registers, and
+logs a run for it on every successful tracked run, with the same data observability as any
+other node. Nothing is needed to enable it; just attach a `HamiltonTracker` as usual.
+
+Which nodes fed the result varies from run to run, so the node declares no dependencies and
+records the outputs it combined on each run instead. In the DAG view it therefore appears off to
+one side, rather than downstream of the nodes it summarizes.
+
+Note: the node is part of what identifies a DAG version, so the first tracked run after
+upgrading registers a new version of each of your dataflows. Your existing versions are left
+as they are, with their runs intact; new runs attach to the new version.
+
+A few things to be aware of:
+
+1. The result is profiled a second time. Each output node is already summarized, and the
+   combined result contains those same objects, so expect roughly twice the profiling time and
+   payload. The options under `Changing behavior of what is captured`_ apply here too.
+2. Only `Driver.execute()` sees a real built result. `raw_execute()` and `materialize()` never
+   call a result builder, and for async drivers the result is built after the tracker has
+   logged. The node is still emitted in those cases, summarizing the raw dictionary of outputs.
+   No lifecycle hook tells the tracker which result builder ran, or whether one ran at all.
+3. Failed runs emit nothing, so the node renders as not executed, like any node the run never
+   reached. A result builder that returns `None` still counts as having run.
+4. Underscore-prefixed function names never become nodes, so `_result_builder` is out of reach
+   of your transforms. If a dataflow defines a node with that name some other way -- an external
+   input, or a decorator-generated name -- the tracker steps aside entirely for that dataflow:
+   it logs a warning, registers no node of its own, and records nothing against yours.
+
 
 ------------------
 SDK Configuration
