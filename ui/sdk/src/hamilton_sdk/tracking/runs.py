@@ -109,13 +109,18 @@ def process_result(
         logger.debug(f"Took {end - start} seconds to introspect schema for {node.name}")
     except Exception as e:
         logger.warning(f"Failed to introspect schema for {node.name}. Error:\n{e}")
-    try:
-        start = py_time.time()
-        additional.extend(data_observation.compute_additional_results(result, node.name, node.tags))
-        end = py_time.time()
-        logger.debug(f"Took {end - start} seconds to introspect additional results for {node.name}")
-    except Exception as e:
-        logger.warning(f"Failed to introspect additional results for {node.name}. Error:\n{e}")
+    if constants.CAPTURE_DATA_STATISTICS:
+        try:
+            start = py_time.time()
+            additional.extend(
+                data_observation.compute_additional_results(result, node.name, node.tags)
+            )
+            end = py_time.time()
+            logger.debug(
+                f"Took {end - start} seconds to introspect additional results for {node.name}"
+            )
+        except Exception as e:
+            logger.warning(f"Failed to introspect additional results for {node.name}. Error:\n{e}")
     return statistics, schema, additional
 
 

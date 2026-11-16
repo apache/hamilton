@@ -297,7 +297,7 @@ Here we first explain the options:
    +-----------------------------+-----------------------------+----------------------------------------------------------+
    | Option                      | Default                     | Explanation                                              |
    +=============================+=============================+==========================================================+
-   | CAPTURE_DATA_STATISTICS     | True                        | Whether to capture any data insights/statistics          |
+   | CAPTURE_DATA_STATISTICS     | True                        | Capture data statistics and additional result insights   |
    +-----------------------------+-----------------------------+----------------------------------------------------------+
    | MAX_LIST_LENGTH_CAPTURE     | 50                          | Max length for list capture                              |
    +-----------------------------+-----------------------------+----------------------------------------------------------+
@@ -305,6 +305,11 @@ Here we first explain the options:
    +-----------------------------+-----------------------------+----------------------------------------------------------+
    | DEFAULT_CONFIG_URI          | ~/.hamilton.conf            | Default config file URI.                                 |
    +-----------------------------+-----------------------------+----------------------------------------------------------+
+
+Setting ``CAPTURE_DATA_STATISTICS`` to ``False`` skips result statistics and
+additional observations such as scikit-learn component HTML and PySpark query
+plans. Schema and execution metadata are still collected. This option does not
+disable collection of run inputs or graph configuration.
 
 
 To change the defaults via a config file, you can do the following:
