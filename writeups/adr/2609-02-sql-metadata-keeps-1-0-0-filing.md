@@ -52,7 +52,7 @@ dataset.
 - Existing consumers of `sql_metadata` see the same `query`/`table_name` values for writes and
   for two-argument calls. Default-mode lineage names are unchanged for every string tested.
 - `query` does not always hold SQL. A written name containing `SELECT` sits there, so lineage code
-  must use `operation` and not the key alone (see ADR 0003).
+  must use `operation` and not the key alone (see [2609-03](2609-03-resolving-sql-writes-and-statements.md)).
 
 ## Alternatives considered
 
