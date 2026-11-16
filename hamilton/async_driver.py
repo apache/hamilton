@@ -23,7 +23,7 @@ import uuid
 from typing import Any
 
 import hamilton.lifecycle.base as lifecycle_base
-from hamilton import base, driver, graph, lifecycle, node
+from hamilton import base, driver, graph, lifecycle, node, packaging
 from hamilton.execution.graph_functions import create_error_message
 from hamilton.io.materialization import ExtractorFactory, MaterializerFactory
 
@@ -213,6 +213,7 @@ class AsyncDriver(driver.Driver):
         result_builder: base.ResultMixin | None = None,
         adapters: list[lifecycle.LifecycleAdapter] = None,
         allow_module_overrides: bool = False,
+        _node_packages: typing.Sequence["packaging.NodePackage"] = None,
     ):
         """Instantiates an asynchronous driver.
 
@@ -231,6 +232,7 @@ class AsyncDriver(driver.Driver):
             The order of listing the modules is important, since later ones will overwrite the previous ones.
             This is a global call affecting all imported modules.
             See https://github.com/apache/hamilton/tree/main/examples/module_overrides for more info.
+        :param _node_packages: Not public facing, do not use this parameter. This is injected by the builder.
         """
         if adapters is None:
             adapters = []
@@ -263,6 +265,7 @@ class AsyncDriver(driver.Driver):
                 *async_adapters,  # note async adapters will not be called during synchronous execution -- this is for access later
             ],
             allow_module_overrides=allow_module_overrides,
+            _node_packages=_node_packages,
         )
         self.initialized = False
 
@@ -451,6 +454,7 @@ class Builder(driver.Builder):
             adapters=self.adapters,
             result_builder=specified_result_builder,
             allow_module_overrides=self._allow_module_overrides,
+            _node_packages=self.node_packages,
         )
 
     async def build(self) -> AsyncDriver:
