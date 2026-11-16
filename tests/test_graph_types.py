@@ -15,10 +15,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import functools
 import inspect
 import json
 import sys
 import textwrap
+from unittest import mock
 
 import pytest
 
@@ -152,6 +154,71 @@ def test_create_hamilton_node_missing_version():
     # the above will have no specified versions
     assert hamilton_node.version is None
     assert hamilton_node.as_dict()["version"] is None
+
+
+def test_hamilton_node_version_is_reused_across_wrappers():
+    """Lifecycle hooks get new HamiltonNode objects on every execution, so the source hash
+    has to outlive a single wrapper instead of being recomputed each time."""
+
+    def node_fn(dep: int) -> int:
+        return dep + 1
+
+    n = node.Node.from_fn(node_fn).copy_with(originating_functions=(node_fn,))
+    expected = graph_types.hash_source_code(node_fn, strip=True)
+    with mock.patch.object(
+        graph_types, "hash_source_code", wraps=graph_types.hash_source_code
+    ) as hash_source_code:
+        versions = [graph_types.HamiltonNode.from_node(n).version for _ in range(3)]
+    assert versions == [expected] * 3
+    assert hash_source_code.call_count == 1
+
+
+@pytest.fixture()
+def load_node_fn(tmp_path):
+    """Writes `node_fn` with the given return expression to a file and loads it from there,
+    so that `inspect.getsource` reads the latest version."""
+    source_file = tmp_path / "node_source.py"
+
+    def load(body: str):
+        source_file.write_text(f"def node_fn(dep: int) -> int:\n    return {body}\n")
+        namespace = {}
+        exec(compile(source_file.read_text(), str(source_file), "exec"), namespace)
+        return namespace["node_fn"]
+
+    return load
+
+
+def test_hamilton_node_version_follows_replaced_code(load_node_fn):
+    """Tools such as IPython's autoreload swap the code of an existing function object.
+    The version has to follow the new code rather than return an earlier hash."""
+    node_fn = load_node_fn("dep + 1")
+    n = Node("node_fn", int, callabl=node_fn, originating_functions=(node_fn,))
+    original_version = graph_types.HamiltonNode.from_node(n).version
+
+    node_fn.__code__ = load_node_fn("dep + 100").__code__
+    new_version = graph_types.HamiltonNode.from_node(n).version
+
+    assert new_version != original_version
+    assert new_version == graph_types.hash_source_code(node_fn, strip=True)
+
+
+def test_hamilton_node_version_follows_replaced_wrapped_function(load_node_fn):
+    """`inspect.getsource` reads the function at the end of `__wrapped__`, so replacing it
+    has to give a new version even though the wrapper's own code is unchanged."""
+    inner = load_node_fn("dep + 1")
+
+    @functools.wraps(inner)
+    def wrapper(*args, **kwargs):
+        return inner(*args, **kwargs)
+
+    n = Node("node_fn", int, callabl=wrapper, originating_functions=(wrapper,))
+    original_version = graph_types.HamiltonNode.from_node(n).version
+
+    wrapper.__wrapped__ = load_node_fn("dep + 100")
+    new_version = graph_types.HamiltonNode.from_node(n).version
+
+    assert new_version != original_version
+    assert new_version == graph_types.hash_source_code(wrapper, strip=True)
 
 
 def test_hamilton_graph_version_normal():
