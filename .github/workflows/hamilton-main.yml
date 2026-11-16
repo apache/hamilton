@@ -19,6 +19,7 @@ on:
   pull_request:
     branches:
         - main
+        - 'dev/2.0'
     paths:
         - '.github/**'
         - 'examples/**'

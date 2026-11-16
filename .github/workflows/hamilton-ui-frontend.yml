@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - main
+      - 'dev/2.0'
     paths:
       - 'ui/frontend/**'
   pull_request:

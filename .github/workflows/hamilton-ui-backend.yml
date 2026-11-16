@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main  # or any specific branches you want to include
+      - 'dev/2.0'
     paths:
       - 'ui/backend/**'
       - '.github/workflows/hamilton-ui-backend.yml'
@@ -11,6 +12,7 @@ on:
   pull_request:
     branches:
       - main
+      - 'dev/2.0'
     paths:
       - 'ui/backend/**'
       - '.github/workflows/hamilton-ui-backend.yml'

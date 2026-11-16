@@ -7,7 +7,7 @@ on:
       - 'docs/**'
       - '.github/workflows/sphinx-docs.yml'
   pull_request:
-    branches: [ "main", "update_references" ]
+    branches: [ "main", "update_references", "dev/2.0" ]
     paths:
       - 'docs/**'
       - '.github/workflows/sphinx-docs.yml'
