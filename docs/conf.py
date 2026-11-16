@@ -1,20 +1,22 @@
 # Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements.  See the NOTICE file
+# or more contributor license agreements. See the NOTICE file
 # distributed with this work for additional information
-# regarding copyright ownership.  The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
+# regarding copyright ownership. The ASF licenses this file
+# to you under the Apache License, Version 2.0. (the
 # "License"); you may not use this file except in compliance
-# with the License.  You may obtain a copy of the License at
+# with the License. You may obtain a copy of the License at
 #
-#   http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing,
 # software distributed under the License is distributed on an
 # "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied.  See the License for the
+# KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations
 # under the License.
 
+import importlib
+import inspect
 import os
 import re
 import subprocess
@@ -25,27 +27,46 @@ sys.path.insert(0, os.path.abspath(".."))
 
 apache_footer = """
 <div class="apache-footer">
-    <img width="200" src="/_static/apache-incubator-logo.svg" alt="Apache Incubator Logo" class="apache-incubator-logo">
+    <img width="200" src="/_static/apache-incubator-logo.svg"
+         alt="Apache Incubator Logo"
+         class="apache-incubator-logo">
     <div class="apache-notice">
-        <p>Apache Hamilton is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.</p>
+        <p>Apache Hamilton is an effort undergoing incubation at
+        The Apache Software Foundation (ASF), sponsored by the Apache
+        Incubator. Incubation is required of all newly accepted projects
+        until a further review indicates that the infrastructure,
+        communications, and decision making process have stabilized in
+        a manner consistent with other successful ASF projects. While
+        incubation status is not necessarily a reflection of the
+        completeness or stability of the code, it does indicate that
+        the project has yet to be fully endorsed by the ASF.</p>
     </div>
     <div class="apache-copyright">
-        <p>Apache, the names of Apache projects, and the feather logo are either registered trademarks or trademarks of the Apache Software Foundation in the United States and/or other countries.</p>
+        <p>Apache, the names of Apache projects, and the feather logo are
+        either registered trademarks or trademarks of the Apache Software
+        Foundation in the United States and/or other countries.</p>
     </div>
 </div>
 """
 
-copyright = "The Apache Software Foundation, Licensed under the Apache License, Version 2.0."
+copyright = (
+    "The Apache Software Foundation, Licensed under the Apache License, "
+    "Version 2.0."
+)
+
 project = "Hamilton"
 
 html_theme = "furo"
 html_title = "Hamilton"
+
 html_theme_options = {
     "source_repository": "https://github.com/apache/hamilton",
     "source_branch": "main",
     "source_directory": "docs/",
-    "announcement": "📢 Announcing the "
-    + '<a target="_blank" href="https://www.meetup.com/global-hamilton-open-source-user-group-meetup/">Hamilton Meetup Group</a>. Sign up to attend events! 📢',
+    "announcement": " Announcing the "
+    + '<a target="_blank" href="https://www.meetup.com/'
+      'global-hamilton-open-source-user-group-meetup/">Hamilton Meetup Group'
+      '</a>. Sign up to attend events! ',
     "light_css_variables": {
         "color-announcement-background": "#ffba00",
         "color-announcement-text": "#091E42",
@@ -62,17 +83,20 @@ html_theme_options = {
         },
     ],
 }
+
 html_static_path = ["_static"]
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 html_css_files = [
     "testimonials.css",
     "custom.css",
 ]
+
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
+    "sphinx.ext.linkcode",
     "myst_nb",
     "sphinx_llms_txt",
     "sphinx_sitemap",
@@ -82,6 +106,7 @@ extensions = [
 
 # sphinx-llms-txt configuration
 llms_txt_title = "Apache Hamilton"
+
 llms_txt_summary = (
     "Apache Hamilton is a lightweight Python framework for creating "
     "DAGs of data transformations using declarative function definitions."
@@ -104,26 +129,91 @@ nb_mime_priority_overrides = [
 ]
 
 exclude_patterns = [
-    '_build',
-    'Thumbs.db',
-    '.DS_Store',
-    'README.md',
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "README.md",
 ]
 
 # for the sitemap extension ---
-# check if the current commit is tagged as a release (vX.Y.Z) and set the version
+# check if the current commit is tagged as a release (vX.Y.Z)
+# and set the version
+
 GIT_TAG_OUTPUT = subprocess.check_output(["git", "tag", "--points-at", "HEAD"])
 current_tag = GIT_TAG_OUTPUT.decode().strip()
-if re.match(r"^apache-hamilton-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$", current_tag):
+
+if re.match(
+    r"^apache-hamilton-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$",
+    current_tag,
+):
     version = current_tag
 else:
     version = "latest"
+
 language = "en"
-GIT_BRANCH_OUTPUT = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+
+GIT_BRANCH_OUTPUT = subprocess.check_output(
+    ["git", "rev-parse", "--abbrev-ref", "HEAD"]
+)
 current_branch = GIT_BRANCH_OUTPUT.decode().strip()
+
 if current_branch == "main":
     html_baseurl = "https://hamilton.apache.org/"
 else:
     html_baseurl = "https://hamilton.staged.apache.org/"
+
 html_extra_path = ["robots.txt"]
-# ---
+
+
+def linkcode_resolve(domain, info):
+    """Return a GitHub URL for Python objects documented by Sphinx."""
+    if domain != "py":
+        return None
+
+    module_name = info.get("module")
+    full_name = info.get("fullname")
+
+    if not module_name or not full_name:
+        return None
+
+    try:
+        module = importlib.import_module(module_name)
+    except (ImportError, ModuleNotFoundError):
+        return None
+
+    obj = module
+
+    for part in full_name.split("."):
+        try:
+            obj = getattr(obj, part)
+        except AttributeError:
+            return None
+
+    try:
+        source_file = inspect.getsourcefile(obj)
+        source_lines, line_number = inspect.getsourcelines(obj)
+    except (TypeError, OSError):
+        return None
+
+    if not source_file:
+        return None
+
+    source_file = os.path.abspath(source_file)
+
+    repo_root = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "..")
+    )
+
+    try:
+        relative_path = os.path.relpath(source_file, repo_root)
+    except ValueError:
+        return None
+
+    relative_path = relative_path.replace(os.sep, "/")
+
+    line_end = line_number + len(source_lines) - 1
+
+    return (
+        "https://github.com/apache/hamilton/blob/main/"
+        f"{relative_path}#L{line_number}-L{line_end}"
+    )
