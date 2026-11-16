@@ -1,0 +1,29 @@
+#!/bin/sh
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+# Starts this project's verification tool, verify.mts beside this file: TypeScript that Node
+# 22.18 or newer (23.6 or newer on Node 23) runs directly. `verify --help` says everything else.
+# A project that ports the tool to another language keeps this file's name and replaces
+# everything below this comment, the Node check included, with a line that starts the port.
+v=$(node --version 2>/dev/null) || { echo "verify: needs Node 22.18 or newer (https://nodejs.org); node was not found" >&2; exit 3; }
+major=${v#v}; minor=${major#*.}; major=${major%%.*}; minor=${minor%%.*}
+if [ "$major" -lt 22 ] || { [ "$major" -eq 22 ] && [ "$minor" -lt 18 ]; } || { [ "$major" -eq 23 ] && [ "$minor" -lt 6 ]; }; then
+  echo "verify: needs Node 22.18 or newer (23.6 or newer on Node 23), which runs TypeScript directly; found $v" >&2
+  exit 3
+fi
+exec node "$(dirname "$0")/verify.mts" "$@"

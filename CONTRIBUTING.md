@@ -51,11 +51,10 @@ Additionally, the code should follow any stylistic and architectural guidelines
 prescribed by the project. For us here, this means you install a pre-commit hook and use
 the given style files. Basically, you should mimic the styles and patterns in the Apache Hamilton code-base.
 
-In terms of getting setup to develop, we invite you to read our [developer setup guide](developer_setup.md).
+In terms of getting set up to develop, we invite you to read our [developer setup guide](writeups/developer_setup.md).
 
-## Using circleci CLI to run tests locally
+## Finding your way around
 
-1. Install the [circleci CLI](https://circleci.com/docs/2.0/local-cli/).
-2. To run a circleci job locally, you should then, from the root of the repository, do
-   > circleci local execute --job=JOB_NAME
-3. This assumes you have docker installed, it will pull the images, but otherwise will run the circleci job.
+- [`CONTEXT.md`](CONTEXT.md) is a glossary of the words that mean something specific in Apache Hamilton, such as the three different things called an "adapter". Read it before naming something new.
+- [`scripts/verify`](scripts/verify) runs the checks that continuous integration (CI) runs, one recipe per area: `scripts/verify affected` names the recipes your change touches, and `scripts/verify drive <recipe>` runs one. It is optional, needs Node 22.18 or newer, and CI does not use it; [`verification/harness.md`](verification/harness.md) says what it assumes.
+- [`writeups/adr/`](writeups/adr/README.md) holds the project's decision records: why its foundations were built the way they are. Read the one that covers what you are changing before you change it.
