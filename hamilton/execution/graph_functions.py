@@ -197,16 +197,33 @@ def execute_subdag(
     def dfs_traverse(
         node_: node.Node, dependency_type: node.DependencyType = node.DependencyType.REQUIRED
     ):
-        if node_.name in computed:
-            return
-        if node_.name in overrides:
-            computed[node_.name] = overrides[node_.name]
-            return
-        for n in node_.dependencies:
-            if n.name not in computed:
-                _, node_dependency_type = node_.input_types[n.name]
-                dfs_traverse(n, node_dependency_type)
+        # Explicit stack instead of recursion so chains deeper than the recursion limit work.
+        # Each entry holds a node, its dependency type, and its dependency iterator (None until entered).
+        stack = [(node_, dependency_type, None)]
+        in_progress = set()
+        while stack:
+            current, current_dependency_type, dependencies = stack.pop()
+            if dependencies is None:
+                if current.name in computed:
+                    continue
+                if current.name in overrides:
+                    computed[current.name] = overrides[current.name]
+                    continue
+                if current.name in in_progress:
+                    raise RecursionError(f"Cycle detected in the graph at node {current.name}.")
+                in_progress.add(current.name)
+                dependencies = iter(current.dependencies)
+            for n in dependencies:
+                if n.name not in computed:
+                    _, node_dependency_type = current.input_types[n.name]
+                    stack.append((current, current_dependency_type, dependencies))
+                    stack.append((n, node_dependency_type, None))
+                    break
+            else:
+                in_progress.remove(current.name)
+                compute_node(current, current_dependency_type)
 
+    def compute_node(node_: node.Node, dependency_type: node.DependencyType):
         logger.debug(f"Computing {node_.name}.")
         if node_.user_defined:
             if node_.name not in inputs:
@@ -376,24 +393,38 @@ def nodes_between(
     visited = set()
     search_node = None
 
-    def dfs_traverse(node_: node.Node):
-        if search_condition(node_):
-            # if we hit the end, we want to include all others in it
-            nonlocal search_node
-            search_node = node_
-            return True
-        if node_ in visited:
-            # if we've already seen it, we want to include it
-            return node_ in out
-        # now we mark that we've seen it
-        visited.add(node_)
-
-        any_deps_included = False
-        for n in node_.dependencies:
-            any_deps_included |= dfs_traverse(n)
-        if any_deps_included:
-            out.add(node_)
-        return any_deps_included
+    def dfs_traverse(start: node.Node):
+        nonlocal search_node
+        # Explicit stack instead of recursion so chains deeper than the recursion limit work.
+        # Each frame is [node, dependency iterator (None until entered), any_deps_included].
+        stack = [[start, None, False]]
+        while stack:
+            frame = stack[-1]
+            node_, dependencies, any_deps_included = frame
+            if dependencies is None:
+                if search_condition(node_):
+                    # if we hit the end, we want to include all others in it
+                    search_node = node_
+                    included = True
+                elif node_ in visited:
+                    # if we've already seen it, we want to include it
+                    included = node_ in out
+                else:
+                    # now we mark that we've seen it
+                    visited.add(node_)
+                    frame[1] = iter(node_.dependencies)
+                    continue
+            else:
+                n = next(dependencies, None)
+                if n is not None:
+                    stack.append([n, None, False])
+                    continue
+                if any_deps_included:
+                    out.add(node_)
+                included = any_deps_included
+            stack.pop()
+            if stack:
+                stack[-1][2] |= included
 
     for dep in end_node.dependencies:
         dfs_traverse(dep)
