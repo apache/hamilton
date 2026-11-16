@@ -1,0 +1,2 @@
+groq
+pydantic>=2.0
