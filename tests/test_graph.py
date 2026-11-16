@@ -1685,3 +1685,54 @@ def test_display_name_list_value_uses_first_element():
     assert "First Name" in dot_string
     # The function name should NOT appear since display_name is set
     assert "<b>node_with_list_display_name</b>" not in dot_string
+
+
+def test_custom_style_function_receives_input_and_output_classes():
+    """Validates that custom_style_function receives explicit 'input' and 'output'
+    node_class values instead of defaulting everything to 'function' (Issue #1307).
+    """
+    from hamilton import graph
+    from hamilton.node import NodeType
+
+    # Input node: external source, has dependents
+    input_node = node.Node(
+        name="external_input",
+        typ=int,
+        node_source=NodeType.EXTERNAL,
+        input_types={},  # No inputs for external node
+    )
+    input_node._depended_on_by = ["some_function_name"]
+
+    # Output node: standard source, has originating function, no dependents (terminal)
+    def dummy_func() -> int:
+        return 42
+
+    output_node = node.Node(
+        name="final_output",
+        typ=int,
+        node_source=NodeType.STANDARD,
+        callabl=dummy_func,
+        input_types={},
+    )
+    output_node._originating_functions = [dummy_func]
+    output_node._depended_on_by = []
+
+    captured_classes = {}
+
+    def spy_style_function(*, node, node_class: str):
+        captured_classes[node.name] = node_class
+        return {}, None, None  # Return expected schema: (style_dict, base_type, legend_name)
+
+    graph.create_graphviz_graph(
+        nodes={input_node, output_node},
+        comment="Test Graph",
+        graphviz_kwargs={},
+        node_modifiers={},
+        strictly_display_only_nodes_passed_in=True,
+        show_legend=False,
+        custom_style_function=spy_style_function,
+        config={},
+    )
+
+    assert captured_classes.get("external_input") == "input"
+    assert captured_classes.get("final_output") == "output"
