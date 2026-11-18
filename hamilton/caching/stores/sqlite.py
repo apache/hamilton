@@ -163,9 +163,10 @@ class SQLiteMetadataStore(MetadataStore):
         cur.execute("INSERT INTO history (cache_key, run_id) VALUES (?, ?)", (cache_key, run_id))
         cur.execute(
             """\
-            INSERT OR IGNORE INTO cache_metadata (
+            INSERT INTO cache_metadata (
                 cache_key, node_name, code_version, data_version
             ) VALUES (?, ?, ?, ?)
+            ON CONFLICT(cache_key) DO UPDATE SET data_version = excluded.data_version
             """,
             (cache_key, node_name, code_version, data_version),
         )

@@ -124,6 +124,24 @@ def test_get_miss_returns_none(metadata_store):
 
 
 @pytest.mark.parametrize("metadata_store", IMPLEMENTATIONS, indirect=True)
+def test_set_updates_existing_data_version(metadata_store):
+    cache_key = _mock_cache_key()
+    for data_version in ["old", "fresh", "newest"]:
+        run_id = f"run-{data_version}"
+        metadata_store.initialize(run_id=run_id)
+        metadata_store.set(cache_key=cache_key, data_version=data_version, run_id=run_id)
+
+        assert metadata_store.get(cache_key) == data_version
+        assert metadata_store.size == 1
+        run_info = metadata_store.get_run(run_id)
+        assert len(run_info) == 1
+        assert run_info[0]["cache_key"] == cache_key
+        assert run_info[0]["data_version"] == data_version
+
+    assert metadata_store.get_run_ids() == ["run-old", "run-fresh", "run-newest"]
+
+
+@pytest.mark.parametrize("metadata_store", IMPLEMENTATIONS, indirect=True)
 def test_set_and_get_with_empty_dependencies(metadata_store):
     cache_key = _mock_cache_key()
     data_version = "foo-a"
