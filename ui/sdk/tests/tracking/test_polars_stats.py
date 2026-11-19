@@ -150,25 +150,12 @@ def test_compute_stats_df():
                 "pos": 6,
             },
             "h": {
-                "base_data_type": "datetime",
+                "base_data_type": "unhandled",
                 "count": 5,
                 "data_type": "Date",
-                "histogram": {},
-                "max": "2024-01-14",
-                "mean": "2024-01-06T19:12:00",
-                "min": "2024-01-01",
                 "missing": 0,
                 "name": "h",
                 "pos": 7,
-                "quantiles": {
-                    0.1: "2024-01-01T00:00:00",
-                    0.25: "2024-01-03T00:00:00",
-                    0.5: "2024-01-06T00:00:00",
-                    0.75: "2024-01-10T00:00:00",
-                    0.9: "2024-01-14T00:00:00",
-                },
-                "std": 0.0,
-                "zeros": 0,
             },
             "i": {
                 "base_data_type": "numeric",
@@ -186,33 +173,15 @@ def test_compute_stats_df():
                 "zeros": 0,
             },
             "j": {
-                "base_data_type": "datetime",
+                "base_data_type": "unhandled",
                 "count": 5,
                 "data_type": "Date",
-                "histogram": {},
-                "max": "2022-05-01",
-                "mean": "2022-03-02T00:00:00",
-                "min": "2022-01-01",
                 "missing": 0,
                 "name": "j",
                 "pos": 9,
-                "quantiles": {
-                    0.1: "2022-01-01T00:00:00",
-                    0.25: "2022-02-01T00:00:00",
-                    0.5: "2022-03-01T00:00:00",
-                    0.75: "2022-04-01T00:00:00",
-                    0.9: "2022-05-01T00:00:00",
-                },
-                "std": 0.0,
-                "zeros": 0,
             },
         },
     }
-    # Date quantile behavior varies across polars versions — some return populated values,
-    # others return empty {}. Don't assert on quantiles for Date columns.
-    for col in ("h", "j"):
-        actual["observability_value"][col].pop("quantiles", None)
-        expected_stats["observability_value"][col].pop("quantiles", None)
     assert actual == expected_stats
 
 

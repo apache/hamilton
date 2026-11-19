@@ -57,8 +57,9 @@ def _compute_stats(df: pl.DataFrame) -> dict[str, dict[str, Any]]:
     numeric_types = df.select(selectors.numeric())
     bool_types = df.select([pl.col(pl.Boolean)])
     # df.select([pl.col(pl.Object)])
-    # Time/Duration are not valid JS Dates in the UI; leave them for unhandled stats.
-    date_types = df.select(selectors.date() | selectors.datetime())
+    # The datetime renderer interprets dates as UTC midnight, shifting calendar days
+    # in some time zones. Dates, times and durations use unhandled stats in v0.0.3.
+    datetime_types = df.select(selectors.datetime())
     # get all other columns that have not been selected
     # df.select(
     #     ~cs.by_dtype([pl.Categorical, pl.Utf8, pl.Boolean, pl.Object])
@@ -93,8 +94,10 @@ def _compute_stats(df: pl.DataFrame) -> dict[str, dict[str, Any]]:
         stats[col] = execute_col("numeric_column_stats", numeric_types[col], col, column_order[col])
     for col in bool_types.columns:
         stats[col] = execute_col("boolean_column_stats", bool_types[col], col, column_order[col])
-    for col in date_types.columns:
-        stats[col] = execute_col("datetime_column_stats", date_types[col], col, column_order[col])
+    for col in datetime_types.columns:
+        stats[col] = execute_col(
+            "datetime_column_stats", datetime_types[col], col, column_order[col]
+        )
     for col, _position in column_order.items():
         if col not in stats:
             stats[col] = execute_col("unhandled_column_stats", df[col], col, column_order[col])

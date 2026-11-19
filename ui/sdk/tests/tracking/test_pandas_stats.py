@@ -15,7 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import json
+from datetime import date
+
 import pandas as pd
+import pytest
 
 from hamilton_sdk.tracking import pandas_stats as ps
 
@@ -227,3 +231,34 @@ def test_compute_stats_df():
         },
     }
     assert actual == expected_stats
+
+
+def test_compute_stats_timedelta_series_is_unhandled():
+    series = pd.Series(
+        [pd.Timedelta(days=-1), None, pd.Timedelta(days=2)],
+        name="duration",
+        dtype="timedelta64[ns]",
+    )
+
+    actual = ps.compute_stats_series(series, "test", {})
+
+    assert actual["observability_value"]["duration"] == {
+        "base_data_type": "unhandled",
+        "count": 3,
+        "data_type": "timedelta64[ns]",
+        "missing": 1,
+        "name": "duration",
+        "pos": 0,
+    }
+    json.dumps(actual, allow_nan=False)
+
+
+def test_compute_stats_arrow_date_series_is_unhandled():
+    pa = pytest.importorskip("pyarrow")
+    series = pd.Series([date(2024, 1, 1), None], name="day", dtype=pd.ArrowDtype(pa.date32()))
+
+    actual = ps.compute_stats_series(series, "test", {})
+
+    assert actual["observability_value"]["day"]["base_data_type"] == "unhandled"
+    assert actual["observability_value"]["day"]["missing"] == 1
+    json.dumps(actual, allow_nan=False)
