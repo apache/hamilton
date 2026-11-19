@@ -510,8 +510,17 @@ def create_node(name: str, type_: type) -> node.Node:
         (
             pl.date_range(date(2023, 1, 1), date(2023, 1, 3), eager=True).alias("a"),
             create_node("a", pl.Series),
-            "dagworks_describe",  # TODO: fix quantiles
-            {"a": {"base_data_type": "unknown-polars", "data_type": "Date", "name": "a", "pos": 0}},
+            "dagworks_describe",
+            {
+                "a": {
+                    "base_data_type": "unhandled",
+                    "count": 3,
+                    "data_type": "Date",
+                    "missing": 0,
+                    "name": "a",
+                    "pos": 0,
+                }
+            },
         ),
     ],
     ids=[
@@ -531,7 +540,7 @@ def create_node(name: str, type_: type) -> node.Node:
         "polars_df",
         "polars_series",
         "pl_nan_series",
-        "pl_datetime_series",
+        "pl_date_series",
     ],
 )
 def test_process_result_happy(test_result, test_node, observability_type, stats):

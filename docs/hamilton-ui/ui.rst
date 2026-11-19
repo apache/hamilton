@@ -285,6 +285,9 @@ Changing behavior of what is captured
 -------------------------------------
 By default, a lot is captured and sent to the Apache Hamilton UI.
 
+Calendar dates, times, and durations appear under Untyped Columns. The tracker
+reports their data type and counts, while Datetime Columns show timestamp statistics.
+
 Here are a few options that can change that - these can be found
 in `hamilton_sdk.tracking.constants`. You can either change the defaults by
 directly changing the constants, by specifying them in a config file, or via environment variables.
