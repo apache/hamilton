@@ -42,13 +42,17 @@ def evict_all_except(nodes_to_keep: dict[str, node.Node], cache: diskcache.Cache
         if len(history) < 1:
             continue
 
+        # a hash appears once per cache miss, so a node run with several inputs repeats it
+        hashes_to_evict = list(dict.fromkeys(history))
         if node_name in nodes_to_keep.keys():
             node_to_keep = nodes_to_keep[node_name]
             hash_to_keep = graph_types.hash_source_code(node_to_keep.callable, strip=True)
-            history.remove(hash_to_keep)
-            new_nodes_history[node_name] = [hash_to_keep]
+            # the current version may have no cached results yet, e.g. right after an edit
+            if hash_to_keep in hashes_to_evict:
+                hashes_to_evict.remove(hash_to_keep)
+                new_nodes_history[node_name] = [hash_to_keep]
 
-        for hash_to_evict in history:
+        for hash_to_evict in hashes_to_evict:
             cache.evict(tag=f"{node_name}.{hash_to_evict}")
             eviction_counter += 1
 

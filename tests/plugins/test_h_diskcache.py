@@ -188,3 +188,42 @@ def test_evict_from_driver(
 
     assert output["eviction_counter"] == 1
     assert hook.cache[h_diskcache.DiskCacheAdapter.nodes_history_key] == dict(A=[node_a_hash])
+
+
+def test_evict_all_except_keeps_results_of_node_run_with_several_inputs(
+    hook: h_diskcache.DiskCacheAdapter,
+    node_a: node.Node,
+    node_a_body: node.Node,
+):
+    """A node run with two different inputs appears twice in its history; its results must stay"""
+    node_a_hash = graph_types.hash_source_code(node_a.callable, strip=True)
+    node_a_body_hash = graph_types.hash_source_code(node_a_body.callable, strip=True)
+    hook.cache[h_diskcache.DiskCacheAdapter.nodes_history_key] = dict(
+        A=[node_a_hash, node_a_hash, node_a_body_hash]
+    )
+    hook.cache.set(key=(node_a_hash, 1), value=1, tag=f"A.{node_a_hash}")
+    hook.cache.set(key=(node_a_hash, 2), value=2, tag=f"A.{node_a_hash}")
+    hook.cache.set(key=(node_a_body_hash, 1), value=1, tag=f"A.{node_a_body_hash}")
+
+    eviction_counter = h_diskcache.evict_all_except(nodes_to_keep=dict(A=node_a), cache=hook.cache)
+
+    assert eviction_counter == 1
+    assert hook.cache.get((node_a_hash, 1)) == 1
+    assert hook.cache.get((node_a_hash, 2)) == 2
+    assert hook.cache.get((node_a_body_hash, 1)) is None
+    assert hook.cache[h_diskcache.DiskCacheAdapter.nodes_history_key] == dict(A=[node_a_hash])
+
+
+def test_evict_all_except_when_current_version_was_never_run(
+    hook: h_diskcache.DiskCacheAdapter,
+    node_a: node.Node,
+    node_a_body: node.Node,
+):
+    """Only an older version of the node is in the cache, e.g. right after editing it"""
+    node_a_body_hash = graph_types.hash_source_code(node_a_body.callable, strip=True)
+    hook.cache[h_diskcache.DiskCacheAdapter.nodes_history_key] = dict(A=[node_a_body_hash])
+
+    eviction_counter = h_diskcache.evict_all_except(nodes_to_keep=dict(A=node_a), cache=hook.cache)
+
+    assert eviction_counter == 1
+    assert hook.cache[h_diskcache.DiskCacheAdapter.nodes_history_key] == dict()
