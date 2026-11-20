@@ -102,6 +102,10 @@ class RichProgressBar(TaskExecutionHook, TaskGroupingHook, GraphExecutionHook, N
 
     @override
     def run_before_graph_execution(self, *, execution_path: Collection[str], **kwargs: Any):
+        # the same adapter is reused across executions of a driver, so drop the previous run's bars
+        for task_id in list(self._progress.task_ids):
+            self._progress.remove_task(task_id)
+        self._task_based = False
         self._progress.add_task(self._group_desc, total=len(execution_path))
         self._progress.start()
 
