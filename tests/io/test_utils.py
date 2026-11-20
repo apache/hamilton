@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import io
 import json
 import pathlib
 import sqlite3
@@ -210,6 +211,24 @@ def test_get_file_metadata(tmp_path: pathlib.Path):
     assert metadata["file_metadata"]["size"] > 0
     assert metadata["file_metadata"]["last_modified"] == file_path.stat().st_mtime
     assert metadata["file_metadata"]["timestamp"] is not None
+
+
+def test_get_file_metadata_in_memory_file_object():
+    metadata = get_file_metadata(io.BytesIO(b"test"))
+    assert metadata["file_metadata"]["path"] == "<BytesIO>"
+    assert metadata["file_metadata"]["size"] is None
+    assert metadata["file_metadata"]["scheme"] == ""
+    assert metadata["file_metadata"]["notes"] != ""
+
+
+def test_get_file_metadata_open_file_handle(tmp_path: pathlib.Path):
+    file_path = tmp_path / "test.txt"
+    file_path.write_text("test")
+    with open(file_path, "rb") as f:
+        metadata = get_file_metadata(f)
+    assert metadata["file_metadata"]["path"] == str(file_path)
+    assert metadata["file_metadata"]["size"] == 4
+    assert metadata["file_metadata"]["notes"] == ""
 
 
 def test_get_file_metadata_url_schema():

@@ -22,7 +22,7 @@ import time
 from datetime import datetime
 from os import PathLike
 from pathlib import Path
-from typing import Any, Literal
+from typing import IO, Any, Literal
 from urllib import parse
 
 import pandas as pd
@@ -66,7 +66,7 @@ def _is_query(query_or_table: str, operation: SqlOperation | None, legacy: bool)
     return not legacy and operation != "write" and _starts_with_select(query_or_table)
 
 
-def get_file_metadata(path: str | Path | PathLike) -> dict[str, Any]:
+def get_file_metadata(path: str | Path | PathLike | IO) -> dict[str, Any]:
     """Gives metadata from loading a file.
 
     Note: we reserve the right to change this schema. So if you're using this come
@@ -77,19 +77,32 @@ def get_file_metadata(path: str | Path | PathLike) -> dict[str, Any]:
     - the file path
     - the last modified time
     - the current time
+
+    ``path`` can also be a file object. A handle opened on a local file is described by its
+    file name. An in-memory buffer such as ``io.BytesIO`` has no file to describe, so its
+    path is its type name in angle brackets (e.g. ``<BytesIO>``) and its size is ``None``.
     """
-    if isinstance(path, Path):
-        path = str(path)
+    in_memory = False
+    if not isinstance(path, (str, PathLike)):
+        name = getattr(path, "name", None)
+        if isinstance(name, (str, PathLike)):
+            path = name
+        else:
+            in_memory = True
+            path = f"<{type(path).__name__}>"
+    path = os.fspath(path)
     parsed = parse.urlparse(path)
     size = None
     scheme = parsed.scheme
     last_modified = time.time()
     timestamp = datetime.now().utcnow().timestamp()
     notes = f"File metadata is unsupported for scheme: {scheme} or path: {path} does not exist."
+    if in_memory:
+        notes = f"File metadata is unsupported for in-memory file object: {path}."
 
     # Check if the path is a local file path (Windows drive can be listed as a scheme)
     is_win_path = parsed.scheme and len(parsed.scheme) == 1 and parsed.scheme.isalpha()
-    if (parsed.scheme == "" or is_win_path) and os.path.exists(path):
+    if not in_memory and (parsed.scheme == "" or is_win_path) and os.path.exists(path):
         size = os.path.getsize(path)
         last_modified = os.path.getmtime(path)
         notes = ""
