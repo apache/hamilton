@@ -84,7 +84,6 @@ class MatplotlibWriter(DataSaver):
 
     def save_data(self, data: Figure) -> dict[str, Any]:
         data.savefig(fname=self.path, **self._get_saving_kwargs())
-        # TODO make utils.get_file_metadata() safer for when self.path is IO type
         return utils.get_file_metadata(self.path)
 
     @classmethod
