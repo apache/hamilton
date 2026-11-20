@@ -39,6 +39,38 @@ from .result_store.test_base import result_store  # noqa: F401
 from tests.resources.dynamic_parallelism import parallel_linear_basic, parallelism_with_caching
 
 
+def test_restored_result_store_recomputes_missing_results(tmp_path):
+    calls = []
+
+    def answer() -> int:
+        calls.append(1)
+        return 42
+
+    module = ad_hoc_utils.create_temporary_module(answer)
+    metadata = InMemoryMetadataStore()
+    disk = FileResultStore(tmp_path)
+    first = (
+        driver.Builder()
+        .with_modules(module)
+        .with_cache(metadata_store=metadata, result_store=disk)
+        .build()
+    )
+    assert first.execute(["answer"]) == {"answer": 42}
+    disk.delete_all()
+
+    restored = InMemoryResultStore.load_from(disk, metadata_store=metadata)
+    second = (
+        driver.Builder()
+        .with_modules(module)
+        .with_cache(metadata_store=metadata, result_store=restored)
+        .build()
+    )
+    assert second.execute(["answer"]) == {"answer": 42}
+    assert len(calls) == 2
+    assert second.execute(["answer"]) == {"answer": 42}
+    assert len(calls) == 2
+
+
 def _instantiate_executor(executor_cls):
     if executor_cls == SynchronousLocalTaskExecutor:
         return SynchronousLocalTaskExecutor()
