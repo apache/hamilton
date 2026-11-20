@@ -17,9 +17,10 @@
 
 import pytest
 
+from hamilton.caching.cache_key import create_cache_key
 from hamilton.caching.stores.base import StoredResult
 from hamilton.caching.stores.file import FileResultStore
-from hamilton.caching.stores.memory import InMemoryResultStore
+from hamilton.caching.stores.memory import InMemoryMetadataStore, InMemoryResultStore
 
 # `result_store` is imported but not directly used because it's
 # a pytest fixture automatically provided to tests
@@ -146,3 +147,33 @@ def test_load_from_must_have_metadata_store_or_data_versions(tmp_path):
     file_result_store = FileResultStore(tmp_path)
     with pytest.raises(ValueError):
         InMemoryResultStore.load_from(result_store=file_result_store)
+
+
+@pytest.mark.parametrize("result_store", [FileResultStore, InMemoryResultStore], indirect=True)
+@pytest.mark.parametrize("selection", ["versions", "metadata", "both"])
+def test_load_from_preserves_missing_results(result_store, selection):  # noqa: F811
+    values = {"present": 42, "none": None, "false": False, "zero": 0, "empty": ""}
+    for data_version, value in values.items():
+        result_store.set(data_version, value)
+
+    versions = [*values, "missing"]
+    metadata = InMemoryMetadataStore()
+    metadata.initialize("run")
+    for data_version in versions:
+        metadata.set(
+            cache_key=create_cache_key(data_version, "code", {}),
+            data_version=data_version,
+            run_id="run",
+        )
+
+    restored = InMemoryResultStore.load_from(
+        result_store,
+        data_versions=versions if selection != "metadata" else None,
+        metadata_store=metadata if selection != "versions" else None,
+    )
+
+    assert not restored.exists("missing")
+    assert restored.get("missing") is None
+    for data_version, value in values.items():
+        assert restored.exists(data_version)
+        assert restored.get(data_version) == value
