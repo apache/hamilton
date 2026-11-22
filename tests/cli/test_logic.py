@@ -309,6 +309,23 @@ def test_create_test_stubs_preserves_parameter_kinds_and_defaults(tmp_path):
     compile(text, str(out_file), "exec")
 
 
+def test_create_test_stubs_uses_empty_containers_for_annotated_variadics(tmp_path):
+    module_file = tmp_path / "variadics.py"
+    module_file.write_text(
+        "import pandas as pd\n"
+        "def collect(*args: pd.Series, **kwargs: pd.Series):\n"
+        "    assert args == ()\n"
+        "    assert kwargs == {}\n"
+    )
+
+    out_file, _, _ = logic.create_test_stubs(module_file)
+
+    text = out_file.read_text()
+    assert "args = ()" in text
+    assert "kwargs = {}" in text
+    _import_file(out_file, tmp_path).test_collect()
+
+
 def test_create_test_stubs_append_adds_missing_imports(tmp_path):
     module_file = tmp_path / "business_logic.py"
     module_file.write_text(HAMILTON_MODULE_SOURCE)
@@ -326,6 +343,26 @@ def test_create_test_stubs_append_adds_missing_imports(tmp_path):
     # the imports land above the code that was already there
     assert text.index("import pandas as pd") < text.index("def test_spend_per_signup():")
     compile(text, str(existing), "exec")
+
+
+@pytest.mark.parametrize(
+    "header",
+    [
+        "def helper():\n    import pandas as pd\n    import series_module\n",
+        "import series_module",
+    ],
+)
+def test_create_test_stubs_append_makes_imports_available(tmp_path, header):
+    module_file = tmp_path / "series_module.py"
+    module_file.write_text(
+        "import pandas as pd\ndef empty() -> pd.Series:\n    return pd.Series([])\n"
+    )
+    existing = tmp_path / "test_series_module.py"
+    existing.write_text(header)
+
+    logic.create_test_stubs(module_file)
+
+    _import_file(existing, tmp_path).test_empty()
 
 
 def test_create_test_stubs_append_keeps_the_header_first_and_does_not_duplicate_imports(tmp_path):

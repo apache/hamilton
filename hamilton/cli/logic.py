@@ -508,32 +508,21 @@ def _imports_for_stubs(stubs: list[str], module_import: str) -> list[str]:
     return imports
 
 
-def _bound_names(text: str) -> set:
-    """Names bound by the top-level imports of a test file."""
-    tree = ast.parse(text)
-    bound = set()
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            for alias in node.names:
-                bound.add(alias.asname or alias.name.split(".")[0])
-    return bound
-
-
 def _imports_to_add(text: str, module_import: str, module_ref: str, stubs: list[str]) -> list[str]:
     """Which of the imports the new stubs need are missing from the file."""
-    bound = _bound_names(text)
+    imports = {
+        (alias.name, alias.asname)
+        for node in ast.parse(text).body
+        if isinstance(node, ast.Import)
+        for alias in node.names
+    }
+    bound = {asname or name.split(".")[0] for name, asname in imports}
     missing = []
     if any("pd." in stub for stub in stubs) and "pd" not in bound:
         missing.append("import pandas as pd")
     # the stubs call `<root>.<...>.function(...)`, so the root name has to be bound by an
     # `import <dotted>` statement (binding `pkg` and importing `pkg.mod` in one go)
-    root = module_ref.split(".")[0]
-    dotted_imported = any(
-        isinstance(node, ast.Import)
-        and any(alias.name == module_ref and alias.asname is None for alias in node.names)
-        for node in ast.walk(ast.parse(text))
-    )
-    if root not in bound or not dotted_imported:
+    if (module_ref, None) not in imports:
         missing.append(module_import)
     return missing
 
@@ -587,6 +576,8 @@ def _ensure_imports(text: str, module_import: str, module_ref: str, stubs: list[
     lines = text.splitlines(keepends=True)
     index = _import_insertion_index(text)
     block = [line + newline for line in missing]
+    if index and not lines[index - 1].endswith(("\r", "\n")):
+        block.insert(0, newline)
     if index < len(lines) and lines[index].strip():
         block.append(newline)
     new_lines = lines[:index] + block + lines[index:]
@@ -600,12 +591,12 @@ def _placeholder(param: DiscoveredParameter, resolvable: set) -> tuple[str, str]
     notes = []
     if param.default and param.literal_default:
         value = param.default
-    elif is_pandas:
-        value = "pd.Series([])" if "Series" in annotation else "pd.DataFrame({})"
     elif param.kind == "var_positional":
         value = "()"
     elif param.kind == "var_keyword":
         value = "{}"
+    elif is_pandas:
+        value = "pd.Series([])" if "Series" in annotation else "pd.DataFrame({})"
     else:
         value = "None"
     if param.default and not param.literal_default:

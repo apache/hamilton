@@ -27,6 +27,8 @@ def test_spend_per_signup():
     actual = business_logic.spend_per_signup(spend, signups)
     # comparing pandas objects: use the pandas testing module
     pd.testing.assert_series_equal(actual, expected)
+
+
 ...
 ```
 
@@ -62,8 +64,8 @@ passed here, so the default is not exercised until you edit the stub.
 
 ```python
 # business_logic.py
-def total_spend(period: str, /, *, include_tax: bool = False, **filters):
-    ...
+def total_spend(period: str, /, *, include_tax: bool = False, **filters): ...
+
 
 # generated stub
 def test_total_spend():
