@@ -427,10 +427,31 @@ def _get_fully_qualified_function_path(fn: Callable) -> str:
     :return: Fully qualified path of the function
     """
     module = inspect.getmodule(fn)
-    fn_name = fn.__name__
+    fn_name = fn.__qualname__
     if module is not None:
         fn_name = f"{module.__name__}.{fn_name}"
     return fn_name
+
+
+def _get_code_artifact_name(fn: Callable) -> str:
+    """Identify the source definition, including same-named nested functions and lambdas.
+
+    Unwrap consistently with source extraction. Use a module-relative filename so
+    moving a checkout does not change the identity, and avoid object IDs so a
+    helper reused in multiple pipes (or recreated by a factory) is deduplicated.
+    """
+    fn = inspect.unwrap(fn)
+    module = inspect.getmodule(fn)
+    name = _get_fully_qualified_function_path(fn)
+    code = getattr(fn, "__code__", None)
+    if code is None:
+        return name
+    source_file = code.co_filename
+    if getattr(module, "__file__", None):
+        source_file = os.path.relpath(source_file, os.path.dirname(module.__file__))
+    # Keep filenames (and their dots) out of the function-name suffix used by the UI.
+    source_hash = hashlib.sha256(source_file.encode()).hexdigest()[:16]
+    return f"{name}@{source_hash}:{code.co_firstlineno}"
 
 
 def hash_dag(dag: graph.FunctionGraph) -> str:
@@ -456,7 +477,7 @@ def hash_dag(dag: graph.FunctionGraph) -> str:
         if node_.originating_functions is None:
             continue
         for fn in node_.originating_functions:
-            fn_name = _get_fully_qualified_function_path(fn)
+            fn_name = _get_code_artifact_name(fn)
             digest.update(fn_name.encode())
     return digest.hexdigest()
 
@@ -536,7 +557,7 @@ def _extract_node_templates_from_function_graph(fn_graph: graph.FunctionGraph) -
         code_artifact_pointers = (
             []
             if (node_.originating_functions is None or len(node_.originating_functions) == 0)
-            else [_get_fully_qualified_function_path(fn) for fn in node_.originating_functions]
+            else [_get_code_artifact_name(fn) for fn in node_.originating_functions]
         )
         node_templates.append(
             dict(
@@ -547,13 +568,7 @@ def _extract_node_templates_from_function_graph(fn_graph: graph.FunctionGraph) -
                 documentation=node_.documentation,
                 tags=node_.tags,  # TODO -- ensure serializable
                 classifications=_convert_classifications(node_),  # TODO -- manage classifications
-                code_artifact_pointers=(
-                    code_artifact_pointers
-                    if node_.originating_functions is None or len(node_.originating_functions) == 0
-                    else [
-                        _get_fully_qualified_function_path(fn) for fn in node_.originating_functions
-                    ]
-                ),
+                code_artifact_pointers=code_artifact_pointers,
                 **_convert_node_dependencies(node_),
             )
         )
@@ -619,7 +634,7 @@ def extract_code_artifacts_from_function_graph(
         if originating_functions is None:
             continue
         for fn in originating_functions:
-            fn_name = _get_fully_qualified_function_path(fn)
+            fn_name = _get_code_artifact_name(fn)
             if fn_name not in seen:
                 seen.add(fn_name)
                 # need to handle decorators -- they will return the wrong sourcefile.
