@@ -649,8 +649,7 @@ def test_execute_and_nodes_between_large_chain_no_recursion_error(monkeypatch):
     Driver.execute (via execute_subdag) and nodes_between must not recurse once per
     dependency level, so a chain deeper than the recursion limit has to work.
     """
-    chain_size = 1200
-    assert chain_size > sys.getrecursionlimit()
+    chain_size = sys.getrecursionlimit() + 200  # Exceeds recursion limit
     module = ModuleType("large_exec_chain")
     src = ["def node_0() -> float:\n    return 1.0\n"]
     for i in range(1, chain_size):
@@ -661,7 +660,7 @@ def test_execute_and_nodes_between_large_chain_no_recursion_error(monkeypatch):
 
     dr = driver.Builder().with_modules(module).build()
 
-    assert dr.execute([last]) == {last: 1200.0}
+    assert dr.execute([last]) == {last: float(chain_size)}
     assert dr.graph.nodes_between("node_0", last) == {
         dr.graph.nodes[f"node_{i}"] for i in range(chain_size)
     }
