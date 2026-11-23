@@ -18,6 +18,7 @@
 import functools
 import pathlib
 import shelve
+from unittest import mock
 
 import pytest
 
@@ -228,3 +229,20 @@ def test_nested_partial_handling(hook: CacheAdapter, node_a_nested_partial: node
         node_callable=node_a_nested_partial.callable,
     )
     assert result2 == result
+
+
+def test_node_source_is_hashed_once_across_executions(hook: CacheAdapter, node_a: node.Node):
+    """The adapter reuses the source hash of a node function instead of re-hashing it on
+    every execution."""
+    hook.cache_vars = [node_a.name]
+    hook.run_before_graph_execution(graph=graph_types.HamiltonGraph([]))  # needed to open cache
+    with mock.patch.object(
+        graph_types, "hash_source_code", wraps=graph_types.hash_source_code
+    ) as hash_source_code:
+        for _ in range(3):
+            hook.run_to_execute_node(
+                node_name=node_a.name,
+                node_kwargs=dict(external_input=7),
+                node_callable=node_a.callable,
+            )
+    assert hash_source_code.call_count == 1

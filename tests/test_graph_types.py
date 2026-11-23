@@ -15,11 +15,14 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import concurrent.futures
 import functools
 import inspect
 import json
 import sys
 import textwrap
+import threading
+import time
 from unittest import mock
 
 import pytest
@@ -331,3 +334,29 @@ def test_different_hash_comment(func_a: str, func_a_comment: str, strip: bool):
     func_a_hash = graph_types.hash_source_code(func_a, strip=strip)
     func_a_comment = graph_types.hash_source_code(func_a_comment, strip=strip)
     assert (func_a_hash == func_a_comment) is (True if strip else False)
+
+
+def test_concurrent_first_hashes_compute_once():
+    """Threads that hash the same function for the first time at once share one computation."""
+    barrier = threading.Barrier(8)
+
+    def node_fn(dep: int) -> int:
+        return dep + 1
+
+    def hash_after_barrier():
+        barrier.wait()
+        return graph_types.hash_function_source(node_fn)
+
+    real_hash = graph_types.hash_source_code
+
+    def slow_hash(*args, **kwargs):
+        time.sleep(0.05)  # keeps the other threads waiting on the first computation
+        return real_hash(*args, **kwargs)
+
+    with mock.patch.object(
+        graph_types, "hash_source_code", side_effect=slow_hash
+    ) as hash_source_code:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
+            results = [f.result() for f in [pool.submit(hash_after_barrier) for _ in range(8)]]
+    assert results == [real_hash(node_fn, strip=True)] * 8
+    assert hash_source_code.call_count == 1
