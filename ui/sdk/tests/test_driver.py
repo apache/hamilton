@@ -18,20 +18,23 @@
 import hashlib
 import inspect
 import logging
+from functools import wraps
 from pathlib import Path
-from types import ModuleType
+from types import FunctionType, ModuleType
 from unittest.mock import mock_open, patch
 
 from hamilton import driver as hamilton_driver
+from hamilton.graph import FunctionGraph
 from hamilton_sdk.api.projecttypes import GitInfo
 from hamilton_sdk.driver import (
     _extract_node_templates_from_function_graph,
-    _get_fully_qualified_function_path,
+    _get_code_artifact_name,
     _hash_module,
     extract_code_artifacts_from_function_graph,
+    hash_dag,
 )
 
-from tests.resources import pipe_source_tracking
+from tests.resources import colliding_step_sources, pipe_source_tracking
 
 
 def test_pipe_step_code_artifacts():
@@ -55,7 +58,7 @@ def test_pipe_step_code_artifacts():
         "output_pipe.increment": pipe_source_tracking._increment,
         "mutated.with_mutator": pipe_source_tracking._mutator,
     }.items():
-        function_name = _get_fully_qualified_function_path(function)
+        function_name = _get_code_artifact_name(function)
         assert templates[node_name]["code_artifact_pointers"][0] == function_name
         matching_artifacts = [
             artifact for artifact in artifacts if artifact["name"] == function_name
@@ -69,9 +72,83 @@ def test_pipe_step_code_artifacts():
 
     for name in ["input_pipe", "output_pipe", "mutated"]:
         assert templates[name]["code_artifact_pointers"] == [
-            _get_fully_qualified_function_path(getattr(pipe_source_tracking, name))
+            _get_code_artifact_name(getattr(pipe_source_tracking, name))
         ]
     assert len(artifacts) == 5
+
+
+def test_chained_steps_with_colliding_names_link_to_their_own_source():
+    dr = hamilton_driver.Builder().with_modules(colliding_step_sources).build()
+    assert dr.execute(["input_chain", "output_chain"], inputs={"value": 1}) == {
+        "input_chain": 40,
+        "output_chain": 40,
+    }
+    templates = {
+        item["name"]: item for item in _extract_node_templates_from_function_graph(dr.graph)
+    }
+    repo_base_path = str(Path(colliding_step_sources.__file__).parent)
+    vcs_info = GitInfo(
+        "main", "test-commit", True, "https://github.com/apache/hamilton", repo_base_path
+    )
+    artifacts = extract_code_artifacts_from_function_graph(dr.graph, vcs_info, repo_base_path)
+    artifacts_by_name = {artifact["name"]: artifact for artifact in artifacts}
+    functions = {
+        "first": colliding_step_sources._steps[0],
+        "second": colliding_step_sources._steps[1],
+        "lambda_add": colliding_step_sources._steps[2],
+        "lambda_multiply": colliding_step_sources._steps[3],
+    }
+    # Both pairs collide even when __qualname__ is used without a source location.
+    assert functions["first"].__qualname__ == functions["second"].__qualname__
+    assert functions["lambda_add"].__qualname__ == functions["lambda_multiply"].__qualname__
+    pointers = []
+    for step_name, function in functions.items():
+        pointer = templates[f"input_chain.{step_name}"]["code_artifact_pointers"][0]
+        pointers.append(pointer)
+        assert templates[f"output_chain.{step_name}"]["code_artifact_pointers"][0] == pointer
+        artifact = artifacts_by_name[pointer]
+        source_lines, start = inspect.getsourcelines(function)
+        assert artifact["path"] == "colliding_step_sources.py"
+        assert artifact["start"] == start - 1
+        assert artifact["end"] == start - 1 + len(source_lines)
+        assert artifact["url"].endswith(f"/colliding_step_sources.py#L{start}")
+    assert len(set(pointers)) == 4
+    # Each helper is shared by two chains, but emitted only once.
+    assert len(artifacts) == len(artifacts_by_name) == 6
+
+
+def test_artifact_identity_reuses_factory_source_and_unwraps_decorators():
+    original = colliding_step_sources._steps[0]
+    recreated = colliding_step_sources._make_step(True)
+    assert recreated is not original
+
+    @wraps(original)
+    def wrapped(value):
+        return original(value)
+
+    assert _get_code_artifact_name(original) == _get_code_artifact_name(recreated)
+    assert _get_code_artifact_name(original) == _get_code_artifact_name(wrapped)
+
+
+def test_artifact_identity_is_stable_when_checkout_moves(tmp_path):
+    original = colliding_step_sources._steps[0]
+    original_name = _get_code_artifact_name(original)
+    moved_file = str(tmp_path / "colliding_step_sources.py")
+    moved = FunctionType(original.__code__.replace(co_filename=moved_file), original.__globals__)
+    moved.__qualname__ = original.__qualname__
+    with patch.object(colliding_step_sources, "__file__", moved_file):
+        assert _get_code_artifact_name(moved) == original_name
+
+
+def test_dag_hash_changes_when_same_named_step_source_changes():
+    graph = hamilton_driver.Builder().with_modules(colliding_step_sources).build().graph
+    nodes = dict(graph.nodes)
+    name = "input_chain.first"
+    nodes[name] = nodes[name].copy_with(
+        originating_functions=(colliding_step_sources._steps[1],)
+        + nodes[name].originating_functions[1:]
+    )
+    assert hash_dag(FunctionGraph(nodes, config={})) != hash_dag(graph)
 
 
 @patch("builtins.open", new_callable=mock_open, read_data=b"print('hello world')\n")
