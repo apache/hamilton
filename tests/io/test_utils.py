@@ -285,6 +285,13 @@ def test_get_file_metadata_bytes_path_like(tmp_path: pathlib.Path):
     assert metadata["file_metadata"]["size"] == 4
 
 
+def test_get_file_metadata_bytes_content():
+    metadata = get_file_metadata(b"a,b\n1,2", bytes_are_content=True)
+    assert metadata["file_metadata"]["path"] == "<bytes>"
+    assert metadata["file_metadata"]["size"] is None
+    assert metadata["file_metadata"]["notes"] != ""
+
+
 def test_get_file_metadata_url_schema():
     url = "s3://bucket/key"
     metadata = get_file_metadata(url)
