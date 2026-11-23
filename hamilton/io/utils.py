@@ -66,7 +66,7 @@ def _is_query(query_or_table: str, operation: SqlOperation | None, legacy: bool)
     return not legacy and operation != "write" and _starts_with_select(query_or_table)
 
 
-def get_file_metadata(path: str | Path | PathLike | IO) -> dict[str, Any]:
+def get_file_metadata(path: str | bytes | Path | PathLike | IO) -> dict[str, Any]:
     """Gives metadata from loading a file.
 
     Note: we reserve the right to change this schema. So if you're using this come
@@ -78,19 +78,25 @@ def get_file_metadata(path: str | Path | PathLike | IO) -> dict[str, Any]:
     - the last modified time
     - the current time
 
-    ``path`` can also be a file object. A handle opened on a local file is described by its
-    file name. An in-memory buffer such as ``io.BytesIO`` has no file to describe, so its
-    path is its type name in angle brackets (e.g. ``<BytesIO>``) and its size is ``None``.
+    ``path`` can also be a file object. A handle with a file descriptor is described by that
+    descriptor, and by its file name when it has one. An in-memory buffer such as ``io.BytesIO``
+    has no file to describe, so its path is its type name in angle brackets (e.g. ``<BytesIO>``)
+    and its size is ``None``.
     """
     in_memory = False
-    if not isinstance(path, (str, PathLike)):
+    stat = None
+    if not isinstance(path, (str, bytes, PathLike)):
+        try:
+            stat = os.fstat(path.fileno())
+        except (AttributeError, OSError, ValueError):
+            pass
         name = getattr(path, "name", None)
-        if isinstance(name, (str, PathLike)):
+        if isinstance(name, (str, bytes, PathLike)):
             path = name
         else:
-            in_memory = True
+            in_memory = stat is None
             path = f"<{type(path).__name__}>"
-    path = os.fspath(path)
+    path = os.fsdecode(path)
     parsed = parse.urlparse(path)
     size = None
     scheme = parsed.scheme
@@ -102,7 +108,11 @@ def get_file_metadata(path: str | Path | PathLike | IO) -> dict[str, Any]:
 
     # Check if the path is a local file path (Windows drive can be listed as a scheme)
     is_win_path = parsed.scheme and len(parsed.scheme) == 1 and parsed.scheme.isalpha()
-    if not in_memory and (parsed.scheme == "" or is_win_path) and os.path.exists(path):
+    if stat is not None:
+        size = stat.st_size
+        last_modified = stat.st_mtime
+        notes = ""
+    elif not in_memory and (parsed.scheme == "" or is_win_path) and os.path.exists(path):
         size = os.path.getsize(path)
         last_modified = os.path.getmtime(path)
         notes = ""
