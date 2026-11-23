@@ -125,16 +125,21 @@ class BaseDataValidationDecorator(base.NodeTransformer):
             :param kwargs:
             :return: returns the original node output
             """
+            async_validator_names = []
+            for validator_node in validator_nodes:
+                validation_result = kwargs[validator_node.name]
+                if asyncio.iscoroutine(validation_result):
+                    validation_result.close()
+                    async_validator_names.append(validator_name_map[validator_node.name].name())
+            if async_validator_names:
+                raise TypeError(
+                    f"Validator '{async_validator_names[0]}' returned a coroutine. "
+                    f"Use AsyncDriver for async validators."
+                )
             failures = []
             for validator_node in validator_nodes:
                 validator: dq_base.DataValidator = validator_name_map[validator_node.name]
                 validation_result: dq_base.ValidationResult = kwargs[validator_node.name]
-                if asyncio.iscoroutine(validation_result):
-                    validation_result.close()
-                    raise TypeError(
-                        f"Validator '{validator.name()}' returned a coroutine. "
-                        f"Use AsyncDriver for async validators."
-                    )
                 if validator.importance == dq_base.DataValidationLevel.WARN:
                     dq_base.act_warn(node_.name, validation_result, validator)
                 else:

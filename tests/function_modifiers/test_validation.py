@@ -17,6 +17,7 @@
 
 import gc
 import inspect
+import logging
 import warnings
 
 import numpy as np
@@ -423,3 +424,51 @@ def test_sync_driver_with_async_validator_raises_type_error(importance):
             dr.execute(["fn"], inputs={"input": 5})
         gc.collect()
     assert not [w for w in caught if "never awaited" in str(w.message)]
+
+
+def test_sync_driver_with_two_async_validators_closes_every_coroutine(monkeypatch):
+    """Every coroutine is closed when the sync Driver rejects more than one async validator."""
+    # The node-error log record keeps the traceback, and with it any open coroutine, alive.
+    monkeypatch.setattr(logging.getLogger("hamilton.execution.graph_functions"), "disabled", True)
+
+    @check_output_custom(
+        AsyncSampleDataValidator(equal_to=10, importance="warn"),
+        AsyncSampleDataValidator(equal_to=10, importance="fail"),
+    )
+    def fn(input: int) -> int:
+        return input
+
+    dr = driver.Builder().with_modules(ad_hoc_utils.create_temporary_module(fn)).build()
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        with pytest.raises(TypeError, match="async_dummy_data_validator"):
+            dr.execute(["fn"], inputs={"input": 5})
+        gc.collect()
+    assert not [w for w in caught if "never awaited" in str(w.message)]
+
+
+@pytest.mark.parametrize("async_first", [True, False])
+def test_sync_driver_with_mixed_validators_raises_before_any_action(
+    async_first, caplog, monkeypatch
+):
+    """The TypeError does not depend on validator order and comes before any warn action."""
+    monkeypatch.setattr(logging.getLogger("hamilton.execution.graph_functions"), "disabled", True)
+    validators = [
+        AsyncSampleDataValidator(equal_to=10, importance="fail"),
+        SampleDataValidator1(equal_to=10, importance="warn"),
+    ]
+    if not async_first:
+        validators.reverse()
+
+    @check_output_custom(*validators)
+    def fn(input: int) -> int:
+        return input
+
+    dr = driver.Builder().with_modules(ad_hoc_utils.create_temporary_module(fn)).build()
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        with pytest.raises(TypeError, match="async_dummy_data_validator"):
+            dr.execute(["fn"], inputs={"input": 5})
+        gc.collect()
+    assert not [w for w in caught if "never awaited" in str(w.message)]
+    assert "validator failed" not in caplog.text
