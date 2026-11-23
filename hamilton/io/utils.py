@@ -66,7 +66,9 @@ def _is_query(query_or_table: str, operation: SqlOperation | None, legacy: bool)
     return not legacy and operation != "write" and _starts_with_select(query_or_table)
 
 
-def get_file_metadata(path: str | bytes | Path | PathLike | IO) -> dict[str, Any]:
+def get_file_metadata(
+    path: str | bytes | Path | PathLike | IO, *, bytes_are_content: bool = False
+) -> dict[str, Any]:
     """Gives metadata from loading a file.
 
     Note: we reserve the right to change this schema. So if you're using this come
@@ -81,11 +83,15 @@ def get_file_metadata(path: str | bytes | Path | PathLike | IO) -> dict[str, Any
     ``path`` can also be a file object. A handle with a file descriptor is described by that
     descriptor, and by its file name when it has one. An in-memory buffer such as ``io.BytesIO``
     has no file to describe, so its path is its type name in angle brackets (e.g. ``<BytesIO>``)
-    and its size is ``None``.
+    and its size is ``None``. Pass ``bytes_are_content=True`` when ``bytes`` hold the file's
+    content rather than its path, so they are described as ``<bytes>`` instead.
     """
     in_memory = False
     stat = None
-    if not isinstance(path, (str, bytes, PathLike)):
+    if bytes_are_content and isinstance(path, bytes):
+        in_memory = True
+        path = "<bytes>"
+    elif not isinstance(path, (str, bytes, PathLike)):
         try:
             stat = os.fstat(path.fileno())
         except (AttributeError, OSError, ValueError):
