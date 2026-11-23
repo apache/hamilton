@@ -250,7 +250,7 @@ class PolarsScanFeatherReader(DataLoader):
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.scan_ipc(self.source, **self._get_loading_kwargs())
-        metadata = utils.get_file_metadata(self.source)
+        metadata = utils.get_file_metadata(self.source, bytes_are_content=True)
         return df, metadata
 
     @classmethod
