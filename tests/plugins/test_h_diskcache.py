@@ -227,3 +227,10 @@ def test_evict_all_except_when_current_version_was_never_run(
 
     assert eviction_counter == 1
     assert hook.cache[h_diskcache.DiskCacheAdapter.nodes_history_key] == dict()
+
+
+def test_evict_all_except_on_fresh_cache(hook: h_diskcache.DiskCacheAdapter, node_a: node.Node):
+    eviction_counter = h_diskcache.evict_all_except(nodes_to_keep=dict(A=node_a), cache=hook.cache)
+
+    assert eviction_counter == 0
+    assert hook.cache[h_diskcache.DiskCacheAdapter.nodes_history_key] == dict()
