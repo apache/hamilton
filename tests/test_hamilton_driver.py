@@ -31,6 +31,7 @@ from hamilton.driver import (
 )
 from hamilton.execution import executors
 from hamilton.io.materialization import from_, to
+from hamilton.lifecycle.base import BaseDoValidateInput
 
 import tests.resources.cyclic_functions
 import tests.resources.dummy_functions
@@ -585,7 +586,8 @@ def test_driver_setstate_getstate():
 
 
 @pytest.mark.parametrize("dynamic", [False, True])
-def test_input_type_error_shows_consumer_annotations(dynamic):
+@pytest.mark.parametrize("any_first", [False, True])
+def test_input_type_error_shows_consumer_annotations(dynamic, any_first):
     class Record:
         pass
 
@@ -602,8 +604,10 @@ def test_input_type_error_shows_consumer_annotations(dynamic):
     def total(needs_record: int, works_with_anything: int) -> int:
         return needs_record + works_with_anything
 
-    module = ad_hoc_utils.create_temporary_module(needs_record, works_with_anything, total)
-    builder = Builder().with_modules(module)
+    concrete_module = ad_hoc_utils.create_temporary_module(needs_record, total)
+    any_module = ad_hoc_utils.create_temporary_module(works_with_anything)
+    modules = (any_module, concrete_module) if any_first else (concrete_module, any_module)
+    builder = Builder().with_modules(*modules)
     if dynamic:
         builder = builder.enable_dynamic_execution(allow_experimental_mode=True)
     dr = builder.build()
@@ -614,8 +618,59 @@ def test_input_type_error_shows_consumer_annotations(dynamic):
     message = str(exc.value)
     assert "Type requirement mismatch" in message
     assert f"needs_record.shared: {Record}" in message
-    assert "works_with_anything.shared: typing.Any" in message
+    assert "works_with_anything.shared" not in message
     assert calls == []
 
     assert dr.execute(["total"], inputs={"shared": Record()}) == {"total": 3}
     assert sorted(calls) == ["needs_record", "works_with_anything"]
+
+
+@pytest.mark.parametrize("dynamic", [False, True])
+def test_external_input_validation_checks_only_executing_consumers(dynamic):
+    def strict(shared: int) -> int:
+        return shared
+
+    def unrestricted(shared: Any) -> str:
+        return shared
+
+    def total(strict: int, unrestricted: str) -> str:
+        return f"{strict}:{unrestricted}"
+
+    module = ad_hoc_utils.create_temporary_module(strict, unrestricted, total)
+    builder = Builder().with_modules(module)
+    if dynamic:
+        builder = builder.enable_dynamic_execution(allow_experimental_mode=True)
+    dr = builder.build()
+
+    assert dr.execute(["unrestricted"], inputs={"shared": "text"}) == {"unrestricted": "text"}
+    assert dr.execute(["total"], inputs={"shared": "text"}, overrides={"strict": 1}) == {
+        "total": "1:text"
+    }
+    with pytest.raises(ValueError, match=r"strict\.shared") as exc:
+        dr.execute(["strict"], inputs={"shared": "text"})
+    assert "unrestricted.shared" not in str(exc.value)
+
+
+def test_external_input_consumer_checks_keep_custom_adapter_and_none_behavior():
+    class AllowIntText(BaseDoValidateInput):
+        def do_validate_input(self, *, node_type: type, input_value: Any) -> bool:
+            if node_type is int:
+                return input_value == "42"
+            return True
+
+    def concrete(shared: int) -> str:
+        return str(shared)
+
+    def unrestricted(shared: Any) -> str:
+        return str(shared)
+
+    module = ad_hoc_utils.create_temporary_module(concrete, unrestricted)
+    dr = Builder().with_modules(module).with_adapters(AllowIntText()).build()
+
+    assert dr.execute(["concrete", "unrestricted"], inputs={"shared": "42"}) == {
+        "concrete": "42",
+        "unrestricted": "42",
+    }
+    assert dr.execute(["concrete"], inputs={"shared": None}) == {"concrete": "None"}
+    with pytest.raises(ValueError, match=r"concrete\.shared"):
+        dr.execute(["concrete", "unrestricted"], inputs={"shared": 42})

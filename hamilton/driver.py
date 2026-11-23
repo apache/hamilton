@@ -477,6 +477,8 @@ class Driver:
         user_nodes: Collection[node.Node],
         inputs: dict[str, Any] | None = None,
         nodes_set: Collection[node.Node] = None,
+        *,
+        overrides: dict[str, Any] | None = None,
     ):
         """Validates that inputs meet our expectations. This means that:
         1. The runtime inputs don't clash with the graph's config
@@ -487,6 +489,7 @@ class Driver:
         :param user_nodes: The required nodes we need for computation.
         :param inputs: the user inputs provided.
         :param nodes_set: the set of nodes to use for validation; Optional.
+        :param overrides: values that replace nodes without executing their functions.
         """
         # TODO -- determine whether or not we want to use the legacy adapter if nothing is here
         # We shouldn't need to do this (normalize the inputs), as we have already, but the bigger issue
@@ -498,38 +501,61 @@ class Driver:
         if nodes_set is None:
             nodes_set = set(fn_graph.nodes.values())
         (all_inputs,) = (graph_functions.combine_config_and_inputs(fn_graph.config, inputs),)
+        overrides = overrides or {}
+        has_validation_hook = adapter.does_method("do_validate_input", is_async=False)
+
+        def accepts(annotation: type, value: Any) -> bool:
+            if has_validation_hook:
+                valid = adapter.call_lifecycle_method_sync(
+                    "do_validate_input", node_type=annotation, input_value=value
+                )
+            else:
+                valid = htypes.check_input_type(annotation, value)
+            return value is None or valid
+
         errors = []
         for user_node in user_nodes:
-            if user_node.name not in all_inputs:
-                if graph_functions.node_is_required_by_anything(user_node, nodes_set):
+            name = user_node.name
+            consumers = [
+                (consumer.name, *consumer.input_types[name])
+                for consumer in user_node.depended_on_by
+                if consumer in nodes_set and consumer.name not in overrides
+            ]
+            if name not in all_inputs:
+                if any(
+                    dependency == node.DependencyType.REQUIRED for _, _, dependency in consumers
+                ):
+                    consumer_names = sorted(consumer for consumer, _, _ in consumers)
                     errors.append(
-                        f"Error: Required input {user_node.name} not provided "
-                        f"for nodes: {[node.name for node in user_node.depended_on_by]}."
+                        f"Error: Required input {name} not provided for nodes: {consumer_names}."
                     )
-            else:
-                valid = all_inputs[user_node.name] is None
-                if adapter.does_method("do_validate_input", is_async=False):
-                    # For now this is an or-gate, as are the rest.
-                    # We may consider changing this/adding another method or type
-                    valid |= adapter.call_lifecycle_method_sync(
-                        "do_validate_input",
-                        node_type=user_node.type,
-                        input_value=all_inputs[user_node.name],
-                    )
-                else:
-                    valid |= htypes.check_input_type(user_node.type, all_inputs[user_node.name])
-                if not valid:
-                    annotations = "; ".join(
-                        f"{consumer.name}.{user_node.name}: {consumer.input_types[user_node.name][0]}"
-                        for consumer in sorted(user_node.depended_on_by, key=lambda n: n.name)
-                        if user_node.name in consumer.input_types
-                    )
-                    context = f" Input annotations: {annotations}." if annotations else ""
-                    errors.append(
-                        f"Error: Type requirement mismatch. Expected {user_node.name}:{user_node.type} "  # noqa: E231
-                        f"got {all_inputs[user_node.name]}:{type(all_inputs[user_node.name])} instead."  # noqa: E231
-                        f"{context}"
-                    )
+                continue
+
+            value = all_inputs[name]
+            checks = [(consumer, annotation) for consumer, annotation, _ in consumers]
+            # A directly requested external input may have no executing consumer.
+            checks = checks or [(None, user_node.type)]
+            failed = sorted(
+                (
+                    (consumer, annotation)
+                    for consumer, annotation in checks
+                    if not accepts(annotation, value)
+                ),
+                key=lambda check: check[0] or "",
+            )
+            if failed:
+                expected_type = failed[0][1]
+                annotations = "; ".join(
+                    f"{consumer}.{name}: {annotation}"
+                    for consumer, annotation in failed
+                    if consumer is not None
+                )
+                context = f" Input annotations: {annotations}." if annotations else ""
+                errors.append(
+                    f"Error: Type requirement mismatch. Expected {name}:{expected_type} "  # noqa: E231
+                    f"got {value}:{type(value)} instead."  # noqa: E231
+                    f"{context}"
+                )
         if errors:
             errors.sort()
             error_str = f"{len(errors)} errors encountered: \n  " + "\n  ".join(errors)
@@ -642,7 +668,7 @@ class Driver:
         run_id = str(uuid.uuid4())
         nodes, user_nodes = function_graph.get_upstream_nodes(final_vars, inputs, overrides)
         Driver.validate_inputs(
-            function_graph, self.adapter, user_nodes, inputs, nodes
+            function_graph, self.adapter, user_nodes, inputs, nodes, overrides=overrides
         )  # TODO -- validate within the function graph itself
         if display_graph:  # deprecated flow.
             warnings.warn(
@@ -718,7 +744,7 @@ class Driver:
         run_id = _run_id
         nodes, user_nodes = function_graph.get_upstream_nodes(final_vars, inputs, overrides)
         Driver.validate_inputs(
-            function_graph, self.adapter, user_nodes, inputs, nodes
+            function_graph, self.adapter, user_nodes, inputs, nodes, overrides=overrides
         )  # TODO -- validate within the function graph itself
         if display_graph:  # deprecated flow.
             warnings.warn(
@@ -906,7 +932,9 @@ class Driver:
         nodes, user_nodes = fn_graph.get_upstream_nodes(final_vars, inputs, overrides)
         if not bypass_validation:
             try:
-                Driver.validate_inputs(fn_graph, adapter, user_nodes, inputs, nodes)
+                Driver.validate_inputs(
+                    fn_graph, adapter, user_nodes, inputs, nodes, overrides=overrides
+                )
             except ValueError as e:
                 # Python 3.11 enables the more succinct `.add_note()` syntax
                 error_note = "Use `bypass_validation=True` to skip validation"
@@ -1037,7 +1065,9 @@ class Driver:
         :return: JSON string representation of the graph.
         """
         nodes, user_nodes = self.graph.get_upstream_nodes(final_vars, inputs, overrides)
-        Driver.validate_inputs(self.graph, self.adapter, user_nodes, inputs, nodes)
+        Driver.validate_inputs(
+            self.graph, self.adapter, user_nodes, inputs, nodes, overrides=overrides
+        )
         all_nodes = nodes | user_nodes
 
         hamilton_nodes = [HamiltonNode.from_node(n).as_dict() for n in all_nodes]
@@ -1603,7 +1633,9 @@ class Driver:
             nodes, user_nodes = function_graph.get_upstream_nodes(
                 final_vars + materializer_vars, inputs, overrides
             )
-            Driver.validate_inputs(function_graph, self.adapter, user_nodes, inputs, nodes)
+            Driver.validate_inputs(
+                function_graph, self.adapter, user_nodes, inputs, nodes, overrides=overrides
+            )
             all_nodes = nodes | user_nodes
             self.graph_executor.validate(list(all_nodes))
             raw_results = self.__raw_execute(
@@ -1718,7 +1750,9 @@ class Driver:
         :raise ValueError: if any issues with executino can be detected.
         """
         nodes, user_nodes = self.graph.get_upstream_nodes(final_vars, inputs, overrides)
-        Driver.validate_inputs(self.graph, self.adapter, user_nodes, inputs, nodes)
+        Driver.validate_inputs(
+            self.graph, self.adapter, user_nodes, inputs, nodes, overrides=overrides
+        )
         self.graph_executor.validate(list(nodes | user_nodes))
 
     def validate_materialization(
@@ -1754,7 +1788,9 @@ class Driver:
         nodes, user_nodes = function_graph.get_upstream_nodes(
             final_vars + materializer_vars, inputs, overrides
         )
-        Driver.validate_inputs(function_graph, self.adapter, user_nodes, inputs, nodes)
+        Driver.validate_inputs(
+            function_graph, self.adapter, user_nodes, inputs, nodes, overrides=overrides
+        )
         all_nodes = nodes | user_nodes
         self.graph_executor.validate(list(all_nodes))
 
