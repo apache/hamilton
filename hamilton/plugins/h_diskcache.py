@@ -33,8 +33,13 @@ def _bytes_to_mb(kb: int) -> float:
 def evict_all_except(nodes_to_keep: dict[str, node.Node], cache: diskcache.Cache) -> int:
     """Evicts all nodes and node version except those passed.
     Remaining nodes may have multiple entries for different input values
+
+    Run it while no driver is executing against the same cache: the node history is read,
+    evicted and rewritten as separate steps, like the adapter itself does after each run.
     """
-    nodes_history: dict[str, list[str]] = cache.get(key=DiskCacheAdapter.nodes_history_key)  # type: ignore
+    nodes_history: dict[str, list[str]] = cache.get(
+        key=DiskCacheAdapter.nodes_history_key, default=dict()
+    )  # type: ignore
 
     new_nodes_history = dict()
     eviction_counter = 0
