@@ -706,6 +706,81 @@ def test_materialize_parallel_branches(tmp_path, executor):
     )
 
 
+class _UnserializableRefresh:
+    def __reduce__(self):
+        raise TypeError("refresh persistence failed")
+
+
+@pytest.mark.parametrize("failure", ["store", "serialization"])
+def test_failed_refresh_preserves_previous_mapping(tmp_path, failure):
+    class FailingResultStore(FileResultStore):
+        fail = False
+
+        def set(self, *args, **kwargs):
+            if self.fail:
+                raise OSError("refresh persistence failed")
+            return super().set(*args, **kwargs)
+
+    state = [1]
+
+    def changing() -> object:
+        return state[0]
+
+    module = ad_hoc_utils.create_temporary_module(changing)
+    metadata = SQLiteMetadataStore(tmp_path / "metadata")
+    results = FailingResultStore(tmp_path / "results")
+    first = (
+        driver.Builder()
+        .with_modules(module)
+        .with_cache(metadata_store=metadata, result_store=results)
+        .build()
+    )
+    assert first.execute(["changing"]) == {"changing": 1}
+    key = first.cache.get_cache_key(first.cache.last_run_id, "changing")
+    original_version = metadata.get(key)
+    state[0] = 2 if failure == "store" else _UnserializableRefresh()
+    results.fail = failure == "store"
+    refresh = (
+        driver.Builder()
+        .with_modules(module)
+        .with_cache(metadata_store=metadata, result_store=results, recompute=["changing"])
+        .build()
+    )
+    with pytest.raises(Exception, match="refresh persistence failed"):
+        refresh.execute(["changing"])
+    assert metadata.get(key) == original_version
+    assert metadata.get_run(refresh.cache.last_run_id) == []
+    assert results.get(original_version) == 1
+    results.fail = False
+    default = (
+        driver.Builder()
+        .with_modules(module)
+        .with_cache(metadata_store=metadata, result_store=results)
+        .build()
+    )
+    assert default.execute(["changing"]) == {"changing": 1}
+
+
+def test_refresh_records_history_but_cache_hit_does_not(tmp_path):
+    def constant() -> int:
+        return 1
+
+    module = ad_hoc_utils.create_temporary_module(constant)
+    first = driver.Builder().with_modules(module).with_cache(path=tmp_path).build()
+    first.execute(["constant"])
+    hit = driver.Builder().with_modules(module).with_cache(path=tmp_path).build()
+    hit.execute(["constant"])
+    assert hit.cache.metadata_store.get_run(hit.cache.last_run_id) == []
+    refresh = (
+        driver.Builder()
+        .with_modules(module)
+        .with_cache(path=tmp_path, recompute=["constant"])
+        .build()
+    )
+    refresh.execute(["constant"])
+    assert len(refresh.cache.metadata_store.get_run(refresh.cache.last_run_id)) == 1
+
+
 def test_consistent_cache_key_with_or_without_default_parameter(tmp_path):
     def foo(external_dep: int = 3) -> int:
         return external_dep + 1

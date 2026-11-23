@@ -79,45 +79,58 @@ class SQLiteMetadataStore(MetadataStore):
         cache_metadata: information to determine if a node needs to be computed or not
 
         In the table ``cache_metadata``, the ``cache_key`` is unique whereas
-        ``history`` allows duplicate.
+        ``history`` allows duplicate and snapshots each run's ``data_version``.
+        Legacy history is backfilled once from the mapping available at migration;
+        versions lost before migration cannot be reconstructed.
         """
-        cur = self.connection.cursor()
+        with self.connection:
+            cur = self.connection.cursor()
+            cur.execute("BEGIN IMMEDIATE")
 
-        cur.execute(
-            """\
-            CREATE TABLE IF NOT EXISTS run_ids (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                run_id TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            cur.execute(
+                """\
+                CREATE TABLE IF NOT EXISTS run_ids (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    run_id TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+                """
             )
-            """
-        )
-        cur.execute(
-            """\
-            CREATE TABLE IF NOT EXISTS history (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                cache_key TEXT,
-                run_id TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            cur.execute(
+                """\
+                CREATE TABLE IF NOT EXISTS history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    cache_key TEXT,
+                    run_id TEXT,
+                    data_version TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-                FOREIGN KEY (cache_key) REFERENCES cache_metadata(cache_key)
-            );
-            """
-        )
-        cur.execute(
-            """\
-            CREATE TABLE IF NOT EXISTS cache_metadata (
-                cache_key TEXT PRIMARY KEY,
-                data_version TEXT NOT NULL,
-                node_name TEXT NOT NULL,
-                code_version TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (cache_key) REFERENCES cache_metadata(cache_key)
+                );
+                """
+            )
+            cur.execute(
+                """\
+                CREATE TABLE IF NOT EXISTS cache_metadata (
+                    cache_key TEXT PRIMARY KEY,
+                    data_version TEXT NOT NULL,
+                    node_name TEXT NOT NULL,
+                    code_version TEXT NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-                FOREIGN KEY (cache_key) REFERENCES history(cache_key)
-            );
-            """
-        )
-        self.connection.commit()
+                    FOREIGN KEY (cache_key) REFERENCES history(cache_key)
+                );
+                """
+            )
+            columns = {row[1] for row in cur.execute("PRAGMA table_info(history)")}
+            if "data_version" not in columns:
+                cur.execute("ALTER TABLE history ADD COLUMN data_version TEXT")
+                cur.execute(
+                    """UPDATE history SET data_version = (
+                        SELECT data_version FROM cache_metadata
+                        WHERE cache_metadata.cache_key = history.cache_key
+                    )"""
+                )
 
     def initialize(self, run_id) -> None:
         """Call initialize when starting a run. This will create database tables
@@ -160,7 +173,10 @@ class SQLiteMetadataStore(MetadataStore):
             node_name = decoded_key["node_name"]
             code_version = decoded_key["code_version"]
 
-        cur.execute("INSERT INTO history (cache_key, run_id) VALUES (?, ?)", (cache_key, run_id))
+        cur.execute(
+            "INSERT INTO history (cache_key, run_id, data_version) VALUES (?, ?, ?)",
+            (cache_key, run_id, data_version),
+        )
         cur.execute(
             """\
             INSERT INTO cache_metadata (
@@ -262,7 +278,7 @@ class SQLiteMetadataStore(MetadataStore):
             """\
             SELECT
                 cache_metadata.cache_key,
-                cache_metadata.data_version,
+                COALESCE(history.data_version, cache_metadata.data_version),
                 cache_metadata.node_name,
                 cache_metadata.code_version
             FROM history
