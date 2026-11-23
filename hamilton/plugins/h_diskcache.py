@@ -126,7 +126,7 @@ class DiskCacheAdapter(
         if node_name not in self.cache_vars:
             return node_callable(**node_kwargs)
 
-        node_hash = graph_types.hash_source_code(node_callable, strip=True)
+        node_hash = graph_types.hash_function_source(node_callable)
         self.used_nodes_hash[node_name] = node_hash
         cache_key = (node_hash, *node_kwargs.values())
 

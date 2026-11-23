@@ -17,6 +17,7 @@
 
 import inspect
 import pathlib
+from unittest import mock
 
 import pytest
 
@@ -188,3 +189,21 @@ def test_evict_from_driver(
 
     assert output["eviction_counter"] == 1
     assert hook.cache[h_diskcache.DiskCacheAdapter.nodes_history_key] == dict(A=[node_a_hash])
+
+
+def test_node_source_is_hashed_once_across_executions(
+    hook: h_diskcache.DiskCacheAdapter, node_a: node.Node
+):
+    """The adapter reuses the source hash of a node function instead of re-hashing it on
+    every execution."""
+    hook.cache_vars = [node_a.name]
+    with mock.patch.object(
+        graph_types, "hash_source_code", wraps=graph_types.hash_source_code
+    ) as hash_source_code:
+        for _ in range(3):
+            hook.run_to_execute_node(
+                node_name=node_a.name,
+                node_kwargs=dict(external_input=7),
+                node_callable=node_a.callable,
+            )
+    assert hash_source_code.call_count == 1

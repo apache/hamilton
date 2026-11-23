@@ -400,7 +400,7 @@ class CacheAdapter(NodeExecutionHook, NodeExecutionMethod, GraphExecutionHook):
         source_of_node_callable = node_callable
         while isinstance(source_of_node_callable, partial):  # handle partials
             source_of_node_callable = source_of_node_callable.func
-        node_hash = graph_types.hash_source_code(source_of_node_callable, strip=True)
+        node_hash = graph_types.hash_function_source(source_of_node_callable)
         cache_key = CacheAdapter.create_key(node_hash, node_kwargs)
 
         from_cache = self.cache.get(cache_key, None)
