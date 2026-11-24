@@ -694,3 +694,18 @@ def test_consistent_cache_key_with_or_without_default_parameter(tmp_path):
     cache_key_2 = cache.cache_keys[cache.last_run_id]["foo"]
 
     assert cache_key_1 == cache_key_2
+
+
+def test_dataframe_with_unhashable_cells_does_not_fail(tmp_path):
+    def tokens() -> pd.DataFrame:
+        return pd.DataFrame({"tokens": [["a", "b"], ["c"]], "n": [2, 1]})
+
+    def total(tokens: pd.DataFrame) -> int:
+        return int(tokens["n"].sum())
+
+    cache = HamiltonCacheAdapter(path=tmp_path)
+    module = ad_hoc_utils.create_temporary_module(tokens, total)
+
+    for _ in range(2):
+        results = execute_dataflow(module=module, cache=cache, final_vars=["total"])
+        assert results["total"] == 3

@@ -316,7 +316,11 @@ def hash_pandas_obj(obj, *args, depth: int = 0, **kwargs) -> str:
     """
     from pandas.util import hash_pandas_object
 
-    row_hashes = hash_pandas_object(obj).values.tobytes()
+    try:
+        row_hashes = hash_pandas_object(obj).values.tobytes()
+    except TypeError:
+        # object cells such as list, dict, set or ndarray can't be hashed by pandas
+        return UNHASHABLE
     if hasattr(obj, "columns"):
         schema = f"{list(obj.columns)}:{[str(dtype) for dtype in obj.dtypes]}"
     else:
