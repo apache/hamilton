@@ -43,7 +43,9 @@ class NumpyNpyWriter(DataSaver):
     fix_imports: bool | None = None
 
     def save_data(self, data: np.ndarray) -> dict[str, Any]:
-        kwargs = dict(file=self.path, arr=data, allow_pickle=self.allow_pickle)
+        kwargs = dict(file=self.path, arr=data)
+        if self.allow_pickle is not None:
+            kwargs["allow_pickle"] = self.allow_pickle
         if np.__version__ < "2.4" and self.fix_imports is not None:
             kwargs["fix_imports"] = self.fix_imports
         np.save(**kwargs)
