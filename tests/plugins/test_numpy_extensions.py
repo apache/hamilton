@@ -48,3 +48,20 @@ def test_numpy_file_reader(array: np.ndarray, tmp_path: pathlib.Path) -> None:
 
     assert np.equal(array, loaded_array).all()
     assert NumpyNpyReader.applicable_types() == [np.ndarray]
+
+
+def test_numpy_file_writer_saves_object_arrays_by_default(tmp_path: pathlib.Path) -> None:
+    file_path = tmp_path / "objects.npy"
+    array = np.array([{"a": 1}, [1, 2]], dtype=object)
+
+    NumpyNpyWriter(path=file_path).save_data(array)
+
+    loaded_array = np.load(file_path, allow_pickle=True)
+    assert loaded_array.tolist() == array.tolist()
+
+
+def test_numpy_file_writer_respects_allow_pickle_false(tmp_path: pathlib.Path) -> None:
+    array = np.array([{"a": 1}, [1, 2]], dtype=object)
+
+    with pytest.raises(ValueError):
+        NumpyNpyWriter(path=tmp_path / "objects.npy", allow_pickle=False).save_data(array)
