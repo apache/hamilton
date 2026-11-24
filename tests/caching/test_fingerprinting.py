@@ -453,6 +453,22 @@ def test_hash_pandas_order_sensitive():
     assert fingerprinting.hash_value(df) != fingerprinting.hash_value(df.iloc[::-1])
 
 
+@pytest.mark.parametrize(
+    "obj",
+    [
+        pd.DataFrame({"a": [[1, 2], [3]], "b": [1, 2]}),
+        pd.DataFrame({"a": [{"k": 1}, {"k": 2}]}),
+        pd.DataFrame({"a": [{1, 2}, {3}]}),
+        pd.Series([[1, 2], [3]]),
+        pd.Series([np.array([1, 2]), np.array([3])]),
+    ],
+)
+def test_hash_pandas_with_unhashable_cells_is_unhashable(obj):
+    """Cells that pandas can't hash (list, dict, set, ndarray) must yield UNHASHABLE
+    rather than raising, so the caching adapter can fall back to recomputing."""
+    assert fingerprinting.hash_value(obj) == fingerprinting.UNHASHABLE
+
+
 def test_hash_polars_different_columns_differ():
     """DataFrames with identical values but different column names must hash differently."""
     polars = pytest.importorskip("polars")
