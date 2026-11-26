@@ -656,6 +656,62 @@ with something all together, augment it, or delegate it.</p>
 
 </dd></dl>
 
+<section id="using-pdbdebugger-with-parallelizable">
+<h2>Using PDBDebugger with Parallelizable<a class="headerlink" href="#using-pdbdebugger-with-parallelizable" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">PDBDebugger</span></code> is not a good fit for parallel or multithreaded task-based
+execution. Task-based execution is turned on with
+<code class="docutils literal notranslate"><span class="pre">enable_dynamic_execution(allow_experimental_mode=True)</span></code>. See
+<a class="reference internal" href="../../../concepts/parallel-task/"><span class="doc">Dynamic DAGs/Parallel Execution</span></a>. If you do not set a remote executor, the
+builder defaults to <code class="docutils literal notranslate"><span class="pre">MultiThreadingExecutor(max_tasks=10)</span></code>. Concurrent
+mapped tasks then enter <code class="docutils literal notranslate"><span class="pre">pdb</span></code> at the same time and share one terminal:
+prompts and command output interleave, a command can be consumed by a
+different task than the one you intended, and the <code class="docutils literal notranslate"><span class="pre">(Pdb)</span></code> prompt itself
+can be split by other tasks’ logs.</p>
+<p><code class="docutils literal notranslate"><span class="pre">MultiProcessingExecutor</span></code> is not usable with <code class="docutils literal notranslate"><span class="pre">PDBDebugger</span></code>: worker
+processes leave the debugger immediately and the run fails with
+<code class="docutils literal notranslate"><span class="pre">bdb.BdbQuit</span></code>.</p>
+<p>To debug a dataflow that uses <code class="docutils literal notranslate"><span class="pre">Parallelizable</span></code> and <code class="docutils literal notranslate"><span class="pre">Collect</span></code>, set the
+remote executor to <code class="docutils literal notranslate"><span class="pre">SynchronousLocalTaskExecutor</span></code> so each mapped task
+finishes its debugger session before the next one starts:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_dataflow.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.htypes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collect</span><span class="p">,</span> <span class="n">Parallelizable</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">items</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Parallelizable</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">value</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">work</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">items</span> <span class="o">*</span> <span class="mi">2</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="n">work</span><span class="p">:</span> <span class="n">Collect</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">work</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># run.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">my_dataflow</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton</span><span class="w"> </span><span class="kn">import</span> <span class="n">driver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.execution.executors</span><span class="w"> </span><span class="kn">import</span> <span class="n">SynchronousLocalTaskExecutor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hamilton.lifecycle</span><span class="w"> </span><span class="kn">import</span> <span class="n">PDBDebugger</span>
+
+<span class="n">dr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">Builder</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">enable_dynamic_execution</span><span class="p">(</span><span class="n">allow_experimental_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_modules</span><span class="p">(</span><span class="n">my_dataflow</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">with_adapters</span><span class="p">(</span><span class="n">PDBDebugger</span><span class="p">(</span><span class="n">node_filter</span><span class="o">=</span><span class="s2">"work"</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">with_remote_executor</span><span class="p">(</span><span class="n">SynchronousLocalTaskExecutor</span><span class="p">())</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">dr</span><span class="o">.</span><span class="n">execute</span><span class="p">([</span><span class="s2">"total"</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">node_filter</span></code> selects which nodes drop into the debugger. At least one of
+<code class="docutils literal notranslate"><span class="pre">before</span></code>, <code class="docutils literal notranslate"><span class="pre">during</span></code>, or <code class="docutils literal notranslate"><span class="pre">after</span></code> must be <code class="docutils literal notranslate"><span class="pre">True</span></code>, or the adapter will
+not open a <code class="docutils literal notranslate"><span class="pre">pdb</span></code> session.</p>
+</section>
 </section>
 
         </article>
@@ -737,6 +793,7 @@ with something all together, augment it, or delegate it.</p>
 <li><a class="reference internal" href="#hamilton.lifecycle.default.PDBDebugger.run_to_execute_node"><code class="docutils literal notranslate"><span class="pre">PDBDebugger.run_to_execute_node()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#using-pdbdebugger-with-parallelizable">Using PDBDebugger with Parallelizable</a></li>
 </ul>
 </li>
 </ul>
