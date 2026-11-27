@@ -15,7 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import json
+from datetime import date, datetime, time, timedelta
+
 import pandas as pd
+import pytest
 
 from hamilton_sdk.tracking import pandas_stats as ps
 
@@ -227,3 +231,82 @@ def test_compute_stats_df():
         },
     }
     assert actual == expected_stats
+
+
+def test_compute_stats_timedelta_series_is_unhandled():
+    series = pd.Series(
+        [pd.Timedelta(days=-1), None, pd.Timedelta(days=2)],
+        name="duration",
+        dtype="timedelta64[ns]",
+    )
+
+    actual = ps.compute_stats_series(series, "test", {})
+
+    assert actual["observability_value"]["duration"] == {
+        "base_data_type": "unhandled",
+        "count": 3,
+        "data_type": "timedelta64[ns]",
+        "missing": 1,
+        "name": "duration",
+        "pos": 0,
+    }
+    json.dumps(actual, allow_nan=False)
+
+
+@pytest.mark.parametrize("timezone", ["UTC", "Asia/Karachi"])
+def test_compute_stats_timezone_aware_datetimes(timezone):
+    start = pd.Timestamp("2024-01-01", tz=timezone)
+    end = pd.Timestamp("2024-01-03", tz=timezone)
+    df = pd.DataFrame({"label": ["a", "b", "c"], "timestamp": pd.Series([start, pd.NaT, end])})
+
+    actual = ps.compute_stats_df(df, "test", {})
+
+    stats = actual["observability_value"]["timestamp"]
+    assert stats["base_data_type"] == "datetime"
+    assert stats["data_type"] == str(df["timestamp"].dtype)
+    assert stats["pos"] == 1
+    assert stats["count"] == 3
+    assert stats["missing"] == 1
+    assert stats["min"] == start.isoformat()
+    assert stats["max"] == end.isoformat()
+    assert stats["mean"] == (start + pd.Timedelta(days=1)).isoformat()
+    assert stats["quantiles"][0.5] == stats["mean"]
+    json.dumps(actual, allow_nan=False)
+
+
+@pytest.mark.parametrize(
+    ("arrow_type", "values"),
+    [
+        ("date32", [date(2024, 1, 1), None]),
+        ("date64", [date(2024, 1, 1), None]),
+        ("duration", [timedelta(days=1), None]),
+        ("time32", [time(12, 30), None]),
+        ("time64", [time(12, 30), None]),
+        ("timestamp", [datetime(2024, 1, 1), None]),
+        ("timestamp_utc", [pd.Timestamp("2024-01-01", tz="UTC"), None]),
+    ],
+)
+def test_compute_stats_arrow_temporal_series_is_unhandled(arrow_type, values):
+    pa = pytest.importorskip("pyarrow")
+    arrow_types = {
+        "date32": pa.date32(),
+        "date64": pa.date64(),
+        "duration": pa.duration("ns"),
+        "time32": pa.time32("s"),
+        "time64": pa.time64("us"),
+        "timestamp": pa.timestamp("ns"),
+        "timestamp_utc": pa.timestamp("ns", tz="UTC"),
+    }
+    series = pd.Series(values, name="temporal", dtype=pd.ArrowDtype(arrow_types[arrow_type]))
+
+    actual = ps.compute_stats_series(series, "test", {})
+
+    assert actual["observability_value"]["temporal"] == {
+        "base_data_type": "unhandled",
+        "count": 2,
+        "data_type": str(series.dtype),
+        "missing": 1,
+        "name": "temporal",
+        "pos": 0,
+    }
+    json.dumps(actual, allow_nan=False)

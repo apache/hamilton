@@ -53,13 +53,15 @@ def _compute_stats(df: pd.DataFrame) -> dict[str, dict[str, Any]]:
     """
     category_types = df.select_dtypes(include=["category"])
     string_types = df.select_dtypes(include=["string"])
-    numeric_types = df.select_dtypes(include=["number"])
+    # Timedeltas are durations and have no renderer in schema v0.0.3.
+    numeric_types = df.select_dtypes(include=["number"], exclude=["timedelta"])
     bool_types = df.select_dtypes(include=["bool"])
-    object_types = df.select_dtypes(include=["object"])
-    datetime_types = df.select_dtypes(include=["datetime", "timedelta"])
-    unhandled_types = df.select_dtypes(
-        exclude=["string", "category", "number", "bool", "object", "datetime", "timedelta"]
-    )
+    # Arrow temporal dtypes use the unhandled stats until their reductions are supported.
+    datetime_columns = [
+        col
+        for col, dtype in df.dtypes.items()
+        if pd.api.types.is_datetime64_dtype(dtype) or isinstance(dtype, pd.DatetimeTZDtype)
+    ]
     column_order = {col: index for index, col in enumerate(df.columns)}
     stats = {}
 
@@ -92,12 +94,11 @@ def _compute_stats(df: pd.DataFrame) -> dict[str, dict[str, Any]]:
         stats[col] = execute_col("numeric_column_stats", numeric_types[col], col, column_order[col])
     for col in bool_types.columns:
         stats[col] = execute_col("boolean_column_stats", bool_types[col], col, column_order[col])
-    for col in datetime_types.columns:
-        stats[col] = execute_col(
-            "datetime_column_stats", datetime_types[col], col, column_order[col]
-        )
-    for col in list(object_types.columns) + list(unhandled_types.columns):
-        stats[col] = execute_col("unhandled_column_stats", df[col], col, column_order[col])
+    for col in datetime_columns:
+        stats[col] = execute_col("datetime_column_stats", df[col], col, column_order[col])
+    for col, position in column_order.items():
+        if col not in stats:
+            stats[col] = execute_col("unhandled_column_stats", df[col], col, position)
     return stats
 
 
