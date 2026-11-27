@@ -15,11 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# pre-commit hooks require a user to have installed `prek`:
-#   $ brew install prek
-# Then install the hooks within the repo:
-#   $ cd /PATH/TO/REPO
-#   $ prek install
+# Install uv as described in CONTRIBUTING.md, then run `uv run --locked prek install`.
 exclude: '^docs/code-comparisons/'  # skip the code comparisons directory
 default_stages: [pre-commit, pre-merge-commit]
 repos:
@@ -145,9 +141,8 @@ repos:
     hooks:
       - id: validate-example-notebooks
         name: validate example notebooks
-        entry: python ./examples/validate_examples.py  # script is called from root directory
-        language: python  # script requires the Python interpreter
+        entry: uv run --locked python ./examples/validate_examples.py
+        language: system
         require_serial: true  # don't run in parallel because one call of the script parses all files
-        additional_dependencies: [nbformat]  # Python dependency for the script
         files: ^examples/.*\.ipynb$  # this catches all .ipynb under examples/
         types: [jupyter]  # jupyter is alias for .ipynb files
