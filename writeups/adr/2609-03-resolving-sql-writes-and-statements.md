@@ -23,7 +23,7 @@ under the License.
 
 ## Context
 
-Under ADR 0002, a write's string may sit under `query` or `table_name`. It may be a table name
+Under [2609-02](2609-02-sql-metadata-keeps-1-0-0-filing.md), a write's string may sit under `query` or `table_name`. It may be a table name
 (`daily revenue`, `SELECT results`, `USER_SELECTIONS`) or, for custom savers, a statement
 (`INSERT INTO t SELECT ...`). `sql_datasets()` must name the tables written, and it must never
 invent a dataset named after SQL text or report a table name as the job's SQL.

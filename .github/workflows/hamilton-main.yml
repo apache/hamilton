@@ -25,7 +25,11 @@ on:
         - 'hamilton/**'
         - 'plugin_tests/**'
         - 'tests/**'
+        - 'verification/**'
         - 'pyproject.toml'
+        - 'scripts/verify'
+        - 'scripts/verify.mts'
+        - 'scripts/verify.test.mts'
         # tests/test_redirect_packages.py renders every redirect package from these
         - 'scripts/render_redirect_pyproject.py'
         - 'sf-hamilton*-redirect/**'
@@ -49,10 +53,16 @@ jobs:
           with:
             python-version: '3.11'
 
+        - name: Set up Node.js
+          uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+          with:
+            node-version: '22'
+
+        - name: Check verification harness
+          run: scripts/verify drive verify-tool
+
         - name: Check linting with prek
-          run: |
-            uv sync --dev
-            uv run prek run --all-files --hook-stage pre-merge-commit
+          run: uv run --isolated --exact --python 3.11 prek run --all-files --hook-stage pre-merge-commit
 
   test:
     name: "Unit Tests"
