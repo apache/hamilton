@@ -279,6 +279,8 @@ class HamiltonCacheAdapter(
             str, dict[str, str | dict[str, str]]
         ] = {}  # {run_id: {node_name: key}} or {run_id: {node_name: {task_id: key}}}
         self._logs: dict[str, list[CachingEvent]] = {}  # {run_id: [logs]}
+        # Keep computed versions until persistence, including EXPAND nodes with no memory version.
+        self._pending_metadata: dict[tuple[str, str, str | None], str] = {}
 
     @property
     def last_run_id(self):
@@ -1302,13 +1304,7 @@ class HamiltonCacheAdapter(
                 self._set_memory_metadata(
                     run_id=run_id, node_name=node_name, task_id=task_id, data_version=data_version
                 )
-                self._set_stored_metadata(
-                    run_id=run_id,
-                    node_name=node_name,
-                    task_id=task_id,
-                    cache_key=cache_key,
-                    data_version=data_version,
-                )
+                self._pending_metadata[run_id, node_name, task_id] = data_version
 
             return result
 
@@ -1389,13 +1385,7 @@ class HamiltonCacheAdapter(
             self._set_memory_metadata(
                 run_id=run_id, node_name=node_name, task_id=task_id, data_version=data_version
             )
-            self._set_stored_metadata(
-                run_id=run_id,
-                node_name=node_name,
-                task_id=task_id,
-                cache_key=cache_key,
-                data_version=data_version,
-            )
+            self._pending_metadata[run_id, node_name, task_id] = data_version
 
         return result
 
@@ -1412,9 +1402,10 @@ class HamiltonCacheAdapter(
     ):
         """Get the cache_key and data_version stored in memory (respectively from
         pre_node_execute and do_node_execute) and store the result in result_store
-        if it doesn't exist.
+        if it doesn't exist. Publish computed metadata only after result storage succeeds.
         """
         node_name = node_.name
+        pending_version = self._pending_metadata.pop((run_id, node_name, task_id), SENTINEL)
 
         if success is False:
             self._log_event(
@@ -1432,9 +1423,11 @@ class HamiltonCacheAdapter(
             CachingBehavior.RECOMPUTE,
         ):
             cache_key = self.get_cache_key(run_id=run_id, node_name=node_name, task_id=task_id)
-            data_version = self.get_data_version(
-                run_id=run_id, node_name=node_name, task_id=task_id, cache_key=cache_key
-            )
+            data_version = pending_version
+            if data_version is SENTINEL:
+                data_version = self.get_data_version(
+                    run_id=run_id, node_name=node_name, task_id=task_id, cache_key=cache_key
+                )
             assert data_version is not SENTINEL
 
             # TODO clean up this logic
@@ -1470,4 +1463,12 @@ class HamiltonCacheAdapter(
                     actor="result_store",
                     event_type=CachingEventType.SET_RESULT,
                     value=data_version,
+                )
+            if pending_version is not SENTINEL:
+                self._set_stored_metadata(
+                    run_id=run_id,
+                    node_name=node_name,
+                    task_id=task_id,
+                    cache_key=cache_key,
+                    data_version=data_version,
                 )

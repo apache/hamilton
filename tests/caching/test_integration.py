@@ -16,6 +16,7 @@
 # under the License.
 
 import itertools
+from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -439,6 +440,38 @@ def test_recompute_behavior(tmp_path):
     check_results_exist_in_store(cache, ["A", "B"])
 
 
+def test_recompute_refreshes_persistent_cache_for_later_default_runs(tmp_path):
+    def source_text(source_file: str) -> str:
+        return Path(source_file).read_text(encoding="utf-8")
+
+    def rendered(source_text: str) -> str:
+        return f"read:{source_text}"
+
+    module = ad_hoc_utils.create_temporary_module(source_text, rendered)
+    source_file = tmp_path / "source.txt"
+    cache_path = tmp_path / "cache"
+    inputs = {"source_file": str(source_file)}
+
+    source_file.write_text("old", encoding="utf-8")
+    initial = driver.Builder().with_modules(module).with_cache(path=cache_path).build()
+    assert initial.execute(["rendered"], inputs=inputs) == {"rendered": "read:old"}
+
+    source_file.write_text("fresh", encoding="utf-8")
+    refreshed = (
+        driver.Builder()
+        .with_modules(module)
+        .with_cache(path=cache_path, recompute=["source_text"])
+        .build()
+    )
+    assert refreshed.execute(["rendered"], inputs=inputs) == {"rendered": "read:fresh"}
+    check_execution(refreshed.cache, did=["source_text", "rendered"])
+
+    source_file.write_text("uncached", encoding="utf-8")
+    resumed = driver.Builder().with_modules(module).with_cache(path=cache_path).build()
+    assert resumed.execute(["rendered"], inputs=inputs) == {"rendered": "read:fresh"}
+    check_execution(resumed.cache, did_not=["source_text", "rendered"])
+
+
 def test_disable_behavior(tmp_path):
     cache = HamiltonCacheAdapter(path=tmp_path)
     module = ad_hoc_utils.create_temporary_module(
@@ -671,6 +704,81 @@ def test_materialize_parallel_branches(tmp_path, executor):
     check_results_exist_in_store(
         cache=dr.cache, expected_nodes=["expand_node", "inside_branch", "collect_node"]
     )
+
+
+class _UnserializableRefresh:
+    def __reduce__(self):
+        raise TypeError("refresh persistence failed")
+
+
+@pytest.mark.parametrize("failure", ["store", "serialization"])
+def test_failed_refresh_preserves_previous_mapping(tmp_path, failure):
+    class FailingResultStore(FileResultStore):
+        fail = False
+
+        def set(self, *args, **kwargs):
+            if self.fail:
+                raise OSError("refresh persistence failed")
+            return super().set(*args, **kwargs)
+
+    state = [1]
+
+    def changing() -> object:
+        return state[0]
+
+    module = ad_hoc_utils.create_temporary_module(changing)
+    metadata = SQLiteMetadataStore(tmp_path / "metadata")
+    results = FailingResultStore(tmp_path / "results")
+    first = (
+        driver.Builder()
+        .with_modules(module)
+        .with_cache(metadata_store=metadata, result_store=results)
+        .build()
+    )
+    assert first.execute(["changing"]) == {"changing": 1}
+    key = first.cache.get_cache_key(first.cache.last_run_id, "changing")
+    original_version = metadata.get(key)
+    state[0] = 2 if failure == "store" else _UnserializableRefresh()
+    results.fail = failure == "store"
+    refresh = (
+        driver.Builder()
+        .with_modules(module)
+        .with_cache(metadata_store=metadata, result_store=results, recompute=["changing"])
+        .build()
+    )
+    with pytest.raises(Exception, match="refresh persistence failed"):
+        refresh.execute(["changing"])
+    assert metadata.get(key) == original_version
+    assert metadata.get_run(refresh.cache.last_run_id) == []
+    assert results.get(original_version) == 1
+    results.fail = False
+    default = (
+        driver.Builder()
+        .with_modules(module)
+        .with_cache(metadata_store=metadata, result_store=results)
+        .build()
+    )
+    assert default.execute(["changing"]) == {"changing": 1}
+
+
+def test_refresh_records_history_but_cache_hit_does_not(tmp_path):
+    def constant() -> int:
+        return 1
+
+    module = ad_hoc_utils.create_temporary_module(constant)
+    first = driver.Builder().with_modules(module).with_cache(path=tmp_path).build()
+    first.execute(["constant"])
+    hit = driver.Builder().with_modules(module).with_cache(path=tmp_path).build()
+    hit.execute(["constant"])
+    assert hit.cache.metadata_store.get_run(hit.cache.last_run_id) == []
+    refresh = (
+        driver.Builder()
+        .with_modules(module)
+        .with_cache(path=tmp_path, recompute=["constant"])
+        .build()
+    )
+    refresh.execute(["constant"])
+    assert len(refresh.cache.metadata_store.get_run(refresh.cache.last_run_id)) == 1
 
 
 def test_consistent_cache_key_with_or_without_default_parameter(tmp_path):
