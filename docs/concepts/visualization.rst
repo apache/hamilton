@@ -166,6 +166,30 @@ Configure your visualization
 
 All of the above visualization functions share parameters to customize the visualization (e.g., hide legend, hide inputs). Learn more by reviewing the API reference for `Driver.display_all_functions() <https://hamilton.apache.org/reference/drivers/Driver/#hamilton.driver.Driver.display_all_functions>`_; parameters should apply to all other visualizations.
 
+Grouping and deduplicating inputs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, each function's external inputs appear together in one input box.
+Set ``group_inputs=False`` to show one box per input instead. Combine it with
+``deduplicate_inputs=True`` to share each input box across the functions that
+need it:
+
+.. code-block:: python
+
+    dr.visualize_execution(
+        ["everything"],
+        inputs={"a": 1, "b": 2},
+        group_inputs=False,
+        deduplicate_inputs=True,
+    )
+
+For functions that take ``a``, ``b``, or both, this draws one box for ``a`` and
+one for ``b``. With grouping enabled, deduplication shares only identical input
+sets, so a function requiring both inputs still has a separate ``a, b`` box.
+With deduplication disabled, each function has its own boxes. ``hide_inputs=True``
+hides input boxes in either mode. These options apply to all the visualization
+methods above.
+
 Custom node labels with display_name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

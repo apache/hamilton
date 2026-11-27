@@ -819,6 +819,7 @@ class Driver:
         show_schema: bool = True,
         custom_style_function: Callable = None,
         keep_dot: bool = False,
+        group_inputs: bool = True,
     ) -> Optional["graphviz.Digraph"]:  # noqa F821
         """Displays the graph of all functions loaded!
 
@@ -835,7 +836,10 @@ class Driver:
             `orient` will be overwridden by the value of `graphviz_kwargs['graph_attr']['rankdir']`
             see (https://graphviz.org/docs/attr-types/rankdir/)
         :param hide_inputs: If True, no input nodes are displayed.
-        :param deduplicate_inputs: If True, remove duplicate input nodes.
+        :param group_inputs: If True, group each function's inputs in one node. If False,
+            display each input separately.
+        :param deduplicate_inputs: If True, share identical input groups between functions,
+            or individual inputs when group_inputs is False.
             Can improve readability depending on the specifics of the DAG.
         :param show_schema: If True, display the schema of the DAG if
             the nodes have schema data provided
@@ -853,6 +857,7 @@ class Driver:
                 orient=orient,
                 hide_inputs=hide_inputs,
                 deduplicate_inputs=deduplicate_inputs,
+                group_inputs=group_inputs,
                 display_fields=show_schema,
                 custom_style_function=custom_style_function,
                 keep_dot=keep_dot,
@@ -878,6 +883,7 @@ class Driver:
         custom_style_function: Callable = None,
         bypass_validation: bool = False,
         keep_dot: bool = False,
+        group_inputs: bool = True,
     ):
         """Helper function to visualize execution, using a passed-in function graph.
 
@@ -889,7 +895,10 @@ class Driver:
         :param show_legend: If True, add a legend to the visualization based on the DAG's nodes.
         :param orient: `LR` stands for "left to right". Accepted values are TB, LR, BT, RL.
         :param hide_inputs: If True, no input nodes are displayed.
-        :param deduplicate_inputs: If True, remove duplicate input nodes.
+        :param group_inputs: If True, group each function's inputs in one node. If False,
+            display each input separately.
+        :param deduplicate_inputs: If True, share identical input groups between functions,
+            or individual inputs when group_inputs is False.
         :param show_schema: If True, display the schema of the DAG if nodes have schema data provided
         :param custom_style_function: Optional. Custom style function.
         :param keep_dot: If true, produce a DOT file (ref: https://graphviz.org/doc/info/lang.html)
@@ -935,6 +944,7 @@ class Driver:
                 orient=orient,
                 hide_inputs=hide_inputs,
                 deduplicate_inputs=deduplicate_inputs,
+                group_inputs=group_inputs,
                 display_fields=show_schema,
                 custom_style_function=custom_style_function,
                 config=fn_graph._config,
@@ -960,6 +970,7 @@ class Driver:
         custom_style_function: Callable = None,
         bypass_validation: bool = False,
         keep_dot: bool = False,
+        group_inputs: bool = True,
     ) -> Optional["graphviz.Digraph"]:  # noqa F821
         """Visualizes Execution.
 
@@ -987,7 +998,10 @@ class Driver:
             `orient` will be overwridden by the value of `graphviz_kwargs['graph_attr']['rankdir']`
             see (https://graphviz.org/docs/attr-types/rankdir/)
         :param hide_inputs: If True, no input nodes are displayed.
-        :param deduplicate_inputs: If True, remove duplicate input nodes.
+        :param group_inputs: If True, group each function's inputs in one node. If False,
+            display each input separately.
+        :param deduplicate_inputs: If True, share identical input groups between functions,
+            or individual inputs when group_inputs is False.
             Can improve readability depending on the specifics of the DAG.
         :param show_schema: If True, display the schema of the DAG if nodes have schema data provided
         :param custom_style_function: Optional. Custom style function.
@@ -1009,6 +1023,7 @@ class Driver:
             orient=orient,
             hide_inputs=hide_inputs,
             deduplicate_inputs=deduplicate_inputs,
+            group_inputs=group_inputs,
             show_schema=show_schema,
             custom_style_function=custom_style_function,
             bypass_validation=bypass_validation,
@@ -1080,6 +1095,7 @@ class Driver:
         show_schema: bool = True,
         custom_style_function: Callable = None,
         keep_dot: bool = False,
+        group_inputs: bool = True,
     ) -> Optional["graphviz.Digraph"]:  # noqa F821
         """Creates a visualization of the DAG starting from the passed in function name(s).
 
@@ -1098,7 +1114,10 @@ class Driver:
             `orient` will be overwridden by the value of `graphviz_kwargs['graph_attr']['rankdir']`
             see (https://graphviz.org/docs/attr-types/rankdir/)
         :param hide_inputs: If True, no input nodes are displayed.
-        :param deduplicate_inputs: If True, remove duplicate input nodes.
+        :param group_inputs: If True, group each function's inputs in one node. If False,
+            display each input separately.
+        :param deduplicate_inputs: If True, share identical input groups between functions,
+            or individual inputs when group_inputs is False.
             Can improve readability depending on the specifics of the DAG.
         :param show_schema: If True, display the schema of the DAG if nodes have schema data provided
         :param custom_style_function: Optional. Custom style function.
@@ -1127,6 +1146,7 @@ class Driver:
                 orient=orient,
                 hide_inputs=hide_inputs,
                 deduplicate_inputs=deduplicate_inputs,
+                group_inputs=group_inputs,
                 display_fields=show_schema,
                 custom_style_function=custom_style_function,
                 config=self.graph._config,
@@ -1149,6 +1169,7 @@ class Driver:
         show_schema: bool = True,
         custom_style_function: Callable = None,
         keep_dot: bool = False,
+        group_inputs: bool = True,
     ) -> Optional["graphviz.Digraph"]:  # noqa F821
         """Creates a visualization of the DAG going backwards from the passed in function name(s).
 
@@ -1167,7 +1188,10 @@ class Driver:
             `orient` will be overwridden by the value of `graphviz_kwargs['graph_attr']['rankdir']`
             see (https://graphviz.org/docs/attr-types/rankdir/)
         :param hide_inputs: If True, no input nodes are displayed.
-        :param deduplicate_inputs: If True, remove duplicate input nodes.
+        :param group_inputs: If True, group each function's inputs in one node. If False,
+            display each input separately.
+        :param deduplicate_inputs: If True, share identical input groups between functions,
+            or individual inputs when group_inputs is False.
             Can improve readability depending on the specifics of the DAG.
         :param show_schema: If True, display the schema of the DAG if nodes have schema data provided
         :param custom_style_function: Optional. Custom style function.
@@ -1191,6 +1215,7 @@ class Driver:
                 orient=orient,
                 hide_inputs=hide_inputs,
                 deduplicate_inputs=deduplicate_inputs,
+                group_inputs=group_inputs,
                 display_fields=show_schema,
                 custom_style_function=custom_style_function,
                 config=self.graph._config,
@@ -1270,6 +1295,7 @@ class Driver:
         show_schema: bool = True,
         custom_style_function: Callable = None,
         keep_dot: bool = False,
+        group_inputs: bool = True,
     ) -> Optional["graphviz.Digraph"]:  # noqa F821
         """Visualizes the path between two nodes.
 
@@ -1290,7 +1316,10 @@ class Driver:
             `orient` will be overwridden by the value of `graphviz_kwargs['graph_attr']['rankdir']`
             see (https://graphviz.org/docs/attr-types/rankdir/)
         :param hide_inputs: If True, no input nodes are displayed.
-        :param deduplicate_inputs: If True, remove duplicate input nodes.
+        :param group_inputs: If True, group each function's inputs in one node. If False,
+            display each input separately.
+        :param deduplicate_inputs: If True, share identical input groups between functions,
+            or individual inputs when group_inputs is False.
             Can improve readability depending on the specifics of the DAG.
         :param show_schema: If True, display the schema of the DAG if nodes have schema data provided
         :return: graphviz object.
@@ -1352,6 +1381,7 @@ class Driver:
                 orient=orient,
                 hide_inputs=hide_inputs,
                 deduplicate_inputs=deduplicate_inputs,
+                group_inputs=group_inputs,
                 display_fields=show_schema,
                 custom_style_function=custom_style_function,
                 config=self.graph._config,
@@ -1644,6 +1674,7 @@ class Driver:
         custom_style_function: Callable = None,
         bypass_validation: bool = False,
         keep_dot: bool = False,
+        group_inputs: bool = True,
     ) -> Optional["graphviz.Digraph"]:  # noqa F821
         """Visualizes materialization. This helps give you a sense of how materialization
         will impact the DAG.
@@ -1660,7 +1691,10 @@ class Driver:
             `orient` will be overwridden by the value of `graphviz_kwargs['graph_attr']['rankdir']`
             see (https://graphviz.org/docs/attr-types/rankdir/)
         :param hide_inputs: If True, no input nodes are displayed.
-        :param deduplicate_inputs: If True, remove duplicate input nodes.
+        :param group_inputs: If True, group each function's inputs in one node. If False,
+            display each input separately.
+        :param deduplicate_inputs: If True, share identical input groups between functions,
+            or individual inputs when group_inputs is False.
             Can improve readability depending on the specifics of the DAG.
         :param show_schema: If True, show the schema of the materialized nodes
             if nodes have schema metadata attached.
@@ -1690,6 +1724,7 @@ class Driver:
             orient=orient,
             hide_inputs=hide_inputs,
             deduplicate_inputs=deduplicate_inputs,
+            group_inputs=group_inputs,
             show_schema=show_schema,
             custom_style_function=custom_style_function,
             bypass_validation=bypass_validation,
