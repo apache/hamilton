@@ -246,7 +246,8 @@ class InMemoryResultStore(ResultStore):
 
         Since result stores do not store an index of their keys, you must provide a
         ``MetadataStore`` instance or a list of ``data_version`` for which results
-        should be loaded in memory.
+        should be loaded in memory. Missing results are skipped; stored ``None``
+        values are preserved.
 
         :param result_store: ``ResultStore`` instance to load results from.
         :param metadata_store: ``MetadataStore`` instance from which all ``data_version`` are retrieved.
@@ -289,9 +290,8 @@ class InMemoryResultStore(ResultStore):
                     data_versions_to_retrieve.add(node_metadata["data_version"])
 
         for data_version in data_versions_to_retrieve:
-            # TODO disambiguate "result is None" from the sentinel value when `data_version`
-            # is not found in `result_store`.
             result = result_store.get(data_version)
-            in_memory_result_store.set(data_version, result)
+            if result is not None or result_store.exists(data_version):
+                in_memory_result_store.set(data_version, result)
 
         return in_memory_result_store
