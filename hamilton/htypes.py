@@ -467,6 +467,14 @@ def check_instance(obj: Any, type_: Any) -> bool:
 
             # If the object is a list, set, or tuple
             elif isinstance(obj, (list, set, tuple)):
+                if origin is tuple and not (len(element_type) == 2 and element_type[1] is Ellipsis):
+                    if len(obj) != len(element_type):
+                        return False
+                    return all(
+                        check_instance(value, expected_type)
+                        for value, expected_type in zip(obj, element_type, strict=True)
+                    )
+
                 element_type = element_type[0]
                 for i in obj:
                     if not check_instance(i, element_type):
