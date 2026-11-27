@@ -864,7 +864,11 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pandas.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">hash_pandas_object</span>
 
-    <span class="n">row_hashes</span> <span class="o">=</span> <span class="n">hash_pandas_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">row_hashes</span> <span class="o">=</span> <span class="n">hash_pandas_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="c1"># object cells such as list, dict, set or ndarray can't be hashed by pandas</span>
+        <span class="k">return</span> <span class="n">UNHASHABLE</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">"columns"</span><span class="p">):</span>
         <span class="n">schema</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">dtype</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">obj</span><span class="o">.</span><span class="n">dtypes</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
     <span class="k">else</span><span class="p">:</span>

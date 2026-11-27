@@ -810,7 +810,9 @@ s=d.getElementsByTagName('script')[0];
         <span class="bp">self</span><span class="o">.</span><span class="n">cache_keys</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span>
             <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
         <span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># {run_id: {node_name: key}} or {run_id: {node_name: {task_id: key}}}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_logs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">CachingEvent</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># {run_id: [logs]}</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">CachingEvent</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># {run_id: [logs]}</span>
+        <span class="c1"># Keep computed versions until persistence, including EXPAND nodes with no memory version.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pending_metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></div>
 
 
     <span class="nd">@property</span>
@@ -1867,13 +1869,7 @@ s=d.getElementsByTagName('script')[0];
                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_memory_metadata</span><span class="p">(</span>
                     <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">data_version</span><span class="o">=</span><span class="n">data_version</span>
                 <span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_set_stored_metadata</span><span class="p">(</span>
-                    <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
-                    <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
-                    <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-                    <span class="n">cache_key</span><span class="o">=</span><span class="n">cache_key</span><span class="p">,</span>
-                    <span class="n">data_version</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
-                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pending_metadata</span><span class="p">[</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_version</span>
 
             <span class="k">return</span> <span class="n">result</span>
 
@@ -1954,13 +1950,7 @@ s=d.getElementsByTagName('script')[0];
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_memory_metadata</span><span class="p">(</span>
                 <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">data_version</span><span class="o">=</span><span class="n">data_version</span>
             <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_set_stored_metadata</span><span class="p">(</span>
-                <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
-                <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
-                <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-                <span class="n">cache_key</span><span class="o">=</span><span class="n">cache_key</span><span class="p">,</span>
-                <span class="n">data_version</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pending_metadata</span><span class="p">[</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_version</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
 
@@ -1980,9 +1970,10 @@ s=d.getElementsByTagName('script')[0];
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Get the cache_key and data_version stored in memory (respectively from</span>
 <span class="sd">        pre_node_execute and do_node_execute) and store the result in result_store</span>
-<span class="sd">        if it doesn't exist.</span>
+<span class="sd">        if it doesn't exist. Publish computed metadata only after result storage succeeds.</span>
 <span class="sd">        """</span>
         <span class="n">node_name</span> <span class="o">=</span> <span class="n">node_</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">pending_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pending_metadata</span><span class="o">.</span><span class="n">pop</span><span class="p">((</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="p">),</span> <span class="n">SENTINEL</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
@@ -2000,9 +1991,11 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">CachingBehavior</span><span class="o">.</span><span class="n">RECOMPUTE</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cache_key</span><span class="p">(</span><span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span>
-            <span class="n">data_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_version</span><span class="p">(</span>
-                <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">cache_key</span><span class="o">=</span><span class="n">cache_key</span>
-            <span class="p">)</span>
+            <span class="n">data_version</span> <span class="o">=</span> <span class="n">pending_version</span>
+            <span class="k">if</span> <span class="n">data_version</span> <span class="ow">is</span> <span class="n">SENTINEL</span><span class="p">:</span>
+                <span class="n">data_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_version</span><span class="p">(</span>
+                    <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">cache_key</span><span class="o">=</span><span class="n">cache_key</span>
+                <span class="p">)</span>
             <span class="k">assert</span> <span class="n">data_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">SENTINEL</span>
 
             <span class="c1"># TODO clean up this logic</span>
@@ -2038,6 +2031,14 @@ s=d.getElementsByTagName('script')[0];
                     <span class="n">actor</span><span class="o">=</span><span class="s2">"result_store"</span><span class="p">,</span>
                     <span class="n">event_type</span><span class="o">=</span><span class="n">CachingEventType</span><span class="o">.</span><span class="n">SET_RESULT</span><span class="p">,</span>
                     <span class="n">value</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">pending_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">SENTINEL</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_stored_metadata</span><span class="p">(</span>
+                    <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
+                    <span class="n">node_name</span><span class="o">=</span><span class="n">node_name</span><span class="p">,</span>
+                    <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
+                    <span class="n">cache_key</span><span class="o">=</span><span class="n">cache_key</span><span class="p">,</span>
+                    <span class="n">data_version</span><span class="o">=</span><span class="n">data_version</span><span class="p">,</span>
                 <span class="p">)</span></div>
 </div>
 

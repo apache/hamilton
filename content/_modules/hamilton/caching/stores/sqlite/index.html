@@ -597,45 +597,58 @@ s=d.getElementsByTagName('script')[0];
 <span class="sd">        cache_metadata: information to determine if a node needs to be computed or not</span>
 
 <span class="sd">        In the table ``cache_metadata``, the ``cache_key`` is unique whereas</span>
-<span class="sd">        ``history`` allows duplicate.</span>
+<span class="sd">        ``history`` allows duplicate and snapshots each run's ``data_version``.</span>
+<span class="sd">        Legacy history is backfilled once from the mapping available at migration;</span>
+<span class="sd">        versions lost before migration cannot be reconstructed.</span>
 <span class="sd">        """</span>
-        <span class="n">cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="p">:</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"BEGIN IMMEDIATE"</span><span class="p">)</span>
 
-        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-<span class="w">            </span><span class="sd">"""\</span>
-<span class="sd">            CREATE TABLE IF NOT EXISTS run_ids (</span>
-<span class="sd">                id INTEGER PRIMARY KEY AUTOINCREMENT,</span>
-<span class="sd">                run_id TEXT,</span>
-<span class="sd">                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>
-<span class="sd">            )</span>
-<span class="sd">            """</span>
-        <span class="p">)</span>
-        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-<span class="w">            </span><span class="sd">"""\</span>
-<span class="sd">            CREATE TABLE IF NOT EXISTS history (</span>
-<span class="sd">                id INTEGER PRIMARY KEY AUTOINCREMENT,</span>
-<span class="sd">                cache_key TEXT,</span>
-<span class="sd">                run_id TEXT,</span>
-<span class="sd">                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">"""\</span>
+<span class="sd">                CREATE TABLE IF NOT EXISTS run_ids (</span>
+<span class="sd">                    id INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="sd">                    run_id TEXT,</span>
+<span class="sd">                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>
+<span class="sd">                )</span>
+<span class="sd">                """</span>
+            <span class="p">)</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">"""\</span>
+<span class="sd">                CREATE TABLE IF NOT EXISTS history (</span>
+<span class="sd">                    id INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="sd">                    cache_key TEXT,</span>
+<span class="sd">                    run_id TEXT,</span>
+<span class="sd">                    data_version TEXT,</span>
+<span class="sd">                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,</span>
 
-<span class="sd">                FOREIGN KEY (cache_key) REFERENCES cache_metadata(cache_key)</span>
-<span class="sd">            );</span>
-<span class="sd">            """</span>
-        <span class="p">)</span>
-        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-<span class="w">            </span><span class="sd">"""\</span>
-<span class="sd">            CREATE TABLE IF NOT EXISTS cache_metadata (</span>
-<span class="sd">                cache_key TEXT PRIMARY KEY,</span>
-<span class="sd">                data_version TEXT NOT NULL,</span>
-<span class="sd">                node_name TEXT NOT NULL,</span>
-<span class="sd">                code_version TEXT NOT NULL,</span>
-<span class="sd">                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,</span>
+<span class="sd">                    FOREIGN KEY (cache_key) REFERENCES cache_metadata(cache_key)</span>
+<span class="sd">                );</span>
+<span class="sd">                """</span>
+            <span class="p">)</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">"""\</span>
+<span class="sd">                CREATE TABLE IF NOT EXISTS cache_metadata (</span>
+<span class="sd">                    cache_key TEXT PRIMARY KEY,</span>
+<span class="sd">                    data_version TEXT NOT NULL,</span>
+<span class="sd">                    node_name TEXT NOT NULL,</span>
+<span class="sd">                    code_version TEXT NOT NULL,</span>
+<span class="sd">                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,</span>
 
-<span class="sd">                FOREIGN KEY (cache_key) REFERENCES history(cache_key)</span>
-<span class="sd">            );</span>
-<span class="sd">            """</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="sd">                    FOREIGN KEY (cache_key) REFERENCES history(cache_key)</span>
+<span class="sd">                );</span>
+<span class="sd">                """</span>
+            <span class="p">)</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA table_info(history)"</span><span class="p">)}</span>
+            <span class="k">if</span> <span class="s2">"data_version"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+                <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"ALTER TABLE history ADD COLUMN data_version TEXT"</span><span class="p">)</span>
+                <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="w">                    </span><span class="sd">"""UPDATE history SET data_version = (</span>
+<span class="sd">                        SELECT data_version FROM cache_metadata</span>
+<span class="sd">                        WHERE cache_metadata.cache_key = history.cache_key</span>
+<span class="sd">                    )"""</span>
+                <span class="p">)</span>
 
 <div class="viewcode-block" id="SQLiteMetadataStore.initialize">
 <a class="viewcode-back" href="../../../../../reference/caching/stores/#hamilton.caching.stores.sqlite.SQLiteMetadataStore.initialize">[docs]</a>
@@ -683,12 +696,16 @@ s=d.getElementsByTagName('script')[0];
             <span class="n">node_name</span> <span class="o">=</span> <span class="n">decoded_key</span><span class="p">[</span><span class="s2">"node_name"</span><span class="p">]</span>
             <span class="n">code_version</span> <span class="o">=</span> <span class="n">decoded_key</span><span class="p">[</span><span class="s2">"code_version"</span><span class="p">]</span>
 
-        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO history (cache_key, run_id) VALUES (?, ?)"</span><span class="p">,</span> <span class="p">(</span><span class="n">cache_key</span><span class="p">,</span> <span class="n">run_id</span><span class="p">))</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="s2">"INSERT INTO history (cache_key, run_id, data_version) VALUES (?, ?, ?)"</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">cache_key</span><span class="p">,</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">data_version</span><span class="p">),</span>
+        <span class="p">)</span>
         <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
 <span class="w">            </span><span class="sd">"""\</span>
-<span class="sd">            INSERT OR IGNORE INTO cache_metadata (</span>
+<span class="sd">            INSERT INTO cache_metadata (</span>
 <span class="sd">                cache_key, node_name, code_version, data_version</span>
 <span class="sd">            ) VALUES (?, ?, ?, ?)</span>
+<span class="sd">            ON CONFLICT(cache_key) DO UPDATE SET data_version = excluded.data_version</span>
 <span class="sd">            """</span><span class="p">,</span>
             <span class="p">(</span><span class="n">cache_key</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">code_version</span><span class="p">,</span> <span class="n">data_version</span><span class="p">),</span>
         <span class="p">)</span>
@@ -802,7 +819,7 @@ s=d.getElementsByTagName('script')[0];
 <span class="w">            </span><span class="sd">"""\</span>
 <span class="sd">            SELECT</span>
 <span class="sd">                cache_metadata.cache_key,</span>
-<span class="sd">                cache_metadata.data_version,</span>
+<span class="sd">                COALESCE(history.data_version, cache_metadata.data_version),</span>
 <span class="sd">                cache_metadata.node_name,</span>
 <span class="sd">                cache_metadata.code_version</span>
 <span class="sd">            FROM history</span>
