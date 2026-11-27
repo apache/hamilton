@@ -231,6 +231,7 @@ def create_graphviz_graph(
     display_fields: bool = True,
     custom_style_function: Callable = None,
     config: dict = None,
+    group_inputs: bool = True,
 ) -> "graphviz.Digraph":  # noqa: F821
     """Helper function to create a graphviz graph.
 
@@ -246,7 +247,10 @@ def create_graphviz_graph(
         `orient` will be overwridden by the value of `graphviz_kwargs['graph_attr']['rankdir']`
         see (https://graphviz.org/docs/attr-types/rankdir/)
     :param hide_inputs: If True, no input nodes are displayed.
-    :param deduplicate_inputs: If True, remove duplicate input nodes.
+    :param group_inputs: If True, group each function's inputs in one node. If False,
+        display each input separately.
+    :param deduplicate_inputs: If True, share identical input groups between functions,
+        or individual inputs when group_inputs is False.
         Can improve readability depending on the specifics of the DAG.
     :param custom_style_function: A function that takes in node values and returns a dictionary of styles to apply to it.
     :param config: The Driver config. This value is passed by the caller, e.g., driver.display_all_functions(),
@@ -687,25 +691,31 @@ def create_graphviz_graph(
 
         # draw input nodes if at least 1 exist
         if len(input_nodes) > 0:
-            input_node_name = f"_{n.name}_inputs"
+            input_groups = [frozenset(input_nodes)]
+            if not group_inputs:
+                input_groups = [frozenset([d]) for d in sorted(input_nodes, key=lambda d: d.name)]
 
-            # following block is for input node deduplication
-            input_nodes = frozenset(input_nodes)
-            if input_sets.get(input_nodes):
-                existing_input_name = input_sets[input_nodes]
-                digraph.edge(existing_input_name, n.name)
-                continue
+            for index, input_group in enumerate(input_groups):
+                input_node_name = f"_{n.name}_inputs"
+                if not group_inputs:
+                    input_node_name += f"_{index}"
 
-            # allow duplicate input nodes by never storing keys
-            if deduplicate_inputs:
-                input_sets[input_nodes] = input_node_name
+                # following block is for input node deduplication
+                if input_sets.get(input_group):
+                    existing_input_name = input_sets[input_group]
+                    digraph.edge(existing_input_name, n.name)
+                    continue
 
-            # create input node
-            node_label = _get_input_label(input_nodes)
-            node_style = _get_node_style("input")
-            digraph.node(name=input_node_name, label=node_label, **node_style)
-            # create edge for input node
-            digraph.edge(input_node_name, n.name)
+                # allow duplicate input nodes by never storing keys
+                if deduplicate_inputs:
+                    input_sets[input_group] = input_node_name
+
+                # create input node
+                node_label = _get_input_label(input_group)
+                node_style = _get_node_style("input")
+                digraph.node(name=input_node_name, label=node_label, **node_style)
+                # create edge for input node
+                digraph.edge(input_node_name, n.name)
 
     if show_legend:
         digraph.subgraph(_get_legend(seen_node_types, extra_legend_nodes))
@@ -825,6 +835,7 @@ class FunctionGraph:
         display_fields: bool = True,
         custom_style_function: Callable = None,
         keep_dot: bool = False,
+        group_inputs: bool = True,
     ) -> Optional["graphviz.Digraph"]:  # noqa F821
         """Displays & saves a dot file of the entire DAG structure constructed.
 
@@ -838,7 +849,10 @@ class FunctionGraph:
             `orient` will be overwridden by the value of `graphviz_kwargs['graph_attr']['rankdir']`
             see (https://graphviz.org/docs/attr-types/rankdir/)
         :param hide_inputs: If True, no input nodes are displayed.
-        :param deduplicate_inputs: If True, remove duplicate input nodes.
+        :param group_inputs: If True, group each function's inputs in one node. If False,
+            display each input separately.
+        :param deduplicate_inputs: If True, share identical input groups between functions,
+            or individual inputs when group_inputs is False.
             Can improve readability depending on the specifics of the DAG.
         :param display_fields: If True, display fields in the graph if node has attached schema metadata
         :param custom_style_function: Optional. Custom style function.
@@ -865,6 +879,7 @@ class FunctionGraph:
             orient=orient,
             hide_inputs=hide_inputs,
             deduplicate_inputs=deduplicate_inputs,
+            group_inputs=group_inputs,
             display_fields=display_fields,
             custom_style_function=custom_style_function,
             config=self._config,
@@ -916,6 +931,7 @@ class FunctionGraph:
         custom_style_function: Callable = None,
         config: dict = None,
         keep_dot: bool = False,
+        group_inputs: bool = True,
     ) -> Optional["graphviz.Digraph"]:  # noqa F821
         """Function to display the graph represented by the passed in nodes.
 
@@ -938,7 +954,10 @@ class FunctionGraph:
             `orient` will be overridden by the value of `graphviz_kwargs['graph_attr']['rankdir']`
             see (https://graphviz.org/docs/attr-types/rankdir/)
         :param hide_inputs: If True, no input nodes are displayed.
-        :param deduplicate_inputs: If True, remove duplicate input nodes.
+        :param group_inputs: If True, group each function's inputs in one node. If False,
+            display each input separately.
+        :param deduplicate_inputs: If True, share identical input groups between functions,
+            or individual inputs when group_inputs is False.
             Can improve readability depending on the specifics of the DAG.
         :param display_fields: If True, display fields in the graph if node has attached
             schema metadata
@@ -974,6 +993,7 @@ class FunctionGraph:
             display_fields=display_fields,
             custom_style_function=custom_style_function,
             config=config,
+            group_inputs=group_inputs,
         )
         kwargs = {"format": "png"}  # default format = png
         if output_file_path:  # infer format from path

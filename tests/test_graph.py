@@ -1300,6 +1300,125 @@ def test_create_graphviz_graph():
     assert dot_set == expected_set
 
 
+@pytest.fixture
+def input_grouping_driver():
+    from hamilton import driver
+
+    def a_plus_b(a: int, b: int) -> int:
+        return a + b
+
+    def a_plus_b_again(a: int, b: int) -> int:
+        return a + b
+
+    def a_times_2(a: int) -> int:
+        return a * 2
+
+    def b_times_2(b: int) -> int:
+        return b * 2
+
+    def everything(a_plus_b: int, a_plus_b_again: int, a_times_2: int, b_times_2: int) -> int:
+        return a_plus_b + a_plus_b_again + a_times_2 + b_times_2
+
+    module = ad_hoc_utils.create_temporary_module(
+        a_plus_b, a_plus_b_again, a_times_2, b_times_2, everything
+    )
+    return driver.Builder().with_modules(module).build()
+
+
+@pytest.mark.parametrize("group_inputs", [True, False])
+@pytest.mark.parametrize("deduplicate_inputs", [True, False])
+@pytest.mark.parametrize(
+    "visualization",
+    ["all", "execution", "upstream", "downstream", "path", "materialization"],
+)
+def test_visualization_input_grouping(
+    input_grouping_driver, visualization, group_inputs, deduplicate_inputs
+):
+    from hamilton.io.materialization import to
+
+    dr = input_grouping_driver
+    options = {
+        "group_inputs": group_inputs,
+        "deduplicate_inputs": deduplicate_inputs,
+        "show_legend": False,
+    }
+    inputs = {"a": 1, "b": 2}
+    visualizations = {
+        "all": lambda: dr.display_all_functions(**options),
+        "execution": lambda: dr.visualize_execution(["everything"], inputs=inputs, **options),
+        "upstream": lambda: dr.display_upstream_of("everything", **options),
+        "downstream": lambda: dr.display_downstream_of("a", "b", **options),
+        "path": lambda: dr.visualize_path_between("a", "everything", **options),
+        "materialization": lambda: dr.visualize_materialization(
+            to.json(
+                id="saver",
+                dependencies=["everything"],
+                combine=base.DictResult(),
+                path="saver.json",
+            ),
+            inputs=inputs,
+            **options,
+        ),
+    }
+    dot = visualizations[visualization]()
+    input_labels = {
+        line.strip().split(" ", 1)[0]: frozenset(
+            name for name in ("a", "b") if f"<td>{name}</td>" in line
+        )
+        for line in dot.body
+        if 'style="filled,dashed"' in line
+    }
+    expected_count = (
+        (3 if deduplicate_inputs else 4) if group_inputs else (2 if deduplicate_inputs else 6)
+    )
+    assert len(input_labels) == expected_count
+    input_edges = set()
+    for line in dot.body:
+        if " -> " in line:
+            source, target = line.strip().split(" -> ")
+            if source in input_labels:
+                input_edges.add((input_labels[source], target))
+    dependencies = {
+        "a_plus_b": {"a", "b"},
+        "a_plus_b_again": {"a", "b"},
+        "a_times_2": {"a"},
+        "b_times_2": {"b"},
+    }
+    expected_edges = set()
+    for name, deps in dependencies.items():
+        groups = [deps] if group_inputs else [{dep} for dep in deps]
+        expected_edges.update((frozenset(group), name) for group in groups)
+    assert input_edges == expected_edges
+
+
+@pytest.mark.parametrize("group_inputs", [True, False])
+@pytest.mark.parametrize("deduplicate_inputs", [True, False])
+def test_visualization_hides_inputs(input_grouping_driver, group_inputs, deduplicate_inputs):
+    dot = input_grouping_driver.display_all_functions(
+        hide_inputs=True,
+        group_inputs=group_inputs,
+        deduplicate_inputs=deduplicate_inputs,
+        show_legend=False,
+    )
+    assert not any('style="filled,dashed"' in line for line in dot.body)
+    assert any("a_plus_b -> everything" in line for line in dot.body)
+
+
+def test_ungrouped_inputs_respect_strict_path(input_grouping_driver):
+    dot = input_grouping_driver.visualize_path_between(
+        "a",
+        "everything",
+        group_inputs=False,
+        deduplicate_inputs=True,
+        strict_path_visualization=True,
+        show_legend=False,
+    )
+    labels = [line for line in dot.body if 'style="filled,dashed"' in line]
+    assert len(labels) == 1
+    assert "<td>a</td>" in labels[0]
+    assert "<td>b</td>" not in labels[0]
+
+
 def test_create_networkx_graph():
     """Tests that we create a networkx graph"""
     fg = graph.FunctionGraph.from_modules(tests.resources.dummy_functions, config={})
