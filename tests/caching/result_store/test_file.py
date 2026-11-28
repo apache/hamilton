@@ -127,3 +127,45 @@ def test_save_and_load_materializer(format, value, file_store):
 
     assert materialized_path.exists()
     assert fingerprinting.hash_value(value) == fingerprinting.hash_value(retrieved_value)
+
+
+@pytest.mark.parametrize(
+    ("format", "value"),
+    [
+        ("json", {"key1": "value1", "key2": 2}),
+        ("pickle", ("value1", "value2", "value3")),
+    ],
+)
+def test_delete_expired_skips_materialized_payloads(format, value, file_store):
+    """Regression test for https://github.com/apache/hamilton/issues/1813"""
+    saver_cls, loader_cls = search_data_adapter_registry(name=format, type_=type(value))
+    data_version = "foo"
+    result_path = pathlib.Path(file_store.path, data_version)
+    materialized_path = file_store._materialized_path(data_version, saver_cls)
+    file_store.set(
+        data_version=data_version, result=value, saver_cls=saver_cls, loader_cls=loader_cls
+    )
+    file_store.set(data_version="bar", result="baz")
+    assert _store_size(file_store) == 3
+
+    file_store.delete_expired()
+
+    assert result_path.exists()
+    assert materialized_path.exists()
+    assert _store_size(file_store) == 3
+    assert fingerprinting.hash_value(file_store.get(data_version)) == fingerprinting.hash_value(
+        value
+    )
+    assert file_store.get("bar") == "baz"
+
+
+def test_delete_expired_ignores_unreadable_entries(file_store):
+    pathlib.Path(file_store.path, "not_a_pickle").write_bytes(b"{not pickle}")
+    pathlib.Path(file_store.path, "empty").write_bytes(b"")
+    pathlib.Path(file_store.path, "subdir.parquet").mkdir()
+    file_store.set(data_version="foo", result="bar")
+
+    file_store.delete_expired()
+
+    assert _store_size(file_store) == 4
+    assert file_store.get("foo") == "bar"
