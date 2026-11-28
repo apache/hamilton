@@ -16,6 +16,7 @@
 # under the License.
 
 import inspect
+import pickle
 import shutil
 from pathlib import Path
 from typing import Any
@@ -133,8 +134,22 @@ class FileResultStore(ResultStore):
         shutil.rmtree(self.path)
         self.path.mkdir(exist_ok=True)
 
+    @staticmethod
+    def _is_result_entry(path: Path) -> bool:
+        """Result entries are written at `self.path / data_version` without a suffix.
+        Materialized payloads always get a `.{saver.name()}` suffix (see `_materialized_path`).
+        """
+        return path.is_file() and path.suffix == ""
+
     def delete_expired(self) -> None:
         for file_path in self.path.iterdir():
-            stored_result = self._load_result_from_path(file_path)
+            # skip materialized payloads (e.g., `.json`, `.parquet`); they aren't `StoredResult`
+            if not self._is_result_entry(file_path):
+                continue
+            try:
+                stored_result = self._load_result_from_path(file_path)
+            except (pickle.UnpicklingError, EOFError):
+                # not a `StoredResult` (foreign or corrupted file); leave it untouched
+                continue
             if stored_result and stored_result.expired:
                 file_path.unlink(missing_ok=True)
