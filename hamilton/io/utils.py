@@ -22,7 +22,7 @@ import time
 from datetime import datetime
 from os import PathLike
 from pathlib import Path
-from typing import Any, Literal
+from typing import IO, Any, Literal
 from urllib import parse
 
 import pandas as pd
@@ -66,7 +66,9 @@ def _is_query(query_or_table: str, operation: SqlOperation | None, legacy: bool)
     return not legacy and operation != "write" and _starts_with_select(query_or_table)
 
 
-def get_file_metadata(path: str | Path | PathLike) -> dict[str, Any]:
+def get_file_metadata(
+    path: str | bytes | Path | PathLike | IO, *, bytes_are_content: bool = False
+) -> dict[str, Any]:
     """Gives metadata from loading a file.
 
     Note: we reserve the right to change this schema. So if you're using this come
@@ -77,19 +79,46 @@ def get_file_metadata(path: str | Path | PathLike) -> dict[str, Any]:
     - the file path
     - the last modified time
     - the current time
+
+    ``path`` can also be a file object. A handle with a file descriptor is described by that
+    descriptor, and by its file name when it has one. An in-memory buffer such as ``io.BytesIO``
+    has no file to describe, so its path is its type name in angle brackets (e.g. ``<BytesIO>``)
+    and its size is ``None``. Pass ``bytes_are_content=True`` when ``bytes`` hold the file's
+    content rather than its path, so they are described as ``<bytes>`` instead.
     """
-    if isinstance(path, Path):
-        path = str(path)
+    in_memory = False
+    stat = None
+    if bytes_are_content and isinstance(path, bytes):
+        in_memory = True
+        path = "<bytes>"
+    elif not isinstance(path, (str, bytes, PathLike)):
+        try:
+            stat = os.fstat(path.fileno())
+        except (AttributeError, OSError, ValueError):
+            pass
+        name = getattr(path, "name", None)
+        if isinstance(name, (str, bytes, PathLike)):
+            path = name
+        else:
+            in_memory = stat is None
+            path = f"<{type(path).__name__}>"
+    path = os.fsdecode(path)
     parsed = parse.urlparse(path)
     size = None
     scheme = parsed.scheme
     last_modified = time.time()
     timestamp = datetime.now().utcnow().timestamp()
     notes = f"File metadata is unsupported for scheme: {scheme} or path: {path} does not exist."
+    if in_memory:
+        notes = f"File metadata is unsupported for in-memory file object: {path}."
 
     # Check if the path is a local file path (Windows drive can be listed as a scheme)
     is_win_path = parsed.scheme and len(parsed.scheme) == 1 and parsed.scheme.isalpha()
-    if (parsed.scheme == "" or is_win_path) and os.path.exists(path):
+    if stat is not None:
+        size = stat.st_size
+        last_modified = stat.st_mtime
+        notes = ""
+    elif not in_memory and (parsed.scheme == "" or is_win_path) and os.path.exists(path):
         size = os.path.getsize(path)
         last_modified = os.path.getmtime(path)
         notes = ""

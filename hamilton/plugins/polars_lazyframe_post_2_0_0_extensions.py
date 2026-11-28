@@ -142,7 +142,7 @@ class PolarsScanFeatherReader(pre_2.PolarsScanFeatherReader):
             self.columns,
             self.row_count_name,
         )
-        metadata = utils.get_file_metadata(self.source)
+        metadata = utils.get_file_metadata(self.source, bytes_are_content=True)
         return df, metadata
 
 

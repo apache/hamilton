@@ -400,7 +400,7 @@ class PolarsFeatherReader(DataLoader):
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_ipc(self.source, **self._get_loading_kwargs())
-        metadata = utils.get_file_metadata(self.source)
+        metadata = utils.get_file_metadata(self.source, bytes_are_content=True)
         return df, metadata
 
     @classmethod
@@ -530,7 +530,7 @@ class PolarsJSONReader(DataLoader):
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_json(self.source, **self._get_loading_kwargs())
-        metadata = utils.get_file_metadata(self.source)
+        metadata = utils.get_file_metadata(self.source, bytes_are_content=True)
         return df, metadata
 
     @classmethod
@@ -588,7 +588,7 @@ class PolarsNDJSONReader(DataLoader):
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_ndjson(self.source, **self._get_loading_kwargs())
-        metadata = utils.get_file_metadata(self.source)
+        metadata = utils.get_file_metadata(self.source, bytes_are_content=True)
         return df, metadata
 
     @classmethod
@@ -662,7 +662,7 @@ class PolarsSpreadsheetReader(DataLoader):
 
     def load_data(self, type_: type) -> tuple[DATAFRAME_TYPE, dict[str, Any]]:
         df = pl.read_excel(self.source, **self._get_loading_kwargs())
-        metadata = utils.get_file_metadata(self.source)
+        metadata = utils.get_file_metadata(self.source, bytes_are_content=True)
         return df, metadata
 
     @classmethod

@@ -15,11 +15,14 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import io
 import json
+import os
 import pathlib
 import sqlite3
 import subprocess
 import sys
+import tempfile
 import time
 
 import pandas as pd
@@ -210,6 +213,83 @@ def test_get_file_metadata(tmp_path: pathlib.Path):
     assert metadata["file_metadata"]["size"] > 0
     assert metadata["file_metadata"]["last_modified"] == file_path.stat().st_mtime
     assert metadata["file_metadata"]["timestamp"] is not None
+
+
+def test_get_file_metadata_in_memory_file_object():
+    metadata = get_file_metadata(io.BytesIO(b"test"))
+    assert metadata["file_metadata"]["path"] == "<BytesIO>"
+    assert metadata["file_metadata"]["size"] is None
+    assert metadata["file_metadata"]["scheme"] == ""
+    assert metadata["file_metadata"]["notes"] != ""
+
+
+@pytest.mark.parametrize("mode", ["r", "rb"])
+def test_get_file_metadata_open_file_handle(tmp_path: pathlib.Path, mode: str):
+    file_path = tmp_path / "test.txt"
+    file_path.write_text("test")
+    with open(file_path, mode) as f:
+        metadata = get_file_metadata(f)
+    assert metadata["file_metadata"]["path"] == str(file_path)
+    assert metadata["file_metadata"]["size"] == 4
+    assert metadata["file_metadata"]["notes"] == ""
+
+
+def test_get_file_metadata_closed_file_handle(tmp_path: pathlib.Path):
+    file_path = tmp_path / "test.txt"
+    file_path.write_text("test")
+    with open(file_path, "rb") as f:
+        pass
+    metadata = get_file_metadata(f)
+    assert metadata["file_metadata"]["path"] == str(file_path)
+    assert metadata["file_metadata"]["size"] == 4
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="an open file cannot be removed on Windows")
+def test_get_file_metadata_handle_of_removed_file(tmp_path: pathlib.Path):
+    file_path = tmp_path / "test.txt"
+    file_path.write_text("test")
+    with open(file_path, "rb") as f:
+        file_path.unlink()
+        metadata = get_file_metadata(f)
+    assert metadata["file_metadata"]["size"] == 4
+    assert metadata["file_metadata"]["notes"] == ""
+
+
+def test_get_file_metadata_temporary_file():
+    with tempfile.TemporaryFile() as f:
+        f.write(b"test")
+        f.flush()
+        metadata = get_file_metadata(f)
+    assert metadata["file_metadata"]["size"] == 4
+    assert metadata["file_metadata"]["notes"] == ""
+
+
+def test_get_file_metadata_bytes_path(tmp_path: pathlib.Path):
+    file_path = tmp_path / "test.txt"
+    file_path.write_text("test")
+    metadata = get_file_metadata(os.fsencode(file_path))
+    assert metadata["file_metadata"]["path"] == str(file_path)
+    assert metadata["file_metadata"]["size"] == 4
+
+
+def test_get_file_metadata_bytes_path_like(tmp_path: pathlib.Path):
+    file_path = tmp_path / "test.txt"
+    file_path.write_text("test")
+
+    class BytesPath(os.PathLike):
+        def __fspath__(self) -> bytes:
+            return os.fsencode(file_path)
+
+    metadata = get_file_metadata(BytesPath())
+    assert metadata["file_metadata"]["path"] == str(file_path)
+    assert metadata["file_metadata"]["size"] == 4
+
+
+def test_get_file_metadata_bytes_content():
+    metadata = get_file_metadata(b"a,b\n1,2", bytes_are_content=True)
+    assert metadata["file_metadata"]["path"] == "<bytes>"
+    assert metadata["file_metadata"]["size"] is None
+    assert metadata["file_metadata"]["notes"] != ""
 
 
 def test_get_file_metadata_url_schema():

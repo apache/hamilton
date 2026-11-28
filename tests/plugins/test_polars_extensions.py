@@ -352,6 +352,19 @@ def test_polars_ndjson(df: pl.DataFrame, tmp_path: pathlib.Path) -> None:
     polars.testing.assert_frame_equal(df, df2)
 
 
+def test_polars_json_reader_describes_bytes_source_as_content(
+    df: pl.DataFrame, tmp_path: pathlib.Path
+) -> None:
+    file = tmp_path / "test.json"
+    PolarsJSONWriter(file=file).save_data(df)
+
+    df2, metadata = PolarsJSONReader(source=file.read_bytes()).load_data(pl.DataFrame)
+
+    polars.testing.assert_frame_equal(df, df2)
+    assert metadata[utils.FILE_METADATA]["path"] == "<bytes>"
+    assert metadata[utils.FILE_METADATA]["size"] is None
+
+
 @pytest.mark.parametrize("reader", [PolarsJSONReader, PolarsNDJSONReader])
 def test_getting_type_hints_json_readers(reader) -> None:
     """Tests that types can be resolved at run time, which loaders and materializers rely on."""
