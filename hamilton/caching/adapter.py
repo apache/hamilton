@@ -818,7 +818,7 @@ class HamiltonCacheAdapter(
             )
             # if the data version is unhashable, we need to set a random suffix to the cache_key
             # to prevent the cache from thinking this value is constant, causing a cache hit.
-            data_version = "<unhashable>" + f"_{uuid.uuid4()}"
+            data_version = f"unhashable_{uuid.uuid4()}"
 
         return data_version
 

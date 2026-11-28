@@ -817,3 +817,33 @@ def test_dataframe_with_unhashable_cells_does_not_fail(tmp_path):
     for _ in range(2):
         results = execute_dataflow(module=module, cache=cache, final_vars=["total"])
         assert results["total"] == 3
+
+
+def test_unhashable_result_persists_across_drivers_and_refresh(tmp_path):
+    calls = []
+
+    def value() -> object:
+        calls.append(1)
+        return object()
+
+    module = ad_hoc_utils.create_temporary_module(value)
+
+    def build(recompute=False):
+        return (
+            driver.Builder()
+            .with_modules(module)
+            .with_cache(path=tmp_path, recompute=["value"] if recompute else [])
+            .build()
+        )
+
+    first = build()
+    assert type(first.execute(["value"])["value"]) is object
+    key = first.cache.get_cache_key(first.cache.last_run_id, "value")
+    original_version = first.cache.metadata_store.get(key)
+    assert type(build().execute(["value"])["value"]) is object
+    assert len(calls) == 1
+    refresh = build(recompute=True)
+    assert type(refresh.execute(["value"])["value"]) is object
+    assert refresh.cache.metadata_store.get(key) != original_version
+    assert type(build().execute(["value"])["value"]) is object
+    assert len(calls) == 2

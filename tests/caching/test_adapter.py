@@ -403,3 +403,15 @@ def test_only_nodes_inside_a_mapped_block_are_keyed_by_task(mapped_cache_adapter
         "collect": "key-collect",
         MAPPED_NODE: {task_id: f"key-{task_id}" for task_id in TASK_IDS},
     }
+
+
+@pytest.mark.parametrize("result", [object(), [object()], {"value": object()}])
+def test_unhashable_result_versions_are_portable_and_unique(cache_adapter, result):
+    assert fingerprinting.hash_value(result) == fingerprinting.UNHASHABLE
+    first = cache_adapter.version_data(result, run_id=cache_adapter.last_run_id)
+    second = cache_adapter.version_data(result, run_id=cache_adapter.last_run_id)
+    assert first != second
+    for version in (first, second):
+        assert not any(character in version for character in '<>:"/\\|?*')
+        cache_adapter.result_store.set(version, result)
+        assert type(cache_adapter.result_store.get(version)) is type(result)
