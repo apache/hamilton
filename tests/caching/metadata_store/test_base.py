@@ -245,3 +245,28 @@ def test_get_run_raises_error_if_run_id_not_found(metadata_store):
     metadata_store.initialize(run_id="test-run-id")
     with pytest.raises(IndexError):
         metadata_store.get_run(run_id="foo")
+
+
+def test_sqlite_unknown_legacy_history_stays_unknown(tmp_path):
+    key = _mock_cache_key()
+    with sqlite3.connect(tmp_path / "metadata_store.db") as connection:
+        connection.executescript("""
+            CREATE TABLE run_ids (id INTEGER PRIMARY KEY AUTOINCREMENT, run_id TEXT);
+            CREATE TABLE history (id INTEGER PRIMARY KEY AUTOINCREMENT, cache_key TEXT, run_id TEXT);
+            CREATE TABLE cache_metadata (cache_key TEXT PRIMARY KEY, data_version TEXT NOT NULL,
+                                         node_name TEXT NOT NULL, code_version TEXT NOT NULL);
+        """)
+        connection.execute("INSERT INTO run_ids (run_id) VALUES (?)", ("legacy",))
+        connection.execute("INSERT INTO history (cache_key, run_id) VALUES (?, ?)", (key, "legacy"))
+    store = SQLiteMetadataStore(tmp_path)
+    assert store.get_run("legacy") == []
+    for version in ["fresh", "newest"]:
+        store.initialize(version)
+        store.set(cache_key=key, data_version=version, run_id=version)
+        assert store.get_run("legacy") == []
+        assert store.get_run(version)[0]["data_version"] == version
+    store._close_connection()
+    reopened = SQLiteMetadataStore(tmp_path)
+    assert reopened.get_run("legacy") == []
+    assert reopened.get_run("fresh")[0]["data_version"] == "fresh"
+    assert reopened.get_run("newest")[0]["data_version"] == "newest"

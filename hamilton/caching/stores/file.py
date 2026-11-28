@@ -17,6 +17,7 @@
 
 import inspect
 import shutil
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -46,7 +47,17 @@ class FileResultStore(ResultStore):
 
     @staticmethod
     def _write_result(file_path: Path, stored_result: StoredResult) -> None:
-        file_path.write_bytes(stored_result.save())
+        data = stored_result.save()
+        temporary_file = tempfile.NamedTemporaryFile(
+            dir=file_path.parent, prefix=".hamilton-", suffix=".tmp", delete=False
+        )
+        temporary_path = Path(temporary_file.name)
+        try:
+            with temporary_file:
+                temporary_file.write(data)
+            temporary_path.replace(file_path)
+        finally:
+            temporary_path.unlink(missing_ok=True)
 
     @staticmethod
     def _load_result_from_path(path: Path) -> StoredResult | None:
@@ -135,6 +146,8 @@ class FileResultStore(ResultStore):
 
     def delete_expired(self) -> None:
         for file_path in self.path.iterdir():
+            if file_path.name.startswith(".hamilton-") and file_path.suffix == ".tmp":
+                continue
             stored_result = self._load_result_from_path(file_path)
             if stored_result and stored_result.expired:
                 file_path.unlink(missing_ok=True)
