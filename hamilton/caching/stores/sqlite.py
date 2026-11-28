@@ -266,7 +266,8 @@ class SQLiteMetadataStore(MetadataStore):
         :param run_id: ID of the run to retrieve
         :return: List of node metadata which includes ``cache_key``, ``data_version``,
             ``node_name``, and ``code_version``. The list can be empty if a run was initialized
-            but no nodes were executed.
+            but no nodes were executed. Legacy entries without a recoverable version
+            snapshot are omitted.
 
         :raises IndexError: if the ``run_id`` is not found in metadata store.
         """
@@ -278,12 +279,12 @@ class SQLiteMetadataStore(MetadataStore):
             """\
             SELECT
                 cache_metadata.cache_key,
-                COALESCE(history.data_version, cache_metadata.data_version),
+                history.data_version,
                 cache_metadata.node_name,
                 cache_metadata.code_version
             FROM history
             JOIN cache_metadata ON history.cache_key = cache_metadata.cache_key
-            WHERE history.run_id = ?
+            WHERE history.run_id = ? AND history.data_version IS NOT NULL
             """,
             (run_id,),
         )
