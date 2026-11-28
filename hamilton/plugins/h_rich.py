@@ -15,6 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import dataclasses
+import threading
 from collections.abc import Collection
 from typing import Any
 
@@ -36,6 +38,13 @@ from hamilton.lifecycle import (
     TaskExecutionHook,
     TaskGroupingHook,
 )
+
+
+@dataclasses.dataclass
+class _RunBars:
+    task_ids: list[rich.progress.TaskID]
+    task_based: bool = False
+    finished: bool = False
 
 
 class RichProgressBar(TaskExecutionHook, TaskGroupingHook, GraphExecutionHook, NodeExecutionHook):
@@ -98,45 +107,63 @@ class RichProgressBar(TaskExecutionHook, TaskGroupingHook, GraphExecutionHook, N
         self._expand_desc = collect_desc or "Collecting:"
         columns = columns or []
         self._progress = Progress(*columns, **kwargs)
-        self._task_based = False
+        self._runs: dict[str, _RunBars] = {}
+        self._lock = threading.Lock()
 
     @override
-    def run_before_graph_execution(self, *, execution_path: Collection[str], **kwargs: Any):
-        self._progress.add_task(self._group_desc, total=len(execution_path))
-        self._progress.start()
+    def run_before_graph_execution(
+        self, *, run_id: str, execution_path: Collection[str], **kwargs: Any
+    ):
+        # the adapter outlives a run, so clear the bars of runs that have finished
+        with self._lock:
+            for finished in [r for r, bars in self._runs.items() if bars.finished]:
+                for task_id in self._runs.pop(finished).task_ids:
+                    self._progress.remove_task(task_id)
+            group = self._progress.add_task(self._group_desc, total=len(execution_path))
+            self._runs[run_id] = _RunBars([group])
+            self._progress.start()
 
     @override
-    def run_after_graph_execution(self, **kwargs: Any):
-        self._progress.stop()  # in case progress thread is lagging
+    def run_after_graph_execution(self, *, run_id: str, **kwargs: Any):
+        with self._lock:
+            if run_id in self._runs:
+                self._runs[run_id].finished = True
+            if all(bars.finished for bars in self._runs.values()):
+                self._progress.stop()
 
     @override
-    def run_after_task_grouping(self, *, task_ids: list[str], **kwargs):
+    def run_after_task_grouping(self, *, run_id: str, task_ids: list[str], **kwargs):
         # Change the total of the task group to the number of tasks in the group
-        self._progress.update(self._progress.task_ids[0], total=len(task_ids))
-        self._task_based = True
+        bars = self._runs[run_id]
+        self._progress.update(bars.task_ids[0], total=len(task_ids))
+        bars.task_based = True
 
     @override
-    def run_after_task_expansion(self, *, parameters: dict[str, Any], **kwargs):
-        self._progress.add_task(self._expand_desc, total=len(parameters))
+    def run_after_task_expansion(self, *, run_id: str, parameters: dict[str, Any], **kwargs):
+        task_id = self._progress.add_task(self._expand_desc, total=len(parameters))
+        self._runs[run_id].task_ids.append(task_id)
 
     @override
-    def run_before_task_execution(self, *, purpose: NodeGroupPurpose, **kwargs):
+    def run_before_task_execution(self, *, run_id: str, purpose: NodeGroupPurpose, **kwargs):
         if purpose == NodeGroupPurpose.GATHER:
-            self._progress.advance(self._progress.task_ids[0])
-            self._progress.stop_task(self._progress.task_ids[-1])
+            task_ids = self._runs[run_id].task_ids
+            self._progress.advance(task_ids[0])
+            self._progress.stop_task(task_ids[-1])
 
     @override
-    def run_after_task_execution(self, *, purpose: NodeGroupPurpose, **kwargs):
+    def run_after_task_execution(self, *, run_id: str, purpose: NodeGroupPurpose, **kwargs):
+        task_ids = self._runs[run_id].task_ids
         if purpose == NodeGroupPurpose.EXECUTE_BLOCK:
-            self._progress.advance(self._progress.task_ids[-1])
+            self._progress.advance(task_ids[-1])
         else:
-            self._progress.advance(self._progress.task_ids[0])
+            self._progress.advance(task_ids[0])
 
     @override
     def run_before_node_execution(self, **kwargs):
         pass
 
     @override
-    def run_after_node_execution(self, **kwargs):
-        if not self._task_based:
-            self._progress.advance(self._progress.task_ids[0])
+    def run_after_node_execution(self, *, run_id: str, **kwargs):
+        bars = self._runs[run_id]
+        if not bars.task_based:
+            self._progress.advance(bars.task_ids[0])
